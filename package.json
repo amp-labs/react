@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/amp-labs/react/issues"
   },
-  "homepage": "https://github.com/amp-labs/react#readme"
+  "homepage": "https://github.com/amp-labs/react#readme",
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "react": "^18.2.0",
+    "typescript": "^4.9.4"
+  }
 }
