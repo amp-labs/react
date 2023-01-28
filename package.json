@@ -1,21 +1,26 @@
 {
   "name": "@amp-labs/react",
-  "version": "0.0.1",
+  "version": "0.0.13",
   "description": "Ampersand React library.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amp-labs/react.git"
-  },
   "author": "joey@thirdslant.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amp-labs/react/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/amp-labs/react#readme",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf ./build/ && tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amp-labs/react.git"
+  },
   "devDependencies": {
     "@types/react": "^18.0.27",
     "react": "^18.2.0",
