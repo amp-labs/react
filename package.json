@@ -1,0 +1,33 @@
+{
+  "name": "@amp-labs/react",
+  "version": "0.0.15",
+  "description": "Ampersand React library.",
+  "author": "joey@thirdslant.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amp-labs/react/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/amp-labs/react#readme",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "rm -rf ./build/ && tsc -p tsconfig.json --watch",
+    "build": "rm -rf ./build/ && tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amp-labs/react.git"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "typescript": "^4.9.4"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  }
+}
