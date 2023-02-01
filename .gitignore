@@ -6,3 +6,6 @@ build/
 
 # npm cache directory
 .npm
+
+# MacOS
+**/.DS_Store
