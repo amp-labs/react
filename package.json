@@ -29,5 +29,11 @@
   },
   "peerDependencies": {
     "react": ">=16"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.4.9",
+    "@nangohq/pizzly-frontend": "^0.5.2",
+    "react-router-dom": "^6.8.0",
+    "reactfire": "^4.2.2"
   }
 }
