@@ -14,8 +14,6 @@ interface ConfigureIntegrationProps {
   connectionId: string,
 }
 export const ConfigureIntegration = ({provider, subdomain, connectionId}: ConfigureIntegrationProps) => {
-  // To use the test source from /testData/integrationSources.ts, uncomment the following line, and comment out the rest of the function.
-  // return <InstallIntegration source={TestSalesforceIntegrationSource} appName={appName} subdomain={subdomain} provider={provider}/>;
   const { status, data: source } = useCallableFunctionResponse('getIntegrationSource', { data: { provider, subdomain, connectionId} });
 
   switch (status) {
