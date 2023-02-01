@@ -1,1 +1,0 @@
-export { AccountsAndContacts } from "./ViewData";
