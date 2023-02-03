@@ -1,1 +1,1 @@
-export { default } from "./ConnectProvider";
+export { default } from './ConnectProvider';

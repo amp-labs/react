@@ -1,1 +1,1 @@
-export { default } from "./CenteredTextBox";
+export { default } from './CenteredTextBox';
