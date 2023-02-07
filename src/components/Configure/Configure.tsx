@@ -1,15 +1,16 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import {
   merge, map, set, capitalize,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
-import { useCallableFunctionResponse } from 'reactfire';
+// import { useCallableFunctionResponse } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
 import { IntegrationSource } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
+import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
 // TODO: for each provider, there may actually be multiple integrations available.
 interface ConfigureIntegrationProps {
@@ -17,17 +18,22 @@ interface ConfigureIntegrationProps {
   subdomain: string,
   connectionId: string,
 }
+
 export function ConfigureIntegration(
   { provider, subdomain, connectionId }: ConfigureIntegrationProps,
 ) {
-  const { status, data: source } = useCallableFunctionResponse(
-    'getIntegrationSource',
-    { data: { provider, subdomain, connectionId } },
-  );
+  // const { status, data: source } = useCallableFunctionResponse(
+  //   'getIntegrationSource',
+  //   { data: { provider, subdomain, connectionId } },
+  // );
+
+  // get this info from context?
+  const status = 'success'; // hard code this for now
+  const source = useContext(AmpersandContext);
 
   switch (status) {
-    case 'loading':
-      return <CenteredTextBox text="Loading..." />;
+    // case 'loading':
+    //   return <CenteredTextBox text="Loading..." />;
     case 'success':
       /* eslint-disable-next-line no-console */
       console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
@@ -49,7 +55,8 @@ interface InstallProps {
   provider: string,
 }
 export function InstallIntegration({ source, subdomain, provider }: InstallProps) {
-  if (source.type === 'read') {
+  const { type } = source;
+  if (type === 'read') {
     return <SetUpRead source={source} subdomain={subdomain} provider={provider} />;
   }
   // return <SetUpWrite source={source} subdomain={subdomain} provider={provider} />;
@@ -68,8 +75,9 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
     navigate('/configure-write');
   };
   const appName = 'MailMonkey'; // TODO: should read from source.
+  const { objects } = source;
 
-  const elems = map(source.objects, (object) => {
+  const elems = map(objects, (object) => {
     let mandatoryFields;
     let optionalFields;
     let customFieldMapping;

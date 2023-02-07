@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Pizzly from '@nangohq/pizzly-frontend';
 import { Box, Button } from '@chakra-ui/react';
 import { Navigate } from 'react-router-dom';
+import { AmpersandContext } from '../AmpersandProvider';
+import { IntegrationSource } from '../types/configTypes';
 
 const pizzly = new Pizzly('http://localhost:3003');
 
+// interface ConnectProviderProps {
+//   provider: string,
+//   // subdomain: string,
+//   connectionId: string,
+// }
 interface ConnectProviderProps {
-  provider: string,
-  // subdomain: string,
   connectionId: string,
 }
 
-function ConnectProvider({ provider, /* subdomain, */ connectionId }: ConnectProviderProps) {
+function ConnectProvider({ connectionId }: ConnectProviderProps) {
   const [loggedIn, setLoggedIn] = useState(false);
-  if (provider !== 'salesforce') {
-    return (<>Not supported</>);
-  }
+  const source: IntegrationSource | null = useContext(AmpersandContext);
+
+  // if (options.provider !== 'salesforce') {
+  //   return (<>Not supported</>);
+  // }
 
   const launchLogIn = () => {
-    pizzly.auth(provider, connectionId)
+    if (!source?.api) return;
+
+    const { api } = source;
+
+    pizzly.auth(api, connectionId)
       .then((result) => {
         /* eslint-disable-next-line no-console */
         console.log(`OAuth flow succeeded for provider "${result.providerConfigKey}" and connection-id "${result.connectionId}"! ${JSON.stringify(result)}`);
