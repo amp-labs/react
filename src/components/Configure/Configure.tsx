@@ -22,6 +22,7 @@ interface ConfigureIntegrationProps {
 export function ConfigureIntegration(
   { provider, subdomain, connectionId }: ConfigureIntegrationProps,
 ) {
+  // IMPORT SOURCE FROM AMPERSAND PROVIDER FOR NOW
   // const { status, data: source } = useCallableFunctionResponse(
   //   'getIntegrationSource',
   //   { data: { provider, subdomain, connectionId } },

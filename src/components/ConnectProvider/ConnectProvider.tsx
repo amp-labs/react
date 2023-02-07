@@ -7,22 +7,15 @@ import { IntegrationSource } from '../types/configTypes';
 
 const pizzly = new Pizzly('http://localhost:3003');
 
-// interface ConnectProviderProps {
-//   provider: string,
-//   // subdomain: string,
-//   connectionId: string,
-// }
 interface ConnectProviderProps {
+  // provider: string,
+  // subdomain: string,
   connectionId: string,
 }
 
 function ConnectProvider({ connectionId }: ConnectProviderProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const source: IntegrationSource | null = useContext(AmpersandContext);
-
-  // if (options.provider !== 'salesforce') {
-  //   return (<>Not supported</>);
-  // }
 
   const launchLogIn = () => {
     if (!source?.api) return;
