@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
 import { IntegrationSource, SourceList } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
+import { findSourceFromList } from '../../utils';
 import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
 // TODO: for each provider, there may actually be multiple integrations available.
@@ -21,30 +22,25 @@ interface ConfigureIntegrationProps {
 export function ConfigureIntegration(
   { integrationName, provider, subdomain }: ConfigureIntegrationProps,
 ) {
-  const status = 'success'; // hard code this for now
   const sourceList: SourceList | null = useContext(AmpersandContext);
-  const source: IntegrationSource | undefined = sourceList
-    /* eslint-disable-next-line react/destructuring-assignment */
-    ? sourceList.find((s: IntegrationSource) => s.name === integrationName)
-    : undefined;
+  let source;
+
+  if (sourceList) {
+    source = findSourceFromList(integrationName, sourceList);
+  }
 
   if (!source) {
     return <CenteredTextBox text="There is an error" />;
   }
 
-  switch (status) {
-    case 'success':
-      /* eslint-disable-next-line no-console */
-      console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
-      return (
-        <InstallIntegration
-          source={source}
-          provider={provider}
-          subdomain={subdomain}
-        />
-      );
-    default:
-      return <CenteredTextBox text="There is an error" />;
+  console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
+  return (
+    <InstallIntegration
+      source={source}
+      provider={provider}
+      subdomain={subdomain}
+    />
+  );
   }
 }
 
