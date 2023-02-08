@@ -8,8 +8,6 @@ import { IntegrationSource } from '../types/configTypes';
 const pizzly = new Pizzly('http://localhost:3003');
 
 interface ConnectProviderProps {
-  // provider: string,
-  // subdomain: string,
   connectionId: string,
 }
 

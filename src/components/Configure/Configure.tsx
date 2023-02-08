@@ -5,7 +5,6 @@ import {
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
-// import { useCallableFunctionResponse } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
 import { IntegrationSource } from '../types/configTypes';
@@ -22,12 +21,6 @@ interface ConfigureIntegrationProps {
 export function ConfigureIntegration(
   { provider, subdomain, connectionId }: ConfigureIntegrationProps,
 ) {
-  // IMPORT SOURCE FROM AMPERSAND PROVIDER FOR NOW
-  // const { status, data: source } = useCallableFunctionResponse(
-  //   'getIntegrationSource',
-  //   { data: { provider, subdomain, connectionId } },
-  // );
-
   // get this info from context?
   const status = 'success'; // hard code this for now
   const source = useContext(AmpersandContext);
