@@ -72,6 +72,7 @@ export const TestSourceList: SourceList = [
       {
         name: {
           objectName: 'email',
+          displayName: 'Email',
         },
       },
     ],
