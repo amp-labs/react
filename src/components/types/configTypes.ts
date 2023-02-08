@@ -1,6 +1,6 @@
 export interface IntegrationSource {
   type: 'read' | 'write';
-  api: 'salesforce';
+  api: string;
   objects: ObjectConfigOptions[];
 }
 
