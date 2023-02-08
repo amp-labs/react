@@ -33,6 +33,7 @@ export function ConfigureIntegration(
     return <CenteredTextBox text="There is an error" />;
   }
 
+  /* eslint-disable-next-line no-console */
   console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
   return (
     <InstallIntegration
@@ -41,7 +42,6 @@ export function ConfigureIntegration(
       subdomain={subdomain}
     />
   );
-  }
 }
 
 interface InstallProps {
