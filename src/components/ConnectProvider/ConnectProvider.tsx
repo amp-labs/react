@@ -3,17 +3,22 @@ import Pizzly from '@nangohq/pizzly-frontend';
 import { Box, Button } from '@chakra-ui/react';
 import { Navigate } from 'react-router-dom';
 import { AmpersandContext } from '../AmpersandProvider';
-import { IntegrationSource } from '../types/configTypes';
+import { SourceList, IntegrationSource } from '../types/configTypes';
 
 const pizzly = new Pizzly('http://localhost:3003');
 
 interface ConnectProviderProps {
+  integrationName: string,
   connectionId: string,
 }
 
-function ConnectProvider({ connectionId }: ConnectProviderProps) {
+function ConnectProvider({ integrationName, connectionId }: ConnectProviderProps) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const source: IntegrationSource | null = useContext(AmpersandContext);
+  const sourceList: SourceList | null = useContext(AmpersandContext);
+  const source: IntegrationSource | undefined = sourceList
+    /* eslint-disable-next-line react/destructuring-assignment */
+    ? sourceList.find((s) => s.name === integrationName)
+    : undefined;
 
   const launchLogIn = () => {
     if (!source?.api) return;

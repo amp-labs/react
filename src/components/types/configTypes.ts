@@ -1,6 +1,9 @@
+export type SourceList = Array<IntegrationSource>
+
 export interface IntegrationSource {
+  name: string;
   type: 'read' | 'write';
-  api: string;
+  api?: string;
   objects: ObjectConfigOptions[];
 }
 
@@ -18,7 +21,7 @@ type DataFieldDisplayName = string;
 
 export interface DataObject {
   objectName: DataObjectName;
-  displayName: DataObjectDisplayName;
+  displayName?: DataObjectDisplayName;
 }
 
 export interface DataField {

@@ -5,9 +5,9 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import { createContext, useContext } from 'react';
-import TestSalesforceIntegrationSource from '../../testData/integrationSource';
-import { IntegrationSource, ObjectConfigOptions } from '../types/configTypes';
+import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
+import { SourceList } from '../types/configTypes';
 
 interface AmpersandProviderProps {
   options: {
@@ -19,32 +19,33 @@ interface AmpersandProviderProps {
 }
 
 /**
- * Call out to get integration source.
- * Currently just mocks the API call.
+ * Compose source URL from params.
  *
- * @param apiKey {string} API key for Ampersand backend.
- * @param projectId {string} Builder's project ID.
- * @returns source {IntegrationSource} Integration source.
+ * @param apiKey {string} Builder's API key.
+ * @param projectId {string} Builder's project ID
+ * @returns {string} URL to be called to fetch source.
  */
-function getSource(apiKey: string, projectId: string): IntegrationSource {
+const getAllSourcesURL = (apiKey: string, projectId: string) : string => {
   console.log(apiKey); /* eslint-disable-line no-console */
   console.log(projectId); /* eslint-disable-line no-console */
 
-  // JUST MOCK THE API CALL FOR NOW, IMPORT SOURCE FROM LOCAL FILE
-  const source = TestSalesforceIntegrationSource;
+  return 'https://us-central1-ampersand-demo-server.cloudfunctions.net/getAllSources';
+};
 
-  return source;
-}
-
-export const AmpersandContext = createContext<IntegrationSource | null>(null);
+export const AmpersandContext = createContext<SourceList | null>(null);
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
+  const [sources, setSources] = useState(null);
   const { options, children } = props;
+  const { apiKey, projectID } = options;
 
-  const source = getSource(options.apiKey, options.projectID);
+  axios.get(getAllSourcesURL(apiKey, projectID))
+    .then((res) => {
+      setSources(res.data);
+    });
 
   return (
-    <AmpersandContext.Provider value={source}>
+    <AmpersandContext.Provider value={sources}>
       { children }
     </AmpersandContext.Provider>
   );

@@ -7,33 +7,38 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
-import { IntegrationSource } from '../types/configTypes';
+import { IntegrationSource, SourceList } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
 import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
 // TODO: for each provider, there may actually be multiple integrations available.
 interface ConfigureIntegrationProps {
+  integrationName: string,
   provider: string,
   subdomain: string,
-  connectionId: string,
 }
 
 export function ConfigureIntegration(
-  { provider, subdomain, connectionId }: ConfigureIntegrationProps,
+  { integrationName, provider, subdomain }: ConfigureIntegrationProps,
 ) {
-  // get this info from context?
   const status = 'success'; // hard code this for now
-  const source = useContext(AmpersandContext);
+  const sourceList: SourceList | null = useContext(AmpersandContext);
+  const source: IntegrationSource | undefined = sourceList
+    /* eslint-disable-next-line react/destructuring-assignment */
+    ? sourceList.find((s: IntegrationSource) => s.name === integrationName)
+    : undefined;
+
+  if (!source) {
+    return <CenteredTextBox text="There is an error" />;
+  }
 
   switch (status) {
-    // case 'loading':
-    //   return <CenteredTextBox text="Loading..." />;
     case 'success':
       /* eslint-disable-next-line no-console */
       console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
       return (
         <InstallIntegration
-          source={source as IntegrationSource}
+          source={source}
           provider={provider}
           subdomain={subdomain}
         />
