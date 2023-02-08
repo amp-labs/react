@@ -42,6 +42,10 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   axios.get(getAllSourcesURL(apiKey, projectID))
     .then((res) => {
       setSources(res.data);
+    })
+    .catch((err) => {
+      /* eslint-disable-next-line no-console */
+      console.error(err);
     });
 
   return (
