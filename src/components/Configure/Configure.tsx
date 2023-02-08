@@ -1,62 +1,64 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import {
   merge, map, set, capitalize,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
-import { useCallableFunctionResponse } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
-import { IntegrationSource } from '../types/configTypes';
+import { IntegrationSource, SourceList } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
+import { findSourceFromList } from '../../utils';
+import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
-// TODO: for each provider, there may actually be multiple integrations available.
 interface ConfigureIntegrationProps {
-  provider: string,
+  integration: string,
+  api: string,
   subdomain: string,
-  connectionId: string,
 }
-export function ConfigureIntegration(
-  { provider, subdomain, connectionId }: ConfigureIntegrationProps,
-) {
-  const { status, data: source } = useCallableFunctionResponse(
-    'getIntegrationSource',
-    { data: { provider, subdomain, connectionId } },
-  );
 
-  switch (status) {
-    case 'loading':
-      return <CenteredTextBox text="Loading..." />;
-    case 'success':
-      /* eslint-disable-next-line no-console */
-      console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
-      return (
-        <InstallIntegration
-          source={source as IntegrationSource}
-          provider={provider}
-          subdomain={subdomain}
-        />
-      );
-    default:
-      return <CenteredTextBox text="There is an error" />;
+export function ConfigureIntegration(
+  { integration, api, subdomain }: ConfigureIntegrationProps,
+) {
+  const sourceList: SourceList | null = useContext(AmpersandContext);
+  let source;
+
+  if (sourceList) {
+    source = findSourceFromList(integration, sourceList);
   }
+
+  if (!source) {
+    return <CenteredTextBox text="There is an error" />;
+  }
+
+  /* eslint-disable-next-line no-console */
+  console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
+  return (
+    <InstallIntegration
+      source={source}
+      api={api}
+      subdomain={subdomain}
+    />
+  );
 }
 
 interface InstallProps {
   source: IntegrationSource;
   subdomain: string;
-  provider: string,
+  api: string,
 }
-export function InstallIntegration({ source, subdomain, provider }: InstallProps) {
-  if (source.type === 'read') {
-    return <SetUpRead source={source} subdomain={subdomain} provider={provider} />;
+export function InstallIntegration({ source, subdomain, api }: InstallProps) {
+  const { type } = source;
+  if (type === 'read') {
+    return <SetUpRead source={source} subdomain={subdomain} api={api} />;
+  } if (type === 'write') {
+    return <SetUpWrite />;
   }
-  // return <SetUpWrite source={source} subdomain={subdomain} provider={provider} />;
   return null;
 }
 
-function SetUpRead({ source, subdomain, provider }: InstallProps) {
+function SetUpRead({ source, subdomain, api }: InstallProps) {
   const [integrationConfig, setIntegrationConfig] = useState(
     generateDefaultIntegrationConfig(source),
   );
@@ -68,8 +70,9 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
     navigate('/configure-write');
   };
   const appName = 'MailMonkey'; // TODO: should read from source.
+  const { objects } = source;
 
-  const elems = map(source.objects, (object) => {
+  const elems = map(objects, (object) => {
     let mandatoryFields;
     let optionalFields;
     let customFieldMapping;
@@ -171,7 +174,7 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
   return (
     <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
       <Text marginBottom="20px">
-        Let's integrate {appName} with your {capitalize(provider)} instance <b>{subdomain}</b>.
+        Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.
       </Text>
       <hr />
       <form onSubmit={handleSubmit}>
@@ -182,9 +185,9 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
   );
 }
 
-// function SetUpWrite(/* props: InstallProps */) {
-//   return (<>TODO</>);
-// }
+function SetUpWrite(/* props: InstallProps */) {
+  return (<>TODO</>);
+}
 
 export function SetUpWriteTemp() {
   const navigate = useNavigate();
@@ -197,11 +200,11 @@ export function SetUpWriteTemp() {
   const prompt = 'Every time we send out an email, we will record it as an Email within Salesforce.';
   const objectDisplayName = 'Email';
   const appName = 'MailMonkey';
-  const provider = 'Salesforce';
+  const api = 'Salesforce';
   const elems = (
     <Box marginTop="20px" marginBottom="10px">
       <Text marginBottom="10px">
-        {appName} will save <b>{objectDisplayName}s</b> to {provider}.
+        {appName} will save <b>{objectDisplayName}s</b> to {api}.
       </Text>
       <Text color="gray.600" marginBottom="10px">{prompt}</Text>
       <Text marginBottom="10px">

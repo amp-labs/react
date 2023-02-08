@@ -1,5 +1,9 @@
+export type SourceList = Array<IntegrationSource>
+
 export interface IntegrationSource {
+  name: string;
   type: 'read' | 'write';
+  api: string;
   objects: ObjectConfigOptions[];
 }
 
