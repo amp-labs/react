@@ -12,15 +12,14 @@ import CenteredTextBox from '../CenteredTextBox';
 import { findSourceFromList } from '../../utils';
 import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
-// TODO: for each provider, there may actually be multiple integrations available.
 interface ConfigureIntegrationProps {
   integration: string,
-  provider: string,
+  api: string,
   subdomain: string,
 }
 
 export function ConfigureIntegration(
-  { integration, provider, subdomain }: ConfigureIntegrationProps,
+  { integration, api, subdomain }: ConfigureIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(AmpersandContext);
   let source;
@@ -38,7 +37,7 @@ export function ConfigureIntegration(
   return (
     <InstallIntegration
       source={source}
-      provider={provider}
+      api={api}
       subdomain={subdomain}
     />
   );
@@ -47,19 +46,19 @@ export function ConfigureIntegration(
 interface InstallProps {
   source: IntegrationSource;
   subdomain: string;
-  provider: string,
+  api: string,
 }
-export function InstallIntegration({ source, subdomain, provider }: InstallProps) {
+export function InstallIntegration({ source, subdomain, api }: InstallProps) {
   const { type } = source;
   if (type === 'read') {
-    return <SetUpRead source={source} subdomain={subdomain} provider={provider} />;
+    return <SetUpRead source={source} subdomain={subdomain} api={api} />;
   } if (type === 'write') {
     return <SetUpWrite />;
   }
   return null;
 }
 
-function SetUpRead({ source, subdomain, provider }: InstallProps) {
+function SetUpRead({ source, subdomain, api }: InstallProps) {
   const [integrationConfig, setIntegrationConfig] = useState(
     generateDefaultIntegrationConfig(source),
   );
@@ -175,7 +174,7 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
   return (
     <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
       <Text marginBottom="20px">
-        Let's integrate {appName} with your {capitalize(provider)} instance <b>{subdomain}</b>.
+        Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.
       </Text>
       <hr />
       <form onSubmit={handleSubmit}>
@@ -201,11 +200,11 @@ export function SetUpWriteTemp() {
   const prompt = 'Every time we send out an email, we will record it as an Email within Salesforce.';
   const objectDisplayName = 'Email';
   const appName = 'MailMonkey';
-  const provider = 'Salesforce';
+  const api = 'Salesforce';
   const elems = (
     <Box marginTop="20px" marginBottom="10px">
       <Text marginBottom="10px">
-        {appName} will save <b>{objectDisplayName}s</b> to {provider}.
+        {appName} will save <b>{objectDisplayName}s</b> to {api}.
       </Text>
       <Text color="gray.600" marginBottom="10px">{prompt}</Text>
       <Text marginBottom="10px">
