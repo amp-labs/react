@@ -14,19 +14,19 @@ import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
 
 // TODO: for each provider, there may actually be multiple integrations available.
 interface ConfigureIntegrationProps {
-  integrationName: string,
+  integration: string,
   provider: string,
   subdomain: string,
 }
 
 export function ConfigureIntegration(
-  { integrationName, provider, subdomain }: ConfigureIntegrationProps,
+  { integration, provider, subdomain }: ConfigureIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(AmpersandContext);
   let source;
 
   if (sourceList) {
-    source = findSourceFromList(integrationName, sourceList);
+    source = findSourceFromList(integration, sourceList);
   }
 
   if (!source) {
@@ -53,8 +53,9 @@ export function InstallIntegration({ source, subdomain, provider }: InstallProps
   const { type } = source;
   if (type === 'read') {
     return <SetUpRead source={source} subdomain={subdomain} provider={provider} />;
+  } if (type === 'write') {
+    return <SetUpWrite />;
   }
-  // return <SetUpWrite source={source} subdomain={subdomain} provider={provider} />;
   return null;
 }
 
@@ -185,9 +186,9 @@ function SetUpRead({ source, subdomain, provider }: InstallProps) {
   );
 }
 
-// function SetUpWrite(/* props: InstallProps */) {
-//   return (<>TODO</>);
-// }
+function SetUpWrite(/* props: InstallProps */) {
+  return (<>TODO</>);
+}
 
 export function SetUpWriteTemp() {
   const navigate = useNavigate();

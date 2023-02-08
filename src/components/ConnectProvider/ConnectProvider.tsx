@@ -9,17 +9,17 @@ import { SourceList, IntegrationSource } from '../types/configTypes';
 const pizzly = new Pizzly('http://localhost:3003');
 
 interface ConnectProviderProps {
-  integrationName: string,
+  integration: string,
   connectionId: string,
 }
 
-function ConnectProvider({ integrationName, connectionId }: ConnectProviderProps) {
+function ConnectProvider({ integration, connectionId }: ConnectProviderProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const sourceList: SourceList | null = useContext(AmpersandContext);
   let source: IntegrationSource | undefined;
 
   if (sourceList) {
-    source = findSourceFromList(integrationName, sourceList);
+    source = findSourceFromList(integration, sourceList);
   }
 
   const launchLogIn = () => {
