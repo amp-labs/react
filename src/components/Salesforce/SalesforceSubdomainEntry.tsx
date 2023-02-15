@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState } from 'react';
 import {
   Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
@@ -7,7 +7,18 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
 
+/**
+ * User input for Salesforce subdomain.
+ *
+ * TODO: Implement error state.
+ */
 function SalesforceSubdomainEntry() {
+  const [subdomain, setSubdomain] = useState('');
+
+  const handleSubmit = async (event) => {
+    // set subdomain value
+  };
+
   return (
     <Container>
       <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
@@ -35,11 +46,14 @@ function SalesforceSubdomainEntry() {
             What is my Salesforce subdomain? <ExternalLinkIcon mx="2px" />
           </Link>
           <Flex marginTop="1em">
-            <Input placeholder="MyDomain" />
+            <Input
+              placeholder="MyDomain"
+              onChange={(event) => setSubdomain(event.currentTarget.value)}
+            />
             <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
           </Flex>
           <br />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" onClick={handleSubmit}>Submit</Button>
         </FormControl>
       </Box>
     </Container>
