@@ -16,8 +16,11 @@
   "typings": "build/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "rm -rf ./build/ && tsc -p tsconfig.json --watch",
-    "build": "rm -rf ./build/ && tsc -p tsconfig.json"
+    "watch": "npm run prepbuild && tsc -p tsconfig.json --watch",
+    "build": "npm run prepbuild && tsc -p tsconfig.json",
+    "prepbuild": "npm run clean && npm run assets",
+    "clean": "rm -rf ./build/",
+    "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/"
   },
   "repository": {
     "type": "git",
@@ -44,6 +47,8 @@
     "@chakra-ui/react": "^2.4.9",
     "@nangohq/pizzly-frontend": "^0.5.2",
     "axios": "^1.3.2",
+    "formik": "^2.2.9",
+    "lodash": "^4.17.21",
     "react-router-dom": "^6.8.0",
     "reactfire": "^4.2.2"
   }
