@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
@@ -15,7 +15,8 @@ const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_C
 function SalesforceSubdomainEntry() {
   const [subdomain, setSubdomain] = useState('');
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent) => {
+    console.log(event); /* eslint-disable-line no-console */
     // set subdomain value
   };
 
