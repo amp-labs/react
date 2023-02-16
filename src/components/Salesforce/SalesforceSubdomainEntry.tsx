@@ -18,6 +18,7 @@ function SalesforceSubdomainEntry() {
   const handleSubmit = async (event: FormEvent) => {
     console.log(event); /* eslint-disable-line no-console */
     // set subdomain value
+    setSubdomain(subdomain);
   };
 
   return (
