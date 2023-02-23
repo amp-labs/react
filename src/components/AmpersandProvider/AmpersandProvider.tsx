@@ -5,7 +5,9 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import { createContext, useContext, useState } from 'react';
+import {
+  createContext, useContext, useEffect, useState,
+} from 'react';
 import axios from 'axios';
 import { SourceList } from '../types/configTypes';
 
@@ -39,14 +41,16 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options, children } = props;
   const { apiKey, projectID } = options;
 
-  axios.get(getAllSourcesURL(apiKey, projectID))
-    .then((res) => {
-      setSources(res.data);
-    })
-    .catch((err) => {
-      /* eslint-disable-next-line no-console */
-      console.error(err);
-    });
+  useEffect(() => {
+    axios.get(getAllSourcesURL(apiKey, projectID))
+      .then((res) => {
+        setSources(res.data);
+      })
+      .catch((err) => {
+        /* eslint-disable-next-line no-console */
+        console.error(err);
+      });
+  }, [apiKey, projectID]);
 
   return (
     <AmpersandContext.Provider value={sources}>
