@@ -10,9 +10,9 @@ type IWindowProps = {
 };
 
 type IPopupProps = IWindowProps & {
-  onClose: () => void;
-  onCode: (code: string, params: URLSearchParams) => void;
-  children: React.ReactNode;
+  onClose?: () => void;
+  onCode?: (code: string, params: URLSearchParams) => void;
+  children?: React.ReactNode;
 };
 
 const createPopup = ({
@@ -45,11 +45,18 @@ function OAuthPopup({
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
         try {
+          console.log('TRY');
           const currentUrl = externalWindow.location.href;
+          console.log('currentUrl');
+          console.log(currentUrl);
           const { searchParams } = new URL(currentUrl);
+          console.log('searchParams');
+          console.log(searchParams);
           const code = searchParams.get('code');
+          console.log('CODE');
+          console.log(code);
           if (!code) return;
-          onCode(code, searchParams);
+          if (onCode) onCode(code, searchParams);
           clearTimer();
           externalWindow.close();
         } catch (error) {
@@ -58,7 +65,7 @@ function OAuthPopup({
           console.error(error);
         } finally {
           if (!externalWindow || externalWindow.closed) {
-            onClose();
+            if (onClose) onClose();
             clearTimer();
           }
         }
@@ -70,12 +77,20 @@ function OAuthPopup({
     };
   }, [externalWindow]);
 
+  // onContainerClick();
   return (
     // eslint-disable-next-line
     <div onClick={() => onContainerClick()}>
+      CLICK ME
       { children }
     </div>
   );
 }
+
+OAuthPopup.defaultProps = {
+  onClose: () => {}, // eslint-disable-line
+  onCode: (code: string, params: URLSearchParams) => {}, // eslint-disable-line
+  children: <></>, // eslint-disable-line
+};
 
 export default OAuthPopup;
