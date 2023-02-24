@@ -1,9 +1,10 @@
-import { FormEvent, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -12,17 +13,21 @@ const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_C
 const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
 
 /**
- * User input for Salesforce subdomain.
+ * User input for Salesforce customerSubdomain.
  *
  * TODO: Implement error state.
  */
 function SalesforceSubdomainEntry() {
-  const [subdomain, setSubdomain] = useState<string | null>('');
+  const [customerSubdomain, setCustomerSubdomain] = useState<string | null>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>('');
 
+  const { setSubdomain } = useContext(SubdomainContext);
+
   const handleSubmit = async () => {
+    setSubdomain(customerSubdomain);
+
     axios.post(AMP_OAUTH_URL, {
-      Subdomain: subdomain,
+      Subdomain: customerSubdomain,
       Api: 'salesforce',
       ProjectId: 'foo',
     }, {
@@ -34,10 +39,6 @@ function SalesforceSubdomainEntry() {
       setOAuthCallbackURL(url);
     }));
   };
-
-  // IF CODE PARAM EXISTS, THAT'S SUCCESSFUL
-  // ONCE REDIRECT TO SUCCESS URL HAPPENS, JUST CLOSE THAT POPUP
-  // const successURL = 'https://oauth-server-msdauvir5a-uc.a.run.app/oauth-callback?code=aPrxxWbemCeRRVE9CO5dOoe7AGEl1H38iTpfzBCvxWVHlGSZundxgtBV5Q1a9OpxYlDypXorpQ%3D%3D&state=%7B%22Subdomain%22%3A%22boxit2-dev-ed%22%2C%22Api%22%3A%22salesforce%22%2C%22ProjectId%22%3A%22foo%22%7D';
 
   const SubdomainEntry = (
     <Container>
@@ -68,7 +69,7 @@ function SalesforceSubdomainEntry() {
           <Flex marginTop="1em">
             <Input
               placeholder="MyDomain"
-              onChange={(event) => setSubdomain(event.currentTarget.value)}
+              onChange={(event) => setCustomerSubdomain(event.currentTarget.value)}
             />
             <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
           </Flex>

@@ -10,25 +10,25 @@ import generateDefaultIntegrationConfig from '../../library/utils/generateDefaul
 import { IntegrationSource, SourceList } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
 import { findSourceFromList } from '../../utils';
-import { AmpersandContext } from '../AmpersandProvider/AmpersandProvider';
+import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface ConfigureIntegrationProps {
   integration: string,
   api: string,
-  subdomain: string,
 }
 
 export function ConfigureIntegration(
-  { integration, api, subdomain }: ConfigureIntegrationProps,
+  { integration, api }: ConfigureIntegrationProps,
 ) {
-  const sourceList: SourceList | null = useContext(AmpersandContext);
+  const sourceList: SourceList | null = useContext(SourceListContext);
+  const { subdomain } = useContext(SubdomainContext);
   let source;
 
   if (sourceList) {
     source = findSourceFromList(integration, sourceList);
   }
 
-  if (!source) {
+  if (!source || !subdomain) {
     return <CenteredTextBox text="There is an error" />;
   }
 

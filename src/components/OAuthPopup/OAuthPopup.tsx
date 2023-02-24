@@ -1,3 +1,9 @@
+/**
+ * OAuthPopup.tsx
+ *
+ * Takes a URL and creates a popup showing that page.
+ */
+
 import React, { useEffect, useState, useRef } from 'react';
 
 const DEFAULT_WIDTH = 600; // px
@@ -43,6 +49,7 @@ function OAuthPopup({
     setExternalWindow(createPopup({ url, title }));
   }, []);
 
+  // CHECK FOR OAUTH WINDOW TO CLOSE (COMPLETE)
   useEffect(() => {
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
