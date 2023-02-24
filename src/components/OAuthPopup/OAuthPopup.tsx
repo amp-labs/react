@@ -10,9 +10,8 @@ type IWindowProps = {
 };
 
 type IPopupProps = IWindowProps & {
-  onClose?: () => void;
-  onCode?: (code: string, params: URLSearchParams) => void;
-  children?: React.ReactNode;
+  onClose: () => void;
+  children: React.ReactNode;
 };
 
 const createPopup = ({
@@ -32,42 +31,24 @@ function OAuthPopup({
   title = '',
   url,
   children,
-  onCode,
   onClose,
 }: IPopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
-  const onContainerClick = () => setExternalWindow(createPopup({ url, title }));
+
+  // CREATE POPUP ON COMPONENT MOUNT
+  useEffect(() => {
+    setExternalWindow(createPopup({ url, title }));
+  }, []);
 
   useEffect(() => {
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
-        try {
-          console.log('TRY');
-          const currentUrl = externalWindow.location.href;
-          console.log('currentUrl');
-          console.log(currentUrl);
-          const { searchParams } = new URL(currentUrl);
-          console.log('searchParams');
-          console.log(searchParams);
-          const code = searchParams.get('code');
-          console.log('CODE');
-          console.log(code);
-          if (!code) return;
-          if (onCode) onCode(code, searchParams);
+        if (!externalWindow || externalWindow.closed) {
+          onClose();
           clearTimer();
-          externalWindow.close();
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          // TODO: HANDLE ERROR IN UI
-          console.error(error);
-        } finally {
-          if (!externalWindow || externalWindow.closed) {
-            if (onClose) onClose();
-            clearTimer();
-          }
         }
       }, DEFAULT_INTERVAL);
     }
@@ -77,20 +58,12 @@ function OAuthPopup({
     };
   }, [externalWindow]);
 
-  // onContainerClick();
   return (
     // eslint-disable-next-line
-    <div onClick={() => onContainerClick()}>
-      CLICK ME
+    <div>
       { children }
     </div>
   );
 }
-
-OAuthPopup.defaultProps = {
-  onClose: () => {}, // eslint-disable-line
-  onCode: (code: string, params: URLSearchParams) => {}, // eslint-disable-line
-  children: <></>, // eslint-disable-line
-};
 
 export default OAuthPopup;

@@ -9,8 +9,7 @@ import OAuthPopup from '../OAuthPopup';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
 
-// const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
-const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/ping';
+const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
 
 /**
  * User input for Salesforce subdomain.
@@ -21,26 +20,19 @@ function SalesforceSubdomainEntry() {
   const [subdomain, setSubdomain] = useState<string | null>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>('');
 
-  const handleSubmit = async (event: FormEvent) => {
-    console.log('EVENT'); /* eslint-disable-line no-console */
-    console.log(event); /* eslint-disable-line no-console */
-
-    // STUB instead of network call
-    setOAuthCallbackURL('https://boxit2-dev-ed.my.salesforce.com/services/oauth2/authorize?prompt=login&client_id=3MVG9kBt168mda__AsLfwj2vUtrPMp39Nvj9amL1F7wMQhoDK7FgznCLTvYMIYLcDidAVGom5YCeiVbbFkE3X&redirect_uri=https://oauth-server-msdauvir5a-uc.a.run.app/oauth-callback&response_type=code&state=%7B%22Subdomain%22%3A%22boxit2-dev-ed%22%2C%22Api%22%3A%22salesforce%22%2C%22ProjectId%22%3A%22foo%22%7D');
-
-    // axios.post(AMP_OAUTH_URL, {
-    //   Subdomain: subdomain,
-    //   Api: 'salesforce',
-    //   ProjectId: 'foo',
-    // }, {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // }).then(((res) => {
-    //   debugger;
-    //   // setOAuthCallbackURL(res.data);
-    //   setOAuthCallbackURL(URL)
-    // }));
+  const handleSubmit = async () => {
+    axios.post(AMP_OAUTH_URL, {
+      Subdomain: subdomain,
+      Api: 'salesforce',
+      ProjectId: 'foo',
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(((res) => {
+      const url = res.data;
+      setOAuthCallbackURL(url);
+    }));
   };
 
   // IF CODE PARAM EXISTS, THAT'S SUCCESSFUL
@@ -92,7 +84,6 @@ function SalesforceSubdomainEntry() {
       <OAuthPopup
         title="OAuth to Salesforce"
         url={oAuthCallbackURL}
-        onCode={() => { console.log('onCodee'); }} // eslint-disable-line
         onClose={() => { console.log('onClose'); }} // eslint-disable-line
       >
         { SubdomainEntry }
