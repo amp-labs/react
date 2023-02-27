@@ -47,6 +47,11 @@ function OAuthPopup({
   // CREATE POPUP ON COMPONENT MOUNT
   useEffect(() => {
     setExternalWindow(createPopup({ url, title }));
+    window.addEventListener("message", (event) => {
+      if (event.origin === 'https://oauth-server-msdauvir5a-uc.a.run.app') {
+        console.log('Got message from oauth server' + JSON.stringify(event.data, null, 2))
+      }
+    });
   }, []);
 
   // CHECK FOR OAUTH WINDOW TO CLOSE (COMPLETE)
@@ -58,10 +63,11 @@ function OAuthPopup({
           clearTimer();
         }
       }, DEFAULT_INTERVAL);
+
     }
     return () => {
-      if (externalWindow) externalWindow.close();
-      if (onClose) onClose();
+      // if (externalWindow) externalWindow.close();
+      // if (onClose) onClose();
     };
   }, [externalWindow]);
 
