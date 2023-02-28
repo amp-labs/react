@@ -8,10 +8,10 @@
 import {
   createContext, useContext, useEffect, useState, useMemo,
 } from 'react';
-import axios from 'axios';
 import {
   SourceList, SubdomainContextConfig,
 } from '../types/configTypes';
+import { getAllSources } from '../../library/services/apiService';
 
 interface AmpersandProviderProps {
   options: {
@@ -21,20 +21,6 @@ interface AmpersandProviderProps {
   },
   children: React.ReactNode
 }
-
-/**
- * Compose source URL from params.
- *
- * @param apiKey {string} Builder's API key.
- * @param projectId {string} Builder's project ID
- * @returns {string} URL to be called to fetch source.
- */
-const getAllSourcesURL = (apiKey: string, projectId: string) : string => {
-  console.log(apiKey); /* eslint-disable-line no-console */
-  console.log(projectId); /* eslint-disable-line no-console */
-
-  return 'https://us-central1-ampersand-demo-server.cloudfunctions.net/getAllSources';
-};
 
 export const AmpersandContext = createContext(null);
 export const SourceListContext = createContext<SourceList | null>(null);
@@ -53,7 +39,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   // CALL FOR SOURCE LIST
   useEffect(() => {
-    axios.get(getAllSourcesURL(apiKey, projectID))
+    getAllSources(apiKey, projectID)
       .then((res) => {
         setSources(res.data);
       })
