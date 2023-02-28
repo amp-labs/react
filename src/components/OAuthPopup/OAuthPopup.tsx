@@ -12,6 +12,7 @@ const DEFAULT_INTERVAL = 700; // ms
 
 const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const SUCCESS_EVENT = 'AUTHORIZATION_SUCCEEDED';
+const FAILURE_EVENT = 'AUTHORIZATION_FAILED';
 
 type WindowProps = {
   url: string;
@@ -53,32 +54,37 @@ function OAuthPopup({
     setExternalWindow(createPopup({ url, title }));
 
     window.addEventListener('message', (event) => {
-      if (event.origin === OAUTH_SERVER && event.data.eventType === SUCCESS_EVENT) {
-        if (externalWindow) externalWindow.close();
-        clearTimer();
-        setOAuthSuccess(true);
-        onClose(null);
-      } else {
-        setOAuthSuccess(false);
-        onClose('error');
+      if (event.origin === OAUTH_SERVER) {
+        if (event.data.eventType === SUCCESS_EVENT) {
+          if (externalWindow) externalWindow.close();
+          clearTimer();
+          setOAuthSuccess(true);
+          onClose(null);
+        } else if (event.data.eventType === FAILURE_EVENT) {
+          if (externalWindow) externalWindow.close();
+          clearTimer();
+          setOAuthSuccess(false);
+          // TODO: replace with actual error from server.
+          onClose('There was an error logging into your Salesforce subdomain. Please try again.');
+        }
       }
     });
   }, []);
 
-  // CHECK FOR OAUTH WINDOW TO CLOSE (COMPLETE)
   useEffect(() => {
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
-        // SUCCESS - INTERVAL CLEARED BY EVENT LISTENER
+        // Check for OAuth success.
         if (oAuthSuccess) {
           onClose(null);
           clearTimer();
           return;
         }
-        // FAILURE - WINDOW CLOSED BUT INTERVAL NOT CLEARED
+        // Check if window was closed prematurely.
         if (!externalWindow || externalWindow.closed) {
-          onClose('error'); // THROW ERROR IN PARENT
+          onClose('The popup was closed too quickly. Please try again.');
           clearTimer();
+          return;
         }
       }, DEFAULT_INTERVAL);
     }
