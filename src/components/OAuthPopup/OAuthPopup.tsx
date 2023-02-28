@@ -5,12 +5,12 @@
  */
 
 import React, { useEffect, useState, useRef } from 'react';
+import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
 const DEFAULT_INTERVAL = 700; // ms
 
-const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const SUCCESS_EVENT = 'AUTHORIZATION_SUCCEEDED';
 const FAILURE_EVENT = 'AUTHORIZATION_FAILED';
 
@@ -54,7 +54,7 @@ function OAuthPopup({
     setExternalWindow(createPopup({ url, title }));
 
     window.addEventListener('message', (event) => {
-      if (event.origin === OAUTH_SERVER) {
+      if (event.origin === AMP_OAUTH_SERVER) {
         if (event.data.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
