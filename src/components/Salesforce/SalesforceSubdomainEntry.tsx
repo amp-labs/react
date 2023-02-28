@@ -1,17 +1,22 @@
+/**
+ * SalesforceSubdomainEntry.tsx
+ *
+ * Prompts customer to input their Salesforce subdomain, then creates an OAuth connection to
+ * that Salesforce instance.
+ */
+
 import { useContext, useState } from 'react';
 import {
   Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup';
+import { postConnectOAuth } from '../../library/services/network';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
-
-const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
 
 interface OAuthErrorAlertProps {
   error: string | null;
@@ -48,18 +53,13 @@ function SalesforceSubdomainEntry() {
     setSubdomain(customerSubdomain);
     setError(null);
 
-    axios.post(AMP_OAUTH_URL, {
-      Subdomain: customerSubdomain,
-      Api: 'salesforce',
-      ProjectId: projectID,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(((res) => {
-      const url = res.data;
-      setOAuthCallbackURL(`${url}&prompt=login`);
-    }));
+    if (customerSubdomain && projectID) {
+      postConnectOAuth(customerSubdomain, 'salesforce', projectID)
+        .then((res) => {
+          const url = res.data;
+          setOAuthCallbackURL(`${url}&prompt=login`);
+        });
+    }
   };
 
   const SubdomainEntry = (
