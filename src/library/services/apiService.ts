@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+export const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const GET_ALL_SOURCES_URL = 'https://us-central1-ampersand-demo-server.cloudfunctions.net/getAllSources';
-const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
+const CONNECT_OAUTH_URL = `${OAUTH_SERVER}/connect-oauth`;
 
 /**
  * Get all sources for a builder.
@@ -27,7 +28,7 @@ export function getAllSources(apiKey: string, projectID: string) {
  * @returns {Promise} Thenable promise to handle success and failure from caller.
  */
 export function postConnectOAuth(subdomain: string, api: string, projectID: string) {
-  return axios.post(AMP_OAUTH_URL, {
+  return axios.post(CONNECT_OAUTH_URL, {
     Subdomain: subdomain,
     Api: 'salesforce',
     ProjectId: projectID,

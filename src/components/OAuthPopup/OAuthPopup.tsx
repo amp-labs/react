@@ -5,12 +5,12 @@
  */
 
 import React, { useEffect, useState, useRef } from 'react';
+import { OAUTH_SERVER } from '../../library/services/apiService';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
 const DEFAULT_INTERVAL = 700; // ms
 
-const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const SUCCESS_EVENT = 'AUTHORIZATION_SUCCEEDED';
 
 type WindowProps = {

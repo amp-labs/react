@@ -11,7 +11,7 @@ import {
 import {
   SourceList, SubdomainContextConfig,
 } from '../types/configTypes';
-import { getAllSources } from '../../library/services/network';
+import { getAllSources } from '../../library/services/apiService';
 
 interface AmpersandProviderProps {
   options: {

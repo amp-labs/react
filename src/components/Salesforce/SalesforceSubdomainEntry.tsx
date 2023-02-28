@@ -13,7 +13,7 @@ import {
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup';
-import { postConnectOAuth } from '../../library/services/network';
+import { postConnectOAuth } from '../../library/services/apiService';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
