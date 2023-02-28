@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import {
-  Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Image, Link, Text,
+  Alert, AlertIcon, AlertTitle, AlertDescription, Box, Button, Container, Flex, FormControl,
+  FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
@@ -12,19 +13,41 @@ const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_C
 
 const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
 
+interface OAuthErrorAlertProps {
+  error: boolean;
+}
+
+function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
+  // TODO: RENDER AN ACTUAL ERROR FROM SALESFORCE OAUTH FLOW INSTEAD OF GENERIC MSG
+  if (error) {
+    return (
+      <Alert status="error" marginTop="2em">
+        <AlertIcon />
+        <AlertDescription>
+          There was an error logging into your Salesforce subdomain. Please try again.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return null;
+}
+
 /**
  * User input for Salesforce customerSubdomain.
  *
  * TODO: Implement error state.
  */
 function SalesforceSubdomainEntry() {
-  const [customerSubdomain, setCustomerSubdomain] = useState<string | null>('');
-  const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>('');
+  const [customerSubdomain, setCustomerSubdomain] = useState<string | null>(null);
+  const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
+  const [error, setError] = useState<boolean>(false);
 
   const { setSubdomain } = useContext(SubdomainContext);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
+    setError(false);
 
     axios.post(AMP_OAUTH_URL, {
       Subdomain: customerSubdomain,
@@ -36,7 +59,7 @@ function SalesforceSubdomainEntry() {
       },
     }).then(((res) => {
       const url = res.data;
-      setOAuthCallbackURL(url);
+      setOAuthCallbackURL(`${url}&prompt=login`);
     }));
   };
 
@@ -66,6 +89,7 @@ function SalesforceSubdomainEntry() {
           >
             What is my Salesforce subdomain? <ExternalLinkIcon mx="2px" />
           </Link>
+          <OAuthErrorAlert error={error} />
           <Flex marginTop="1em">
             <Input
               placeholder="MyDomain"
@@ -85,7 +109,7 @@ function SalesforceSubdomainEntry() {
       <OAuthPopup
         title="OAuth to Salesforce"
         url={oAuthCallbackURL}
-        onClose={() => { console.log('onClose'); }} // eslint-disable-line
+        onClose={(err: boolean) => { if (err) setError(true); }}
       >
         { SubdomainEntry }
       </OAuthPopup>
