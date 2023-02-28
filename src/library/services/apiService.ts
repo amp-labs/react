@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-export const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
-const GET_ALL_SOURCES_URL = 'https://us-central1-ampersand-demo-server.cloudfunctions.net/getAllSources';
-const CONNECT_OAUTH_URL = `${OAUTH_SERVER}/connect-oauth`;
+export const AMP_OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
+const CONNECT_OAUTH_URL = `${AMP_OAUTH_SERVER}/connect-oauth`;
+
+const AMP_CF_SERVER = 'https://us-central1-ampersand-demo-server.cloudfunctions.net';
+const GET_ALL_SOURCES_URL = `${AMP_CF_SERVER}/getAllSources`;
 
 /**
  * Get all sources for a builder.

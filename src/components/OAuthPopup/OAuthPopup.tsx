@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState, useRef } from 'react';
-import { OAUTH_SERVER } from '../../library/services/apiService';
+import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -53,7 +53,7 @@ function OAuthPopup({
     setExternalWindow(createPopup({ url, title }));
 
     window.addEventListener('message', (event) => {
-      if (event.origin === OAUTH_SERVER && event.data.eventType === SUCCESS_EVENT) {
+      if (event.origin === AMP_OAUTH_SERVER && event.data.eventType === SUCCESS_EVENT) {
         if (externalWindow) externalWindow.close();
         clearTimer();
         setOAuthSuccess(true);
