@@ -55,12 +55,12 @@ function OAuthPopup({
 
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_OAUTH_SERVER) {
-        if (event.data.eventType === SUCCESS_EVENT) {
+        if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
           setOAuthSuccess(true);
           onClose(null);
-        } else if (event.data.eventType === FAILURE_EVENT) {
+        } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
           setOAuthSuccess(false);
