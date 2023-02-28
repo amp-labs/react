@@ -38,6 +38,7 @@ const getAllSourcesURL = (apiKey: string, projectId: string) : string => {
 
 export const AmpersandContext = createContext(null);
 export const SourceListContext = createContext<SourceList | null>(null);
+export const ProjectIDContext = createContext<string | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
   subdomain: '',
   setSubdomain: () => {}, // eslint-disable-line
@@ -70,7 +71,9 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   return (
     <SourceListContext.Provider value={sources}>
       <SubdomainContext.Provider value={subdomainContext}>
-        { children }
+        <ProjectIDContext.Provider value={options.projectID}>
+          { children }
+        </ProjectIDContext.Provider>
       </SubdomainContext.Provider>
     </SourceListContext.Provider>
   );

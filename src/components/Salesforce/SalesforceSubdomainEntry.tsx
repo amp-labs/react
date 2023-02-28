@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import {
-  Alert, AlertIcon, AlertTitle, AlertDescription, Box, Button, Container, Flex, FormControl,
+  Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { SubdomainContext } from '../AmpersandProvider';
+import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -14,7 +14,7 @@ const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_C
 const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
 
 interface OAuthErrorAlertProps {
-  error: boolean;
+  error: string | null;
 }
 
 function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
@@ -39,18 +39,19 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
 function SalesforceSubdomainEntry() {
   const [customerSubdomain, setCustomerSubdomain] = useState<string | null>(null);
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { setSubdomain } = useContext(SubdomainContext);
+  const projectID = useContext(ProjectIDContext);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
-    setError(false);
+    setError(null);
 
     axios.post(AMP_OAUTH_URL, {
       Subdomain: customerSubdomain,
       Api: 'salesforce',
-      ProjectId: 'foo',
+      ProjectId: projectID,
     }, {
       headers: {
         'Content-Type': 'application/json',
@@ -105,9 +106,9 @@ function SalesforceSubdomainEntry() {
   if (oAuthCallbackURL) {
     return (
       <OAuthPopup
-        title="OAuth to Salesforce"
+        title="Connect to Salesforce"
         url={oAuthCallbackURL}
-        onClose={(err: boolean) => { if (err) setError(true); }}
+        onClose={(err: string | null) => { if (err) setError(err); }}
       >
         { SubdomainEntry }
       </OAuthPopup>

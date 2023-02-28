@@ -11,7 +11,7 @@ const DEFAULT_HEIGHT = 600; // px
 const DEFAULT_INTERVAL = 700; // ms
 
 const OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
-const SUCCESS_EVENT = 'AUTHORIZATION_SUCEEDED'; // [sic]
+const SUCCESS_EVENT = 'AUTHORIZATION_SUCCEEDED';
 
 type WindowProps = {
   url: string;
@@ -19,7 +19,7 @@ type WindowProps = {
 };
 
 type PopupProps = WindowProps & {
-  onClose: (err: boolean) => void;
+  onClose: (err: string | null) => void;
   children: React.ReactNode;
 };
 
@@ -27,7 +27,7 @@ const createPopup = ({
   url, title,
 }: WindowProps) => {
   const left = window.screenX + (window.outerWidth - DEFAULT_WIDTH) / 2;
-  const top = window.screenY + (window.outerHeight - DEFAULT_HEIGHT) / 2.5;
+  const top = window.screenY + (window.outerHeight - DEFAULT_HEIGHT) / 2.5; // a lil shorter
   const popup = window.open(
     url,
     title,
@@ -43,6 +43,7 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
+  const [oAuthSuccess, setOAuthSuccess] = useState<boolean | null>(null);
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
@@ -55,9 +56,11 @@ function OAuthPopup({
       if (event.origin === OAUTH_SERVER && event.data.eventType === SUCCESS_EVENT) {
         if (externalWindow) externalWindow.close();
         clearTimer();
-        if (onClose) onClose(false);
+        setOAuthSuccess(true);
+        onClose(null);
       } else {
-        // TODO: HANDLE ERROR...SET `onClose(true)` to send error to parent
+        setOAuthSuccess(false);
+        onClose('error');
       }
     });
   }, []);
@@ -67,13 +70,14 @@ function OAuthPopup({
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
         // SUCCESS - INTERVAL CLEARED BY EVENT LISTENER
-        if (!intervalRef) {
-          onClose(false);
+        if (oAuthSuccess) {
+          onClose(null);
+          clearTimer();
           return;
         }
         // FAILURE - WINDOW CLOSED BUT INTERVAL NOT CLEARED
         if (!externalWindow || externalWindow.closed) {
-          onClose(true); // THROW ERROR IN PARENT
+          onClose('error'); // THROW ERROR IN PARENT
           clearTimer();
         }
       }, DEFAULT_INTERVAL);
