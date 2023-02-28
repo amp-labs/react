@@ -6,10 +6,12 @@
  */
 
 import {
-  createContext, useContext, useEffect, useState,
+  createContext, useContext, useEffect, useState, useMemo,
 } from 'react';
 import axios from 'axios';
-import { SourceList } from '../types/configTypes';
+import {
+  SourceList, SubdomainContextConfig,
+} from '../types/configTypes';
 
 interface AmpersandProviderProps {
   options: {
@@ -34,13 +36,22 @@ const getAllSourcesURL = (apiKey: string, projectId: string) : string => {
   return 'https://us-central1-ampersand-demo-server.cloudfunctions.net/getAllSources';
 };
 
-export const AmpersandContext = createContext<SourceList | null>(null);
+export const AmpersandContext = createContext(null);
+export const SourceListContext = createContext<SourceList | null>(null);
+export const ProjectIDContext = createContext<string | null>(null);
+export const SubdomainContext = createContext<SubdomainContextConfig>({
+  subdomain: '',
+  setSubdomain: () => {}, // eslint-disable-line
+});
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState(null);
+  const [subdomain, setSubdomain] = useState(null);
+
   const { options, children } = props;
   const { apiKey, projectID } = options;
 
+  // CALL FOR SOURCE LIST
   useEffect(() => {
     axios.get(getAllSourcesURL(apiKey, projectID))
       .then((res) => {
@@ -52,10 +63,19 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       });
   }, [apiKey, projectID]);
 
+  const subdomainContext = useMemo(() => ({
+    subdomain,
+    setSubdomain,
+  }), [subdomain]);
+
   return (
-    <AmpersandContext.Provider value={sources}>
-      { children }
-    </AmpersandContext.Provider>
+    <SourceListContext.Provider value={sources}>
+      <SubdomainContext.Provider value={subdomainContext}>
+        <ProjectIDContext.Provider value={options.projectID}>
+          { children }
+        </ProjectIDContext.Provider>
+      </SubdomainContext.Provider>
+    </SourceListContext.Provider>
   );
 }
 

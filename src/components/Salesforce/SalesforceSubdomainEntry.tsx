@@ -1,26 +1,68 @@
-import { FormEvent, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
-  Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Image, Link, Text,
+  Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
+  FormLabel, Heading, Input, Image, Link, Text,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
+import OAuthPopup from '../OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
 
+const AMP_OAUTH_URL = 'https://oauth-server-msdauvir5a-uc.a.run.app/connect-oauth';
+
+interface OAuthErrorAlertProps {
+  error: string | null;
+}
+
+function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
+  // TODO: RENDER AN ACTUAL ERROR FROM SALESFORCE OAUTH FLOW INSTEAD OF GENERIC MSG
+  if (error) {
+    return (
+      <Alert status="error" marginTop="2em">
+        <AlertIcon />
+        <AlertDescription>
+          There was an error logging into your Salesforce subdomain. Please try again.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return null;
+}
+
 /**
- * User input for Salesforce subdomain.
- *
- * TODO: Implement error state.
+ * User input for Salesforce customerSubdomain.
  */
 function SalesforceSubdomainEntry() {
-  const [subdomain, setSubdomain] = useState('');
+  const [customerSubdomain, setCustomerSubdomain] = useState<string | null>(null);
+  const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: FormEvent) => {
-    console.log(event); /* eslint-disable-line no-console */
-    // set subdomain value
+  const { setSubdomain } = useContext(SubdomainContext);
+  const projectID = useContext(ProjectIDContext);
+
+  const handleSubmit = async () => {
+    setSubdomain(customerSubdomain);
+    setError(null);
+
+    axios.post(AMP_OAUTH_URL, {
+      Subdomain: customerSubdomain,
+      Api: 'salesforce',
+      ProjectId: projectID,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(((res) => {
+      const url = res.data;
+      setOAuthCallbackURL(`${url}&prompt=login`);
+    }));
   };
 
-  return (
+  const SubdomainEntry = (
     <Container>
       <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
         <FormControl>
@@ -46,10 +88,11 @@ function SalesforceSubdomainEntry() {
           >
             What is my Salesforce subdomain? <ExternalLinkIcon mx="2px" />
           </Link>
+          <OAuthErrorAlert error={error} />
           <Flex marginTop="1em">
             <Input
               placeholder="MyDomain"
-              onChange={(event) => setSubdomain(event.currentTarget.value)}
+              onChange={(event) => setCustomerSubdomain(event.currentTarget.value)}
             />
             <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
           </Flex>
@@ -59,6 +102,20 @@ function SalesforceSubdomainEntry() {
       </Box>
     </Container>
   );
+
+  if (oAuthCallbackURL) {
+    return (
+      <OAuthPopup
+        title="Connect to Salesforce"
+        url={oAuthCallbackURL}
+        onClose={(err: string | null) => { if (err) setError(err); }}
+      >
+        { SubdomainEntry }
+      </OAuthPopup>
+    );
+  }
+
+  return SubdomainEntry;
 }
 
 export default SalesforceSubdomainEntry;

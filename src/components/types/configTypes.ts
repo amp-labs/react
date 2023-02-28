@@ -50,3 +50,8 @@ export interface ObjectConfig {
   selectedOptionalFields: { [mapTo: DataFieldName]: boolean }
   selectedFieldMapping: { [mapTo: string]: DataFieldName }
 }
+
+export interface SubdomainContextConfig {
+  subdomain: string | null;
+  setSubdomain: any;
+}
