@@ -29,7 +29,7 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
       <Alert status="error" marginTop="2em">
         <AlertIcon />
         <AlertDescription>
-          There was an error logging into your Salesforce subdomain. Please try again.
+          { error }
         </AlertDescription>
       </Alert>
     );
