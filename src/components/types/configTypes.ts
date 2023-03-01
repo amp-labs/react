@@ -55,3 +55,8 @@ export interface SubdomainContextConfig {
   subdomain: string | null;
   setSubdomain: any;
 }
+
+export interface AuthenticationContextConfig {
+  isAuthenticated: boolean | null;
+  setIsAuthenticated: any;
+}

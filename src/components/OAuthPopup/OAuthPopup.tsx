@@ -4,8 +4,11 @@
  * Takes a URL and creates a popup showing that page.
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useContext, useEffect, useState, useRef,
+} from 'react';
 import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
+import { AuthenticationContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -44,7 +47,7 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
-  const [oAuthSuccess, setOAuthSuccess] = useState<boolean | null>(null);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthenticationContext);
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
@@ -58,12 +61,12 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setOAuthSuccess(true);
+          setIsAuthenticated(true);
           onClose(null);
         } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setOAuthSuccess(false);
+          setIsAuthenticated(false);
           // TODO: replace with actual error from server.
           onClose('There was an error logging into your Salesforce subdomain. Please try again.');
         }
@@ -75,7 +78,7 @@ function OAuthPopup({
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
-        if (oAuthSuccess) {
+        if (isAuthenticated) {
           onClose(null);
           clearTimer();
           return;
@@ -84,7 +87,6 @@ function OAuthPopup({
         if (!externalWindow || externalWindow.closed) {
           onClose('The popup was closed too quickly. Please try again.');
           clearTimer();
-          return;
         }
       }, DEFAULT_INTERVAL);
     }

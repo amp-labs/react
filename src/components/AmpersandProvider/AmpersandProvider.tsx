@@ -9,6 +9,7 @@ import {
   createContext, useContext, useEffect, useState, useMemo,
 } from 'react';
 import {
+  AuthenticationContextConfig,
   SourceList, SubdomainContextConfig,
 } from '../types/configTypes';
 import { getAllSources } from '../../library/services/apiService';
@@ -23,6 +24,10 @@ interface AmpersandProviderProps {
 }
 
 export const AmpersandContext = createContext(null);
+export const AuthenticationContext = createContext<AuthenticationContextConfig>({
+  isAuthenticated: false,
+  setIsAuthenticated: () => {}, // eslint-disable-line
+});
 export const SourceListContext = createContext<SourceList | null>(null);
 export const ProjectIDContext = createContext<string | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
@@ -33,6 +38,7 @@ export const SubdomainContext = createContext<SubdomainContextConfig>({
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState(null);
   const [subdomain, setSubdomain] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   const { options, children } = props;
   const { apiKey, projectID } = options;
@@ -54,14 +60,21 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     setSubdomain,
   }), [subdomain]);
 
+  const isAuthenticatedContext = useMemo(() => ({
+    isAuthenticated,
+    setIsAuthenticated,
+  }), [isAuthenticated]);
+
   return (
-    <SourceListContext.Provider value={sources}>
-      <SubdomainContext.Provider value={subdomainContext}>
-        <ProjectIDContext.Provider value={options.projectID}>
-          { children }
-        </ProjectIDContext.Provider>
-      </SubdomainContext.Provider>
-    </SourceListContext.Provider>
+    <AuthenticationContext.Provider value={isAuthenticatedContext}>
+      <SourceListContext.Provider value={sources}>
+        <SubdomainContext.Provider value={subdomainContext}>
+          <ProjectIDContext.Provider value={options.projectID}>
+            { children }
+          </ProjectIDContext.Provider>
+        </SubdomainContext.Provider>
+      </SourceListContext.Provider>
+    </AuthenticationContext.Provider>
   );
 }
 
