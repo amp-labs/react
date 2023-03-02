@@ -9,7 +9,7 @@ import { useContext } from 'react';
 
 import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
 import { ConfigureIntegration } from '../Configure';
-import { AuthenticationContext } from '../AmpersandProvider';
+import { ProviderConnectionContext } from '../AmpersandProvider';
 
 interface ConfigureSalesforceProps {
   integration: string;
@@ -17,9 +17,9 @@ interface ConfigureSalesforceProps {
 
 function ConfigureSalesforce(props: ConfigureSalesforceProps) {
   const { integration } = props;
-  const { isAuthenticated } = useContext(AuthenticationContext);
+  const { isAuthenticatedToProvider } = useContext(ProviderConnectionContext);
 
-  if (isAuthenticated) {
+  if (isAuthenticatedToProvider.salesforce) {
     return (
       <ConfigureIntegration
         integration={integration}

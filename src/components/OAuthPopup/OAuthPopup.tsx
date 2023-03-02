@@ -8,7 +8,7 @@ import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
 import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
-import { AuthenticationContext } from '../AmpersandProvider';
+import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -47,7 +47,10 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthenticationContext);
+  const {
+    isAuthenticatedToProvider,
+    setIsAuthenticatedToProvider,
+  } = useContext(ProviderConnectionContext);
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
@@ -61,12 +64,12 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setIsAuthenticated(true);
+          setIsAuthenticatedToProvider({ salesforce: true });
           onClose(null);
         } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setIsAuthenticated(false);
+          setIsAuthenticatedToProvider({ salesforce: false });
           // TODO: replace with actual error from server.
           onClose('There was an error logging into your Salesforce subdomain. Please try again.');
         }
@@ -78,7 +81,7 @@ function OAuthPopup({
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
-        if (isAuthenticated) {
+        if (isAuthenticatedToProvider) {
           onClose(null);
           clearTimer();
           return;

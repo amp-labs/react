@@ -56,7 +56,9 @@ export interface SubdomainContextConfig {
   setSubdomain: any;
 }
 
-export interface AuthenticationContextConfig {
-  isAuthenticated: boolean | null;
-  setIsAuthenticated: any;
+export interface ProviderConnectionContextConfig {
+  isAuthenticatedToProvider: {
+    salesforce: boolean | null;
+  };
+  setIsAuthenticatedToProvider: any;
 }
