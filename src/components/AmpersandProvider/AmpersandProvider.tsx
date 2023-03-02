@@ -59,11 +59,13 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       });
   }, [apiKey, projectID]);
 
+  // INIT SUBDOMAIN CONTEXT
   const subdomainContext = useMemo(() => ({
     subdomain,
     setSubdomain,
   }), [subdomain]);
 
+  // INIT PROVIDER CONNECTION CONTEXT
   const isAuthenticatedToProviderContext = useMemo(() => ({
     isAuthenticatedToProvider,
     setIsAuthenticatedToProvider,

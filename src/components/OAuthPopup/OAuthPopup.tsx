@@ -78,12 +78,11 @@ function OAuthPopup({
   }, []);
 
   useEffect(() => {
-    if (externalWindow) {
+    if (externalWindow && !intervalRef.current) {
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
-        if (isAuthenticatedToProvider) {
+        if (isAuthenticatedToProvider.salesforce) {
           onClose(null);
-          clearTimer();
           return;
         }
         // Check if window was closed prematurely.
@@ -93,6 +92,10 @@ function OAuthPopup({
         }
       }, DEFAULT_INTERVAL);
     }
+    return () => {
+      if (externalWindow) externalWindow.close();
+      if (onClose) onClose(null);
+    };
   }, [externalWindow]);
 
   return (
