@@ -48,8 +48,8 @@ function OAuthPopup({
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
   const {
-    isAuthenticatedToProvider,
-    setIsAuthenticatedToProvider,
+    isConnectedToProvider,
+    setIsConnectedToProvider,
   } = useContext(ProviderConnectionContext);
   const intervalRef = useRef<number>();
 
@@ -64,12 +64,12 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setIsAuthenticatedToProvider({ salesforce: true });
+          setIsConnectedToProvider({ salesforce: true });
           onClose(null);
         } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setIsAuthenticatedToProvider({ salesforce: false });
+          setIsConnectedToProvider({ salesforce: false });
           // TODO: replace with actual error from server.
           onClose('There was an error logging into your Salesforce subdomain. Please try again.');
         }
@@ -81,7 +81,7 @@ function OAuthPopup({
     if (externalWindow && !intervalRef.current) {
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
-        if (isAuthenticatedToProvider.salesforce) {
+        if (isConnectedToProvider.salesforce) {
           onClose(null);
           return;
         }

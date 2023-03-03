@@ -11,7 +11,7 @@ import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
 import { ProviderConnectionContext, SubdomainContext } from '../AmpersandProvider';
 
 function ConnectSalesforce() {
-  const { isAuthenticatedToProvider } = useContext(ProviderConnectionContext);
+  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
   const { subdomain } = useContext(SubdomainContext);
 
   const successText = `Salesforce instance ${subdomain} successfully connected.`;
@@ -23,7 +23,7 @@ function ConnectSalesforce() {
     </Container>
   );
 
-  if (isAuthenticatedToProvider.salesforce && subdomain) {
+  if (isConnectedToProvider.salesforce && subdomain) {
     return Success;
   }
 

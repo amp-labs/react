@@ -25,10 +25,10 @@ interface AmpersandProviderProps {
 
 export const AmpersandContext = createContext(null);
 export const ProviderConnectionContext = createContext<ProviderConnectionContextConfig>({
-  isAuthenticatedToProvider: {
+  isConnectedToProvider: {
     salesforce: null,
   },
-  setIsAuthenticatedToProvider: null, // eslint-disable-line
+  setIsConnectedToProvider: null, // eslint-disable-line
 });
 export const SourceListContext = createContext<SourceList | null>(null);
 export const ProjectIDContext = createContext<string | null>(null);
@@ -40,7 +40,7 @@ export const SubdomainContext = createContext<SubdomainContextConfig>({
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState(null);
   const [subdomain, setSubdomain] = useState(null);
-  const [isAuthenticatedToProvider, setIsAuthenticatedToProvider] = useState({
+  const [isConnectedToProvider, setIsConnectedToProvider] = useState({
     salesforce: null,
   });
 
@@ -66,13 +66,13 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   }), [subdomain]);
 
   // INIT PROVIDER CONNECTION CONTEXT
-  const isAuthenticatedToProviderContext = useMemo(() => ({
-    isAuthenticatedToProvider,
-    setIsAuthenticatedToProvider,
-  }), [isAuthenticatedToProvider]);
+  const isConnectedToProviderContext = useMemo(() => ({
+    isConnectedToProvider,
+    setIsConnectedToProvider,
+  }), [isConnectedToProvider]);
 
   return (
-    <ProviderConnectionContext.Provider value={isAuthenticatedToProviderContext}>
+    <ProviderConnectionContext.Provider value={isConnectedToProviderContext}>
       <SourceListContext.Provider value={sources}>
         <SubdomainContext.Provider value={subdomainContext}>
           <ProjectIDContext.Provider value={options.projectID}>

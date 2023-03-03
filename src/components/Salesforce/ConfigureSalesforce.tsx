@@ -17,9 +17,9 @@ interface ConfigureSalesforceProps {
 
 function ConfigureSalesforce(props: ConfigureSalesforceProps) {
   const { integration } = props;
-  const { isAuthenticatedToProvider } = useContext(ProviderConnectionContext);
+  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
 
-  if (isAuthenticatedToProvider.salesforce) {
+  if (isConnectedToProvider.salesforce) {
     return (
       <ConfigureIntegration
         integration={integration}
