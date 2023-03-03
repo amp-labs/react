@@ -92,10 +92,6 @@ function OAuthPopup({
         }
       }, DEFAULT_INTERVAL);
     }
-    return () => {
-      if (externalWindow) externalWindow.close();
-      if (onClose) onClose(null);
-    };
   }, [externalWindow]);
 
   return (
