@@ -4,8 +4,11 @@
  * Takes a URL and creates a popup showing that page.
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useContext, useEffect, useState, useRef,
+} from 'react';
 import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
+import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -44,7 +47,10 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
-  const [oAuthSuccess, setOAuthSuccess] = useState<boolean | null>(null);
+  const {
+    isConnectedToProvider,
+    setIsConnectedToProvider,
+  } = useContext(ProviderConnectionContext);
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
@@ -58,12 +64,12 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setOAuthSuccess(true);
+          setIsConnectedToProvider({ salesforce: true });
           onClose(null);
         } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
-          setOAuthSuccess(false);
+          setIsConnectedToProvider({ salesforce: false });
           // TODO: replace with actual error from server.
           onClose('There was an error logging into your Salesforce subdomain. Please try again.');
         }
@@ -72,19 +78,17 @@ function OAuthPopup({
   }, []);
 
   useEffect(() => {
-    if (externalWindow) {
+    if (externalWindow && !intervalRef.current) {
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
-        if (oAuthSuccess) {
+        if (isConnectedToProvider.salesforce) {
           onClose(null);
-          clearTimer();
           return;
         }
         // Check if window was closed prematurely.
         if (!externalWindow || externalWindow.closed) {
           onClose('The popup was closed too quickly. Please try again.');
           clearTimer();
-          return;
         }
       }, DEFAULT_INTERVAL);
     }

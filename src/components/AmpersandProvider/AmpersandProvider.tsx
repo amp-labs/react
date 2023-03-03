@@ -9,6 +9,7 @@ import {
   createContext, useContext, useEffect, useState, useMemo,
 } from 'react';
 import {
+  ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
 } from '../types/configTypes';
 import { getAllSources } from '../../library/services/apiService';
@@ -23,16 +24,24 @@ interface AmpersandProviderProps {
 }
 
 export const AmpersandContext = createContext(null);
+export const ProviderConnectionContext = createContext<ProviderConnectionContextConfig>({
+  isConnectedToProvider: {},
+  setIsConnectedToProvider: () => null,
+});
 export const SourceListContext = createContext<SourceList | null>(null);
 export const ProjectIDContext = createContext<string | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
   subdomain: '',
-  setSubdomain: () => {}, // eslint-disable-line
+  setSubdomain: () => null,
 });
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState(null);
-  const [subdomain, setSubdomain] = useState(null);
+  const [subdomain, setSubdomain] = useState('');
+  // const [isConnectedToProvider, setIsConnectedToProvider] = useState({
+  //   salesforce: null,
+  // });
+  const [isConnectedToProvider, setIsConnectedToProvider] = useState({});
 
   const { options, children } = props;
   const { apiKey, projectID } = options;
@@ -49,19 +58,28 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       });
   }, [apiKey, projectID]);
 
+  // INIT SUBDOMAIN CONTEXT
   const subdomainContext = useMemo(() => ({
     subdomain,
     setSubdomain,
   }), [subdomain]);
 
+  // INIT PROVIDER CONNECTION CONTEXT
+  const isConnectedToProviderContext = useMemo(() => ({
+    isConnectedToProvider,
+    setIsConnectedToProvider,
+  }), [isConnectedToProvider]);
+
   return (
-    <SourceListContext.Provider value={sources}>
-      <SubdomainContext.Provider value={subdomainContext}>
-        <ProjectIDContext.Provider value={options.projectID}>
-          { children }
-        </ProjectIDContext.Provider>
-      </SubdomainContext.Provider>
-    </SourceListContext.Provider>
+    <ProviderConnectionContext.Provider value={isConnectedToProviderContext}>
+      <SourceListContext.Provider value={sources}>
+        <SubdomainContext.Provider value={subdomainContext}>
+          <ProjectIDContext.Provider value={options.projectID}>
+            { children }
+          </ProjectIDContext.Provider>
+        </SubdomainContext.Provider>
+      </SourceListContext.Provider>
+    </ProviderConnectionContext.Provider>
   );
 }
 

@@ -40,3 +40,7 @@ export function postConnectOAuth(subdomain: string, api: string, projectID: stri
     },
   });
 }
+
+export function getUserConfig() {
+  // return configuration object
+}
