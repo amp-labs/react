@@ -42,7 +42,7 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
  * User input for Salesforce customerSubdomain.
  */
 function SalesforceSubdomainEntry() {
-  const [customerSubdomain, setCustomerSubdomain] = useState<string | null>(null);
+  const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
