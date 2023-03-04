@@ -1,4 +1,6 @@
-import { SourceList, IntegrationSource } from '../components/types/configTypes';
+import {
+  SourceList, IntegrationSource,
+} from '../components/types/configTypes';
 
 /* eslint-disable-next-line */
 export const findSourceFromList = (integrationName: string, sourceList: SourceList) => {

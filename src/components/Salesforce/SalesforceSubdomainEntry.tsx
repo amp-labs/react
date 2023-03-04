@@ -57,7 +57,7 @@ function SalesforceSubdomainEntry() {
       postConnectOAuth(customerSubdomain, 'salesforce', projectID)
         .then((res) => {
           const url = res.data;
-          setOAuthCallbackURL(`${url}&prompt=login`);
+          setOAuthCallbackURL(url);
         });
     }
   };

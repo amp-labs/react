@@ -1,15 +1,20 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, {
+  FormEvent, useContext, useEffect, useState,
+} from 'react';
 import {
-  merge, map, set, capitalize,
+  merge, map, set, capitalize, reduce,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
-import { IntegrationSource, SourceList } from '../types/configTypes';
+import {
+  IntegrationSource, ObjectConfig, SourceList,
+} from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
 import { findSourceFromList } from '../../utils';
+import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface ConfigureIntegrationProps {
@@ -33,7 +38,7 @@ export function ConfigureIntegration(
   }
 
   /* eslint-disable-next-line no-console */
-  console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
+  console.log(`Successfully got integration source ${JSON.stringify(source, null, 2)}`);
   return (
     <InstallIntegration
       source={source}
@@ -63,14 +68,32 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
     generateDefaultIntegrationConfig(source),
   );
   const navigate = useNavigate();
+
+  const appName = 'MailMonkey'; // TODO: should read from source.
+  const { objects } = source;
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     /* eslint-disable-next-line no-console */
     console.log('submitted');
+    postUserConfig(integrationConfig);
+
     navigate('/configure-write');
   };
-  const appName = 'MailMonkey'; // TODO: should read from source.
-  const { objects } = source;
+
+  // INIT `integrationConfig` WITH REQUIRED FIELD VALUES
+  useEffect(() => {
+    // REDUCE `ObjectConfigOptions` TO `ObjectConfig`
+    const requiredFields = reduce(objects, (config, object) => (merge(config, {
+      [object.name.objectName]: {
+        requiredFields: reduce(object.requiredFields, (required, field) => merge(required, {
+          [field.fieldName]: true,
+        }), {}),
+      },
+    })), {} as ObjectConfig);
+
+    setIntegrationConfig(merge({}, integrationConfig, requiredFields));
+  }, []);
 
   const elems = map(objects, (object) => {
     let mandatoryFields;

@@ -14,6 +14,7 @@ const generateDefaultIntegrationConfig = (source: IntegrationSource): Integratio
     const toSet: ObjectConfig = {
       selectedOptionalFields,
       selectedFieldMapping: {},
+      requiredFields: {},
     };
     set(config, options.name.objectName, toSet);
   });

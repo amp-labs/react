@@ -47,6 +47,7 @@ export interface IntegrationConfig {
 }
 
 export interface ObjectConfig {
+  requiredFields: { [mapTo: DataFieldName]: boolean }
   selectedOptionalFields: { [mapTo: DataFieldName]: boolean }
   selectedFieldMapping: { [mapTo: string]: DataFieldName }
 }
