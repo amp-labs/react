@@ -36,10 +36,9 @@ const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null 
   return reduce(
     fields,
     (fieldsAcc: FieldConfig, dataField: DataField | OptionalDataField) => {
-      let fieldValue = true;
-      if ((dataField as OptionalDataField).default === 'unselected') fieldValue = false;
-      fieldsAcc[dataField.fieldName] = fieldValue; // eslint-disable-line no-param-reassign
-      return fieldsAcc;
+      const config = fieldsAcc;
+      config[dataField.fieldName] = (dataField as OptionalDataField).isDefaultSelected || true;
+      return config;
     },
     {} as FieldConfig,
   );

@@ -32,7 +32,7 @@ export interface DataField {
 }
 
 export interface OptionalDataField extends DataField {
-  default: 'selected' | 'unselected';
+  isDefaultSelected: boolean;
 }
 
 export interface FieldMappingOption {
