@@ -12,7 +12,7 @@ import {
   IntegrationSource, SourceList,
 } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
-import { findFieldConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
+import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
 import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
@@ -118,7 +118,7 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
                   id={field.fieldName}
                   defaultChecked={field.isDefaultSelected}
                   onChange={(e) => {
-                    const selectedObject = findFieldConfig(object, integrationConfig);
+                    const selectedObject = findObjectInIntegrationConfig(object, integrationConfig);
                     if (selectedObject) {
                       selectedObject.selectedOptionalFields[field.fieldName] = e.target.checked;
                     }
@@ -147,7 +147,7 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
               <Select
                 placeholder="Select custom field"
                 onChange={(e) => {
-                  const selectedObject = findFieldConfig(object, integrationConfig);
+                  const selectedObject = findObjectInIntegrationConfig(object, integrationConfig);
 
                   if (selectedObject?.selectedFieldMapping) {
                     selectedObject.selectedFieldMapping[mapping.mapToName] = e.target.value;
