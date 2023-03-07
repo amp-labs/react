@@ -116,7 +116,7 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
                 </FormLabel>
                 <Switch
                   id={field.fieldName}
-                  defaultChecked={field.default === 'selected'}
+                  defaultChecked={field.isDefaultSelected}
                   onChange={(e) => {
                     const selectedObject = findFieldConfig(object, integrationConfig);
                     if (selectedObject) {
