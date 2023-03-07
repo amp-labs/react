@@ -16,8 +16,10 @@ export const findSourceFromList = (integrationName: string, sourceList: SourceLi
   return sourceList.find((s: IntegrationSource) => s.name === integrationName);
 };
 
-// eslint-disable-next-line max-len
-export const findObjectInIntegrationConfig = (object: ObjectConfigOptions, integrationConfig: IntegrationConfig): ObjectConfig | undefined => integrationConfig.find(
+export const findObjectInIntegrationConfig = (
+  object: ObjectConfigOptions,
+  integrationConfig: IntegrationConfig,
+): ObjectConfig | undefined => integrationConfig.find(
   (objectToSet: ObjectConfig) => objectToSet.objectName === object.name.objectName,
 );
 
