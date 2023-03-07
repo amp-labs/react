@@ -8,6 +8,7 @@ import {
   IntegrationSource,
   ObjectConfig,
   ObjectConfigOptions,
+  OptionalDataField,
 } from '../components/types/configTypes';
 
 /* eslint-disable-next-line */
@@ -15,7 +16,12 @@ export const findSourceFromList = (integrationName: string, sourceList: SourceLi
   return sourceList.find((s: IntegrationSource) => s.name === integrationName);
 };
 
-export const mapIntegrationSourceToConfig = (objects: ObjectConfigOptions[]): IntegrationConfig => map(
+// eslint-disable-next-line max-len
+export const findObjectInIntegrationConfig = (object: ObjectConfigOptions, integrationConfig: IntegrationConfig): ObjectConfig | undefined => integrationConfig.find(
+  (objectToSet: ObjectConfig) => objectToSet.objectName === object.name.objectName,
+);
+
+export const getDefaultConfigForSource = (objects: ObjectConfigOptions[]): IntegrationConfig => map(
   objects,
   (object: ObjectConfigOptions): ObjectConfig => ({
     objectName: object.name.objectName,
@@ -29,8 +35,10 @@ const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null 
   if (!fields) return null;
   return reduce(
     fields,
-    (fieldsAcc: FieldConfig, dataField: DataField) => {
-      fieldsAcc[dataField.fieldName] = true; // eslint-disable-line no-param-reassign
+    (fieldsAcc: FieldConfig, dataField: DataField | OptionalDataField) => {
+      let fieldValue = true;
+      if ((dataField as OptionalDataField).default === 'unselected') fieldValue = false;
+      fieldsAcc[dataField.fieldName] = fieldValue; // eslint-disable-line no-param-reassign
       return fieldsAcc;
     },
     {} as FieldConfig,

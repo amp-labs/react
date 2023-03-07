@@ -31,9 +31,7 @@ export interface DataField {
   displayName: DataFieldDisplayName;
 }
 
-export interface OptionalDataField {
-  fieldName: DataFieldName;
-  displayName: DataFieldDisplayName;
+export interface OptionalDataField extends DataField {
   default: 'selected' | 'unselected';
 }
 
@@ -45,7 +43,7 @@ export interface FieldMappingOption {
 }
 
 export interface FieldConfig {
-  [mapTo: DataFieldName]: boolean
+  [fieldName: DataFieldName]: boolean
 }
 
 export interface ObjectConfig {

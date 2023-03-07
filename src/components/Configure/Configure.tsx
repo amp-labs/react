@@ -9,10 +9,10 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import {
-  IntegrationSource, SourceList, ObjectConfig,
+  IntegrationSource, SourceList,
 } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
-import { findSourceFromList, mapIntegrationSourceToConfig } from '../../utils';
+import { findFieldConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
 import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
@@ -36,8 +36,6 @@ export function ConfigureIntegration(
     return <CenteredTextBox text="There is an error" />;
   }
 
-  /* eslint-disable-next-line no-console */
-  console.log(`Successfully got integration source ${JSON.stringify(source, null, 2)}`);
   return (
     <InstallIntegration
       source={source}
@@ -64,7 +62,7 @@ export function InstallIntegration({ source, subdomain, api }: InstallProps) {
 
 function SetUpRead({ source, subdomain, api }: InstallProps) {
   const [integrationConfig, setIntegrationConfig] = useState(
-    mapIntegrationSourceToConfig(source.objects),
+    getDefaultConfigForSource(source.objects),
   );
   const navigate = useNavigate();
 
@@ -120,13 +118,10 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
                   id={field.fieldName}
                   defaultChecked={field.default === 'selected'}
                   onChange={(e) => {
-                    const fieldConfigIdx = integrationConfig.findIndex(
-                      (objectToSet: ObjectConfig) => objectToSet.objectName
-                      === object.name.objectName,
-                    );
-
-                    integrationConfig[fieldConfigIdx]
-                      .selectedOptionalFields[field.fieldName] = e.target.checked;
+                    const selectedObject = findFieldConfig(object, integrationConfig);
+                    if (selectedObject) {
+                      selectedObject.selectedOptionalFields[field.fieldName] = e.target.checked;
+                    }
 
                     setIntegrationConfig(integrationConfig);
                   }}
@@ -152,15 +147,10 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
               <Select
                 placeholder="Select custom field"
                 onChange={(e) => {
-                  const fieldConfigIdx = integrationConfig.findIndex(
-                    (objectToSet: ObjectConfig) => objectToSet.objectName
-                    === object.name.objectName,
-                  );
+                  const selectedObject = findFieldConfig(object, integrationConfig);
 
-                  // check for selectedFieldMapping to please the TS compiler
-                  const fieldConfig = integrationConfig[fieldConfigIdx];
-                  if (fieldConfig && fieldConfig.selectedFieldMapping) {
-                    fieldConfig.selectedFieldMapping[mapping.mapToName] = e.target.value;
+                  if (selectedObject?.selectedFieldMapping) {
+                    selectedObject.selectedFieldMapping[mapping.mapToName] = e.target.value;
                   }
 
                   setIntegrationConfig(integrationConfig);
