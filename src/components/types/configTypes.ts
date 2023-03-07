@@ -9,10 +9,12 @@ export interface IntegrationSource {
 
 export interface ObjectConfigOptions {
   name: DataObject;
-  requiredFields?: DataField[];
+  requiredFields?: DataFields;
   optionalFields?: OptionalDataField[];
   customFieldMapping?: FieldMappingOption[];
 }
+
+export type DataFields = Array<DataField>
 
 type DataObjectName = string;
 type DataFieldName = string;
@@ -42,15 +44,18 @@ export interface FieldMappingOption {
   choices: DataField[];
 }
 
-export interface IntegrationConfig {
-  [object: DataObjectName]: ObjectConfig
+export interface FieldConfig {
+  [mapTo: DataFieldName]: boolean
 }
 
 export interface ObjectConfig {
-  requiredFields: { [mapTo: DataFieldName]: boolean }
-  selectedOptionalFields: { [mapTo: DataFieldName]: boolean }
-  selectedFieldMapping: { [mapTo: string]: DataFieldName }
+  objectName: DataObjectName;
+  requiredFields: FieldConfig;
+  selectedOptionalFields: FieldConfig;
+  selectedFieldMapping?: { [mapTo: string]: DataFieldName }
 }
+
+export type IntegrationConfig = Array<ObjectConfig>;
 
 export interface SubdomainContextConfig {
   subdomain: string;

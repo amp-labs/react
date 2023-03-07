@@ -8,7 +8,6 @@ import {
   IntegrationSource,
   ObjectConfig,
   ObjectConfigOptions,
-  FieldMappingOption,
 } from '../components/types/configTypes';
 
 /* eslint-disable-next-line */
@@ -16,22 +15,15 @@ export const findSourceFromList = (integrationName: string, sourceList: SourceLi
   return sourceList.find((s: IntegrationSource) => s.name === integrationName);
 };
 
-export const mapIntegrationSourceToConfig = 
-  (objects?: ObjectConfigOptions[]): IntegrationConfig | null => {
-    if (!objects) return null;
-    return map(
-      objects,
-      (object: ObjectConfigOptions): ObjectConfig => {
-        return {
-          objectName: object.name.objectName,
-          requiredFields: reduceDataFieldsToFieldConfig(object.requiredFields) || {},
-          selectedOptionalFields: reduceDataFieldsToFieldConfig(object.optionalFields) || {},
-          selectedFieldMapping: {} // SET BY USER IN CONFIGURE FLOW
-        }
-      }
-    );
-  };
-};
+export const mapIntegrationSourceToConfig = (objects: ObjectConfigOptions[]): IntegrationConfig => map(
+  objects,
+  (object: ObjectConfigOptions): ObjectConfig => ({
+    objectName: object.name.objectName,
+    requiredFields: reduceDataFieldsToFieldConfig(object.requiredFields) || {},
+    selectedOptionalFields: reduceDataFieldsToFieldConfig(object.optionalFields) || {},
+    selectedFieldMapping: {}, // SET BY USER IN CONFIGURE FLOW
+  }),
+);
 
 const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null => {
   if (!fields) return null;
@@ -43,4 +35,4 @@ const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null 
     },
     {} as FieldConfig,
   );
-);
+};

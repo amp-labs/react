@@ -1,19 +1,18 @@
 import React, {
-  FormEvent, useContext, useEffect, useState,
+  FormEvent, useContext, useState,
 } from 'react';
 import {
-  merge, map, set, capitalize, reduce,
+  map, capitalize,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
 import {
-  IntegrationSource, ObjectConfig, SourceList,
+  IntegrationSource, SourceList, ObjectConfig,
 } from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
-import { findSourceFromList } from '../../utils';
+import { findSourceFromList, mapIntegrationSourceToConfig } from '../../utils';
 import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
@@ -65,7 +64,7 @@ export function InstallIntegration({ source, subdomain, api }: InstallProps) {
 
 function SetUpRead({ source, subdomain, api }: InstallProps) {
   const [integrationConfig, setIntegrationConfig] = useState(
-    generateDefaultIntegrationConfig(source),
+    mapIntegrationSourceToConfig(source.objects),
   );
   const navigate = useNavigate();
 
@@ -80,20 +79,6 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
 
     navigate('/configure-write');
   };
-
-  // INIT `integrationConfig` WITH REQUIRED FIELD VALUES
-  useEffect(() => {
-    // REDUCE `ObjectConfigOptions` TO `ObjectConfig`
-    const requiredFields = reduce(objects, (config, object) => (merge(config, {
-      [object.name.objectName]: {
-        requiredFields: reduce(object.requiredFields, (required, field) => merge(required, {
-          [field.fieldName]: true,
-        }), {}),
-      },
-    })), {} as ObjectConfig);
-
-    setIntegrationConfig(merge({}, integrationConfig, requiredFields));
-  }, []);
 
   const elems = map(objects, (object) => {
     let mandatoryFields;
@@ -135,12 +120,15 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
                   id={field.fieldName}
                   defaultChecked={field.default === 'selected'}
                   onChange={(e) => {
-                    const newConfig = set(
-                      {},
-                      [object.name.objectName, 'selectedOptionalFields', field.fieldName],
-                      e.target.checked,
+                    const fieldConfigIdx = integrationConfig.findIndex(
+                      (objectToSet: ObjectConfig) => objectToSet.objectName
+                      === object.name.objectName,
                     );
-                    setIntegrationConfig(merge({}, integrationConfig, newConfig));
+
+                    integrationConfig[fieldConfigIdx]
+                      .selectedOptionalFields[field.fieldName] = e.target.checked;
+
+                    setIntegrationConfig(integrationConfig);
                   }}
                 />
               </Box>
@@ -164,12 +152,18 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
               <Select
                 placeholder="Select custom field"
                 onChange={(e) => {
-                  const newConfig = set(
-                    {},
-                    [object.name.objectName, 'selectedFieldMapping', mapping.mapToName],
-                    e.target.value,
+                  const fieldConfigIdx = integrationConfig.findIndex(
+                    (objectToSet: ObjectConfig) => objectToSet.objectName
+                    === object.name.objectName,
                   );
-                  setIntegrationConfig(merge({}, integrationConfig, newConfig));
+
+                  // check for selectedFieldMapping to please the TS compiler
+                  const fieldConfig = integrationConfig[fieldConfigIdx];
+                  if (fieldConfig && fieldConfig.selectedFieldMapping) {
+                    fieldConfig.selectedFieldMapping[mapping.mapToName] = e.target.value;
+                  }
+
+                  setIntegrationConfig(integrationConfig);
                 }}
               >
                 {map(mapping.choices, (choice) => (
