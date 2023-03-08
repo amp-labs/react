@@ -25,12 +25,12 @@ export const TestSourceList: SourceList = [
           {
             fieldName: 'annualRevenue',
             displayName: 'Annual Revenue',
-            default: 'selected',
+            isDefaultSelected: true,
           },
           {
             fieldName: 'website',
             displayName: 'Website',
-            default: 'selected',
+            isDefaultSelected: true,
           },
         ],
       },
@@ -103,12 +103,12 @@ export const TestSalesforceIntegrationSource: IntegrationSource = {
         {
           fieldName: 'annualRevenue',
           displayName: 'Annual Revenue',
-          default: 'selected',
+          isDefaultSelected: true,
         },
         {
           fieldName: 'website',
           displayName: 'Website',
-          default: 'selected',
+          isDefaultSelected: true,
         },
       ],
     },

@@ -38,9 +38,6 @@ export const SubdomainContext = createContext<SubdomainContextConfig>({
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState(null);
   const [subdomain, setSubdomain] = useState('');
-  // const [isConnectedToProvider, setIsConnectedToProvider] = useState({
-  //   salesforce: null,
-  // });
   const [isConnectedToProvider, setIsConnectedToProvider] = useState({});
 
   const { options, children } = props;

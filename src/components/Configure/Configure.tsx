@@ -1,15 +1,19 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, {
+  FormEvent, useContext, useState,
+} from 'react';
 import {
-  merge, map, set, capitalize,
+  map, capitalize,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import generateDefaultIntegrationConfig from '../../library/utils/generateDefaultIntegrationConfig';
-import { IntegrationSource, SourceList } from '../types/configTypes';
+import {
+  IntegrationSource, SourceList,
+} from '../types/configTypes';
 import CenteredTextBox from '../CenteredTextBox';
-import { findSourceFromList } from '../../utils';
+import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
+import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface ConfigureIntegrationProps {
@@ -32,8 +36,6 @@ export function ConfigureIntegration(
     return <CenteredTextBox text="There is an error" />;
   }
 
-  /* eslint-disable-next-line no-console */
-  console.log(`Successfully got integration source${JSON.stringify(source, null, 2)}`);
   return (
     <InstallIntegration
       source={source}
@@ -60,17 +62,21 @@ export function InstallIntegration({ source, subdomain, api }: InstallProps) {
 
 function SetUpRead({ source, subdomain, api }: InstallProps) {
   const [integrationConfig, setIntegrationConfig] = useState(
-    generateDefaultIntegrationConfig(source),
+    getDefaultConfigForSource(source.objects),
   );
   const navigate = useNavigate();
+
+  const appName = 'MailMonkey'; // TODO: should read from source.
+  const { objects } = source;
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     /* eslint-disable-next-line no-console */
     console.log('submitted');
+    postUserConfig(integrationConfig);
+
     navigate('/configure-write');
   };
-  const appName = 'MailMonkey'; // TODO: should read from source.
-  const { objects } = source;
 
   const elems = map(objects, (object) => {
     let mandatoryFields;
@@ -110,14 +116,14 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
                 </FormLabel>
                 <Switch
                   id={field.fieldName}
-                  defaultChecked={field.default === 'selected'}
+                  defaultChecked={field.isDefaultSelected}
                   onChange={(e) => {
-                    const newConfig = set(
-                      {},
-                      [object.name.objectName, 'selectedOptionalFields', field.fieldName],
-                      e.target.checked,
-                    );
-                    setIntegrationConfig(merge({}, integrationConfig, newConfig));
+                    const selectedObject = findObjectInIntegrationConfig(object, integrationConfig);
+                    if (selectedObject) {
+                      selectedObject.selectedOptionalFields[field.fieldName] = e.target.checked;
+                    }
+
+                    setIntegrationConfig(integrationConfig);
                   }}
                 />
               </Box>
@@ -141,12 +147,13 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
               <Select
                 placeholder="Select custom field"
                 onChange={(e) => {
-                  const newConfig = set(
-                    {},
-                    [object.name.objectName, 'selectedFieldMapping', mapping.mapToName],
-                    e.target.value,
-                  );
-                  setIntegrationConfig(merge({}, integrationConfig, newConfig));
+                  const selectedObject = findObjectInIntegrationConfig(object, integrationConfig);
+
+                  if (selectedObject?.selectedFieldMapping) {
+                    selectedObject.selectedFieldMapping[mapping.mapToName] = e.target.value;
+                  }
+
+                  setIntegrationConfig(integrationConfig);
                 }}
               >
                 {map(mapping.choices, (choice) => (

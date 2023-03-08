@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IntegrationConfig } from '../../components/types/configTypes';
 
 export const AMP_OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const CONNECT_OAUTH_URL = `${AMP_OAUTH_SERVER}/connect-oauth`;
@@ -43,4 +44,9 @@ export function postConnectOAuth(subdomain: string, api: string, projectID: stri
 
 export function getUserConfig() {
   // return configuration object
+}
+
+export function postUserConfig(integrationConfig: IntegrationConfig) {
+  console.log(integrationConfig); // eslint-disable-line
+  // TODO: Replace stub with network call.
 }
