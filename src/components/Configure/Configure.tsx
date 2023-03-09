@@ -30,15 +30,21 @@ const STRINGS = {
     appName: string,
     api: string,
     subdomain: string,
-  ) => `Let's integrate ${appName} with your ${capitalize(api)} instance <b>${subdomain}</b>.</>`,
+  ) => <>Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.</>,
   CONFIGURE_REQUIRED_FIELDS: (
     appName: string,
     object: ObjectConfigOptions,
-  ) => `${appName} will read the following <b>${object.name.displayName}</b> fields:`,
+  ) => {
+    const { name } = object;
+    return <>{appName} will read the following <b>{name.displayName}</b> fields:</>;
+  },
   RECONFIGURE_REQUIRED_FIELDS: (
     appName: string,
     object: ObjectConfigOptions,
-  ) => `${appName} is reading the following <b>${object.name.displayName}</b> fields:`,
+  ) => {
+    const { name } = object;
+    return <>{appName} is reading the following <b>{name.displayName}</b> fields:</>;
+  },
 };
 
 export function ConfigureIntegration(
