@@ -1,5 +1,5 @@
 import React, {
-  FormEvent, useContext, useState,
+  FormEvent, useContext, useEffect, useState,
 } from 'react';
 import {
   map, capitalize,
@@ -9,20 +9,40 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import {
-  IntegrationSource, SourceList,
+  IntegrationSource, ObjectConfigOptions, SourceList,
 } from '../types/configTypes';
+import {
+  getUserConfig,
+  postUserConfig,
+} from '../../library/services/apiService';
 import CenteredTextBox from '../CenteredTextBox';
 import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
-import { postUserConfig } from '../../library/services/apiService';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface ConfigureIntegrationProps {
   integration: string,
   api: string,
+  reconfigure?: boolean,
 }
 
+const STRINGS = {
+  CONFIGURE_INTRO: (
+    appName: string,
+    api: string,
+    subdomain: string,
+  ) => `Let's integrate ${appName} with your ${capitalize(api)} instance <b>${subdomain}</b>.</>`,
+  CONFIGURE_REQUIRED_FIELDS: (
+    appName: string,
+    object: ObjectConfigOptions,
+  ) => `${appName} will read the following <b>${object.name.displayName}</b> fields:`,
+  RECONFIGURE_REQUIRED_FIELDS: (
+    appName: string,
+    object: ObjectConfigOptions,
+  ) => `${appName} is reading the following <b>${object.name.displayName}</b> fields:`,
+};
+
 export function ConfigureIntegration(
-  { integration, api }: ConfigureIntegrationProps,
+  { integration, api, reconfigure = false }: ConfigureIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
@@ -41,6 +61,7 @@ export function ConfigureIntegration(
       source={source}
       api={api}
       subdomain={subdomain}
+      reconfigure={reconfigure}
     />
   );
 }
@@ -49,21 +70,41 @@ interface InstallProps {
   source: IntegrationSource;
   subdomain: string;
   api: string,
+  reconfigure?: boolean;
 }
-export function InstallIntegration({ source, subdomain, api }: InstallProps) {
+
+export function InstallIntegration({
+  source, subdomain, api, reconfigure = false,
+}: InstallProps) {
   const { type } = source;
   if (type === 'read') {
-    return <SetUpRead source={source} subdomain={subdomain} api={api} />;
+    return (
+      <SetUpRead
+        source={source}
+        subdomain={subdomain}
+        api={api}
+        reconfigure={reconfigure}
+      />
+    );
   } if (type === 'write') {
     return <SetUpWrite />;
   }
   return null;
 }
 
-function SetUpRead({ source, subdomain, api }: InstallProps) {
-  const [integrationConfig, setIntegrationConfig] = useState(
-    getDefaultConfigForSource(source.objects),
-  );
+function SetUpRead({
+  source, subdomain, api, reconfigure = false,
+}: InstallProps) {
+  let userConfig = getDefaultConfigForSource(source.objects);
+
+  // GET USER'S EXISTING CONFIG IF EXISTING
+  if (reconfigure) {
+    useEffect(() => {
+      userConfig = getUserConfig(source, subdomain, api);
+    }, []);
+  }
+
+  const [integrationConfig, setIntegrationConfig] = useState(userConfig);
   const navigate = useNavigate();
 
   const appName = 'MailMonkey'; // TODO: should read from source.
@@ -84,10 +125,15 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
     let customFieldMapping;
 
     if (object.requiredFields) {
+      let configureString = STRINGS.CONFIGURE_REQUIRED_FIELDS(appName, object);
+      if (reconfigure) {
+        configureString = STRINGS.RECONFIGURE_REQUIRED_FIELDS(appName, object);
+      }
+
       mandatoryFields = (
         <>
           <Text marginBottom="10px">
-            {appName} will read the following <b>{object.name.displayName}</b> fields:
+            {configureString}
           </Text>
           <FormControl>
             {map(object.requiredFields, (field) => (
@@ -108,7 +154,7 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
       optionalFields = (
         <>
           <FormControl>
-            <Text color="gray.600" marginBottom="5px">Optional:</Text>
+            <Text color="gray.600" marginBottom="5px">Optional fields:</Text>
             {map(object.optionalFields, (field) => (
               <Box key={field.fieldName} as={SimpleGrid} columns={{ base: 2, lg: 2 }}>
                 <FormLabel htmlFor={field.fieldName} margin="0" paddingRight="20px">
@@ -181,7 +227,7 @@ function SetUpRead({ source, subdomain, api }: InstallProps) {
   return (
     <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
       <Text marginBottom="20px">
-        Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.
+        {STRINGS.CONFIGURE_INTRO(appName, api, subdomain)}
       </Text>
       <hr />
       <form onSubmit={handleSubmit}>

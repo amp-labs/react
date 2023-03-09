@@ -13,9 +13,10 @@ import { ProviderConnectionContext } from '../AmpersandProvider';
 
 interface ConfigureSalesforceProps {
   integration: string;
+  reconfigure?: boolean;
 }
 
-function ConfigureSalesforce({ integration } : ConfigureSalesforceProps) {
+function ConfigureSalesforce({ integration, reconfigure = false } : ConfigureSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
 
   if (isConnectedToProvider.salesforce) {
@@ -23,6 +24,7 @@ function ConfigureSalesforce({ integration } : ConfigureSalesforceProps) {
       <ConfigureIntegration
         integration={integration}
         api="salesforce"
+        reconfigure={reconfigure}
       />
     );
   }
