@@ -9,10 +9,10 @@ import {
 
 const testReadAccountsAndContactsFromSalesforce = TestSourceList[0] as IntegrationSource;
 const [
-  testAccountsObject,
-  testContactObject,
+  targetAccountsObject,
+  targetContactObject,
 ] = testReadAccountsAndContactsFromSalesforce.objects;
-const testIntegrationConfig = [
+const targetIntegrationConfig = [
   {
     objectName: 'account',
     selectedOptionalFields: {
@@ -36,24 +36,24 @@ const testIntegrationConfig = [
     },
   },
 ] as IntegrationConfig;
-const [testAccountConfig, testContactConfig] = testIntegrationConfig;
+const [targetAccountConfig, targetContactConfig] = targetIntegrationConfig;
 
 test('getDefaultConfigForSource creates correct default config from source', () => {
   expect(
     getDefaultConfigForSource(testReadAccountsAndContactsFromSalesforce.objects),
   ).toMatchObject(
-    testIntegrationConfig,
+    targetIntegrationConfig,
   );
 });
 
 test('findObjectInIntegrationConfig finds right object in config', () => {
   expect(
-    findObjectInIntegrationConfig(testContactObject, testIntegrationConfig),
-  ).toMatchObject(testContactConfig);
+    findObjectInIntegrationConfig(targetContactObject, targetIntegrationConfig),
+  ).toMatchObject(targetContactConfig);
 
   expect(
-    findObjectInIntegrationConfig(testAccountsObject, testIntegrationConfig),
-  ).toMatchObject(testAccountConfig);
+    findObjectInIntegrationConfig(targetAccountsObject, targetIntegrationConfig),
+  ).toMatchObject(targetAccountConfig);
 });
 
 test('findSourceFromList finds source in list', () => {
