@@ -42,15 +42,15 @@ export interface FieldMappingOption {
   choices: DataField[];
 }
 
-export interface FieldConfig {
-  [fieldName: DataFieldName]: boolean
-}
-
 export interface ObjectConfig {
   objectName: DataObjectName;
   requiredFields: FieldConfig;
   selectedOptionalFields: FieldConfig;
   selectedFieldMapping?: { [mapTo: string]: DataFieldName }
+}
+
+export interface FieldConfig {
+  [fieldName: DataFieldName]: boolean;
 }
 
 export type IntegrationConfig = Array<ObjectConfig>;
