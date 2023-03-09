@@ -101,6 +101,7 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "exclude": [
-    "test/"
+    "build",
+    "test/**/*.test.ts",
   ]
 }
