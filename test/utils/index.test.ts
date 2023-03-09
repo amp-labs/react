@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { IntegrationConfig, IntegrationSource } from '../../src/components/types/configTypes';
+import { IntegrationSource, ObjectConfig } from '../../src/components/types/configTypes';
 import { TestSourceList } from '../../src/testData/integrationSource';
 import {
   findSourceFromList,
@@ -24,7 +24,7 @@ const targetIntegrationConfig = [
       name: true,
       industry: true,
     },
-  },
+  } as ObjectConfig,
   {
     objectName: 'contact',
     selectedOptionalFields: {},
@@ -34,30 +34,28 @@ const targetIntegrationConfig = [
       lastName: true,
       email: true,
     },
-  },
-] as IntegrationConfig;
+  } as ObjectConfig,
+];
 const [targetAccountConfig, targetContactConfig] = targetIntegrationConfig;
 
 test('getDefaultConfigForSource creates correct default config from source', () => {
   expect(
     getDefaultConfigForSource(testReadAccountsAndContactsFromSalesforce.objects),
-  ).toMatchObject(
-    targetIntegrationConfig,
-  );
+  ).toEqual(targetIntegrationConfig);
 });
 
 test('findObjectInIntegrationConfig finds right object in config', () => {
   expect(
     findObjectInIntegrationConfig(targetContactObject, targetIntegrationConfig),
-  ).toMatchObject(targetContactConfig);
+  ).toEqual(targetContactConfig);
 
   expect(
     findObjectInIntegrationConfig(targetAccountsObject, targetIntegrationConfig),
-  ).toMatchObject(targetAccountConfig);
+  ).toEqual(targetAccountConfig);
 });
 
 test('findSourceFromList finds source in list', () => {
   expect(
     findSourceFromList('read-accounts-and-contacts-from-salesforce', TestSourceList),
-  ).toMatchObject(testReadAccountsAndContactsFromSalesforce);
+  ).toEqual(testReadAccountsAndContactsFromSalesforce);
 });
