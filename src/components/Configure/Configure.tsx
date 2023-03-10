@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import {
-  IntegrationSource, ObjectConfigOptions, SourceList,
+  IntegrationSource, ObjectConfigOptions, OptionalDataField, SourceList,
 } from '../types/configTypes';
 import {
   getUserConfig,
@@ -104,11 +104,13 @@ function SetUpRead({
   let userConfig = getDefaultConfigForSource(source.objects);
 
   // GET USER'S EXISTING CONFIG IF EXISTING
-  if (reconfigure) {
-    useEffect(() => {
+  useEffect(() => {
+    if (reconfigure) {
       userConfig = getUserConfig(source, subdomain, api);
-    }, []);
-  }
+    }
+
+    setIntegrationConfig(userConfig);
+  }, []);
 
   const [integrationConfig, setIntegrationConfig] = useState(userConfig);
   const navigate = useNavigate();
@@ -125,7 +127,7 @@ function SetUpRead({
     navigate('/configure-write');
   };
 
-  const elems = map(objects, (object) => {
+  const elems = map(objects, (object: ObjectConfigOptions) => {
     let mandatoryFields;
     let optionalFields;
     let customFieldMapping;
@@ -157,18 +159,25 @@ function SetUpRead({
     }
 
     if (object.optionalFields) {
+      // GET USER'S CONFIG SETTINGS, IF THEY EXIST
+      const userObject = findObjectInIntegrationConfig(object, integrationConfig);
+      const userOptionalFieldConfig = userObject?.selectedOptionalFields;
+
       optionalFields = (
         <>
           <FormControl>
             <Text color="gray.600" marginBottom="5px">Optional fields:</Text>
-            {map(object.optionalFields, (field) => (
+            {map(object.optionalFields, (field: OptionalDataField) => (
               <Box key={field.fieldName} as={SimpleGrid} columns={{ base: 2, lg: 2 }}>
                 <FormLabel htmlFor={field.fieldName} margin="0" paddingRight="20px">
                   { field.displayName }
                 </FormLabel>
                 <Switch
                   id={field.fieldName}
-                  defaultChecked={field.isDefaultSelected}
+                  defaultChecked={
+                    userOptionalFieldConfig?.[field.fieldName]
+                    || field.isDefaultSelected
+                  }
                   onChange={(e) => {
                     const selectedObject = findObjectInIntegrationConfig(object, integrationConfig);
                     if (selectedObject) {
