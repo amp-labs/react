@@ -9,7 +9,12 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import {
-  IntegrationSource, ObjectConfigOptions, OptionalDataField, SourceList,
+  DataField,
+  FieldMappingOption,
+  IntegrationSource,
+  ObjectConfigOptions,
+  OptionalDataField,
+  SourceList,
 } from '../types/configTypes';
 import {
   getUserConfig,
@@ -31,6 +36,15 @@ const STRINGS = {
     api: string,
     subdomain: string,
   ) => <>Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.</>,
+  RECONFIGURE_INTRO: (
+    appName: string,
+    api: string,
+    subdomain: string,
+  ) => (
+    <>
+      Let's update {appName}'s integration with your {capitalize(api)} instance <b>{subdomain}</b>.
+    </>
+  ),
   CONFIGURE_REQUIRED_FIELDS: (
     appName: string,
     object: ObjectConfigOptions,
@@ -196,9 +210,15 @@ function SetUpRead({
     }
 
     if (object.customFieldMapping) {
+      // GET USER'S CONFIG SETTINGS, IF THEY EXIST
+      const userObject = findObjectInIntegrationConfig(object, integrationConfig);
+      const userSelectedFieldMapping = userObject?.selectedFieldMapping;
+      console.log('FIELD MAPPING');
+      console.log(userSelectedFieldMapping);
+
       customFieldMapping = (
         <>
-          {map(object.customFieldMapping, (mapping) => (
+          {map(object.customFieldMapping, (mapping: FieldMappingOption) => (
             <div key={mapping.mapToName}>
               <Text marginBottom="10px">
                 Which of your custom fields from <b>{object.name.displayName}</b> should be mapped
@@ -217,8 +237,12 @@ function SetUpRead({
                   setIntegrationConfig(integrationConfig);
                 }}
               >
-                {map(mapping.choices, (choice) => (
-                  <option value={choice.fieldName} key={choice.fieldName}>
+                {map(mapping.choices, (choice: DataField) => (
+                  <option
+                    value={choice.fieldName}
+                    key={choice.fieldName}
+                    selected={choice.fieldName === userSelectedFieldMapping?.[mapping.mapToName]}
+                  >
                     {choice.displayName}
                   </option>
                 ))}
@@ -239,10 +263,15 @@ function SetUpRead({
     );
   });
 
+  let IntroString = STRINGS.CONFIGURE_INTRO(appName, api, subdomain);
+  if (reconfigure) {
+    IntroString = STRINGS.RECONFIGURE_INTRO(appName, api, subdomain);
+  }
+
   return (
     <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
       <Text marginBottom="20px">
-        {STRINGS.CONFIGURE_INTRO(appName, api, subdomain)}
+        {IntroString}
       </Text>
       <hr />
       <form onSubmit={handleSubmit}>

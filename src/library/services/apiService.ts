@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IntegrationConfig, IntegrationSource } from '../../components/types/configTypes';
-import { getDefaultConfigForSource } from '../../utils';
+import { sampleIntegrationConfig } from '../../testData/integrationSource';
 
 export const AMP_OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
 const CONNECT_OAUTH_URL = `${AMP_OAUTH_SERVER}/connect-oauth`;
@@ -48,14 +48,15 @@ export function getUserConfig(
   subdomain: string,
   api: string,
 ): IntegrationConfig {
+  console.log(source); // eslint-disable-line
   console.log(subdomain); // eslint-disable-line
   console.log(api); // eslint-disable-line
 
-  // TODO: rip out stub and make network call to return real configuration object
-  return getDefaultConfigForSource(source.objects);
+  // TODO: rip out mock and make network call to return real configuration object
+  return sampleIntegrationConfig;
 }
 
 export function postUserConfig(integrationConfig: IntegrationConfig) {
-  console.log(integrationConfig); // eslint-disable-line
   // TODO: Replace stub with network call.
+  console.log(integrationConfig); // eslint-disable-line
 }
