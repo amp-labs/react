@@ -27,7 +27,6 @@ import { SourceListContext, SubdomainContext } from '../AmpersandProvider/Ampers
 interface InstallIntegrationProps {
   integration: string,
   api: string,
-  reconfigure?: boolean,
 }
 
 const STRINGS = {
@@ -62,7 +61,7 @@ const STRINGS = {
 };
 
 export function InstallIntegration(
-  { integration, api, reconfigure = false }: InstallIntegrationProps,
+  { integration, api }: InstallIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
@@ -81,7 +80,32 @@ export function InstallIntegration(
       source={source}
       api={api}
       subdomain={subdomain}
-      reconfigure={reconfigure}
+      reconfigure={false}
+    />
+  );
+}
+
+export function ReconfigureIntegration(
+  { integration, api }: InstallIntegrationProps,
+) {
+  const sourceList: SourceList | null = useContext(SourceListContext);
+  const { subdomain } = useContext(SubdomainContext);
+  let source;
+
+  if (sourceList) {
+    source = findSourceFromList(integration, sourceList);
+  }
+
+  if (!source || !subdomain) {
+    return <CenteredTextBox text="There is an error" />;
+  }
+
+  return (
+    <ConfigureIntegration
+      source={source}
+      api={api}
+      subdomain={subdomain}
+      reconfigure
     />
   );
 }
@@ -93,7 +117,7 @@ interface ConfigureIntegrationProps {
   reconfigure?: boolean;
 }
 
-export function ConfigureIntegration({
+function ConfigureIntegration({
   source, subdomain, api, reconfigure = false,
 }: ConfigureIntegrationProps) {
   const { type } = source;

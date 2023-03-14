@@ -1,5 +1,5 @@
 /**
- * ConfigureSalesforce.tsx
+ * InstallSalesforce.tsx
  *
  * Component that prompts user to connect Salesforce, connecting subdomain, OAuth, and
  * configuration. Wraps SalesforceSubdomainEntry and ConfigureIntegration.
@@ -11,13 +11,13 @@ import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
 import { InstallIntegration } from '../Configure';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
-interface ConfigureSalesforceProps {
+interface InstallSalesforceProps {
   integration: string;
-  reconfigure?: boolean;
 }
 
-function ConfigureSalesforce({ integration, reconfigure = false } : ConfigureSalesforceProps) {
+function InstallSalesforce({ integration } : InstallSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
+  const reconfigure = false;
 
   if (isConnectedToProvider.salesforce) {
     return (
@@ -32,4 +32,4 @@ function ConfigureSalesforce({ integration, reconfigure = false } : ConfigureSal
   return <SalesforceSubdomainEntry />;
 }
 
-export default ConfigureSalesforce;
+export default InstallSalesforce;
