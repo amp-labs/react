@@ -24,7 +24,7 @@ import CenteredTextBox from '../CenteredTextBox';
 import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
-interface ConfigureIntegrationProps {
+interface InstallIntegrationProps {
   integration: string,
   api: string,
   reconfigure?: boolean,
@@ -61,8 +61,8 @@ const STRINGS = {
   },
 };
 
-export function ConfigureIntegration(
-  { integration, api, reconfigure = false }: ConfigureIntegrationProps,
+export function InstallIntegration(
+  { integration, api, reconfigure = false }: InstallIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
@@ -77,7 +77,7 @@ export function ConfigureIntegration(
   }
 
   return (
-    <InstallIntegration
+    <ConfigureIntegration
       source={source}
       api={api}
       subdomain={subdomain}
@@ -86,16 +86,16 @@ export function ConfigureIntegration(
   );
 }
 
-interface InstallProps {
+interface ConfigureIntegrationProps {
   source: IntegrationSource;
   subdomain: string;
   api: string,
   reconfigure?: boolean;
 }
 
-export function InstallIntegration({
+export function ConfigureIntegration({
   source, subdomain, api, reconfigure = false,
-}: InstallProps) {
+}: ConfigureIntegrationProps) {
   const { type } = source;
   if (type === 'read') {
     return (
@@ -114,7 +114,7 @@ export function InstallIntegration({
 
 function SetUpRead({
   source, subdomain, api, reconfigure = false,
-}: InstallProps) {
+}: ConfigureIntegrationProps) {
   let userConfig = getDefaultConfigForSource(source.objects);
 
   // GET USER'S EXISTING CONFIG IF EXISTING
@@ -213,8 +213,6 @@ function SetUpRead({
       // GET USER'S CONFIG SETTINGS, IF THEY EXIST
       const userObject = findObjectInIntegrationConfig(object, integrationConfig);
       const userSelectedFieldMapping = userObject?.selectedFieldMapping;
-      console.log('FIELD MAPPING');
-      console.log(userSelectedFieldMapping);
 
       customFieldMapping = (
         <>

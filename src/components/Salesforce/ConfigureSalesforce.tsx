@@ -8,7 +8,7 @@
 import { useContext } from 'react';
 
 import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
-import { ConfigureIntegration } from '../Configure';
+import { InstallIntegration } from '../Configure';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
 interface ConfigureSalesforceProps {
@@ -21,7 +21,7 @@ function ConfigureSalesforce({ integration, reconfigure = false } : ConfigureSal
 
   if (isConnectedToProvider.salesforce) {
     return (
-      <ConfigureIntegration
+      <InstallIntegration
         integration={integration}
         api="salesforce"
         reconfigure={reconfigure}
