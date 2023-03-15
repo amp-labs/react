@@ -9,9 +9,9 @@ const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/connect-oauth`;
  *
  * @param projectId {string} Builder's project ID
  * @param apiKey {string} Builder's API key.
- * @returns {Promise} Await-able promise to handle success and failure from caller.
+ * @returns {Promise} Then-able promise to handle success and failure from caller.
  */
-export async function getAllSources(projectID: string, apiKey: string) {
+export function getAllSources(projectID: string, apiKey: string) {
   return axios.get(
     `${AMP_BACKEND_SERVER}/projects/${projectID}/sources?key=${apiKey}`,
   );

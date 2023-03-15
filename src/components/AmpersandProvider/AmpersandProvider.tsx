@@ -46,10 +46,14 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   // CALL FOR SOURCE LIST
   useEffect(() => {
-    (async () => {
-      const res = await getAllSources(projectID, apiKey);
-      setSources(res.data);
-    })();
+    getAllSources(apiKey, projectID)
+      .then((res) => {
+        setSources(res.data);
+      })
+      .catch((err) => {
+        /* eslint-disable-next-line no-console */
+        console.error(err);
+      });
   }, [apiKey, projectID]);
 
   // INIT SUBDOMAIN CONTEXT
