@@ -11,7 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   DataField,
   FieldMappingOption,
+  IntegrationConfig,
   IntegrationSource,
+  ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
   SourceList,
@@ -80,7 +82,6 @@ export function InstallIntegration(
       source={source}
       api={api}
       subdomain={subdomain}
-      reconfigure={false}
     />
   );
 }
@@ -88,15 +89,22 @@ export function InstallIntegration(
 export function ReconfigureIntegration(
   { integration, api }: InstallIntegrationProps,
 ) {
-  const sourceList: SourceList | null = useContext(SourceListContext);
+  let source: IntegrationSource | undefined;
+  // let userConfig: IntegrationConfig | undefined;
   const { subdomain } = useContext(SubdomainContext);
-  let source;
+  const [userConfig, setUserConfig] = useState({});
 
-  if (sourceList) {
-    source = findSourceFromList(integration, sourceList);
-  }
+  // GET USER'S EXISTING CONFIG IF EXISTING
+  useEffect(() => {
+    // if (source) userConfig = getUserConfig(source, subdomain, api);
+    if (source) setUserConfig(getUserConfig(source, subdomain, api));
+  }, []);
 
-  if (!source || !subdomain) {
+  const sourceList: SourceList | null = useContext(SourceListContext);
+  if (sourceList) source = findSourceFromList(integration, sourceList);
+
+  // debugger;
+  if (!source || !subdomain || !userConfig) {
     return <CenteredTextBox text="There is an error" />;
   }
 
@@ -105,7 +113,7 @@ export function ReconfigureIntegration(
       source={source}
       api={api}
       subdomain={subdomain}
-      reconfigure
+      userConfig={userConfig}
     />
   );
 }
@@ -114,11 +122,11 @@ interface ConfigureIntegrationProps {
   source: IntegrationSource;
   subdomain: string;
   api: string,
-  reconfigure?: boolean;
+  userConfig?: IntegrationConfig,
 }
 
 function ConfigureIntegration({
-  source, subdomain, api, reconfigure = false,
+  source, subdomain, api, userConfig = undefined,
 }: ConfigureIntegrationProps) {
   const { type } = source;
   if (type === 'read') {
@@ -126,8 +134,8 @@ function ConfigureIntegration({
       <SetUpRead
         source={source}
         subdomain={subdomain}
+        userConfig={userConfig}
         api={api}
-        reconfigure={reconfigure}
       />
     );
   } if (type === 'write') {
@@ -137,20 +145,16 @@ function ConfigureIntegration({
 }
 
 function SetUpRead({
-  source, subdomain, api, reconfigure = false,
+  source, subdomain, api, userConfig = undefined,
 }: ConfigureIntegrationProps) {
-  let userConfig = getDefaultConfigForSource(source.objects);
+  let config: IntegrationConfig;
+  if (!userConfig) {
+    config = getDefaultConfigForSource(source.objects);
+  } else {
+    config = userConfig;
+  }
 
-  // GET USER'S EXISTING CONFIG IF EXISTING
-  useEffect(() => {
-    if (reconfigure) {
-      userConfig = getUserConfig(source, subdomain, api);
-    }
-
-    setIntegrationConfig(userConfig);
-  }, []);
-
-  const [integrationConfig, setIntegrationConfig] = useState(userConfig);
+  const [integrationConfig, setIntegrationConfig] = useState(config);
   const navigate = useNavigate();
 
   const appName = 'MailMonkey'; // TODO: should read from source.
@@ -172,7 +176,7 @@ function SetUpRead({
 
     if (object.requiredFields) {
       let configureString = STRINGS.CONFIGURE_REQUIRED_FIELDS(appName, object);
-      if (reconfigure) {
+      if (userConfig) {
         configureString = STRINGS.RECONFIGURE_REQUIRED_FIELDS(appName, object);
       }
 
@@ -286,7 +290,8 @@ function SetUpRead({
   });
 
   let IntroString = STRINGS.CONFIGURE_INTRO(appName, api, subdomain);
-  if (reconfigure) {
+
+  if (userConfig) {
     IntroString = STRINGS.RECONFIGURE_INTRO(appName, api, subdomain);
   }
 

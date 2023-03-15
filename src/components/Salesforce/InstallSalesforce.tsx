@@ -17,14 +17,12 @@ interface InstallSalesforceProps {
 
 function InstallSalesforce({ integration } : InstallSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
-  const reconfigure = false;
 
   if (isConnectedToProvider.salesforce) {
     return (
       <InstallIntegration
         integration={integration}
         api="salesforce"
-        reconfigure={reconfigure}
       />
     );
   }
