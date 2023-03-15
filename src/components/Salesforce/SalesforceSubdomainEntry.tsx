@@ -5,7 +5,7 @@
  * that Salesforce instance.
  */
 
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Input, Image, Link, Text,
@@ -54,11 +54,9 @@ function SalesforceSubdomainEntry() {
     setError(null);
 
     if (customerSubdomain && projectID) {
-      postConnectOAuth(customerSubdomain, 'salesforce', projectID)
-        .then((res) => {
-          const url = res.data;
-          setOAuthCallbackURL(url);
-        });
+      const res = await postConnectOAuth(customerSubdomain, 'salesforce', projectID);
+      const url = res.data;
+      setOAuthCallbackURL(url);
     }
   };
 

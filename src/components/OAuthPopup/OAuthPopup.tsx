@@ -7,7 +7,7 @@
 import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
-import { AMP_OAUTH_SERVER } from '../../library/services/apiService';
+import { AMP_BACKEND_SERVER } from '../../library/services/apiService';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
@@ -60,7 +60,7 @@ function OAuthPopup({
     setExternalWindow(createPopup({ url, title }));
 
     window.addEventListener('message', (event) => {
-      if (event.origin === AMP_OAUTH_SERVER) {
+      if (event.origin === AMP_BACKEND_SERVER) {
         if (event.data?.eventType === SUCCESS_EVENT) {
           if (externalWindow) externalWindow.close();
           clearTimer();
