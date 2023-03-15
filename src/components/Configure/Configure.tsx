@@ -13,7 +13,6 @@ import {
   FieldMappingOption,
   IntegrationConfig,
   IntegrationSource,
-  ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
   SourceList,
@@ -89,19 +88,21 @@ export function InstallIntegration(
 export function ReconfigureIntegration(
   { integration, api }: InstallIntegrationProps,
 ) {
-  let source: IntegrationSource | undefined;
-  // let userConfig: IntegrationConfig | undefined;
+  const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
-  const [userConfig, setUserConfig] = useState({});
+  const [source, setSource] = useState<IntegrationSource | null>(null);
+  const [userConfig, setUserConfig] = useState<IntegrationConfig | undefined>(undefined);
 
   // GET USER'S EXISTING CONFIG IF EXISTING
   useEffect(() => {
-    // if (source) userConfig = getUserConfig(source, subdomain, api);
-    if (source) setUserConfig(getUserConfig(source, subdomain, api));
-  }, []);
-
-  const sourceList: SourceList | null = useContext(SourceListContext);
-  if (sourceList) source = findSourceFromList(integration, sourceList);
+    if (sourceList) {
+      const source = findSourceFromList(integration, sourceList);
+      if (source) {
+        setSource(source);
+        setUserConfig(getUserConfig(source, subdomain, api));
+      }
+    }
+  }, [sourceList]);
 
   // debugger;
   if (!source || !subdomain || !userConfig) {
