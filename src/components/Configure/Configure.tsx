@@ -263,12 +263,12 @@ function SetUpRead({
 
                   setIntegrationConfig(integrationConfig);
                 }}
+                defaultValue={userSelectedFieldMapping?.[mapping.mapToName]}
               >
                 {map(mapping.choices, (choice: DataField) => (
                   <option
                     value={choice.fieldName}
                     key={choice.fieldName}
-                    selected={choice.fieldName === userSelectedFieldMapping?.[mapping.mapToName]}
                   >
                     {choice.displayName}
                   </option>
@@ -348,9 +348,7 @@ export function SetUpWriteTemp() {
   return (
     <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
       <Text marginBottom="20px">
-        Let's integrate MailMonkey with your Salesforce instance
-        <b>boxit2-dev-ed</b>
-        .
+        Let's integrate MailMonkey with your Salesforce instance <b>boxit2-dev-ed</b>.
       </Text>
       <hr />
       <form onSubmit={handleSubmit}>
