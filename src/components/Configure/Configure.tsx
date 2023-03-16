@@ -2,7 +2,7 @@ import React, {
   FormEvent, useContext, useEffect, useState,
 } from 'react';
 import {
-  map, capitalize,
+  capitalize, map, merge,
 } from 'lodash';
 import {
   Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
@@ -30,13 +30,13 @@ interface InstallIntegrationProps {
   api: string,
 }
 
-const STRINGS = {
-  CONFIGURE_INTRO: (
+const strings = {
+  configureIntro: (
     appName: string,
     api: string,
     subdomain: string,
   ) => <>Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.</>,
-  RECONFIGURE_INTRO: (
+  reconfigureIntro: (
     appName: string,
     api: string,
     subdomain: string,
@@ -45,14 +45,14 @@ const STRINGS = {
       Let's update {appName}'s integration with your {capitalize(api)} instance <b>{subdomain}</b>.
     </>
   ),
-  CONFIGURE_REQUIRED_FIELDS: (
+  configureRequiredFields: (
     appName: string,
     object: ObjectConfigOptions,
   ) => {
     const { name } = object;
     return <>{appName} will read the following <b>{name.displayName}</b> fields:</>;
   },
-  RECONFIGURE_REQUIRED_FIELDS: (
+  reconfigureRequiredFields: (
     appName: string,
     object: ObjectConfigOptions,
   ) => {
@@ -96,10 +96,11 @@ export function ReconfigureIntegration(
   // GET USER'S EXISTING CONFIG IF EXISTING
   useEffect(() => {
     if (sourceList) {
-      const source = findSourceFromList(integration, sourceList);
-      if (source) {
-        setSource(source);
-        setUserConfig(getUserConfig(source, subdomain, api));
+      const sourceFromList = findSourceFromList(integration, sourceList);
+
+      if (sourceFromList) {
+        setSource(sourceFromList);
+        setUserConfig(getUserConfig(sourceFromList, subdomain, api));
       }
     }
   }, [sourceList]);
@@ -152,7 +153,7 @@ function SetUpRead({
   if (!userConfig) {
     config = getDefaultConfigForSource(source.objects);
   } else {
-    config = userConfig;
+    config = merge(getDefaultConfigForSource(source.objects), userConfig);
   }
 
   const [integrationConfig, setIntegrationConfig] = useState(config);
@@ -176,9 +177,9 @@ function SetUpRead({
     let customFieldMapping;
 
     if (object.requiredFields) {
-      let configureString = STRINGS.CONFIGURE_REQUIRED_FIELDS(appName, object);
+      let configureString = strings.configureRequiredFields(appName, object);
       if (userConfig) {
-        configureString = STRINGS.RECONFIGURE_REQUIRED_FIELDS(appName, object);
+        configureString = strings.reconfigureRequiredFields(appName, object);
       }
 
       mandatoryFields = (
@@ -290,10 +291,10 @@ function SetUpRead({
     );
   });
 
-  let IntroString = STRINGS.CONFIGURE_INTRO(appName, api, subdomain);
+  let IntroString = strings.configureIntro(appName, api, subdomain);
 
   if (userConfig) {
-    IntroString = STRINGS.RECONFIGURE_INTRO(appName, api, subdomain);
+    IntroString = strings.reconfigureIntro(appName, api, subdomain);
   }
 
   return (
