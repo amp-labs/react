@@ -1,26 +1,26 @@
 /**
- * ConfigureSalesforce.tsx
+ * ReconfigureSalesforce.tsx
  *
- * Component that prompts user to connect Salesforce, connecting subdomain, OAuth, and
- * configuration. Wraps SalesforceSubdomainEntry and ConfigureIntegration.
+ * Component that prompts user to reconfigure a Salesforce integration.
+ * Wraps SalesforceSubdomainEntry and ConfigureIntegration.
  */
 
 import { useContext } from 'react';
 
 import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
-import { ConfigureIntegration } from '../Configure';
+import { ReconfigureIntegration } from '../Configure';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
-interface ConfigureSalesforceProps {
+interface ReconfigureSalesforceProps {
   integration: string;
 }
 
-function ConfigureSalesforce({ integration } : ConfigureSalesforceProps) {
+function ReconfigureSalesforce({ integration } : ReconfigureSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
 
   if (isConnectedToProvider.salesforce) {
     return (
-      <ConfigureIntegration
+      <ReconfigureIntegration
         integration={integration}
         api="salesforce"
       />
@@ -30,4 +30,4 @@ function ConfigureSalesforce({ integration } : ConfigureSalesforceProps) {
   return <SalesforceSubdomainEntry />;
 }
 
-export default ConfigureSalesforce;
+export default ReconfigureSalesforce;

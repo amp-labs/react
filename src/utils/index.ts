@@ -16,14 +16,14 @@ import {
  *
  * @param integrationName {string} Name of the integration.
  * @param sourceList {SourceList} List of sources.
- * @returns {IntegrationSource | undefined}
+ * @returns {IntegrationSource | null}
  */
 export const findSourceFromList = (
   integrationName: string,
   sourceList: SourceList,
-) : IntegrationSource | undefined => sourceList.find(
+) : IntegrationSource | null => sourceList.find(
   (s: IntegrationSource) => s.name === integrationName,
-);
+) ?? null;
 
 /**
  * Finder function to locate the right object in the source.

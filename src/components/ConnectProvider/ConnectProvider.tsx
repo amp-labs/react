@@ -16,7 +16,7 @@ interface ConnectProviderProps {
 function ConnectProvider({ integration, connectionId }: ConnectProviderProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const sourceList: SourceList | null = useContext(AmpersandContext);
-  let source: IntegrationSource | undefined;
+  let source: IntegrationSource | null;
 
   if (sourceList) {
     source = findSourceFromList(integration, sourceList);

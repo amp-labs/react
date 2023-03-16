@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { IntegrationConfig } from '../../components/types/configTypes';
+import { IntegrationConfig, IntegrationSource } from '../../components/types/configTypes';
+import { sampleIntegrationConfig } from '../../testData/integrationSource';
 
 export const AMP_BACKEND_SERVER = 'https://api.withampersand.com';
 const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/connect-oauth`;
@@ -37,11 +38,20 @@ export async function postConnectOAuth(subdomain: string, api: string, projectID
   });
 }
 
-export function getUserConfig() {
-  // return configuration object
+export function getUserConfig(
+  source: IntegrationSource,
+  subdomain: string,
+  api: string,
+): IntegrationConfig {
+  console.log(source); // eslint-disable-line
+  console.log(subdomain); // eslint-disable-line
+  console.log(api); // eslint-disable-line
+
+  // TODO: rip out mock and make network call to return real configuration object
+  return sampleIntegrationConfig;
 }
 
 export function postUserConfig(integrationConfig: IntegrationConfig) {
-  console.log(integrationConfig); // eslint-disable-line
   // TODO: Replace stub with network call.
+  console.log(integrationConfig); // eslint-disable-line
 }
