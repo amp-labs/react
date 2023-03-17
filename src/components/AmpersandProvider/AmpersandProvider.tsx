@@ -5,7 +5,7 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import {
+import React, {
   createContext, useContext, useEffect, useState, useMemo,
 } from 'react';
 import {
@@ -28,6 +28,7 @@ export const ProviderConnectionContext = createContext<ProviderConnectionContext
   isConnectedToProvider: {},
   setIsConnectedToProvider: () => null,
 });
+export const ApiKeyContext = createContext<string | null>(null);
 export const SourceListContext = createContext<SourceList | null>(null);
 export const ProjectIDContext = createContext<string | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
@@ -72,7 +73,9 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <SourceListContext.Provider value={sources}>
         <SubdomainContext.Provider value={subdomainContext}>
           <ProjectIDContext.Provider value={options.projectID}>
-            { children }
+            <ApiKeyContext.Provider value={options.apiKey}>
+              { children }
+            </ApiKeyContext.Provider>
           </ProjectIDContext.Provider>
         </SubdomainContext.Provider>
       </SourceListContext.Provider>

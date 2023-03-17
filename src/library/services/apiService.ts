@@ -1,25 +1,21 @@
 import axios from 'axios';
-import { IntegrationConfig } from '../../components/types/configTypes';
+import { IntegrationConfig, IntegrationSource } from '../../components/types/configTypes';
+import { sampleIntegrationConfig } from '../../testData/integrationSource';
 
-export const AMP_OAUTH_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
-const CONNECT_OAUTH_URL = `${AMP_OAUTH_SERVER}/connect-oauth`;
-
-const AMP_CF_SERVER = 'https://us-central1-ampersand-demo-server.cloudfunctions.net';
-const GET_ALL_SOURCES_URL = `${AMP_CF_SERVER}/getAllSources`;
+export const AMP_BACKEND_SERVER = 'https://api.withampersand.com';
+const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/connect-oauth`;
 
 /**
  * Get all sources for a builder.
  *
- * @param apiKey {string} Builder's API key.
  * @param projectId {string} Builder's project ID
- * @returns {Promise} Thenable promise to handle success and failure from caller.
+ * @param apiKey {string} Builder's API key.
+ * @returns {Promise} Then-able promise to handle success and failure from caller.
  */
-export function getAllSources(apiKey: string, projectID: string) {
-  // TODO: SEND API KEY AND PROJECT ID AS PARAMS - JUST LOG THEM FOR NOW
-  console.log(apiKey); /* eslint-disable-line no-console */
-  console.log(projectID); /* eslint-disable-line no-console */
-
-  return axios.get(GET_ALL_SOURCES_URL);
+export function getAllSources(projectID: string, apiKey: string) {
+  return axios.get(
+    `${AMP_BACKEND_SERVER}/projects/${projectID}/sources?key=${apiKey}`,
+  );
 }
 
 /**
@@ -28,12 +24,12 @@ export function getAllSources(apiKey: string, projectID: string) {
  * @param subdomain {string} Salesforce subdomain.
  * @param api {string} API service to connect to.
  * @param projectID {string} Builder's project ID.
- * @returns {Promise} Thenable promise to handle success and failure from caller.
+ * @returns {Promise} Await-able promise to handle success and failure from caller.
  */
-export function postConnectOAuth(subdomain: string, api: string, projectID: string) {
+export async function postConnectOAuth(subdomain: string, api: string, projectID: string) {
   return axios.post(CONNECT_OAUTH_URL, {
     Subdomain: subdomain,
-    Api: 'salesforce',
+    Api: api,
     ProjectId: projectID,
   }, {
     headers: {
@@ -42,11 +38,20 @@ export function postConnectOAuth(subdomain: string, api: string, projectID: stri
   });
 }
 
-export function getUserConfig() {
-  // return configuration object
+export function getUserConfig(
+  source: IntegrationSource,
+  subdomain: string,
+  api: string,
+): IntegrationConfig {
+  console.log(source); // eslint-disable-line
+  console.log(subdomain); // eslint-disable-line
+  console.log(api); // eslint-disable-line
+
+  // TODO: rip out mock and make network call to return real configuration object
+  return sampleIntegrationConfig;
 }
 
 export function postUserConfig(integrationConfig: IntegrationConfig) {
-  console.log(integrationConfig); // eslint-disable-line
   // TODO: Replace stub with network call.
+  console.log(integrationConfig); // eslint-disable-line
 }

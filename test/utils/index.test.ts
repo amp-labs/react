@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { IntegrationSource, ObjectConfig } from '../../src/components/types/configTypes';
+import { IntegrationConfig, IntegrationSource, ObjectConfig } from '../../src/components/types/configTypes';
 import { TestSourceList } from '../../src/testData/integrationSource';
 import {
   findSourceFromList,
@@ -12,7 +12,7 @@ const [
   targetAccountsObject,
   targetContactObject,
 ] = testReadAccountsAndContactsFromSalesforce.objects;
-const targetIntegrationConfig = [
+const targetIntegrationConfig : IntegrationConfig = [
   {
     objectName: 'account',
     selectedOptionalFields: {

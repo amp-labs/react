@@ -1,4 +1,6 @@
-import { SourceList, IntegrationSource } from '../components/types/configTypes';
+import {
+  SourceList, IntegrationSource, ObjectConfig, IntegrationConfig,
+} from '../components/types/configTypes';
 
 export const TestSourceList: SourceList = [
   {
@@ -151,3 +153,30 @@ export const TestSalesforceIntegrationSource: IntegrationSource = {
     },
   ],
 };
+
+export const sampleIntegrationConfig : IntegrationConfig = [
+  {
+    objectName: 'account',
+    selectedOptionalFields: {
+      website: true,
+      annualRevenue: true,
+    },
+    selectedFieldMapping: {},
+    requiredFields: {
+      name: true,
+      industry: true,
+    },
+  } as ObjectConfig,
+  {
+    objectName: 'contact',
+    selectedOptionalFields: {},
+    selectedFieldMapping: {
+      pronoun: 'gender_pronoun',
+    },
+    requiredFields: {
+      firstName: true,
+      lastName: true,
+      email: true,
+    },
+  } as ObjectConfig,
+];
