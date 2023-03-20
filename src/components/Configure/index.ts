@@ -1,1 +1,1 @@
-export { ReconfigureIntegration, InstallIntegration, SetUpWriteTemp } from './Configure';
+export { ReconfigureIntegration, InstallIntegration } from './Configure';
