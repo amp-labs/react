@@ -54,9 +54,13 @@ function SalesforceSubdomainEntry() {
     setError(null);
 
     if (customerSubdomain && projectID) {
-      const res = await postConnectOAuth(customerSubdomain, 'salesforce', projectID);
-      const url = res.data;
-      setOAuthCallbackURL(url);
+      try {
+        const res = await postConnectOAuth(customerSubdomain, 'salesforce', projectID);
+        const url = res.data;
+        setOAuthCallbackURL(url);
+      } catch (err: any) {
+        setError(err.message);
+      }
     }
   };
 
