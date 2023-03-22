@@ -3,8 +3,7 @@ import { IntegrationConfig, IntegrationSource } from '../../components/types/con
 import { sampleIntegrationConfig } from '../../testData/integrationSource';
 
 export const AMP_BACKEND_SERVER = 'https://api.withampersand.com';
-export const AMP_TEST_SERVER = 'https://oauth-server-msdauvir5a-uc.a.run.app';
-const CONNECT_OAUTH_URL = `${AMP_TEST_SERVER}/connect-oauth`;
+const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/connect-oauth`;
 
 /**
  * Get all sources for a builder.
