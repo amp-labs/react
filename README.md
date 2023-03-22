@@ -7,8 +7,6 @@ starting with Salesforce.
 This repository contains the Ampersand React library, a set of React components that allow your
 end users to install and manage Ampersand integrations.
 
-## Getting started
-
 ## Prerequisites
 - React version 16+
  
