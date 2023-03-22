@@ -46,7 +46,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   // CALL FOR SOURCE LIST
   useEffect(() => {
-    getAllSources(apiKey, projectID)
+    getAllSources(projectID, apiKey)
       .then((res) => {
         setSources(res.data);
       })
@@ -54,7 +54,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
         /* eslint-disable-next-line no-console */
         console.error(err);
       });
-  }, [apiKey, projectID]);
+  }, [projectID, apiKey]);
 
   // INIT SUBDOMAIN CONTEXT
   const subdomainContext = useMemo(() => ({

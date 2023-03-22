@@ -4,7 +4,7 @@
  * Component that prompts user to connect Salesforce, connecting subdomain and OAuth.
  */
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { Box, Container, Text } from '@chakra-ui/react';
 import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';

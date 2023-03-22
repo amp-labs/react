@@ -5,7 +5,7 @@
  * Wraps SalesforceSubdomainEntry and ConfigureIntegration.
  */
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
 import { ReconfigureIntegration } from '../Configure';
@@ -13,9 +13,13 @@ import { ProviderConnectionContext } from '../AmpersandProvider';
 
 interface ReconfigureSalesforceProps {
   integration: string;
+  redirectUrl?: string;
 }
 
-function ReconfigureSalesforce({ integration } : ReconfigureSalesforceProps) {
+function ReconfigureSalesforce({
+  integration,
+  redirectUrl = undefined,
+} : ReconfigureSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
 
   if (isConnectedToProvider.salesforce) {
@@ -23,6 +27,7 @@ function ReconfigureSalesforce({ integration } : ReconfigureSalesforceProps) {
       <ReconfigureIntegration
         integration={integration}
         api="salesforce"
+        redirectUrl={redirectUrl}
       />
     );
   }

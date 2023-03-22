@@ -5,7 +5,7 @@ import {
   capitalize, map, merge,
 } from 'lodash';
 import {
-  Switch, FormControl, FormLabel, Button, Box, UnorderedList, ListItem, Select, Text, SimpleGrid,
+  Switch, FormControl, FormLabel, Button, Box, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -28,6 +28,7 @@ import { SourceListContext, SubdomainContext } from '../AmpersandProvider/Ampers
 interface InstallIntegrationProps {
   integration: string,
   api: string,
+  redirectUrl?: string,
 }
 
 const strings = {
@@ -62,7 +63,7 @@ const strings = {
 };
 
 export function InstallIntegration(
-  { integration, api }: InstallIntegrationProps,
+  { integration, api, redirectUrl = undefined }: InstallIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
@@ -81,12 +82,13 @@ export function InstallIntegration(
       source={source}
       api={api}
       subdomain={subdomain}
+      redirectUrl={redirectUrl}
     />
   );
 }
 
 export function ReconfigureIntegration(
-  { integration, api }: InstallIntegrationProps,
+  { integration, api, redirectUrl = undefined }: InstallIntegrationProps,
 ) {
   const sourceList: SourceList | null = useContext(SourceListContext);
   const { subdomain } = useContext(SubdomainContext);
@@ -105,7 +107,6 @@ export function ReconfigureIntegration(
     }
   }, [sourceList]);
 
-  // debugger;
   if (!source || !subdomain || !userConfig) {
     return <CenteredTextBox text="There is an error" />;
   }
@@ -116,6 +117,7 @@ export function ReconfigureIntegration(
       api={api}
       subdomain={subdomain}
       userConfig={userConfig}
+      redirectUrl={redirectUrl}
     />
   );
 }
@@ -125,10 +127,11 @@ interface ConfigureIntegrationProps {
   subdomain: string;
   api: string,
   userConfig?: IntegrationConfig,
+  redirectUrl?: string,
 }
 
 function ConfigureIntegration({
-  source, subdomain, api, userConfig = undefined,
+  source, subdomain, api, userConfig = undefined, redirectUrl = undefined,
 }: ConfigureIntegrationProps) {
   const { type } = source;
   if (type === 'read') {
@@ -138,6 +141,7 @@ function ConfigureIntegration({
         subdomain={subdomain}
         userConfig={userConfig}
         api={api}
+        redirectUrl={redirectUrl}
       />
     );
   } if (type === 'write') {
@@ -147,7 +151,7 @@ function ConfigureIntegration({
 }
 
 function SetUpRead({
-  source, subdomain, api, userConfig = undefined,
+  source, subdomain, api, userConfig = undefined, redirectUrl = undefined,
 }: ConfigureIntegrationProps) {
   let config: IntegrationConfig;
   if (!userConfig) {
@@ -157,6 +161,7 @@ function SetUpRead({
   }
 
   const [integrationConfig, setIntegrationConfig] = useState(config);
+  const [isSuccessfulNoRedirect, setIsSuccessfulNoRedirect] = useState(false);
   const navigate = useNavigate();
 
   const appName = 'MailMonkey'; // TODO: should read from source.
@@ -168,7 +173,11 @@ function SetUpRead({
     console.log('submitted');
     postUserConfig(integrationConfig);
 
-    navigate('/configure-write');
+    if (redirectUrl) {
+      navigate(redirectUrl);
+    } else {
+      setIsSuccessfulNoRedirect(true);
+    }
   };
 
   const elems = map(objects, (object: ObjectConfigOptions) => {
@@ -295,6 +304,14 @@ function SetUpRead({
 
   if (userConfig) {
     IntroString = strings.reconfigureIntro(appName, api, subdomain);
+  }
+
+  if (isSuccessfulNoRedirect) {
+    return (
+      <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
+        <Text>Setup successful!</Text>
+      </Box>
+    );
   }
 
   return (
