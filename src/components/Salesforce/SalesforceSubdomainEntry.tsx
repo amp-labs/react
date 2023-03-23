@@ -23,7 +23,6 @@ interface OAuthErrorAlertProps {
 }
 
 function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
-  // TODO: RENDER AN ACTUAL ERROR FROM SALESFORCE OAUTH FLOW INSTEAD OF GENERIC MSG
   if (error) {
     return (
       <Alert status="error" marginTop="2em">

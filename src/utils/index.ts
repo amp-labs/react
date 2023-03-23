@@ -76,3 +76,8 @@ const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null 
     {} as FieldConfig,
   );
 };
+
+// Redirect page to another URL, can be relative (e.g. `/login`) or absolute (e.g. `https://www.google.com`).
+export const redirectTo = (url: string) => {
+  window.location.href = url;
+}

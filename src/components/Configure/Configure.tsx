@@ -7,7 +7,6 @@ import {
 import {
   Switch, FormControl, FormLabel, Button, Box, Select, Text, SimpleGrid,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import {
   DataField,
   FieldMappingOption,
@@ -22,7 +21,7 @@ import {
   postUserConfig,
 } from '../../library/services/apiService';
 import CenteredTextBox from '../CenteredTextBox';
-import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource } from '../../utils';
+import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo } from '../../utils';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface InstallIntegrationProps {
@@ -162,7 +161,6 @@ function SetUpRead({
 
   const [integrationConfig, setIntegrationConfig] = useState(config);
   const [isSuccessfulNoRedirect, setIsSuccessfulNoRedirect] = useState(false);
-  const navigate = useNavigate();
 
   const appName = 'MailMonkey'; // TODO: should read from source.
   const { objects } = source;
@@ -174,7 +172,7 @@ function SetUpRead({
     postUserConfig(integrationConfig);
 
     if (redirectUrl) {
-      navigate(redirectUrl);
+      redirectTo(redirectUrl);
     } else {
       setIsSuccessfulNoRedirect(true);
     }
@@ -309,7 +307,7 @@ function SetUpRead({
   if (isSuccessfulNoRedirect) {
     return (
       <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
-        <Text>Setup successful!</Text>
+        <Text>Success!</Text>
       </Box>
     );
   }

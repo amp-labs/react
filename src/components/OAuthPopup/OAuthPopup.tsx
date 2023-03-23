@@ -62,16 +62,15 @@ function OAuthPopup({
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_BACKEND_SERVER) {
         if (event.data?.eventType === SUCCESS_EVENT) {
-          if (externalWindow) externalWindow.close();
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });
           onClose(null);
-        } else if (event.data?.eventType === FAILURE_EVENT) {
           if (externalWindow) externalWindow.close();
+        } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: false });
-          // TODO: replace with actual error from server.
-          onClose('There was an error logging into your Salesforce subdomain. Please try again.');
+          onClose(event.data?.errorMessage ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
+          if (externalWindow) externalWindow.close();
         }
       }
     });
@@ -82,6 +81,7 @@ function OAuthPopup({
       intervalRef.current = window.setInterval(() => {
         // Check for OAuth success.
         if (isConnectedToProvider.salesforce) {
+          console.log("connecte to salesforce")
           onClose(null);
           return;
         }
