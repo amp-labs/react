@@ -104,19 +104,18 @@ function SalesforceSubdomainEntry() {
     </Container>
   );
 
-  if (oAuthCallbackURL) {
-    return (
-      <OAuthPopup
-        title="Connect to Salesforce"
-        url={oAuthCallbackURL}
-        onClose={(err: string | null) => { if (err) setError(err); }}
-      >
-        { SubdomainEntry }
-      </OAuthPopup>
-    );
-  }
-
-  return SubdomainEntry;
+  return (
+    <OAuthPopup
+      title="Connect to Salesforce"
+      url={oAuthCallbackURL}
+      onClose={(err: string | null) => {
+        setError(err);
+        setOAuthCallbackURL(null);
+      }}
+    >
+      { SubdomainEntry }
+    </OAuthPopup>
+  );
 }
 
 export default SalesforceSubdomainEntry;

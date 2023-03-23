@@ -2,7 +2,7 @@ import {
   SourceList, IntegrationSource, ObjectConfig, IntegrationConfig,
 } from '../components/types/configTypes';
 
-export const TestSourceList: SourceList = [
+export const sources: IntegrationSource[] = [
   {
     name: 'read-accounts-and-contacts-from-salesforce',
     type: 'read',
@@ -80,6 +80,11 @@ export const TestSourceList: SourceList = [
     ],
   },
 ];
+
+export const TestSourceList: SourceList = {
+  appName: 'Test App',
+  integrations: sources,
+}
 
 export const TestSalesforceIntegrationSource: IntegrationSource = {
   name: 'read-accounts-and-contacts-from-salesforce',

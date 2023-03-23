@@ -161,8 +161,12 @@ function SetUpRead({
 
   const [integrationConfig, setIntegrationConfig] = useState(config);
   const [isSuccessfulNoRedirect, setIsSuccessfulNoRedirect] = useState(false);
+  const sourceList: SourceList | null = useContext(SourceListContext);
 
-  const appName = 'MailMonkey'; // TODO: should read from source.
+  let appName = 'this app';
+  if (sourceList) {
+    appName = sourceList.appName;
+  }
   const { objects } = source;
 
   const handleSubmit = (event: FormEvent) => {

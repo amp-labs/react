@@ -21,7 +21,7 @@ import {
 export const findSourceFromList = (
   integrationName: string,
   sourceList: SourceList,
-) : IntegrationSource | null => sourceList.find(
+) : IntegrationSource | null => sourceList.integrations.find(
   (s: IntegrationSource) => s.name === integrationName,
 ) ?? null;
 

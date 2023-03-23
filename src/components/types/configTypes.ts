@@ -1,4 +1,7 @@
-export type SourceList = Array<IntegrationSource>
+export type SourceList = {
+  appName: string;
+  integrations: Array<IntegrationSource>;
+}
 
 export interface IntegrationSource {
   name: string;

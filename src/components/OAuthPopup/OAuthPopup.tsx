@@ -12,7 +12,7 @@ import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
-const DEFAULT_INTERVAL = 700; // ms
+const DEFAULT_INTERVAL = 500; // ms
 
 const SUCCESS_EVENT = 'AUTHORIZATION_SUCCEEDED';
 const FAILURE_EVENT = 'AUTHORIZATION_FAILED';
@@ -22,7 +22,9 @@ type WindowProps = {
   title: string;
 };
 
-type PopupProps = WindowProps & {
+type PopupProps = {
+  url: string | null;
+  title: string;
   onClose: (err: string | null) => void;
   children: React.ReactNode;
 };
@@ -48,17 +50,17 @@ function OAuthPopup({
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
   const {
-    isConnectedToProvider,
     setIsConnectedToProvider,
   } = useContext(ProviderConnectionContext);
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
 
-  // CREATE POPUP ON COMPONENT MOUNT
   useEffect(() => {
-    setExternalWindow(createPopup({ url, title }));
+    if (url) setExternalWindow(createPopup({ url, title }));
+  }, [url]);
 
+  useEffect(() => {
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_BACKEND_SERVER) {
         if (event.data?.eventType === SUCCESS_EVENT) {
@@ -79,16 +81,10 @@ function OAuthPopup({
   useEffect(() => {
     if (externalWindow && !intervalRef.current) {
       intervalRef.current = window.setInterval(() => {
-        // Check for OAuth success.
-        if (isConnectedToProvider.salesforce) {
-          console.log("connecte to salesforce")
-          onClose(null);
-          return;
-        }
         // Check if window was closed prematurely.
         if (!externalWindow || externalWindow.closed) {
-          onClose('The popup was closed too quickly. Please try again.');
           clearTimer();
+          onClose('The popup was closed too quickly. Please try again.');
         }
       }, DEFAULT_INTERVAL);
     }
