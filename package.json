@@ -29,7 +29,8 @@
     "build": "npm run prepbuild && tsc -p tsconfig.json",
     "prepbuild": "npm run clean && npm run assets",
     "clean": "rm -rf ./build/",
-    "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/"
+    "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
+    "lint": "eslint --ext .ts,.tsx src/"
   },
   "repository": {
     "type": "git",

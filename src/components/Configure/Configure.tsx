@@ -21,7 +21,9 @@ import {
   postUserConfig,
 } from '../../library/services/apiService';
 import CenteredTextBox from '../CenteredTextBox';
-import { findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo } from '../../utils';
+import {
+  findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
+} from '../../utils';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 
 interface InstallIntegrationProps {

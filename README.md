@@ -41,11 +41,11 @@ Both components have the same prop signature:
 Example:
 ```tsx
 import { render } from 'react-dom';
-import { AmpersandProvider, ConnectSalesforce, InstallSalesforce, ReconfigureSalesforce } from '@amp-labs/react';
+import { AmpersandProvider, ConnectSalesforce, InstallIntegration, ReconfigureIntegration } from '@amp-labs/react';
 import { Routes, Route } from 'react-router-dom';
 
-const projectId = 'my-project-id'; // your project ID
-const apiKey = 'my-api-key';       // your API key
+const projectId = 'PROJECT_ID'; // Your Ampersand project ID
+const apiKey = 'API_KEY';       // Your Ampersand API key
 
 render (
   // Wrap your app with AmpersandProvider
@@ -59,42 +59,44 @@ render (
 )
 
 function App() {
-  const integration = 'read-accounts-and-contacts-from-salesforce'; // name of the integration you'd like to install
+  // Name of the integration that you've defined in amp.yaml
+  const integration = 'read-accounts-and-contacts-from-salesforce';
+  // The ID that your app uses to identify this end user.
+  const userId = 'USER_ID'; 
+  // The ID that your app uses to identify a company, team, or workspace.
+  // All member of the group has access to its integrations, and only
+  // one member needs to install the integration.
+  const groupId = 'GROUP_ID'; 
 
   return (
     <Routes>
-      <Route path='/install' element=
-        {<InstallSalesforce 
-          integration={integration}
-          redirectUrl={'/next-step'}
+      <Route path = '/install' element =
+        {<InstallIntegration 
+          integration = {integration}
+          userId = {userId}
+          groupId = {groupId}
+          redirectUrl = '/next-step' // Optional.
         />}
       />
-      <Route path='/reconfigure' element=
-        {<ReconfigureSalesforce integration={integration}/>}
+      <Route path = '/reconfigure' element =
+        {<ReconfigureIntegration 
+          integration = {integration}
+          userId = {userId}
+          groupId = {groupId}
+          redirectUrl = '/next-step' // Optional.
+        />}
       >
-      <Route path='/connect' element=
-        {<ConnectSalesforce />}
+      <Route path = '/connect' element =
+        {<ConnectSalesforce 
+          userId = {userId}
+          groupId = {groupId}
+          redirectUrl = '/salesforce-integrations' // Optional.
+        />}
       >
     </Route>
   )
 }
 
-```
-
-## Development
-To build this repo for development with hot reload, run:
-```sh
-npm run watch
-```
-
-To build this repo for production, run:
-```sh
-npm run build
-```
-
-To run the test suite, run:
-```sh
-npm run test
 ```
 
 ## License
