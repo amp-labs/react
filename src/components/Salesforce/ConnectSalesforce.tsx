@@ -7,15 +7,22 @@
 import React, { useContext } from 'react';
 
 import { Box, Container, Text } from '@chakra-ui/react';
-import SalesforceSubdomainEntry from './SalesforceSubdomainEntry';
+import SalesforceOauthFlow from './SalesforceOauthFlow';
 import { ProviderConnectionContext, SubdomainContext } from '../AmpersandProvider';
+import { redirectTo } from '../../utils';
 
-function ConnectSalesforce() {
+interface ConnectSalesforceProps {
+  userId: string;
+  groupId: string;
+  redirectUrl?: string;
+}
+
+function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
   const { subdomain } = useContext(SubdomainContext);
 
   const successText = `Salesforce instance ${subdomain} successfully connected.`;
-  const Success = (
+  const successBox = (
     <Container>
       <Box>
         <Text>{successText}</Text>
@@ -24,10 +31,18 @@ function ConnectSalesforce() {
   );
 
   if (isConnectedToProvider.salesforce && subdomain) {
-    return Success;
+    if (redirectUrl) {
+      redirectTo(redirectUrl);
+    }
+    return successBox;
   }
 
-  return <SalesforceSubdomainEntry />;
+  return (
+    <SalesforceOauthFlow
+      userId={userId}
+      groupId={groupId}
+    />
+  );
 }
 
 export default ConnectSalesforce;

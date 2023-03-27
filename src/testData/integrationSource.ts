@@ -84,7 +84,7 @@ export const sources: IntegrationSource[] = [
 export const TestSourceList: SourceList = {
   appName: 'Test App',
   integrations: sources,
-}
+};
 
 export const TestSalesforceIntegrationSource: IntegrationSource = {
   name: 'read-accounts-and-contacts-from-salesforce',

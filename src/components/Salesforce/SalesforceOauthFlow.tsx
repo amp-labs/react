@@ -37,10 +37,15 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
   return null;
 }
 
+interface SalesforceOauthFlowProps {
+  userId: string;
+  groupId: string;
+}
+
 /**
  * User input for Salesforce customerSubdomain.
  */
-function SalesforceSubdomainEntry() {
+function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
   const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +59,7 @@ function SalesforceSubdomainEntry() {
 
     if (customerSubdomain && projectID) {
       try {
-        const res = await postConnectOAuth(customerSubdomain, 'salesforce', projectID);
+        const res = await postConnectOAuth(userId, groupId, 'salesforce', customerSubdomain, projectID);
         const url = res.data;
         setOAuthCallbackURL(url);
       } catch (err: any) {
@@ -118,4 +123,4 @@ function SalesforceSubdomainEntry() {
   );
 }
 
-export default SalesforceSubdomainEntry;
+export default SalesforceOauthFlow;
