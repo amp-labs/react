@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import { IntegrationConfig, IntegrationSource } from '../../components/types/configTypes';
 import { sampleIntegrationConfig } from '../../testData/integrationSource';
@@ -12,7 +13,7 @@ const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/oauth-connect`;
  * @param apiKey {string} Builder's API key.
  * @returns {Promise} Then-able promise to handle success and failure from caller.
  */
-export function getAllSources(projectID: string, apiKey: string) {
+export async function getAllSources(projectID: string, apiKey: string) {
   return axios.get(
     `${AMP_BACKEND_SERVER}/projects/${projectID}/sources?key=${apiKey}`,
   );
@@ -38,20 +39,21 @@ export async function postConnectOAuth(subdomain: string, api: string, projectID
   });
 }
 
-export function getUserConfig(
-  source: IntegrationSource,
-  subdomain: string,
-  api: string,
-): IntegrationConfig {
-  console.log(source); // eslint-disable-line
-  console.log(subdomain); // eslint-disable-line
-  console.log(api); // eslint-disable-line
-
+export async function getUserConfig(
+  userId: string,
+  groupId: string,
+  integrationName: string,
+): Promise<IntegrationConfig> {
   // TODO: rip out mock and make network call to return real configuration object
   return sampleIntegrationConfig;
 }
 
-export function postUserConfig(integrationConfig: IntegrationConfig) {
+export async function postUserConfig(
+  userId: string,
+  groupId: string,
+  integrationName: string,
+  integrationConfig: IntegrationConfig,
+): Promise<void> {
   // TODO: Replace stub with network call.
   console.log(integrationConfig); // eslint-disable-line
 }
