@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
-import { IntegrationConfig, IntegrationSource } from '../../components/types/configTypes';
-import { sampleIntegrationConfig } from '../../testData/integrationSource';
+import { IntegrationConfig, IntegrationSource } from '../types/configTypes';
+import { sampleIntegrationConfig } from '../testData/integrationSource';
 
 export const AMP_BACKEND_SERVER = 'https://api.withampersand.com';
 const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/oauth-connect`;

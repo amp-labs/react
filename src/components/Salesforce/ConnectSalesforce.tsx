@@ -17,7 +17,7 @@ interface ConnectSalesforceProps {
   redirectUrl?: string;
 }
 
-function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceProps) {
+export function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceProps) {
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
   const { subdomain } = useContext(SubdomainContext);
 
@@ -44,5 +44,3 @@ function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceP
     />
   );
 }
-
-export default ConnectSalesforce;

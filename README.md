@@ -35,11 +35,11 @@ import { render } from 'react-dom';
 import { AmpersandProvider, InstallIntegration, ReconfigureIntegration } from '@amp-labs/react';
 import { Routes, Route } from 'react-router-dom';
 
-const projectId = 'PROJECT_ID'; // Your Ampersand project ID
-const apiKey = 'API_KEY';       // Your Ampersand API key
+const projectId = 'PROJECT_ID'; // Your Ampersand project ID.
+const apiKey = 'API_KEY';       // Your Ampersand API key.
 
 render (
-  // Wrap your app with AmpersandProvider
+  // Wrap your app with AmpersandProvider.
   <AmpersandProvider
     apiKey={apiKey}
     projectId={projectId}
@@ -50,7 +50,7 @@ render (
 )
 
 function App() {
-  // Name of the integration that you've defined in amp.yaml
+  // Name of the integration that you've defined in amp.yaml.
   const integration = 'sync-accounts-and-contacts-from-salesforce';
   // The ID that your app uses to identify this end user.
   const userId = 'USER_ID'; 

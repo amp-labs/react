@@ -11,8 +11,8 @@ import React, {
 import {
   ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
-} from '../types/configTypes';
-import { getAllSources } from '../../library/services/apiService';
+} from '../../types/configTypes';
+import { getAllSources } from '../../services/apiService';
 
 interface AmpersandProviderProps {
   options: {

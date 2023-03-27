@@ -1,6 +1,6 @@
 import {
   SourceList, IntegrationSource, ObjectConfig, IntegrationConfig,
-} from '../components/types/configTypes';
+} from '../types/configTypes';
 
 export const sources: IntegrationSource[] = [
   {

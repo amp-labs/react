@@ -9,7 +9,7 @@ import {
   ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
-} from '../components/types/configTypes';
+} from '../types/configTypes';
 
 /**
  * Given the name of an integration, return the matching source configuration.

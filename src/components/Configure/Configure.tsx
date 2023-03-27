@@ -15,12 +15,12 @@ import {
   ObjectConfigOptions,
   OptionalDataField,
   SourceList,
-} from '../types/configTypes';
+} from '../../types/configTypes';
 import {
   getUserConfig,
   postUserConfig,
-} from '../../library/services/apiService';
-import CenteredTextBox from '../CenteredTextBox';
+} from '../../services/apiService';
+import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import {
   findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
 } from '../../utils';
