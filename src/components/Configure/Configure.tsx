@@ -25,6 +25,8 @@ import {
   findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
 } from '../../utils';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
+import { ProviderConnectionContext } from '../AmpersandProvider';
+import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 interface InstallIntegrationProps {
   integration: string,
@@ -34,10 +36,17 @@ interface InstallIntegrationProps {
 }
 
 export function InstallIntegration(
-  props: InstallIntegrationProps,
+  {
+    integration, userId, groupId, redirectUrl,
+  }: InstallIntegrationProps,
 ) {
   return (
-    <ConfigureIntegration {...props} />
+    <ConfigureIntegrationBase
+      integration={integration}
+      userId={userId}
+      groupId={groupId}
+      redirectUrl={redirectUrl}
+    />
   );
 }
 
@@ -61,7 +70,7 @@ export function ReconfigureIntegration(
   }, [userId, groupId, integration]);
 
   return (
-    <ConfigureIntegration
+    <ConfigureIntegrationBase
       integration={integration}
       userId={userId}
       groupId={groupId}
@@ -71,7 +80,7 @@ export function ReconfigureIntegration(
   );
 }
 
-interface ConfigureIntegrationProps {
+interface ConfigureIntegrationBaseProps {
   integration: string,
   userId: string,
   groupId: string,
@@ -79,10 +88,13 @@ interface ConfigureIntegrationProps {
   redirectUrl?: string,
 }
 
-function ConfigureIntegration({
+// Base component for configuring and reconfiguring an integration.
+function ConfigureIntegrationBase({
   integration, userId, groupId, userConfig, redirectUrl,
-}: ConfigureIntegrationProps) {
+}: ConfigureIntegrationBaseProps) {
   const { subdomain } = useContext(SubdomainContext);
+  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
+
   const sourceList: SourceList | null = useContext(SourceListContext);
   let source;
   let appName = 'this app';
@@ -95,6 +107,16 @@ function ConfigureIntegration({
   if (!source) {
     return <CenteredTextBox text="We can't load the integration" />;
   }
+
+  if (!isConnectedToProvider[integration]) {
+    return (
+      <SalesforceOauthFlow
+        userId={userId}
+        groupId={groupId}
+      />
+    );
+  }
+
   const { type } = source;
   if (type === 'read') {
     return (

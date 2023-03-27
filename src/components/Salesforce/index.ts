@@ -1,4 +1,2 @@
-export { default as InstallSalesforce } from './InstallSalesforce';
-export { default as ReconfigureSalesforce } from './ReconfigureSalesforce';
-export { default as SalesforceSubdomainEntry } from './SalesforceSubdomainEntry';
+/* eslint-disable import/prefer-default-export */
 export { default as ConnectSalesforce } from './ConnectSalesforce';

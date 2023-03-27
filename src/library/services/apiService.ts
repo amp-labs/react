@@ -19,15 +19,13 @@ export async function getAllSources(projectID: string, apiKey: string) {
   );
 }
 
-/**
- * Connect to Ampersand OAuth server to register customer's subdomain.
- *
- * @param subdomain {string} Salesforce subdomain.
- * @param api {string} API service to connect to.
- * @param projectID {string} Builder's project ID.
- * @returns {Promise} Await-able promise to handle success and failure from caller.
- */
-export async function postConnectOAuth(subdomain: string, api: string, projectID: string) {
+export async function postConnectOAuth(
+  userId: string,
+  groupId: string,
+  api: string,
+  subdomain: string,
+  projectID: string,
+) {
   return axios.post(CONNECT_OAUTH_URL, {
     Subdomain: subdomain,
     Api: api,
