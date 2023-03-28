@@ -135,6 +135,7 @@ This library was created with [Chakra UI](https://chakra-ui.com/). As a result i
 
 ```tsx
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from '@chakra-ui/react';
+import { InstallIntegration } from '@amp-labs/react';
 
 const theme = extendTheme({
   fonts: {
