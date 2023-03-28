@@ -107,8 +107,8 @@ function ConfigureIntegrationBase({
   if (!source) {
     return <CenteredTextBox text="We can't load the integration" />;
   }
-
-  if (!isConnectedToProvider[integration]) {
+  const { api } = source;
+  if (!isConnectedToProvider[api]) {
     return (
       <SalesforceOauthFlow
         userId={userId}
@@ -126,7 +126,7 @@ function ConfigureIntegrationBase({
         subdomain={subdomain}
         appName={appName}
         userConfig={userConfig}
-        api={source.api}
+        api={api}
         userId={userId}
         groupId={groupId}
         redirectUrl={redirectUrl}
