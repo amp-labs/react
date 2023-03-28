@@ -129,6 +129,37 @@ function App() {
 }
 ```
 
+### Customizing the Style
+
+This library was created with [Chakra UI](https://chakra-ui.com/). As a result if you would like to override the style of any of the components, you can wrap them in a `ChakraProvider` component and inject a Chakra theme object. Please see the [Chakra docs](https://chakra-ui.com/docs/styled-system/customize-theme) for how to do this. If your app is already using Chakra UI, then your themes and global overrides should automatically apply.
+
+```tsx
+import { ChakraProvider, extendTheme, withDefaultColorScheme } from '@chakra-ui/react';
+import { InstallIntegration } from '@amp-labs/react';
+
+const theme = extendTheme({
+  fonts: {
+    body: "system-ui, sans-serif",
+    heading: "Georgia, serif",
+  },
+}, withDefaultColorScheme({
+  colorScheme: 'blue',
+  components: ['Button'],
+}));
+
+function MyComponent() {
+  return (
+    <ChakraProvider theme={theme}>
+      <InstallIntegration 
+        integration={integration}
+        userId={userId}
+        groupId={groupId}
+      />
+    </ChakraProvider>
+  );
+}
+```
+
 ## License
 
 This repository is licensed under the **MIT license**.
