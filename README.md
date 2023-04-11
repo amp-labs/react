@@ -51,8 +51,8 @@ import { AmpersandProvider, InstallIntegration, ReconfigureIntegration } from '@
 import { Routes, Route } from 'react-router-dom';
 
 const options = {
-  projectId:'test-project-id', // Your Ampersand project ID.
-  apiKey:'AIzaSyAjpBTtaMPgavSTh1pDXaMLDzhtxEDaC7o',// Your Ampersand API key.
+  projectId: 'PROJECT_ID', // Your Ampersand project ID.
+  apiKey: 'API_KEY',// Your Ampersand API key.
 };
 
 const theme = extendTheme({
