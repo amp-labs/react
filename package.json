@@ -38,13 +38,16 @@
     "url": "git+https://github.com/amp-labs/react.git"
   },
   "jest": {
-    "testPathIgnorePatterns": ["build"]
+    "testPathIgnorePatterns": [
+      "build"
+    ]
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.0",
     "@jest/globals": "^29.5.0",
+    "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.27",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "babel-jest": "^29.5.0",
@@ -62,11 +65,11 @@
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "@chakra-ui/react": ">=2"
+    "react": ">=16"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.9",
+    "@chakra-ui/react": "^2.7.1",
     "axios": "^1.3.2",
     "lodash": "^4.17.21"
   }
