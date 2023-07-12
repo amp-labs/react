@@ -1,22 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import { IntegrationConfig, IntegrationSource } from '../types/configTypes';
-import { sampleIntegrationConfig } from '../testData/integrationSource';
+import { TestSourceList, sampleIntegrationConfig } from '../testData/integrationSource';
 
-export const AMP_BACKEND_SERVER = 'https://api.withampersand.com';
+console.log('process.env.REACT_APP_AMP_SERVER', process.env.AMP_SERVER); // eslint-disable-line
+console.log(JSON.stringify(process.env, null, 2)); // eslint-disable-line
+export const AMP_BACKEND_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
+  ? 'http://localhost:8080'
+  : 'https://api.withampersand.com';
 const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/oauth-connect`;
 
 /**
- * Get all sources for a builder.
+ * Get all integrations for a builder.
  *
  * @param projectId {string} Builder's project ID
  * @param apiKey {string} Builder's API key.
  * @returns {Promise} Then-able promise to handle success and failure from caller.
  */
-export async function getAllSources(projectID: string, apiKey: string) {
-  return axios.get(
-    `${AMP_BACKEND_SERVER}/projects/${projectID}/sources?key=${apiKey}`,
-  );
+export async function getIntegrations(projectID: string, apiKey: string) {
+  // TODO: replace with a real API call to GetIntegrations
+  return { data: TestSourceList };
 }
 
 export async function postConnectOAuth(
@@ -27,9 +30,14 @@ export async function postConnectOAuth(
   projectID: string,
 ) {
   return axios.post(CONNECT_OAUTH_URL, {
-    Subdomain: subdomain,
-    Api: api,
+    ProviderWorkspaceRef: subdomain,
+    Provider: api,
     ProjectId: projectID,
+    GroupRef: 'p0-g1-ref',
+    ConsumerRef: 'consumerRef:p0-c1',
+    // This ID is from the seed data in the server.
+    // TODO: replace.
+    ProviderAppId: '85401a99-9395-4929-b57f-32da59048f2e',
   }, {
     headers: {
       'Content-Type': 'application/json',

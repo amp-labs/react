@@ -12,7 +12,7 @@ import {
   ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
 } from '../../types/configTypes';
-import { getAllSources } from '../../services/apiService';
+import { getIntegrations } from '../../services/apiService';
 
 interface AmpersandProviderProps {
   options: {
@@ -37,7 +37,7 @@ export const SubdomainContext = createContext<SubdomainContextConfig>({
 });
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const [sources, setSources] = useState(null);
+  const [sources, setSources] = useState<SourceList | null>(null);
   const [subdomain, setSubdomain] = useState('');
   const [isConnectedToProvider, setIsConnectedToProvider] = useState({});
 
@@ -46,7 +46,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   // CALL FOR SOURCE LIST
   useEffect(() => {
-    getAllSources(projectID, apiKey)
+    getIntegrations(projectID, apiKey)
       .then((res) => {
         setSources(res.data);
       })
