@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
-import { IntegrationConfig, IntegrationSource } from '../types/configTypes';
+import { IntegrationConfig } from '../types/configTypes';
 import { TestSourceList, sampleIntegrationConfig } from '../testData/integrationSource';
 
-console.log('process.env.REACT_APP_AMP_SERVER', process.env.AMP_SERVER); // eslint-disable-line
-console.log(JSON.stringify(process.env, null, 2)); // eslint-disable-line
 export const AMP_BACKEND_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
   ? 'http://localhost:8080'
   : 'https://api.withampersand.com';
@@ -33,10 +31,10 @@ export async function postConnectOAuth(
     ProviderWorkspaceRef: subdomain,
     Provider: api,
     ProjectId: projectID,
+    // The following IDs are from the DB seed data.
+    // TODO: replace.
     GroupRef: 'p0-g1-ref',
     ConsumerRef: 'consumerRef:p0-c1',
-    // This ID is from the seed data in the server.
-    // TODO: replace.
     ProviderAppId: '85401a99-9395-4929-b57f-32da59048f2e',
   }, {
     headers: {
