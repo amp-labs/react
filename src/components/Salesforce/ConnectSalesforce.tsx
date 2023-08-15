@@ -5,12 +5,13 @@
  */
 
 import { useContext, useEffect } from 'react';
-
 import { Box, Container, Text } from '@chakra-ui/react';
-import SalesforceOauthFlow from './SalesforceOauthFlow';
-import { ProviderConnectionContext, SubdomainContext, ProjectIDContext } from '../AmpersandProvider';
-import { redirectTo } from '../../utils';
+
 import { postCreateConsumer, postCreateGroup } from '../../services/apiService';
+import { redirectTo } from '../../utils';
+import { ProjectIDContext, ProviderConnectionContext, SubdomainContext } from '../AmpersandProvider';
+
+import SalesforceOauthFlow from './SalesforceOauthFlow';
 
 interface ConnectSalesforceProps {
   userId: string;

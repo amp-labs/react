@@ -6,14 +6,15 @@
  */
 
 import { useContext, useState } from 'react';
-import {
-  Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
-  FormLabel, Heading, Input, Image, Link, Text,
-} from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import {
+  Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
+  FormLabel, Heading, Image, Input, Link, Text,
+} from '@chakra-ui/react';
+
+import { postConnectOAuth } from '../../services/apiService';
 import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
-import { postConnectOAuth } from '../../services/apiService';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
