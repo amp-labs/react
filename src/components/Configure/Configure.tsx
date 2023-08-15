@@ -108,6 +108,8 @@ function ConfigureIntegrationBase({
     return <CenteredTextBox text="We can't load the integration" />;
   }
   const { api } = source;
+
+  //  TODO: isConnectedToProvider should be an API call
   if (!isConnectedToProvider[api]) {
     return (
       <SalesforceOauthFlow

@@ -4,12 +4,13 @@
  * Component that prompts user to connect Salesforce, connecting subdomain and OAuth.
  */
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Box, Container, Text } from '@chakra-ui/react';
 import SalesforceOauthFlow from './SalesforceOauthFlow';
-import { ProviderConnectionContext, SubdomainContext } from '../AmpersandProvider';
+import { ProviderConnectionContext, SubdomainContext, ProjectIDContext } from '../AmpersandProvider';
 import { redirectTo } from '../../utils';
+import { postCreateConsumer, postCreateGroup } from '../../services/apiService';
 
 interface ConnectSalesforceProps {
   userId: string;
@@ -18,6 +19,7 @@ interface ConnectSalesforceProps {
 }
 
 export function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceProps) {
+  const projectID = useContext(ProjectIDContext);
   const { isConnectedToProvider } = useContext(ProviderConnectionContext);
   const { subdomain } = useContext(SubdomainContext);
 
@@ -36,6 +38,23 @@ export function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSale
     }
     return successBox;
   }
+
+  // upsert group + consumer (user)
+  async function createConsumerAndGroup() {
+    try {
+      const consumerResponse = await postCreateConsumer(userId, projectID || '');
+      console.log('postCreateConsumer response', consumerResponse);
+
+      const groupResponse = await postCreateGroup(groupId, projectID || '');
+      console.log('postCreateGroup response', groupResponse);
+    } catch (error) {
+      console.error('Error creating consumer and group:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (projectID) createConsumerAndGroup();
+  }, [projectID]);
 
   return (
     <SalesforceOauthFlow
