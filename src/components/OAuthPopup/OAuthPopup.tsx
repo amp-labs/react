@@ -63,7 +63,7 @@ function OAuthPopup({
   useEffect(() => {
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_BACKEND_SERVER) {
-        //  this event come from our own server)
+        //  this event come from our own server
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });

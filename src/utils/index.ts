@@ -40,25 +40,6 @@ export const findObjectInIntegrationConfig = (
 );
 
 /**
- * Given a source, create the config payload to be saved.
- * Gets rid of extra data like display names.
- *
- * @param objects {ObjectConfigOptions[]} Array of object config options.
- * @returns {ObjectConfig} Config payload for source.
- */
-export const getDefaultConfigForSource = (
-  objects: ObjectConfigOptions[],
-): IntegrationConfig => map(
-  objects,
-  (object: ObjectConfigOptions): ObjectConfig => ({
-    objectName: object.name.objectName,
-    requiredFields: reduceDataFieldsToFieldConfig(object.requiredFields) || {},
-    selectedOptionalFields: reduceDataFieldsToFieldConfig(object.optionalFields) || {},
-    selectedFieldMapping: {}, // SET BY USER IN CONFIGURE FLOW
-  }),
-);
-
-/**
  * Create config payload for data fields.
  *
  * @param fields {DataFields} Config parameter.
@@ -76,6 +57,25 @@ const reduceDataFieldsToFieldConfig = (fields?: DataFields): FieldConfig | null 
     {} as FieldConfig,
   );
 };
+
+/**
+ * Given a source, create the config payload to be saved.
+ * Gets rid of extra data like display names.
+ *
+ * @param objects {ObjectConfigOptions[]} Array of object config options.
+ * @returns {ObjectConfig} Config payload for source.
+ */
+export const getDefaultConfigForSource = (
+  objects: ObjectConfigOptions[],
+): IntegrationConfig => map(
+  objects,
+  (object: ObjectConfigOptions): ObjectConfig => ({
+    objectName: object.name.objectName,
+    requiredFields: reduceDataFieldsToFieldConfig(object.requiredFields) || {},
+    selectedOptionalFields: reduceDataFieldsToFieldConfig(object.optionalFields) || {},
+    selectedFieldMapping: {}, // SET BY USER IN CONFIGURE FLOW
+  }),
+);
 
 // Redirect page to another URL, can be relative (e.g. `/login`) or absolute (e.g. `https://www.google.com`).
 export const redirectTo = (url: string) => {

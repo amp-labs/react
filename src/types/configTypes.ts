@@ -1,7 +1,10 @@
+/* eslint-disable no-use-before-define */
+// TODO - reorder types to match this rule
+
 export type SourceList = {
   appName: string;
   integrations: Array<IntegrationSource>;
-}
+};
 
 export interface IntegrationSource {
   name: string;
@@ -17,7 +20,7 @@ export interface ObjectConfigOptions {
   customFieldMapping?: FieldMappingOption[];
 }
 
-export type DataFields = Array<DataField>
+export type DataFields = Array<DataField>;
 
 type DataObjectName = string;
 type DataFieldName = string;
