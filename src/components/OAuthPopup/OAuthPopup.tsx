@@ -5,8 +5,10 @@
  */
 
 import React, {
-  useContext, useEffect, useState, useRef,
+  useContext, useEffect, useRef,
+  useState,
 } from 'react';
+
 import { AMP_BACKEND_SERVER } from '../../services/apiService';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 

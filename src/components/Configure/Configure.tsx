@@ -2,11 +2,16 @@ import {
   FormEvent, useContext, useEffect, useState,
 } from 'react';
 import {
+  Box, Button, FormControl, FormLabel, Select, SimpleGrid, Switch, Text,
+} from '@chakra-ui/react';
+import {
   capitalize, map, merge,
 } from 'lodash';
+
 import {
-  Switch, FormControl, FormLabel, Button, Box, Select, Text, SimpleGrid,
-} from '@chakra-ui/react';
+  getUserConfig,
+  postUserConfig,
+} from '../../services/apiService';
 import {
   DataField,
   FieldMappingOption,
@@ -17,15 +22,11 @@ import {
   SourceList,
 } from '../../types/configTypes';
 import {
-  getUserConfig,
-  postUserConfig,
-} from '../../services/apiService';
-import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
-import {
   findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
 } from '../../utils';
-import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 import { ProviderConnectionContext } from '../AmpersandProvider';
+import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
+import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 function SetUpWrite(/* props: InstallProps */) {

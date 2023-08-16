@@ -1,14 +1,15 @@
 import { map, reduce } from 'lodash';
+
 import {
   DataField,
   DataFields,
   FieldConfig,
-  SourceList,
   IntegrationConfig,
   IntegrationSource,
   ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
+  SourceList,
 } from '../types/configTypes';
 
 /**

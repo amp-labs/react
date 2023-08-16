@@ -6,13 +6,14 @@
  */
 
 import React, {
-  createContext, useContext, useEffect, useState, useMemo,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
+
+import { getIntegrations } from '../../services/apiService';
 import {
   ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
 } from '../../types/configTypes';
-import { getIntegrations } from '../../services/apiService';
 
 interface AmpersandProviderProps {
   options: {
