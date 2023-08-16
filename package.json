@@ -10,6 +10,10 @@
     {
       "name": "Joey Yang",
       "email": "joey@thirdslant.com"
+    },
+    {
+      "name": "Dion Low",
+      "email": "dion@withampersand.com"
     }
   ],
   "license": "MIT",
@@ -51,7 +55,9 @@
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.27",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "babel-cli": "^6.26.0",
     "babel-jest": "^29.5.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^8.33.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-standard-with-typescript": "^34.0.0",

@@ -1,0 +1,22 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": { "node": "current" } }],
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "src": "./src",
+          "services": "./src/services",
+          "components": "./src/components",
+          "types": "./src/types"
+          // Add more aliases as needed
+        }
+      }
+    ]
+  ]
+}

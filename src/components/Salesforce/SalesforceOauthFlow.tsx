@@ -11,8 +11,8 @@ import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
+import { postConnectOAuth } from 'services/apiService';
 
-import { postConnectOAuth } from '../../services/apiService';
 import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 

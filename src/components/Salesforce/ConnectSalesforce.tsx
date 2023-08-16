@@ -6,9 +6,9 @@
 
 import { useContext, useEffect } from 'react';
 import { Box, Container, Text } from '@chakra-ui/react';
+import { postCreateConsumer, postCreateGroup } from 'services/apiService';
+import { redirectTo } from 'src/utils';
 
-import { postCreateConsumer, postCreateGroup } from '../../services/apiService';
-import { redirectTo } from '../../utils';
 import { ProjectIDContext, ProviderConnectionContext, SubdomainContext } from '../AmpersandProvider';
 
 import SalesforceOauthFlow from './SalesforceOauthFlow';

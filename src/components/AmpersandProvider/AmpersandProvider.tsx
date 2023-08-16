@@ -8,12 +8,11 @@
 import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
-
-import { getIntegrations } from '../../services/apiService';
+import { getIntegrations } from 'services/apiService';
 import {
   ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
-} from '../../types/configTypes';
+} from 'types/configTypes';
 
 interface AmpersandProviderProps {
   options: {

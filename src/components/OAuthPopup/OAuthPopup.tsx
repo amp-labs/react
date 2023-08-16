@@ -8,8 +8,8 @@ import React, {
   useContext, useEffect, useRef,
   useState,
 } from 'react';
+import { AMP_BACKEND_SERVER } from 'services/apiService';
 
-import { AMP_BACKEND_SERVER } from '../../services/apiService';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px

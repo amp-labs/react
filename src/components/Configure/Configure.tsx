@@ -7,11 +7,13 @@ import {
 import {
   capitalize, map, merge,
 } from 'lodash';
-
 import {
   getUserConfig,
   postUserConfig,
-} from '../../services/apiService';
+} from 'services/apiService';
+import {
+  findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
+} from 'src/utils';
 import {
   DataField,
   FieldMappingOption,
@@ -20,10 +22,8 @@ import {
   ObjectConfigOptions,
   OptionalDataField,
   SourceList,
-} from '../../types/configTypes';
-import {
-  findObjectInIntegrationConfig, findSourceFromList, getDefaultConfigForSource, redirectTo,
-} from '../../utils';
+} from 'types/configTypes';
+
 import { ProviderConnectionContext } from '../AmpersandProvider';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
