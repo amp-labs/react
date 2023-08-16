@@ -5,7 +5,7 @@
  * that Salesforce instance.
  */
 
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Alert, AlertIcon, AlertDescription, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Input, Image, Link, Text,
@@ -92,7 +92,8 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
             color="blackAlpha.600"
             isExternal
           >
-            What is my Salesforce subdomain? <ExternalLinkIcon mx="2px" />
+            What is my Salesforce subdomain?
+            <ExternalLinkIcon mx="2px" />
           </Link>
           <OAuthErrorAlert error={error} />
           <Flex marginTop="1em">

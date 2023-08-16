@@ -1,4 +1,4 @@
-import React, {
+import {
   FormEvent, useContext, useEffect, useState,
 } from 'react';
 import {
@@ -28,117 +28,40 @@ import { SourceListContext, SubdomainContext } from '../AmpersandProvider/Ampers
 import { ProviderConnectionContext } from '../AmpersandProvider';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
-interface InstallIntegrationProps {
-  integration: string,
-  userId: string,
-  groupId: string,
-  redirectUrl?: string,
+function SetUpWrite(/* props: InstallProps */) {
+  return (<>TODO</>);
 }
 
-export function InstallIntegration(
-  {
-    integration, userId, groupId, redirectUrl,
-  }: InstallIntegrationProps,
-) {
-  return (
-    <ConfigureIntegrationBase
-      integration={integration}
-      userId={userId}
-      groupId={groupId}
-      redirectUrl={redirectUrl}
-    />
-  );
-}
-
-interface ReconfigureIntegrationProps {
-  integration: string,
-  userId: string,
-  groupId: string,
-  redirectUrl?: string,
-}
-export function ReconfigureIntegration(
-  {
-    integration, userId, groupId, redirectUrl,
-  }: ReconfigureIntegrationProps,
-) {
-  const [userConfig, setUserConfig] = useState<IntegrationConfig | undefined>(undefined);
-
-  // GET USER'S EXISTING CONFIG IF EXISTING
-  useEffect(() => {
-    getUserConfig(userId, groupId, integration)
-      .then((config) => setUserConfig(config));
-  }, [userId, groupId, integration]);
-
-  return (
-    <ConfigureIntegrationBase
-      integration={integration}
-      userId={userId}
-      groupId={groupId}
-      userConfig={userConfig}
-      redirectUrl={redirectUrl}
-    />
-  );
-}
-
-interface ConfigureIntegrationBaseProps {
-  integration: string,
-  userId: string,
-  groupId: string,
-  userConfig?: IntegrationConfig,
-  redirectUrl?: string,
-}
-
-// Base component for configuring and reconfiguring an integration.
-function ConfigureIntegrationBase({
-  integration, userId, groupId, userConfig, redirectUrl,
-}: ConfigureIntegrationBaseProps) {
-  const { subdomain } = useContext(SubdomainContext);
-  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
-
-  const sourceList: SourceList | null = useContext(SourceListContext);
-  let source;
-  let appName = 'this app';
-
-  if (sourceList) {
-    source = findSourceFromList(integration, sourceList);
-    appName = sourceList.appName;
-  }
-
-  if (!source) {
-    return <CenteredTextBox text="We can't load the integration" />;
-  }
-  const { api } = source;
-
-  //  TODO: isConnectedToProvider should be an API call
-  if (!isConnectedToProvider[api]) {
-    return (
-      <SalesforceOauthFlow
-        userId={userId}
-        groupId={groupId}
-      />
-    );
-  }
-
-  const { type } = source;
-  if (type === 'read') {
-    return (
-      <SetUpRead
-        integration={integration}
-        source={source}
-        subdomain={subdomain}
-        appName={appName}
-        userConfig={userConfig}
-        api={api}
-        userId={userId}
-        groupId={groupId}
-        redirectUrl={redirectUrl}
-      />
-    );
-  } if (type === 'write') {
-    return <SetUpWrite />;
-  }
-  return null;
-}
+const strings = {
+  configureIntro: (
+    appName: string,
+    api: string,
+    subdomain: string,
+  ) => <>Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.</>,
+  reconfigureIntro: (
+    appName: string,
+    api: string,
+    subdomain: string,
+  ) => (
+    <>
+      Let's update {appName}'s integration with your {capitalize(api)} instance <b>{subdomain}</b>.
+    </>
+  ),
+  configureRequiredFields: (
+    appName: string,
+    object: ObjectConfigOptions,
+  ) => {
+    const { name } = object;
+    return <>{appName} will read the following <b>{name.displayName}</b> fields:</>;
+  },
+  reconfigureRequiredFields: (
+    appName: string,
+    object: ObjectConfigOptions,
+  ) => {
+    const { name } = object;
+    return <>{appName} is reading the following <b>{name.displayName}</b> fields:</>;
+  },
+};
 
 interface SetUpReadProps {
   integration: string,
@@ -324,37 +247,113 @@ function SetUpRead({
   );
 }
 
-function SetUpWrite(/* props: InstallProps */) {
-  return (<>TODO</>);
+interface ConfigureIntegrationBaseProps {
+  integration: string,
+  userId: string,
+  groupId: string,
+  userConfig?: IntegrationConfig,
+  redirectUrl?: string,
 }
 
-const strings = {
-  configureIntro: (
-    appName: string,
-    api: string,
-    subdomain: string,
-  ) => <>Let's integrate {appName} with your {capitalize(api)} instance <b>{subdomain}</b>.</>,
-  reconfigureIntro: (
-    appName: string,
-    api: string,
-    subdomain: string,
-  ) => (
-    <>
-      Let's update {appName}'s integration with your {capitalize(api)} instance <b>{subdomain}</b>.
-    </>
-  ),
-  configureRequiredFields: (
-    appName: string,
-    object: ObjectConfigOptions,
-  ) => {
-    const { name } = object;
-    return <>{appName} will read the following <b>{name.displayName}</b> fields:</>;
-  },
-  reconfigureRequiredFields: (
-    appName: string,
-    object: ObjectConfigOptions,
-  ) => {
-    const { name } = object;
-    return <>{appName} is reading the following <b>{name.displayName}</b> fields:</>;
-  },
-};
+// Base component for configuring and reconfiguring an integration.
+function ConfigureIntegrationBase({
+  integration, userId, groupId, userConfig, redirectUrl,
+}: ConfigureIntegrationBaseProps) {
+  const { subdomain } = useContext(SubdomainContext);
+  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
+
+  const sourceList: SourceList | null = useContext(SourceListContext);
+  let source;
+  let appName = 'this app';
+
+  if (sourceList) {
+    source = findSourceFromList(integration, sourceList);
+    appName = sourceList.appName;
+  }
+
+  if (!source) {
+    return <CenteredTextBox text="We can't load the integration" />;
+  }
+  const { api } = source;
+
+  //  TODO: isConnectedToProvider should be an API call
+  if (!isConnectedToProvider[api]) {
+    return (
+      <SalesforceOauthFlow
+        userId={userId}
+        groupId={groupId}
+      />
+    );
+  }
+
+  const { type } = source;
+  if (type === 'read') {
+    return (
+      <SetUpRead
+        integration={integration}
+        source={source}
+        subdomain={subdomain}
+        appName={appName}
+        userConfig={userConfig}
+        api={api}
+        userId={userId}
+        groupId={groupId}
+        redirectUrl={redirectUrl}
+      />
+    );
+  } if (type === 'write') {
+    return <SetUpWrite />;
+  }
+  return null;
+}
+interface InstallIntegrationProps {
+  integration: string,
+  userId: string,
+  groupId: string,
+  redirectUrl?: string,
+}
+
+export function InstallIntegration(
+  {
+    integration, userId, groupId, redirectUrl,
+  }: InstallIntegrationProps,
+) {
+  return (
+    <ConfigureIntegrationBase
+      integration={integration}
+      userId={userId}
+      groupId={groupId}
+      redirectUrl={redirectUrl}
+    />
+  );
+}
+
+interface ReconfigureIntegrationProps {
+  integration: string,
+  userId: string,
+  groupId: string,
+  redirectUrl?: string,
+}
+export function ReconfigureIntegration(
+  {
+    integration, userId, groupId, redirectUrl,
+  }: ReconfigureIntegrationProps,
+) {
+  const [userConfig, setUserConfig] = useState<IntegrationConfig | undefined>(undefined);
+
+  // GET USER'S EXISTING CONFIG IF EXISTING
+  useEffect(() => {
+    getUserConfig(userId, groupId, integration)
+      .then((config) => setUserConfig(config));
+  }, [userId, groupId, integration]);
+
+  return (
+    <ConfigureIntegrationBase
+      integration={integration}
+      userId={userId}
+      groupId={groupId}
+      userConfig={userConfig}
+      redirectUrl={redirectUrl}
+    />
+  );
+}
