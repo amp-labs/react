@@ -66,16 +66,17 @@ function OAuthPopup({
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_SERVER) {
         //  this event come from our own server
-        console.log('Received message from AMP backend', JSON.stringify(event.data, null, 2));
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });
+          /* eslint-disable-next-line no-console */
+          console.log("The connection ID is", event.data.data?.connection);
           onClose(null);
           if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: false });
-          onClose(event.data?.errorMessage ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
+          onClose(event.data.data?.message ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
           if (externalWindow) externalWindow.close();
         }
       }
