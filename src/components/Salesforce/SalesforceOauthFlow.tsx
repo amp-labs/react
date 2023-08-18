@@ -5,14 +5,14 @@
  * that Salesforce instance.
  */
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { postConnectOAuth } from '../../services/apiService';
+import { postConnectOAuth, postCreateConsumer, postCreateGroup } from '../../services/apiService';
 import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
@@ -53,6 +53,23 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
 
   const { setSubdomain } = useContext(SubdomainContext);
   const projectID = useContext(ProjectIDContext);
+
+  // upsert group + consumer (user)
+  async function createConsumerAndGroup() {
+    try {
+      const consumerResponse = await postCreateConsumer(userId, projectID || '');
+      console.log('postCreateConsumer response', consumerResponse);
+
+      const groupResponse = await postCreateGroup(groupId, projectID || '');
+      console.log('postCreateGroup response', groupResponse);
+    } catch (error) {
+      console.error('Error creating consumer and group:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (projectID) createConsumerAndGroup();
+  }, [projectID]);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
