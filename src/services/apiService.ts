@@ -6,11 +6,13 @@ import { IntegrationConfig } from '../types/configTypes';
 
 const VERSION = 'v1';
 
-export const AMP_BACKEND_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
-  ? `http://localhost:8080/${VERSION}`
-  : `https://api.withampersand.com/${VERSION}`;
+export const AMP_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
+  ? `http://localhost:8080`
+  : `https://api.withampersand.com`;
 
-const CONNECT_OAUTH_URL = `${AMP_BACKEND_SERVER}/oauth-connect`;
+export const AMP_API_ROOT= `${AMP_SERVER}/${VERSION}`;
+
+const CONNECT_OAUTH_URL = `${AMP_API_ROOT}/oauth-connect`;
 
 /**
  * Get all integrations for a builder.
@@ -52,7 +54,7 @@ export async function postCreateConsumer(
   projectID: string,
   consumerName = 'Test Consumer', // test data
 ) {
-  const POST_CONSUMER_URL = `${AMP_BACKEND_SERVER}/projects/${projectID}/consumers`;
+  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectID}/consumers`;
   return axios.post(POST_CONSUMER_URL, {
     ConsumerRef: userId,
     ConsumerName: consumerName,
@@ -68,7 +70,7 @@ export async function postCreateGroup(
   projectID: string,
   groupName = 'Test Group', // test data
 ) {
-  const POST_CONSUMER_URL = `${AMP_BACKEND_SERVER}/projects/${projectID}/groups`;
+  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectID}/groups`;
   return axios.post(POST_CONSUMER_URL, {
     GroupRef: groupId,
     GroupName: groupName,

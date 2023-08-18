@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 
-import { AMP_BACKEND_SERVER } from '../../services/apiService';
+import { AMP_SERVER } from '../../services/apiService';
 import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
@@ -64,8 +64,9 @@ function OAuthPopup({
 
   useEffect(() => {
     window.addEventListener('message', (event) => {
-      if (event.origin === AMP_BACKEND_SERVER) {
+      if (event.origin === AMP_SERVER) {
         //  this event come from our own server
+        console.log('Received message from AMP backend', JSON.stringify(event.data, null, 2));
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });
