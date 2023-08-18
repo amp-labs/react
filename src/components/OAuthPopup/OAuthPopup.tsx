@@ -69,7 +69,6 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });
-          /* eslint-disable-next-line no-console */
           console.log("The connection ID is", event.data.data?.connection);
           onClose(null);
           if (externalWindow) externalWindow.close();
