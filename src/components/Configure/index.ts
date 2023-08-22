@@ -1,1 +1,2 @@
-export { ReconfigureIntegration, InstallIntegration } from './Configure';
+export { ReconfigureIntegration } from './Configure';
+export { InstallIntegration } from './InstallIntegration';

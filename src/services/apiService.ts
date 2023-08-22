@@ -22,7 +22,7 @@ const CONNECT_OAUTH_URL = `${AMP_API_ROOT}/oauth-connect`;
  * @returns {Promise} Then-able promise to handle success and failure from caller.
  */
 export async function getIntegrations(projectID: string, apiKey: string) {
-  // TODO: replace with a real API call to GetIntegrations
+  // TODO: replace with a real API call to listIntegrations
   return { data: TestSourceList };
 }
 
@@ -81,13 +81,23 @@ export async function postCreateGroup(
   });
 }
 
-export async function getUserConfig(
-  userId: string,
-  groupId: string,
-  integrationName: string,
+// /projects/{projectId}/connections
+export async function getListConnections(
+  projectID: string,
+  consumerRef: string,
+  groupRef: string,
+  provider = 'salesforce',
 ): Promise<IntegrationConfig> {
+  const LIST_CONNECTIONS_URL = `${AMP_BACKEND_SERVER}/projects/${projectID}/connections`;
+  return axios.get(LIST_CONNECTIONS_URL, {
+    params: {
+      provider,
+      groupRef,
+      consumerRef,
+    },
+  });
   // TODO: rip out mock and make network call to return real configuration object
-  return sampleIntegrationConfig;
+  // return sampleIntegrationConfig;
 }
 
 export async function postUserConfig(
