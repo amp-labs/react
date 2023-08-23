@@ -7,10 +7,10 @@ import { IntegrationConfig } from '../types/configTypes';
 const VERSION = 'v1';
 
 export const AMP_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
-  ? `http://localhost:8080`
-  : `https://api.withampersand.com`;
+  ? 'http://localhost:8080'
+  : 'https://api.withampersand.com';
 
-export const AMP_API_ROOT= `${AMP_SERVER}/${VERSION}`;
+export const AMP_API_ROOT = `${AMP_SERVER}/${VERSION}`;
 
 const CONNECT_OAUTH_URL = `${AMP_API_ROOT}/oauth-connect`;
 
@@ -88,7 +88,7 @@ export async function getListConnections(
   groupRef: string,
   provider = 'salesforce',
 ): Promise<IntegrationConfig> {
-  const LIST_CONNECTIONS_URL = `${AMP_BACKEND_SERVER}/projects/${projectID}/connections`;
+  const LIST_CONNECTIONS_URL = `${AMP_API_ROOT}/projects/${projectID}/connections`;
   return axios.get(LIST_CONNECTIONS_URL, {
     params: {
       provider,
