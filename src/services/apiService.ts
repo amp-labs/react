@@ -1,3 +1,6 @@
+/**
+ * DEPRECATED: this file will be deleted as the generated SDK will be used instead.
+ */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 
@@ -26,6 +29,9 @@ export async function getIntegrations(projectID: string, apiKey: string) {
   return { data: TestSourceList };
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export async function postConnectOAuth(
   userId: string,
   groupId: string,
@@ -48,7 +54,9 @@ export async function postConnectOAuth(
     },
   });
 }
-
+/**
+ * @deprecated The method should not be used
+ */
 export async function postCreateConsumer(
   userId: string, // 'consumerRef:p0-c1' // seed data
   projectID: string,
@@ -65,6 +73,9 @@ export async function postCreateConsumer(
   });
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export async function postCreateGroup(
   groupId: string,
   projectID: string,
@@ -82,6 +93,9 @@ export async function postCreateGroup(
 }
 
 // /projects/{projectId}/connections
+/**
+ * @deprecated The method should not be used
+ */
 export async function getListConnections(
   projectID: string,
   consumerRef: string,
@@ -100,6 +114,9 @@ export async function getListConnections(
   // return sampleIntegrationConfig;
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export async function postUserConfig(
   userId: string,
   groupId: string,
