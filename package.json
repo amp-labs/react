@@ -31,7 +31,8 @@
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
     "lint": "eslint --ext .ts,.tsx src/ --fix",
-    "lint:dry": "eslint --ext .ts,.tsx src/"
+    "lint:dry": "eslint --ext .ts,.tsx src/",
+    "generate-api": "openapi-generator-cli generate -i ../server/openapi/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@chakra-ui/react": "^2.7.1",
     "@jest/globals": "^29.5.0",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.27",
     "@typescript-eslint/eslint-plugin": "^5.50.0",

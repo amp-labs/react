@@ -14,6 +14,8 @@ interface ReconfigureIntegrationProps {
   groupId: string,
   redirectUrl?: string,
 }
+
+//  Update Installation Flow
 export function ReconfigureIntegration(
   {
     integration, userId, groupId, redirectUrl,

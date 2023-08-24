@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useProjectID } from '../../hooks/useProjectId';
-import { getListConnections } from '../../services/apiService';
+import { api, Installation } from '../../services/api';
 
+import { ReconfigureIntegration } from './Configure';
 import { ConfigureIntegrationBase } from './ConfigureIntegrationBase';
 
 interface InstallIntegrationProps {
@@ -19,14 +20,26 @@ export function InstallIntegration(
   }: InstallIntegrationProps,
 ) {
   const projectID = useProjectID();
+  const [installations, setInstallations] = useState<Installation[]>([]);
   // check if integration has been installed
   useEffect(() => {
-    // call list
-    getListConnections(projectID, consumerRef, groupRef).then((res) => {
-      console.log({ res });
-    });
+    // check if installation exists
+    api.listInstallations({ projectId: projectID, integrationId: integration, groupRef })
+      .then((res) => { setInstallations(res.installations || []); });
   }, []);
 
+  if (installations.length > 0) {
+    // Update Installation Flow
+    return (
+      <ReconfigureIntegration
+        integration={integration}
+        userId={consumerRef}
+        groupId={groupRef}
+      />
+    );
+  }
+
+  // New Installation Flow
   return (
     <ConfigureIntegrationBase
       integration={integration}
