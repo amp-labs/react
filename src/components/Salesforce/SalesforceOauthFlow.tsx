@@ -62,8 +62,8 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
 
       const groupResponse = await postCreateGroup(groupId, projectID || '');
       console.log('postCreateGroup response', groupResponse);
-    } catch (error) {
-      console.error('Error creating consumer and group:', error);
+    } catch (e) {
+      console.error('Error creating consumer and group:', e);
     }
   }
 

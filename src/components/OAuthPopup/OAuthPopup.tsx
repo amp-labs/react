@@ -4,13 +4,10 @@
  * Takes a URL and creates a popup showing that page.
  */
 
-import React, {
-  useContext, useEffect, useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { useProviderConnection } from '../../context/ProviderConnectionContext';
 import { AMP_SERVER } from '../../services/apiService';
-import { ProviderConnectionContext } from '../AmpersandProvider';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -51,9 +48,7 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
-  const {
-    setIsConnectedToProvider,
-  } = useContext(ProviderConnectionContext);
+  const { setIsConnectedToProvider } = useProviderConnection();
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
@@ -69,7 +64,7 @@ function OAuthPopup({
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
           setIsConnectedToProvider({ salesforce: true });
-          console.log("The connection ID is", event.data.data?.connection);
+          console.log('The connection ID is', event.data.data?.connection);
           onClose(null);
           if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {

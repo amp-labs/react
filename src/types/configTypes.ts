@@ -69,8 +69,3 @@ export interface SubdomainContextConfig {
 export interface ConnectedToProviderType {
   [provider: string]: boolean | null;
 }
-
-export interface ProviderConnectionContextConfig {
-  isConnectedToProvider: ConnectedToProviderType;
-  setIsConnectedToProvider: React.Dispatch<React.SetStateAction<ConnectedToProviderType>>;
-}
