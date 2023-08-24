@@ -19,6 +19,8 @@ import {
 const PRISM_MOCK_URL = 'http://127.0.0.1:4010';
 
 const LOCAL_URL = 'http://localhost:8080';
+const DEV_URL = 'https:// dev-api.withampersand.com';
+const STAGING_URL = 'https://staging-api.withampersand.com';
 const PRODUCTION_URL = 'https://api.withampersand.com';
 const VERSION = 'v1';
 
@@ -28,12 +30,16 @@ const getApiRoot = (server: string, version: string): string => `${server}/${ver
 function assignRoot(): string {
   const env = process.env.REACT_APP_AMP_SERVER;
   switch (env) {
+    case 'prod':
+      return getApiRoot(PRODUCTION_URL, VERSION);
+    case 'staging':
+      return getApiRoot(STAGING_URL, VERSION);
+    case 'dev':
+      return getApiRoot(DEV_URL, VERSION);
     case 'local':
       return getApiRoot(LOCAL_URL, VERSION);
     case 'mock':
       return PRISM_MOCK_URL;
-    case 'prod':
-      return getApiRoot(PRODUCTION_URL, VERSION);
     default:
       return getApiRoot(PRODUCTION_URL, VERSION);
   }
