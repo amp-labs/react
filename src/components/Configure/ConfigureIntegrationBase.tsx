@@ -2,12 +2,12 @@ import {
   useContext,
 } from 'react';
 
+import { useProviderConnection } from '../../context/ProviderConnectionContext';
 import {
   IntegrationConfig,
   SourceList,
 } from '../../types/configTypes';
 import { findSourceFromList } from '../../utils';
-import { ProviderConnectionContext } from '../AmpersandProvider';
 import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
@@ -30,8 +30,8 @@ interface ConfigureIntegrationBaseProps {
 export function ConfigureIntegrationBase({
   integration, userId, groupId, userConfig, redirectUrl,
 }: ConfigureIntegrationBaseProps) {
+  const { isConnectedToProvider } = useProviderConnection();
   const { subdomain } = useContext(SubdomainContext);
-  const { isConnectedToProvider } = useContext(ProviderConnectionContext);
 
   const sourceList: SourceList | null = useContext(SourceListContext);
   let source;

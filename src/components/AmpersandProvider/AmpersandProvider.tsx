@@ -9,9 +9,9 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
+import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
 import { getIntegrations } from '../../services/apiService';
 import {
-  ProviderConnectionContextConfig,
   SourceList, SubdomainContextConfig,
 } from '../../types/configTypes';
 
@@ -24,23 +24,17 @@ interface AmpersandProviderProps {
   children: React.ReactNode
 }
 
-export const AmpersandContext = createContext(null);
-export const ProviderConnectionContext = createContext<ProviderConnectionContextConfig>({
-  isConnectedToProvider: {},
-  setIsConnectedToProvider: () => null,
-});
-export const ApiKeyContext = createContext<string | null>(null);
 export const SourceListContext = createContext<SourceList | null>(null);
-export const ProjectIDContext = createContext<string | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
   subdomain: '',
   setSubdomain: () => null,
 });
+export const ProjectIDContext = createContext<string | null>(null);
+export const ApiKeyContext = createContext<string | null>(null);
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const [sources, setSources] = useState<SourceList | null>(null);
   const [subdomain, setSubdomain] = useState('');
-  const [isConnectedToProvider, setIsConnectedToProvider] = useState({});
 
   const { options, children } = props;
   const { apiKey, projectID } = options;
@@ -63,14 +57,8 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     setSubdomain,
   }), [subdomain]);
 
-  // INIT PROVIDER CONNECTION CONTEXT
-  const isConnectedToProviderContext = useMemo(() => ({
-    isConnectedToProvider,
-    setIsConnectedToProvider,
-  }), [isConnectedToProvider]);
-
   return (
-    <ProviderConnectionContext.Provider value={isConnectedToProviderContext}>
+    <ProviderConnectionProvider>
       <SourceListContext.Provider value={sources}>
         <SubdomainContext.Provider value={subdomainContext}>
           <ProjectIDContext.Provider value={options.projectID}>
@@ -80,10 +68,11 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
           </ProjectIDContext.Provider>
         </SubdomainContext.Provider>
       </SourceListContext.Provider>
-    </ProviderConnectionContext.Provider>
+    </ProviderConnectionProvider>
   );
 }
 
+export const AmpersandContext = createContext(null);
 export function useAmpersandProvider() {
   const ampersandContext = useContext(AmpersandContext);
 
