@@ -21,8 +21,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "homepage": "https://github.com/amp-labs/react#readme",
-  "main": "build/index.js",
-  "typings": "build/index.d.ts",
+  "main": "build/src/index.js",
+  "typings": "build/src/index.d.ts",
   "scripts": {
     "test": "jest",
     "watch": "npm run prepbuild && tsc -p tsconfig.json --watch",
