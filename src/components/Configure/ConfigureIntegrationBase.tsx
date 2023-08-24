@@ -3,12 +3,12 @@ import {
 } from 'react';
 
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
+import { useSourceList } from '../../context/SourceListContext';
 import {
   IntegrationConfig,
-  SourceList,
 } from '../../types/configTypes';
 import { findSourceFromList } from '../../utils';
-import { SourceListContext, SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
+import { SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
@@ -31,21 +31,19 @@ export function ConfigureIntegrationBase({
   integration, userId, groupId, userConfig, redirectUrl,
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
+  const { sources } = useSourceList();
   const { subdomain } = useContext(SubdomainContext);
-
-  const sourceList: SourceList | null = useContext(SourceListContext);
-  let source;
-  let appName = 'this app';
-
-  if (sourceList) {
-    source = findSourceFromList(integration, sourceList);
-    appName = sourceList.appName;
+  if (!sources) {
+    return <CenteredTextBox text="We can't load the integration" />;
   }
+  const source = findSourceFromList(integration, sources);
 
   if (!source) {
     return <CenteredTextBox text="We can't load the integration" />;
   }
-  const { api } = source;
+
+  const appName = sources?.appName || '';
+  const api = source?.api || '';
 
   //  TODO: isConnectedToProvider should be an API call
   if (!isConnectedToProvider[api]) {
