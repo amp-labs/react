@@ -1,14 +1,10 @@
-import {
-  useContext,
-} from 'react';
-
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
 import { useSourceList } from '../../context/SourceListContext';
+import { useSubdomain } from '../../context/SubdomainProvider';
 import {
   IntegrationConfig,
 } from '../../types/configTypes';
 import { findSourceFromList } from '../../utils';
-import { SubdomainContext } from '../AmpersandProvider/AmpersandProvider';
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
@@ -32,7 +28,8 @@ export function ConfigureIntegrationBase({
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
   const { sources } = useSourceList();
-  const { subdomain } = useContext(SubdomainContext);
+  const { subdomain } = useSubdomain();
+
   if (!sources) {
     return <CenteredTextBox text="We can't load the integration" />;
   }
