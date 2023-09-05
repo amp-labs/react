@@ -4,12 +4,11 @@
  * Component that prompts user to connect Salesforce, connecting subdomain and OAuth.
  */
 
-import { useContext } from 'react';
 import { Box, Container, Text } from '@chakra-ui/react';
 
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
+import { useSubdomain } from '../../context/SubdomainProvider';
 import { redirectTo } from '../../utils';
-import { SubdomainContext } from '../AmpersandProvider';
 
 import SalesforceOauthFlow from './SalesforceOauthFlow';
 
@@ -21,7 +20,7 @@ interface ConnectSalesforceProps {
 
 export function ConnectSalesforce({ userId, groupId, redirectUrl } : ConnectSalesforceProps) {
   const { isConnectedToProvider } = useProviderConnection();
-  const { subdomain } = useContext(SubdomainContext);
+  const { subdomain } = useSubdomain();
 
   const successText = `Salesforce instance ${subdomain} successfully connected.`;
   const successBox = (

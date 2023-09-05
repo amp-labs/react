@@ -59,11 +59,6 @@ export interface FieldConfig {
 
 export type IntegrationConfig = Array<ObjectConfig>;
 
-export interface SubdomainContextConfig {
-  subdomain: string;
-  setSubdomain: React.Dispatch<React.SetStateAction<string>>;
-}
-
 export interface ConnectedToProviderType {
   [provider: string]: boolean | null;
 }

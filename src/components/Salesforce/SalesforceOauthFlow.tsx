@@ -5,15 +5,16 @@
  * that Salesforce instance.
  */
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
 
+import { useSubdomain } from '../../context/SubdomainProvider';
+import { useProjectID } from '../../hooks/useProjectID';
 import { postConnectOAuth, postCreateConsumer, postCreateGroup } from '../../services/apiService';
-import { ProjectIDContext, SubdomainContext } from '../AmpersandProvider';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -51,8 +52,8 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { setSubdomain } = useContext(SubdomainContext);
-  const projectID = useContext(ProjectIDContext);
+  const { setSubdomain } = useSubdomain();
+  const projectID = useProjectID();
 
   // upsert group + consumer (user)
   async function createConsumerAndGroup() {

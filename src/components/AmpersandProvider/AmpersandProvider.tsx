@@ -5,13 +5,11 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import React, {
-  createContext, useContext, useMemo, useState,
-} from 'react';
+import React, { createContext, useContext } from 'react';
 
 import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
 import { SourceListProvider } from '../../context/SourceListContext';
-import { SubdomainContextConfig } from '../../types/configTypes';
+import { SubdomainProvider } from '../../context/SubdomainProvider';
 
 interface AmpersandProviderProps {
   options: {
@@ -22,34 +20,22 @@ interface AmpersandProviderProps {
   children: React.ReactNode
 }
 
-export const SubdomainContext = createContext<SubdomainContextConfig>({
-  subdomain: '',
-  setSubdomain: () => null,
-});
 export const ProjectIDContext = createContext<string | null>(null);
 export const ApiKeyContext = createContext<string | null>(null);
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const [subdomain, setSubdomain] = useState('');
-
   const { options: { apiKey, projectID }, children } = props;
-
-  // INIT SUBDOMAIN CONTEXT
-  const subdomainContext = useMemo(() => ({
-    subdomain,
-    setSubdomain,
-  }), [subdomain]);
 
   return (
     <ProviderConnectionProvider>
       <SourceListProvider projectID={projectID} apiKey={apiKey}>
-        <SubdomainContext.Provider value={subdomainContext}>
+        <SubdomainProvider>
           <ProjectIDContext.Provider value={projectID}>
             <ApiKeyContext.Provider value={apiKey}>
               { children }
             </ApiKeyContext.Provider>
           </ProjectIDContext.Provider>
-        </SubdomainContext.Provider>
+        </SubdomainProvider>
       </SourceListProvider>
     </ProviderConnectionProvider>
   );
