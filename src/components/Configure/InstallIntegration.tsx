@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useProjectID } from '../../hooks/useProjectId';
+import { useProjectID } from '../../hooks/useProjectID';
 import { api, Installation } from '../../services/api';
 
 import { ReconfigureIntegration } from './Configure';
