@@ -25,7 +25,8 @@ export function InstallIntegration(
   useEffect(() => {
     // check if installation exists
     api.listInstallations({ projectId: projectID, integrationId: integration, groupRef })
-      .then((res) => { setInstallations(res.installations || []); });
+      .then((res) => { setInstallations(res.installations || []); })
+      .catch((err) => { console.error(err); });
   }, []);
 
   if (installations.length > 0) {

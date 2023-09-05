@@ -1,11 +1,9 @@
 /* eslint-disable no-use-before-define */
 // TODO - reorder types to match this rule
-
 export type SourceList = {
   appName: string;
   integrations: Array<IntegrationSource>;
 };
-
 export interface IntegrationSource {
   name: string;
   type: 'read' | 'write';

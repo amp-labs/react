@@ -6,14 +6,12 @@
  */
 
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useMemo, useState,
 } from 'react';
 
 import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
-import { getIntegrations } from '../../services/apiService';
-import {
-  SourceList, SubdomainContextConfig,
-} from '../../types/configTypes';
+import { SourceListProvider } from '../../context/SourceListContext';
+import { SubdomainContextConfig } from '../../types/configTypes';
 
 interface AmpersandProviderProps {
   options: {
@@ -24,7 +22,6 @@ interface AmpersandProviderProps {
   children: React.ReactNode
 }
 
-export const SourceListContext = createContext<SourceList | null>(null);
 export const SubdomainContext = createContext<SubdomainContextConfig>({
   subdomain: '',
   setSubdomain: () => null,
@@ -33,23 +30,9 @@ export const ProjectIDContext = createContext<string | null>(null);
 export const ApiKeyContext = createContext<string | null>(null);
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const [sources, setSources] = useState<SourceList | null>(null);
   const [subdomain, setSubdomain] = useState('');
 
-  const { options, children } = props;
-  const { apiKey, projectID } = options;
-
-  // CALL FOR SOURCE LIST
-  useEffect(() => {
-    getIntegrations(projectID, apiKey)
-      .then((res) => {
-        setSources(res.data);
-      })
-      .catch((err) => {
-        /* eslint-disable-next-line no-console */
-        console.error(err);
-      });
-  }, [projectID, apiKey]);
+  const { options: { apiKey, projectID }, children } = props;
 
   // INIT SUBDOMAIN CONTEXT
   const subdomainContext = useMemo(() => ({
@@ -59,15 +42,15 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   return (
     <ProviderConnectionProvider>
-      <SourceListContext.Provider value={sources}>
+      <SourceListProvider projectID={projectID} apiKey={apiKey}>
         <SubdomainContext.Provider value={subdomainContext}>
-          <ProjectIDContext.Provider value={options.projectID}>
-            <ApiKeyContext.Provider value={options.apiKey}>
+          <ProjectIDContext.Provider value={projectID}>
+            <ApiKeyContext.Provider value={apiKey}>
               { children }
             </ApiKeyContext.Provider>
           </ProjectIDContext.Provider>
         </SubdomainContext.Provider>
-      </SourceListContext.Provider>
+      </SourceListProvider>
     </ProviderConnectionProvider>
   );
 }
