@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './Action';
+export * from './ActionType';
 export * from './Config';
 export * from './Connection';
 export * from './ConnectionsList';
@@ -15,15 +15,25 @@ export * from './CreateProjectMembershipRequest';
 export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
 export * from './CreateRevisionRequest';
-export * from './Field';
 export * from './Group';
+export * from './HydratedIntegration';
+export * from './HydratedIntegrationAction';
+export * from './HydratedIntegrationField';
+export * from './HydratedIntegrationFieldExistent';
+export * from './HydratedIntegrationObject';
+export * from './HydratedRevision';
 export * from './Installation';
 export * from './InstallationsList';
 export * from './Integration';
 export * from './Integration1';
+export * from './IntegrationAction';
+export * from './IntegrationField';
+export * from './IntegrationFieldExistent';
+export * from './IntegrationFieldMapping';
+export * from './IntegrationObject';
 export * from './IntegrationsList';
-export * from './ModelObject';
 export * from './OauthConnectRequest';
+export * from './OptionalFieldsAutoOption';
 export * from './Project';
 export * from './ProjectMembership';
 export * from './ProjectMembershipsList';

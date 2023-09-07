@@ -23,10 +23,14 @@ export function InstallIntegration(
   const [installations, setInstallations] = useState<Installation[]>([]);
   // check if integration has been installed
   useEffect(() => {
+    console.log('check if installation exists: ', { projectID, integration, groupRef });
     // check if installation exists
     api.listInstallations({ projectId: projectID, integrationId: integration, groupRef })
-      .then((res) => { setInstallations(res.installations || []); })
-      .catch((err) => { console.error(err); });
+      .then((res) => {
+        console.log('SETTING INTALLATIONS: ', res.installations || '[]');
+        setInstallations(res.installations || []);
+      })
+      .catch((err) => { console.error('ERROR: ', err); });
   }, []);
 
   if (installations.length > 0) {

@@ -25,6 +25,7 @@ import type {
   CreateProjectRequest,
   CreateProviderAppRequest,
   CreateRevisionRequest,
+  HydratedRevision,
   Installation,
   InstallationsList,
   IntegrationsList,
@@ -34,7 +35,6 @@ import type {
   ProjectMembershipsList,
   ProviderApp,
   ProviderAppsList,
-  Revision,
   UpdateInstallationRequest,
   UpdateProjectRequest,
   UpdateProviderAppRequest,
@@ -60,6 +60,8 @@ import {
     CreateProviderAppRequestToJSON,
     CreateRevisionRequestFromJSON,
     CreateRevisionRequestToJSON,
+    HydratedRevisionFromJSON,
+    HydratedRevisionToJSON,
     InstallationFromJSON,
     InstallationToJSON,
     InstallationsListFromJSON,
@@ -78,8 +80,6 @@ import {
     ProviderAppToJSON,
     ProviderAppsListFromJSON,
     ProviderAppsListToJSON,
-    RevisionFromJSON,
-    RevisionToJSON,
     UpdateInstallationRequestFromJSON,
     UpdateInstallationRequestToJSON,
     UpdateProjectRequestFromJSON,
@@ -435,12 +435,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Revision>>;
+    getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>>;
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Revision>;
+    getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision>;
 
     /**
      * 
@@ -600,6 +600,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
+     * @summary OAuth callback
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -607,11 +608,13 @@ export interface DefaultApiInterface {
     oauthCallbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * OAuth callback
      */
     oauthCallback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
+     * @summary Generate a URL for the browser to render to kick off OAuth flow.
      * @param {OauthConnectRequest} [connectOAuthParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -620,11 +623,13 @@ export interface DefaultApiInterface {
     oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
+     * @summary Options endpoint to make sure CORS works.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -632,6 +637,7 @@ export interface DefaultApiInterface {
     oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
@@ -1119,7 +1125,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Revision>> {
+    async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getHydratedRevision.');
         }
@@ -1151,13 +1157,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => HydratedRevisionFromJSON(jsonValue));
     }
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Revision> {
+    async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision> {
         const response = await this.getHydratedRevisionRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1495,6 +1501,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * OAuth callback
      */
     async oauthCallbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1512,12 +1519,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * OAuth callback
      */
     async oauthCallback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthCallbackRaw(initOverrides);
     }
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1538,12 +1547,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     async oauthConnect(requestParameters: OauthConnectOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthConnectRaw(requestParameters, initOverrides);
     }
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     async oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1561,6 +1572,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     async oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthConnectCorsRaw(initOverrides);
