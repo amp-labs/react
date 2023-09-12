@@ -12,13 +12,12 @@ interface ReconfigureIntegrationProps {
   integration: string,
   userId: string,
   groupId: string,
-  redirectUrl?: string,
 }
 
 //  Update Installation Flow
 export function ReconfigureIntegration(
   {
-    integration, userId, groupId, redirectUrl,
+    integration, userId, groupId,
   }: ReconfigureIntegrationProps,
 ) {
   const [userConfig, setUserConfig] = useState<IntegrationConfig | undefined>(undefined);
@@ -35,7 +34,6 @@ export function ReconfigureIntegration(
       userId={userId}
       groupId={groupId}
       userConfig={userConfig}
-      redirectUrl={redirectUrl}
     />
   );
 }

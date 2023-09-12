@@ -6,11 +6,9 @@ import {
   DataFields,
   FieldConfig,
   IntegrationConfig,
-  // IntegrationSource,
   ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
-  // SourceList,
 } from '../types/configTypes';
 
 /**

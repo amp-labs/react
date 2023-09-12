@@ -15,16 +15,15 @@ function SetUpWrite(/* props: InstallProps */) {
 }
 
 interface ConfigureIntegrationBaseProps {
-  integration: string, // integraitionName
+  integration: string, // integrationName
   userId: string,
   groupId: string,
   userConfig?: IntegrationConfig,
-  redirectUrl?: string,
 }
 
 // Base component for configuring and reconfiguring an integration.
 export function ConfigureIntegrationBase({
-  integration, userId, groupId, userConfig, redirectUrl,
+  integration, userId, groupId, userConfig,
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
   const { integrations } = useIntegrationList();

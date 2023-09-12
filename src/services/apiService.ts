@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 
-// import { sampleIntegrationConfig, TestSourceList } from '../testData/integrationSource';
 import { IntegrationConfig } from '../types/configTypes';
 
 const VERSION = 'v1';
