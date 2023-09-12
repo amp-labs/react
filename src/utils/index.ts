@@ -1,15 +1,16 @@
 import { map, reduce } from 'lodash';
 
+import { Integration } from '../services/api';
 import {
   DataField,
   DataFields,
   FieldConfig,
   IntegrationConfig,
-  IntegrationSource,
+  // IntegrationSource,
   ObjectConfig,
   ObjectConfigOptions,
   OptionalDataField,
-  SourceList,
+  // SourceList,
 } from '../types/configTypes';
 
 /**
@@ -17,14 +18,18 @@ import {
  *
  * @param integrationName {string} Name of the integration.
  * @param sourceList {SourceList} List of sources.
- * @returns {IntegrationSource | null}
+ * @returns {Integration | null}
  */
-export const findSourceFromList = (
+export const findIntegrationFromList = (
   integrationName: string,
-  sourceList: SourceList,
-) : IntegrationSource | null => sourceList.integrations.find(
-  (s: IntegrationSource) => s.name === integrationName,
-) ?? null;
+  integrations: Integration[],
+) : Integration | null => {
+  if (integrations?.length === 0 || !integrationName) return null;
+
+  return integrations.find(
+    (s: Integration) => s.name === integrationName,
+  ) ?? null;
+};
 
 /**
  * Finder function to locate the right object in the source.

@@ -11,6 +11,8 @@ src/models/Connection.ts
 src/models/ConnectionsList.ts
 src/models/Consumer.ts
 src/models/CreateConsumerRequest.ts
+src/models/CreateDestinationRequest.ts
+src/models/CreateDestinationRequestMetadata.ts
 src/models/CreateGroupRequest.ts
 src/models/CreateInstallationRequest.ts
 src/models/CreateInstallationRequestConfig.ts
@@ -28,7 +30,6 @@ src/models/HydratedIntegrationFieldExistent.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedRevision.ts
 src/models/Installation.ts
-src/models/InstallationsList.ts
 src/models/Integration.ts
 src/models/Integration1.ts
 src/models/IntegrationAction.ts
@@ -36,7 +37,6 @@ src/models/IntegrationField.ts
 src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
-src/models/IntegrationsList.ts
 src/models/OauthConnectRequest.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts

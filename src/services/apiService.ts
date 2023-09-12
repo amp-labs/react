@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 
-import { sampleIntegrationConfig, TestSourceList } from '../testData/integrationSource';
+// import { sampleIntegrationConfig, TestSourceList } from '../testData/integrationSource';
 import { IntegrationConfig } from '../types/configTypes';
 
 const VERSION = 'v1';
@@ -18,18 +18,6 @@ export const AMP_API_ROOT = `${AMP_SERVER}/${VERSION}`;
 const CONNECT_OAUTH_URL = `${AMP_API_ROOT}/oauth-connect`;
 
 /**
- * Get all integrations for a builder.
- *
- * @param projectId {string} Builder's project ID
- * @param apiKey {string} Builder's API key.
- * @returns {Promise} Then-able promise to handle success and failure from caller.
- */
-export async function getIntegrations(projectID: string, apiKey: string) {
-  // TODO: replace with a real API call to listIntegrations
-  return { data: TestSourceList };
-}
-
-/**
  * @deprecated The method should not be used
  */
 export async function postConnectOAuth(
@@ -40,14 +28,14 @@ export async function postConnectOAuth(
   projectID: string,
 ) {
   return axios.post(CONNECT_OAUTH_URL, {
-    ProviderWorkspaceRef: subdomain,
-    Provider: api,
-    ProjectId: projectID,
+    providerWorkspaceRef: subdomain,
+    provider: api,
+    projectId: projectID,
     // The following IDs are from the DB seed data.
     // TODO: replace.
-    GroupRef: groupId,
-    ConsumerRef: userId,
-    ProviderAppId: '85401a99-9395-4929-b57f-32da59048f2e',
+    groupRef: groupId,
+    consumerRef: userId,
+    providerAppId: '85401a99-9395-4929-b57f-32da59048f2e',
   }, {
     headers: {
       'Content-Type': 'application/json',

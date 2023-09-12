@@ -7,8 +7,8 @@
 
 import React, { createContext, useContext } from 'react';
 
+import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
-import { SourceListProvider } from '../../context/SourceListContext';
 import { SubdomainProvider } from '../../context/SubdomainProvider';
 
 interface AmpersandProviderProps {
@@ -28,7 +28,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   return (
     <ProviderConnectionProvider>
-      <SourceListProvider projectID={projectID} apiKey={apiKey}>
+      <IntegrationListProvider projectID={projectID} apiKey={apiKey}>
         <SubdomainProvider>
           <ProjectIDContext.Provider value={projectID}>
             <ApiKeyContext.Provider value={apiKey}>
@@ -36,7 +36,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
             </ApiKeyContext.Provider>
           </ProjectIDContext.Provider>
         </SubdomainProvider>
-      </SourceListProvider>
+      </IntegrationListProvider>
     </ProviderConnectionProvider>
   );
 }
