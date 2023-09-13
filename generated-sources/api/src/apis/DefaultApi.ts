@@ -18,6 +18,7 @@ import type {
   Connection,
   ConnectionsList,
   CreateConsumerRequest,
+  CreateDestinationRequest,
   CreateGroupRequest,
   CreateInstallationRequest,
   CreateIntegrationRequest,
@@ -25,16 +26,15 @@ import type {
   CreateProjectRequest,
   CreateProviderAppRequest,
   CreateRevisionRequest,
+  HydratedRevision,
   Installation,
-  InstallationsList,
-  IntegrationsList,
+  Integration,
   OauthConnectRequest,
   Project,
   ProjectMembership,
   ProjectMembershipsList,
   ProviderApp,
   ProviderAppsList,
-  Revision,
   UpdateInstallationRequest,
   UpdateProjectRequest,
   UpdateProviderAppRequest,
@@ -46,6 +46,8 @@ import {
     ConnectionsListToJSON,
     CreateConsumerRequestFromJSON,
     CreateConsumerRequestToJSON,
+    CreateDestinationRequestFromJSON,
+    CreateDestinationRequestToJSON,
     CreateGroupRequestFromJSON,
     CreateGroupRequestToJSON,
     CreateInstallationRequestFromJSON,
@@ -60,12 +62,12 @@ import {
     CreateProviderAppRequestToJSON,
     CreateRevisionRequestFromJSON,
     CreateRevisionRequestToJSON,
+    HydratedRevisionFromJSON,
+    HydratedRevisionToJSON,
     InstallationFromJSON,
     InstallationToJSON,
-    InstallationsListFromJSON,
-    InstallationsListToJSON,
-    IntegrationsListFromJSON,
-    IntegrationsListToJSON,
+    IntegrationFromJSON,
+    IntegrationToJSON,
     OauthConnectRequestFromJSON,
     OauthConnectRequestToJSON,
     ProjectFromJSON,
@@ -78,8 +80,6 @@ import {
     ProviderAppToJSON,
     ProviderAppsListFromJSON,
     ProviderAppsListToJSON,
-    RevisionFromJSON,
-    RevisionToJSON,
     UpdateInstallationRequestFromJSON,
     UpdateInstallationRequestToJSON,
     UpdateProjectRequestFromJSON,
@@ -91,6 +91,11 @@ import {
 export interface CreateConsumerOperationRequest {
     projectId: string;
     consumer?: CreateConsumerRequest;
+}
+
+export interface CreateDestinationOperationRequest {
+    projectId: string;
+    destination?: CreateDestinationRequest;
 }
 
 export interface CreateGroupOperationRequest {
@@ -246,6 +251,22 @@ export interface DefaultApiInterface {
      * Create a new consumer
      */
     createConsumer(requestParameters: CreateConsumerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Create a new destination
+     * @param {string} projectId 
+     * @param {CreateDestinationRequest} [destination] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    createDestinationRaw(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Create a new destination
+     */
+    createDestination(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -435,12 +456,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Revision>>;
+    getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>>;
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Revision>;
+    getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision>;
 
     /**
      * 
@@ -546,12 +567,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InstallationsList>>;
+    listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>>;
 
     /**
      * List installations
      */
-    listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InstallationsList>;
+    listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
 
     /**
      * 
@@ -561,12 +582,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationsList>>;
+    listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
 
     /**
      * List integrations
      */
-    listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationsList>;
+    listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
 
     /**
      * 
@@ -600,6 +621,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
+     * @summary OAuth callback
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -607,11 +629,13 @@ export interface DefaultApiInterface {
     oauthCallbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * OAuth callback
      */
     oauthCallback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
+     * @summary Generate a URL for the browser to render to kick off OAuth flow.
      * @param {OauthConnectRequest} [connectOAuthParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -620,11 +644,13 @@ export interface DefaultApiInterface {
     oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
+     * @summary Options endpoint to make sure CORS works.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -632,6 +658,7 @@ export interface DefaultApiInterface {
     oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
@@ -754,6 +781,38 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Create a new destination
+     */
+    async createDestinationRaw(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createDestination.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/projects/{projectId}/destinations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateDestinationRequestToJSON(requestParameters.destination),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Create a new destination
+     */
+    async createDestination(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.createDestinationRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Create a new group
      */
     async createGroupRaw(requestParameters: CreateGroupOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -864,7 +923,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/project`,
+            path: `/projects`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -896,7 +955,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/project/{projectId}/memberships`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}/memberships`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -1033,7 +1092,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/project/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -1119,7 +1178,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Revision>> {
+    async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getHydratedRevision.');
         }
@@ -1151,13 +1210,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => HydratedRevisionFromJSON(jsonValue));
     }
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
-    async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Revision> {
+    async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision> {
         const response = await this.getHydratedRevisionRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1175,7 +1234,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/project/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1213,7 +1272,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/project/{projectId}/memberships:get-for-builder`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}/memberships:get-for-builder`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1369,7 +1428,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List installations
      */
-    async listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InstallationsList>> {
+    async listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listInstallations.');
         }
@@ -1393,13 +1452,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InstallationsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(InstallationFromJSON));
     }
 
     /**
      * List installations
      */
-    async listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InstallationsList> {
+    async listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
         const response = await this.listInstallationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1407,7 +1466,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List integrations
      */
-    async listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationsList>> {
+    async listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listIntegrations.');
         }
@@ -1423,13 +1482,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationFromJSON));
     }
 
     /**
      * List integrations
      */
-    async listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationsList> {
+    async listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
         const response = await this.listIntegrationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1447,7 +1506,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/project/{projectId}/memberships`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}/memberships`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1495,6 +1554,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * OAuth callback
      */
     async oauthCallbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1512,12 +1572,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * OAuth callback
      */
     async oauthCallback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthCallbackRaw(initOverrides);
     }
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1538,12 +1600,14 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Generate a URL for the browser to render to kick off OAuth flow.
      */
     async oauthConnect(requestParameters: OauthConnectOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthConnectRaw(requestParameters, initOverrides);
     }
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     async oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1561,6 +1625,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Options endpoint to make sure CORS works.
      */
     async oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthConnectCorsRaw(initOverrides);
@@ -1680,7 +1745,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/project/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

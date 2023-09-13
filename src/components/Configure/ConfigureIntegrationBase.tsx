@@ -1,49 +1,49 @@
+import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
-import { useSourceList } from '../../context/SourceListContext';
-import { useSubdomain } from '../../context/SubdomainProvider';
+// import { useSubdomain } from '../../context/SubdomainProvider';
 import {
   IntegrationConfig,
 } from '../../types/configTypes';
-import { findSourceFromList } from '../../utils';
+import { findIntegrationFromList } from '../../utils';
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
-import { SetUpRead } from './SetupRead';
-
-function SetUpWrite(/* props: InstallProps */) {
-  return (<>TODO</>);
-}
+// import { SetUpRead } from './SetupRead';
 
 interface ConfigureIntegrationBaseProps {
-  integration: string,
+  integration: string, // integrationName
   userId: string,
   groupId: string,
   userConfig?: IntegrationConfig,
-  redirectUrl?: string,
+}
+
+function ErrorTextBoxPlaceholder() {
+  return <CenteredTextBox text="We can't load the integration" />;
 }
 
 // Base component for configuring and reconfiguring an integration.
 export function ConfigureIntegrationBase({
-  integration, userId, groupId, userConfig, redirectUrl,
+  integration, userId, groupId, userConfig,
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
-  const { sources } = useSourceList();
-  const { subdomain } = useSubdomain();
+  const { integrations } = useIntegrationList();
+  // const { subdomain } = useSubdomain();
 
-  if (!sources) {
-    return <CenteredTextBox text="We can't load the integration" />;
-  }
-  const source = findSourceFromList(integration, sources);
-
-  if (!source) {
-    return <CenteredTextBox text="We can't load the integration" />;
+  if (!integrations || !integrations.length || !integration) {
+    return <ErrorTextBoxPlaceholder />;
   }
 
-  const appName = sources?.appName || '';
-  const api = source?.api || '';
+  const integrationObj = findIntegrationFromList(integration, integrations);
+
+  if (!integrationObj) {
+    return <ErrorTextBoxPlaceholder />;
+  }
+
+  // const appName = integrationObj?.name || '';
+  const provider = integrationObj?.provider || '';
 
   //  TODO: isConnectedToProvider should be an API call
-  if (!isConnectedToProvider[api]) {
+  if (!isConnectedToProvider[provider]) {
     return (
       <SalesforceOauthFlow
         userId={userId}
@@ -52,23 +52,20 @@ export function ConfigureIntegrationBase({
     );
   }
 
-  const { type } = source;
-  if (type === 'read') {
-    return (
-      <SetUpRead
-        integration={integration}
-        source={source}
-        subdomain={subdomain}
-        appName={appName}
-        userConfig={userConfig}
-        api={api}
-        userId={userId}
-        groupId={groupId}
-        redirectUrl={redirectUrl}
-      />
-    );
-  } if (type === 'write') {
-    return <SetUpWrite />;
-  }
-  return null;
+  return (
+    <div>SetUpRead</div>
+
+  // TODO: update SetupRead to use hydrated revision
+  // <SetUpRead
+  //   integration={integration}
+  //   source={integrationObj}
+  //   subdomain={subdomain}
+  //   appName={appName}
+  //   userConfig={userConfig}
+  //   api={provider}
+  //   userId={userId}
+  //   groupId={groupId}
+  //   redirectUrl={redirectUrl}
+  // />
+  );
 }

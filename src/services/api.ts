@@ -1,7 +1,7 @@
 /* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import {
-  Configuration, DefaultApi, Installation,
+  Configuration, DefaultApi, Installation, Integration,
 } from '../../generated-sources/api/src/index';
 
 /**
@@ -65,5 +65,6 @@ export const api = new DefaultApi(config);
    * Types exported from generated api
    */
 export type {
+  Integration,
   Installation,
 };

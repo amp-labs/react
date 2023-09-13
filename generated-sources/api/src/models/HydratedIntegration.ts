@@ -13,49 +13,49 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { IntegrationAction } from './IntegrationAction';
+import type { HydratedIntegrationAction } from './HydratedIntegrationAction';
 import {
-    IntegrationActionFromJSON,
-    IntegrationActionFromJSONTyped,
-    IntegrationActionToJSON,
-} from './IntegrationAction';
+    HydratedIntegrationActionFromJSON,
+    HydratedIntegrationActionFromJSONTyped,
+    HydratedIntegrationActionToJSON,
+} from './HydratedIntegrationAction';
 
 /**
  * 
  * @export
- * @interface Integration1
+ * @interface HydratedIntegration
  */
-export interface Integration1 {
+export interface HydratedIntegration {
     /**
      * 
      * @type {string}
-     * @memberof Integration1
+     * @memberof HydratedIntegration
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof Integration1
+     * @memberof HydratedIntegration
      */
     displayName?: string;
     /**
      * 
      * @type {string}
-     * @memberof Integration1
+     * @memberof HydratedIntegration
      */
     api: string;
     /**
      * 
-     * @type {Array<IntegrationAction>}
-     * @memberof Integration1
+     * @type {Array<HydratedIntegrationAction>}
+     * @memberof HydratedIntegration
      */
-    actions: Array<IntegrationAction>;
+    actions: Array<HydratedIntegrationAction>;
 }
 
 /**
- * Check if a given object implements the Integration1 interface.
+ * Check if a given object implements the HydratedIntegration interface.
  */
-export function instanceOfIntegration1(value: object): boolean {
+export function instanceOfHydratedIntegration(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "api" in value;
@@ -64,11 +64,11 @@ export function instanceOfIntegration1(value: object): boolean {
     return isInstance;
 }
 
-export function Integration1FromJSON(json: any): Integration1 {
-    return Integration1FromJSONTyped(json, false);
+export function HydratedIntegrationFromJSON(json: any): HydratedIntegration {
+    return HydratedIntegrationFromJSONTyped(json, false);
 }
 
-export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolean): Integration1 {
+export function HydratedIntegrationFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegration {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -77,11 +77,11 @@ export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolea
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'api': json['api'],
-        'actions': ((json['actions'] as Array<any>).map(IntegrationActionFromJSON)),
+        'actions': ((json['actions'] as Array<any>).map(HydratedIntegrationActionFromJSON)),
     };
 }
 
-export function Integration1ToJSON(value?: Integration1 | null): any {
+export function HydratedIntegrationToJSON(value?: HydratedIntegration | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -93,7 +93,7 @@ export function Integration1ToJSON(value?: Integration1 | null): any {
         'name': value.name,
         'displayName': value.displayName,
         'api': value.api,
-        'actions': ((value.actions as Array<any>).map(IntegrationActionToJSON)),
+        'actions': ((value.actions as Array<any>).map(HydratedIntegrationActionToJSON)),
     };
 }
 
