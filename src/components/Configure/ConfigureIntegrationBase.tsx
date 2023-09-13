@@ -10,15 +10,15 @@ import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 // import { SetUpRead } from './SetupRead';
 
-function SetUpWrite(/* props: InstallProps */) {
-  return (<>TODO</>);
-}
-
 interface ConfigureIntegrationBaseProps {
   integration: string, // integrationName
   userId: string,
   groupId: string,
   userConfig?: IntegrationConfig,
+}
+
+function ErrorTextBoxPlaceholder() {
+  return <CenteredTextBox text="We can't load the integration" />;
 }
 
 // Base component for configuring and reconfiguring an integration.
@@ -29,14 +29,14 @@ export function ConfigureIntegrationBase({
   const { integrations } = useIntegrationList();
   // const { subdomain } = useSubdomain();
 
-  if (!integrations) {
-    return <CenteredTextBox text="We can't load the integration" />;
+  if (!integrations || !integrations.length || !integration) {
+    return <ErrorTextBoxPlaceholder />;
   }
 
   const integrationObj = findIntegrationFromList(integration, integrations);
 
-  if (!integration) {
-    return <CenteredTextBox text="We can't load the integration" />;
+  if (!integrationObj) {
+    return <ErrorTextBoxPlaceholder />;
   }
 
   // const appName = integrationObj?.name || '';
@@ -52,28 +52,20 @@ export function ConfigureIntegrationBase({
     );
   }
 
-  // todo fetch this from somewhere.
-  const type = 'read';
-  // const { type } = source;
-  if (type === 'read') {
-    return (
-      <div>SetUpRead</div>
+  return (
+    <div>SetUpRead</div>
 
-    // TODO: update SetupRead to use hydrated revision
-    // <SetUpRead
-    //   integration={integration}
-    //   source={integrationObj}
-    //   subdomain={subdomain}
-    //   appName={appName}
-    //   userConfig={userConfig}
-    //   api={provider}
-    //   userId={userId}
-    //   groupId={groupId}
-    //   redirectUrl={redirectUrl}
-    // />
-    );
-  } if (type === 'write') {
-    return <SetUpWrite />;
-  }
-  return null;
+  // TODO: update SetupRead to use hydrated revision
+  // <SetUpRead
+  //   integration={integration}
+  //   source={integrationObj}
+  //   subdomain={subdomain}
+  //   appName={appName}
+  //   userConfig={userConfig}
+  //   api={provider}
+  //   userId={userId}
+  //   groupId={groupId}
+  //   redirectUrl={redirectUrl}
+  // />
+  );
 }
