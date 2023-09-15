@@ -6,8 +6,11 @@ src/apis/DefaultApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/ActionType.ts
+src/models/BatchUpsertIntegrationsRequest.ts
 src/models/Config.ts
+src/models/ConfigContent.ts
 src/models/Connection.ts
+src/models/ConnectionsList.ts
 src/models/Consumer.ts
 src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
@@ -20,7 +23,6 @@ src/models/CreateIntegrationRequestLatestRevision.ts
 src/models/CreateProjectMembershipRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
-src/models/CreateRevisionRequest.ts
 src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationAction.ts
@@ -37,12 +39,14 @@ src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
 src/models/OauthConnectRequest.ts
+src/models/ObjectReadConfig.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts
 src/models/ProjectMembership.ts
 src/models/ProjectMembershipsList.ts
 src/models/ProviderApp.ts
 src/models/ProviderAppsList.ts
+src/models/ReadConfig.ts
 src/models/Revision.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts

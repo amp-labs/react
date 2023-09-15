@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ConfigContent } from './ConfigContent';
+import {
+    ConfigContentFromJSON,
+    ConfigContentFromJSONTyped,
+    ConfigContentToJSON,
+} from './ConfigContent';
+
 /**
  * 
  * @export
@@ -44,11 +51,11 @@ export interface Config {
      */
     createdBy: string;
     /**
-     * The content of the config, as a JSON string.
-     * @type {string}
+     * 
+     * @type {ConfigContent}
      * @memberof Config
      */
-    content: string;
+    content: ConfigContent;
 }
 
 /**
@@ -79,7 +86,7 @@ export function ConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean): Co
         'revisionId': json['revisionId'],
         'createTime': (new Date(json['createTime'])),
         'createdBy': json['createdBy'],
-        'content': json['content'],
+        'content': ConfigContentFromJSON(json['content']),
     };
 }
 
@@ -96,7 +103,7 @@ export function ConfigToJSON(value?: Config | null): any {
         'revisionId': value.revisionId,
         'createTime': (value.createTime.toISOString()),
         'createdBy': value.createdBy,
-        'content': value.content,
+        'content': ConfigContentToJSON(value.content),
     };
 }
 

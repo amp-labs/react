@@ -1,8 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './ActionType';
+export * from './BatchUpsertIntegrationsRequest';
 export * from './Config';
+export * from './ConfigContent';
 export * from './Connection';
+export * from './ConnectionsList';
 export * from './Consumer';
 export * from './CreateConsumerRequest';
 export * from './CreateDestinationRequest';
@@ -15,7 +18,6 @@ export * from './CreateIntegrationRequestLatestRevision';
 export * from './CreateProjectMembershipRequest';
 export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
-export * from './CreateRevisionRequest';
 export * from './Group';
 export * from './HydratedIntegration';
 export * from './HydratedIntegrationAction';
@@ -32,12 +34,14 @@ export * from './IntegrationFieldExistent';
 export * from './IntegrationFieldMapping';
 export * from './IntegrationObject';
 export * from './OauthConnectRequest';
+export * from './ObjectReadConfig';
 export * from './OptionalFieldsAutoOption';
 export * from './Project';
 export * from './ProjectMembership';
 export * from './ProjectMembershipsList';
 export * from './ProviderApp';
 export * from './ProviderAppsList';
+export * from './ReadConfig';
 export * from './Revision';
 export * from './UpdateInstallationRequest';
 export * from './UpdateInstallationRequestInstallation';
