@@ -3,7 +3,6 @@
 export * from './ActionType';
 export * from './Config';
 export * from './Connection';
-export * from './ConnectionsList';
 export * from './Consumer';
 export * from './CreateConsumerRequest';
 export * from './CreateDestinationRequest';

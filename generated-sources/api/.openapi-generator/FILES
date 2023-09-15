@@ -8,7 +8,6 @@ src/index.ts
 src/models/ActionType.ts
 src/models/Config.ts
 src/models/Connection.ts
-src/models/ConnectionsList.ts
 src/models/Consumer.ts
 src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts

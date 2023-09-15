@@ -35,7 +35,6 @@ export function IntegrationListProvider(
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
 
   useEffect(() => {
-    // todo replace with integrations sdk call
     api.listIntegrations({ projectId: projectID }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
