@@ -12,8 +12,6 @@ import {
 interface ReconfigureIntegrationProps {
   installation: Installation,
   integrationObj: Integration,
-  userId: string,
-  groupId: string,
 }
 
 const dummyConfig2 = {
@@ -188,9 +186,7 @@ const initialConfigureState: ConfigureState = {
 
 //  Update Installation Flow
 export function ReconfigureIntegration(
-  {
-    installation, integrationObj, userId, groupId,
-  }: ReconfigureIntegrationProps,
+  { installation, integrationObj }: ReconfigureIntegrationProps,
 ) {
   const projectID = useProjectID();
   const { config } = installation; // TODO: update config structure, currently using dummyConfig2
@@ -217,7 +213,7 @@ export function ReconfigureIntegration(
         console.error('ERROR: ', err);
       });
     }
-  }, [projectID, integrationObj, installation]);
+  }, [projectID, integrationObj.id, installation.connectionId, integrationObj.latestRevision.id]);
 
   return (
     <div>

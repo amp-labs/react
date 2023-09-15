@@ -44,7 +44,7 @@ export function ConfigureIntegrationBase({
 
   //  TODO: isConnectedToProvider should be an API call
   if (!isConnectedToProvider[provider]) {
-    // require user to login to Saleforce if not connection is established
+    // require user to login to Saleforce if no connection is established
     return (
       <SalesforceOauthFlow
         userId={userId}

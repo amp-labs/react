@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { ConnectionsListProvider } from '../../context/ConnectionsListContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProjectID } from '../../hooks/useProjectID';
 import { api, Installation } from '../../services/api';
@@ -37,24 +36,18 @@ export function InstallIntegration(
         .then((_installations) => { setInstallations(_installations || []); })
         .catch((err) => { console.error('ERROR: ', err); });
     }
-  }, [integrationObj]);
+  }, [integrationObj?.id]);
 
-  return (
-    <ConnectionsListProvider projectID={projectID} groupRef={groupRef} provider={integration}>
-      {installation && integrationObj ? (
-        <ReconfigureIntegration
-          installation={installation}
-          integrationObj={integrationObj}
-          userId={consumerRef}
-          groupId={groupRef}
-        />
-      ) : (
-        <ConfigureIntegrationBase
-          integration={integration}
-          userId={consumerRef}
-          groupId={groupRef}
-        />
-      )}
-    </ConnectionsListProvider>
+  return installation && integrationObj ? (
+    <ReconfigureIntegration
+      installation={installation}
+      integrationObj={integrationObj}
+    />
+  ) : (
+    <ConfigureIntegrationBase
+      integration={integration}
+      userId={consumerRef}
+      groupId={groupRef}
+    />
   );
 }
