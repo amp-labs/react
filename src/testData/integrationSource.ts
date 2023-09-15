@@ -1,5 +1,5 @@
 import {
-  IntegrationConfig, IntegrationSource, ObjectConfig, SourceList,
+  IntegrationConfig, IntegrationSource, ObjectConfig,
 } from '../types/configTypes';
 
 export const sources: IntegrationSource[] = [
@@ -81,11 +81,6 @@ export const sources: IntegrationSource[] = [
   },
 ];
 
-export const TestSourceList: SourceList = {
-  appName: 'Test App',
-  integrations: sources,
-};
-
 export const TestSalesforceIntegrationSource: IntegrationSource = {
   name: 'read-accounts-and-contacts-from-salesforce',
   type: 'read',
@@ -159,6 +154,7 @@ export const TestSalesforceIntegrationSource: IntegrationSource = {
   ],
 };
 
+// TODO - delete me after config update is done
 export const sampleIntegrationConfig : IntegrationConfig = [
   {
     objectName: 'account',

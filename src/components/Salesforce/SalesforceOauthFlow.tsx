@@ -55,16 +55,14 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
   const { setSubdomain } = useSubdomain();
   const projectID = useProjectID();
 
+  // temp hack that populates table db
   // upsert group + consumer (user)
   async function createConsumerAndGroup() {
     try {
-      const consumerResponse = await postCreateConsumer(userId, projectID || '');
-      console.log('postCreateConsumer response', consumerResponse);
-
-      const groupResponse = await postCreateGroup(groupId, projectID || '');
-      console.log('postCreateGroup response', groupResponse);
+      await postCreateConsumer(userId, projectID || '');
+      await postCreateGroup(groupId, projectID || '');
     } catch (e) {
-      console.error('Error creating consumer and group:', e);
+      console.debug('Error creating consumer and group:', e);
     }
   }
 
