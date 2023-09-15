@@ -15,7 +15,9 @@
 
 import * as runtime from '../runtime';
 import type {
+  BatchUpsertIntegrationsRequest,
   Connection,
+  ConnectionsList,
   CreateConsumerRequest,
   CreateDestinationRequest,
   CreateGroupRequest,
@@ -24,7 +26,6 @@ import type {
   CreateProjectMembershipRequest,
   CreateProjectRequest,
   CreateProviderAppRequest,
-  CreateRevisionRequest,
   HydratedRevision,
   Installation,
   Integration,
@@ -39,8 +40,12 @@ import type {
   UpdateProviderAppRequest,
 } from '../models';
 import {
+    BatchUpsertIntegrationsRequestFromJSON,
+    BatchUpsertIntegrationsRequestToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
+    ConnectionsListFromJSON,
+    ConnectionsListToJSON,
     CreateConsumerRequestFromJSON,
     CreateConsumerRequestToJSON,
     CreateDestinationRequestFromJSON,
@@ -57,8 +62,6 @@ import {
     CreateProjectRequestToJSON,
     CreateProviderAppRequestFromJSON,
     CreateProviderAppRequestToJSON,
-    CreateRevisionRequestFromJSON,
-    CreateRevisionRequestToJSON,
     HydratedRevisionFromJSON,
     HydratedRevisionToJSON,
     InstallationFromJSON,
@@ -84,6 +87,11 @@ import {
     UpdateProviderAppRequestFromJSON,
     UpdateProviderAppRequestToJSON,
 } from '../models';
+
+export interface BatchUpsertIntegrationsOperationRequest {
+    projectId: string;
+    batchUpsertIntegrationsRequest?: BatchUpsertIntegrationsRequest;
+}
 
 export interface CreateConsumerOperationRequest {
     projectId: string;
@@ -125,10 +133,10 @@ export interface CreateProviderAppOperationRequest {
     providerApp?: CreateProviderAppRequest;
 }
 
-export interface CreateRevisionOperationRequest {
+export interface CreateRevisionRequest {
     projectId: string;
     integrationId: string;
-    revision?: CreateRevisionRequest;
+    revision?: BatchUpsertIntegrationsRequest;
 }
 
 export interface DeleteInstallationRequest {
@@ -233,6 +241,22 @@ export interface UpdateProviderAppOperationRequest {
  * @interface DefaultApiInterface
  */
 export interface DefaultApiInterface {
+    /**
+     * 
+     * @summary Batch upsert a group of integrations
+     * @param {string} projectId 
+     * @param {BatchUpsertIntegrationsRequest} [batchUpsertIntegrationsRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
+
+    /**
+     * Batch upsert a group of integrations
+     */
+    batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
+
     /**
      * 
      * @summary Create a new consumer
@@ -366,17 +390,17 @@ export interface DefaultApiInterface {
      * @summary Create a new revision
      * @param {string} projectId 
      * @param {string} integrationId 
-     * @param {CreateRevisionRequest} [revision] 
+     * @param {BatchUpsertIntegrationsRequest} [revision] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    createRevisionRaw(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Create a new revision
      */
-    createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    createRevision(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -547,12 +571,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Connection>>>;
+    listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionsList>>;
 
     /**
      * List a project\'s connections
      */
-    listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>>;
+    listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionsList>;
 
     /**
      * 
@@ -744,6 +768,39 @@ export interface DefaultApiInterface {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
+
+    /**
+     * Batch upsert a group of integrations
+     */
+    async batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling batchUpsertIntegrations.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/projects/{projectId}/integrations:batch`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BatchUpsertIntegrationsRequestToJSON(requestParameters.batchUpsertIntegrationsRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationFromJSON));
+    }
+
+    /**
+     * Batch upsert a group of integrations
+     */
+    async batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
+        const response = await this.batchUpsertIntegrationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Create a new consumer
@@ -1006,7 +1063,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Create a new revision
      */
-    async createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createRevisionRaw(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createRevision.');
         }
@@ -1026,7 +1083,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateRevisionRequestToJSON(requestParameters.revision),
+            body: BatchUpsertIntegrationsRequestToJSON(requestParameters.revision),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -1035,7 +1092,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Create a new revision
      */
-    async createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async createRevision(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createRevisionRaw(requestParameters, initOverrides);
     }
 
@@ -1383,7 +1440,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List a project\'s connections
      */
-    async listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Connection>>> {
+    async listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionsList>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listConnections.');
         }
@@ -1411,13 +1468,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ConnectionFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionsListFromJSON(jsonValue));
     }
 
     /**
      * List a project\'s connections
      */
-    async listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>> {
+    async listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionsList> {
         const response = await this.listConnectionsRaw(requestParameters, initOverrides);
         return await response.value();
     }

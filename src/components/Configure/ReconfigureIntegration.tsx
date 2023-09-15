@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useProjectID } from '../../hooks/useProjectID';
 import {
-  api, HydratedIntegrationAction, HydratedIntegrationField,
+  api, Config, HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   Installation, Integration,
@@ -14,33 +14,38 @@ interface ReconfigureIntegrationProps {
   integrationObj: Integration,
 }
 
-const dummyConfig2 = {
-  api: 'salesforce',
-  name: 'readCoreObjects',
-  read: {
-    schedule: '*/15 * * * *',
-    standardObjects: {
-      account: {
-        objectName: 'account',
-        destination: 'accountWebhook',
-        selectedFields: {
-          name: true,
-          phone: true,
+const dummyConfig2 : Config = {
+  id: 'dummyConfig2',
+  revisionId: 'revisionId',
+  createTime: new Date(),
+  createdBy: 'createdBy',
+  content: {
+    api: 'salesforce',
+    read: {
+      schedule: '*/15 * * * *',
+      objects: {
+        account: {
+          objectName: 'account',
+          destination: 'accountWebhook',
+          selectedFields: {
+            name: true,
+            phone: true,
+          },
+          selectedFieldMappings: {
+            accountId: 'Id',
+          },
         },
-        selectedFieldMappings: {
-          accountId: 'Id',
-        },
-      },
-      contact: {
-        objectName: 'contact',
-        destination: 'contactWebhook',
-        selectedFields: {
-          fax: true,
-          name: true,
-        },
-        selectedFieldMappings: {
-          userId: 'Email',
-          accountId: 'AccountId',
+        contact: {
+          objectName: 'contact',
+          destination: 'contactWebhook',
+          selectedFields: {
+            fax: true,
+            name: true,
+          },
+          selectedFieldMappings: {
+            userId: 'Email',
+            accountId: 'AccountId',
+          },
         },
       },
     },
@@ -107,15 +112,21 @@ function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
   return object?.optionalFields || null;
 }
 
+const getReadObject = (
+  config: Config,
+  objectName:string,
+) => config?.content?.read?.objects[objectName];
+
 // 5. get value for field
-function getValueFromConfigExist(config: any, type: string, objectName: string, key: string): any {
-  return config?.[type]?.standardObjects?.[objectName]?.selectedFields[key] || false;
+function getValueFromConfigExist(config: Config, objectName: string, key: string): boolean {
+  const object = getReadObject(config, objectName);
+  return object?.selectedFields?.[key] || false;
 }
 
 // 5b. get value for custom mapping field
-function getValueFromConfigCustomMapping(config: any, type: string, objectName: string, key: string)
-  : any {
-  return config?.[type]?.standardObjects?.[objectName]?.selectedFieldMappings[key] || '';
+function getValueFromConfigCustomMapping(config: Config, objectName: string, key: string) : string {
+  const object = getReadObject(config, objectName);
+  return object?.selectedFieldMappings?.[key] || '';
 }
 
 // aux. get field value based on type guard
@@ -151,7 +162,6 @@ function getConfigurationState(
       ...field,
       value: getValueFromConfigExist(
         config,
-        type,
         objectName,
         // should only use fieldName for existant fields
         getFieldKeyValue(field),
@@ -164,7 +174,6 @@ function getConfigurationState(
       ...field,
       value: getValueFromConfigCustomMapping(
         config,
-        type,
         objectName,
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
