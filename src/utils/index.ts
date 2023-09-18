@@ -11,6 +11,10 @@ import {
   OptionalDataField,
 } from '../types/configTypes';
 
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 /**
  * Given the name of an integration, return the matching source configuration.
  *
