@@ -26,14 +26,14 @@ export const useConnectionsList = (): ConnectionsListContextValue => {
 };
 
 type ConnectionsListProviderProps = {
-  projectID: string;
+  projectId: string;
   groupRef: string;
   provider: string;
   children?: React.ReactNode;
 };
 
 export function ConnectionsListProvider({
-  projectID,
+  projectId,
   groupRef,
   provider,
   children,
@@ -41,14 +41,14 @@ export function ConnectionsListProvider({
   const [connections, setConnections] = useState<Connection[] | null>(null);
 
   useEffect(() => {
-    api.listConnections({ projectId: projectID, groupRef, provider })
+    api.listConnections({ projectId, groupRef, provider })
       .then((_connections) => {
         console.log('CONNECTIONS: ', _connections);
         setConnections(_connections);
       }).catch((err) => {
         console.error('ERROR: ', err);
       });
-  }, [projectID]);
+  }, [projectId]);
 
   const contextValue = useMemo(() => ({
     connections,
