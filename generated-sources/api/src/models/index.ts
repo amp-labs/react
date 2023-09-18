@@ -5,7 +5,6 @@ export * from './BatchUpsertIntegrationsRequest';
 export * from './Config';
 export * from './ConfigContent';
 export * from './Connection';
-export * from './ConnectionsList';
 export * from './Consumer';
 export * from './CreateConsumerRequest';
 export * from './CreateDestinationRequest';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Box, Checkbox, Stack, Tag, Text,
+  Box, Checkbox, Select, Stack, Tag, Text,
 } from '@chakra-ui/react';
 
 import { useProjectID } from '../../hooks/useProjectID';
@@ -36,7 +36,7 @@ const dummyConfig2 : Config = {
             phone: true,
           },
           selectedFieldMappings: {
-            accountId: 'Id',
+            accountId: 'id',
           },
         },
         contact: {
@@ -68,7 +68,12 @@ const content = {
   reconfigureRequiredFields: (
     appName: string,
     objectName: string,
-  ) => <>{capitalize(appName)} reads the following <b>{objectName}</b> fields</>,
+  ) => <>{appName} reads the following <b>{objectName}</b> fields</>,
+  customMappingText: (
+    objectName: string,
+    customField: string,
+  // eslint-disable-next-line max-len
+  ) => <>Which of your custom fields from <b>{objectName}</b> should be mapped to <b>{customField}</b>?</>,
 };
 
 /**
@@ -160,10 +165,15 @@ type ConfigureStateIntegrationField = HydratedIntegrationFieldExistent & {
   value: string | number | boolean | null,
 };
 
+type CustomConfigureStateIntegrationField = IntegrationFieldMapping & {
+  value: string | number | undefined,
+};
+
 type ConfigureState = {
+  allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: ConfigureStateIntegrationField[] | null,
-  requiredCustomMapFields: ConfigureStateIntegrationField[] | null,
+  requiredCustomMapFields: CustomConfigureStateIntegrationField[] | null,
 };
 
 function getConfigurationState(
@@ -197,9 +207,12 @@ function getConfigurationState(
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
       ),
-    })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
+    })) as CustomConfigureStateIntegrationField[] : null; // type hack - TODO fix
+
+  const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
 
   return {
+    allFields,
     requiredFields,
     optionalFields,
     requiredCustomMapFields,
@@ -213,6 +226,7 @@ const objectName = 'account';
 const OPERATION_TYPE = 'read'; // only one supported for mvp
 
 const initialConfigureState: ConfigureState = {
+  allFields: null,
   requiredFields: null,
   optionalFields: null,
   requiredCustomMapFields: null,
@@ -224,13 +238,15 @@ export function ReconfigureIntegration(
 ) {
   const [loading, setLoading] = useState(false);
   const projectID = useProjectID();
-  const { config } = installation; // TODO: update config structure, currently using dummyConfig2
+
+  // TODO: update config structure, currently using dummyConfig2 [ENG-251]
+  const { config } = installation;
 
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision from installation revisionId (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const [configureState, setConfigureState] = useState<ConfigureState>(initialConfigureState);
-  console.log('config: ', { config });
+  console.log('config: ', { config, configureState });
 
   useEffect(() => {
     if (projectID && integrationObj && installation) {
@@ -268,10 +284,27 @@ export function ReconfigureIntegration(
       optionalFieldToUpdate.value = checked;
 
       // update state
-      setConfigureState({
+      setConfigureState({ ...configureState, optionalFields: [...optionalFields || []] });
+    }
+  };
+
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    const { requiredCustomMapFields } = configureState;
+    const requiredCustomMapFieldtoUpdate = requiredCustomMapFields?.find(
+      (field) => field.mapToName === name,
+    );
+
+    if (requiredCustomMapFieldtoUpdate) {
+      // Update the custome field value property to new value
+      requiredCustomMapFieldtoUpdate.value = value;
+      const newState = {
         ...configureState,
-        optionalFields: [...optionalFields || []],
-      });
+        requiredCustomMapFields: [...requiredCustomMapFields || []],
+      };
+
+      // update state
+      setConfigureState(newState);
     }
   };
 
@@ -309,7 +342,7 @@ export function ReconfigureIntegration(
               {configureState.optionalFields?.map((field) => {
                 if (!isIntegrationFieldMapping(field)) {
                   return (
-                    <Box display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
+                    <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
                       <Checkbox
                         name={field.fieldName}
                         id={field.fieldName}
@@ -324,15 +357,32 @@ export function ReconfigureIntegration(
                 return null; // fallback for customed mapped fields
               })}
             </Stack>
-            <div>Custom Mapping</div>
-            <p>
+
+            <Stack>
               {configureState.requiredCustomMapFields?.map((field) => {
                 if (isIntegrationFieldMapping(field)) {
-                  return <li key={field.mapToName}>{`${field.mapToName} - ${field.value}`}</li>;
+                  return (
+                    <>
+                      <Text marginBottom="5px">
+                        {content.customMappingText(objectName, field.mapToName)}
+                      </Text>
+                      <Select
+                        name={field.mapToName}
+                        variant="flushed"
+                        value={field.value}
+                        onChange={onSelectChange}
+                        placeholder="Please select one"
+                      >
+                        {configureState?.allFields?.map((f) => (
+                          <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
+                        ))}
+                      </Select>
+                    </>
+                  );
                 }
                 return null; // fallback for existant fields
               })}
-            </p>
+            </Stack>
           </>
         )}
     </Box>
