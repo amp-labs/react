@@ -60,15 +60,15 @@ const content = {
   reconfigureIntro: (
     appName: string,
     apiProvider: string,
-    subdomain: string,
+    workspace: string,
   ) => (
     // eslint-disable-next-line max-len
-    <>Let's update {capitalize(appName)}'s integration with your {capitalize(apiProvider)} instance <b>{subdomain}</b>.</>
+    <>{capitalize(apiProvider)} integration: <b>{workspace}</b>.</>
   ),
   reconfigureRequiredFields: (
     appName: string,
     objectName: string,
-  ) => <>{capitalize(appName)} is reading the following <b>{objectName}</b> fields</>,
+  ) => <>{capitalize(appName)} reads the following <b>{objectName}</b> fields</>,
 };
 
 /**
