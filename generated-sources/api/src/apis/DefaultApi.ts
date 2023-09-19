@@ -17,7 +17,6 @@ import * as runtime from '../runtime';
 import type {
   BatchUpsertIntegrationsRequest,
   Connection,
-  ConnectionsList,
   CreateConsumerRequest,
   CreateDestinationRequest,
   CreateGroupRequest,
@@ -44,8 +43,6 @@ import {
     BatchUpsertIntegrationsRequestToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
-    ConnectionsListFromJSON,
-    ConnectionsListToJSON,
     CreateConsumerRequestFromJSON,
     CreateConsumerRequestToJSON,
     CreateDestinationRequestFromJSON,
@@ -571,12 +568,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionsList>>;
+    listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Connection>>>;
 
     /**
      * List a project\'s connections
      */
-    listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionsList>;
+    listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>>;
 
     /**
      * 
@@ -1440,7 +1437,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List a project\'s connections
      */
-    async listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectionsList>> {
+    async listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Connection>>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listConnections.');
         }
@@ -1468,13 +1465,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ConnectionFromJSON));
     }
 
     /**
      * List a project\'s connections
      */
-    async listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectionsList> {
+    async listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>> {
         const response = await this.listConnectionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
