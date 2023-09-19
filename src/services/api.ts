@@ -10,6 +10,7 @@ import {
   HydratedRevision,
   Installation, Integration,
   IntegrationFieldMapping,
+  Project,
 } from '../../generated-sources/api/src/index';
 
 /**
@@ -83,4 +84,5 @@ export type {
   Integration,
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
+  Project,
 };

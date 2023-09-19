@@ -24,23 +24,22 @@ export const useIntegrationList = (): IntegrationListContextValue => {
 };
 
 type IntegrationListContextProviderProps = {
-  projectID: string,
-  apiKey: string,
+  projectId: string,
   children?: React.ReactNode;
 };
 
 export function IntegrationListProvider(
-  { projectID, apiKey, children }: IntegrationListContextProviderProps,
+  { projectId, children }: IntegrationListContextProviderProps,
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
 
   useEffect(() => {
-    api.listIntegrations({ projectId: projectID }).then((_integrations) => {
+    api.listIntegrations({ projectId }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
       console.error('ERROR: ', err);
     });
-  }, [projectID, apiKey]);
+  }, [projectId]);
 
   const contextValue = useMemo(() => ({
     integrations,
