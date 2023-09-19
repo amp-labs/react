@@ -12,8 +12,8 @@ import {
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
+import { useProjectID } from '../../hooks/useProjectID';
 import { postConnectOAuth, postCreateConsumer, postCreateGroup } from '../../services/apiService';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
@@ -39,17 +39,6 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
   return null;
 }
 
-// temp hack that populates table db
-// upsert group + consumer (user)
-async function createConsumerAndGroup(projectId: string, userId: string, groupId: string) {
-  try {
-    await postCreateConsumer(userId, projectId);
-    await postCreateGroup(groupId, projectId);
-  } catch (e) {
-    console.debug('Error creating consumer and group:', e);
-  }
-}
-
 interface SalesforceOauthFlowProps {
   userId: string;
   groupId: string;
@@ -64,19 +53,30 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
   const [error, setError] = useState<string | null>(null);
 
   const { setSubdomain } = useSubdomain();
-  const { projectId } = useProject();
+  const projectID = useProjectID();
+
+  // temp hack that populates table db
+  // upsert group + consumer (user)
+  async function createConsumerAndGroup() {
+    try {
+      await postCreateConsumer(userId, projectID || '');
+      await postCreateGroup(groupId, projectID || '');
+    } catch (e) {
+      console.debug('Error creating consumer and group:', e);
+    }
+  }
 
   useEffect(() => {
-    if (projectId && userId && groupId) createConsumerAndGroup(projectId, userId, groupId);
-  }, [projectId]);
+    if (projectID) createConsumerAndGroup();
+  }, [projectID]);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
     setError(null);
 
-    if (customerSubdomain && projectId) {
+    if (customerSubdomain && projectID) {
       try {
-        const res = await postConnectOAuth(userId, groupId, 'salesforce', customerSubdomain, projectId);
+        const res = await postConnectOAuth(userId, groupId, 'salesforce', customerSubdomain, projectID);
         const url = res.data;
         setOAuthCallbackURL(url);
       } catch (err: any) {

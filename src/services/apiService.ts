@@ -24,12 +24,12 @@ export async function postConnectOAuth(
   groupId: string,
   api: string,
   subdomain: string,
-  projectId: string,
+  projectID: string,
 ) {
   return axios.post(CONNECT_OAUTH_URL, {
     providerWorkspaceRef: subdomain,
     provider: api,
-    projectId,
+    projectId: projectID,
     // The following IDs are from the DB seed data.
     // TODO: replace.
     groupRef: groupId,
@@ -46,10 +46,10 @@ export async function postConnectOAuth(
  */
 export async function postCreateConsumer(
   userId: string, // 'consumerRef:p0-c1' // seed data
-  projectId: string,
+  projectID: string,
   consumerName = 'Test Consumer', // test data
 ) {
-  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/consumers`;
+  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectID}/consumers`;
   return axios.post(POST_CONSUMER_URL, {
     ConsumerRef: userId,
     ConsumerName: consumerName,
@@ -65,10 +65,10 @@ export async function postCreateConsumer(
  */
 export async function postCreateGroup(
   groupId: string,
-  projectId: string,
+  projectID: string,
   groupName = 'Test Group', // test data
 ) {
-  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/groups`;
+  const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectID}/groups`;
   return axios.post(POST_CONSUMER_URL, {
     GroupRef: groupId,
     GroupName: groupName,
@@ -84,12 +84,12 @@ export async function postCreateGroup(
  * @deprecated The method should not be used
  */
 export async function getListConnections(
-  projectId: string,
+  projectID: string,
   consumerRef: string,
   groupRef: string,
   provider = 'salesforce',
 ): Promise<IntegrationConfig> {
-  const LIST_CONNECTIONS_URL = `${AMP_API_ROOT}/projects/${projectId}/connections`;
+  const LIST_CONNECTIONS_URL = `${AMP_API_ROOT}/projects/${projectID}/connections`;
   return axios.get(LIST_CONNECTIONS_URL, {
     params: {
       provider,

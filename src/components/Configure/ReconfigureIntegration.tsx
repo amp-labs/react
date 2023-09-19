@@ -3,7 +3,7 @@ import {
   Box, Checkbox, Select, Stack, Tag, Text,
 } from '@chakra-ui/react';
 
-import { useProject } from '../../context/ProjectContext';
+import { useProjectID } from '../../hooks/useProjectID';
 import {
   api, Config, HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
@@ -221,6 +221,7 @@ function getConfigurationState(
 
 // TODO - add support for fetching these dynamically
 const providerWorkspaceRef = 'my-instance'; // get this from installation.connection
+const appName = 'my-app'; // get this from getProject
 const objectName = 'account';
 const OPERATION_TYPE = 'read'; // only one supported for mvp
 
@@ -236,8 +237,7 @@ export function ReconfigureIntegration(
   { installation, integrationObj }: ReconfigureIntegrationProps,
 ) {
   const [loading, setLoading] = useState(false);
-  const { projectId, project } = useProject();
-  const appName = project?.appName || '';
+  const projectID = useProjectID();
 
   // TODO: update config structure, currently using dummyConfig2 [ENG-251]
   const { config } = installation;
@@ -249,11 +249,11 @@ export function ReconfigureIntegration(
   console.log('config: ', { config, configureState });
 
   useEffect(() => {
-    if (projectId && integrationObj && installation) {
+    if (projectID && integrationObj && installation) {
       setLoading(true);
       api.getHydratedRevision(
         {
-          projectId,
+          projectId: projectID,
           integrationId: integrationObj.id,
           revisionId: integrationObj.latestRevision.id, // revisionId from integration
           connectionId: installation.connectionId, // connectionId from installation
@@ -272,7 +272,7 @@ export function ReconfigureIntegration(
         console.error('ERROR: ', err);
       });
     }
-  }, [projectId, integrationObj.id, installation.connectionId, integrationObj.latestRevision.id]);
+  }, [projectID, integrationObj.id, installation.connectionId, integrationObj.latestRevision.id]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;

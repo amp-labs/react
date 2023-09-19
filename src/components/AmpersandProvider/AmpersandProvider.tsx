@@ -8,33 +8,33 @@
 import React, { createContext, useContext } from 'react';
 
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
-import { ProjectProvider } from '../../context/ProjectContext';
 import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
 import { SubdomainProvider } from '../../context/SubdomainProvider';
 
 interface AmpersandProviderProps {
   options: {
     apiKey: string,
-    projectId: string,
+    projectID: string,
     styles?: object,
   },
   children: React.ReactNode
 }
 
+export const ProjectIDContext = createContext<string | null>(null);
 export const ApiKeyContext = createContext<string | null>(null);
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const { options: { apiKey, projectId }, children } = props;
+  const { options: { apiKey, projectID }, children } = props;
 
   return (
     <ProviderConnectionProvider>
-      <IntegrationListProvider projectId={projectId}>
+      <IntegrationListProvider projectID={projectID} apiKey={apiKey}>
         <SubdomainProvider>
-          <ProjectProvider projectId={projectId}>
+          <ProjectIDContext.Provider value={projectID}>
             <ApiKeyContext.Provider value={apiKey}>
               { children }
             </ApiKeyContext.Provider>
-          </ProjectProvider>
+          </ProjectIDContext.Provider>
         </SubdomainProvider>
       </IntegrationListProvider>
     </ProviderConnectionProvider>

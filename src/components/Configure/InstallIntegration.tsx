@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useIntegrationList } from '../../context/IntegrationListContext';
-import { useProject } from '../../context/ProjectContext';
+import { useProjectID } from '../../hooks/useProjectID';
 import { api, Installation } from '../../services/api';
 import { findIntegrationFromList } from '../../utils';
 
@@ -22,7 +22,7 @@ export function InstallIntegration(
     integration, consumerRef, consumerName, groupRef, groupName,
   }: InstallIntegrationProps,
 ) {
-  const { projectId } = useProject();
+  const projectID = useProjectID();
   const { integrations } = useIntegrationList();
   const [installations, setInstallations] = useState<Installation[]>([]);
   const integrationObj = findIntegrationFromList(integration, integrations || []);
@@ -30,13 +30,13 @@ export function InstallIntegration(
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
-    if (projectId && integrationObj?.id) {
+    if (integrationObj) {
       // check if installation exists on selected integration
-      api.listInstallations({ projectId, integrationId: integrationObj.id, groupRef })
+      api.listInstallations({ projectId: projectID, integrationId: integrationObj.id, groupRef })
         .then((_installations) => { setInstallations(_installations || []); })
         .catch((err) => { console.error('ERROR: ', err); });
     }
-  }, [projectId, integrationObj?.id]);
+  }, [integrationObj?.id]);
 
   return installation && integrationObj ? (
     <ReconfigureIntegration
