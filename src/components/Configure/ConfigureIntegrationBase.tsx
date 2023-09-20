@@ -5,9 +5,9 @@ import {
   IntegrationConfig,
 } from '../../types/configTypes';
 import { findIntegrationFromList } from '../../utils';
-import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
+import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
 // import { SetUpRead } from './SetupRead';
 
 interface ConfigureIntegrationBaseProps {
@@ -15,10 +15,6 @@ interface ConfigureIntegrationBaseProps {
   userId: string,
   groupId: string,
   userConfig?: IntegrationConfig,
-}
-
-function ErrorTextBoxPlaceholder() {
-  return <CenteredTextBox text="We can't load the integration" />;
 }
 
 // Base component for configuring and reconfiguring an integration.
