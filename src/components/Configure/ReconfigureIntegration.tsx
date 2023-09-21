@@ -3,22 +3,32 @@ import {
   Box, Checkbox, Select, Stack, Tag, Text,
 } from '@chakra-ui/react';
 
+import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useProject } from '../../context/ProjectContext';
 import {
-  api, Config, HydratedIntegrationAction, HydratedIntegrationField,
+  Config, HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
-  HydratedIntegrationObject,
   Installation, Integration,
   IntegrationFieldMapping,
 } from '../../services/api';
 import { capitalize } from '../../utils';
+
+import { ObjectManagementNav, useSelectedObjectName } from './ObjectManagementNav';
+import {
+  getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
+  getRequiredCustomMapFieldsFromObject,
+  getRequiredFieldsFromObject, getStandardObjectFromAction,
+  getValueFromConfigCustomMapping, getValueFromConfigExist,
+  isIntegrationFieldMapping,
+  PLACEHOLDER_VARS,
+} from './utils';
 
 interface ReconfigureIntegrationProps {
   installation: Installation,
   integrationObj: Integration,
 }
 
-const dummyConfig2 : Config = {
+const dummyConfig2: Config = {
   id: 'dummyConfig2',
   revisionId: 'revisionId',
   createTime: new Date(),
@@ -72,94 +82,9 @@ const content = {
   customMappingText: (
     objectName: string,
     customField: string,
-  // eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
   ) => <>Which of your custom fields from <b>{objectName}</b> should be mapped to <b>{customField}</b>?</>,
 };
-
-/**
- * TODO move to utils - kept here until config update is complete.
- */
-
-/**
- * type guard for IntegrationFieldMapping | IntegrationFieldExistent
- *
- * @param field HydratedIntegrationField
- * @returns
- */
-function isIntegrationFieldMapping(field: HydratedIntegrationField):
-field is IntegrationFieldMapping {
-  return (field as IntegrationFieldMapping).mapToName !== undefined;
-}
-
-// 1. get action type
-/**
- *
- * @param actions HydratedIntegrationAction[]
- * @param type read / write / etc...
- * @returns HydratedIntegrationAction | null
- */
-function getActionTypeFromActions(actions: HydratedIntegrationAction[], type: string)
-  : HydratedIntegrationAction | null {
-  return actions.find((action) => action.type === type) || null;
-}
-// 2. get standard object
-/**
- *
- * @param action HydratedIntegrationAction
- * @param objectName string (account, contect, etc...)
- * @returns HydratedIntegrationObject | null
- */
-function getStandardObjectFromAction(action: HydratedIntegrationAction, objectName: string)
-  : HydratedIntegrationObject | null {
-  return action?.standardObjects?.find((object) => object.objectName === objectName) || null;
-}
-
-// 3a. get required fields
-function getRequiredFieldsFromObject(object: HydratedIntegrationObject)
-  : HydratedIntegrationField[] | null {
-  return object?.requiredFields?.filter(
-    (rf: HydratedIntegrationField) => !isIntegrationFieldMapping(rf) && !!rf.fieldName,
-  ) || null;
-}
-
-// 3b. get required custom mapping fields
-function getRequiredCustomMapFieldsFromObject(object: HydratedIntegrationObject)
-  : HydratedIntegrationField[] | null {
-  return object?.requiredFields?.filter(
-    (rf: HydratedIntegrationField) => isIntegrationFieldMapping(rf) && !!rf.mapToName,
-  ) || null;
-}
-
-// 4. get optional fields
-function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
-  : HydratedIntegrationField[] | null {
-  return object?.optionalFields || null;
-}
-
-const getReadObject = (
-  config: Config,
-  objectName:string,
-) => config?.content?.read?.objects[objectName];
-
-// 5. get value for field
-function getValueFromConfigExist(config: Config, objectName: string, key: string): boolean {
-  const object = getReadObject(config, objectName);
-  return object?.selectedFields?.[key] || false;
-}
-
-// 5b. get value for custom mapping field
-function getValueFromConfigCustomMapping(config: Config, objectName: string, key: string) : string {
-  const object = getReadObject(config, objectName);
-  return object?.selectedFieldMappings?.[key] || '';
-}
-
-// aux. get field value based on type guard
-function getFieldKeyValue(field: HydratedIntegrationField): string {
-  if (isIntegrationFieldMapping(field)) {
-    return field.mapToName; // custom mapping
-  }
-  return field.fieldName; // existant field
-}
 
 type ConfigureStateIntegrationField = HydratedIntegrationFieldExistent & {
   value: string | number | boolean | null,
@@ -219,11 +144,6 @@ function getConfigurationState(
   };
 }
 
-// TODO - add support for fetching these dynamically
-const providerWorkspaceRef = 'my-instance'; // get this from installation.connection
-const objectName = 'account';
-const OPERATION_TYPE = 'read'; // only one supported for mvp
-
 const initialConfigureState: ConfigureState = {
   allFields: null,
   requiredFields: null,
@@ -232,11 +152,13 @@ const initialConfigureState: ConfigureState = {
 };
 
 //  Update Installation Flow
-export function ReconfigureIntegration(
+function ReconfigureIntegrationContent(
   { installation, integrationObj }: ReconfigureIntegrationProps,
 ) {
-  const [loading, setLoading] = useState(false);
-  const { projectId, project } = useProject();
+  const { hydratedRevision, loading, error } = useHydratedRevision();
+  const { selectedObjectName } = useSelectedObjectName();
+
+  const { project } = useProject();
   const appName = project?.appName || '';
 
   // TODO: update config structure, currently using dummyConfig2 [ENG-251]
@@ -246,33 +168,21 @@ export function ReconfigureIntegration(
   // 2. get the hydrated revision from installation revisionId (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const [configureState, setConfigureState] = useState<ConfigureState>(initialConfigureState);
-  console.log('config: ', { config, configureState });
+  console.log('config: ', { config, dummyConfig2, configureState });
 
   useEffect(() => {
-    if (projectId && integrationObj && installation) {
-      setLoading(true);
-      api.getHydratedRevision(
-        {
-          projectId,
-          integrationId: integrationObj.id,
-          revisionId: integrationObj.latestRevision.id, // revisionId from integration
-          connectionId: installation.connectionId, // connectionId from installation
-        },
-      ).then((_hydratedRevision) => {
-        const hydratedActions = _hydratedRevision?.content.actions || []; // read / write / etc...
-        const state = getConfigurationState(
-          hydratedActions,
-          OPERATION_TYPE,
-          objectName,
-          dummyConfig2,
-        );
-        setConfigureState(state);
-        setLoading(false);
-      }).catch((err) => {
-        console.error('ERROR: ', err);
-      });
+    // set configurationState when hydratedRevision is loaded
+    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+      const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
+      const state = getConfigurationState(
+        hydratedActions,
+        PLACEHOLDER_VARS.OPERATION_TYPE,
+        selectedObjectName,
+        dummyConfig2,
+      );
+      setConfigureState(state);
     }
-  }, [projectId, integrationObj.id, installation.connectionId, integrationObj.latestRevision.id]);
+  }, [hydratedRevision?.content?.actions, loading, selectedObjectName]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -311,7 +221,8 @@ export function ReconfigureIntegration(
   return (
     <Box
       p={8}
-      maxWidth="600px"
+      width="600px"
+      minWidth="600px"
       borderWidth={1}
       borderRadius={8}
       boxShadow="lg"
@@ -321,70 +232,85 @@ export function ReconfigureIntegration(
       bgColor="white"
     >
       <Text marginBottom="20px">
-        {content.reconfigureIntro(appName, integrationObj.provider, providerWorkspaceRef)}
-      </Text>
-      {loading ? <div>Loading...</div>
-        : (
-          <>
-            <Text marginBottom="5px">
-              {content.reconfigureRequiredFields(appName, objectName)}
-            </Text>
-            <Box marginBottom="20px">
-              {configureState.requiredFields?.map((field) => {
-                if (!isIntegrationFieldMapping(field)) {
-                  return <Tag key={field.fieldName}>{field.displayName}</Tag>;
-                }
-                return null; // fallback for customed mapped fields
-              })}
-            </Box>
-            <Text marginBottom="5px">Optional Fields</Text>
-            <Stack marginBottom="20px">
-              {configureState.optionalFields?.map((field) => {
-                if (!isIntegrationFieldMapping(field)) {
-                  return (
-                    <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
-                      <Checkbox
-                        name={field.fieldName}
-                        id={field.fieldName}
-                        isChecked={!!field.value}
-                        onChange={onCheckboxChange}
-                      >
-                        {field.displayName}
-                      </Checkbox>
-                    </Box>
-                  );
-                }
-                return null; // fallback for customed mapped fields
-              })}
-            </Stack>
-
-            <Stack>
-              {configureState.requiredCustomMapFields?.map((field) => {
-                if (isIntegrationFieldMapping(field)) {
-                  return (
-                    <>
-                      <Text marginBottom="5px">
-                        {content.customMappingText(objectName, field.mapToName)}
-                      </Text>
-                      <Select
-                        name={field.mapToName}
-                        variant="flushed"
-                        value={field.value}
-                        onChange={onSelectChange}
-                        placeholder="Please select one"
-                      >
-                        {configureState?.allFields?.map((f) => (
-                          <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
-                        ))}
-                      </Select>
-                    </>
-                  );
-                }
-                return null; // fallback for existant fields
-              })}
-            </Stack>
-          </>
+        {content.reconfigureIntro(
+          appName,
+          integrationObj.provider,
+          PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
         )}
+      </Text>
+      {error && <div>{error}</div>}
+      {loading && <div>Loading...</div>}
+      {hydratedRevision && selectedObjectName && (
+        <>
+          <Text marginBottom="5px">
+            {content.reconfigureRequiredFields(appName, selectedObjectName)}
+          </Text>
+          <Box marginBottom="20px">
+            {configureState.requiredFields?.map((field) => {
+              if (!isIntegrationFieldMapping(field)) {
+                return <Tag key={field.fieldName}>{field.displayName}</Tag>;
+              }
+              return null; // fallback for customed mapped fields
+            })}
+          </Box>
+          <Text marginBottom="5px">Optional Fields</Text>
+          <Stack marginBottom="20px">
+            {configureState.optionalFields?.map((field) => {
+              if (!isIntegrationFieldMapping(field)) {
+                return (
+                  <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
+                    <Checkbox
+                      name={field.fieldName}
+                      id={field.fieldName}
+                      isChecked={!!field.value}
+                      onChange={onCheckboxChange}
+                    >
+                      {field.displayName}
+                    </Checkbox>
+                  </Box>
+                );
+              }
+              return null; // fallback for customed mapped fields
+            })}
+          </Stack>
+
+          <Stack>
+            {configureState.requiredCustomMapFields?.map((field) => {
+              if (isIntegrationFieldMapping(field)) {
+                return (
+                  <Stack key={field.mapToName}>
+                    <Text marginBottom="5px">
+                      {content.customMappingText(selectedObjectName, field.mapToName)}
+                    </Text>
+                    <Select
+                      name={field.mapToName}
+                      variant="flushed"
+                      value={field.value}
+                      onChange={onSelectChange}
+                      placeholder="Please select one"
+                    >
+                      {configureState?.allFields?.map((f) => (
+                        <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
+                      ))}
+                    </Select>
+                  </Stack>
+                );
+              }
+              return null; // fallback for existant fields
+            })}
+          </Stack>
+        </>
+      )}
     </Box>
+  );
+}
+
+export function ReconfigureIntegration(
+  { installation, integrationObj }: ReconfigureIntegrationProps,
+) {
+  return (
+    <ObjectManagementNav config={dummyConfig2}>
+      <ReconfigureIntegrationContent installation={installation} integrationObj={integrationObj} />
+    </ObjectManagementNav>
   );
 }

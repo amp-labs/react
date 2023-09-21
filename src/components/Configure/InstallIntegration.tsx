@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { HydratedRevisionProvider } from '../../context/HydratedRevisionContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProject } from '../../context/ProjectContext';
 import { api, Installation } from '../../services/api';
@@ -38,16 +39,29 @@ export function InstallIntegration(
     }
   }, [projectId, integrationObj?.id]);
 
-  return installation && integrationObj ? (
+  const content = installation && integrationObj ? (
+  // if installation exists, render update integration flow
     <ReconfigureIntegration
       installation={installation}
       integrationObj={integrationObj}
     />
   ) : (
+    // no installation, render create integration flow
     <ConfigureIntegrationBase
       integration={integration}
       userId={consumerRef}
       groupId={groupRef}
     />
+  );
+
+  return (
+    <HydratedRevisionProvider
+      projectId={projectId}
+      integrationId={integrationObj?.id}
+      revisionId={integrationObj?.latestRevision?.id}
+      connectionId={installation?.connectionId}
+    >
+      {content}
+    </HydratedRevisionProvider>
   );
 }

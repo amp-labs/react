@@ -23,7 +23,7 @@ npm install @amp-labs/react
 This library requires your application to be wrapped in the `<AmpersandProvider/>` context. 
 `<AmpersandProvider />` takes these props:
 - `apiKey`: an API key to access Ampersand services. Please contact the team to obtain a key.
-- `projectID`: your project ID. Please contact the team to obtain your project ID.
+- `projectId`: your project ID. Please contact the team to obtain your project ID.
 
 Currently, we offer two primary components:
 - `<InstallIntegration>`: Leads customers through installing Salesforce connection for an integration. Prompt users to provide their Salesforce credentials and guide them through the configuration of this integration. If the user had previously provided their Salesforce credentials already, this component will skip to the configuration step directly.
