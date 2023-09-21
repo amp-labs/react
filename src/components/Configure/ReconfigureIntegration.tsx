@@ -13,7 +13,7 @@ import {
 } from '../../services/api';
 import { capitalize } from '../../utils';
 
-import { ObjectManagementNav } from './ObjectManagementNav';
+import { ObjectManagementNav, useSelectedObjectName } from './ObjectManagementNav';
 import {
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredCustomMapFieldsFromObject,
@@ -28,7 +28,7 @@ interface ReconfigureIntegrationProps {
   integrationObj: Integration,
 }
 
-const dummyConfig2 : Config = {
+const dummyConfig2: Config = {
   id: 'dummyConfig2',
   revisionId: 'revisionId',
   createTime: new Date(),
@@ -82,7 +82,7 @@ const content = {
   customMappingText: (
     objectName: string,
     customField: string,
-  // eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
   ) => <>Which of your custom fields from <b>{objectName}</b> should be mapped to <b>{customField}</b>?</>,
 };
 
@@ -152,10 +152,11 @@ const initialConfigureState: ConfigureState = {
 };
 
 //  Update Installation Flow
-export function ReconfigureIntegration(
+function ReconfigureIntegrationContent(
   { installation, integrationObj }: ReconfigureIntegrationProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
+  const { selectedObjectName } = useSelectedObjectName();
 
   const { project } = useProject();
   const appName = project?.appName || '';
@@ -171,17 +172,17 @@ export function ReconfigureIntegration(
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (hydratedRevision?.content?.actions && !loading) {
+    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
       const state = getConfigurationState(
         hydratedActions,
         PLACEHOLDER_VARS.OPERATION_TYPE,
-        PLACEHOLDER_VARS.OBJECT_NAME,
+        selectedObjectName,
         dummyConfig2,
       );
       setConfigureState(state);
     }
-  }, [hydratedRevision?.content?.actions, loading]);
+  }, [hydratedRevision?.content?.actions, loading, selectedObjectName]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -218,32 +219,31 @@ export function ReconfigureIntegration(
   };
 
   return (
-    <ObjectManagementNav config={dummyConfig2}>
-      <Box
-        p={8}
-        width="600px"
-        minWidth="600px"
-        borderWidth={1}
-        borderRadius={8}
-        boxShadow="lg"
-        textAlign={['left']}
-        margin="auto"
-        marginTop="40px"
-        bgColor="white"
-      >
-        <Text marginBottom="20px">
-          {content.reconfigureIntro(
-            appName,
-            integrationObj.provider,
-            PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
-          )}
-        </Text>
-        {error && <div>{error}</div>}
-        {loading && <div>Loading...</div>}
-        {hydratedRevision && (
+    <Box
+      p={8}
+      width="600px"
+      minWidth="600px"
+      borderWidth={1}
+      borderRadius={8}
+      boxShadow="lg"
+      textAlign={['left']}
+      margin="auto"
+      marginTop="40px"
+      bgColor="white"
+    >
+      <Text marginBottom="20px">
+        {content.reconfigureIntro(
+          appName,
+          integrationObj.provider,
+          PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
+        )}
+      </Text>
+      {error && <div>{error}</div>}
+      {loading && <div>Loading...</div>}
+      {hydratedRevision && selectedObjectName && (
         <>
           <Text marginBottom="5px">
-            {content.reconfigureRequiredFields(appName, PLACEHOLDER_VARS.OBJECT_NAME)}
+            {content.reconfigureRequiredFields(appName, selectedObjectName)}
           </Text>
           <Box marginBottom="20px">
             {configureState.requiredFields?.map((field) => {
@@ -280,7 +280,7 @@ export function ReconfigureIntegration(
                 return (
                   <Stack key={field.mapToName}>
                     <Text marginBottom="5px">
-                      {content.customMappingText(PLACEHOLDER_VARS.OBJECT_NAME, field.mapToName)}
+                      {content.customMappingText(selectedObjectName, field.mapToName)}
                     </Text>
                     <Select
                       name={field.mapToName}
@@ -300,8 +300,17 @@ export function ReconfigureIntegration(
             })}
           </Stack>
         </>
-        )}
-      </Box>
+      )}
+    </Box>
+  );
+}
+
+export function ReconfigureIntegration(
+  { installation, integrationObj }: ReconfigureIntegrationProps,
+) {
+  return (
+    <ObjectManagementNav config={dummyConfig2}>
+      <ReconfigureIntegrationContent installation={installation} integrationObj={integrationObj} />
     </ObjectManagementNav>
   );
 }
