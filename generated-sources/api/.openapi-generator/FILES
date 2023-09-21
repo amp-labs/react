@@ -38,14 +38,13 @@ src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
 src/models/OauthConnectRequest.ts
-src/models/ObjectReadConfig.ts
+src/models/Operation.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts
 src/models/ProjectMembership.ts
-src/models/ProjectMembershipsList.ts
 src/models/ProviderApp.ts
-src/models/ProviderAppsList.ts
 src/models/ReadConfig.ts
+src/models/ReadConfigStandardObject.ts
 src/models/Revision.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts

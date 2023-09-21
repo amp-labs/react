@@ -4,7 +4,7 @@ import { Box, Tab, Tabs } from '@chakra-ui/react';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { Config, HydratedRevision } from '../../services/api';
 
-import { getActionTypeFromActions, PLACEHOLDER_VARS } from './utils';
+import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from './utils';
 
 type NavObjectItemProps = {
   objectName: string;
@@ -32,7 +32,7 @@ function generateNavObjects(config: Config, hydratedRevision: HydratedRevision) 
       {
         name: object?.objectName,
         // object is completed if the key exists in the config
-        completed: !!config?.content?.read?.objects?.[object.objectName],
+        completed: !!getReadObject(config, object.objectName),
       },
     );
   });

@@ -6,7 +6,7 @@ import {
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useProject } from '../../context/ProjectContext';
 import {
-  Config, HydratedIntegrationAction, HydratedIntegrationField,
+  HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   Installation, Integration,
   IntegrationFieldMapping,
@@ -27,44 +27,6 @@ interface ReconfigureIntegrationProps {
   installation: Installation,
   integrationObj: Integration,
 }
-
-const dummyConfig2: Config = {
-  id: 'dummyConfig2',
-  revisionId: 'revisionId',
-  createTime: new Date(),
-  createdBy: 'createdBy',
-  content: {
-    api: 'salesforce',
-    read: {
-      schedule: '*/15 * * * *',
-      objects: {
-        account: {
-          objectName: 'account',
-          destination: 'accountWebhook',
-          selectedFields: {
-            name: true,
-            phone: true,
-          },
-          selectedFieldMappings: {
-            accountId: 'id',
-          },
-        },
-        contact: {
-          objectName: 'contact',
-          destination: 'contactWebhook',
-          selectedFields: {
-            fax: true,
-            name: true,
-          },
-          selectedFieldMappings: {
-            userId: 'Email',
-            accountId: 'AccountId',
-          },
-        },
-      },
-    },
-  },
-};
 
 const content = {
   reconfigureIntro: (
@@ -161,14 +123,12 @@ function ReconfigureIntegrationContent(
   const { project } = useProject();
   const appName = project?.appName || '';
 
-  // TODO: update config structure, currently using dummyConfig2 [ENG-251]
   const { config } = installation;
 
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision from installation revisionId (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const [configureState, setConfigureState] = useState<ConfigureState>(initialConfigureState);
-  console.log('config: ', { config, dummyConfig2, configureState });
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
@@ -178,7 +138,7 @@ function ReconfigureIntegrationContent(
         hydratedActions,
         PLACEHOLDER_VARS.OPERATION_TYPE,
         selectedObjectName,
-        dummyConfig2,
+        config,
       );
       setConfigureState(state);
     }
@@ -309,7 +269,7 @@ export function ReconfigureIntegration(
   { installation, integrationObj }: ReconfigureIntegrationProps,
 ) {
   return (
-    <ObjectManagementNav config={dummyConfig2}>
+    <ObjectManagementNav config={installation?.config}>
       <ReconfigureIntegrationContent installation={installation} integrationObj={integrationObj} />
     </ObjectManagementNav>
   );

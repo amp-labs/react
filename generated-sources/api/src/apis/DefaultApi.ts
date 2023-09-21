@@ -29,11 +29,10 @@ import type {
   Installation,
   Integration,
   OauthConnectRequest,
+  Operation,
   Project,
   ProjectMembership,
-  ProjectMembershipsList,
   ProviderApp,
-  ProviderAppsList,
   UpdateInstallationRequest,
   UpdateProjectRequest,
   UpdateProviderAppRequest,
@@ -67,16 +66,14 @@ import {
     IntegrationToJSON,
     OauthConnectRequestFromJSON,
     OauthConnectRequestToJSON,
+    OperationFromJSON,
+    OperationToJSON,
     ProjectFromJSON,
     ProjectToJSON,
     ProjectMembershipFromJSON,
     ProjectMembershipToJSON,
-    ProjectMembershipsListFromJSON,
-    ProjectMembershipsListToJSON,
     ProviderAppFromJSON,
     ProviderAppToJSON,
-    ProviderAppsListFromJSON,
-    ProviderAppsListToJSON,
     UpdateInstallationRequestFromJSON,
     UpdateInstallationRequestToJSON,
     UpdateProjectRequestFromJSON,
@@ -92,42 +89,42 @@ export interface BatchUpsertIntegrationsOperationRequest {
 
 export interface CreateConsumerOperationRequest {
     projectId: string;
-    consumer?: CreateConsumerRequest;
+    consumer: CreateConsumerRequest;
 }
 
 export interface CreateDestinationOperationRequest {
     projectId: string;
-    destination?: CreateDestinationRequest;
+    destination: CreateDestinationRequest;
 }
 
 export interface CreateGroupOperationRequest {
     projectId: string;
-    group?: CreateGroupRequest;
+    group: CreateGroupRequest;
 }
 
 export interface CreateInstallationOperationRequest {
     projectId: string;
     integrationId: string;
-    installation?: CreateInstallationRequest;
+    installation: CreateInstallationRequest;
 }
 
 export interface CreateIntegrationOperationRequest {
     projectId: string;
-    integration?: CreateIntegrationRequest;
+    integration: CreateIntegrationRequest;
 }
 
 export interface CreateProjectOperationRequest {
-    project?: CreateProjectRequest;
+    project: CreateProjectRequest;
 }
 
 export interface CreateProjectMembershipOperationRequest {
     projectId: string;
-    membership?: CreateProjectMembershipRequest;
+    membership: CreateProjectMembershipRequest;
 }
 
 export interface CreateProviderAppOperationRequest {
     projectId: string;
-    providerApp?: CreateProviderAppRequest;
+    providerApp: CreateProviderAppRequest;
 }
 
 export interface CreateRevisionRequest {
@@ -201,6 +198,12 @@ export interface ListIntegrationsRequest {
     projectId: string;
 }
 
+export interface ListOperationsRequest {
+    projectId: string;
+    integrationId: string;
+    installationId: string;
+}
+
 export interface ListProjectMembershipsRequest {
     projectId: string;
 }
@@ -210,7 +213,7 @@ export interface ListProviderAppsRequest {
 }
 
 export interface OauthConnectOperationRequest {
-    connectOAuthParams?: OauthConnectRequest;
+    connectOAuthParams: OauthConnectRequest;
 }
 
 export interface UpdateInstallationOperationRequest {
@@ -258,7 +261,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new consumer
      * @param {string} projectId 
-     * @param {CreateConsumerRequest} [consumer] 
+     * @param {CreateConsumerRequest} consumer 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -274,7 +277,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new destination
      * @param {string} projectId 
-     * @param {CreateDestinationRequest} [destination] 
+     * @param {CreateDestinationRequest} destination 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -290,7 +293,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new group
      * @param {string} projectId 
-     * @param {CreateGroupRequest} [group] 
+     * @param {CreateGroupRequest} group 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -307,7 +310,7 @@ export interface DefaultApiInterface {
      * @summary Create a new installation
      * @param {string} projectId 
      * @param {string} integrationId 
-     * @param {CreateInstallationRequest} [installation] 
+     * @param {CreateInstallationRequest} installation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -323,7 +326,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new integration
      * @param {string} projectId 
-     * @param {CreateIntegrationRequest} [integration] 
+     * @param {CreateIntegrationRequest} integration 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -338,7 +341,7 @@ export interface DefaultApiInterface {
     /**
      * 
      * @summary Create a new project
-     * @param {CreateProjectRequest} [project] 
+     * @param {CreateProjectRequest} project 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -354,7 +357,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new project membership
      * @param {string} projectId 
-     * @param {CreateProjectMembershipRequest} [membership] 
+     * @param {CreateProjectMembershipRequest} membership 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -370,7 +373,7 @@ export interface DefaultApiInterface {
      * 
      * @summary Create a new provider app
      * @param {string} projectId 
-     * @param {CreateProviderAppRequest} [providerApp] 
+     * @param {CreateProviderAppRequest} providerApp 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -550,12 +553,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listBuilderProjectMembershipsRaw(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembershipsList>>;
+    listBuilderProjectMembershipsRaw(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectMembership>>>;
 
     /**
      * List project memberships for a builder.
      */
-    listBuilderProjectMemberships(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembershipsList>;
+    listBuilderProjectMemberships(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectMembership>>;
 
     /**
      * 
@@ -609,18 +612,35 @@ export interface DefaultApiInterface {
 
     /**
      * 
+     * @summary List operations
+     * @param {string} projectId 
+     * @param {string} integrationId 
+     * @param {string} installationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Operation>>>;
+
+    /**
+     * List operations
+     */
+    listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Operation>>;
+
+    /**
+     * 
      * @summary List a project\'s memberships
      * @param {string} projectId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listProjectMembershipsRaw(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembershipsList>>;
+    listProjectMembershipsRaw(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectMembership>>>;
 
     /**
      * List a project\'s memberships
      */
-    listProjectMemberships(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembershipsList>;
+    listProjectMemberships(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectMembership>>;
 
     /**
      * 
@@ -630,12 +650,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    listProviderAppsRaw(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderAppsList>>;
+    listProviderAppsRaw(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProviderApp>>>;
 
     /**
      * List provider apps
      */
-    listProviderApps(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderAppsList>;
+    listProviderApps(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProviderApp>>;
 
     /**
      * 
@@ -654,7 +674,7 @@ export interface DefaultApiInterface {
     /**
      * 
      * @summary Generate a URL for the browser to render to kick off OAuth flow.
-     * @param {OauthConnectRequest} [connectOAuthParams] 
+     * @param {OauthConnectRequest} connectOAuthParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -807,6 +827,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createConsumer.');
         }
 
+        if (requestParameters.consumer === null || requestParameters.consumer === undefined) {
+            throw new runtime.RequiredError('consumer','Required parameter requestParameters.consumer was null or undefined when calling createConsumer.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -839,6 +863,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createDestination.');
         }
 
+        if (requestParameters.destination === null || requestParameters.destination === undefined) {
+            throw new runtime.RequiredError('destination','Required parameter requestParameters.destination was null or undefined when calling createDestination.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -869,6 +897,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     async createGroupRaw(requestParameters: CreateGroupOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createGroup.');
+        }
+
+        if (requestParameters.group === null || requestParameters.group === undefined) {
+            throw new runtime.RequiredError('group','Required parameter requestParameters.group was null or undefined when calling createGroup.');
         }
 
         const queryParameters: any = {};
@@ -907,6 +939,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling createInstallation.');
         }
 
+        if (requestParameters.installation === null || requestParameters.installation === undefined) {
+            throw new runtime.RequiredError('installation','Required parameter requestParameters.installation was null or undefined when calling createInstallation.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -939,6 +975,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createIntegration.');
         }
 
+        if (requestParameters.integration === null || requestParameters.integration === undefined) {
+            throw new runtime.RequiredError('integration','Required parameter requestParameters.integration was null or undefined when calling createIntegration.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -967,6 +1007,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      * Create a new project
      */
     async createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.project === null || requestParameters.project === undefined) {
+            throw new runtime.RequiredError('project','Required parameter requestParameters.project was null or undefined when calling createProject.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -987,7 +1031,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Create a new project
      */
-    async createProject(requestParameters: CreateProjectOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createProjectRaw(requestParameters, initOverrides);
     }
 
@@ -997,6 +1041,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     async createProjectMembershipRaw(requestParameters: CreateProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembership>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createProjectMembership.');
+        }
+
+        if (requestParameters.membership === null || requestParameters.membership === undefined) {
+            throw new runtime.RequiredError('membership','Required parameter requestParameters.membership was null or undefined when calling createProjectMembership.');
         }
 
         const queryParameters: any = {};
@@ -1030,6 +1078,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     async createProviderAppRaw(requestParameters: CreateProviderAppOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderApp>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createProviderApp.');
+        }
+
+        if (requestParameters.providerApp === null || requestParameters.providerApp === undefined) {
+            throw new runtime.RequiredError('providerApp','Required parameter requestParameters.providerApp was null or undefined when calling createProviderApp.');
         }
 
         const queryParameters: any = {};
@@ -1407,7 +1459,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List project memberships for a builder.
      */
-    async listBuilderProjectMembershipsRaw(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembershipsList>> {
+    async listBuilderProjectMembershipsRaw(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectMembership>>> {
         if (requestParameters.builderId === null || requestParameters.builderId === undefined) {
             throw new runtime.RequiredError('builderId','Required parameter requestParameters.builderId was null or undefined when calling listBuilderProjectMemberships.');
         }
@@ -1423,13 +1475,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectMembershipsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProjectMembershipFromJSON));
     }
 
     /**
      * List project memberships for a builder.
      */
-    async listBuilderProjectMemberships(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembershipsList> {
+    async listBuilderProjectMemberships(requestParameters: ListBuilderProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectMembership>> {
         const response = await this.listBuilderProjectMembershipsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1545,9 +1597,47 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * List operations
+     */
+    async listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Operation>>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperations.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling listOperations.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling listOperations.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}/operations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OperationFromJSON));
+    }
+
+    /**
+     * List operations
+     */
+    async listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Operation>> {
+        const response = await this.listOperationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List a project\'s memberships
      */
-    async listProjectMembershipsRaw(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembershipsList>> {
+    async listProjectMembershipsRaw(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectMembership>>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listProjectMemberships.');
         }
@@ -1563,13 +1653,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectMembershipsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProjectMembershipFromJSON));
     }
 
     /**
      * List a project\'s memberships
      */
-    async listProjectMemberships(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembershipsList> {
+    async listProjectMemberships(requestParameters: ListProjectMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectMembership>> {
         const response = await this.listProjectMembershipsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1577,7 +1667,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * List provider apps
      */
-    async listProviderAppsRaw(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderAppsList>> {
+    async listProviderAppsRaw(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProviderApp>>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listProviderApps.');
         }
@@ -1593,13 +1683,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderAppsListFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProviderAppFromJSON));
     }
 
     /**
      * List provider apps
      */
-    async listProviderApps(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderAppsList> {
+    async listProviderApps(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProviderApp>> {
         const response = await this.listProviderAppsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1633,6 +1723,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      * Generate a URL for the browser to render to kick off OAuth flow.
      */
     async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.connectOAuthParams === null || requestParameters.connectOAuthParams === undefined) {
+            throw new runtime.RequiredError('connectOAuthParams','Required parameter requestParameters.connectOAuthParams was null or undefined when calling oauthConnect.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1653,7 +1747,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Generate a URL for the browser to render to kick off OAuth flow.
      */
-    async oauthConnect(requestParameters: OauthConnectOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.oauthConnectRaw(requestParameters, initOverrides);
     }
 

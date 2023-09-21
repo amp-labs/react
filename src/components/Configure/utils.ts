@@ -72,10 +72,10 @@ export function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
   return object?.optionalFields || null;
 }
 
-const getReadObject = (
+export const getReadObject = (
   config: Config,
   objectName:string,
-) => config?.content?.read?.objects[objectName];
+) => config?.content?.read?.standardObjects[objectName];
 
 // 5. get value for field
 export function getValueFromConfigExist(config: Config, objectName: string, key: string): boolean {

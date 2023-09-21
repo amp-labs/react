@@ -24,13 +24,13 @@ export interface CreateProjectMembershipRequest {
      * @type {string}
      * @memberof CreateProjectMembershipRequest
      */
-    builderId?: string;
+    builderId: string;
     /**
      * The builder's role.
      * @type {string}
      * @memberof CreateProjectMembershipRequest
      */
-    role?: string;
+    role: string;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface CreateProjectMembershipRequest {
  */
 export function instanceOfCreateProjectMembershipRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "builderId" in value;
+    isInstance = isInstance && "role" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function CreateProjectMembershipRequestFromJSONTyped(json: any, ignoreDis
     }
     return {
         
-        'builderId': !exists(json, 'builderId') ? undefined : json['builderId'],
-        'role': !exists(json, 'role') ? undefined : json['role'],
+        'builderId': json['builderId'],
+        'role': json['role'],
     };
 }
 

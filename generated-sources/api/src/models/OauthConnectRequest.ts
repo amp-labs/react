@@ -24,37 +24,49 @@ export interface OauthConnectRequest {
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    providerWorkspaceRef?: string;
+    providerWorkspaceRef: string;
     /**
      * The project ID.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    projectId?: string;
+    projectId: string;
     /**
      * The group reference that will be used along with projectId as unique identifier.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    groupRef?: string;
+    groupRef: string;
+    /**
+     * The display name for the group.
+     * @type {string}
+     * @memberof OauthConnectRequest
+     */
+    groupName?: string;
     /**
      * The consumer reference.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    consumerRef?: string;
+    consumerRef: string;
+    /**
+     * The display name for the consumer.
+     * @type {string}
+     * @memberof OauthConnectRequest
+     */
+    consumerName?: string;
     /**
      * The provider app ID.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    providerAppId?: string;
+    providerAppId: string;
     /**
      * The provider that this app connects to.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    provider?: string;
+    provider: string;
 }
 
 /**
@@ -62,6 +74,12 @@ export interface OauthConnectRequest {
  */
 export function instanceOfOauthConnectRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "providerWorkspaceRef" in value;
+    isInstance = isInstance && "projectId" in value;
+    isInstance = isInstance && "groupRef" in value;
+    isInstance = isInstance && "consumerRef" in value;
+    isInstance = isInstance && "providerAppId" in value;
+    isInstance = isInstance && "provider" in value;
 
     return isInstance;
 }
@@ -76,12 +94,14 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
-        'projectId': !exists(json, 'projectId') ? undefined : json['projectId'],
-        'groupRef': !exists(json, 'groupRef') ? undefined : json['groupRef'],
-        'consumerRef': !exists(json, 'consumerRef') ? undefined : json['consumerRef'],
-        'providerAppId': !exists(json, 'providerAppId') ? undefined : json['providerAppId'],
-        'provider': !exists(json, 'provider') ? undefined : json['provider'],
+        'providerWorkspaceRef': json['providerWorkspaceRef'],
+        'projectId': json['projectId'],
+        'groupRef': json['groupRef'],
+        'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
+        'consumerRef': json['consumerRef'],
+        'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
+        'providerAppId': json['providerAppId'],
+        'provider': json['provider'],
     };
 }
 
@@ -97,7 +117,9 @@ export function OauthConnectRequestToJSON(value?: OauthConnectRequest | null): a
         'providerWorkspaceRef': value.providerWorkspaceRef,
         'projectId': value.projectId,
         'groupRef': value.groupRef,
+        'groupName': value.groupName,
         'consumerRef': value.consumerRef,
+        'consumerName': value.consumerName,
         'providerAppId': value.providerAppId,
         'provider': value.provider,
     };

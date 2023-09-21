@@ -59,7 +59,7 @@ export function InstallIntegration(
       projectId={projectId}
       integrationId={integrationObj?.id}
       revisionId={integrationObj?.latestRevision?.id}
-      connectionId={installation?.connectionId}
+      connectionId={installation?.connection?.id}
     >
       {content}
     </HydratedRevisionProvider>
