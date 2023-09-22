@@ -23,49 +23,48 @@ import {
 /**
  * 
  * @export
- * @interface ConfigContent
+ * @interface UpdateInstallationConfigContent
  */
-export interface ConfigContent {
+export interface UpdateInstallationConfigContent {
     /**
      * The SaaS API that we are integrating with.
      * @type {string}
-     * @memberof ConfigContent
+     * @memberof UpdateInstallationConfigContent
      */
-    api: string;
+    api?: string;
     /**
      * 
      * @type {BaseReadConfig}
-     * @memberof ConfigContent
+     * @memberof UpdateInstallationConfigContent
      */
     read?: BaseReadConfig;
 }
 
 /**
- * Check if a given object implements the ConfigContent interface.
+ * Check if a given object implements the UpdateInstallationConfigContent interface.
  */
-export function instanceOfConfigContent(value: object): boolean {
+export function instanceOfUpdateInstallationConfigContent(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "api" in value;
 
     return isInstance;
 }
 
-export function ConfigContentFromJSON(json: any): ConfigContent {
-    return ConfigContentFromJSONTyped(json, false);
+export function UpdateInstallationConfigContentFromJSON(json: any): UpdateInstallationConfigContent {
+    return UpdateInstallationConfigContentFromJSONTyped(json, false);
 }
 
-export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConfigContent {
+export function UpdateInstallationConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateInstallationConfigContent {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'api': json['api'],
+        'api': !exists(json, 'api') ? undefined : json['api'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
     };
 }
 
-export function ConfigContentToJSON(value?: ConfigContent | null): any {
+export function UpdateInstallationConfigContentToJSON(value?: UpdateInstallationConfigContent | null): any {
     if (value === undefined) {
         return undefined;
     }

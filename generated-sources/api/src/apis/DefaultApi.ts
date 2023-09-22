@@ -22,7 +22,6 @@ import type {
   CreateGroupRequest,
   CreateInstallationRequest,
   CreateIntegrationRequest,
-  CreateProjectMembershipRequest,
   CreateProjectRequest,
   CreateProviderAppRequest,
   HydratedRevision,
@@ -37,6 +36,7 @@ import type {
   UpdateInstallationRequest,
   UpdateProjectRequest,
   UpdateProviderAppRequest,
+  UpsertProjectMembershipRequest,
 } from '../models';
 import {
     BatchUpsertIntegrationsRequestFromJSON,
@@ -53,8 +53,6 @@ import {
     CreateInstallationRequestToJSON,
     CreateIntegrationRequestFromJSON,
     CreateIntegrationRequestToJSON,
-    CreateProjectMembershipRequestFromJSON,
-    CreateProjectMembershipRequestToJSON,
     CreateProjectRequestFromJSON,
     CreateProjectRequestToJSON,
     CreateProviderAppRequestFromJSON,
@@ -83,6 +81,8 @@ import {
     UpdateProjectRequestToJSON,
     UpdateProviderAppRequestFromJSON,
     UpdateProviderAppRequestToJSON,
+    UpsertProjectMembershipRequestFromJSON,
+    UpsertProjectMembershipRequestToJSON,
 } from '../models';
 
 export interface BatchUpsertIntegrationsOperationRequest {
@@ -118,11 +118,6 @@ export interface CreateIntegrationOperationRequest {
 
 export interface CreateProjectOperationRequest {
     project: CreateProjectRequest;
-}
-
-export interface CreateProjectMembershipOperationRequest {
-    projectId: string;
-    membership: CreateProjectMembershipRequest;
 }
 
 export interface CreateProviderAppOperationRequest {
@@ -243,6 +238,11 @@ export interface UpdateProviderAppOperationRequest {
     providerAppUpdate: UpdateProviderAppRequest;
 }
 
+export interface UpsertProjectMembershipOperationRequest {
+    projectId: string;
+    membership: UpsertProjectMembershipRequest;
+}
+
 /**
  * DefaultApi - interface
  * 
@@ -361,22 +361,6 @@ export interface DefaultApiInterface {
      * Create a new project
      */
     createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * 
-     * @summary Create a new project membership
-     * @param {string} projectId 
-     * @param {CreateProjectMembershipRequest} membership 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    createProjectMembershipRaw(requestParameters: CreateProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembership>>;
-
-    /**
-     * Create a new project membership
-     */
-    createProjectMembership(requestParameters: CreateProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembership>;
 
     /**
      * 
@@ -763,6 +747,22 @@ export interface DefaultApiInterface {
      */
     updateProviderApp(requestParameters: UpdateProviderAppOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderApp>;
 
+    /**
+     * 
+     * @summary Create or update a project membership
+     * @param {string} projectId 
+     * @param {UpsertProjectMembershipRequest} membership 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    upsertProjectMembershipRaw(requestParameters: UpsertProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembership>>;
+
+    /**
+     * Create or update a project membership
+     */
+    upsertProjectMembership(requestParameters: UpsertProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembership>;
+
 }
 
 /**
@@ -1018,43 +1018,6 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createProjectRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Create a new project membership
-     */
-    async createProjectMembershipRaw(requestParameters: CreateProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembership>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createProjectMembership.');
-        }
-
-        if (requestParameters.membership === null || requestParameters.membership === undefined) {
-            throw new runtime.RequiredError('membership','Required parameter requestParameters.membership was null or undefined when calling createProjectMembership.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/projects/{projectId}/memberships`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateProjectMembershipRequestToJSON(requestParameters.membership),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectMembershipFromJSON(jsonValue));
-    }
-
-    /**
-     * Create a new project membership
-     */
-    async createProjectMembership(requestParameters: CreateProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembership> {
-        const response = await this.createProjectMembershipRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -1902,6 +1865,43 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async updateProviderApp(requestParameters: UpdateProviderAppOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderApp> {
         const response = await this.updateProviderAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create or update a project membership
+     */
+    async upsertProjectMembershipRaw(requestParameters: UpsertProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectMembership>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling upsertProjectMembership.');
+        }
+
+        if (requestParameters.membership === null || requestParameters.membership === undefined) {
+            throw new runtime.RequiredError('membership','Required parameter requestParameters.membership was null or undefined when calling upsertProjectMembership.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/projects/{projectId}/memberships:upsert`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpsertProjectMembershipRequestToJSON(requestParameters.membership),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectMembershipFromJSON(jsonValue));
+    }
+
+    /**
+     * Create or update a project membership
+     */
+    async upsertProjectMembership(requestParameters: UpsertProjectMembershipOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectMembership> {
+        const response = await this.upsertProjectMembershipRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

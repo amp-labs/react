@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
-  Box, Checkbox, Select, Stack, Tag, Text,
+  Box, Button, Checkbox, Select, Stack, Tag, Text,
 } from '@chakra-ui/react';
 
+import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useProject } from '../../context/ProjectContext';
 import {
+  api,
+  Config,
   HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   Installation, Integration,
   IntegrationFieldMapping,
+  UpdateInstallationRequestInstallationConfig,
 } from '../../services/api';
 import { capitalize } from '../../utils';
 
@@ -106,6 +110,52 @@ function getConfigurationState(
   };
 }
 
+const generateConfigFromConfigureState = (
+  configureState: ConfigureState,
+  config: Config,
+  objectName: string,
+): UpdateInstallationRequestInstallationConfig => {
+  const {
+    requiredFields, optionalFields, requiredCustomMapFields,
+  } = configureState;
+
+  const fields = new Set<string>();
+  requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
+  optionalFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
+  // convert set to object for config
+  const selectedFields = Array.from(fields).reduce((acc, field) => ({
+    ...acc,
+    [field]: true,
+  }), {});
+
+  const requiredCustomMapFieldsConfig = (requiredCustomMapFields || []).reduce((acc, field) => {
+    const key = getFieldKeyValue(field);
+    return {
+      ...acc,
+      [key]: field.value,
+    };
+  }, {});
+
+  // config request object type needs to be fixed
+  const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
+    content: {
+      read: {
+        standardObjects: {
+          [objectName]: {
+            objectName,
+            schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
+            destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
+            selectedFields,
+            selectedFieldMappings: requiredCustomMapFieldsConfig,
+          },
+        },
+      },
+    },
+  };
+
+  return updateConfigObject;
+};
+
 const initialConfigureState: ConfigureState = {
   allFields: null,
   requiredFields: null,
@@ -119,8 +169,8 @@ function ReconfigureIntegrationContent(
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
-
-  const { project } = useProject();
+  const apiKey = useContext(ApiKeyContext);
+  const { project, projectId } = useProject();
   const appName = project?.appName || '';
 
   const { config } = installation;
@@ -178,29 +228,67 @@ function ReconfigureIntegrationContent(
     }
   };
 
+  const onSave = () => {
+    // get configuration state
+    const configurationStateCopy = configureState;
+    // transform configuration state to update shape
+    const newConfig = generateConfigFromConfigureState(
+      configurationStateCopy,
+      config,
+      selectedObjectName || '',
+    );
+
+    // call api.updateInstallation
+    api().updateInstallation({
+      projectId,
+      installationId: installation.id,
+      integrationId: integrationObj.id,
+      installationUpdate: {
+        updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
+        installation: {
+          config: newConfig,
+        },
+      },
+    }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+        'Content-Type': 'application/json',
+      },
+    }).then((data) => {
+      console.log('UPDATED INSTALLATION: ', data);
+    }).catch((err) => {
+      console.error('ERROR: ', err);
+    });
+  };
+
   return (
-    <Box
-      p={8}
-      width="600px"
-      minWidth="600px"
-      borderWidth={1}
-      borderRadius={8}
-      boxShadow="lg"
-      textAlign={['left']}
-      margin="auto"
-      marginTop="40px"
-      bgColor="white"
-    >
-      <Text marginBottom="20px">
-        {content.reconfigureIntro(
-          appName,
-          integrationObj.provider,
-          PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
-        )}
-      </Text>
-      {error && <div>{error}</div>}
-      {loading && <div>Loading...</div>}
-      {hydratedRevision && selectedObjectName && (
+    <Box>
+      <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
+        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
+        <Button backgroundColor="gray.200" color="blackAlpha.700" _hover={{ backgroundColor: 'gray.300' }}>Cancel</Button>
+      </Stack>
+      <Box
+        p={8}
+        width="600px"
+        minWidth="600px"
+        borderWidth={1}
+        borderRadius={8}
+        boxShadow="lg"
+        textAlign={['left']}
+        margin="auto"
+        // marginTop="40px"
+        bgColor="white"
+      >
+        <Text marginBottom="20px">
+          {content.reconfigureIntro(
+            appName,
+            integrationObj.provider,
+            PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
+          )}
+        </Text>
+        {error && <div>{error}</div>}
+        {loading && <div>Loading...</div>}
+        {hydratedRevision && selectedObjectName && (
         <>
           <Text marginBottom="5px">
             {content.reconfigureRequiredFields(appName, selectedObjectName)}
@@ -260,7 +348,8 @@ function ReconfigureIntegrationContent(
             })}
           </Stack>
         </>
-      )}
+        )}
+      </Box>
     </Box>
   );
 }

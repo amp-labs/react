@@ -33,6 +33,7 @@ export function ConfigureIntegrationBase({
     return <ErrorTextBoxPlaceholder />;
   }
 
+  // no installation, but a connection exists
   if (selectedConnection) {
     return (
       <div>
