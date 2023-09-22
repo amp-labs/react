@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ConfigContent } from './ConfigContent';
+import {
+    ConfigContentFromJSON,
+    ConfigContentFromJSONTyped,
+    ConfigContentToJSON,
+} from './ConfigContent';
+
 /**
  * The config of the installation.
  * @export
@@ -32,11 +39,11 @@ export interface CreateInstallationRequestConfig {
      */
     createdBy: string;
     /**
-     * The content of the config, as a JSON string.
-     * @type {string}
+     * 
+     * @type {ConfigContent}
      * @memberof CreateInstallationRequestConfig
      */
-    content: string;
+    content: ConfigContent;
 }
 
 /**
@@ -63,7 +70,7 @@ export function CreateInstallationRequestConfigFromJSONTyped(json: any, ignoreDi
         
         'revisionId': json['revisionId'],
         'createdBy': json['createdBy'],
-        'content': json['content'],
+        'content': ConfigContentFromJSON(json['content']),
     };
 }
 
@@ -78,7 +85,7 @@ export function CreateInstallationRequestConfigToJSON(value?: CreateInstallation
         
         'revisionId': value.revisionId,
         'createdBy': value.createdBy,
-        'content': value.content,
+        'content': ConfigContentToJSON(value.content),
     };
 }
 

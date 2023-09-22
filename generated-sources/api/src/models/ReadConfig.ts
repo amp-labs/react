@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { ObjectReadConfig } from './ObjectReadConfig';
+import type { ReadConfigStandardObject } from './ReadConfigStandardObject';
 import {
-    ObjectReadConfigFromJSON,
-    ObjectReadConfigFromJSONTyped,
-    ObjectReadConfigToJSON,
-} from './ObjectReadConfig';
+    ReadConfigStandardObjectFromJSON,
+    ReadConfigStandardObjectFromJSONTyped,
+    ReadConfigStandardObjectToJSON,
+} from './ReadConfigStandardObject';
 
 /**
  * 
@@ -34,10 +34,10 @@ export interface ReadConfig {
     schedule: string;
     /**
      * This is a map of object names to their configuration.
-     * @type {{ [key: string]: ObjectReadConfig; }}
+     * @type {{ [key: string]: ReadConfigStandardObject; }}
      * @memberof ReadConfig
      */
-    objects: { [key: string]: ObjectReadConfig; };
+    standardObjects: { [key: string]: ReadConfigStandardObject; };
 }
 
 /**
@@ -46,7 +46,7 @@ export interface ReadConfig {
 export function instanceOfReadConfig(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "schedule" in value;
-    isInstance = isInstance && "objects" in value;
+    isInstance = isInstance && "standardObjects" in value;
 
     return isInstance;
 }
@@ -62,7 +62,7 @@ export function ReadConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'schedule': json['schedule'],
-        'objects': (mapValues(json['objects'], ObjectReadConfigFromJSON)),
+        'standardObjects': (mapValues(json['standardObjects'], ReadConfigStandardObjectFromJSON)),
     };
 }
 
@@ -76,7 +76,7 @@ export function ReadConfigToJSON(value?: ReadConfig | null): any {
     return {
         
         'schedule': value.schedule,
-        'objects': (mapValues(value.objects, ObjectReadConfigToJSON)),
+        'standardObjects': (mapValues(value.standardObjects, ReadConfigStandardObjectToJSON)),
     };
 }
 

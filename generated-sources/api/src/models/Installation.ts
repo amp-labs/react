@@ -19,6 +19,12 @@ import {
     ConfigFromJSONTyped,
     ConfigToJSON,
 } from './Config';
+import type { Connection } from './Connection';
+import {
+    ConnectionFromJSON,
+    ConnectionFromJSONTyped,
+    ConnectionToJSON,
+} from './Connection';
 import type { Group } from './Group';
 import {
     GroupFromJSON,
@@ -63,11 +69,11 @@ export interface Installation {
      */
     healthStatus: string;
     /**
-     * The ID of the SaaS connection tied to this installation.
-     * @type {string}
+     * 
+     * @type {Connection}
      * @memberof Installation
      */
-    connectionId: string;
+    connection: Connection;
     /**
      * The time the integration was first installed.
      * @type {Date}
@@ -103,7 +109,7 @@ export function instanceOfInstallation(value: object): boolean {
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "integrationId" in value;
     isInstance = isInstance && "healthStatus" in value;
-    isInstance = isInstance && "connectionId" in value;
+    isInstance = isInstance && "connection" in value;
     isInstance = isInstance && "createTime" in value;
     isInstance = isInstance && "createdBy" in value;
     isInstance = isInstance && "config" in value;
@@ -126,7 +132,7 @@ export function InstallationFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'integrationId': json['integrationId'],
         'group': !exists(json, 'group') ? undefined : GroupFromJSON(json['group']),
         'healthStatus': json['healthStatus'],
-        'connectionId': json['connectionId'],
+        'connection': ConnectionFromJSON(json['connection']),
         'createTime': (new Date(json['createTime'])),
         'createdBy': json['createdBy'],
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
@@ -148,7 +154,7 @@ export function InstallationToJSON(value?: Installation | null): any {
         'integrationId': value.integrationId,
         'group': GroupToJSON(value.group),
         'healthStatus': value.healthStatus,
-        'connectionId': value.connectionId,
+        'connection': ConnectionToJSON(value.connection),
         'createTime': (value.createTime.toISOString()),
         'createdBy': value.createdBy,
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
