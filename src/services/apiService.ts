@@ -8,9 +8,26 @@ import { IntegrationConfig } from '../types/configTypes';
 
 const VERSION = 'v1';
 
-export const AMP_SERVER = process.env.REACT_APP_AMP_SERVER === 'local'
-  ? 'http://localhost:8080'
-  : 'https://api.withampersand.com';
+export function getApiEndpoint(): string {
+  switch (process.env.REACT_APP_AMP_SERVER) {
+    case 'local':
+      return 'http://localhost:8080';
+    case 'dev':
+      return 'dev-api.withampersand.com';
+    case 'staging':
+      return 'staging-api.withampersand.com';
+    case 'prod':
+      return 'https://api.withampersand.com';
+    case '':
+      return 'https://api.withampersand.com';
+    default:
+      // The user may provide an arbitrary URL here if they want to, or else the
+      // default prod url will be used.
+      return process.env.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
+  }
+}
+
+export const AMP_SERVER = getApiEndpoint();
 
 export const AMP_API_ROOT = `${AMP_SERVER}/${VERSION}`;
 
