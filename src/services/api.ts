@@ -11,7 +11,9 @@ import {
   Installation, Integration,
   IntegrationFieldMapping,
   Project,
-} from '../../generated-sources/api/src/index';
+} from '../../generated-sources/api/src';
+
+import { getApiEndpoint } from './apiService';
 
 /**
    * To update the api you need to
@@ -25,33 +27,13 @@ import {
    * based on the api.yaml swagger (open-api v2) spec
    *
    * */
-const PRISM_MOCK_URL = 'http://127.0.0.1:4010';
-
-const LOCAL_URL = 'http://localhost:8080';
-const DEV_URL = 'https:// dev-api.withampersand.com';
-const STAGING_URL = 'https://staging-api.withampersand.com';
-const PRODUCTION_URL = 'https://api.withampersand.com';
 const VERSION = 'v1';
 
 const getApiRoot = (server: string, version: string): string => `${server}/${version}`;
 
 // REACT_APP_AMP_SERVER=local npm start will use the local server
 function assignRoot(): string {
-  const env = process.env.REACT_APP_AMP_SERVER;
-  switch (env) {
-    case 'prod':
-      return getApiRoot(PRODUCTION_URL, VERSION);
-    case 'staging':
-      return getApiRoot(STAGING_URL, VERSION);
-    case 'dev':
-      return getApiRoot(DEV_URL, VERSION);
-    case 'local':
-      return getApiRoot(LOCAL_URL, VERSION);
-    case 'mock':
-      return PRISM_MOCK_URL;
-    default:
-      return getApiRoot(PRODUCTION_URL, VERSION);
-  }
+  return getApiRoot(getApiEndpoint(), VERSION);
 }
 
 export const AMP_API_ROOT = assignRoot();
