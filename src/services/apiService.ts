@@ -2,13 +2,14 @@
  * DEPRECATED: this file will be deleted as the generated SDK will be used instead.
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useContext } from 'react';
 import axios from 'axios';
 
-import { IntegrationConfig } from '../types/configTypes';
+import { ApiKeyContext } from '../context/ApiKeyContext';
 
 const VERSION = 'v1';
 
-export function getApiEndpoint(): string {
+function getApiEndpointImpl(): string {
   switch (process.env.REACT_APP_AMP_SERVER) {
     case 'local':
       return 'http://localhost:8080';
@@ -29,6 +30,13 @@ export function getApiEndpoint(): string {
   }
 }
 
+export function getApiEndpoint(): string {
+  const endpoint = getApiEndpointImpl();
+  console.log(`process.env.REACT_APP_AMP_SERVER: ${process.env.REACT_APP_AMP_SERVER}`);
+  console.log(`using ampersand endpoint: ${endpoint}`);
+  return endpoint;
+}
+
 export const AMP_SERVER = getApiEndpoint();
 
 export const AMP_API_ROOT = `${AMP_SERVER}/${VERSION}`;
@@ -45,6 +53,7 @@ export async function postConnectOAuth(
   subdomain: string,
   projectId: string,
 ) {
+  const apiKey = useContext(ApiKeyContext);
   return axios.post(CONNECT_OAUTH_URL, {
     providerWorkspaceRef: subdomain,
     provider: api,
@@ -57,6 +66,7 @@ export async function postConnectOAuth(
   }, {
     headers: {
       'Content-Type': 'application/json',
+      'X-Api-Key': apiKey ?? '',
     },
   });
 }
@@ -68,6 +78,7 @@ export async function postCreateConsumer(
   projectId: string,
   consumerName = 'Test Consumer', // test data
 ) {
+  const apiKey = useContext(ApiKeyContext);
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/consumers`;
   return axios.post(POST_CONSUMER_URL, {
     ConsumerRef: userId,
@@ -75,6 +86,7 @@ export async function postCreateConsumer(
   }, {
     headers: {
       'Content-Type': 'application/json',
+      'X-Api-Key': apiKey ?? '',
     },
   });
 }
@@ -87,6 +99,7 @@ export async function postCreateGroup(
   projectId: string,
   groupName = 'Test Group', // test data
 ) {
+  const apiKey = useContext(ApiKeyContext);
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/groups`;
   return axios.post(POST_CONSUMER_URL, {
     GroupRef: groupId,
@@ -94,41 +107,7 @@ export async function postCreateGroup(
   }, {
     headers: {
       'Content-Type': 'application/json',
+      'X-Api-Key': apiKey ?? '',
     },
   });
-}
-
-// /projects/{projectId}/connections
-/**
- * @deprecated The method should not be used
- */
-export async function getListConnections(
-  projectId: string,
-  consumerRef: string,
-  groupRef: string,
-  provider = 'salesforce',
-): Promise<IntegrationConfig> {
-  const LIST_CONNECTIONS_URL = `${AMP_API_ROOT}/projects/${projectId}/connections`;
-  return axios.get(LIST_CONNECTIONS_URL, {
-    params: {
-      provider,
-      groupRef,
-      consumerRef,
-    },
-  });
-  // TODO: rip out mock and make network call to return real configuration object
-  // return sampleIntegrationConfig;
-}
-
-/**
- * @deprecated The method should not be used
- */
-export async function postUserConfig(
-  userId: string,
-  groupId: string,
-  integrationName: string,
-  integrationConfig: IntegrationConfig,
-): Promise<void> {
-  // TODO: Replace stub with network call.
-  console.log(integrationConfig); // eslint-disable-line
 }

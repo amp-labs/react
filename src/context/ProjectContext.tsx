@@ -4,6 +4,8 @@ import {
 
 import { api, Project } from '../services/api';
 
+import { ApiKeyContext } from './ApiKeyContext';
+
 interface ProjectContextValue {
   project: Project | null;
   projectId: string | null;
@@ -33,9 +35,14 @@ export function ProjectProvider(
   { projectId, children }:ProjectProviderProps,
 ) {
   const [project, setProject] = useState<Project | null>(null);
+  const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.getProject({ projectId }).then((_project) => {
+    api.getProject({ projectId }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+      },
+    }).then((_project) => {
       setProject(_project);
     }).catch((err) => {
       console.error('ERROR: ', err);

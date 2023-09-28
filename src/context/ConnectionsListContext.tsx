@@ -7,6 +7,8 @@ import React, {
 
 import { api, Connection } from '../services/api';
 
+import { ApiKeyContext } from './ApiKeyContext';
+
 interface ConnectionsListContextValue {
   connections: Connection[] | null;
 }
@@ -39,15 +41,19 @@ export function ConnectionsListProvider({
   children,
 }: ConnectionsListProviderProps) {
   const [connections, setConnections] = useState<Connection[] | null>(null);
+  const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listConnections({ projectId, groupRef, provider })
-      .then((_connections) => {
-        console.log('CONNECTIONS: ', _connections);
-        setConnections(_connections);
-      }).catch((err) => {
-        console.error('ERROR: ', err);
-      });
+    api.listConnections({ projectId, groupRef, provider }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+      },
+    }).then((_connections) => {
+      console.log('CONNECTIONS: ', _connections);
+      setConnections(_connections);
+    }).catch((err) => {
+      console.error('ERROR: ', err);
+    });
   }, [projectId]);
 
   const contextValue = useMemo(() => ({

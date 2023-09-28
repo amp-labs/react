@@ -7,6 +7,7 @@
 
 import React, { createContext, useContext } from 'react';
 
+import { ApiKeyProvider } from '../../context/ApiKeyContext';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';
 import { ProviderConnectionProvider } from '../../context/ProviderConnectionContext';
@@ -21,23 +22,21 @@ interface AmpersandProviderProps {
   children: React.ReactNode
 }
 
-export const ApiKeyContext = createContext<string | null>(null);
-
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options: { apiKey, projectId }, children } = props;
 
   return (
-    <ProviderConnectionProvider>
-      <IntegrationListProvider projectId={projectId}>
-        <SubdomainProvider>
-          <ProjectProvider projectId={projectId}>
-            <ApiKeyContext.Provider value={apiKey}>
+    <ApiKeyProvider value={apiKey}>
+      <ProviderConnectionProvider>
+        <IntegrationListProvider projectId={projectId}>
+          <SubdomainProvider>
+            <ProjectProvider projectId={projectId}>
               { children }
-            </ApiKeyContext.Provider>
-          </ProjectProvider>
-        </SubdomainProvider>
-      </IntegrationListProvider>
-    </ProviderConnectionProvider>
+            </ProjectProvider>
+          </SubdomainProvider>
+        </IntegrationListProvider>
+      </ProviderConnectionProvider>
+    </ApiKeyProvider>
   );
 }
 

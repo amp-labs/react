@@ -27,12 +27,6 @@ import {
  */
 export interface ReadConfig {
     /**
-     * 
-     * @type {string}
-     * @memberof ReadConfig
-     */
-    schedule: string;
-    /**
      * This is a map of object names to their configuration.
      * @type {{ [key: string]: ReadConfigStandardObject; }}
      * @memberof ReadConfig
@@ -45,7 +39,6 @@ export interface ReadConfig {
  */
 export function instanceOfReadConfig(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "schedule" in value;
     isInstance = isInstance && "standardObjects" in value;
 
     return isInstance;
@@ -61,7 +54,6 @@ export function ReadConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'schedule': json['schedule'],
         'standardObjects': (mapValues(json['standardObjects'], ReadConfigStandardObjectFromJSON)),
     };
 }
@@ -75,7 +67,6 @@ export function ReadConfigToJSON(value?: ReadConfig | null): any {
     }
     return {
         
-        'schedule': value.schedule,
         'standardObjects': (mapValues(value.standardObjects, ReadConfigStandardObjectToJSON)),
     };
 }
