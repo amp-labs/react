@@ -9,7 +9,7 @@ import { ApiKeyContext } from '../context/ApiKeyContext';
 
 const VERSION = 'v1';
 
-function getApiEndpointImpl(): string {
+export function getApiEndpoint(): string {
   switch (process.env.REACT_APP_AMP_SERVER) {
     case 'local':
       return 'http://localhost:8080';
@@ -28,13 +28,6 @@ function getApiEndpointImpl(): string {
       // default prod url will be used.
       return process.env.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
   }
-}
-
-export function getApiEndpoint(): string {
-  const endpoint = getApiEndpointImpl();
-  console.log(`process.env.REACT_APP_AMP_SERVER: ${process.env.REACT_APP_AMP_SERVER}`);
-  console.log(`using ampersand endpoint: ${endpoint}`);
-  return endpoint;
 }
 
 export const AMP_SERVER = getApiEndpoint();
