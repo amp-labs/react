@@ -13,11 +13,13 @@ export function getApiEndpoint(): string {
     case 'local':
       return 'http://localhost:8080';
     case 'dev':
-      return 'dev-api.withampersand.com';
+      return 'https://dev-api.withampersand.com';
     case 'staging':
-      return 'staging-api.withampersand.com';
+      return 'https://staging-api.withampersand.com';
     case 'prod':
       return 'https://api.withampersand.com';
+    case 'mock':
+      return 'http://127.0.0.1:4010';
     case '':
       return 'https://api.withampersand.com';
     default:
