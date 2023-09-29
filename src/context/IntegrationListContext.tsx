@@ -5,6 +5,8 @@ import {
 
 import { api, Integration } from '../services/api';
 
+import { ApiKeyContext } from './ApiKeyContext';
+
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
 }
@@ -32,14 +34,19 @@ export function IntegrationListProvider(
   { projectId, children }: IntegrationListContextProviderProps,
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
+  const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listIntegrations({ projectId }).then((_integrations) => {
+    api.listIntegrations({ projectId }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+      },
+    }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
       console.error('ERROR: ', err);
     });
-  }, [projectId]);
+  }, [projectId, apiKey]);
 
   const contextValue = useMemo(() => ({
     integrations,

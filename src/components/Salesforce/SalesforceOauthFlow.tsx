@@ -5,13 +5,14 @@
  * that Salesforce instance.
  */
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
 
+import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
 import { postConnectOAuth, postCreateConsumer, postCreateGroup } from '../../services/apiService';
@@ -41,10 +42,15 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
 
 // temp hack that populates table db
 // upsert group + consumer (user)
-async function createConsumerAndGroup(projectId: string, userId: string, groupId: string) {
+async function createConsumerAndGroup(
+  projectId: string,
+  userId: string,
+  groupId: string,
+  apiKey: string | null,
+) {
   try {
-    await postCreateConsumer(userId, projectId);
-    await postCreateGroup(groupId, projectId);
+    await postCreateConsumer(userId, projectId, apiKey);
+    await postCreateGroup(groupId, projectId, apiKey);
   } catch (e) {
     console.debug('Error creating consumer and group:', e);
   }
@@ -65,10 +71,11 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
 
   const { setSubdomain } = useSubdomain();
   const { projectId } = useProject();
+  const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    if (projectId && userId && groupId) createConsumerAndGroup(projectId, userId, groupId);
-  }, [projectId]);
+    if (projectId && userId && groupId) createConsumerAndGroup(projectId, userId, groupId, apiKey);
+  }, [projectId, apiKey]);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);

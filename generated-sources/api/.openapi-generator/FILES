@@ -39,6 +39,7 @@ src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts
+src/models/OperationError.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts
 src/models/ProjectMembership.ts

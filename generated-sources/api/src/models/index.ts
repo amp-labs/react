@@ -34,6 +34,7 @@ export * from './IntegrationFieldMapping';
 export * from './IntegrationObject';
 export * from './OauthConnectRequest';
 export * from './Operation';
+export * from './OperationError';
 export * from './OptionalFieldsAutoOption';
 export * from './Project';
 export * from './ProjectMembership';

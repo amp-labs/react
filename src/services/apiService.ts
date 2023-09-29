@@ -2,9 +2,8 @@
  * DEPRECATED: this file will be deleted as the generated SDK will be used instead.
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useContext } from 'react';
 import axios from 'axios';
-
-import { IntegrationConfig } from '../types/configTypes';
 
 const VERSION = 'v1';
 
@@ -66,6 +65,7 @@ export async function postConnectOAuth(
 export async function postCreateConsumer(
   userId: string, // 'consumerRef:p0-c1' // seed data
   projectId: string,
+  apiKey: string | null = null,
   consumerName = 'Test Consumer', // test data
 ) {
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/consumers`;
@@ -75,6 +75,7 @@ export async function postCreateConsumer(
   }, {
     headers: {
       'Content-Type': 'application/json',
+      'X-Api-Key': apiKey ?? '',
     },
   });
 }
@@ -85,6 +86,7 @@ export async function postCreateConsumer(
 export async function postCreateGroup(
   groupId: string,
   projectId: string,
+  apiKey: string | null = null,
   groupName = 'Test Group', // test data
 ) {
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/groups`;
@@ -94,41 +96,7 @@ export async function postCreateGroup(
   }, {
     headers: {
       'Content-Type': 'application/json',
+      'X-Api-Key': apiKey ?? '',
     },
   });
-}
-
-// /projects/{projectId}/connections
-/**
- * @deprecated The method should not be used
- */
-export async function getListConnections(
-  projectId: string,
-  consumerRef: string,
-  groupRef: string,
-  provider = 'salesforce',
-): Promise<IntegrationConfig> {
-  const LIST_CONNECTIONS_URL = `${AMP_API_ROOT}/projects/${projectId}/connections`;
-  return axios.get(LIST_CONNECTIONS_URL, {
-    params: {
-      provider,
-      groupRef,
-      consumerRef,
-    },
-  });
-  // TODO: rip out mock and make network call to return real configuration object
-  // return sampleIntegrationConfig;
-}
-
-/**
- * @deprecated The method should not be used
- */
-export async function postUserConfig(
-  userId: string,
-  groupId: string,
-  integrationName: string,
-  integrationConfig: IntegrationConfig,
-): Promise<void> {
-  // TODO: Replace stub with network call.
-  console.log(integrationConfig); // eslint-disable-line
 }

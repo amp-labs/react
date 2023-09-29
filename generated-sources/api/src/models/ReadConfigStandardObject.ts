@@ -30,6 +30,12 @@ export interface ReadConfigStandardObject {
      * @type {string}
      * @memberof ReadConfigStandardObject
      */
+    schedule: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReadConfigStandardObject
+     */
     destination: string;
     /**
      * This is a map of field names to booleans indicating whether they should be read.
@@ -51,6 +57,7 @@ export interface ReadConfigStandardObject {
 export function instanceOfReadConfigStandardObject(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "objectName" in value;
+    isInstance = isInstance && "schedule" in value;
     isInstance = isInstance && "destination" in value;
     isInstance = isInstance && "selectedFields" in value;
     isInstance = isInstance && "selectedFieldMappings" in value;
@@ -69,6 +76,7 @@ export function ReadConfigStandardObjectFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'objectName': json['objectName'],
+        'schedule': json['schedule'],
         'destination': json['destination'],
         'selectedFields': json['selectedFields'],
         'selectedFieldMappings': json['selectedFieldMappings'],
@@ -85,6 +93,7 @@ export function ReadConfigStandardObjectToJSON(value?: ReadConfigStandardObject 
     return {
         
         'objectName': value.objectName,
+        'schedule': value.schedule,
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedFieldMappings': value.selectedFieldMappings,

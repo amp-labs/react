@@ -13,18 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { OperationError } from './OperationError';
+import {
+    OperationErrorFromJSON,
+    OperationErrorFromJSONTyped,
+    OperationErrorToJSON,
+} from './OperationError';
+
 /**
  * 
  * @export
  * @interface Operation
  */
 export interface Operation {
-    /**
-     * The operation ID.
-     * @type {string}
-     * @memberof Operation
-     */
-    id: string;
     /**
      * The Ampersand project ID.
      * @type {string}
@@ -49,6 +50,42 @@ export interface Operation {
      * @memberof Operation
      */
     installationId: string;
+    /**
+     * The time the operation was started.
+     * @type {Date}
+     * @memberof Operation
+     */
+    startTime?: Date;
+    /**
+     * The time the operation was completed.
+     * @type {Date}
+     * @memberof Operation
+     */
+    endTime?: Date;
+    /**
+     * The status of the operation.
+     * @type {string}
+     * @memberof Operation
+     */
+    status?: string;
+    /**
+     * The workflow reference.
+     * @type {string}
+     * @memberof Operation
+     */
+    workflowRef?: string;
+    /**
+     * The run reference.
+     * @type {string}
+     * @memberof Operation
+     */
+    runRef?: string;
+    /**
+     * The error history of the operation.
+     * @type {Array<OperationError>}
+     * @memberof Operation
+     */
+    errorHistory?: Array<OperationError>;
 }
 
 /**
@@ -56,7 +93,6 @@ export interface Operation {
  */
 export function instanceOfOperation(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "actionType" in value;
     isInstance = isInstance && "objectName" in value;
@@ -75,11 +111,16 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'id': json['id'],
         'projectId': json['projectId'],
         'actionType': json['actionType'],
         'objectName': json['objectName'],
         'installationId': json['installationId'],
+        'startTime': !exists(json, 'startTime') ? undefined : (new Date(json['startTime'])),
+        'endTime': !exists(json, 'endTime') ? undefined : (new Date(json['endTime'])),
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'workflowRef': !exists(json, 'workflowRef') ? undefined : json['workflowRef'],
+        'runRef': !exists(json, 'runRef') ? undefined : json['runRef'],
+        'errorHistory': !exists(json, 'errorHistory') ? undefined : ((json['errorHistory'] as Array<any>).map(OperationErrorFromJSON)),
     };
 }
 
@@ -92,11 +133,16 @@ export function OperationToJSON(value?: Operation | null): any {
     }
     return {
         
-        'id': value.id,
         'projectId': value.projectId,
         'actionType': value.actionType,
         'objectName': value.objectName,
         'installationId': value.installationId,
+        'startTime': value.startTime === undefined ? undefined : (value.startTime.toISOString()),
+        'endTime': value.endTime === undefined ? undefined : (value.endTime.toISOString()),
+        'status': value.status,
+        'workflowRef': value.workflowRef,
+        'runRef': value.runRef,
+        'errorHistory': value.errorHistory === undefined ? undefined : ((value.errorHistory as Array<any>).map(OperationErrorToJSON)),
     };
 }
 

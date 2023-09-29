@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
+import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { HydratedRevisionProvider } from '../../context/HydratedRevisionContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProject } from '../../context/ProjectContext';
@@ -28,16 +29,21 @@ export function InstallIntegration(
   const [installations, setInstallations] = useState<Installation[]>([]);
   const integrationObj = findIntegrationFromList(integration, integrations || []);
   const installation = installations?.[0] || null;
+  const apiKey = useContext(ApiKeyContext);
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
     if (projectId && integrationObj?.id) {
       // check if installation exists on selected integration
-      api.listInstallations({ projectId, integrationId: integrationObj.id, groupRef })
+      api.listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
+        headers: {
+          'X-Api-Key': apiKey ?? '',
+        },
+      })
         .then((_installations) => { setInstallations(_installations || []); })
         .catch((err) => { console.error('ERROR: ', err); });
     }
-  }, [projectId, integrationObj?.id]);
+  }, [projectId, integrationObj?.id, apiKey]);
 
   const content = installation && integrationObj ? (
   // if installation exists, render update integration flow
