@@ -46,7 +46,6 @@ export async function postConnectOAuth(
   subdomain: string,
   projectId: string,
 ) {
-  const apiKey = useContext(ApiKeyContext);
   return axios.post(CONNECT_OAUTH_URL, {
     providerWorkspaceRef: subdomain,
     provider: api,
@@ -59,7 +58,6 @@ export async function postConnectOAuth(
   }, {
     headers: {
       'Content-Type': 'application/json',
-      'X-Api-Key': apiKey ?? '',
     },
   });
 }
