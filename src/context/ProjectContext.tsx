@@ -47,7 +47,7 @@ export function ProjectProvider(
     }).catch((err) => {
       console.error('ERROR: ', err);
     });
-  }, [projectId]);
+  }, [projectId, apiKey]);
 
   const contextValue = useMemo(() => ({ projectId, project }), [projectId]);
 

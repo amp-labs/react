@@ -54,7 +54,7 @@ export function ConnectionsListProvider({
     }).catch((err) => {
       console.error('ERROR: ', err);
     });
-  }, [projectId]);
+  }, [projectId, apiKey]);
 
   const contextValue = useMemo(() => ({
     connections,

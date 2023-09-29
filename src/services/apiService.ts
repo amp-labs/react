@@ -5,8 +5,6 @@
 import { useContext } from 'react';
 import axios from 'axios';
 
-import { ApiKeyContext } from '../context/ApiKeyContext';
-
 const VERSION = 'v1';
 
 export function getApiEndpoint(): string {
@@ -67,9 +65,9 @@ export async function postConnectOAuth(
 export async function postCreateConsumer(
   userId: string, // 'consumerRef:p0-c1' // seed data
   projectId: string,
+  apiKey: string | null = null,
   consumerName = 'Test Consumer', // test data
 ) {
-  const apiKey = useContext(ApiKeyContext);
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/consumers`;
   return axios.post(POST_CONSUMER_URL, {
     ConsumerRef: userId,
@@ -88,9 +86,9 @@ export async function postCreateConsumer(
 export async function postCreateGroup(
   groupId: string,
   projectId: string,
+  apiKey: string | null = null,
   groupName = 'Test Group', // test data
 ) {
-  const apiKey = useContext(ApiKeyContext);
   const POST_CONSUMER_URL = `${AMP_API_ROOT}/projects/${projectId}/groups`;
   return axios.post(POST_CONSUMER_URL, {
     GroupRef: groupId,

@@ -46,7 +46,7 @@ export function IntegrationListProvider(
     }).catch((err) => {
       console.error('ERROR: ', err);
     });
-  }, [projectId]);
+  }, [projectId, apiKey]);
 
   const contextValue = useMemo(() => ({
     integrations,

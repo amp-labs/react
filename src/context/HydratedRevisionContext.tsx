@@ -72,7 +72,7 @@ export function HydratedRevisionProvider({
           setError(err.message || 'An error occurred while fetching data');
         });
     }
-  }, [projectId, integrationId, revisionId, connectionId]);
+  }, [projectId, integrationId, revisionId, connectionId, apiKey]);
 
   const contextValue = useMemo(() => ({
     hydratedRevision,

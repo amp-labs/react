@@ -43,7 +43,7 @@ export function InstallIntegration(
         .then((_installations) => { setInstallations(_installations || []); })
         .catch((err) => { console.error('ERROR: ', err); });
     }
-  }, [projectId, integrationObj?.id]);
+  }, [projectId, integrationObj?.id, apiKey]);
 
   const content = installation && integrationObj ? (
   // if installation exists, render update integration flow
