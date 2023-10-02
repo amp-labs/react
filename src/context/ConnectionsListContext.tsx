@@ -30,7 +30,7 @@ export const useConnectionsList = (): ConnectionsListContextValue => {
 type ConnectionsListProviderProps = {
   projectId: string;
   groupRef: string;
-  provider: string;
+  provider?: string;
   children?: React.ReactNode;
 };
 
@@ -44,17 +44,19 @@ export function ConnectionsListProvider({
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listConnections({ projectId, groupRef, provider }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
-    }).then((_connections) => {
-      console.log('CONNECTIONS: ', _connections);
-      setConnections(_connections);
-    }).catch((err) => {
-      console.error('ERROR: ', err);
-    });
-  }, [projectId, apiKey]);
+    if (groupRef) {
+      api.listConnections({ projectId, groupRef, provider }, {
+        headers: {
+          'X-Api-Key': apiKey ?? '',
+        },
+      }).then((_connections) => {
+        console.log('CONNECTIONS: ', _connections);
+        setConnections(_connections);
+      }).catch((err) => {
+        console.error('ERROR: ', err);
+      });
+    }
+  }, [projectId, apiKey, groupRef]);
 
   const contextValue = useMemo(() => ({
     connections,

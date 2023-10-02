@@ -1,5 +1,5 @@
+import { useConnectionsList } from '../../context/ConnectionsListContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
-import { useProviderConnection } from '../../context/ProviderConnectionContext';
 // import { useSubdomain } from '../../context/SubdomainProvider';
 import {
   IntegrationConfig,
@@ -23,7 +23,7 @@ interface ConfigureIntegrationBaseProps {
 export function ConfigureIntegrationBase({
   integration, userId, userName, groupId, groupName, userConfig,
 }: ConfigureIntegrationBaseProps) {
-  const { isConnectedToProvider } = useProviderConnection();
+  const { connections } = useConnectionsList();
   const { integrations } = useIntegrationList();
   // const { subdomain } = useSubdomain();
 
@@ -41,7 +41,7 @@ export function ConfigureIntegrationBase({
   const provider = integrationObj?.provider || '';
 
   //  TODO: isConnectedToProvider should be an API call
-  if (!isConnectedToProvider[provider]) {
+  if (connections && connections.length > 0) {
     // require user to login to Saleforce if no connection is established
     return (
       <SalesforceOauthFlow

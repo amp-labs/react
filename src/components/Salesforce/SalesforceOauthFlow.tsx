@@ -3,21 +3,21 @@
  * that Salesforce instance.
  */
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
+import { ProviderApp } from 'amp-labs-generated-rest-sdk/src/models/models';
+import { OauthConnectRequest } from 'amp-labs-generated-rest-sdk/src/models/OauthConnectRequest';
 
+import { PROVIDER_SALESFORCE } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
 import { api } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
-import { OauthConnectRequest } from '../../../generated-sources/api/src/models/OauthConnectRequest';
-import { ProviderApp } from '../../../generated-sources/api/src/models';
-import { PROVIDER_SALESFORCE } from '../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
@@ -51,7 +51,9 @@ interface SalesforceOauthFlowProps {
 /**
  * User input for Salesforce customerSubdomain.
  */
-function SalesforceOauthFlow({ userId, userName, groupId, groupName }: SalesforceOauthFlowProps) {
+function SalesforceOauthFlow({
+  userId, userName, groupId, groupName,
+}: SalesforceOauthFlowProps) {
   const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -67,34 +69,34 @@ function SalesforceOauthFlow({ userId, userName, groupId, groupName }: Salesforc
     if (customerSubdomain && projectId) {
       try {
         const providerApps = await api.listProviderApps({
-          projectId: projectId,
+          projectId,
         }, {
           headers: {
             'X-Api-Key': apiKey ?? '',
-          }
-        })
-        const app = providerApps.find((app: ProviderApp) => app.provider === PROVIDER_SALESFORCE)
+          },
+        });
+        const app = providerApps.find((a: ProviderApp) => a.provider === PROVIDER_SALESFORCE);
 
         if (!app) {
-          throw new Error("You must first set up a Salesforce Connected App using the Ampersand Console.")
+          throw new Error('You must first set up a Salesforce Connected App using the Ampersand Console.');
         }
 
         const params: OauthConnectRequest = {
           providerWorkspaceRef: customerSubdomain,
-          projectId: projectId,
+          projectId,
           groupRef: groupId,
-          groupName: groupName,
+          groupName,
           consumerRef: userId,
           consumerName: userName,
           providerAppId: app.id,
           provider: PROVIDER_SALESFORCE,
-        }
-        const res = await api.oauthConnect({connectOAuthParams: params})
+        };
+        const res = await api.oauthConnect({ connectOAuthParams: params });
         const url = res.data;
         setOAuthCallbackURL(url);
       } catch (err: any) {
-        console.error(err)
-        setError(err.message ?? "Unexpected error");
+        console.error(err);
+        setError(err.message ?? 'Unexpected error');
       }
     }
   };
