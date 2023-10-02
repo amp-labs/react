@@ -13,13 +13,15 @@ import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
 interface ConfigureIntegrationBaseProps {
   integration: string, // integrationName
   userId: string,
+  userName?: string,
   groupId: string,
+  groupName?: string,
   userConfig?: IntegrationConfig,
 }
 
 // Base component for configuring and reconfiguring an integration.
 export function ConfigureIntegrationBase({
-  integration, userId, groupId, userConfig,
+  integration, userId, userName, groupId, groupName, userConfig,
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
   const { integrations } = useIntegrationList();
@@ -44,7 +46,9 @@ export function ConfigureIntegrationBase({
     return (
       <SalesforceOauthFlow
         userId={userId}
+        userName={userName}
         groupId={groupId}
+        groupName={groupName}
       />
     );
   }

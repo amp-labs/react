@@ -1,6 +1,4 @@
 /**
- * SalesforceSubdomainEntry.tsx
- *
  * Prompts customer to input their Salesforce subdomain, then creates an OAuth connection to
  * that Salesforce instance.
  */
@@ -15,8 +13,11 @@ import {
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
-import { postConnectOAuth, postCreateConsumer, postCreateGroup } from '../../services/apiService';
+import { api } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
+import { OauthConnectRequest } from '../../../generated-sources/api/src/models/OauthConnectRequest';
+import { ProviderApp } from '../../../generated-sources/api/src/models';
+import { PROVIDER_SALESFORCE } from '../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const salesforceLogo = require('../../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
@@ -40,31 +41,17 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
   return null;
 }
 
-// temp hack that populates table db
-// upsert group + consumer (user)
-async function createConsumerAndGroup(
-  projectId: string,
-  userId: string,
-  groupId: string,
-  apiKey: string | null,
-) {
-  try {
-    await postCreateConsumer(userId, projectId, apiKey);
-    await postCreateGroup(groupId, projectId, apiKey);
-  } catch (e) {
-    console.debug('Error creating consumer and group:', e);
-  }
-}
-
 interface SalesforceOauthFlowProps {
   userId: string;
+  userName?: string;
   groupId: string;
+  groupName?: string;
 }
 
 /**
  * User input for Salesforce customerSubdomain.
  */
-function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
+function SalesforceOauthFlow({ userId, userName, groupId, groupName }: SalesforceOauthFlowProps) {
   const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -73,21 +60,41 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useContext(ApiKeyContext);
 
-  useEffect(() => {
-    if (projectId && userId && groupId) createConsumerAndGroup(projectId, userId, groupId, apiKey);
-  }, [projectId, apiKey]);
-
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
     setError(null);
 
     if (customerSubdomain && projectId) {
       try {
-        const res = await postConnectOAuth(userId, groupId, 'salesforce', customerSubdomain, projectId);
+        const providerApps = await api.listProviderApps({
+          projectId: projectId,
+        }, {
+          headers: {
+            'X-Api-Key': apiKey ?? '',
+          }
+        })
+        const app = providerApps.find((app: ProviderApp) => app.provider === PROVIDER_SALESFORCE)
+
+        if (!app) {
+          throw new Error("You must first set up a Salesforce Connected App using the Ampersand Console.")
+        }
+
+        const params: OauthConnectRequest = {
+          providerWorkspaceRef: customerSubdomain,
+          projectId: projectId,
+          groupRef: groupId,
+          groupName: groupName,
+          consumerRef: userId,
+          consumerName: userName,
+          providerAppId: app.id,
+          provider: PROVIDER_SALESFORCE,
+        }
+        const res = await api.oauthConnect({connectOAuthParams: params})
         const url = res.data;
         setOAuthCallbackURL(url);
       } catch (err: any) {
-        setError(err.message);
+        console.error(err)
+        setError(err.message ?? "Unexpected error");
       }
     }
   };
