@@ -16,7 +16,7 @@ import { PROVIDER_SALESFORCE } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
-import { api } from '../../services/api';
+import { api, ProviderApp } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -42,9 +42,9 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
 }
 
 interface SalesforceOauthFlowProps {
-  userId: string;
-  userName?: string;
-  groupId: string;
+  consumerRef: string;
+  consumerName?: string;
+  groupRef: string;
   groupName?: string;
 }
 
@@ -52,7 +52,7 @@ interface SalesforceOauthFlowProps {
  * User input for Salesforce customerSubdomain.
  */
 function SalesforceOauthFlow({
-  userId, userName, groupId, groupName,
+  consumerRef, consumerName, groupRef, groupName,
 }: SalesforceOauthFlowProps) {
   const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
@@ -81,18 +81,19 @@ function SalesforceOauthFlow({
           throw new Error('You must first set up a Salesforce Connected App using the Ampersand Console.');
         }
 
-        const params: OauthConnectRequest = {
-          providerWorkspaceRef: customerSubdomain,
-          projectId,
-          groupRef: groupId,
-          groupName,
-          consumerRef: userId,
-          consumerName: userName,
-          providerAppId: app.id,
-          provider: PROVIDER_SALESFORCE,
-        };
-        const res = await api.oauthConnect({ connectOAuthParams: params });
-        const url = res.data;
+        const url = await api.oauthConnect({
+          connectOAuthParams: {
+            providerWorkspaceRef: customerSubdomain,
+            projectId,
+            groupRef,
+            groupName,
+            consumerRef,
+            consumerName,
+            providerAppId: app.id,
+            provider: PROVIDER_SALESFORCE,
+          },
+        });
+
         setOAuthCallbackURL(url);
       } catch (err: any) {
         console.error(err);
