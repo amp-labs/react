@@ -679,12 +679,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
      * Generate a URL for the browser to render to kick off OAuth flow.
      */
-    oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
      * 
@@ -1722,7 +1722,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Generate a URL for the browser to render to kick off OAuth flow.
      */
-    async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         if (requestParameters.connectOAuthParams === null || requestParameters.connectOAuthParams === undefined) {
             throw new runtime.RequiredError('connectOAuthParams','Required parameter requestParameters.connectOAuthParams was null or undefined when calling oauthConnect.');
         }
@@ -1741,14 +1741,19 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             body: OauthConnectRequestToJSON(requestParameters.connectOAuthParams),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Generate a URL for the browser to render to kick off OAuth flow.
      */
-    async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.oauthConnectRaw(requestParameters, initOverrides);
+    async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.oauthConnectRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

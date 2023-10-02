@@ -7,6 +7,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
+import { AMP_SERVER } from '../../services/api';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px

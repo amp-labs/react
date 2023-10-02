@@ -38,7 +38,7 @@ export interface OauthConnectRequest {
      */
     groupRef: string;
     /**
-     * The display name for the group.
+     * The display name for the group. Defaults to groupRef if not provided.
      * @type {string}
      * @memberof OauthConnectRequest
      */
@@ -50,7 +50,7 @@ export interface OauthConnectRequest {
      */
     consumerRef: string;
     /**
-     * The display name for the consumer.
+     * The display name for the consumer. Defaults to consumerRef if not provided.
      * @type {string}
      * @memberof OauthConnectRequest
      */

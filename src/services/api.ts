@@ -11,6 +11,7 @@ import {
   Installation, Integration,
   IntegrationFieldMapping,
   Project,
+  ProviderApp,
 } from '../../generated-sources/api/src';
 
 /**
@@ -87,4 +88,5 @@ export type {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
   Project,
+  ProviderApp,
 };

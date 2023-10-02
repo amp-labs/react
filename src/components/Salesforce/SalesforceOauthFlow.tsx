@@ -9,14 +9,12 @@ import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
-import { ProviderApp } from 'amp-labs-generated-rest-sdk/src/models/models';
-import { OauthConnectRequest } from 'amp-labs-generated-rest-sdk/src/models/OauthConnectRequest';
 
 import { PROVIDER_SALESFORCE } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
 import { useSubdomain } from '../../context/SubdomainProvider';
-import { api } from '../../services/api';
+import { api, ProviderApp } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -81,18 +79,19 @@ function SalesforceOauthFlow({
           throw new Error('You must first set up a Salesforce Connected App using the Ampersand Console.');
         }
 
-        const params: OauthConnectRequest = {
-          providerWorkspaceRef: customerSubdomain,
-          projectId,
-          groupRef: groupId,
-          groupName,
-          consumerRef: userId,
-          consumerName: userName,
-          providerAppId: app.id,
-          provider: PROVIDER_SALESFORCE,
-        };
-        const res = await api.oauthConnect({ connectOAuthParams: params });
-        const url = res.data;
+        const url = await api.oauthConnect({
+          connectOAuthParams: {
+            providerWorkspaceRef: customerSubdomain,
+            projectId,
+            groupRef: groupId,
+            groupName,
+            consumerRef: userId,
+            consumerName: userName,
+            providerAppId: app.id,
+            provider: PROVIDER_SALESFORCE,
+          },
+        });
+
         setOAuthCallbackURL(url);
       } catch (err: any) {
         console.error(err);
