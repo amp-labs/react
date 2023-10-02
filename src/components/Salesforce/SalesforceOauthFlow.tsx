@@ -3,7 +3,7 @@
  * that Salesforce instance.
  */
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
@@ -40,9 +40,9 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
 }
 
 interface SalesforceOauthFlowProps {
-  userId: string;
-  userName?: string;
-  groupId: string;
+  consumerRef: string;
+  consumerName?: string;
+  groupRef: string;
   groupName?: string;
 }
 
@@ -50,7 +50,7 @@ interface SalesforceOauthFlowProps {
  * User input for Salesforce customerSubdomain.
  */
 function SalesforceOauthFlow({
-  userId, userName, groupId, groupName,
+  consumerRef, consumerName, groupRef, groupName,
 }: SalesforceOauthFlowProps) {
   const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
@@ -83,10 +83,10 @@ function SalesforceOauthFlow({
           connectOAuthParams: {
             providerWorkspaceRef: customerSubdomain,
             projectId,
-            groupRef: groupId,
+            groupRef,
             groupName,
-            consumerRef: userId,
-            consumerName: userName,
+            consumerRef,
+            consumerName,
             providerAppId: app.id,
             provider: PROVIDER_SALESFORCE,
           },
