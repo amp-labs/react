@@ -5,13 +5,14 @@
  */
 
 import React, {
+  useCallback,
   useContext, useEffect, useRef, useState,
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnectionsList } from '../../context/ConnectionsListContext';
 import { useProjectId } from '../../context/ProjectContext';
-import { AMP_SERVER, api, Connection } from '../../services/api';
+import { AMP_SERVER, api } from '../../services/api';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -63,6 +64,15 @@ function OAuthPopup({
     if (url) setExternalWindow(createPopup({ url, title }));
   }, [url, title]);
 
+  const refreshConnections = useCallback(async (connectionId: string) => {
+    const connection = await api.getConnection({ projectId, connectionId }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+      },
+    });
+    setConnections([connection]);
+  }, [projectId, apiKey, setConnections]);
+
   useEffect(() => {
     window.addEventListener('message', (event) => {
       if (event.origin === AMP_SERVER) {
@@ -76,7 +86,7 @@ function OAuthPopup({
             );
             onClose('There is an unexpected server issue.');
           } else {
-            refreshConnectionsList(projectId, connectionId, setConnections, apiKey);
+            refreshConnections(connectionId);
             onClose(null);
           }
           if (externalWindow) externalWindow.close();
@@ -87,7 +97,7 @@ function OAuthPopup({
         }
       }
     });
-  }, [externalWindow, onClose, apiKey, projectId]);
+  }, [externalWindow, onClose, refreshConnections]);
 
   useEffect(() => {
     if (externalWindow && !intervalRef.current) {
@@ -104,15 +114,6 @@ function OAuthPopup({
   return (
     <div>{ children }</div>
   );
-}
-
-async function refreshConnectionsList(projectId: string, connectionId: string, setConnections: (connections: Connection[] | null) => void, apiKey: string | null) {
-  const connection = await api.getConnection({ projectId, connectionId }, {
-    headers: {
-      'X-Api-Key': apiKey ?? '',
-    },
-  });
-  setConnections([connection]);
 }
 
 export default OAuthPopup;

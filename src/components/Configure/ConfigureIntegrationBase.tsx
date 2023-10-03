@@ -46,19 +46,9 @@ export function ConfigureIntegrationBase({
   }
   const connection = connections[0];
   return (
-    <div>SetUpRead with Connection ID {connection.id} and workspaceRef {connection.providerWorkspaceRef}</div>
-
-  // TODO: update SetupRead to use hydrated revision
-  // <SetUpRead
-  //   integration={integration}
-  //   source={integrationObj}
-  //   subdomain={subdomain}
-  //   appName={appName}
-  //   userConfig={userConfig}
-  //   api={provider}
-  //   userId={userId}
-  //   groupId={groupId}
-  //   redirectUrl={redirectUrl}
-  // />
+    <div>
+      'SetUpRead with Connection ID {connection.id} and
+      workspaceRef {connection.providerWorkspaceRef}
+    </div>
   );
 }
