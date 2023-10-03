@@ -15,9 +15,9 @@ import { ReconfigureIntegration } from './ReconfigureIntegration';
 interface InstallIntegrationProps {
   integration: string, // integration name
   consumerRef: string,
-  consumerName: string,
+  consumerName?: string,
   groupRef: string,
-  groupName: string,
+  groupName?: string,
 }
 
 // TODO consider creating an integration obj context
@@ -61,8 +61,10 @@ export function InstallIntegration(
     // no installation, render create integration flow
     <ConfigureIntegrationBase
       integration={integration}
-      userId={consumerRef}
-      groupId={groupRef}
+      consumerRef={consumerRef}
+      consumerName={consumerName}
+      groupRef={groupRef}
+      groupName={groupName}
       integrationObj={integrationObj}
     />
   );

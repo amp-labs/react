@@ -11,9 +11,8 @@ import {
   Installation, Integration,
   IntegrationFieldMapping,
   Project,
+  ProviderApp,
 } from '../../generated-sources/api/src';
-
-import { getApiEndpoint } from './apiService';
 
 /**
    * To update the api you need to
@@ -29,6 +28,27 @@ import { getApiEndpoint } from './apiService';
    * */
 const VERSION = 'v1';
 
+function getApiEndpoint(): string {
+  switch (process.env.REACT_APP_AMP_SERVER) {
+    case 'local':
+      return 'http://localhost:8080';
+    case 'dev':
+      return 'https://dev-api.withampersand.com';
+    case 'staging':
+      return 'https://staging-api.withampersand.com';
+    case 'prod':
+      return 'https://api.withampersand.com';
+    case 'mock':
+      return 'http://127.0.0.1:4010';
+    case '':
+      return 'https://api.withampersand.com';
+    default:
+      // The user may provide an arbitrary URL here if they want to, or else the
+      // default prod url will be used.
+      return process.env.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
+  }
+}
+
 const getApiRoot = (server: string, version: string): string => `${server}/${version}`;
 
 // REACT_APP_AMP_SERVER=local npm start will use the local server
@@ -36,6 +56,7 @@ function assignRoot(): string {
   return getApiRoot(getApiEndpoint(), VERSION);
 }
 
+export const AMP_SERVER = getApiEndpoint();
 export const AMP_API_ROOT = assignRoot();
 
 /**
@@ -67,4 +88,5 @@ export type {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
   Project,
+  ProviderApp,
 };
