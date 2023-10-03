@@ -30,8 +30,8 @@
     "prepbuild": "npm run clean && npm run assets",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
-    "lint": "eslint --ext .ts,.tsx src/ --fix",
-    "lint:dry": "eslint --ext .ts,.tsx src/",
+    "lint": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/ --fix",
+    "lint:dry": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/",
     "generate-api": "openapi-generator-cli generate -i ../server/openapi/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true"
   },
   "repository": {
