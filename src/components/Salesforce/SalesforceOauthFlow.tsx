@@ -5,7 +5,9 @@
  * that Salesforce instance.
  */
 
-import { useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
@@ -75,7 +77,7 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
 
   useEffect(() => {
     if (projectId && userId && groupId) createConsumerAndGroup(projectId, userId, groupId, apiKey);
-  }, [projectId, apiKey]);
+  }, [projectId, apiKey, groupId, userId]);
 
   const handleSubmit = async () => {
     setSubdomain(customerSubdomain);
@@ -91,6 +93,11 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
       }
     }
   };
+
+  const onClose = useCallback((err: string | null) => {
+    setError(err);
+    setOAuthCallbackURL(null);
+  }, []);
 
   const SubdomainEntry = (
     <Container>
@@ -138,10 +145,7 @@ function SalesforceOauthFlow({ userId, groupId }: SalesforceOauthFlowProps) {
     <OAuthPopup
       title="Connect to Salesforce"
       url={oAuthCallbackURL}
-      onClose={(err: string | null) => {
-        setError(err);
-        setOAuthCallbackURL(null);
-      }}
+      onClose={onClose}
     >
       { SubdomainEntry }
     </OAuthPopup>

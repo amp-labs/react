@@ -1,10 +1,10 @@
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProviderConnection } from '../../context/ProviderConnectionContext';
+import { Integration } from '../../services/api';
 // import { useSubdomain } from '../../context/SubdomainProvider';
 import {
   IntegrationConfig,
 } from '../../types/configTypes';
-import { findIntegrationFromList } from '../../utils';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
@@ -14,12 +14,13 @@ interface ConfigureIntegrationBaseProps {
   integration: string, // integrationName
   userId: string,
   groupId: string,
+  integrationObj: Integration | null,
   userConfig?: IntegrationConfig,
 }
 
 // Base component for configuring and reconfiguring an integration.
 export function ConfigureIntegrationBase({
-  integration, userId, groupId, userConfig,
+  integration, userId, groupId, integrationObj, userConfig,
 }: ConfigureIntegrationBaseProps) {
   const { isConnectedToProvider } = useProviderConnection();
   const { integrations } = useIntegrationList();
@@ -28,8 +29,6 @@ export function ConfigureIntegrationBase({
   if (!integrations || !integrations.length || !integration) {
     return <ErrorTextBoxPlaceholder />;
   }
-
-  const integrationObj = findIntegrationFromList(integration, integrations);
 
   if (!integrationObj) {
     return <ErrorTextBoxPlaceholder />;
