@@ -25,7 +25,6 @@ export function ConfigureIntegrationBase({
 }: ConfigureIntegrationBaseProps) {
   const { connections } = useConnectionsList();
   const { integrations } = useIntegrationList();
-  // const { subdomain } = useSubdomain();
 
   if (!integrations || !integrations.length || !integration) {
     return <ErrorTextBoxPlaceholder />;
@@ -37,11 +36,7 @@ export function ConfigureIntegrationBase({
     return <ErrorTextBoxPlaceholder />;
   }
 
-  // const appName = integrationObj?.name || '';
-  const provider = integrationObj?.provider || '';
-
-  //  TODO: isConnectedToProvider should be an API call
-  if (connections && connections.length > 0) {
+  if (!connections || connections.length === 0) {
     // require user to login to Saleforce if no connection is established
     return (
       <SalesforceOauthFlow
@@ -52,9 +47,9 @@ export function ConfigureIntegrationBase({
       />
     );
   }
-
+  const connection = connections[0];
   return (
-    <div>SetUpRead</div>
+    <div>SetUpRead with Connection ID {connection.id} and workspaceRef {connection.providerWorkspaceRef}</div>
 
   // TODO: update SetupRead to use hydrated revision
   // <SetUpRead

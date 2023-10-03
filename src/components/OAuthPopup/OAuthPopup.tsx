@@ -4,9 +4,12 @@
  * Takes a URL and creates a popup showing that page.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { AMP_SERVER } from '../../services/api';
+import { AMP_SERVER, Connection, api } from '../../services/api';
+import { useConnectionsList } from '../../context/ConnectionsListContext';
+import { useProjectId } from '../../context/ProjectContext';
+import { ApiKeyContext } from '../../context/ApiKeyContext';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -47,10 +50,12 @@ function OAuthPopup({
   onClose,
 }: PopupProps) {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
-  const { setIsConnectedToProvider } = useProviderConnection();
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
+  const { setConnections } = useConnectionsList();
+  const projectId  = useProjectId();
+  const apiKey  = useContext(ApiKeyContext);
 
   useEffect(() => {
     if (url) setExternalWindow(createPopup({ url, title }));
@@ -62,19 +67,25 @@ function OAuthPopup({
         //  this event come from our own server
         if (event.data?.eventType === SUCCESS_EVENT) {
           clearTimer();
-          setIsConnectedToProvider({ salesforce: true });
-          console.log('The connection ID is', event.data.data?.connection);
-          onClose(null);
+          const connectionId = event.data.data?.connection;
+          if (!connectionId) {
+            console.error(
+              'Ampersand server returned a successful authorization event, but did not return a connection ID.'
+            )
+            onClose('There is an unexpected server issue.');
+          } else {
+            refreshConnectionsList(projectId, connectionId, setConnections, apiKey);
+            onClose(null);
+          }
           if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
-          setIsConnectedToProvider({ salesforce: false });
           onClose(event.data.data?.message ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
           if (externalWindow) externalWindow.close();
         }
       }
     });
-  }, []);
+  }, [projectId, apiKey]);
 
   useEffect(() => {
     if (externalWindow && !intervalRef.current) {
@@ -91,6 +102,15 @@ function OAuthPopup({
   return (
     <div>{ children }</div>
   );
+}
+
+async function refreshConnectionsList(projectId: string, connectionId: string, setConnections: (connections: Connection[] | null) => void, apiKey: string | null) {
+  const connection = await api.getConnection({ projectId, connectionId }, {
+    headers: {
+      'X-Api-Key': apiKey ?? '',
+    },
+  });
+  setConnections([connection]);
 }
 
 export default OAuthPopup;

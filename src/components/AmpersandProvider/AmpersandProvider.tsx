@@ -26,7 +26,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
 
   return (
     <ApiKeyProvider value={apiKey}>
-      <IntegrationListProvider projconectId={projectId}>
+      <IntegrationListProvider projectId={projectId}>
         <SubdomainProvider>
           <ProjectProvider projectId={projectId}>
             { children }

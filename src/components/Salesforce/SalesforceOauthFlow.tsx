@@ -9,8 +9,6 @@ import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
   FormLabel, Heading, Image, Input, Link, Text,
 } from '@chakra-ui/react';
-import { ProviderApp } from 'amp-labs-generated-rest-sdk/src/models/models';
-import { OauthConnectRequest } from 'amp-labs-generated-rest-sdk/src/models/OauthConnectRequest';
 
 import { PROVIDER_SALESFORCE } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';

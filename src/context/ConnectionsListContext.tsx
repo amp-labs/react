@@ -11,10 +11,12 @@ import { ApiKeyContext } from './ApiKeyContext';
 
 interface ConnectionsListContextValue {
   connections: Connection[] | null;
+  setConnections: React.Dispatch<React.SetStateAction<Connection[] | null>>;
 }
 
 export const ConnectionsListContext = createContext<ConnectionsListContextValue>({
   connections: null,
+  setConnections: () => {},
 });
 
 export const useConnectionsList = (): ConnectionsListContextValue => {
@@ -28,7 +30,7 @@ export const useConnectionsList = (): ConnectionsListContextValue => {
 };
 
 type ConnectionsListProviderProps = {
-  projectId: string;
+  projectId?: string | null;
   groupRef: string;
   provider?: string;
   children?: React.ReactNode;
@@ -42,9 +44,10 @@ export function ConnectionsListProvider({
 }: ConnectionsListProviderProps) {
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  console.log('inside ConnectionListProvider', projectId, groupRef, provider)
 
   useEffect(() => {
-    if (groupRef) {
+    if (groupRef && projectId) {
       api.listConnections({ projectId, groupRef, provider }, {
         headers: {
           'X-Api-Key': apiKey ?? '',
@@ -60,6 +63,7 @@ export function ConnectionsListProvider({
 
   const contextValue = useMemo(() => ({
     connections,
+    setConnections,
   }), [connections]);
 
   return (
