@@ -49,7 +49,7 @@ export function ProjectProvider(
     });
   }, [projectId, apiKey]);
 
-  const contextValue = useMemo(() => ({ projectId, project }), [projectId]);
+  const contextValue = useMemo(() => ({ projectId, project }), [projectId, project]);
 
   return (
     <ProjectContext.Provider value={contextValue}>

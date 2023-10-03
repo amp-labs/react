@@ -30,8 +30,8 @@
     "prepbuild": "npm run clean && npm run assets",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
-    "lint": "eslint --ext .ts,.tsx src/ --fix",
-    "lint:dry": "eslint --ext .ts,.tsx src/",
+    "lint": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/ --fix",
+    "lint:dry": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/",
     "generate-api": "openapi-generator-cli generate -i ../server/openapi/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true"
   },
   "repository": {
@@ -44,16 +44,16 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.23.0",
     "@chakra-ui/react": "^2.8.1",
     "@jest/globals": "^29.5.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/lodash": "^4.14.199",
-    "@types/react": "^18.0.27",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
+    "@types/react": "^18.2.24",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
     "babel-jest": "^29.7.0",
     "eslint": "^8.50.0",
     "eslint-config-airbnb": "^19.0.4",

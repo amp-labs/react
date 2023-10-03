@@ -55,7 +55,7 @@ function OAuthPopup({
 
   useEffect(() => {
     if (url) setExternalWindow(createPopup({ url, title }));
-  }, [url]);
+  }, [url, title]);
 
   useEffect(() => {
     window.addEventListener('message', (event) => {
@@ -75,7 +75,7 @@ function OAuthPopup({
         }
       }
     });
-  }, []);
+  }, [externalWindow, onClose, setIsConnectedToProvider]);
 
   useEffect(() => {
     if (externalWindow && !intervalRef.current) {
@@ -87,7 +87,7 @@ function OAuthPopup({
         }
       }, DEFAULT_INTERVAL);
     }
-  }, [externalWindow]);
+  }, [externalWindow, onClose]);
 
   return (
     <div>{ children }</div>

@@ -142,7 +142,7 @@ function ReconfigureIntegrationContent(
       );
       setConfigureState(state);
     }
-  }, [hydratedRevision?.content?.actions, loading, selectedObjectName]);
+  }, [hydratedRevision?.content?.actions, loading, selectedObjectName, config]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;

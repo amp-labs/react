@@ -3,7 +3,9 @@
  * that Salesforce instance.
  */
 
-import { useContext, useState } from 'react';
+import {
+  useCallback, useContext, useState,
+} from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
@@ -100,6 +102,11 @@ function SalesforceOauthFlow({
     }
   };
 
+  const onClose = useCallback((err: string | null) => {
+    setError(err);
+    setOAuthCallbackURL(null);
+  }, []);
+
   const SubdomainEntry = (
     <Container>
       <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
@@ -146,10 +153,7 @@ function SalesforceOauthFlow({
     <OAuthPopup
       title="Connect to Salesforce"
       url={oAuthCallbackURL}
-      onClose={(err: string | null) => {
-        setError(err);
-        setOAuthCallbackURL(null);
-      }}
+      onClose={onClose}
     >
       { SubdomainEntry }
     </OAuthPopup>
