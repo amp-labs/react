@@ -11,7 +11,7 @@ import React, {
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnectionsList } from '../../context/ConnectionsListContext';
-import { useProjectId } from '../../context/ProjectContext';
+import { useProject } from '../../context/ProjectContext';
 import { AMP_SERVER, api } from '../../services/api';
 
 const DEFAULT_WIDTH = 600; // px
@@ -57,7 +57,7 @@ function OAuthPopup({
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
   const { setConnections } = useConnectionsList();
-  const projectId = useProjectId();
+  const { projectId } = useProject();
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {

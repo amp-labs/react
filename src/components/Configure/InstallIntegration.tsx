@@ -40,7 +40,7 @@ export function InstallIntegration(
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
-    if (projectId && integrationObj?.id) {
+    if (integrationObj?.id) {
       // check if installation exists on selected integration
       api.listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
         headers: {
