@@ -44,7 +44,6 @@ export function ConnectionsListProvider({
 }: ConnectionsListProviderProps) {
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
-  console.log('inside ConnectionListProvider', projectId, groupRef, provider)
 
   useEffect(() => {
     if (groupRef && projectId) {
@@ -59,7 +58,7 @@ export function ConnectionsListProvider({
         console.error('ERROR: ', err);
       });
     }
-  }, [projectId, apiKey, groupRef]);
+  }, [projectId, apiKey, groupRef, provider]);
 
   const contextValue = useMemo(() => ({
     connections,
