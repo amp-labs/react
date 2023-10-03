@@ -3,6 +3,7 @@ import {
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
+import { ConnectionsListProvider } from '../../context/ConnectionsListContext';
 import { HydratedRevisionProvider } from '../../context/HydratedRevisionContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { useProject } from '../../context/ProjectContext';
@@ -76,7 +77,13 @@ export function InstallIntegration(
       revisionId={integrationObj?.latestRevision?.id}
       connectionId={installation?.connection?.id}
     >
-      {content}
+      <ConnectionsListProvider
+        projectId={projectId}
+        groupRef={groupRef}
+        provider={integrationObj?.provider}
+      >
+        {content}
+      </ConnectionsListProvider>
     </HydratedRevisionProvider>
   );
 }

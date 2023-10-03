@@ -1,14 +1,12 @@
+import { useConnectionsList } from '../../context/ConnectionsListContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
-import { useProviderConnection } from '../../context/ProviderConnectionContext';
 import { Integration } from '../../services/api';
-// import { useSubdomain } from '../../context/SubdomainProvider';
 import {
   IntegrationConfig,
 } from '../../types/configTypes';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
-// import { SetUpRead } from './SetupRead';
 
 interface ConfigureIntegrationBaseProps {
   integration: string, // integrationName
@@ -24,9 +22,8 @@ interface ConfigureIntegrationBaseProps {
 export function ConfigureIntegrationBase({
   integration, consumerRef, consumerName, groupRef, groupName, integrationObj, userConfig,
 }: ConfigureIntegrationBaseProps) {
-  const { isConnectedToProvider } = useProviderConnection();
+  const { connections } = useConnectionsList();
   const { integrations } = useIntegrationList();
-  // const { subdomain } = useSubdomain();
 
   if (!integrations || !integrations.length || !integration) {
     return <ErrorTextBoxPlaceholder />;
@@ -36,11 +33,7 @@ export function ConfigureIntegrationBase({
     return <ErrorTextBoxPlaceholder />;
   }
 
-  // const appName = integrationObj?.name || '';
-  const provider = integrationObj?.provider || '';
-
-  //  TODO: isConnectedToProvider should be an API call
-  if (!isConnectedToProvider[provider]) {
+  if (!connections || connections.length === 0) {
     // require user to login to Saleforce if no connection is established
     return (
       <SalesforceOauthFlow
@@ -51,9 +44,9 @@ export function ConfigureIntegrationBase({
       />
     );
   }
-
+  const connection = connections[0];
   return (
-    <div>SetUpRead</div>
+    <div>SetUpRead with Connection ID {connection.id} and workspaceRef {connection.providerWorkspaceRef}</div>
 
   // TODO: update SetupRead to use hydrated revision
   // <SetUpRead

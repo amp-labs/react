@@ -26,6 +26,14 @@ export const useProject = (): ProjectContextValue => {
   return context;
 };
 
+export const useProjectId = (): string => {
+  const id = useProject().projectId;
+  if (!id) {
+    throw new Error('All components must be wraped inside of AmpersandProvider, and AmpersandProvider must have a project ID');
+  }
+  return id;
+};
+
 type ProjectProviderProps = {
   projectId: string,
   children?: React.ReactNode;

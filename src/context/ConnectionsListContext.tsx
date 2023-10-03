@@ -11,10 +11,12 @@ import { ApiKeyContext } from './ApiKeyContext';
 
 interface ConnectionsListContextValue {
   connections: Connection[] | null;
+  setConnections: React.Dispatch<React.SetStateAction<Connection[] | null>>;
 }
 
 export const ConnectionsListContext = createContext<ConnectionsListContextValue>({
   connections: null,
+  setConnections: () => {},
 });
 
 export const useConnectionsList = (): ConnectionsListContextValue => {
@@ -28,9 +30,9 @@ export const useConnectionsList = (): ConnectionsListContextValue => {
 };
 
 type ConnectionsListProviderProps = {
-  projectId: string;
+  projectId?: string | null;
   groupRef: string;
-  provider: string;
+  provider?: string;
   children?: React.ReactNode;
 };
 
@@ -44,20 +46,23 @@ export function ConnectionsListProvider({
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listConnections({ projectId, groupRef, provider }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
-    }).then((_connections) => {
-      console.log('CONNECTIONS: ', _connections);
-      setConnections(_connections);
-    }).catch((err) => {
-      console.error('ERROR: ', err);
-    });
+    if (groupRef && projectId) {
+      api.listConnections({ projectId, groupRef, provider }, {
+        headers: {
+          'X-Api-Key': apiKey ?? '',
+        },
+      }).then((_connections) => {
+        console.log('CONNECTIONS: ', _connections);
+        setConnections(_connections);
+      }).catch((err) => {
+        console.error('ERROR: ', err);
+      });
+    }
   }, [projectId, apiKey, groupRef, provider]);
 
   const contextValue = useMemo(() => ({
     connections,
+    setConnections,
   }), [connections]);
 
   return (
