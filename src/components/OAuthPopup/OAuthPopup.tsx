@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
-import { useConnectionsList } from '../../context/ConnectionsListContext';
+import { useConnections } from '../../context/ConnectionsContext';
 import { useProject } from '../../context/ProjectContext';
 import { AMP_SERVER, api } from '../../services/api';
 
@@ -56,7 +56,7 @@ function OAuthPopup({
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
-  const { setConnections } = useConnectionsList();
+  const { setSelectedConnection } = useConnections();
   const { projectId } = useProject();
   const apiKey = useContext(ApiKeyContext);
 
@@ -70,8 +70,8 @@ function OAuthPopup({
         'X-Api-Key': apiKey ?? '',
       },
     });
-    setConnections([connection]);
-  }, [projectId, apiKey, setConnections]);
+    setSelectedConnection(connection);
+  }, [projectId, apiKey, setSelectedConnection]);
 
   useEffect(() => {
     window.addEventListener('message', (event) => {
