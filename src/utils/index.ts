@@ -16,10 +16,10 @@ export function capitalize(str: string) {
 }
 
 /**
- * Given the name of an integration, return the matching source configuration.
+ * Given the name of an integration, return the integration object
  *
  * @param integrationName {string} Name of the integration.
- * @param sourceList {SourceList} List of sources.
+ * @param integrations {Integration[]} List of integrations.
  * @returns {Integration | null}
  */
 export const findIntegrationFromList = (
