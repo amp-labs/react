@@ -1,4 +1,4 @@
-import { useConnectionsList } from '../../context/ConnectionsListContext';
+import { useConnections } from '../../context/ConnectionsContext';
 import { useIntegrationList } from '../../context/IntegrationListContext';
 import { Integration } from '../../services/api';
 import {
@@ -22,7 +22,7 @@ interface ConfigureIntegrationBaseProps {
 export function ConfigureIntegrationBase({
   integration, consumerRef, consumerName, groupRef, groupName, integrationObj, userConfig,
 }: ConfigureIntegrationBaseProps) {
-  const { connections } = useConnectionsList();
+  const { selectedConnection, setSelectedConnection, connections } = useConnections();
   const { integrations } = useIntegrationList();
 
   if (!integrations || !integrations.length || !integration) {
@@ -33,8 +33,23 @@ export function ConfigureIntegrationBase({
     return <ErrorTextBoxPlaceholder />;
   }
 
-  if (!connections || connections.length === 0) {
-    // require user to login to Saleforce if no connection is established
+  if (selectedConnection) {
+    return (
+      <div>
+        'SetUpRead with Connection ID {selectedConnection.id} and
+        workspaceRef {selectedConnection.providerWorkspaceRef}
+      </div>
+    );
+  }
+
+  if (connections && connections.length > 0) {
+    // For now, the connections list for a particular groupRef + provider combo will be always be
+    // an array of one.
+    const [connection] = connections;
+    // This will cause the component to re-render with the selected connection.
+    setSelectedConnection(connection);
+  } else {
+    // Require user to login to Saleforce if there are no connections yet.
     return (
       <SalesforceOauthFlow
         consumerRef={consumerRef}
@@ -44,11 +59,4 @@ export function ConfigureIntegrationBase({
       />
     );
   }
-  const connection = connections[0];
-  return (
-    <div>
-      'SetUpRead with Connection ID {connection.id} and
-      workspaceRef {connection.providerWorkspaceRef}
-    </div>
-  );
 }

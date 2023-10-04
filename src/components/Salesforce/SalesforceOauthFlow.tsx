@@ -66,7 +66,7 @@ function SalesforceOauthFlow({
     setSubdomain(customerSubdomain);
     setError(null);
 
-    if (customerSubdomain && projectId) {
+    if (customerSubdomain) {
       try {
         const providerApps = await api.listProviderApps({
           projectId,
