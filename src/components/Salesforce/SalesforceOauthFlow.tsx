@@ -68,7 +68,7 @@ function SalesforceOauthFlow({
 
     if (customerSubdomain) {
       try {
-        const providerApps = await api.listProviderApps({
+        const providerApps = await api().listProviderApps({
           projectId,
         }, {
           headers: {
@@ -81,7 +81,7 @@ function SalesforceOauthFlow({
           throw new Error('You must first set up a Salesforce Connected App using the Ampersand Console.');
         }
 
-        const url = await api.oauthConnect({
+        const url = await api().oauthConnect({
           connectOAuthParams: {
             providerWorkspaceRef: customerSubdomain,
             projectId,

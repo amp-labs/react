@@ -37,7 +37,7 @@ export function IntegrationListProvider(
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listIntegrations({ projectId }, {
+    api().listIntegrations({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },

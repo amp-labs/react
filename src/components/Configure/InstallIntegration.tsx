@@ -42,7 +42,7 @@ export function InstallIntegration(
   useEffect(() => {
     if (integrationObj?.id) {
       // check if installation exists on selected integration
-      api.listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
+      api().listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
         headers: {
           'X-Api-Key': apiKey ?? '',
         },

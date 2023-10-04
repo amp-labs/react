@@ -71,7 +71,14 @@ const config = new Configuration({
   basePath: AMP_API_ROOT,
 });
 
-export const api = new DefaultApi(config);
+let apiValue = new DefaultApi(config);
+
+// For testing, etc. we may want to use a different API configuration than the default
+export const setApi = (api: DefaultApi) => {
+  apiValue = api;
+};
+
+export const api = () => apiValue;
 
 /**
    * Types exported from generated api
