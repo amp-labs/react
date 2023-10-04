@@ -46,6 +46,7 @@ export function ConfigureIntegrationBase({
     // For now, the connections list for a particular groupRef + provider combo will be always be
     // an array of one.
     const [connection] = connections;
+    // This will cause the component to re-render with the selected connection.
     setSelectedConnection(connection);
   } else {
     // Require user to login to Saleforce if there are no connections yet.
