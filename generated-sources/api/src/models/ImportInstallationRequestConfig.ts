@@ -21,76 +21,52 @@ import {
 } from './ConfigContent';
 
 /**
- * 
+ * The config of the installation.
  * @export
- * @interface Config
+ * @interface ImportInstallationRequestConfig
  */
-export interface Config {
+export interface ImportInstallationRequestConfig {
     /**
-     * The config ID.
+     * The ID of the integration revision that this config is based on, you can retrieve this ID after deploying an integration via the CLI.
      * @type {string}
-     * @memberof Config
-     */
-    id: string;
-    /**
-     * The ID of the revision that this config is based on.
-     * @type {string}
-     * @memberof Config
+     * @memberof ImportInstallationRequestConfig
      */
     revisionId: string;
     /**
-     * The time the config was created.
-     * @type {Date}
-     * @memberof Config
-     */
-    createTime: Date;
-    /**
-     * The person who created the config, in the format of "consumer:{consumer-id}" or "builder:{builder-id}".
-     * @type {string}
-     * @memberof Config
-     */
-    createdBy: string;
-    /**
      * 
      * @type {ConfigContent}
-     * @memberof Config
+     * @memberof ImportInstallationRequestConfig
      */
     content: ConfigContent;
 }
 
 /**
- * Check if a given object implements the Config interface.
+ * Check if a given object implements the ImportInstallationRequestConfig interface.
  */
-export function instanceOfConfig(value: object): boolean {
+export function instanceOfImportInstallationRequestConfig(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "revisionId" in value;
-    isInstance = isInstance && "createTime" in value;
-    isInstance = isInstance && "createdBy" in value;
     isInstance = isInstance && "content" in value;
 
     return isInstance;
 }
 
-export function ConfigFromJSON(json: any): Config {
-    return ConfigFromJSONTyped(json, false);
+export function ImportInstallationRequestConfigFromJSON(json: any): ImportInstallationRequestConfig {
+    return ImportInstallationRequestConfigFromJSONTyped(json, false);
 }
 
-export function ConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean): Config {
+export function ImportInstallationRequestConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean): ImportInstallationRequestConfig {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
         'revisionId': json['revisionId'],
-        'createTime': (new Date(json['createTime'])),
-        'createdBy': json['createdBy'],
         'content': ConfigContentFromJSON(json['content']),
     };
 }
 
-export function ConfigToJSON(value?: Config | null): any {
+export function ImportInstallationRequestConfigToJSON(value?: ImportInstallationRequestConfig | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -99,10 +75,7 @@ export function ConfigToJSON(value?: Config | null): any {
     }
     return {
         
-        'id': value.id,
         'revisionId': value.revisionId,
-        'createTime': (value.createTime.toISOString()),
-        'createdBy': value.createdBy,
         'content': ConfigContentToJSON(value.content),
     };
 }

@@ -16,27 +16,27 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CreateConsumerRequest
+ * @interface PutConsumerRequest
  */
-export interface CreateConsumerRequest {
+export interface PutConsumerRequest {
     /**
      * The consumer reference.
      * @type {string}
-     * @memberof CreateConsumerRequest
+     * @memberof PutConsumerRequest
      */
     consumerRef: string;
     /**
      * The name of the consumer that has access to this installation.
      * @type {string}
-     * @memberof CreateConsumerRequest
+     * @memberof PutConsumerRequest
      */
     consumerName: string;
 }
 
 /**
- * Check if a given object implements the CreateConsumerRequest interface.
+ * Check if a given object implements the PutConsumerRequest interface.
  */
-export function instanceOfCreateConsumerRequest(value: object): boolean {
+export function instanceOfPutConsumerRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "consumerRef" in value;
     isInstance = isInstance && "consumerName" in value;
@@ -44,11 +44,11 @@ export function instanceOfCreateConsumerRequest(value: object): boolean {
     return isInstance;
 }
 
-export function CreateConsumerRequestFromJSON(json: any): CreateConsumerRequest {
-    return CreateConsumerRequestFromJSONTyped(json, false);
+export function PutConsumerRequestFromJSON(json: any): PutConsumerRequest {
+    return PutConsumerRequestFromJSONTyped(json, false);
 }
 
-export function CreateConsumerRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateConsumerRequest {
+export function PutConsumerRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PutConsumerRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -59,7 +59,7 @@ export function CreateConsumerRequestFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-export function CreateConsumerRequestToJSON(value?: CreateConsumerRequest | null): any {
+export function PutConsumerRequestToJSON(value?: PutConsumerRequest | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -29,6 +29,9 @@ src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedRevision.ts
+src/models/ImportConnectionRequest.ts
+src/models/ImportInstallationRequest.ts
+src/models/ImportInstallationRequestConfig.ts
 src/models/Installation.ts
 src/models/Integration.ts
 src/models/Integration1.ts
