@@ -48,15 +48,16 @@ export function ConfigureIntegrationBase({
     const [connection] = connections;
     // This will cause the component to re-render with the selected connection.
     setSelectedConnection(connection);
-  } else {
-    // Require user to login to Saleforce if there are no connections yet.
-    return (
-      <SalesforceOauthFlow
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      />
-    );
+    return null;
   }
+
+  // Require user to login to Saleforce if there are no connections yet.
+  return (
+    <SalesforceOauthFlow
+      consumerRef={consumerRef}
+      consumerName={consumerName}
+      groupRef={groupRef}
+      groupName={groupName}
+    />
+  );
 }
