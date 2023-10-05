@@ -51,7 +51,7 @@ export function HydratedRevisionProvider({
   useEffect(() => {
     // Fetch the hydrated revision data using your API call
     if (projectId && integrationId && revisionId && connectionId) {
-      api.getHydratedRevision({
+      api().getHydratedRevision({
         projectId,
         integrationId,
         revisionId,

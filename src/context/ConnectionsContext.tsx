@@ -48,7 +48,7 @@ export function ConnectionsProvider({
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.listConnections({ projectId, groupRef, provider }, {
+    api().listConnections({ projectId, groupRef, provider }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },

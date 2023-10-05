@@ -38,7 +38,7 @@ export function ProjectProvider(
   const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
-    api.getProject({ projectId }, {
+    api().getProject({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
