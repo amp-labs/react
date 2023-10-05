@@ -10,7 +10,6 @@ import React, { createContext, useContext } from 'react';
 import { ApiKeyProvider } from '../../context/ApiKeyContext';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';
-import { SubdomainProvider } from '../../context/SubdomainProvider';
 
 interface AmpersandProviderProps {
   options: {
@@ -27,11 +26,9 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   return (
     <ApiKeyProvider value={apiKey}>
       <IntegrationListProvider projectId={projectId}>
-        <SubdomainProvider>
-          <ProjectProvider projectId={projectId}>
-            { children }
-          </ProjectProvider>
-        </SubdomainProvider>
+        <ProjectProvider projectId={projectId}>
+          { children }
+        </ProjectProvider>
       </IntegrationListProvider>
     </ApiKeyProvider>
   );

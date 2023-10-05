@@ -15,7 +15,6 @@ import {
 import { PROVIDER_SALESFORCE } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useProject } from '../../context/ProjectContext';
-import { useSubdomain } from '../../context/SubdomainProvider';
 import { api, ProviderApp } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
@@ -49,24 +48,23 @@ interface SalesforceOauthFlowProps {
 }
 
 /**
- * User input for Salesforce customerSubdomain.
+ * SalesforceOauthFlow first prompts user for their workspace ("subdomain" in Salesforce lingo),
+ * then launches a popup with the OAuth flow.
  */
 function SalesforceOauthFlow({
   consumerRef, consumerName, groupRef, groupName,
 }: SalesforceOauthFlowProps) {
-  const [customerSubdomain, setCustomerSubdomain] = useState<string>('');
+  const [workspace, setWorkspace] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { setSubdomain } = useSubdomain();
   const { projectId } = useProject();
   const apiKey = useContext(ApiKeyContext);
 
   const handleSubmit = async () => {
-    setSubdomain(customerSubdomain);
     setError(null);
 
-    if (customerSubdomain) {
+    if (workspace) {
       try {
         const providerApps = await api().listProviderApps({
           projectId,
@@ -83,7 +81,7 @@ function SalesforceOauthFlow({
 
         const url = await api().oauthConnect({
           connectOAuthParams: {
-            providerWorkspaceRef: customerSubdomain,
+            providerWorkspaceRef: workspace,
             projectId,
             groupRef,
             groupName,
@@ -138,7 +136,7 @@ function SalesforceOauthFlow({
           <Flex marginTop="1em">
             <Input
               placeholder="MyDomain"
-              onChange={(event) => setCustomerSubdomain(event.currentTarget.value)}
+              onChange={(event) => setWorkspace(event.currentTarget.value)}
             />
             <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
           </Flex>
