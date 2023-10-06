@@ -11,6 +11,7 @@ import {
   Config,
   HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
+  HydratedRevision,
   Installation, Integration,
   IntegrationFieldMapping,
   UpdateInstallationRequestInstallationConfig,
@@ -156,6 +157,22 @@ const generateConfigFromConfigureState = (
   return updateConfigObject;
 };
 
+const resetConfigurationState = (
+  hydratedRevision: HydratedRevision,
+  config: Config,
+  selectedObjectName: string,
+  setConfigureState: React.Dispatch<React.SetStateAction<ConfigureState>>,
+) => {
+  const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
+  const state = getConfigurationState(
+    hydratedActions,
+    PLACEHOLDER_VARS.OPERATION_TYPE,
+    selectedObjectName,
+    config,
+  );
+  setConfigureState(state);
+};
+
 const initialConfigureState: ConfigureState = {
   allFields: null,
   requiredFields: null,
@@ -183,16 +200,9 @@ function ReconfigureIntegrationContent(
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
-      const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
-      const state = getConfigurationState(
-        hydratedActions,
-        PLACEHOLDER_VARS.OPERATION_TYPE,
-        selectedObjectName,
-        config,
-      );
-      setConfigureState(state);
+      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }
-  }, [hydratedRevision?.content?.actions, loading, selectedObjectName, config]);
+  }, [hydratedRevision, loading, selectedObjectName, config]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -230,10 +240,9 @@ function ReconfigureIntegrationContent(
 
   const onSave = () => {
     // get configuration state
-    const configurationStateCopy = configureState;
     // transform configuration state to update shape
     const newConfig = generateConfigFromConfigureState(
-      configurationStateCopy,
+      configureState,
       config,
       selectedObjectName || '',
     );
@@ -261,11 +270,24 @@ function ReconfigureIntegrationContent(
     });
   };
 
+  const onCancel = () => {
+    // revert configurationState when canceled
+    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
+    }
+  };
+
   return (
     <Box>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
         <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
-        <Button backgroundColor="gray.200" color="blackAlpha.700" _hover={{ backgroundColor: 'gray.300' }}>Cancel</Button>
+        <Button
+          backgroundColor="gray.200"
+          color="blackAlpha.700"
+          _hover={{ backgroundColor: 'gray.300' }}
+          onClick={onCancel}
+        >Cancel
+        </Button>
       </Stack>
       <Box
         p={8}
