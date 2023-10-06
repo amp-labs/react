@@ -111,6 +111,20 @@ function getConfigurationState(
   };
 }
 
+/**
+ * given a configureState, config, and objectName, generate the config object that is need for
+ * update installation request.
+ *
+ * 1. get required fields from configureState
+ * 2. get optional fields from configureState
+ * 3. merge required fields and optional fields into selectedFields
+ * 4. get required custom map fields from configureState
+ * 5. generate modified config object based on update mask
+ * @param configureState
+ * @param config
+ * @param objectName
+ * @returns
+ */
 const generateConfigFromConfigureState = (
   configureState: ConfigureState,
   config: Config,
@@ -144,6 +158,7 @@ const generateConfigFromConfigureState = (
         standardObjects: {
           [objectName]: {
             objectName,
+            // these two fields are copied from previous config, otherwise they will override null
             schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
             destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
             selectedFields,
@@ -253,6 +268,8 @@ function ReconfigureIntegrationContent(
       installationId: installation.id,
       integrationId: integrationObj.id,
       installationUpdate: {
+        // update mask will recurse to the object path and replace the object at the object path
+        // this example will replace the object at the object (i.e. accounts)
         updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
         installation: {
           config: newConfig,
@@ -298,7 +315,6 @@ function ReconfigureIntegrationContent(
         boxShadow="lg"
         textAlign={['left']}
         margin="auto"
-        // marginTop="40px"
         bgColor="white"
       >
         <Text marginBottom="20px">
