@@ -23,49 +23,48 @@ import {
 /**
  * 
  * @export
- * @interface ConfigContent
+ * @interface BaseConfigContent
  */
-export interface ConfigContent {
+export interface BaseConfigContent {
     /**
      * The SaaS API that we are integrating with.
      * @type {string}
-     * @memberof ConfigContent
+     * @memberof BaseConfigContent
      */
-    api: string;
+    api?: string;
     /**
      * 
      * @type {BaseReadConfig}
-     * @memberof ConfigContent
+     * @memberof BaseConfigContent
      */
     read?: BaseReadConfig;
 }
 
 /**
- * Check if a given object implements the ConfigContent interface.
+ * Check if a given object implements the BaseConfigContent interface.
  */
-export function instanceOfConfigContent(value: object): boolean {
+export function instanceOfBaseConfigContent(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "api" in value;
 
     return isInstance;
 }
 
-export function ConfigContentFromJSON(json: any): ConfigContent {
-    return ConfigContentFromJSONTyped(json, false);
+export function BaseConfigContentFromJSON(json: any): BaseConfigContent {
+    return BaseConfigContentFromJSONTyped(json, false);
 }
 
-export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConfigContent {
+export function BaseConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseConfigContent {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'api': json['api'],
+        'api': !exists(json, 'api') ? undefined : json['api'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
     };
 }
 
-export function ConfigContentToJSON(value?: ConfigContent | null): any {
+export function BaseConfigContentToJSON(value?: BaseConfigContent | null): any {
     if (value === undefined) {
         return undefined;
     }

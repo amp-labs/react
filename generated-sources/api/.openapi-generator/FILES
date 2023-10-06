@@ -6,6 +6,9 @@ src/apis/DefaultApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/ActionType.ts
+src/models/BaseConfigContent.ts
+src/models/BaseReadConfig.ts
+src/models/BaseReadConfigStandardObject.ts
 src/models/BatchUpsertIntegrationsRequest.ts
 src/models/Config.ts
 src/models/ConfigContent.ts
@@ -19,7 +22,6 @@ src/models/CreateInstallationRequest.ts
 src/models/CreateInstallationRequestConfig.ts
 src/models/CreateIntegrationRequest.ts
 src/models/CreateIntegrationRequestLatestRevision.ts
-src/models/CreateProjectMembershipRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/Group.ts
@@ -47,15 +49,16 @@ src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts
 src/models/ProjectMembership.ts
 src/models/ProviderApp.ts
-src/models/ReadConfig.ts
-src/models/ReadConfigStandardObject.ts
 src/models/Revision.ts
+src/models/UpdateInstallationConfigContent.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts
+src/models/UpdateInstallationRequestInstallationConfig.ts
 src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
+src/models/UpsertProjectMembershipRequest.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

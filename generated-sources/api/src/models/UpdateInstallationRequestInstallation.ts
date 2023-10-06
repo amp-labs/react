@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { CreateInstallationRequestConfig } from './CreateInstallationRequestConfig';
+import type { UpdateInstallationRequestInstallationConfig } from './UpdateInstallationRequestInstallationConfig';
 import {
-    CreateInstallationRequestConfigFromJSON,
-    CreateInstallationRequestConfigFromJSONTyped,
-    CreateInstallationRequestConfigToJSON,
-} from './CreateInstallationRequestConfig';
+    UpdateInstallationRequestInstallationConfigFromJSON,
+    UpdateInstallationRequestInstallationConfigFromJSONTyped,
+    UpdateInstallationRequestInstallationConfigToJSON,
+} from './UpdateInstallationRequestInstallationConfig';
 
 /**
  * The installation fields to update. (Only include the fields you'd like to update.)
@@ -34,10 +34,10 @@ export interface UpdateInstallationRequestInstallation {
     connectionId?: string;
     /**
      * 
-     * @type {CreateInstallationRequestConfig}
+     * @type {UpdateInstallationRequestInstallationConfig}
      * @memberof UpdateInstallationRequestInstallation
      */
-    config?: CreateInstallationRequestConfig;
+    config?: UpdateInstallationRequestInstallationConfig;
 }
 
 /**
@@ -60,7 +60,7 @@ export function UpdateInstallationRequestInstallationFromJSONTyped(json: any, ig
     return {
         
         'connectionId': !exists(json, 'connectionId') ? undefined : json['connectionId'],
-        'config': !exists(json, 'config') ? undefined : CreateInstallationRequestConfigFromJSON(json['config']),
+        'config': !exists(json, 'config') ? undefined : UpdateInstallationRequestInstallationConfigFromJSON(json['config']),
     };
 }
 
@@ -74,7 +74,7 @@ export function UpdateInstallationRequestInstallationToJSON(value?: UpdateInstal
     return {
         
         'connectionId': value.connectionId,
-        'config': CreateInstallationRequestConfigToJSON(value.config),
+        'config': UpdateInstallationRequestInstallationConfigToJSON(value.config),
     };
 }
 
