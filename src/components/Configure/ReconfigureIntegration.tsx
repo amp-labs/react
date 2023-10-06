@@ -11,6 +11,7 @@ import {
   Config,
   HydratedIntegrationAction, HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
+  HydratedRevision,
   Installation, Integration,
   IntegrationFieldMapping,
   UpdateInstallationRequestInstallationConfig,
@@ -110,6 +111,20 @@ function getConfigurationState(
   };
 }
 
+/**
+ * given a configureState, config, and objectName, generate the config object that is need for
+ * update installation request.
+ *
+ * 1. get required fields from configureState
+ * 2. get optional fields from configureState
+ * 3. merge required fields and optional fields into selectedFields
+ * 4. get required custom map fields from configureState
+ * 5. generate modified config object based on update mask
+ * @param configureState
+ * @param config
+ * @param objectName
+ * @returns
+ */
 const generateConfigFromConfigureState = (
   configureState: ConfigureState,
   config: Config,
@@ -143,6 +158,7 @@ const generateConfigFromConfigureState = (
         standardObjects: {
           [objectName]: {
             objectName,
+            // these two fields are copied from previous config, otherwise they will override null
             schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
             destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
             selectedFields,
@@ -154,6 +170,22 @@ const generateConfigFromConfigureState = (
   };
 
   return updateConfigObject;
+};
+
+const resetConfigurationState = (
+  hydratedRevision: HydratedRevision,
+  config: Config,
+  selectedObjectName: string,
+  setConfigureState: React.Dispatch<React.SetStateAction<ConfigureState>>,
+) => {
+  const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
+  const state = getConfigurationState(
+    hydratedActions,
+    PLACEHOLDER_VARS.OPERATION_TYPE,
+    selectedObjectName,
+    config,
+  );
+  setConfigureState(state);
 };
 
 const initialConfigureState: ConfigureState = {
@@ -183,16 +215,9 @@ function ReconfigureIntegrationContent(
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
-      const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
-      const state = getConfigurationState(
-        hydratedActions,
-        PLACEHOLDER_VARS.OPERATION_TYPE,
-        selectedObjectName,
-        config,
-      );
-      setConfigureState(state);
+      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }
-  }, [hydratedRevision?.content?.actions, loading, selectedObjectName, config]);
+  }, [hydratedRevision, loading, selectedObjectName, config]);
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -230,10 +255,9 @@ function ReconfigureIntegrationContent(
 
   const onSave = () => {
     // get configuration state
-    const configurationStateCopy = configureState;
     // transform configuration state to update shape
     const newConfig = generateConfigFromConfigureState(
-      configurationStateCopy,
+      configureState,
       config,
       selectedObjectName || '',
     );
@@ -244,6 +268,8 @@ function ReconfigureIntegrationContent(
       installationId: installation.id,
       integrationId: integrationObj.id,
       installationUpdate: {
+        // update mask will recurse to the object path and replace the object at the object path
+        // this example will replace the object at the object (i.e. accounts)
         updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
         installation: {
           config: newConfig,
@@ -261,11 +287,24 @@ function ReconfigureIntegrationContent(
     });
   };
 
+  const onCancel = () => {
+    // revert configurationState when canceled
+    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
+    }
+  };
+
   return (
     <Box>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
         <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
-        <Button backgroundColor="gray.200" color="blackAlpha.700" _hover={{ backgroundColor: 'gray.300' }}>Cancel</Button>
+        <Button
+          backgroundColor="gray.200"
+          color="blackAlpha.700"
+          _hover={{ backgroundColor: 'gray.300' }}
+          onClick={onCancel}
+        >Cancel
+        </Button>
       </Stack>
       <Box
         p={8}
@@ -276,7 +315,6 @@ function ReconfigureIntegrationContent(
         boxShadow="lg"
         textAlign={['left']}
         margin="auto"
-        // marginTop="40px"
         bgColor="white"
       >
         <Text marginBottom="20px">
