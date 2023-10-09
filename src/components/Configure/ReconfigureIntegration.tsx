@@ -9,22 +9,24 @@ import { useProject } from '../../context/ProjectContext';
 import {
   api,
   Config,
-  HydratedIntegrationAction, HydratedIntegrationField,
+  HydratedIntegrationAction,
   HydratedIntegrationFieldExistent,
   HydratedRevision,
   Installation, Integration,
-  IntegrationFieldMapping,
   UpdateInstallationRequestInstallationConfig,
 } from '../../services/api';
-import { capitalize } from '../../utils';
 
+import { OptionalFields } from './fields/OptionalFields';
+import { RequiredCustomFields } from './fields/RequiredCustomFields';
+import { RequiredFields } from './fields/RequiredFields';
+import { content } from './content';
 import { ObjectManagementNav, useSelectedObjectName } from './ObjectManagementNav';
+import { ConfigureState, ConfigureStateIntegrationField, CustomConfigureStateIntegrationField } from './types';
 import {
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredCustomMapFieldsFromObject,
   getRequiredFieldsFromObject, getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
-  isIntegrationFieldMapping,
   PLACEHOLDER_VARS,
 } from './utils';
 
@@ -32,41 +34,6 @@ interface ReconfigureIntegrationProps {
   installation: Installation,
   integrationObj: Integration,
 }
-
-const content = {
-  reconfigureIntro: (
-    appName: string,
-    apiProvider: string,
-    workspace: string,
-  ) => (
-    // eslint-disable-next-line max-len
-    <>{capitalize(apiProvider)} integration: <b>{workspace}</b>.</>
-  ),
-  reconfigureRequiredFields: (
-    appName: string,
-    objectName: string,
-  ) => <>{appName} reads the following <b>{objectName}</b> fields</>,
-  customMappingText: (
-    objectName: string,
-    customField: string,
-    // eslint-disable-next-line max-len
-  ) => <>Which of your custom fields from <b>{objectName}</b> should be mapped to <b>{customField}</b>?</>,
-};
-
-type ConfigureStateIntegrationField = HydratedIntegrationFieldExistent & {
-  value: string | number | boolean | null,
-};
-
-type CustomConfigureStateIntegrationField = IntegrationFieldMapping & {
-  value: string | number | undefined,
-};
-
-type ConfigureState = {
-  allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
-  requiredFields: HydratedIntegrationField[] | null,
-  optionalFields: ConfigureStateIntegrationField[] | null,
-  requiredCustomMapFields: CustomConfigureStateIntegrationField[] | null,
-};
 
 function getConfigurationState(
   actions: HydratedIntegrationAction[],
@@ -219,40 +186,6 @@ function ReconfigureIntegrationContent(
     }
   }, [hydratedRevision, loading, selectedObjectName, config]);
 
-  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    const { optionalFields } = configureState;
-    const optionalFieldToUpdate = optionalFields?.find((field) => field.fieldName === name);
-
-    if (optionalFieldToUpdate) {
-      // Update the value property to new checked value
-      optionalFieldToUpdate.value = checked;
-
-      // update state
-      setConfigureState({ ...configureState, optionalFields: [...optionalFields || []] });
-    }
-  };
-
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    const { requiredCustomMapFields } = configureState;
-    const requiredCustomMapFieldtoUpdate = requiredCustomMapFields?.find(
-      (field) => field.mapToName === name,
-    );
-
-    if (requiredCustomMapFieldtoUpdate) {
-      // Update the custome field value property to new value
-      requiredCustomMapFieldtoUpdate.value = value;
-      const newState = {
-        ...configureState,
-        requiredCustomMapFields: [...requiredCustomMapFields || []],
-      };
-
-      // update state
-      setConfigureState(newState);
-    }
-  };
-
   const onSave = () => {
     // get configuration state
     // transform configuration state to update shape
@@ -328,63 +261,12 @@ function ReconfigureIntegrationContent(
         {loading && <div>Loading...</div>}
         {hydratedRevision && selectedObjectName && (
         <>
-          <Text marginBottom="5px">
-            {content.reconfigureRequiredFields(appName, selectedObjectName)}
-          </Text>
-          <Box marginBottom="20px">
-            {configureState.requiredFields?.map((field) => {
-              if (!isIntegrationFieldMapping(field)) {
-                return <Tag key={field.fieldName}>{field.displayName}</Tag>;
-              }
-              return null; // fallback for customed mapped fields
-            })}
-          </Box>
-          <Text marginBottom="5px">Optional Fields</Text>
-          <Stack marginBottom="20px">
-            {configureState.optionalFields?.map((field) => {
-              if (!isIntegrationFieldMapping(field)) {
-                return (
-                  <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
-                    <Checkbox
-                      name={field.fieldName}
-                      id={field.fieldName}
-                      isChecked={!!field.value}
-                      onChange={onCheckboxChange}
-                    >
-                      {field.displayName}
-                    </Checkbox>
-                  </Box>
-                );
-              }
-              return null; // fallback for customed mapped fields
-            })}
-          </Stack>
-
-          <Stack>
-            {configureState.requiredCustomMapFields?.map((field) => {
-              if (isIntegrationFieldMapping(field)) {
-                return (
-                  <Stack key={field.mapToName}>
-                    <Text marginBottom="5px">
-                      {content.customMappingText(selectedObjectName, field.mapToName)}
-                    </Text>
-                    <Select
-                      name={field.mapToName}
-                      variant="flushed"
-                      value={field.value}
-                      onChange={onSelectChange}
-                      placeholder="Please select one"
-                    >
-                      {configureState?.allFields?.map((f) => (
-                        <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
-                      ))}
-                    </Select>
-                  </Stack>
-                );
-              }
-              return null; // fallback for existant fields
-            })}
-          </Stack>
+          <RequiredFields configureState={configureState} />
+          <OptionalFields configureState={configureState} setConfigureState={setConfigureState} />
+          <RequiredCustomFields
+            configureState={configureState}
+            setConfigureState={setConfigureState}
+          />
         </>
         )}
       </Box>
