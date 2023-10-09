@@ -2,15 +2,11 @@ import {
   Box, Checkbox, Stack, Text,
 } from '@chakra-ui/react';
 
-import { ConfigureState } from '../types';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { isIntegrationFieldMapping } from '../utils';
 
-type OptionalFieldsProps = {
-  configureState: ConfigureState;
-  setConfigureState: (configureState: ConfigureState) => void;
-};
-
-export function OptionalFields({ configureState, setConfigureState }: OptionalFieldsProps) {
+export function OptionalFields() {
+  const { configureState, setConfigureState } = useConfigureState();
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     const { optionalFields } = configureState;

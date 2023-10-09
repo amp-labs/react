@@ -10,8 +10,12 @@ import { useProject } from '../../context/ProjectContext';
 import { api, Installation } from '../../services/api';
 import { findIntegrationFromList } from '../../utils';
 
-import { ConfigureIntegrationBase } from './ConfigureIntegrationBase';
-import { ReconfigureIntegration } from './ReconfigureIntegration';
+import { ConfigurationProvider } from './state/ConfigurationStateProvider';
+import { CreateInstallation } from './CreateInstallation';
+import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
+import { ObjectManagementNav } from './ObjectManagementNav';
+import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
+import { UpdateInstallation } from './UpdateInstallation';
 
 interface InstallIntegrationProps {
   integration: string, // integration name
@@ -52,22 +56,20 @@ export function InstallIntegration(
     }
   }, [projectId, integrationObj?.id, apiKey, groupRef]);
 
+  // if no integration, render error page
+  if (!integrations || !integrations.length || !integration || !integrationObj) {
+    return <ErrorTextBoxPlaceholder />;
+  }
+
   const content = installation && integrationObj ? (
-  // if installation exists, render update integration flow
-    <ReconfigureIntegration
+  // if installation exists, render update installation flow
+    <UpdateInstallation
       installation={installation}
       integrationObj={integrationObj}
     />
   ) : (
-    // no installation, render create integration flow
-    <ConfigureIntegrationBase
-      integration={integration}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-      integrationObj={integrationObj}
-    />
+    // no installation, render create installation flow
+    <CreateInstallation />
   );
 
   return (
@@ -82,7 +84,18 @@ export function InstallIntegration(
         groupRef={groupRef}
         provider={integrationObj?.provider}
       >
-        {content}
+        <ProtectedConnectionLayout
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        >
+          <ObjectManagementNav config={installation?.config}>
+            <ConfigurationProvider config={installation?.config}>
+              {content}
+            </ConfigurationProvider>
+          </ObjectManagementNav>
+        </ProtectedConnectionLayout>
       </ConnectionsProvider>
     </HydratedRevisionProvider>
   );

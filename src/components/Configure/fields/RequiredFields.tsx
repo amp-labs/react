@@ -3,14 +3,11 @@ import { Box, Tag, Text } from '@chakra-ui/react';
 import { useProject } from '../../../context/ProjectContext';
 import { content } from '../content';
 import { useSelectedObjectName } from '../ObjectManagementNav';
-import { ConfigureState } from '../types';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { isIntegrationFieldMapping } from '../utils';
 
-type RequiredFieldsProps = {
-  configureState: ConfigureState;
-};
-
-export function RequiredFields({ configureState }: RequiredFieldsProps) {
+export function RequiredFields() {
+  const { configureState } = useConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
   const { project } = useProject();
   const appName = project?.appName || '';
