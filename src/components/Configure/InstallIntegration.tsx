@@ -73,30 +73,30 @@ export function InstallIntegration(
   );
 
   return (
-    <HydratedRevisionProvider
+    <ConnectionsProvider
       projectId={projectId}
-      integrationId={integrationObj?.id}
-      revisionId={integrationObj?.latestRevision?.id}
-      connectionId={installation?.connection?.id}
+      groupRef={groupRef}
+      provider={integrationObj?.provider}
     >
-      <ConnectionsProvider
-        projectId={projectId}
+      <ProtectedConnectionLayout
+        consumerRef={consumerRef}
+        consumerName={consumerName}
         groupRef={groupRef}
-        provider={integrationObj?.provider}
+        groupName={groupName}
       >
-        <ProtectedConnectionLayout
-          consumerRef={consumerRef}
-          consumerName={consumerName}
-          groupRef={groupRef}
-          groupName={groupName}
+        <HydratedRevisionProvider
+          projectId={projectId}
+          integrationId={integrationObj?.id}
+          revisionId={integrationObj?.latestRevision?.id}
         >
           <ObjectManagementNav config={installation?.config}>
             <ConfigurationProvider config={installation?.config}>
               {content}
             </ConfigurationProvider>
           </ObjectManagementNav>
-        </ProtectedConnectionLayout>
-      </ConnectionsProvider>
-    </HydratedRevisionProvider>
+        </HydratedRevisionProvider>
+      </ProtectedConnectionLayout>
+    </ConnectionsProvider>
+
   );
 }
