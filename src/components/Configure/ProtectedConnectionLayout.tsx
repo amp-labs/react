@@ -5,7 +5,7 @@ import { useInstallIntegrationProps } from '../../context/InstallIntegrationCont
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 interface ConfigureIntegrationBaseProps {
-  children: React.ReactNode,
+  children: JSX.Element,
 }
 
 // if connection does not exist, render SalesforceOauthFlow

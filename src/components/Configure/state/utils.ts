@@ -74,3 +74,39 @@ export const resetConfigurationState = (
   );
   setConfigureState(state);
 };
+
+/**
+ * generates selectedFields object for Config from configureState
+ * @param configureState
+ * @returns
+ */
+export const generateSelectedFieldsFromConfigureState = (configureState: ConfigureState) => {
+  const { requiredFields, optionalFields } = configureState;
+  const fields = new Set<string>();
+  requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
+  // adds optional fields that are selected (true)
+  optionalFields?.forEach((field) => field.value && fields.add(getFieldKeyValue(field)));
+  // convert set to object for config
+  const selectedFields = Array.from(fields).reduce((acc, field) => ({
+    ...acc,
+    [field]: true,
+  }), {});
+  return selectedFields;
+};
+
+/**
+ * generates selectedFieldMappings object for Config from configureState
+ * @param configureState
+ * @returns
+ */
+export const generateSelectedFieldMappingsFromConfigureState = (configureState: ConfigureState) => {
+  const { requiredCustomMapFields } = configureState;
+  const requiredCustomMapFieldsConfig = (requiredCustomMapFields || []).reduce((acc, field) => {
+    const key = getFieldKeyValue(field);
+    return {
+      ...acc,
+      [key]: field.value,
+    };
+  }, {});
+  return requiredCustomMapFieldsConfig;
+};

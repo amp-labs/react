@@ -1,5 +1,6 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback,
+  useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { api, Installation, Integration } from '../services/api';
@@ -13,23 +14,25 @@ import { useProject } from './ProjectContext';
 interface InstallIntegrationContextValue {
   integrationId: string;
   provider: string;
-  integrationObj: Integration | null;
+  integrationObj?: Integration | null;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
   groupName?: string;
-  installation: Installation | undefined;
+  installation?: Installation;
+  setInstallation: (installationObj: Installation) => void;
 }
 // Create a context to pass down the props
 const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
   integrationId: '',
   provider: '',
-  integrationObj: null,
+  integrationObj: undefined,
   consumerRef: '',
   consumerName: '',
   groupRef: '',
   groupName: '',
   installation: undefined,
+  setInstallation: () => {},
 });
 
 // Create a custom hook to access the props
@@ -64,6 +67,12 @@ export function InstallIntegrationProvider({
     [integration, integrations],
   );
 
+  // default set the installations array with a single installation object
+  // may need to find and update the installation object in the future
+  const setInstallation = useCallback((installationObj: Installation) => {
+    setInstallations([installationObj]);
+  }, [setInstallations]);
+
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
     if (integrationObj?.id) {
@@ -81,13 +90,15 @@ export function InstallIntegrationProvider({
   const props = useMemo(() => ({
     integrationId: integrationObj?.id || '',
     provider: integrationObj?.provider || '',
-    integrationObj: integrationObj || null,
+    integrationObj,
     consumerRef,
     consumerName,
     groupRef,
     groupName,
     installation,
-  }), [integrationObj, consumerRef, consumerName, groupRef, groupName, installation]);
+    setInstallation,
+  }), [integrationObj, consumerRef, consumerName, groupRef,
+    groupName, installation, setInstallation]);
 
   return (
     <InstallIntegrationContext.Provider value={props}>
