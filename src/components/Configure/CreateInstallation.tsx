@@ -11,6 +11,7 @@ import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 
+// the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
 
 //  Create Installation Flow

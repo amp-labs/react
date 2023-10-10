@@ -25,7 +25,7 @@ export function ProtectedConnectionLayout({
   }, [connections, selectedConnection, setSelectedConnection]);
 
   // a selected connection exists, render children
-  if (selectedConnection) return <div>{children}</div>;
+  if (selectedConnection) return children;
 
   // Require user to login to Saleforce if there are no connections yet.
   return (
