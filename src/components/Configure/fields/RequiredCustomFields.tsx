@@ -4,17 +4,11 @@ import {
 
 import { content } from '../content';
 import { useSelectedObjectName } from '../ObjectManagementNav';
-import { ConfigureState } from '../types';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { isIntegrationFieldMapping } from '../utils';
 
-type RequiredCustomFieldsProps = {
-  configureState: ConfigureState;
-  setConfigureState: (configureState: ConfigureState) => void;
-};
-
-export function RequiredCustomFields(
-  { configureState, setConfigureState }: RequiredCustomFieldsProps,
-) {
+export function RequiredCustomFields() {
+  const { configureState, setConfigureState } = useConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;

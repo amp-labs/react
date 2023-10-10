@@ -5,6 +5,7 @@ import React, {
 import { api, HydratedRevision } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import { useConnections } from './ConnectionsContext';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -32,7 +33,6 @@ type HydratedRevisionProviderProps = {
   projectId?: string | null;
   integrationId?: string | null;
   revisionId?: string | null;
-  connectionId?: string | null;
   children?: React.ReactNode;
 };
 
@@ -40,13 +40,14 @@ export function HydratedRevisionProvider({
   projectId,
   integrationId,
   revisionId,
-  connectionId,
   children,
 } : HydratedRevisionProviderProps) {
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  const { selectedConnection } = useConnections();
+  const connectionId = selectedConnection?.id;
 
   useEffect(() => {
     // Fetch the hydrated revision data using your API call

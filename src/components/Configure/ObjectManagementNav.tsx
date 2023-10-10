@@ -23,7 +23,7 @@ export type NavObject = {
   completed: boolean;
 };
 
-function generateNavObjects(config: Config, hydratedRevision: HydratedRevision) {
+function generateNavObjects(config: Config | undefined, hydratedRevision: HydratedRevision) {
   const { actions } = hydratedRevision.content;
   const action = getActionTypeFromActions(actions, PLACEHOLDER_VARS.OPERATION_TYPE);
   const navObjects: NavObject[] = [];
@@ -31,8 +31,9 @@ function generateNavObjects(config: Config, hydratedRevision: HydratedRevision) 
     navObjects.push(
       {
         name: object?.objectName,
+        // if no config, object is not completed
         // object is completed if the key exists in the config
-        completed: !!getReadObject(config, object.objectName),
+        completed: config ? !!getReadObject(config, object.objectName) : false,
       },
     );
   });
@@ -55,7 +56,7 @@ export function useSelectedObjectName() {
 }
 
 type ObjectManagementNavProps = {
-  config: Config;
+  config?: Config;
   children?: React.ReactNode;
 };
 
