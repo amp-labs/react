@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { Box, Tab, Tabs } from '@chakra-ui/react';
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
+import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { Config, HydratedRevision } from '../../services/api';
 
 import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from './utils';
@@ -56,7 +57,6 @@ export function useSelectedObjectName() {
 }
 
 type ObjectManagementNavProps = {
-  config?: Config;
   children?: React.ReactNode;
 };
 
@@ -66,10 +66,11 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
 
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNav({
-  config,
   children,
 }: ObjectManagementNavProps) {
+  const { installation } = useInstallIntegrationProps();
   const { hydratedRevision, loading, error } = useHydratedRevision();
+  const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabsChange = (index: number) => { setTabIndex(index); };

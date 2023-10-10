@@ -1,10 +1,9 @@
 import React, {
-  createContext, useContext, useEffect, useMemo,
-  useState,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
-import { Config } from '../../../services/api';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { ConfigureState } from '../types';
 
@@ -35,20 +34,21 @@ export function useConfigureState() {
 }
 
 type ConfigurationProviderProps = {
-  config?: Config;
   children: React.ReactNode;
 };
 
 // Create a provider component for the configuration context
 export function ConfigurationProvider(
-  { config, children }: ConfigurationProviderProps,
+  { children }: ConfigurationProviderProps,
 ) {
+  const { installation } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision from installation revisionId (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const [configureState, setConfigureState] = useState<ConfigureState>(initialConfigureState);
+  const config = installation?.config;
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
