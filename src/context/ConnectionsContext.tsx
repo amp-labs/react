@@ -5,6 +5,7 @@ import React, {
 import { api, Connection } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import { useInstallIntegrationProps } from './InstallIntegrationContext';
 
 interface ConnectionsContextValue {
   connections: Connection[] | null;
@@ -32,17 +33,14 @@ export const useConnections = (): ConnectionsContextValue => {
 
 type ConnectionsProviderProps = {
   projectId: string;
-  groupRef: string;
-  provider?: string;
   children?: React.ReactNode;
 };
 
 export function ConnectionsProvider({
   projectId,
-  groupRef,
-  provider,
   children,
 }: ConnectionsProviderProps) {
+  const { groupRef, provider } = useInstallIntegrationProps();
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const apiKey = useContext(ApiKeyContext);

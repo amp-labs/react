@@ -1,20 +1,18 @@
 import { useEffect } from 'react';
 
 import { useConnections } from '../../context/ConnectionsContext';
+import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 interface ConfigureIntegrationBaseProps {
-  consumerRef: string,
-  consumerName?: string,
-  groupRef: string,
-  groupName?: string,
   children: React.ReactNode,
 }
 
 // if connection does not exist, render SalesforceOauthFlow
-export function ProtectedConnectionLayout({
-  consumerRef, consumerName, groupRef, groupName, children,
-}: ConfigureIntegrationBaseProps) {
+export function ProtectedConnectionLayout({ children }: ConfigureIntegrationBaseProps) {
+  const {
+    consumerRef, consumerName, groupRef, groupName,
+  } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection, connections } = useConnections();
 
   useEffect(() => {

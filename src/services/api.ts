@@ -3,6 +3,7 @@
 import {
   Config,
   Configuration, Connection,
+  CreateInstallationOperationRequest,
   DefaultApi, HydratedIntegrationAction,
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
@@ -87,6 +88,7 @@ export const api = () => apiValue;
 export type {
   Config,
   Connection,
+  CreateInstallationOperationRequest,
   HydratedIntegrationAction,
   HydratedIntegrationObject,
   HydratedIntegrationField,
