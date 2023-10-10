@@ -26,7 +26,8 @@ const generateUpdateConfigFromConfigureState = (
 
   const fields = new Set<string>();
   requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
-  optionalFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
+  // adds optional fields that are selected (true)
+  optionalFields?.forEach((field) => field.value && fields.add(getFieldKeyValue(field)));
   // convert set to object for config
   const selectedFields = Array.from(fields).reduce((acc, field) => ({
     ...acc,
