@@ -74,7 +74,7 @@ const generateCreateConfigFromConfigureState = (
   // create config request object
   const createConfigObj: CreateInstallationRequestConfig = {
     revisionId: hydratedRevision.id,
-    createdBy: consumerRef,
+    createdBy: `consumer:${consumerRef}`,
     content: {
       api: hydratedRevision.content.api,
       read: {
