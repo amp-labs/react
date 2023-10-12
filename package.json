@@ -74,8 +74,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.1.1",
-    "axios": "^1.5.1",
-    "lodash": "^4.17.21"
+    "@chakra-ui/icons": "^2.1.1"
   }
 }
