@@ -1,5 +1,9 @@
-import { createContext, useContext, useState } from 'react';
-import { Box, Tab, Tabs } from '@chakra-ui/react';
+import {
+  createContext, forwardRef, useContext, useState,
+} from 'react';
+import {
+  Box, Button, Tab, Tabs, useMultiStyleConfig, useTab,
+} from '@chakra-ui/react';
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
@@ -7,17 +11,29 @@ import { Config, HydratedRevision } from '../../services/api';
 
 import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from './utils';
 
-type NavObjectItemProps = {
+interface NavObjectItemProps {
   objectName: string;
   completed: boolean;
-};
-
-// TODO: add a checkmark icon if the object is completed
-function NavObjectItem({ objectName, completed }: NavObjectItemProps) {
-  return (
-    <Tab>{`${objectName}: ${completed}`}</Tab>
-  );
 }
+
+const CustomTab = forwardRef<HTMLButtonElement, NavObjectItemProps>(
+  ({ objectName, completed }, ref) => {
+    // 1. Reuse the `useTab` hook
+    const tabProps = useTab({ ref });
+
+    // 2. Hook into the Tabs `size`, `variant`, props
+    const styles = useMultiStyleConfig('Tabs', tabProps);
+
+    return (
+      <Button __css={styles.tab} {...tabProps}>
+        <Box as="span" mr="3">
+          {completed ? '✅' : '⚪'} {objectName}
+        </Box>
+        {tabProps.children}
+      </Button>
+    );
+  },
+);
 
 export type NavObject = {
   name: string;
@@ -90,7 +106,7 @@ export function ObjectManagementNav({
         bgColor="white"
         display="flex"
       >
-        <Box marginTop="40px" paddingRight="10px">
+        <Box marginTop="3.5rem" width="30rem">
           {error && <p>Error</p>}
           {loading && <p>Loading...</p>}
           {navObjects && (
@@ -98,11 +114,9 @@ export function ObjectManagementNav({
             index={tabIndex}
             onChange={handleTabsChange}
             orientation="horizontal"
-            variant="solid-rounded"
-            colorScheme="blue"
           >
             {navObjects.map((object) => (
-              <NavObjectItem
+              <CustomTab
                 key={object.name}
                 objectName={object.name}
                 completed={object.completed}
