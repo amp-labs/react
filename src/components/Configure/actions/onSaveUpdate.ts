@@ -1,6 +1,10 @@
 import { api, Config, UpdateInstallationRequestInstallationConfig } from '../../../services/api';
+import {
+  generateSelectedFieldMappingsFromConfigureState,
+  generateSelectedFieldsFromConfigureState,
+} from '../state/utils';
 import { ConfigureState } from '../types';
-import { getFieldKeyValue } from '../utils';
+
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
  * update installation request.
@@ -20,27 +24,10 @@ const generateUpdateConfigFromConfigureState = (
   config: Config,
   objectName: string,
 ): UpdateInstallationRequestInstallationConfig => {
-  const {
-    requiredFields, optionalFields, requiredCustomMapFields,
-  } = configureState;
-
-  const fields = new Set<string>();
-  requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
-  // adds optional fields that are selected (true)
-  optionalFields?.forEach((field) => field.value && fields.add(getFieldKeyValue(field)));
-  // convert set to object for config
-  const selectedFields = Array.from(fields).reduce((acc, field) => ({
-    ...acc,
-    [field]: true,
-  }), {});
-
-  const requiredCustomMapFieldsConfig = (requiredCustomMapFields || []).reduce((acc, field) => {
-    const key = getFieldKeyValue(field);
-    return {
-      ...acc,
-      [key]: field.value,
-    };
-  }, {});
+  const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
+  const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
+    configureState,
+  );
 
   // config request object type needs to be fixed
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
@@ -53,7 +40,7 @@ const generateUpdateConfigFromConfigureState = (
             schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
             destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
             selectedFields,
-            selectedFieldMappings: requiredCustomMapFieldsConfig,
+            selectedFieldMappings,
           },
         },
       },
