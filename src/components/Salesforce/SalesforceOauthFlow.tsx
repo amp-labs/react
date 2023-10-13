@@ -18,9 +18,6 @@ import { useProject } from '../../context/ProjectContext';
 import { api, ProviderApp } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const salesforceLogo = require('../../../public/images/apis/salesforce/Salesforce_Corporate_Logo_RGB.png');
-
 interface OAuthErrorAlertProps {
   error: string | null;
 }
@@ -109,13 +106,6 @@ function SalesforceOauthFlow({
     <Container>
       <Box p={8} maxWidth="600px" borderWidth={1} borderRadius={8} boxShadow="lg" textAlign={['left']} margin="auto" marginTop="40px" bgColor="white">
         <FormControl>
-          <Image
-            width="40%"
-            height="auto"
-            margin="0 auto"
-            src={salesforceLogo}
-            alt="Salesforce logo"
-          />
           <FormLabel
             marginTop="3em"
             marginBottom="0"

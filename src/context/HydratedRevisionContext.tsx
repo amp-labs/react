@@ -50,7 +50,7 @@ export function HydratedRevisionProvider({
 
   useEffect(() => {
     // Fetch the hydrated revision data using your API call
-    if (projectId && integrationId && revisionId && connectionId) {
+    if (projectId && integrationId && revisionId && connectionId && apiKey) {
       api().getHydratedRevision({
         projectId,
         integrationId,
@@ -71,6 +71,8 @@ export function HydratedRevisionProvider({
           setLoading(false);
           setError(err.message || 'An error occurred while fetching data');
         });
+    } else {
+      console.error('Missing required parameters for HydratedRevisionProvider');
     }
   }, [projectId, integrationId, revisionId, connectionId, apiKey]);
 
