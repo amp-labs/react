@@ -67,6 +67,12 @@ export function InstallIntegrationProvider({
     [integration, integrations],
   );
 
+  useEffect(() => {
+    if (integrationObj === null && integrations?.length) {
+      console.error(`Integration "${integration}" not found in integration list`);
+    }
+  }, [integration, integrationObj, integrations]);
+
   // default set the installations array with a single installation object
   // may need to find and update the installation object in the future
   const setInstallation = useCallback((installationObj: Installation) => {
