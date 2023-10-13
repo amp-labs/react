@@ -1,6 +1,6 @@
 {
   "name": "@amp-labs/react",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Ampersand React library.",
   "author": {
     "name": "Ampersand Labs",
@@ -23,11 +23,14 @@
   "homepage": "https://github.com/amp-labs/react#readme",
   "main": "build/src/index.js",
   "typings": "build/src/index.d.ts",
+  "files": [
+    "/build"
+  ],
   "scripts": {
     "test": "jest",
     "watch": "npm run prepbuild && tsc -p tsconfig.json --watch",
     "build": "npm run prepbuild && tsc -p tsconfig.json",
-    "prepbuild": "npm run clean && npm run assets",
+    "prepbuild": "npm run clean",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
     "lint": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/ --fix",
