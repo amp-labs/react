@@ -1,4 +1,7 @@
-import { api, Config, UpdateInstallationRequestInstallationConfig } from '../../../services/api';
+import {
+  api, Config, Installation, UpdateInstallationOperationRequest,
+  UpdateInstallationRequestInstallationConfig,
+} from '../../../services/api';
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
@@ -57,18 +60,18 @@ export const onSaveUpdate = (
   selectedObjectName: string,
   installationId: string,
   integrationId:string,
-  apiKey:string | null,
+  apiKey:string,
+  setInstallation: (installationObj: Installation) => void,
 ) => {
   // get configuration state
   // transform configuration state to update shape
-  const newConfig = generateUpdateConfigFromConfigureState(
+  const updateConfig = generateUpdateConfigFromConfigureState(
     configureState,
     config,
     selectedObjectName || '',
   );
 
-  // call api.updateInstallation
-  api().updateInstallation({
+  const updateInstallationRequest: UpdateInstallationOperationRequest = {
     projectId,
     installationId,
     integrationId,
@@ -77,16 +80,20 @@ export const onSaveUpdate = (
       // this example will replace the object at the object (i.e. accounts)
       updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
       installation: {
-        config: newConfig,
+        config: updateConfig,
       },
     },
-  }, {
+  };
+
+  // call api.updateInstallation
+  api().updateInstallation(updateInstallationRequest, {
     headers: {
-      'X-Api-Key': apiKey ?? '',
+      'X-Api-Key': apiKey,
       'Content-Type': 'application/json',
     },
   }).then((data) => {
-    console.log('UPDATED INSTALLATION: ', data);
+    // update local installation state
+    setInstallation(data);
   }).catch((err) => {
     console.error('ERROR: ', err);
   });
