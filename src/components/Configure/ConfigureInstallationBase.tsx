@@ -42,6 +42,8 @@ export function ConfigureInstallationBase(
         textAlign={['left']}
         margin="auto"
         bgColor="white"
+        maxHeight="33rem"
+        overflowY="scroll"
       >
         <Text marginBottom="20px">{title}</Text>
         {error && <div>{error}</div>}

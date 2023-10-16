@@ -24,7 +24,7 @@ export function OptionalFields() {
   return (
     <>
       <Text marginBottom="5px">Optional Fields</Text>
-      <Stack marginBottom="20px">
+      <Stack marginBottom="20px" height="21.5rem" overflowY="scroll">
         {configureState.optionalFields?.map((field) => {
           if (!isIntegrationFieldMapping(field)) {
             return (
