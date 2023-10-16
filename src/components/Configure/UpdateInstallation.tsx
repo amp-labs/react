@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
+import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
 import { Installation, Integration } from '../../services/api';
 
@@ -22,6 +23,7 @@ interface UpdateInstallationProps {
 export function UpdateInstallation(
   { installation, integrationObj }: UpdateInstallationProps,
 ) {
+  const { setInstallation } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   const apiKey = useContext(ApiKeyContext);
@@ -48,7 +50,7 @@ export function UpdateInstallation(
   }, [resetState]);
 
   const onSave = () => {
-    if (installation && selectedObjectName) {
+    if (installation && selectedObjectName && apiKey && projectId) {
       onSaveUpdate(
         projectId,
         configureState,
@@ -57,10 +59,10 @@ export function UpdateInstallation(
         installation.id,
         integrationObj.id,
         apiKey,
+        setInstallation,
       );
     } else {
-      // TODO: create new installation
-      console.error('no installation or selectedObjectName');
+      console.error('update installation props missing');
     }
   };
 
