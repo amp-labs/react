@@ -10,9 +10,7 @@ import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
-import { content } from './content';
 import { useSelectedObjectName } from './ObjectManagementNav';
-import { PLACEHOLDER_VARS } from './utils';
 
 interface UpdateInstallationProps {
   installation: Installation,
@@ -27,8 +25,7 @@ export function UpdateInstallation(
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   const apiKey = useContext(ApiKeyContext);
-  const { project, projectId } = useProject();
-  const appName = project?.appName || '';
+  const { projectId } = useProject();
 
   // when no installation or config exists, render create flow
   const { config } = installation;
@@ -66,17 +63,10 @@ export function UpdateInstallation(
     }
   };
 
-  const title = content.reconfigureIntro(
-    appName,
-    integrationObj.provider,
-    PLACEHOLDER_VARS.PROVIDER_WORKSPACE_REF,
-  );
-
   return (
     <ConfigureInstallationBase
       onSave={onSave}
       onCancel={resetState}
-      title={title}
     />
   );
 }

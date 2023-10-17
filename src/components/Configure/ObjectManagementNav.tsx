@@ -2,11 +2,13 @@ import {
   createContext, forwardRef, useContext, useState,
 } from 'react';
 import {
-  Box, Button, Tab, Tabs, useMultiStyleConfig, useTab,
+  Box, Button, Tabs, Text,
+  useMultiStyleConfig, useTab,
 } from '@chakra-ui/react';
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
+import { useProject } from '../../context/ProjectContext';
 import { Config, HydratedRevision } from '../../services/api';
 
 import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from './utils';
@@ -91,22 +93,26 @@ export function ObjectManagementNav({
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabsChange = (index: number) => { setTabIndex(index); };
   const selectedObject = getSelectedObject(navObjects || [], tabIndex);
+  const { project } = useProject();
+  const appName = project?.appName || '';
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
       <Box
         p={8}
-        maxWidth="800px"
-        borderWidth={1}
-        borderRadius={8}
-        boxShadow="lg"
+        maxWidth="1024px"
+        border="1px solid #EFEFEF"
+        borderRadius="8px"
+        boxShadow="md"
         textAlign={['left']}
         margin="auto"
-        marginTop="40px"
-        bgColor="white"
+        bgColor="whitesmoke"
         display="flex"
+        minHeight="100%"
       >
-        <Box marginTop="3.5rem" width="30rem">
+        <Box minWidth="12rem">
+          <Text>Salesforce integration</Text>
+          <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {error && <p>Error</p>}
           {loading && <p>Loading...</p>}
           {navObjects && (
