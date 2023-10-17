@@ -8,11 +8,13 @@ import { ApiKeyContext } from './ApiKeyContext';
 
 interface ProjectContextValue {
   project: Project | null;
+  appName: string;
   projectId: string;
 }
 
 export const ProjectContext = createContext<ProjectContextValue>({
   project: null,
+  appName: '',
   projectId: '',
 });
 
@@ -49,7 +51,9 @@ export function ProjectProvider(
     });
   }, [projectId, apiKey]);
 
-  const contextValue = useMemo(() => ({ projectId, project }), [projectId, project]);
+  const contextValue = useMemo(() => ({
+    projectId, project, appName: project?.appName || '',
+  }), [projectId, project]);
 
   return (
     <ProjectContext.Provider value={contextValue}>
