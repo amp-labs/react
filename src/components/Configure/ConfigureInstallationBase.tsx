@@ -1,5 +1,5 @@
 import {
-  Box, Button, Stack, Text,
+  Box, Button, Stack,
 } from '@chakra-ui/react';
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
@@ -11,12 +11,11 @@ import { RequiredFields } from './fields/RequiredFields';
 interface ConfigureInstallationBaseProps {
   onSave: () => void,
   onCancel: () => void,
-  title: JSX.Element,
 }
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  { title, onSave, onCancel }: ConfigureInstallationBaseProps,
+  { onSave, onCancel }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
@@ -34,18 +33,16 @@ export function ConfigureInstallationBase(
       </Stack>
       <Box
         p={8}
-        width="600px"
-        minWidth="600px"
-        borderWidth={1}
+        maxWidth="900px"
+        border="1px solid #EFEFEF"
         borderRadius={8}
-        boxShadow="lg"
+        boxShadow="md"
         textAlign={['left']}
         margin="auto"
         bgColor="white"
-        maxHeight="33rem"
+        maxHeight="100%"
         overflowY="scroll"
       >
-        <Text marginBottom="20px">{title}</Text>
         {error && <div>{error}</div>}
         {loading && <div>Loading...</div>}
         {hydratedRevision && (

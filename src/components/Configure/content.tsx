@@ -1,15 +1,5 @@
-import { capitalize } from '../../utils';
-
 // reconfigure content
 export const content = {
-  reconfigureIntro: (
-    appName: string,
-    apiProvider: string,
-    workspace: string,
-  ) => (
-    // eslint-disable-next-line max-len
-    <>{capitalize(apiProvider)} integration: <b>{workspace}</b>.</>
-  ),
   reconfigureRequiredFields: (
     appName: string,
     objectName: string,

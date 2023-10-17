@@ -69,13 +69,10 @@ export function CreateInstallation() {
     }
   };
 
-  const title = <>Create a new installation</>;
-
   return (
     <ConfigureInstallationBase
       onSave={onSave}
       onCancel={resetState}
-      title={title}
     />
   );
 }
