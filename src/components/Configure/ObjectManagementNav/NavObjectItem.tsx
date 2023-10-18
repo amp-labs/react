@@ -3,6 +3,8 @@ import {
   Box, Button, useMultiStyleConfig, useTab,
 } from '@chakra-ui/react';
 
+import { NavIcon } from '../../../assets/NavIcon';
+
 interface NavObjectItemProps {
   objectName: string;
   completed: boolean;
@@ -18,8 +20,14 @@ export const NavObjectItem = forwardRef<HTMLButtonElement, NavObjectItemProps>(
 
     return (
       <Button __css={styles.tab} {...tabProps} variant="outline">
-        <Box as="span" mr="3">
-          {completed ? '✅' : '⚪'} {objectName}
+        <Box
+          as="span"
+          display="flex"
+          alignItems="center"
+          gap={2}
+          mr="3"
+        >
+          {NavIcon(completed)} {objectName}
         </Box>
         {tabProps.children}
       </Button>
