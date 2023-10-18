@@ -27,11 +27,11 @@ import {
  */
 export interface ImportInstallationRequestConfig {
     /**
-     * The ID of the integration revision that this config is based on, you can retrieve this ID after deploying an integration via the CLI.
+     * The ID of the integration revision that this config is based on. If omitted, the latest revision is assumed.
      * @type {string}
      * @memberof ImportInstallationRequestConfig
      */
-    revisionId: string;
+    revisionId?: string;
     /**
      * 
      * @type {ConfigContent}
@@ -45,7 +45,6 @@ export interface ImportInstallationRequestConfig {
  */
 export function instanceOfImportInstallationRequestConfig(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "revisionId" in value;
     isInstance = isInstance && "content" in value;
 
     return isInstance;
@@ -61,7 +60,7 @@ export function ImportInstallationRequestConfigFromJSONTyped(json: any, ignoreDi
     }
     return {
         
-        'revisionId': json['revisionId'],
+        'revisionId': !exists(json, 'revisionId') ? undefined : json['revisionId'],
         'content': ConfigContentFromJSON(json['content']),
     };
 }

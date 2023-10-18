@@ -16,49 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ConfigContent
+ * @interface ConfigContentAllOf
  */
-export interface ConfigContent {
-    /**
-     * The SaaS API that we are integrating with.
-     * @type {string}
-     * @memberof ConfigContent
-     */
-    api: string;
+export interface ConfigContentAllOf {
     /**
      * 
      * @type {any}
-     * @memberof ConfigContent
+     * @memberof ConfigContentAllOf
      */
     read?: any | null;
 }
 
 /**
- * Check if a given object implements the ConfigContent interface.
+ * Check if a given object implements the ConfigContentAllOf interface.
  */
-export function instanceOfConfigContent(value: object): boolean {
+export function instanceOfConfigContentAllOf(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "api" in value;
 
     return isInstance;
 }
 
-export function ConfigContentFromJSON(json: any): ConfigContent {
-    return ConfigContentFromJSONTyped(json, false);
+export function ConfigContentAllOfFromJSON(json: any): ConfigContentAllOf {
+    return ConfigContentAllOfFromJSONTyped(json, false);
 }
 
-export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConfigContent {
+export function ConfigContentAllOfFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConfigContentAllOf {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'api': json['api'],
         'read': !exists(json, 'read') ? undefined : json['read'],
     };
 }
 
-export function ConfigContentToJSON(value?: ConfigContent | null): any {
+export function ConfigContentAllOfToJSON(value?: ConfigContentAllOf | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -67,7 +59,6 @@ export function ConfigContentToJSON(value?: ConfigContent | null): any {
     }
     return {
         
-        'api': value.api,
         'read': value.read,
     };
 }

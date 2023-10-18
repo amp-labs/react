@@ -73,19 +73,25 @@ export interface Operation {
      * @type {string}
      * @memberof Operation
      */
-    workflowRef?: string;
+    workflowRef: string;
     /**
      * The run reference.
      * @type {string}
      * @memberof Operation
      */
-    runRef?: string;
+    runRef: string;
     /**
      * The error history of the operation.
      * @type {Array<OperationError>}
      * @memberof Operation
      */
     errorHistory?: Array<OperationError>;
+    /**
+     * The time the operation was created.
+     * @type {Date}
+     * @memberof Operation
+     */
+    createTime?: Date;
 }
 
 /**
@@ -97,6 +103,8 @@ export function instanceOfOperation(value: object): boolean {
     isInstance = isInstance && "actionType" in value;
     isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "installationId" in value;
+    isInstance = isInstance && "workflowRef" in value;
+    isInstance = isInstance && "runRef" in value;
 
     return isInstance;
 }
@@ -118,9 +126,10 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'startTime': !exists(json, 'startTime') ? undefined : (new Date(json['startTime'])),
         'endTime': !exists(json, 'endTime') ? undefined : (new Date(json['endTime'])),
         'status': !exists(json, 'status') ? undefined : json['status'],
-        'workflowRef': !exists(json, 'workflowRef') ? undefined : json['workflowRef'],
-        'runRef': !exists(json, 'runRef') ? undefined : json['runRef'],
+        'workflowRef': json['workflowRef'],
+        'runRef': json['runRef'],
         'errorHistory': !exists(json, 'errorHistory') ? undefined : ((json['errorHistory'] as Array<any>).map(OperationErrorFromJSON)),
+        'createTime': !exists(json, 'createTime') ? undefined : (new Date(json['createTime'])),
     };
 }
 
@@ -143,6 +152,7 @@ export function OperationToJSON(value?: Operation | null): any {
         'workflowRef': value.workflowRef,
         'runRef': value.runRef,
         'errorHistory': value.errorHistory === undefined ? undefined : ((value.errorHistory as Array<any>).map(OperationErrorToJSON)),
+        'createTime': value.createTime === undefined ? undefined : (value.createTime.toISOString()),
     };
 }
 

@@ -32,7 +32,7 @@ const InstallIntegrationContext = createContext<InstallIntegrationContextValue>(
   groupRef: '',
   groupName: '',
   installation: undefined,
-  setInstallation: () => {},
+  setInstallation: () => { },
 });
 
 // Create a custom hook to access the props
@@ -88,7 +88,9 @@ export function InstallIntegrationProvider({
           'X-Api-Key': apiKey ?? '',
         },
       })
-        .then((_installations) => { setInstallations(_installations || []); })
+        .then((_installations) => {
+          setInstallations(_installations || []);
+        })
         .catch((err) => { console.error('ERROR: ', err); });
     }
   }, [projectId, integrationObj?.id, apiKey, groupRef]);

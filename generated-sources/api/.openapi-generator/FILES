@@ -12,6 +12,7 @@ src/models/BaseReadConfigStandardObject.ts
 src/models/BatchUpsertIntegrationsRequest.ts
 src/models/Config.ts
 src/models/ConfigContent.ts
+src/models/ConfigContentAllOf.ts
 src/models/Connection.ts
 src/models/Consumer.ts
 src/models/CreateConsumerRequest.ts
