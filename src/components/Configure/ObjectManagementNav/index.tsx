@@ -1,41 +1,15 @@
 import {
-  createContext, forwardRef, useContext, useState,
+  createContext, useContext, useState,
 } from 'react';
-import {
-  Box, Button, Tabs, Text,
-  useMultiStyleConfig, useTab,
-} from '@chakra-ui/react';
+import { Box, Tabs, Text } from '@chakra-ui/react';
 
-import { useHydratedRevision } from '../../context/HydratedRevisionContext';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
-import { Config, HydratedRevision } from '../../services/api';
+import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useProject } from '../../../context/ProjectContext';
+import { Config, HydratedRevision } from '../../../services/api';
+import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from '../utils';
 
-import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from './utils';
-
-interface NavObjectItemProps {
-  objectName: string;
-  completed: boolean;
-}
-
-const CustomTab = forwardRef<HTMLButtonElement, NavObjectItemProps>(
-  ({ objectName, completed }, ref) => {
-    // 1. Reuse the `useTab` hook
-    const tabProps = useTab({ ref });
-
-    // 2. Hook into the Tabs `size`, `variant`, props
-    const styles = useMultiStyleConfig('Tabs', tabProps);
-
-    return (
-      <Button __css={styles.tab} {...tabProps}>
-        <Box as="span" mr="3">
-          {completed ? '✅' : '⚪'} {objectName}
-        </Box>
-        {tabProps.children}
-      </Button>
-    );
-  },
-);
+import { NavObjectItem } from './NavObjectItem';
 
 export type NavObject = {
   name: string;
@@ -74,9 +48,9 @@ export function useSelectedObjectName() {
   return { selectedObjectName: selectedNavObjectName }; // Return as an object
 }
 
-type ObjectManagementNavProps = {
-  children?: React.ReactNode;
-};
+  type ObjectManagementNavProps = {
+    children?: React.ReactNode;
+  };
 
 function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject | undefined {
   return navObjects?.[tabIndex];
@@ -116,19 +90,19 @@ export function ObjectManagementNav({
           {error && <p>Error</p>}
           {loading && <p>Loading...</p>}
           {navObjects && (
-          <Tabs
-            index={tabIndex}
-            onChange={handleTabsChange}
-            orientation="horizontal"
-          >
-            {navObjects.map((object) => (
-              <CustomTab
-                key={object.name}
-                objectName={object.name}
-                completed={object.completed}
-              />
-            ))}
-          </Tabs>
+            <Tabs
+              index={tabIndex}
+              onChange={handleTabsChange}
+              orientation="horizontal"
+            >
+              {navObjects.map((object) => (
+                <NavObjectItem
+                  key={object.name}
+                  objectName={object.name}
+                  completed={object.completed}
+                />
+              ))}
+            </Tabs>
           )}
         </Box>
         {children}
