@@ -34,6 +34,7 @@ export function ConfigureInstallationBase(
       <Box
         p={8}
         maxWidth="900px"
+        minWidth="500px"
         border="1px solid #EFEFEF"
         borderRadius={8}
         boxShadow="md"
@@ -48,8 +49,8 @@ export function ConfigureInstallationBase(
         {hydratedRevision && (
         <>
           <RequiredFields />
-          <OptionalFields />
           <RequiredCustomFields />
+          <OptionalFields />
         </>
         )}
       </Box>

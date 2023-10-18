@@ -1,15 +1,15 @@
 import {
-  Select, Stack, Text,
+  Box, Select, Stack, Text,
 } from '@chakra-ui/react';
 
-import { content } from '../content';
-import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { isIntegrationFieldMapping } from '../utils';
 
+import { FieldHeader } from './FieldHeader';
+
 export function RequiredCustomFields() {
   const { configureState, setConfigureState } = useConfigureState();
-  const { selectedObjectName } = useSelectedObjectName();
+
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
     const { requiredCustomMapFields } = configureState;
@@ -30,30 +30,33 @@ export function RequiredCustomFields() {
     }
   };
   return (
-    <Stack>
-      {configureState.requiredCustomMapFields?.map((field) => {
-        if (isIntegrationFieldMapping(field)) {
-          return (
-            <Stack key={field.mapToName}>
-              <Text marginBottom="5px">
-                {content.customMappingText(selectedObjectName || '', field.mapToName)}
-              </Text>
-              <Select
-                name={field.mapToName}
-                variant="flushed"
-                value={field.value}
-                onChange={onSelectChange}
-                placeholder="Please select one"
-              >
-                {configureState?.allFields?.map((f) => (
-                  <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
-                ))}
-              </Select>
-            </Stack>
-          );
-        }
-        return null; // fallback for existant fields
-      })}
-    </Stack>
+    <Box>
+      <FieldHeader string="Map the following fields (required)" />
+      <Stack>
+        {configureState.requiredCustomMapFields?.map((field) => {
+          if (isIntegrationFieldMapping(field)) {
+            return (
+              <Stack key={field.mapToName}>
+                <Text fontWeight="500">{field.mapToDisplayName}</Text>
+                <Text marginBottom="5px" fontSize={14}>{field?.prompt}</Text>
+                <Select
+                  name={field.mapToName}
+                  variant="flushed"
+                  value={field.value}
+                  onChange={onSelectChange}
+                  placeholder="Please select one"
+                >
+                  {configureState?.allFields?.map((f) => (
+                    <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>
+                  ))}
+                </Select>
+              </Stack>
+            );
+          }
+          return null; // fallback for existant fields
+        })}
+      </Stack>
+    </Box>
+
   );
 }

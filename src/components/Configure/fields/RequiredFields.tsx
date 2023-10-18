@@ -1,21 +1,20 @@
-import { Box, Tag, Text } from '@chakra-ui/react';
+import { Box, Tag } from '@chakra-ui/react';
 
 import { useProject } from '../../../context/ProjectContext';
-import { content } from '../content';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { isIntegrationFieldMapping } from '../utils';
 
+import { FieldHeader } from './FieldHeader';
+
 export function RequiredFields() {
   const { configureState } = useConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
-  const { project } = useProject();
-  const appName = project?.appName || '';
+  const { appName } = useProject();
+
   return (
     <>
-      <Text marginBottom="5px">
-        {content.reconfigureRequiredFields(appName, selectedObjectName || '')}
-      </Text>
+      <FieldHeader string={`${appName} reads the following ${selectedObjectName} fields`} />
       <Box marginBottom="20px">
         {configureState.requiredFields?.map((field) => {
           if (!isIntegrationFieldMapping(field)) {
