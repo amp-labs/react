@@ -10,7 +10,7 @@ const customTheme = extendTheme({
           _selected: {
             color: 'black', // Set the color of the selected tab to 'black
             fontWeight: '500', // Set the font weight of the selected tab
-            bg: 'blue.100', // Set the background color of the selected tab to blue.100
+            bg: 'gray.200', // Set the background color of the selected tab to blue.100
             border: 'none',
           },
         },
