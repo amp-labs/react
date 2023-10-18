@@ -7,11 +7,17 @@ const customTheme = extendTheme({
         tab: {
           width: '100%',
           borderRadius: '4px',
+          _hover: {
+            bg: 'gray.300',
+          },
           _selected: {
             color: 'black', // Set the color of the selected tab to 'black
             fontWeight: '500', // Set the font weight of the selected tab
-            bg: 'gray.200', // Set the background color of the selected tab to blue.100
+            bg: 'gray.200', // Set the background color of the selected tab
             border: 'none',
+            _hover: {
+              bg: 'gray.300',
+            },
           },
         },
       },
