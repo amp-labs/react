@@ -74,8 +74,8 @@
   },
   "peerDependencies": {
     "@chakra-ui/react": "^2.4.4",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^x.x.x",
+    "@emotion/styled": "^x.x.x",
     "framer-motion": "^x.x.x",
     "react": "^18.0.0"
   },

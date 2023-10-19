@@ -1,4 +1,17 @@
-export function NavIcon(completed: boolean) {
+import React from 'react';
+
+export function NavIcon(completed: boolean, pending?: boolean) {
+  if (pending) {
+    return (React.createElement(
+      'svg',
+      {
+        xmlns: 'http://www.w3.org/2000/svg', width: '18', height: '18', viewBox: '0 0 18 18', fill: 'none',
+      },
+      React.createElement('circle', {
+        cx: '9', cy: '9', r: '5', fill: '#FBD38D',
+      }),
+    ));
+  }
   if (completed) {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -7,6 +20,7 @@ export function NavIcon(completed: boolean) {
       </svg>
     );
   }
+  // default to empty icon
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
       <circle cx="9" cy="9" r="5" fill="#BFDBFE" />
