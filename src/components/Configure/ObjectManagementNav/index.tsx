@@ -76,7 +76,7 @@ export function ObjectManagementNav({
         p={8}
         maxWidth="1024px"
         border="1px solid #EFEFEF"
-        borderRadius="8px"
+        borderRadius={6}
         boxShadow="md"
         textAlign={['left']}
         margin="auto"
@@ -84,7 +84,7 @@ export function ObjectManagementNav({
         display="flex"
         minHeight="100%"
       >
-        <Box minWidth="12rem">
+        <Box minWidth="12rem" paddingRight={6}>
           <Text>Salesforce integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {error && <p>Error</p>}

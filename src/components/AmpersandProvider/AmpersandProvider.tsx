@@ -10,6 +10,7 @@ import React, { createContext, useContext } from 'react';
 import { ApiKeyProvider } from '../../context/ApiKeyContext';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';
+import { ThemeProvider } from '../ThemeProvider';
 
 interface AmpersandProviderProps {
   options: {
@@ -24,13 +25,15 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options: { apiKey, projectId }, children } = props;
 
   return (
-    <ApiKeyProvider value={apiKey}>
-      <IntegrationListProvider projectId={projectId}>
-        <ProjectProvider projectId={projectId}>
-          { children }
-        </ProjectProvider>
-      </IntegrationListProvider>
-    </ApiKeyProvider>
+    <ThemeProvider>
+      <ApiKeyProvider value={apiKey}>
+        <IntegrationListProvider projectId={projectId}>
+          <ProjectProvider projectId={projectId}>
+            { children }
+          </ProjectProvider>
+        </IntegrationListProvider>
+      </ApiKeyProvider>
+    </ThemeProvider>
   );
 }
 
