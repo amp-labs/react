@@ -50,15 +50,17 @@ export function CreateInstallation() {
   }, [resetState]);
 
   const onSave = () => {
+    // check configrueState for required fields
+
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
-         && integrationId && groupRef && consumerRef && hydratedRevision) {
+      && integrationId && groupRef && consumerRef && hydratedRevision) {
       onSaveCreate(
-        selectedObjectName,
         projectId,
         integrationId,
         groupRef,
         consumerRef,
         selectedConnection.id,
+        selectedObjectName,
         apiKey,
         hydratedRevision,
         configureState,

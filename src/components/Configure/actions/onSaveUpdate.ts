@@ -55,12 +55,12 @@ const generateUpdateConfigFromConfigureState = (
 
 export const onSaveUpdate = (
   projectId: string,
-  configureState: ConfigureState,
-  config: Config,
-  selectedObjectName: string,
+  integrationId: string,
   installationId: string,
-  integrationId:string,
-  apiKey:string,
+  selectedObjectName: string,
+  apiKey: string,
+  config: Config,
+  configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
 ) => {
   // get configuration state

@@ -95,12 +95,12 @@ const generateCreateConfigFromConfigureState = (
 };
 
 export const onSaveCreate = (
-  objectName: string,
   projectId: string,
   integrationId: string,
-  groupRef:string,
+  groupRef: string,
   consumerRef: string,
   connectionId: string,
+  objectName: string,
   apiKey: string,
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
