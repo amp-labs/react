@@ -29,7 +29,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <ApiKeyProvider value={apiKey}>
         <IntegrationListProvider projectId={projectId}>
           <ProjectProvider projectId={projectId}>
-            { children }
+            {children}
           </ProjectProvider>
         </IntegrationListProvider>
       </ApiKeyProvider>

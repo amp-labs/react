@@ -20,13 +20,19 @@ import { exists, mapValues } from '../runtime';
  */
 export interface ImportConnectionRequest {
     /**
-     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call.
+     * The SaaS provider that this installation connects to.
      * @type {string}
      * @memberof ImportConnectionRequest
      */
-    providerAppId: string;
+    provider: string;
     /**
-     * The ID of the user group that has access to this installation.
+     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Console is assumed.
+     * @type {string}
+     * @memberof ImportConnectionRequest
+     */
+    providerAppId?: string;
+    /**
+     * The ID of the user group that has access to this installation. This is any ID that your app uses to identify a group of users - such as an org, team, or workspace.
      * @type {string}
      * @memberof ImportConnectionRequest
      */
@@ -38,7 +44,7 @@ export interface ImportConnectionRequest {
      */
     groupName: string;
     /**
-     * The ID of the user whose credential was used for this connection.
+     * The ID of the user whose credential was used for this connection. This is the ID that your app uses to identify a user - such as a user ID or username.
      * @type {string}
      * @memberof ImportConnectionRequest
      */
@@ -80,7 +86,7 @@ export interface ImportConnectionRequest {
  */
 export function instanceOfImportConnectionRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "providerAppId" in value;
+    isInstance = isInstance && "provider" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "groupName" in value;
     isInstance = isInstance && "consumerRef" in value;
@@ -101,7 +107,8 @@ export function ImportConnectionRequestFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'providerAppId': json['providerAppId'],
+        'provider': json['provider'],
+        'providerAppId': !exists(json, 'providerAppId') ? undefined : json['providerAppId'],
         'groupRef': json['groupRef'],
         'groupName': json['groupName'],
         'consumerRef': json['consumerRef'],
@@ -122,6 +129,7 @@ export function ImportConnectionRequestToJSON(value?: ImportConnectionRequest | 
     }
     return {
         
+        'provider': value.provider,
         'providerAppId': value.providerAppId,
         'groupRef': value.groupRef,
         'groupName': value.groupName,

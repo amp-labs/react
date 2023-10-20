@@ -7,6 +7,7 @@ export * from './BaseReadConfigStandardObject';
 export * from './BatchUpsertIntegrationsRequest';
 export * from './Config';
 export * from './ConfigContent';
+export * from './ConfigContentAllOf';
 export * from './Connection';
 export * from './Consumer';
 export * from './CreateConsumerRequest';

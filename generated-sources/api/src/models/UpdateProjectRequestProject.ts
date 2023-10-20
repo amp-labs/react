@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * The provider app fields to update. (Only include the fields you'd like to update.)
+ * The project fields to update. (Only include the fields you'd like to update.)
  * @export
  * @interface UpdateProjectRequestProject
  */
