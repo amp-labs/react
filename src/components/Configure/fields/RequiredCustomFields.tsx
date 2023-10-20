@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
-  Box, Stack,
+  Box, FormControl,
+  FormErrorMessage, Stack,
 } from '@chakra-ui/react';
 
 import { useConfigureState } from '../state/ConfigurationStateProvider';
@@ -52,15 +53,19 @@ export function RequiredCustomFields(
           );
 
           return (
-            <RequiredFieldsSelect
-              key={field.mapToName}
-              allFields={configureState.allFields || []}
-              field={field}
-              onSelectChange={onSelectChange}
-              isError={isError}
-            />
+            <FormControl isInvalid={isError}>
+              <RequiredFieldsSelect
+                key={field.mapToName}
+                allFields={configureState.allFields || []}
+                field={field}
+                onSelectChange={onSelectChange}
+                isError={isError}
+              />
+              <FormErrorMessage> * required</FormErrorMessage>
+            </FormControl>
           );
         })}
+
       </Stack>
     </Box>
 
