@@ -1,6 +1,7 @@
 import {
   useContext,
-  useEffect, useState,
+  useEffect, useMemo,
+  useState,
 } from 'react';
 
 import { ApiKeyContext } from '../context/ApiKeyContext';
@@ -8,15 +9,25 @@ import { useIntegrationList } from '../context/IntegrationListContext';
 import { useProject } from '../context/ProjectContext';
 import { api, Installation, Integration } from '../services/api';
 
-interface UseIsIntegrationInstalled {
+interface UseIsIntegrationInstalledResult {
   isLoaded: boolean;
-  isIntegrationInstalled: boolean;
+  isIntegrationInstalled: boolean | null;
 }
 
 export const useIsIntegrationInstalled = (
   integration: string,
   groupRef: string,
-): UseIsIntegrationInstalled => {
+): UseIsIntegrationInstalledResult => {
+  const apiKey = useContext(ApiKeyContext);
+  const { projectId } = useProject();
+  const { integrations } = useIntegrationList();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isIntegrationInstalled, setIsIntegrationInstalled] = useState<boolean | null>(null);
+
+  if (!apiKey || !projectId) {
+    throw new Error('useIsIntegrationInstalled must be used within AmpersandProvider');
+  }
+
   if (!integration) {
     throw new Error('useIsIntegrationInstalled requires an integration name');
   }
@@ -25,24 +36,7 @@ export const useIsIntegrationInstalled = (
     throw new Error('useIsIntegrationInstalled requires a groupRef');
   }
 
-  const apiKey = useContext(ApiKeyContext);
-  if (!apiKey) {
-    throw new Error('useIsIntegrationInstalled requires an ApiKeyContext');
-  }
-
-  const { projectId } = useProject();
-  if (!projectId) {
-    throw new Error('useIsIntegrationInstalled requires a projectId');
-  }
-
-  const { integrations } = useIntegrationList();
-  const [isLoaded, setIsLoaded] = useState(
-    false,
-  );
-
-  const [installations, setInstallations] = useState<Installation[]>([]);
-
-  const integrationToCheck = integrations?.reduce(
+  const integrationToCheck = useMemo(() => integrations?.reduce(
     (
       acc: Integration,
       _integration: Integration,
@@ -51,12 +45,10 @@ export const useIsIntegrationInstalled = (
         ? _integration
         : acc),
     {} as Integration,
-  );
+  ), [integrations]);
 
   useEffect(() => {
-    if (!apiKey) return;
     if (!integrationToCheck) return;
-    if (!projectId) return;
 
     api().listInstallations({
       projectId,
@@ -68,15 +60,12 @@ export const useIsIntegrationInstalled = (
       },
     }).then((installationList: Installation[]) => {
       setIsLoaded(true);
-      setInstallations(installationList);
+      setIsIntegrationInstalled(installationList.length > 0);
     }).catch((err) => {
       console.error('Error listing installations: ', err);
       setIsLoaded(true);
     });
-  }, [integrations, integration, groupRef, apiKey, projectId, integrationToCheck]);
+  }, [groupRef, apiKey, projectId, integrationToCheck]);
 
-  if (!isLoaded) {
-    return { isLoaded: false, isIntegrationInstalled: false };
-  }
-  return { isLoaded: true, isIntegrationInstalled: installations.length > 0 };
+  return { isLoaded, isIntegrationInstalled };
 };
