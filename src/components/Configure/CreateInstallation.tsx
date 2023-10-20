@@ -1,7 +1,9 @@
 /**
  * this page is wip: untested
  */
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
@@ -50,20 +52,22 @@ export function CreateInstallation() {
     resetState();
   }, [resetState]);
 
-  const [formErrorFields, setFormErrorFields] = useState<CustomConfigureStateIntegrationField[]>([]);
-
+  const [
+    formErrorFields,
+    setFormErrorFields,
+  ] = useState<CustomConfigureStateIntegrationField[]>([]);
 
   const onSave = (e: any) => {
     e.preventDefault();
     setFormErrorFields([]);
 
     const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value)
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
-      setFormErrorFields(fieldsWithRequirementsNotMet)
-      console.error('required fields not met', fieldsWithRequirementsNotMet.map(field => field.mapToDisplayName))
+      setFormErrorFields(fieldsWithRequirementsNotMet);
+      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
       return;
     }
 

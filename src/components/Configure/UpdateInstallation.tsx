@@ -1,4 +1,6 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
@@ -12,7 +14,6 @@ import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 import { CustomConfigureStateIntegrationField } from './types';
-
 
 interface UpdateInstallationProps {
   installation: Installation,
@@ -47,20 +48,23 @@ export function UpdateInstallation(
     // set configurationState when hydratedRevision is loaded
     resetState();
   }, [resetState]);
-  const [formErrorFields, setFormErrorFields] = useState<CustomConfigureStateIntegrationField[]>([]);
+  const [
+    formErrorFields,
+    setFormErrorFields,
+  ] = useState<CustomConfigureStateIntegrationField[]>([]);
 
   const onSave = (e: any) => {
     e.preventDefault();
-    setFormErrorFields([])
+    setFormErrorFields([]);
 
     // check if fields with requirements are met
     const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value)
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
-      setFormErrorFields(fieldsWithRequirementsNotMet)
-      console.error('required fields not met', fieldsWithRequirementsNotMet.map(field => field.mapToDisplayName))
+      setFormErrorFields(fieldsWithRequirementsNotMet);
+      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
       return;
     }
 

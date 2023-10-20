@@ -1,9 +1,9 @@
 import {
-  Box, Button, Stack, FormControl, FormLabel, FormErrorMessage
-} from '@chakra-ui/react';
+  FormEventHandler,
+} from 'react';
 import {
-  FormEventHandler
-} from "react";
+  Box, Button, Stack,
+} from '@chakra-ui/react';
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 
@@ -21,15 +21,18 @@ interface ConfigureInstallationBaseProps {
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  { onSave, onCancel, formErrorFields, setFormErrorFields }: ConfigureInstallationBaseProps,
+  {
+    onSave, onCancel, formErrorFields, setFormErrorFields,
+  }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
   return (
     <form
-      onSubmit={onSave}>
+      onSubmit={onSave}
+    >
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
-        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type='submit'>Save</Button>
+        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type="submit">Save</Button>
         <Button
           backgroundColor="gray.200"
           color="blackAlpha.700"
@@ -56,7 +59,10 @@ export function ConfigureInstallationBase(
         {hydratedRevision && (
           <>
             <RequiredFields />
-            <RequiredCustomFields formErrorFields={formErrorFields} setFormErrorFields={setFormErrorFields} />
+            <RequiredCustomFields
+              formErrorFields={formErrorFields}
+              setFormErrorFields={setFormErrorFields}
+            />
             <OptionalFields />
           </>
         )}
