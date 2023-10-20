@@ -53,9 +53,8 @@ export function RequiredCustomFields(
           );
 
           return (
-            <FormControl isInvalid={isError}>
+            <FormControl key={field.mapToName} isInvalid={isError}>
               <RequiredFieldsSelect
-                key={field.mapToName}
                 allFields={configureState.allFields || []}
                 field={field}
                 onSelectChange={onSelectChange}
