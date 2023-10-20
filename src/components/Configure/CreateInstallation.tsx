@@ -1,7 +1,7 @@
 /**
  * this page is wip: untested
  */
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
@@ -14,6 +14,7 @@ import { useConfigureState } from './state/ConfigurationStateProvider';
 import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
+import { CustomConfigureStateIntegrationField } from './types';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -49,7 +50,24 @@ export function CreateInstallation() {
     resetState();
   }, [resetState]);
 
-  const onSave = () => {
+  const [formErrorFields, setFormErrorFields] = useState<CustomConfigureStateIntegrationField[]>([]);
+
+
+  const onSave = (e: any) => {
+    e.preventDefault();
+    setFormErrorFields([]);
+
+    const { requiredCustomMapFields } = configureState;
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value)
+
+    // if requires fields are not met, set error fields and return
+    if (fieldsWithRequirementsNotMet?.length) {
+      setFormErrorFields(fieldsWithRequirementsNotMet)
+      console.error('required fields not met', fieldsWithRequirementsNotMet.map(field => field.mapToDisplayName))
+      return;
+    }
+
+    // check configrueState for required fields
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {
       onSaveCreate(
@@ -73,6 +91,8 @@ export function CreateInstallation() {
     <ConfigureInstallationBase
       onSave={onSave}
       onCancel={resetState}
+      formErrorFields={formErrorFields}
+      setFormErrorFields={setFormErrorFields}
     />
   );
 }

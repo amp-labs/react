@@ -9,8 +9,16 @@ import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
 import { RequiredFieldsSelect } from './RequiredFieldsSelect';
+import { CustomConfigureStateIntegrationField } from '../types'
 
-export function RequiredCustomFields() {
+interface RequiredCustomFieldsProps {
+  formErrorFields: CustomConfigureStateIntegrationField[],
+  setFormErrorFields: (fields: CustomConfigureStateIntegrationField[]) => void,
+}
+
+export function RequiredCustomFields(
+  { formErrorFields, setFormErrorFields }: RequiredCustomFieldsProps,
+) {
   const { configureState, setConfigureState } = useConfigureState();
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
@@ -19,6 +27,9 @@ export function RequiredCustomFields() {
     if (isUpdated) {
       setConfigureState(newState);
     }
+    const newFormErrorFields = formErrorFields?.filter((field) => field.mapToName !== name)
+    setFormErrorFields(newFormErrorFields)
+    setRequiredCustomMapFieldValue(name, value, configureState);
   };
 
   const integrationFieldMappings = useMemo(
@@ -28,18 +39,24 @@ export function RequiredCustomFields() {
     [configureState],
   );
 
+
   return (
     <Box>
       <FieldHeader string="Map the following fields (required)" />
       <Stack>
-        {integrationFieldMappings.map((field) => (
-          <RequiredFieldsSelect
+        {integrationFieldMappings.map((field) => {
+          // check if current select field is in error
+          const isError = !!formErrorFields?.find((errorField) => errorField.mapToName === field.mapToName)
+
+          return < RequiredFieldsSelect
             key={field.mapToName}
             allFields={configureState.allFields || []}
             field={field}
             onSelectChange={onSelectChange}
+            isError={isError}
           />
-        ))}
+
+        })}
       </Stack>
     </Box>
 

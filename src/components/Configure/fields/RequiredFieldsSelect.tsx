@@ -13,11 +13,12 @@ interface RequiredFieldsSelectProps {
   onSelectChange: (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void,
-  allFields: HydratedIntegrationFieldExistent[]
+  allFields: HydratedIntegrationFieldExistent[],
+  isError: boolean,
 }
 
 export function RequiredFieldsSelect(
-  { field, onSelectChange, allFields }: RequiredFieldsSelectProps,
+  { field, onSelectChange, allFields, isError }: RequiredFieldsSelectProps,
 ) {
   const { configureState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
@@ -53,6 +54,7 @@ export function RequiredFieldsSelect(
         onChange={onSelectChange}
         placeholder="Please select one"
         disabled={disabled}
+        isInvalid={isError}
       >
         {options}
       </Select>

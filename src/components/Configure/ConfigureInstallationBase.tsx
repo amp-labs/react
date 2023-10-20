@@ -1,28 +1,35 @@
 import {
-  Box, Button, Stack,
+  Box, Button, Stack, FormControl, FormLabel, FormErrorMessage
 } from '@chakra-ui/react';
+import {
+  FormEventHandler
+} from "react";
 
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredCustomFields } from './fields/RequiredCustomFields';
 import { RequiredFields } from './fields/RequiredFields';
+import { CustomConfigureStateIntegrationField } from './types';
 
 interface ConfigureInstallationBaseProps {
-  onSave: () => void,
+  onSave: FormEventHandler,
   onCancel: () => void,
+  formErrorFields: CustomConfigureStateIntegrationField[],
+  setFormErrorFields: (fields: CustomConfigureStateIntegrationField[]) => void,
 }
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  { onSave, onCancel }: ConfigureInstallationBaseProps,
+  { onSave, onCancel, formErrorFields, setFormErrorFields }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
   return (
-    <Box>
+    <form
+      onSubmit={onSave}>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
-        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
+        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type='submit'>Save</Button>
         <Button
           backgroundColor="gray.200"
           color="blackAlpha.700"
@@ -47,13 +54,13 @@ export function ConfigureInstallationBase(
         {error && <div>{error}</div>}
         {loading && <div>Loading...</div>}
         {hydratedRevision && (
-        <>
-          <RequiredFields />
-          <RequiredCustomFields />
-          <OptionalFields />
-        </>
+          <>
+            <RequiredFields />
+            <RequiredCustomFields formErrorFields={formErrorFields} setFormErrorFields={setFormErrorFields} />
+            <OptionalFields />
+          </>
         )}
       </Box>
-    </Box>
+    </form>
   );
 }
