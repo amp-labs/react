@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Select, Stack, Text,
 } from '@chakra-ui/react';
@@ -8,14 +8,16 @@ import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { setRequiredCustomMapFieldValue } from '../state/utils';
 import { CustomConfigureStateIntegrationField } from '../types';
 
+interface RequiredFieldsSelectProps {
+  field: CustomConfigureStateIntegrationField,
+  onSelectChange: (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => void,
+  allFields: HydratedIntegrationFieldExistent[]
+}
+
 export function RequiredFieldsSelect(
-  { field, onSelectChange, allFields }: {
-    field: CustomConfigureStateIntegrationField,
-    onSelectChange: (
-      e: React.ChangeEvent<HTMLSelectElement>
-    ) => void,
-    allFields: HydratedIntegrationFieldExistent[]
-  },
+  { field, onSelectChange, allFields }: RequiredFieldsSelectProps,
 ) {
   const { configureState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
@@ -23,19 +25,23 @@ export function RequiredFieldsSelect(
   useEffect(() => {
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
     if (!!field._default && !field.value) {
-      setRequiredCustomMapFieldValue(
+      const { isUpdated, newState } = setRequiredCustomMapFieldValue(
         field.mapToName,
         field._default, /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
         configureState,
-        setConfigureState,
       );
+
+      if (isUpdated) {
+        setConfigureState(newState);
+      }
     }
     setDisabled(false);
   }, [field, allFields, configureState, setConfigureState]);
 
-  const options = allFields?.map(
+  const options = useMemo(() => allFields?.map(
     (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,
-  );
+  ), [allFields]);
+
   return (
     <Stack key={field.mapToName}>
       <Text fontWeight="500">{field.mapToDisplayName}</Text>

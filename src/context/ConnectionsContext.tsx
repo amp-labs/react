@@ -18,7 +18,7 @@ export const ConnectionsContext = createContext<ConnectionsContextValue>({
   connections: null,
   selectedConnection: null,
   setConnections: () => { },
-  setSelectedConnection: () => {},
+  setSelectedConnection: () => { },
 });
 
 export const useConnections = (): ConnectionsContextValue => {
@@ -51,7 +51,6 @@ export function ConnectionsProvider({
         'X-Api-Key': apiKey ?? '',
       },
     }).then((_connections) => {
-      console.log('CONNECTIONS: ', _connections);
       setConnections(_connections);
     }).catch((err) => {
       console.error('ERROR: ', err);

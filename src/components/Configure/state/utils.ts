@@ -123,9 +123,6 @@ export const setRequiredCustomMapFieldValue = (
   objectName: string,
   value: string,
   configureState: ConfigureState,
-  setConfigureState: (
-    configureState: ConfigureState
-  ) => void,
 ) => {
   const { requiredCustomMapFields } = configureState;
 
@@ -141,7 +138,8 @@ export const setRequiredCustomMapFieldValue = (
       requiredCustomMapFields: [...requiredCustomMapFields || []],
     };
 
-    // update state
-    setConfigureState(newState);
+    return { isUpdated: true, newState };
   }
+
+  return { isUpdated: false, newState: configureState };
 };

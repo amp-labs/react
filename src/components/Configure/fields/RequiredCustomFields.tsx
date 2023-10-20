@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   Box, Stack,
 } from '@chakra-ui/react';
@@ -13,12 +14,19 @@ export function RequiredCustomFields() {
   const { configureState, setConfigureState } = useConfigureState();
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
-    setRequiredCustomMapFieldValue(name, value, configureState, setConfigureState);
+    const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
+
+    if (isUpdated) {
+      setConfigureState(newState);
+    }
   };
 
-  const integrationFieldMappings = configureState?.requiredCustomMapFields?.filter(
-    isIntegrationFieldMapping,
-  ) || [];
+  const integrationFieldMappings = useMemo(
+    () => configureState?.requiredCustomMapFields?.filter(
+      isIntegrationFieldMapping,
+    ) || [],
+    [configureState],
+  );
 
   return (
     <Box>
