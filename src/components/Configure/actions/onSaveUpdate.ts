@@ -1,5 +1,9 @@
 import {
-  api, Config, Installation, UpdateInstallationOperationRequest,
+  api,
+  Config,
+  HydratedIntegrationObject,
+  Installation,
+  UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '../../../services/api';
 import {
@@ -7,6 +11,7 @@ import {
   generateSelectedFieldsFromConfigureState,
 } from '../state/utils';
 import { ConfigureState } from '../types';
+// import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -20,12 +25,16 @@ import { ConfigureState } from '../types';
  * @param configureState
  * @param config
  * @param objectName
+ * @param hydratedObject
+ * @param schedule
  * @returns
  */
 const generateUpdateConfigFromConfigureState = (
   configureState: ConfigureState,
   config: Config,
   objectName: string,
+  hydratedObject: HydratedIntegrationObject,
+  schedule: string,
 ): UpdateInstallationRequestInstallationConfig => {
   const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
@@ -40,8 +49,8 @@ const generateUpdateConfigFromConfigureState = (
           [objectName]: {
             objectName,
             // these two fields are copied from previous config, otherwise they will override null
-            schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
-            destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
+            schedule,
+            destination: hydratedObject?.destination || '',
             selectedFields,
             selectedFieldMappings,
           },
@@ -62,6 +71,8 @@ export const onSaveUpdate = (
   config: Config,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
+  hydratedObject: HydratedIntegrationObject,
+  schedule: string,
 ) => {
   // get configuration state
   // transform configuration state to update shape
@@ -69,6 +80,8 @@ export const onSaveUpdate = (
     configureState,
     config,
     selectedObjectName || '',
+    hydratedObject,
+    schedule,
   );
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {

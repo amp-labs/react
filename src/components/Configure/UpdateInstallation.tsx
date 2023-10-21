@@ -59,6 +59,17 @@ export function UpdateInstallation(
     resetState();
   }, [resetState]);
 
+  const readActions = hydratedRevision?.content?.actions?.find(
+    (
+      action,
+    ) => action?.type === 'read',
+  );
+  const hydratedObject = readActions?.standardObjects?.find(
+    (
+      obj,
+    ) => obj?.objectName === selectedObjectName,
+  );
+
   const onSave = (e: any) => {
     e.preventDefault();
 
@@ -82,7 +93,13 @@ export function UpdateInstallation(
       return;
     }
 
-    if (installation && selectedObjectName && apiKey && projectId) {
+    if (installation
+      && selectedObjectName
+      && apiKey
+      && projectId
+      && hydratedObject
+      && readActions) {
+
       onSaveUpdate(
         projectId,
         integrationObj.id,
@@ -92,6 +109,8 @@ export function UpdateInstallation(
         config,
         configureState,
         setInstallation,
+        hydratedObject,
+        readActions?.schedule || '',
       );
     } else {
       console.error('update installation props missing');
