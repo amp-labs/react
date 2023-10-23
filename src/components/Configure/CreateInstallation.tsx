@@ -59,19 +59,17 @@ export function CreateInstallation() {
 
   const onSave = (e: any) => {
     e.preventDefault();
-    setFormErrorFields([]);
 
     const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value);
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value) || [];
+    setFormErrorFields(fieldsWithRequirementsNotMet);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
-      setFormErrorFields(fieldsWithRequirementsNotMet);
       console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
       return;
     }
 
-    // check configrueState for required fields
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {
       onSaveCreate(

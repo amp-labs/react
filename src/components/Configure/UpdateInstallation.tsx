@@ -55,15 +55,14 @@ export function UpdateInstallation(
 
   const onSave = (e: any) => {
     e.preventDefault();
-    setFormErrorFields([]);
 
     // check if fields with requirements are met
     const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value);
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value) || [];
+    setFormErrorFields(fieldsWithRequirementsNotMet);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
-      setFormErrorFields(fieldsWithRequirementsNotMet);
       console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
       return;
     }
