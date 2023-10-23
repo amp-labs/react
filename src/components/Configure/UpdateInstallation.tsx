@@ -50,12 +50,12 @@ export function UpdateInstallation(
     if (installation && selectedObjectName && apiKey && projectId) {
       onSaveUpdate(
         projectId,
-        configureState,
-        config,
-        selectedObjectName,
-        installation.id,
         integrationObj.id,
+        installation.id,
+        selectedObjectName,
         apiKey,
+        config,
+        configureState,
         setInstallation,
       );
     } else {

@@ -110,3 +110,35 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
   }, {});
   return requiredCustomMapFieldsConfig;
 };
+
+/**
+ * returns a new configure state with one of its FieldMappings updated with a new value.
+ * @param objectName
+ * @param value
+ * @param configureState
+ * @returns
+ */
+export const setRequiredCustomMapFieldValue = (
+  objectName: string,
+  value: string,
+  configureState: ConfigureState,
+) => {
+  const { requiredCustomMapFields } = configureState;
+
+  const requiredField = requiredCustomMapFields?.find(
+    (field) => field.mapToName === objectName,
+  );
+
+  if (requiredField) {
+    // Update the custome field value property to new value
+    requiredField.value = value;
+    const newState = {
+      ...configureState,
+      requiredCustomMapFields: [...requiredCustomMapFields || []],
+    };
+
+    return { isUpdated: true, newState };
+  }
+
+  return { isUpdated: false, newState: configureState };
+};

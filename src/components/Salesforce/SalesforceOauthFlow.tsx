@@ -9,7 +9,7 @@ import {
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
-  FormLabel, Heading, Image, Input, Link, Text,
+  FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
 import { PROVIDER_SALESFORCE } from '../../constants';
@@ -28,7 +28,7 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
       <Alert status="error" marginTop="2em">
         <AlertIcon />
         <AlertDescription>
-          { error }
+          {error}
         </AlertDescription>
       </Alert>
     );
@@ -143,7 +143,7 @@ function SalesforceOauthFlow({
       url={oAuthCallbackURL}
       onClose={onClose}
     >
-      { SubdomainEntry }
+      {SubdomainEntry}
     </OAuthPopup>
   );
 }

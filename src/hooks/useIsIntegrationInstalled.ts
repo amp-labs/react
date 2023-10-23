@@ -45,7 +45,7 @@ export const useIsIntegrationInstalled = (
         ? _integration
         : acc),
     {} as Integration,
-  ), [integrations]);
+  ), [integrations, integration]);
 
   useEffect(() => {
     if (!integrationToCheck) return;

@@ -19,6 +19,7 @@ module.exports = {
     'react-hooks'
   ],
   rules: {
+    'no-console': ["error", { allow: ["warn", "error"] }],
     'import/no-unresolved': 0,
     'react/jsx-one-expression-per-line': 0,
     'react/no-unescaped-entities': 0,
