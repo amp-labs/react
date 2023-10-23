@@ -106,7 +106,6 @@ export function UpdateInstallation(
         installation.id,
         selectedObjectName,
         apiKey,
-        config,
         configureState,
         setInstallation,
         hydratedObject,

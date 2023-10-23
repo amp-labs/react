@@ -31,7 +31,6 @@ import { ConfigureState } from '../types';
  */
 const generateUpdateConfigFromConfigureState = (
   configureState: ConfigureState,
-  config: Config,
   objectName: string,
   hydratedObject: HydratedIntegrationObject,
   schedule: string,
@@ -68,7 +67,6 @@ export const onSaveUpdate = (
   installationId: string,
   selectedObjectName: string,
   apiKey: string,
-  config: Config,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
@@ -78,7 +76,6 @@ export const onSaveUpdate = (
   // transform configuration state to update shape
   const updateConfig = generateUpdateConfigFromConfigureState(
     configureState,
-    config,
     selectedObjectName || '',
     hydratedObject,
     schedule,
