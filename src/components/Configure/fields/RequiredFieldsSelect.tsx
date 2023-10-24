@@ -23,20 +23,18 @@ export function RequiredFieldsSelect(
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
+    /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
+    if (!!field._default && !field.value) {
+      const { isUpdated, newState } = setRequiredCustomMapFieldValue(
+        field.mapToName,
+        field._default, /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
+        configureState,
+      );
 
-    // // Below is setting default value if there is one for mapping
-    // /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    // if (!!field._default && !field.value) {
-    //   const { isUpdated, newState } = setRequiredCustomMapFieldValue(
-    //     field.mapToName,
-    //     field._default, /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    //     configureState,
-    //   );
-
-    //   if (isUpdated) {
-    //     setConfigureState(newState);
-    //   }
-    // }
+      if (isUpdated) {
+        setConfigureState(newState);
+      }
+    }
     setDisabled(false);
   }, [field, allFields, configureState, setConfigureState]);
 
