@@ -43,7 +43,7 @@ export function RequiredCustomFields() {
       <FieldHeader string="Map the following fields (required)" />
       <Stack>
         {integrationFieldMappings.map((field) => (
-          <FormControl key={field.mapToName}>
+          <FormControl key={field.mapToName} isInvalid={!!errorState[field.mapToName]}>
             <RequiredFieldsSelect
               allFields={configureState.allFields || []}
               field={field}
