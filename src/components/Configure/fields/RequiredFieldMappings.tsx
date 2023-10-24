@@ -13,7 +13,7 @@ import { isIntegrationFieldMapping } from '../utils';
 import { FieldHeader } from './FieldHeader';
 import { RequiredFieldsSelect } from './RequiredFieldsSelect';
 
-export function RequiredCustomFields() {
+export function RequiredFieldMappings() {
   const { configureState, setConfigureState } = useConfigureState();
   const { errorState, setErrorState } = useErrorState();
 
@@ -37,7 +37,7 @@ export function RequiredCustomFields() {
   };
 
   const integrationFieldMappings = useMemo(
-    () => configureState?.requiredCustomMapFields?.filter(
+    () => configureState?.requiredMapFields?.filter(
       isIntegrationFieldMapping,
     ) || [],
     [configureState],

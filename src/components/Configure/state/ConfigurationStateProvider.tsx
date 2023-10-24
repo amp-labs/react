@@ -21,7 +21,7 @@ const initialConfigureState: ConfigureState = {
   allFields: null,
   requiredFields: null,
   optionalFields: null,
-  requiredCustomMapFields: null,
+  requiredMapFields: null,
 };
 
 // Custom hook to access and update the configuration state

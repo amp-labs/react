@@ -16,5 +16,5 @@ export type ConfigureState = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: ConfigureStateIntegrationField[] | null,
-  requiredCustomMapFields: CustomConfigureStateIntegrationField[] | null,
+  requiredMapFields: CustomConfigureStateIntegrationField[] | null,
 };

@@ -8,7 +8,7 @@ import {
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 
 import { OptionalFields } from './fields/OptionalFields';
-import { RequiredCustomFields } from './fields/RequiredCustomFields';
+import { RequiredFieldMappings } from './fields/RequiredFieldMappings';
 import { RequiredFields } from './fields/RequiredFields';
 
 interface ConfigureInstallationBaseProps {
@@ -56,7 +56,7 @@ export function ConfigureInstallationBase(
         {hydratedRevision && (
           <>
             <RequiredFields />
-            <RequiredCustomFields />
+            <RequiredFieldMappings />
             <OptionalFields />
           </>
         )}
