@@ -8,7 +8,7 @@ import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { setRequiredCustomMapFieldValue } from '../state/utils';
 import { ConfigureStateMappingIntegrationField } from '../types';
 
-interface RequiredFieldsSelectProps {
+interface FieldMappingProps {
   field: ConfigureStateMappingIntegrationField,
   onSelectChange: (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -16,8 +16,8 @@ interface RequiredFieldsSelectProps {
   allFields: HydratedIntegrationFieldExistent[],
 }
 
-export function RequiredFieldsSelect(
-  { field, onSelectChange, allFields }: RequiredFieldsSelectProps,
+export function FieldMapping(
+  { field, onSelectChange, allFields }: FieldMappingProps,
 ) {
   const { configureState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);

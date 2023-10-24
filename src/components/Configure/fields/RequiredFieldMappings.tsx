@@ -11,7 +11,7 @@ import { setRequiredCustomMapFieldValue } from '../state/utils';
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
-import { RequiredFieldsSelect } from './RequiredFieldsSelect';
+import { FieldMapping } from './FieldMapping';
 
 export function RequiredFieldMappings() {
   const { configureState, setConfigureState } = useConfigureState();
@@ -54,7 +54,7 @@ export function RequiredFieldMappings() {
 
           return (
             <FormControl key={field.mapToName} isInvalid={isError}>
-              <RequiredFieldsSelect
+              <FieldMapping
                 allFields={configureState.allFields || []}
                 field={field}
                 onSelectChange={onSelectChange}
