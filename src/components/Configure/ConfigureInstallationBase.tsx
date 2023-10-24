@@ -13,29 +13,25 @@ import { RequiredFields } from './fields/RequiredFields';
 
 interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
-  onReset: () => void,
+  onCancel: () => void,
 }
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  {
-    onSave, onReset,
-  }: ConfigureInstallationBaseProps,
+  { onSave, onCancel }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
   return (
-    <form
-      onSubmit={onSave}
-    >
+    <Box>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
-        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type="submit">Save</Button>
+        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
         <Button
           backgroundColor="gray.200"
           color="blackAlpha.700"
           _hover={{ backgroundColor: 'gray.300' }}
-          onClick={onReset}
-        >Reset
+          onClick={onCancel}
+        >Cancel
         </Button>
       </Stack>
       <Box
@@ -61,6 +57,6 @@ export function ConfigureInstallationBase(
           </>
         )}
       </Box>
-    </form>
+    </Box>
   );
 }

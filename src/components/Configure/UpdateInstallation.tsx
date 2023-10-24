@@ -99,7 +99,6 @@ export function UpdateInstallation(
       && projectId
       && hydratedObject
       && readActions) {
-
       onSaveUpdate(
         projectId,
         integrationObj.id,
