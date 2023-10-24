@@ -27,8 +27,6 @@ export function RequiredCustomFields() {
     const newErrorState = { ...errorState };
     delete newErrorState[name];
     setErrorState(newErrorState);
-
-    setRequiredCustomMapFieldValue(name, value, configureState);
   };
 
   const integrationFieldMappings = useMemo(
