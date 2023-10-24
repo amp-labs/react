@@ -1,6 +1,5 @@
 import {
   api,
-  Config,
   HydratedIntegrationObject,
   Installation,
   UpdateInstallationOperationRequest,
@@ -11,7 +10,6 @@ import {
   generateSelectedFieldsFromConfigureState,
 } from '../state/utils';
 import { ConfigureState } from '../types';
-// import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
