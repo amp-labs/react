@@ -5,8 +5,9 @@ import {
 
 import { HydratedIntegrationFieldExistent } from '../../../services/api';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { setRequiredCustomMapFieldValue } from '../state/utils';
+import { isError } from '../state/ErrorStateProvider';
 import { CustomConfigureStateIntegrationField } from '../types';
+import { setRequiredCustomMapFieldValue } from '../state/utils';
 
 interface RequiredFieldsSelectProps {
   field: CustomConfigureStateIntegrationField,
@@ -14,11 +15,10 @@ interface RequiredFieldsSelectProps {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void,
   allFields: HydratedIntegrationFieldExistent[],
-  isError: boolean,
 }
 
 export function RequiredFieldsSelect(
-  { field, onSelectChange, allFields, isError }: RequiredFieldsSelectProps,
+  { field, onSelectChange, allFields }: RequiredFieldsSelectProps,
 ) {
   const { configureState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
@@ -54,7 +54,7 @@ export function RequiredFieldsSelect(
         onChange={onSelectChange}
         placeholder="Please select one"
         disabled={disabled}
-        isInvalid={isError}
+        isInvalid={isError(field.mapToName)}
       >
         {options}
       </Select>

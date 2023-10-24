@@ -10,19 +10,16 @@ import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredCustomFields } from './fields/RequiredCustomFields';
 import { RequiredFields } from './fields/RequiredFields';
-import { CustomConfigureStateIntegrationField } from './types';
 
 interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
-  onCancel: () => void,
-  formErrorFields: CustomConfigureStateIntegrationField[],
-  setFormErrorFields: (fields: CustomConfigureStateIntegrationField[]) => void,
+  onReset: () => void,
 }
 
 // Installation UI Base
 export function ConfigureInstallationBase(
   {
-    onSave, onCancel, formErrorFields, setFormErrorFields,
+    onSave, onReset,
   }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
@@ -37,8 +34,8 @@ export function ConfigureInstallationBase(
           backgroundColor="gray.200"
           color="blackAlpha.700"
           _hover={{ backgroundColor: 'gray.300' }}
-          onClick={onCancel}
-        >Cancel
+          onClick={onReset}
+        >Reset
         </Button>
       </Stack>
       <Box
@@ -59,10 +56,7 @@ export function ConfigureInstallationBase(
         {hydratedRevision && (
           <>
             <RequiredFields />
-            <RequiredCustomFields
-              formErrorFields={formErrorFields}
-              setFormErrorFields={setFormErrorFields}
-            />
+            <RequiredCustomFields />
             <OptionalFields />
           </>
         )}

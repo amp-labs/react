@@ -2,7 +2,7 @@
  * this page is wip: untested
  */
 import {
-  useCallback, useContext, useEffect, useState,
+  useCallback, useContext, useEffect,
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
@@ -13,10 +13,10 @@ import { useProject } from '../../context/ProjectContext';
 
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
+import { useErrorState } from './state/ErrorStateProvider';
 import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
-import { CustomConfigureStateIntegrationField } from './types';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -35,8 +35,10 @@ export function CreateInstallation() {
   // 1. get the hydrated revision
   // 3. generate the configuration state from the hydrated revision
   const { configureState, setConfigureState } = useConfigureState();
+  const { setErrorState } = useErrorState();
 
   const resetState = useCallback(() => {
+    setErrorState({});
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(
         hydratedRevision,
@@ -45,24 +47,27 @@ export function CreateInstallation() {
         setConfigureState,
       );
     }
-  }, [hydratedRevision, loading, selectedObjectName, setConfigureState]);
+  }, [hydratedRevision, loading, selectedObjectName, setConfigureState, setErrorState]);
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     resetState();
   }, [resetState]);
 
-  const [
-    formErrorFields,
-    setFormErrorFields,
-  ] = useState<CustomConfigureStateIntegrationField[]>([]);
-
   const onSave = (e: any) => {
     e.preventDefault();
 
     const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter((field) => !field.value) || [];
-    setFormErrorFields(fieldsWithRequirementsNotMet);
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter(
+      (field) => !field.value,
+    )
+      || [];
+
+    const newErrorState = {};
+    fieldsWithRequirementsNotMet.forEach((field) => {
+      newErrorState[field.mapToName] = true;
+    });
+    setErrorState(newErrorState);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
@@ -92,9 +97,7 @@ export function CreateInstallation() {
   return (
     <ConfigureInstallationBase
       onSave={onSave}
-      onCancel={resetState}
-      formErrorFields={formErrorFields}
-      setFormErrorFields={setFormErrorFields}
+      onReset={resetState}
     />
   );
 }
