@@ -4,6 +4,7 @@ import {
   FormErrorMessage, Stack,
 } from '@chakra-ui/react';
 
+import { MAPPING_ERROR_BOUNDARY } from '../../../constants';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { useErrorState } from '../state/ErrorStateProvider';
 import { setRequiredCustomMapFieldValue } from '../state/utils';
@@ -18,15 +19,21 @@ export function RequiredCustomFields() {
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
-    const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
+    if (!value) {
+      // if place holder value is chosen, we don't change state
+      return;
+    }
 
+    const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
     if (isUpdated) {
       setConfigureState(newState);
     }
 
-    const newErrorState = { ...errorState };
-    delete newErrorState[name];
-    setErrorState(newErrorState);
+    if (errorState[MAPPING_ERROR_BOUNDARY]?.[name]) {
+      const newErrorState = { ...errorState };
+      delete newErrorState[MAPPING_ERROR_BOUNDARY][name];
+      setErrorState(newErrorState);
+    }
   };
 
   const integrationFieldMappings = useMemo(
@@ -40,16 +47,22 @@ export function RequiredCustomFields() {
     <Box>
       <FieldHeader string="Map the following fields (required)" />
       <Stack>
-        {integrationFieldMappings.map((field) => (
-          <FormControl key={field.mapToName} isInvalid={!!errorState[field.mapToName]}>
-            <RequiredFieldsSelect
-              allFields={configureState.allFields || []}
-              field={field}
-              onSelectChange={onSelectChange}
-            />
-            <FormErrorMessage> * required</FormErrorMessage>
-          </FormControl>
-        ))}
+        {integrationFieldMappings.map((field) => {
+          const isError = errorState[MAPPING_ERROR_BOUNDARY]
+            ? !!errorState[MAPPING_ERROR_BOUNDARY][field.mapToName]
+            : false;
+
+          return (
+            <FormControl key={field.mapToName} isInvalid={isError}>
+              <RequiredFieldsSelect
+                allFields={configureState.allFields || []}
+                field={field}
+                onSelectChange={onSelectChange}
+              />
+              <FormErrorMessage> * required</FormErrorMessage>
+            </FormControl>
+          );
+        })}
 
       </Stack>
     </Box>

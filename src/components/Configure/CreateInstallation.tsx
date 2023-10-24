@@ -5,6 +5,7 @@ import {
   useCallback, useContext, useEffect,
 } from 'react';
 
+import { MAPPING_ERROR_BOUNDARY } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
@@ -35,10 +36,13 @@ export function CreateInstallation() {
   // 1. get the hydrated revision
   // 3. generate the configuration state from the hydrated revision
   const { configureState, setConfigureState } = useConfigureState();
-  const { setErrorState } = useErrorState();
+  const { errorState, setErrorState } = useErrorState();
 
   const resetState = useCallback(() => {
-    setErrorState({});
+    setErrorState({
+      ...errorState,
+      [MAPPING_ERROR_BOUNDARY]: {},
+    });
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(
         hydratedRevision,
@@ -63,9 +67,13 @@ export function CreateInstallation() {
     )
       || [];
 
-    const newErrorState = {};
+    const newErrorState = {
+      ...errorState,
+      [MAPPING_ERROR_BOUNDARY]: {} as { [key: string]: boolean },
+    };
+
     fieldsWithRequirementsNotMet.forEach((field) => {
-      newErrorState[field.mapToName] = true;
+      newErrorState[MAPPING_ERROR_BOUNDARY][field.mapToName] = true;
     });
     setErrorState(newErrorState);
 

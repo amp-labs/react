@@ -2,6 +2,7 @@ import {
   useCallback, useContext, useEffect,
 } from 'react';
 
+import { MAPPING_ERROR_BOUNDARY } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
@@ -37,14 +38,21 @@ export function UpdateInstallation(
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const { configureState, setConfigureState } = useConfigureState();
-  const { setErrorState } = useErrorState();
+  const { errorState, setErrorState } = useErrorState();
 
   const resetState = useCallback(() => {
-    setErrorState({});
+    setErrorState({ ...errorState, [MAPPING_ERROR_BOUNDARY]: {} });
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }
-  }, [hydratedRevision, loading, selectedObjectName, config, setConfigureState, setErrorState]);
+  }, [
+    hydratedRevision,
+    loading,
+    selectedObjectName,
+    config,
+    setConfigureState,
+    setErrorState,
+  ]);
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
@@ -61,9 +69,10 @@ export function UpdateInstallation(
     )
       || [];
 
-    const newErrorState = {};
+    const newErrorState = { ...errorState };
+    newErrorState[MAPPING_ERROR_BOUNDARY] = newErrorState[MAPPING_ERROR_BOUNDARY] || {};
     fieldsWithRequirementsNotMet.forEach((field) => {
-      newErrorState[field.mapToName] = true;
+      newErrorState[MAPPING_ERROR_BOUNDARY][field.mapToName] = true;
     });
     setErrorState(newErrorState);
 

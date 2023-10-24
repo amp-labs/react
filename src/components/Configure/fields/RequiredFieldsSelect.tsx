@@ -5,8 +5,8 @@ import {
 
 import { HydratedIntegrationFieldExistent } from '../../../services/api';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { CustomConfigureStateIntegrationField } from '../types';
 import { setRequiredCustomMapFieldValue } from '../state/utils';
+import { CustomConfigureStateIntegrationField } from '../types';
 
 interface RequiredFieldsSelectProps {
   field: CustomConfigureStateIntegrationField,
@@ -51,7 +51,7 @@ export function RequiredFieldsSelect(
         variant="flushed"
         value={field.value}
         onChange={onSelectChange}
-        placeholder="Please select one"
+        placeholder={!field.value ? 'Please select one' : undefined} // remove placeholder when value is selected
         disabled={disabled}
       >
         {options}
