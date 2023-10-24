@@ -1,5 +1,8 @@
-import { useCallback, useContext, useEffect } from 'react';
+import {
+  useCallback, useContext, useEffect,
+} from 'react';
 
+import { MAPPING_ERROR_BOUNDARY } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
@@ -8,6 +11,7 @@ import { Installation, Integration } from '../../services/api';
 
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
+import { useErrorState } from './state/ErrorStateProvider';
 import { resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
@@ -34,19 +38,50 @@ export function UpdateInstallation(
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const { configureState, setConfigureState } = useConfigureState();
+  const { errorState, setErrorState } = useErrorState();
 
   const resetState = useCallback(() => {
+    setErrorState({ ...errorState, [MAPPING_ERROR_BOUNDARY]: {} });
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }
-  }, [hydratedRevision, loading, selectedObjectName, config, setConfigureState]);
+  }, [
+    hydratedRevision,
+    loading,
+    selectedObjectName,
+    config,
+    setConfigureState,
+    setErrorState,
+  ]);
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     resetState();
   }, [resetState]);
 
-  const onSave = () => {
+  const onSave = (e: any) => {
+    e.preventDefault();
+
+    // check if fields with requirements are met
+    const { requiredCustomMapFields } = configureState;
+    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter(
+      (field) => !field.value,
+    )
+      || [];
+
+    const newErrorState = { ...errorState };
+    newErrorState[MAPPING_ERROR_BOUNDARY] = newErrorState[MAPPING_ERROR_BOUNDARY] || {};
+    fieldsWithRequirementsNotMet.forEach((field) => {
+      newErrorState[MAPPING_ERROR_BOUNDARY][field.mapToName] = true;
+    });
+    setErrorState(newErrorState);
+
+    // if requires fields are not met, set error fields and return
+    if (fieldsWithRequirementsNotMet?.length) {
+      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
+      return;
+    }
+
     if (installation && selectedObjectName && apiKey && projectId) {
       onSaveUpdate(
         projectId,
@@ -66,7 +101,7 @@ export function UpdateInstallation(
   return (
     <ConfigureInstallationBase
       onSave={onSave}
-      onCancel={resetState}
+      onReset={resetState}
     />
   );
 }

@@ -13,7 +13,7 @@ interface RequiredFieldsSelectProps {
   onSelectChange: (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void,
-  allFields: HydratedIntegrationFieldExistent[]
+  allFields: HydratedIntegrationFieldExistent[],
 }
 
 export function RequiredFieldsSelect(
@@ -51,7 +51,7 @@ export function RequiredFieldsSelect(
         variant="flushed"
         value={field.value}
         onChange={onSelectChange}
-        placeholder="Please select one"
+        placeholder={!field.value ? 'Please select one' : undefined} // remove placeholder when value is selected
         disabled={disabled}
       >
         {options}

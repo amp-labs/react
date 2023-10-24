@@ -1,4 +1,7 @@
 import {
+  FormEventHandler,
+} from 'react';
+import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
@@ -9,26 +12,30 @@ import { RequiredCustomFields } from './fields/RequiredCustomFields';
 import { RequiredFields } from './fields/RequiredFields';
 
 interface ConfigureInstallationBaseProps {
-  onSave: () => void,
-  onCancel: () => void,
+  onSave: FormEventHandler,
+  onReset: () => void,
 }
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  { onSave, onCancel }: ConfigureInstallationBaseProps,
+  {
+    onSave, onReset,
+  }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
   return (
-    <Box>
+    <form
+      onSubmit={onSave}
+    >
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
-        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} onClick={onSave}>Save</Button>
+        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type="submit">Save</Button>
         <Button
           backgroundColor="gray.200"
           color="blackAlpha.700"
           _hover={{ backgroundColor: 'gray.300' }}
-          onClick={onCancel}
-        >Cancel
+          onClick={onReset}
+        >Reset
         </Button>
       </Stack>
       <Box
@@ -47,13 +54,13 @@ export function ConfigureInstallationBase(
         {error && <div>{error}</div>}
         {loading && <div>Loading...</div>}
         {hydratedRevision && (
-        <>
-          <RequiredFields />
-          <RequiredCustomFields />
-          <OptionalFields />
-        </>
+          <>
+            <RequiredFields />
+            <RequiredCustomFields />
+            <OptionalFields />
+          </>
         )}
       </Box>
-    </Box>
+    </form>
   );
 }
