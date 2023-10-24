@@ -6,10 +6,10 @@ import {
 import { HydratedIntegrationFieldExistent } from '../../../services/api';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { setRequiredCustomMapFieldValue } from '../state/utils';
-import { CustomConfigureStateIntegrationField } from '../types';
+import { ConfigureStateMappingIntegrationField } from '../types';
 
 interface RequiredFieldsSelectProps {
-  field: CustomConfigureStateIntegrationField,
+  field: ConfigureStateMappingIntegrationField,
   onSelectChange: (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void,

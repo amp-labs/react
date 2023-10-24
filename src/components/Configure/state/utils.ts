@@ -6,7 +6,7 @@ import {
 import {
   ConfigureState,
   ConfigureStateIntegrationField,
-  CustomConfigureStateIntegrationField,
+  ConfigureStateMappingIntegrationField,
 } from '../types';
 import {
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
@@ -47,7 +47,7 @@ export function getConfigurationState(
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
       ),
-    })) as CustomConfigureStateIntegrationField[] : null; // type hack - TODO fix
+    })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
 
