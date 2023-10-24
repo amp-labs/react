@@ -10,8 +10,8 @@ import {
 } from '../types';
 import {
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
-  getRequiredMapFieldsFromObject,
-  getRequiredFieldsFromObject, getStandardObjectFromAction,
+  getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
+  getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
   PLACEHOLDER_VARS,
 } from '../utils';
