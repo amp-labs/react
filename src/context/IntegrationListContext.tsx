@@ -49,6 +49,7 @@ export function IntegrationListProvider(
       setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', errorState, setErrorState);
       console.error('ERROR: ', err);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, apiKey, setErrorState]);
 
   const contextValue = useMemo(() => ({

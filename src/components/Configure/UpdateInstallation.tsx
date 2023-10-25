@@ -42,19 +42,23 @@ export function UpdateInstallation(
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
-  const resetState = useCallback(() => {
-    resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
-    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
-      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
-    }
-  }, [
-    hydratedRevision,
-    loading,
-    selectedObjectName,
-    config,
-    setConfigureState,
-    setErrorState,
-  ]);
+  const resetState = useCallback(
+    () => {
+      resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
+      if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+        resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      hydratedRevision,
+      loading,
+      selectedObjectName,
+      config,
+      setConfigureState,
+      setErrorState,
+    ],
+  );
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded

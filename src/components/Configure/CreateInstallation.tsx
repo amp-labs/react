@@ -35,17 +35,21 @@ export function CreateInstallation() {
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
-  const resetState = useCallback(() => {
-    resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
-    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
-      resetConfigurationState(
-        hydratedRevision,
-        UNDEFINED_CONFIG,
-        selectedObjectName,
-        setConfigureState,
-      );
-    }
-  }, [hydratedRevision, loading, selectedObjectName, setConfigureState, setErrorState]);
+  const resetState = useCallback(
+    () => {
+      resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
+      if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+        resetConfigurationState(
+          hydratedRevision,
+          UNDEFINED_CONFIG,
+          selectedObjectName,
+          setConfigureState,
+        );
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hydratedRevision, loading, selectedObjectName, setConfigureState, setErrorState],
+  );
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded

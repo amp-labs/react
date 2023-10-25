@@ -6,7 +6,7 @@ import { useProject } from '../../context/ProjectContext';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { ErrorBoundary, useErrorState } from './state/ErrorStateProvider';
 import { CreateInstallation } from './CreateInstallation';
-import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
+import { ErrorTextBox } from './ErrorTextBox';
 import { ObjectManagementNav } from './ObjectManagementNav';
 import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
 import { UpdateInstallation } from './UpdateInstallation';
@@ -16,7 +16,7 @@ function InstallationContent() {
   const { integrationObj, installation } = useInstallIntegrationProps();
 
   if (!integrationObj) {
-    return <ErrorTextBoxPlaceholder message={"We can't load the integration"} />;
+    return <ErrorTextBox message={"We can't load the integration"} />;
   }
 
   return installation && integrationObj ? (
@@ -48,7 +48,7 @@ export function InstallIntegration(
   const { projectId } = useProject();
   const { errorState } = useErrorState();
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
-    return <ErrorTextBoxPlaceholder message="Something went wrong, couldn't find integration information" />;
+    return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
   }
 
   return (
