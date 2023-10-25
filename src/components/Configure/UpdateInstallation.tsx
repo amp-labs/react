@@ -10,7 +10,9 @@ import { Installation, Integration } from '../../services/api';
 
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
-import { ErrorBoundary, ErrorState, useErrorState } from './state/ErrorStateProvider';
+import {
+  ErrorBoundary, ErrorState, resetBoundary, useErrorState,
+} from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
@@ -41,7 +43,7 @@ export function UpdateInstallation(
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(() => {
-    setErrorState({ ...errorState, [ErrorBoundary.MAPPING]: {} });
+    resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }

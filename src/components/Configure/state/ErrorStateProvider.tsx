@@ -44,7 +44,12 @@ export function ErrorStateProvider(
   );
 }
 
-export const setError = (boundary: ErrorBoundary, key: string, errorState: ErrorState, setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>) => {
+export const setError = (
+  boundary: ErrorBoundary,
+  key: string,
+  errorState: ErrorState,
+  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
+) => {
   const newErrorState = {
     ...errorState,
   };
@@ -53,13 +58,34 @@ export const setError = (boundary: ErrorBoundary, key: string, errorState: Error
   setErrorState(newErrorState);
 };
 
-export const isError = (boundary: ErrorBoundary, key: string, errorState: ErrorState) => !!errorState[boundary]?.[key];
+export const isError = (
+  boundary: ErrorBoundary,
+  key: string,
+  errorState: ErrorState,
+) => !!errorState[boundary]?.[key];
 
-export const removeError = (boundary: ErrorBoundary, key: string, errorState: ErrorState, setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>) => {
+export const removeError = (
+  boundary: ErrorBoundary,
+  key: string,
+  errorState: ErrorState,
+  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
+) => {
   const newErrorState = {
     ...errorState,
   };
   delete newErrorState[boundary][key];
+  setErrorState(newErrorState);
+};
+
+export const resetBoundary = (
+  boundary: ErrorBoundary,
+  errorState: ErrorState,
+  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
+) => {
+  const newErrorState = {
+    ...errorState,
+  };
+  newErrorState[boundary] = {};
   setErrorState(newErrorState);
 };
 

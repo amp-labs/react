@@ -11,7 +11,7 @@ import { useProject } from '../../context/ProjectContext';
 
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
-import { ErrorBoundary, useErrorState } from './state/ErrorStateProvider';
+import { ErrorBoundary, resetBoundary, useErrorState } from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
@@ -36,10 +36,7 @@ export function CreateInstallation() {
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(() => {
-    setErrorState({
-      ...errorState,
-      [ErrorBoundary.MAPPING]: {},
-    });
+    resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(
         hydratedRevision,

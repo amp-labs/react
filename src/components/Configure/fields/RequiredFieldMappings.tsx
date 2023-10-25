@@ -6,9 +6,10 @@ import {
 
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { useErrorState, ErrorBoundary, removeError, isError } from '../state/ErrorStateProvider';
+import {
+  ErrorBoundary, isError, removeError, useErrorState,
+} from '../state/ErrorStateProvider';
 import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
-
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
@@ -33,7 +34,7 @@ export function RequiredFieldMappings() {
     }
 
     if (isError(ErrorBoundary.MAPPING, name, errorState)) {
-      removeError(ErrorBoundary.MAPPING, name, errorState, setErrorState)
+      removeError(ErrorBoundary.MAPPING, name, errorState, setErrorState);
     }
   };
 
@@ -50,7 +51,7 @@ export function RequiredFieldMappings() {
       <Stack>
         {integrationFieldMappings.map((field) => {
           return (
-            <FormControl key={field.mapToName} isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName, errorState)Error}>
+            <FormControl key={field.mapToName} isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName, errorState)}>
               <FieldMapping
                 allFields={configureState.allFields || []}
                 field={field}
@@ -58,10 +59,10 @@ export function RequiredFieldMappings() {
               />
               <FormErrorMessage> * required</FormErrorMessage>
             </FormControl>
-      );
+          );
         })}
 
-    </Stack>
+      </Stack>
     </Box >
 
   );

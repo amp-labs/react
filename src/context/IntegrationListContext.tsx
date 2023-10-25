@@ -49,7 +49,7 @@ export function IntegrationListProvider(
       setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', errorState, setErrorState);
       console.error('ERROR: ', err);
     });
-  }, [projectId, apiKey]);
+  }, [projectId, apiKey, setErrorState]);
 
   const contextValue = useMemo(() => ({
     integrations,
