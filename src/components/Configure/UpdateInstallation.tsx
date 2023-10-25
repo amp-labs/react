@@ -1,5 +1,5 @@
 import {
-  useCallback, useContext, useEffect,
+  useCallback, useContext, useEffect, useMemo,
 } from 'react';
 
 import { MAPPING_ERROR_BOUNDARY } from '../../constants';
@@ -59,16 +59,20 @@ export function UpdateInstallation(
     resetState();
   }, [resetState]);
 
-  const readActions = hydratedRevision?.content?.actions?.find(
-    (
-      action,
-    ) => action?.type === 'read',
-  );
-  const hydratedObject = readActions?.standardObjects?.find(
-    (
-      obj,
-    ) => obj?.objectName === selectedObjectName,
-  );
+  const { readActions, hydratedObject } = useMemo(() => {
+    const actions = hydratedRevision?.content?.actions?.find(
+      (
+        action,
+      ) => action?.type === 'read',
+    );
+    const hydrated = actions?.standardObjects?.find(
+      (
+        obj,
+      ) => obj?.objectName === selectedObjectName,
+    );
+
+    return { readActions: actions, hydratedObject: hydrated };
+  }, [hydratedRevision, selectedObjectName]);
 
   const onSave = (e: any) => {
     e.preventDefault();
