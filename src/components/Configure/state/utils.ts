@@ -6,12 +6,12 @@ import {
 import {
   ConfigureState,
   ConfigureStateIntegrationField,
-  CustomConfigureStateIntegrationField,
+  ConfigureStateMappingIntegrationField,
 } from '../types';
 import {
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
-  getRequiredCustomMapFieldsFromObject,
-  getRequiredFieldsFromObject, getStandardObjectFromAction,
+  getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
+  getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
   PLACEHOLDER_VARS,
 } from '../utils';
@@ -37,8 +37,8 @@ export function getConfigurationState(
       ),
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
 
-  // todo map over requiredCustomMapFields and get value from config
-  const requiredCustomMapFields = object ? getRequiredCustomMapFieldsFromObject(object)
+  // todo map over requiredMapFields and get value from config
+  const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
     ?.map((field) => ({
       ...field,
       value: getValueFromConfigCustomMapping(
@@ -47,7 +47,7 @@ export function getConfigurationState(
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
       ),
-    })) as CustomConfigureStateIntegrationField[] : null; // type hack - TODO fix
+    })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
 
@@ -55,7 +55,7 @@ export function getConfigurationState(
     allFields,
     requiredFields,
     optionalFields,
-    requiredCustomMapFields,
+    requiredMapFields,
   };
 }
 
@@ -100,15 +100,15 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
  * @returns
  */
 export const generateSelectedFieldMappingsFromConfigureState = (configureState: ConfigureState) => {
-  const { requiredCustomMapFields } = configureState;
-  const requiredCustomMapFieldsConfig = (requiredCustomMapFields || []).reduce((acc, field) => {
+  const { requiredMapFields } = configureState;
+  const requiredMapFieldsConfig = (requiredMapFields || []).reduce((acc, field) => {
     const key = getFieldKeyValue(field);
     return {
       ...acc,
       [key]: field.value,
     };
   }, {});
-  return requiredCustomMapFieldsConfig;
+  return requiredMapFieldsConfig;
 };
 
 /**
@@ -123,9 +123,9 @@ export const setRequiredCustomMapFieldValue = (
   value: string,
   configureState: ConfigureState,
 ) => {
-  const { requiredCustomMapFields } = configureState;
+  const { requiredMapFields } = configureState;
 
-  const requiredField = requiredCustomMapFields?.find(
+  const requiredField = requiredMapFields?.find(
     (field) => field.mapToName === objectName,
   );
 
@@ -134,7 +134,7 @@ export const setRequiredCustomMapFieldValue = (
     requiredField.value = value;
     const newState = {
       ...configureState,
-      requiredCustomMapFields: [...requiredCustomMapFields || []],
+      requiredMapFields: [...requiredMapFields || []],
     };
 
     return { isUpdated: true, newState };

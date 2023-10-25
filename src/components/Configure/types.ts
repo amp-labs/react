@@ -8,7 +8,7 @@ export type ConfigureStateIntegrationField = HydratedIntegrationFieldExistent & 
   value: string | number | boolean | null,
 };
 
-export type CustomConfigureStateIntegrationField = IntegrationFieldMapping & {
+export type ConfigureStateMappingIntegrationField = IntegrationFieldMapping & {
   value: string | number | undefined,
 };
 
@@ -16,5 +16,5 @@ export type ConfigureState = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: ConfigureStateIntegrationField[] | null,
-  requiredCustomMapFields: CustomConfigureStateIntegrationField[] | null,
+  requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
 };

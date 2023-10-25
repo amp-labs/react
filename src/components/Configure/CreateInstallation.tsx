@@ -61,8 +61,8 @@ export function CreateInstallation() {
   const onSave = (e: any) => {
     e.preventDefault();
 
-    const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter(
+    const { requiredMapFields } = configureState;
+    const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
       (field) => !field.value,
     )
       || [];

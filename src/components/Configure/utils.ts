@@ -23,7 +23,7 @@ export const PLACEHOLDER_VARS = {
  * @returns
  */
 export function isIntegrationFieldMapping(field: HydratedIntegrationField):
-field is IntegrationFieldMapping {
+  field is IntegrationFieldMapping {
   return (field as IntegrationFieldMapping).mapToName !== undefined;
 }
 
@@ -59,7 +59,7 @@ export function getRequiredFieldsFromObject(object: HydratedIntegrationObject)
 }
 
 // 3b. get required custom mapping fields
-export function getRequiredCustomMapFieldsFromObject(object: HydratedIntegrationObject)
+export function getRequiredMapFieldsFromObject(object: HydratedIntegrationObject)
   : HydratedIntegrationField[] | null {
   return object?.requiredFields?.filter(
     (rf: HydratedIntegrationField) => isIntegrationFieldMapping(rf) && !!rf.mapToName,
@@ -74,7 +74,7 @@ export function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
 
 export const getReadObject = (
   config: Config,
-  objectName:string,
+  objectName: string,
 ) => config?.content?.read?.standardObjects?.[objectName];
 
 // 5. get value for field

@@ -78,8 +78,8 @@ export function UpdateInstallation(
     e.preventDefault();
 
     // check if fields with requirements are met
-    const { requiredCustomMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredCustomMapFields?.filter(
+    const { requiredMapFields } = configureState;
+    const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
       (field) => !field.value,
     )
       || [];

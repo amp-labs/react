@@ -11,9 +11,9 @@ import { setRequiredCustomMapFieldValue } from '../state/utils';
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
-import { RequiredFieldsSelect } from './RequiredFieldsSelect';
+import { FieldMapping } from './FieldMapping';
 
-export function RequiredCustomFields() {
+export function RequiredFieldMappings() {
   const { configureState, setConfigureState } = useConfigureState();
   const { errorState, setErrorState } = useErrorState();
 
@@ -37,7 +37,7 @@ export function RequiredCustomFields() {
   };
 
   const integrationFieldMappings = useMemo(
-    () => configureState?.requiredCustomMapFields?.filter(
+    () => configureState?.requiredMapFields?.filter(
       isIntegrationFieldMapping,
     ) || [],
     [configureState],
@@ -54,7 +54,7 @@ export function RequiredCustomFields() {
 
           return (
             <FormControl key={field.mapToName} isInvalid={isError}>
-              <RequiredFieldsSelect
+              <FieldMapping
                 allFields={configureState.allFields || []}
                 field={field}
                 onSelectChange={onSelectChange}
