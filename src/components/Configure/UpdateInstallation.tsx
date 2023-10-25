@@ -12,7 +12,7 @@ import { Installation, Integration } from '../../services/api';
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useErrorState } from './state/ErrorStateProvider';
-import { resetConfigurationState } from './state/utils';
+import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 
@@ -37,8 +37,9 @@ export function UpdateInstallation(
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
-  const { configureState, setConfigureState } = useConfigureState();
   const { errorState, setErrorState } = useErrorState();
+  const { setConfigureState, objectConfigurationsState } = useConfigureState();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(() => {
     setErrorState({ ...errorState, [MAPPING_ERROR_BOUNDARY]: {} });

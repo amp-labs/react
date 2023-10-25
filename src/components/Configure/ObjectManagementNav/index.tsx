@@ -6,33 +6,10 @@ import { Box, Tabs, Text } from '@chakra-ui/react';
 import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
-import { Config, HydratedRevision } from '../../../services/api';
-import { getActionTypeFromActions, getReadObject, PLACEHOLDER_VARS } from '../utils';
+import { NavObject } from '../types';
+import { generateNavObjects } from '../utils';
 
 import { NavObjectItem } from './NavObjectItem';
-
-export type NavObject = {
-  name: string;
-  completed: boolean;
-};
-
-function generateNavObjects(config: Config | undefined, hydratedRevision: HydratedRevision) {
-  const { actions } = hydratedRevision.content;
-  const action = getActionTypeFromActions(actions, PLACEHOLDER_VARS.OPERATION_TYPE);
-  const navObjects: NavObject[] = [];
-  action?.standardObjects?.forEach((object) => {
-    navObjects.push(
-      {
-        name: object?.objectName,
-        // if no config, object is not completed
-        // object is completed if the key exists in the config
-        completed: config ? !!getReadObject(config, object.objectName) : false,
-      },
-    );
-  });
-
-  return navObjects;
-}
 
 // Create a context for the selected navObject's name
 const SelectedObjectNameContext = createContext<string | null | undefined>(null);

@@ -1,9 +1,7 @@
 /**
  * this page is wip: untested
  */
-import {
-  useCallback, useContext, useEffect,
-} from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 
 import { MAPPING_ERROR_BOUNDARY } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
@@ -15,7 +13,7 @@ import { useProject } from '../../context/ProjectContext';
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useErrorState } from './state/ErrorStateProvider';
-import { resetConfigurationState } from './state/utils';
+import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 
@@ -35,8 +33,10 @@ export function CreateInstallation() {
 
   // 1. get the hydrated revision
   // 3. generate the configuration state from the hydrated revision
-  const { configureState, setConfigureState } = useConfigureState();
+
   const { errorState, setErrorState } = useErrorState();
+  const { setConfigureState, objectConfigurationsState } = useConfigureState();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(() => {
     setErrorState({
@@ -55,8 +55,10 @@ export function CreateInstallation() {
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    resetState();
-  }, [resetState]);
+    if (!configureState && hydratedRevision?.content?.actions && !loading) {
+      resetState();
+    }
+  }, [configureState, objectConfigurationsState, hydratedRevision, loading, resetState]);
 
   const onSave = (e: any) => {
     e.preventDefault();

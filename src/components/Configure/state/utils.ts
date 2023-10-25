@@ -7,8 +7,10 @@ import {
   ConfigureState,
   ConfigureStateIntegrationField,
   ConfigureStateMappingIntegrationField,
+  ObjectConfigurationsState,
 } from '../types';
 import {
+  generateNavObjects,
   getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
@@ -16,7 +18,7 @@ import {
   PLACEHOLDER_VARS,
 } from '../utils';
 
-export function getConfigurationState(
+export function generateConfigurationState(
   actions: HydratedIntegrationAction[],
   type: string,
   objectName: string,
@@ -59,20 +61,45 @@ export function getConfigurationState(
   };
 }
 
+// resets configure state for single object to hyrdated revision values
 export const resetConfigurationState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
   selectedObjectName: string,
-  setConfigureState: React.Dispatch<React.SetStateAction<ConfigureState>>,
+  setConfigureState: (objectName: string, configureState: ConfigureState) => void,
 ) => {
   const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
-  const state = getConfigurationState(
+  const state = generateConfigurationState(
     hydratedActions,
     PLACEHOLDER_VARS.OPERATION_TYPE,
     selectedObjectName,
     config,
   );
-  setConfigureState(state);
+  setConfigureState(selectedObjectName, state);
+};
+
+/**
+ * resets configure state for all objects in hydrated revision to hyrdated revision values
+ */
+
+export const resetAllObjectsConfigurationState = (
+  hydratedRevision: HydratedRevision,
+  config: Config | undefined,
+  setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>,
+) => {
+  const navObjects = generateNavObjects(config, hydratedRevision);
+  const objectConfigurationsState: ObjectConfigurationsState = {};
+  navObjects.forEach(({ name, completed }) => {
+    if (completed) {
+      objectConfigurationsState[name] = generateConfigurationState(
+        hydratedRevision.content.actions,
+        PLACEHOLDER_VARS.OPERATION_TYPE,
+        name,
+        config,
+      );
+    }
+  });
+  setObjectConfiguresState(objectConfigurationsState);
 };
 
 /**
@@ -142,3 +169,12 @@ export const setRequiredCustomMapFieldValue = (
 
   return { isUpdated: false, newState: configureState };
 };
+
+// get configure state of single object
+// eslint-disable-next-line max-len
+export function getConfigureState(
+  objectName: string,
+  objectConfigurationsState: ObjectConfigurationsState,
+) {
+  return objectConfigurationsState[objectName] || undefined;
+}

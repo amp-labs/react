@@ -1,25 +1,33 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
 import { useProject } from '../../../context/ProjectContext';
+import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { getConfigureState } from '../state/utils';
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
 
 export function OptionalFields() {
   const { appName } = useProject();
-  const { configureState, setConfigureState } = useConfigureState();
+  const { objectConfigurationsState, setConfigureState } = useConfigureState();
+  const { selectedObjectName } = useSelectedObjectName();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     const { optionalFields } = configureState;
     const optionalFieldToUpdate = optionalFields?.find((field) => field.fieldName === name);
 
-    if (optionalFieldToUpdate) {
+    if (optionalFieldToUpdate && selectedObjectName) {
       // Update the value property to new checked value
       optionalFieldToUpdate.value = checked;
 
       // update state
-      setConfigureState({ ...configureState, optionalFields: [...optionalFields || []] });
+      setConfigureState(
+        selectedObjectName,
+        { ...configureState, optionalFields: [...optionalFields || []] },
+      );
     }
   };
 
@@ -34,7 +42,7 @@ export function OptionalFields() {
         borderRadius={8}
         padding={4}
       >
-        {configureState.optionalFields?.map((field) => {
+        {configureState?.optionalFields?.map((field) => {
           if (!isIntegrationFieldMapping(field)) {
             return (
               <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">

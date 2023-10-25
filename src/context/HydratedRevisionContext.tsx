@@ -7,6 +7,7 @@ import { api, HydratedRevision } from '../services/api';
 import { ApiKeyContext } from './ApiKeyContext';
 import { useConnections } from './ConnectionsContext';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
+import { useIntegrationList } from './IntegrationListContext';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -40,6 +41,7 @@ export function HydratedRevisionProvider({
   children,
 } : HydratedRevisionProviderProps) {
   const { integrationId, integrationObj } = useInstallIntegrationProps();
+  const { integrations } = useIntegrationList();
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,9 +74,11 @@ export function HydratedRevisionProvider({
           setError(err.message || 'An error occurred while fetching data');
         });
     } else {
-      console.error('Missing required parameters for HydratedRevisionProvider');
+      console.error('Missing required parameters for HydratedRevisionProvider', {
+        projectId, integrationId, revisionId, connectionId, apiKey, integrations,
+      });
     }
-  }, [projectId, integrationId, revisionId, connectionId, apiKey]);
+  }, [projectId, integrationId, revisionId, connectionId, apiKey, integrations]);
 
   const contextValue = useMemo(() => ({
     hydratedRevision,

@@ -3,8 +3,13 @@ import {
   HydratedIntegrationAction,
   HydratedIntegrationField,
   HydratedIntegrationObject,
+  HydratedRevision,
   IntegrationFieldMapping,
 } from '../../services/api';
+
+import {
+  NavObject,
+} from './types';
 
 // TODO - add support for fetching these dynamically
 const OPERATION_TYPE = 'read'; // only one supported for mvp
@@ -96,4 +101,23 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
     return field.mapToName; // custom mapping
   }
   return field.fieldName; // existant field
+}
+
+// generates standard objects and whether they are complete based on config and hydrated revision
+export function generateNavObjects(config: Config | undefined, hydratedRevision: HydratedRevision) {
+  const { actions } = hydratedRevision.content;
+  const action = getActionTypeFromActions(actions, PLACEHOLDER_VARS.OPERATION_TYPE);
+  const navObjects: NavObject[] = [];
+  action?.standardObjects?.forEach((object) => {
+    navObjects.push(
+      {
+        name: object?.objectName,
+        // if no config, object is not completed
+        // object is completed if the key exists in the config
+        completed: config ? !!getReadObject(config, object.objectName) : false,
+      },
+    );
+  });
+
+  return navObjects;
 }
