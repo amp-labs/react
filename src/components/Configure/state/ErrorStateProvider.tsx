@@ -2,6 +2,12 @@ import React, {
   createContext, useContext, useMemo, useState,
 } from 'react';
 
+export enum ErrorBoundary {
+  MAPPING = 'mappingError',
+  INTEGRATION_LIST = 'integrationListError',
+  PROJECT_ERROR_BOUNDARY = 'projectError',
+}
+
 export type ErrorState = {
   [boundary in ErrorBoundary]: {
     [key: string]: boolean;
@@ -27,10 +33,18 @@ type ErrorProviderProps = {
   children: React.ReactNode;
 };
 
+const initialState: ErrorState = (() => {
+  const obj = Object.keys(ErrorBoundary).reduce((acc, key) => {
+    acc[key] = {};
+    return acc;
+  }, {} as ErrorState);
+  return obj;
+})();
+
 export function ErrorStateProvider(
   { children }: ErrorProviderProps,
 ) {
-  const [errorState, setErrorState] = useState<ErrorState>({} as ErrorState);
+  const [errorState, setErrorState] = useState<ErrorState>(initialState);
 
   const contextValue = useMemo(
     () => ({ errorState, setErrorState }),
@@ -108,9 +122,3 @@ export const setErrors = (
     return newErrorState;
   });
 };
-
-export enum ErrorBoundary {
-  MAPPING = 'mappingError',
-  INTEGRATION_LIST = 'integrationListError',
-  PROJECT_ERROR_BOUNDARY = 'projectError',
-}
