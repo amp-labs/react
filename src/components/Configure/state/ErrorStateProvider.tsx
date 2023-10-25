@@ -47,15 +47,16 @@ export function ErrorStateProvider(
 export const setError = (
   boundary: ErrorBoundary,
   key: string,
-  errorState: ErrorState,
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
 ) => {
-  const newErrorState = {
-    ...errorState,
-  };
-  newErrorState[boundary] = newErrorState[boundary] || {};
-  newErrorState[boundary][key] = true;
-  setErrorState(newErrorState);
+  setErrorState((prevState) => {
+    const newErrorState = {
+      ...prevState,
+    };
+    newErrorState[boundary] = newErrorState[boundary] || {};
+    newErrorState[boundary][key] = true;
+    return newErrorState;
+  });
 };
 
 export const isError = (
@@ -67,26 +68,45 @@ export const isError = (
 export const removeError = (
   boundary: ErrorBoundary,
   key: string,
-  errorState: ErrorState,
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
 ) => {
-  const newErrorState = {
-    ...errorState,
-  };
-  delete newErrorState[boundary][key];
-  setErrorState(newErrorState);
+  setErrorState((prevState) => {
+    const newErrorState = {
+      ...prevState,
+    };
+    delete newErrorState[boundary][key];
+    return newErrorState;
+  });
 };
 
 export const resetBoundary = (
   boundary: ErrorBoundary,
-  errorState: ErrorState,
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
 ) => {
-  const newErrorState = {
-    ...errorState,
-  };
-  newErrorState[boundary] = {};
-  setErrorState(newErrorState);
+  setErrorState((prevState) => {
+    const newErrorState = {
+      ...prevState,
+    };
+    newErrorState[boundary] = {};
+    return newErrorState;
+  });
+};
+
+export const setErrors = (
+  boundary: ErrorBoundary,
+  keys: string[],
+  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
+) => {
+  setErrorState((prevState) => {
+    const newErrorState = {
+      ...prevState,
+    };
+    newErrorState[boundary] = newErrorState[boundary] || {};
+    keys.forEach((key) => {
+      newErrorState[boundary][key] = true;
+    });
+    return newErrorState;
+  });
 };
 
 export enum ErrorBoundary {

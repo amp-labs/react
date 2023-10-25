@@ -36,7 +36,7 @@ export function IntegrationListProvider(
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
-  const { errorState, setErrorState } = useErrorState();
+  const { setErrorState } = useErrorState();
 
   useEffect(() => {
     api().listIntegrations({ projectId }, {
@@ -46,10 +46,9 @@ export function IntegrationListProvider(
     }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
-      setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', errorState, setErrorState);
+      setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', setErrorState);
       console.error('ERROR: ', err);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, apiKey, setErrorState]);
 
   const contextValue = useMemo(() => ({

@@ -11,7 +11,8 @@ import { Installation, Integration } from '../../services/api';
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import {
-  ErrorBoundary, ErrorState, resetBoundary, useErrorState,
+  ErrorBoundary, resetBoundary, setErrors,
+  useErrorState,
 } from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
@@ -38,30 +39,29 @@ export function UpdateInstallation(
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
-  const { errorState, setErrorState } = useErrorState();
+  const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(
     () => {
-      resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
+      resetBoundary(ErrorBoundary.MAPPING, setErrorState);
+      // set configurationState when hydratedRevision is loaded
       if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
         resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       hydratedRevision,
       loading,
-      selectedObjectName,
       config,
+      selectedObjectName,
       setConfigureState,
       setErrorState,
     ],
   );
 
   useEffect(() => {
-    // set configurationState when hydratedRevision is loaded
     resetState();
   }, [resetState]);
 
@@ -90,12 +90,8 @@ export function UpdateInstallation(
     )
       || [];
 
-    const newErrorState = { ...errorState } as ErrorState;
-    newErrorState[ErrorBoundary.MAPPING] = newErrorState[ErrorBoundary.MAPPING] || {};
-    fieldsWithRequirementsNotMet.forEach((field) => {
-      newErrorState[ErrorBoundary.MAPPING][field.mapToName] = true;
-    });
-    setErrorState(newErrorState);
+    const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
+    setErrors(ErrorBoundary.MAPPING, errList, setErrorState);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {

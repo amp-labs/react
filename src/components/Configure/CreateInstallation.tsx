@@ -11,7 +11,9 @@ import { useProject } from '../../context/ProjectContext';
 
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
-import { ErrorBoundary, resetBoundary, useErrorState } from './state/ErrorStateProvider';
+import {
+  ErrorBoundary, resetBoundary, setErrors, useErrorState,
+} from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
@@ -31,13 +33,13 @@ export function CreateInstallation() {
   const { projectId } = useProject();
 
 
-  const { errorState, setErrorState } = useErrorState();
+  const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(
     () => {
-      resetBoundary(ErrorBoundary.MAPPING, errorState, setErrorState);
+      resetBoundary(ErrorBoundary.MAPPING, setErrorState);
       if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
         resetConfigurationState(
           hydratedRevision,
@@ -47,7 +49,6 @@ export function CreateInstallation() {
         );
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [hydratedRevision, loading, selectedObjectName, setConfigureState, setErrorState],
   );
 
@@ -67,15 +68,8 @@ export function CreateInstallation() {
     )
       || [];
 
-    const newErrorState = {
-      ...errorState,
-      [ErrorBoundary.MAPPING]: {} as { [key: string]: boolean },
-    };
-
-    fieldsWithRequirementsNotMet.forEach((field) => {
-      newErrorState[ErrorBoundary.MAPPING][field.mapToName] = true;
-    });
-    setErrorState(newErrorState);
+    const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
+    setErrors(ErrorBoundary.MAPPING, errList, setErrorState);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {
