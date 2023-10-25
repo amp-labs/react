@@ -2,7 +2,6 @@ import {
   useCallback, useContext, useEffect, useMemo,
 } from 'react';
 
-import { MAPPING_ERROR_BOUNDARY } from '../../constants';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
@@ -11,7 +10,7 @@ import { Installation, Integration } from '../../services/api';
 
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
-import { useErrorState } from './state/ErrorStateProvider';
+import { ErrorBoundary, ErrorState, useErrorState } from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
@@ -42,7 +41,7 @@ export function UpdateInstallation(
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(() => {
-    setErrorState({ ...errorState, [MAPPING_ERROR_BOUNDARY]: {} });
+    setErrorState({ ...errorState, [ErrorBoundary.MAPPING]: {} });
     if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
       resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
     }
@@ -85,10 +84,10 @@ export function UpdateInstallation(
     )
       || [];
 
-    const newErrorState = { ...errorState };
-    newErrorState[MAPPING_ERROR_BOUNDARY] = newErrorState[MAPPING_ERROR_BOUNDARY] || {};
+    const newErrorState = { ...errorState } as ErrorState;
+    newErrorState[ErrorBoundary.MAPPING] = newErrorState[ErrorBoundary.MAPPING] || {};
     fieldsWithRequirementsNotMet.forEach((field) => {
-      newErrorState[MAPPING_ERROR_BOUNDARY][field.mapToName] = true;
+      newErrorState[ErrorBoundary.MAPPING][field.mapToName] = true;
     });
     setErrorState(newErrorState);
 

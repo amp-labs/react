@@ -3,6 +3,7 @@ import {
   useMemo, useState,
 } from 'react';
 
+import { ErrorBoundary, setError, useErrorState } from '../components/Configure/state/ErrorStateProvider';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
@@ -35,6 +36,7 @@ export function IntegrationListProvider(
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  const { errorState, setErrorState } = useErrorState();
 
   useEffect(() => {
     api().listIntegrations({ projectId }, {
@@ -44,6 +46,7 @@ export function IntegrationListProvider(
     }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
+      setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', errorState, setErrorState);
       console.error('ERROR: ', err);
     });
   }, [projectId, apiKey]);

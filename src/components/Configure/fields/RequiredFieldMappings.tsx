@@ -4,11 +4,11 @@ import {
   FormErrorMessage, Stack,
 } from '@chakra-ui/react';
 
-import { MAPPING_ERROR_BOUNDARY } from '../../../constants';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { useErrorState } from '../state/ErrorStateProvider';
+import { useErrorState, ErrorBoundary, removeError, isError } from '../state/ErrorStateProvider';
 import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
+
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
@@ -32,10 +32,8 @@ export function RequiredFieldMappings() {
       setConfigureState(selectedObjectName, newState);
     }
 
-    if (errorState[MAPPING_ERROR_BOUNDARY]?.[name]) {
-      const newErrorState = { ...errorState };
-      delete newErrorState[MAPPING_ERROR_BOUNDARY][name];
-      setErrorState(newErrorState);
+    if (isError(ErrorBoundary.MAPPING, name, errorState)) {
+      removeError(ErrorBoundary.MAPPING, name, errorState, setErrorState)
     }
   };
 
@@ -51,12 +49,8 @@ export function RequiredFieldMappings() {
       <FieldHeader string="Map the following fields (required)" />
       <Stack>
         {integrationFieldMappings.map((field) => {
-          const isError = errorState[MAPPING_ERROR_BOUNDARY]
-            ? !!errorState[MAPPING_ERROR_BOUNDARY][field.mapToName]
-            : false;
-
           return (
-            <FormControl key={field.mapToName} isInvalid={isError}>
+            <FormControl key={field.mapToName} isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName, errorState)Error}>
               <FieldMapping
                 allFields={configureState.allFields || []}
                 field={field}
@@ -64,11 +58,11 @@ export function RequiredFieldMappings() {
               />
               <FormErrorMessage> * required</FormErrorMessage>
             </FormControl>
-          );
+      );
         })}
 
-      </Stack>
-    </Box>
+    </Stack>
+    </Box >
 
   );
 }

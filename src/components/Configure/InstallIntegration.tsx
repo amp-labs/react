@@ -4,6 +4,7 @@ import { InstallIntegrationProvider, useInstallIntegrationProps } from '../../co
 import { useProject } from '../../context/ProjectContext';
 
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
+import { ErrorBoundary, useErrorState } from './state/ErrorStateProvider';
 import { CreateInstallation } from './CreateInstallation';
 import { ErrorTextBoxPlaceholder } from './ErrorTextBoxPlaceholder';
 import { ObjectManagementNav } from './ObjectManagementNav';
@@ -15,7 +16,7 @@ function InstallationContent() {
   const { integrationObj, installation } = useInstallIntegrationProps();
 
   if (!integrationObj) {
-    return <ErrorTextBoxPlaceholder />;
+    return <ErrorTextBoxPlaceholder message={"We can't load the integration"} />;
   }
 
   return installation && integrationObj ? (
@@ -45,6 +46,12 @@ export function InstallIntegration(
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
+  const { errorState } = useErrorState();
+  if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
+    console.log('asdlaskdjasldkjasdlkasjdlas');
+    return <ErrorTextBoxPlaceholder message="Something went wrong, couldn't find integration information" />;
+  }
+
   return (
     // install integration provider provides all props, integrationObj and installation
     <InstallIntegrationProvider

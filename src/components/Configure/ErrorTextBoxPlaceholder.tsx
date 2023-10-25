@@ -1,5 +1,9 @@
 import CenteredTextBox from '../CenteredTextBox/CenteredTextBox';
 
-export function ErrorTextBoxPlaceholder() {
-  return <CenteredTextBox text="We can't load the integration" />;
+interface ErrorTextBoxPlaceholderProps {
+  message: string,
+}
+
+export function ErrorTextBoxPlaceholder({ message }: ErrorTextBoxPlaceholderProps) {
+  return <CenteredTextBox text={message} />;
 }

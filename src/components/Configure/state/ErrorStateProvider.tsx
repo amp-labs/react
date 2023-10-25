@@ -2,11 +2,11 @@ import React, {
   createContext, useContext, useMemo, useState,
 } from 'react';
 
-interface ErrorState {
-  [boundary: string]: {
-    [key: string]: boolean
-  }
-}
+export type ErrorState = {
+  [boundary in ErrorBoundary]: {
+    [key: string]: boolean;
+  };
+};
 
 export const ErrorContext = createContext<{
   errorState: ErrorState;
@@ -30,7 +30,7 @@ type ErrorProviderProps = {
 export function ErrorStateProvider(
   { children }: ErrorProviderProps,
 ) {
-  const [errorState, setErrorState] = useState<ErrorState>({});
+  const [errorState, setErrorState] = useState<ErrorState>({} as ErrorState);
 
   const contextValue = useMemo(
     () => ({ errorState, setErrorState }),
@@ -42,4 +42,29 @@ export function ErrorStateProvider(
       {children}
     </ErrorContext.Provider>
   );
+}
+
+export const setError = (boundary: ErrorBoundary, key: string, errorState: ErrorState, setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>) => {
+  const newErrorState = {
+    ...errorState,
+  };
+  newErrorState[boundary] = newErrorState[boundary] || {};
+  newErrorState[boundary][key] = true;
+  setErrorState(newErrorState);
+};
+
+export const isError = (boundary: ErrorBoundary, key: string, errorState: ErrorState) => !!errorState[boundary]?.[key];
+
+export const removeError = (boundary: ErrorBoundary, key: string, errorState: ErrorState, setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>) => {
+  const newErrorState = {
+    ...errorState,
+  };
+  delete newErrorState[boundary][key];
+  setErrorState(newErrorState);
+};
+
+export enum ErrorBoundary {
+  MAPPING = 'mappingError',
+  INTEGRATION_LIST = 'integrationListError',
+  PROJECT_ERROR_BOUNDARY = 'projectError',
 }
