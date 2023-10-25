@@ -1,5 +1,5 @@
 import {
-  useCallback, useContext, useEffect,
+  useCallback, useContext, useEffect, useMemo,
 } from 'react';
 
 import { MAPPING_ERROR_BOUNDARY } from '../../constants';
@@ -59,6 +59,21 @@ export function UpdateInstallation(
     resetState();
   }, [resetState]);
 
+  const { readActions, hydratedObject } = useMemo(() => {
+    const actions = hydratedRevision?.content?.actions?.find(
+      (
+        action,
+      ) => action?.type === 'read',
+    );
+    const hydrated = actions?.standardObjects?.find(
+      (
+        obj,
+      ) => obj?.objectName === selectedObjectName,
+    );
+
+    return { readActions: actions, hydratedObject: hydrated };
+  }, [hydratedRevision, selectedObjectName]);
+
   const onSave = (e: any) => {
     e.preventDefault();
 
@@ -82,16 +97,22 @@ export function UpdateInstallation(
       return;
     }
 
-    if (installation && selectedObjectName && apiKey && projectId) {
+    if (installation
+      && selectedObjectName
+      && apiKey
+      && projectId
+      && hydratedObject
+      && readActions) {
       onSaveUpdate(
         projectId,
         integrationObj.id,
         installation.id,
         selectedObjectName,
         apiKey,
-        config,
         configureState,
         setInstallation,
+        hydratedObject,
+        readActions?.schedule || '',
       );
     } else {
       console.error('update installation props missing');

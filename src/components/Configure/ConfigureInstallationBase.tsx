@@ -18,16 +18,12 @@ interface ConfigureInstallationBaseProps {
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  {
-    onSave, onReset,
-  }: ConfigureInstallationBaseProps,
+  { onSave, onReset }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
 
   return (
-    <form
-      onSubmit={onSave}
-    >
+    <form onSubmit={onSave}>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
         <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type="submit">Save</Button>
         <Button

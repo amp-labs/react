@@ -1,5 +1,8 @@
 import {
-  api, Config, Installation, UpdateInstallationOperationRequest,
+  api,
+  HydratedIntegrationObject,
+  Installation,
+  UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '../../../services/api';
 import {
@@ -20,12 +23,15 @@ import { ConfigureState } from '../types';
  * @param configureState
  * @param config
  * @param objectName
+ * @param hydratedObject
+ * @param schedule
  * @returns
  */
 const generateUpdateConfigFromConfigureState = (
   configureState: ConfigureState,
-  config: Config,
   objectName: string,
+  hydratedObject: HydratedIntegrationObject,
+  schedule: string,
 ): UpdateInstallationRequestInstallationConfig => {
   const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
@@ -40,8 +46,8 @@ const generateUpdateConfigFromConfigureState = (
           [objectName]: {
             objectName,
             // these two fields are copied from previous config, otherwise they will override null
-            schedule: config?.content?.read?.standardObjects?.[objectName].schedule || '',
-            destination: config?.content?.read?.standardObjects?.[objectName].destination || '',
+            schedule,
+            destination: hydratedObject?.destination || '',
             selectedFields,
             selectedFieldMappings,
           },
@@ -59,16 +65,18 @@ export const onSaveUpdate = (
   installationId: string,
   selectedObjectName: string,
   apiKey: string,
-  config: Config,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
+  hydratedObject: HydratedIntegrationObject,
+  schedule: string,
 ) => {
   // get configuration state
   // transform configuration state to update shape
   const updateConfig = generateUpdateConfigFromConfigureState(
     configureState,
-    config,
     selectedObjectName || '',
+    hydratedObject,
+    schedule,
   );
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
