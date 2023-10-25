@@ -11,6 +11,7 @@ import { ApiKeyProvider } from '../../context/ApiKeyContext';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';
 import { ErrorStateProvider } from '../Configure/state/ErrorStateProvider';
+import { LoadingStateProvider } from '../Configure/state/LoadingStateProvider';
 import { ThemeProvider } from '../ThemeProvider';
 
 interface AmpersandProviderProps {
@@ -28,13 +29,15 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   return (
     <ThemeProvider>
       <ErrorStateProvider>
-        <ApiKeyProvider value={apiKey}>
-          <IntegrationListProvider projectId={projectId}>
-            <ProjectProvider projectId={projectId}>
-              {children}
-            </ProjectProvider>
-          </IntegrationListProvider>
-        </ApiKeyProvider>
+        <LoadingStateProvider>
+          <ApiKeyProvider value={apiKey}>
+            <IntegrationListProvider projectId={projectId}>
+              <ProjectProvider projectId={projectId}>
+                {children}
+              </ProjectProvider>
+            </IntegrationListProvider>
+          </ApiKeyProvider>
+        </LoadingStateProvider>
       </ErrorStateProvider>
     </ThemeProvider>
   );
