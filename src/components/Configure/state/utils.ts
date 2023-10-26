@@ -61,7 +61,7 @@ export function generateConfigurationState(
   };
 }
 
-// resets configure state for single object to hyrdated revision values
+// resets configure state for single object to hydrated revision values
 export const resetConfigurationState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
