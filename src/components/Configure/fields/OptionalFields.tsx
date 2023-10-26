@@ -51,7 +51,7 @@ export function OptionalFields() {
                 <Checkbox
                   name={field.fieldName}
                   id={field.fieldName}
-                  isChecked={selectedOptionalFields?.[field?.fieldName]}
+                  isChecked={!!selectedOptionalFields?.[field?.fieldName]}
                   onChange={onCheckboxChange}
                 >
                   {field.displayName}
