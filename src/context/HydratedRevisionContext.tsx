@@ -73,8 +73,6 @@ export function HydratedRevisionProvider({
           setLoading(false);
           setError(err.message || 'An error occurred while fetching data');
         });
-    } else {
-
     }
   }, [projectId, integrationId, revisionId, connectionId, apiKey, integrations]);
 
