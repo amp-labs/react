@@ -79,7 +79,7 @@ export const resetConfigurationState = (
 };
 
 /**
- * resets configure state for all objects in hydrated revision to hyrdated revision values
+ * resets configure state for all objects in hydrated revision to hydrated revision values
  */
 
 export const resetAllObjectsConfigurationState = (
