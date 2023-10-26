@@ -31,8 +31,6 @@ export function CreateInstallation() {
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
 
-  // 1. get the hydrated revision
-  // 3. generate the configuration state from the hydrated revision
 
   const { errorState, setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
