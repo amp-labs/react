@@ -2,6 +2,8 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
+import { LoadingIcon } from '../assets/LoadingIcon';
+import { useLoadingState } from './LoadingStateContext';
 import { api, Project } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
@@ -34,22 +36,26 @@ type ProjectProviderProps = {
 };
 
 export function ProjectProvider(
-  { projectId, children }:ProjectProviderProps,
+  { projectId, children }: ProjectProviderProps,
 ) {
   const [project, setProject] = useState<Project | null>(null);
   const apiKey = useContext(ApiKeyContext);
 
+  const { isLoading, setLoadingState } = useLoadingState();
   useEffect(() => {
+    setLoadingState(true);
     api().getProject({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
     }).then((_project) => {
+      setLoadingState(false);
       setProject(_project);
     }).catch((err) => {
+      setLoadingState(false);
       console.error('ERROR: ', err);
     });
-  }, [projectId, apiKey]);
+  }, [projectId, apiKey, setLoadingState]);
 
   const contextValue = useMemo(() => ({
     projectId, project, appName: project?.appName || '',
@@ -57,7 +63,7 @@ export function ProjectProvider(
 
   return (
     <ProjectContext.Provider value={contextValue}>
-      {children}
+      {isLoading ? <LoadingIcon /> : children}
     </ProjectContext.Provider>
   );
 }
