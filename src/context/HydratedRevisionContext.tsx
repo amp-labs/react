@@ -39,7 +39,7 @@ type HydratedRevisionProviderProps = {
 export function HydratedRevisionProvider({
   projectId,
   children,
-} : HydratedRevisionProviderProps) {
+}: HydratedRevisionProviderProps) {
   const { integrationId, integrationObj } = useInstallIntegrationProps();
   const { integrations } = useIntegrationList();
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);

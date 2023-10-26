@@ -68,9 +68,6 @@ const generateCreateConfigFromConfigureState = (
     configureState,
   );
 
-  console.log("selectedFields", selectedFields)
-  console.log("selectedFieldMappings", selectedFieldMappings)
-
   const schedule = getScheduleFromHydratedRevision(hydratedRevision);
   const destination = getDestinationFromHydratedRevision(hydratedRevision, objectName);
 

@@ -52,14 +52,14 @@ export function generateConfigurationState(
     })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
+  const selectedFields = config?.content?.read?.standardObjects?.[objectName]?.selectedFields || {};
 
   return {
     allFields,
     requiredFields,
     optionalFields,
     requiredMapFields,
-    selectedOptionalFields: null,
-    selectedRequiredFields: null,
+    selectedOptionalFields: selectedFields,
   };
 }
 
@@ -124,7 +124,7 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
   selectedFields = {
     ...selectedFields,
     ...(selectedOptionalFields || {}),
-  }
+  };
   return selectedFields;
 };
 
