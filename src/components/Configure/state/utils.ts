@@ -40,9 +40,11 @@ export function generateConfigurationState(
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
 
   // remove optional fields that are required
-  optionalFields = optionalFields?.filter((field) => {
-    return !!requiredFields?.find((requiredField) => getFieldKeyValue(requiredField) !== getFieldKeyValue(field));
-  }) || [];
+  optionalFields = optionalFields?.filter(
+    (field) => !!requiredFields?.find(
+      (requiredField) => getFieldKeyValue(requiredField) !== getFieldKeyValue(field),
+    ),
+  ) || [];
 
   // todo map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
