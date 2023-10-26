@@ -31,7 +31,6 @@ export function CreateInstallation() {
   const { selectedConnection } = useConnections();
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
-
   const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
