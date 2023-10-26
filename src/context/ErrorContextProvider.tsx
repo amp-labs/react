@@ -34,10 +34,10 @@ type ErrorProviderProps = {
 };
 
 const initialState: ErrorState = (() => {
-  const obj = Object.keys(ErrorBoundary).reduce((acc, key) => {
-    acc[key] = {};
-    return acc;
-  }, {} as ErrorState);
+  const obj = {} as ErrorState;
+  Object.values(ErrorBoundary).forEach((key) => {
+    obj[key] = {};
+  });
   return obj;
 })();
 

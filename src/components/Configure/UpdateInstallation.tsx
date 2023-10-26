@@ -3,6 +3,10 @@ import {
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
+import {
+  ErrorBoundary, resetBoundary, setErrors,
+  useErrorState,
+} from '../../context/ErrorContextProvider';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
@@ -10,10 +14,6 @@ import { Installation, Integration } from '../../services/api';
 
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
-import {
-  ErrorBoundary, resetBoundary, setErrors,
-  useErrorState,
-} from './state/ErrorStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';

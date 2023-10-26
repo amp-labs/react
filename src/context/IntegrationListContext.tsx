@@ -3,10 +3,10 @@ import {
   useMemo, useState,
 } from 'react';
 
-import { ErrorBoundary, setError, useErrorState } from '../components/Configure/state/ErrorStateProvider';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import { ErrorBoundary, setError, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;

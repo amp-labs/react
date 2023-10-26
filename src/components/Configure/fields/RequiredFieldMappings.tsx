@@ -4,11 +4,11 @@ import {
   FormErrorMessage, Stack,
 } from '@chakra-ui/react';
 
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
 import {
   ErrorBoundary, isError, removeError, useErrorState,
-} from '../state/ErrorStateProvider';
+} from '../../../context/ErrorContextProvider';
+import { useSelectedObjectName } from '../ObjectManagementNav';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
 import { isIntegrationFieldMapping } from '../utils';
 
