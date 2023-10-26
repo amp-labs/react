@@ -13,7 +13,7 @@ export function OptionalFields() {
   const { objectConfigurationsState, setConfigureState } = useConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-
+  const { selectedOptionalFields } = configureState || {};
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
