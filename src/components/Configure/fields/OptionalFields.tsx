@@ -22,7 +22,7 @@ export function OptionalFields() {
       // Update the value property to new checked value
       selectedOptionalFields = selectedOptionalFields || {};
       selectedOptionalFields[name] = checked;
-      console.log("checked", checked)
+
       configureState.selectedOptionalFields = selectedOptionalFields;
       // update state
       setConfigureState(

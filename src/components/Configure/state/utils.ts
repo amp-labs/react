@@ -110,16 +110,21 @@ export const resetAllObjectsConfigurationState = (
  * @returns
  */
 export const generateSelectedFieldsFromConfigureState = (configureState: ConfigureState) => {
-  const { requiredFields, optionalFields } = configureState;
+  const { requiredFields, selectedOptionalFields } = configureState;
   const fields = new Set<string>();
   requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
   // adds optional fields that are selected (true)
-  optionalFields?.forEach((field) => field.value && fields.add(getFieldKeyValue(field)));
+
   // convert set to object for config
-  const selectedFields = Array.from(fields).reduce((acc, field) => ({
+  let selectedFields = Array.from(fields).reduce((acc, field) => ({
     ...acc,
     [field]: true,
   }), {});
+
+  selectedFields = {
+    ...selectedFields,
+    ...(selectedOptionalFields || {}),
+  }
   return selectedFields;
 };
 
