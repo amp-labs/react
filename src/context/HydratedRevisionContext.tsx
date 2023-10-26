@@ -74,9 +74,7 @@ export function HydratedRevisionProvider({
           setError(err.message || 'An error occurred while fetching data');
         });
     } else {
-      console.error('Missing required parameters for HydratedRevisionProvider', {
-        projectId, integrationId, revisionId, connectionId, apiKey, integrations,
-      });
+
     }
   }, [projectId, integrationId, revisionId, connectionId, apiKey, integrations]);
 
