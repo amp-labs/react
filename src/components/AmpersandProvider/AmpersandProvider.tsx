@@ -38,7 +38,6 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
           </ApiKeyProvider>
         </ErrorStateProvider>
       </LoadingStateProvider>
-
     </ThemeProvider>
   );
 }
