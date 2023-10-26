@@ -171,7 +171,6 @@ export const setRequiredCustomMapFieldValue = (
 };
 
 // get configure state of single object
-// eslint-disable-next-line max-len
 export function getConfigureState(
   objectName: string,
   objectConfigurationsState: ObjectConfigurationsState,
