@@ -11,7 +11,7 @@ import { ApiKeyProvider } from '../../context/ApiKeyContext';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';
 import { ErrorStateProvider } from '../Configure/state/ErrorStateProvider';
-import { LoadingStateProvider } from '../Configure/state/LoadingStateProvider';
+import { LoadingStateProvider } from '../../context/LoadingStateProvider';
 import { ThemeProvider } from '../ThemeProvider';
 
 interface AmpersandProviderProps {
