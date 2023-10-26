@@ -5,7 +5,7 @@ interface CenteredTextBoxProps {
 }
 
 function CenteredTextBox({ text }: CenteredTextBoxProps) {
-  return (<Box margin="auto" width="80px" paddingTop="30px">{text}</Box>);
+  return (<Box margin="auto" width="100%" paddingTop="30px">{text}</Box>);
 }
 
 export default CenteredTextBox;

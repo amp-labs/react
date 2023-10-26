@@ -6,6 +6,7 @@ import {
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import { ErrorBoundary, setError, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
@@ -35,6 +36,7 @@ export function IntegrationListProvider(
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  const { setErrorState } = useErrorState();
 
   useEffect(() => {
     api().listIntegrations({ projectId }, {
@@ -44,9 +46,10 @@ export function IntegrationListProvider(
     }).then((_integrations) => {
       setIntegrations(_integrations || []);
     }).catch((err) => {
+      setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', setErrorState);
       console.error('ERROR: ', err);
     });
-  }, [projectId, apiKey]);
+  }, [projectId, apiKey, setErrorState]);
 
   const contextValue = useMemo(() => ({
     integrations,
