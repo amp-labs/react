@@ -1,6 +1,6 @@
 import {
-  Config, HydratedIntegrationAction,
-  HydratedIntegrationFieldExistent,
+  Config, HydratedIntegrationFieldExistent,
+  HydratedIntegrationRead,
   HydratedRevision,
 } from '../../../services/api';
 import {
@@ -11,21 +11,18 @@ import {
 } from '../types';
 import {
   generateNavObjects,
-  getActionTypeFromActions, getFieldKeyValue, getOptionalFieldsFromObject,
+  getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
-  PLACEHOLDER_VARS,
 } from '../utils';
 
 export function generateConfigurationState(
-  actions: HydratedIntegrationAction[],
-  type: string,
+  action: HydratedIntegrationRead,
   objectName: string,
   config?: any,
 ): ConfigureState {
-  const action = getActionTypeFromActions(actions, type);
-  const object = action && getStandardObjectFromAction(action, objectName);
+  const object = getStandardObjectFromAction(action, objectName);
 
   const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object
@@ -68,10 +65,12 @@ export const resetConfigurationState = (
   selectedObjectName: string,
   setConfigureState: (objectName: string, configureState: ConfigureState) => void,
 ) => {
-  const hydratedActions = hydratedRevision?.content.actions || []; // read / write / etc...
+  const readAction = hydratedRevision?.content?.read;
+  if (!readAction) {
+    return;
+  }
   const state = generateConfigurationState(
-    hydratedActions,
-    PLACEHOLDER_VARS.OPERATION_TYPE,
+    readAction,
     selectedObjectName,
     config,
   );
@@ -90,10 +89,10 @@ export const resetAllObjectsConfigurationState = (
   const navObjects = generateNavObjects(config, hydratedRevision);
   const objectConfigurationsState: ObjectConfigurationsState = {};
   navObjects.forEach(({ name, completed }) => {
-    if (completed) {
+    const readAction = hydratedRevision?.content?.read;
+    if (completed && readAction) {
       objectConfigurationsState[name] = generateConfigurationState(
-        hydratedRevision.content.actions,
-        PLACEHOLDER_VARS.OPERATION_TYPE,
+        readAction,
         name,
         config,
       );

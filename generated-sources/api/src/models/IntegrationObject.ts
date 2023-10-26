@@ -46,6 +46,12 @@ export interface IntegrationObject {
     destination: string;
     /**
      * 
+     * @type {string}
+     * @memberof IntegrationObject
+     */
+    schedule: string;
+    /**
+     * 
      * @type {Array<IntegrationField>}
      * @memberof IntegrationObject
      */
@@ -71,6 +77,7 @@ export function instanceOfIntegrationObject(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "destination" in value;
+    isInstance = isInstance && "schedule" in value;
 
     return isInstance;
 }
@@ -87,6 +94,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'objectName': json['objectName'],
         'destination': json['destination'],
+        'schedule': json['schedule'],
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
@@ -104,6 +112,7 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         
         'objectName': value.objectName,
         'destination': value.destination,
+        'schedule': value.schedule,
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),

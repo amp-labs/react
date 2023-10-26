@@ -24,7 +24,7 @@ export interface ConfigContent {
      * @type {string}
      * @memberof ConfigContent
      */
-    api: string;
+    provider: string;
     /**
      * 
      * @type {any}
@@ -38,7 +38,7 @@ export interface ConfigContent {
  */
 export function instanceOfConfigContent(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "api" in value;
+    isInstance = isInstance && "provider" in value;
 
     return isInstance;
 }
@@ -53,7 +53,7 @@ export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'api': json['api'],
+        'provider': json['provider'],
         'read': !exists(json, 'read') ? undefined : json['read'],
     };
 }
@@ -67,7 +67,7 @@ export function ConfigContentToJSON(value?: ConfigContent | null): any {
     }
     return {
         
-        'api': value.api,
+        'provider': value.provider,
         'read': value.read,
     };
 }

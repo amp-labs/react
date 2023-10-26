@@ -52,6 +52,12 @@ export interface HydratedIntegrationObject {
     destination: string;
     /**
      * 
+     * @type {string}
+     * @memberof HydratedIntegrationObject
+     */
+    schedule: string;
+    /**
+     * 
      * @type {Array<HydratedIntegrationField>}
      * @memberof HydratedIntegrationObject
      */
@@ -84,6 +90,7 @@ export function instanceOfHydratedIntegrationObject(value: object): boolean {
     isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "displayName" in value;
     isInstance = isInstance && "destination" in value;
+    isInstance = isInstance && "schedule" in value;
 
     return isInstance;
 }
@@ -101,6 +108,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'objectName': json['objectName'],
         'displayName': json['displayName'],
         'destination': json['destination'],
+        'schedule': json['schedule'],
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
@@ -120,6 +128,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'objectName': value.objectName,
         'displayName': value.displayName,
         'destination': value.destination,
+        'schedule': value.schedule,
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),

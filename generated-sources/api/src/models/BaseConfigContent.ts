@@ -31,7 +31,7 @@ export interface BaseConfigContent {
      * @type {string}
      * @memberof BaseConfigContent
      */
-    api?: string;
+    provider?: string;
     /**
      * 
      * @type {BaseReadConfig}
@@ -59,7 +59,7 @@ export function BaseConfigContentFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'api': !exists(json, 'api') ? undefined : json['api'],
+        'provider': !exists(json, 'provider') ? undefined : json['provider'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
     };
 }
@@ -73,7 +73,7 @@ export function BaseConfigContentToJSON(value?: BaseConfigContent | null): any {
     }
     return {
         
-        'api': value.api,
+        'provider': value.provider,
         'read': BaseReadConfigToJSON(value.read),
     };
 }

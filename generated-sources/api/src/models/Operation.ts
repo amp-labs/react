@@ -51,18 +51,6 @@ export interface Operation {
      */
     installationId: string;
     /**
-     * The time the operation was started.
-     * @type {Date}
-     * @memberof Operation
-     */
-    startTime?: Date;
-    /**
-     * The time the operation was completed.
-     * @type {Date}
-     * @memberof Operation
-     */
-    endTime?: Date;
-    /**
      * The status of the operation.
      * @type {string}
      * @memberof Operation
@@ -123,8 +111,6 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'actionType': json['actionType'],
         'objectName': json['objectName'],
         'installationId': json['installationId'],
-        'startTime': !exists(json, 'startTime') ? undefined : (new Date(json['startTime'])),
-        'endTime': !exists(json, 'endTime') ? undefined : (new Date(json['endTime'])),
         'status': !exists(json, 'status') ? undefined : json['status'],
         'workflowRef': json['workflowRef'],
         'runRef': json['runRef'],
@@ -146,8 +132,6 @@ export function OperationToJSON(value?: Operation | null): any {
         'actionType': value.actionType,
         'objectName': value.objectName,
         'installationId': value.installationId,
-        'startTime': value.startTime === undefined ? undefined : (value.startTime.toISOString()),
-        'endTime': value.endTime === undefined ? undefined : (value.endTime.toISOString()),
         'status': value.status,
         'workflowRef': value.workflowRef,
         'runRef': value.runRef,

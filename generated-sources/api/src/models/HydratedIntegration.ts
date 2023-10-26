@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { HydratedIntegrationAction } from './HydratedIntegrationAction';
+import type { HydratedIntegrationRead } from './HydratedIntegrationRead';
 import {
-    HydratedIntegrationActionFromJSON,
-    HydratedIntegrationActionFromJSONTyped,
-    HydratedIntegrationActionToJSON,
-} from './HydratedIntegrationAction';
+    HydratedIntegrationReadFromJSON,
+    HydratedIntegrationReadFromJSONTyped,
+    HydratedIntegrationReadToJSON,
+} from './HydratedIntegrationRead';
 
 /**
  * 
@@ -43,13 +43,13 @@ export interface HydratedIntegration {
      * @type {string}
      * @memberof HydratedIntegration
      */
-    api: string;
+    provider: string;
     /**
      * 
-     * @type {Array<HydratedIntegrationAction>}
+     * @type {HydratedIntegrationRead}
      * @memberof HydratedIntegration
      */
-    actions: Array<HydratedIntegrationAction>;
+    read?: HydratedIntegrationRead;
 }
 
 /**
@@ -58,8 +58,7 @@ export interface HydratedIntegration {
 export function instanceOfHydratedIntegration(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "api" in value;
-    isInstance = isInstance && "actions" in value;
+    isInstance = isInstance && "provider" in value;
 
     return isInstance;
 }
@@ -76,8 +75,8 @@ export function HydratedIntegrationFromJSONTyped(json: any, ignoreDiscriminator:
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
-        'api': json['api'],
-        'actions': ((json['actions'] as Array<any>).map(HydratedIntegrationActionFromJSON)),
+        'provider': json['provider'],
+        'read': !exists(json, 'read') ? undefined : HydratedIntegrationReadFromJSON(json['read']),
     };
 }
 
@@ -92,8 +91,8 @@ export function HydratedIntegrationToJSON(value?: HydratedIntegration | null): a
         
         'name': value.name,
         'displayName': value.displayName,
-        'api': value.api,
-        'actions': ((value.actions as Array<any>).map(HydratedIntegrationActionToJSON)),
+        'provider': value.provider,
+        'read': HydratedIntegrationReadToJSON(value.read),
     };
 }
 
