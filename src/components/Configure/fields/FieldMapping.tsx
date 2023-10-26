@@ -4,8 +4,9 @@ import {
 } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent } from '../../../services/api';
+import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { setRequiredCustomMapFieldValue } from '../state/utils';
+import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
 import { ConfigureStateMappingIntegrationField } from '../types';
 
 interface FieldMappingProps {
@@ -19,7 +20,9 @@ interface FieldMappingProps {
 export function FieldMapping(
   { field, onSelectChange, allFields }: FieldMappingProps,
 ) {
-  const { configureState, setConfigureState } = useConfigureState();
+  const { selectedObjectName } = useSelectedObjectName();
+  const { objectConfigurationsState, setConfigureState } = useConfigureState();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -31,12 +34,12 @@ export function FieldMapping(
         configureState,
       );
 
-      if (isUpdated) {
-        setConfigureState(newState);
+      if (isUpdated && selectedObjectName) {
+        setConfigureState(selectedObjectName, newState);
       }
     }
     setDisabled(false);
-  }, [field, allFields, configureState, setConfigureState]);
+  }, [field, allFields, configureState, setConfigureState, selectedObjectName]);
 
   const options = useMemo(() => allFields?.map(
     (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,

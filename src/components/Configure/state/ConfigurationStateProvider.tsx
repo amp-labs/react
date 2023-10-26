@@ -1,28 +1,24 @@
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { ConfigureState } from '../types';
+import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import {
-  resetConfigurationState,
+  resetAllObjectsConfigurationState,
 } from './utils';
 
 // Create a context for the configuration state
-export const ConfigurationContext = createContext<{
-  configureState: ConfigureState;
-  setConfigureState: React.Dispatch<React.SetStateAction<ConfigureState>>;
+const ConfigurationContext = createContext<{
+  objectConfigurationsState: ObjectConfigurationsState;
+  setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
+  setConfigureState:(objectName: string, configureState: ConfigureState) => void;
+
 } | undefined>(undefined);
 
-const initialConfigureState: ConfigureState = {
-  allFields: null,
-  requiredFields: null,
-  optionalFields: null,
-  requiredMapFields: null,
-};
+const initalObjectConfigurationsState: ObjectConfigurationsState = {};
 
 // Custom hook to access and update the configuration state
 export function useConfigureState() {
@@ -43,23 +39,43 @@ export function ConfigurationProvider(
 ) {
   const { installation } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
-  const { selectedObjectName } = useSelectedObjectName();
+
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision from installation revisionId (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
-  const [configureState, setConfigureState] = useState<ConfigureState>(initialConfigureState);
+
+  const [
+    objectConfigurationsState,
+    setObjectConfigurationsState,
+  ] = useState<ObjectConfigurationsState>(initalObjectConfigurationsState);
   const config = installation?.config;
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
-      resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
+    if (hydratedRevision?.content?.actions && !loading) {
+      resetAllObjectsConfigurationState(
+        hydratedRevision,
+        config,
+        setObjectConfigurationsState,
+      );
     }
-  }, [hydratedRevision, loading, selectedObjectName, config]);
+  }, [hydratedRevision, loading, config]);
+
+  // set configure state of single object
+  const setConfigureState = useCallback((objectName: string, configureState: ConfigureState) => {
+    setObjectConfigurationsState((prevState) => ({
+      ...prevState,
+      [objectName]: configureState,
+    }));
+  }, [setObjectConfigurationsState]);
 
   const contextValue = useMemo(
-    () => ({ configureState, setConfigureState }),
-    [configureState, setConfigureState],
+    () => ({
+      objectConfigurationsState,
+      setObjectConfigurationsState,
+      setConfigureState,
+    }),
+    [objectConfigurationsState, setConfigureState],
   );
 
   return (

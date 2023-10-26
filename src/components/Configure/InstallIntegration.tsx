@@ -57,11 +57,11 @@ export function InstallIntegration(
       <ConnectionsProvider projectId={projectId}>
         <ProtectedConnectionLayout>
           <HydratedRevisionProvider projectId={projectId}>
-            <ObjectManagementNav>
-              <ConfigurationProvider>
+            <ConfigurationProvider>
+              <ObjectManagementNav>
                 <InstallationContent />
-              </ConfigurationProvider>
-            </ObjectManagementNav>
+              </ObjectManagementNav>
+            </ConfigurationProvider>
           </HydratedRevisionProvider>
         </ProtectedConnectionLayout>
       </ConnectionsProvider>

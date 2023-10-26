@@ -5,16 +5,19 @@ import {
 } from '@chakra-ui/react';
 
 import { MAPPING_ERROR_BOUNDARY } from '../../../constants';
+import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { useErrorState } from '../state/ErrorStateProvider';
-import { setRequiredCustomMapFieldValue } from '../state/utils';
+import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
 import { FieldMapping } from './FieldMapping';
 
 export function RequiredFieldMappings() {
-  const { configureState, setConfigureState } = useConfigureState();
+  const { selectedObjectName } = useSelectedObjectName();
+  const { objectConfigurationsState, setConfigureState } = useConfigureState();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const { errorState, setErrorState } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -25,8 +28,8 @@ export function RequiredFieldMappings() {
     }
 
     const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
-    if (isUpdated) {
-      setConfigureState(newState);
+    if (isUpdated && selectedObjectName) {
+      setConfigureState(selectedObjectName, newState);
     }
 
     if (errorState[MAPPING_ERROR_BOUNDARY]?.[name]) {

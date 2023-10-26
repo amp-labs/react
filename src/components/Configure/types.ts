@@ -18,3 +18,12 @@ export type ConfigureState = {
   optionalFields: ConfigureStateIntegrationField[] | null,
   requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
 };
+
+// maps to all object keys in hydrated revision
+export type ObjectConfigurationsState = Record<string, ConfigureState>;
+
+// standard object name and whether it is completed in the ObjectManagementNav
+export type NavObject = {
+  name: string;
+  completed: boolean;
+};
