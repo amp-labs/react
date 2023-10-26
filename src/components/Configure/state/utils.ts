@@ -58,6 +58,8 @@ export function generateConfigurationState(
     requiredFields,
     optionalFields,
     requiredMapFields,
+    selectedOptionalFields: null,
+    selectedRequiredFields: null,
   };
 }
 

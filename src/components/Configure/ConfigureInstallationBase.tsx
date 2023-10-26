@@ -21,6 +21,7 @@ export function ConfigureInstallationBase(
   { onSave, onReset }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading, error } = useHydratedRevision();
+  console.log("hydratedRevision", hydratedRevision)
 
   return (
     <form onSubmit={onSave}>

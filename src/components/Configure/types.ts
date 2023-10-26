@@ -12,11 +12,21 @@ export type ConfigureStateMappingIntegrationField = IntegrationFieldMapping & {
   value: string | number | undefined,
 };
 
+export type selectOptionalFields = {
+  [key: string]: boolean,
+}
+
+export type selectedRequiredFields = {
+  [key: string]: boolean,
+}
+
 export type ConfigureState = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: ConfigureStateIntegrationField[] | null,
   requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
+  selectedOptionalFields: selectOptionalFields | null,
+  selectedRequiredFields: selectedRequiredFields | null,
 };
 
 // maps to all object keys in hydrated revision

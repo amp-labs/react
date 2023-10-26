@@ -4,7 +4,7 @@ import React, {
 
 import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { ConfigureState, ObjectConfigurationsState } from '../types';
+import { ConfigureState, ObjectConfigurationsState, selectOptionalFields } from '../types';
 
 import {
   resetAllObjectsConfigurationState,
@@ -14,11 +14,11 @@ import {
 const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
-  setConfigureState:(objectName: string, configureState: ConfigureState) => void;
+  setConfigureState: (objectName: string, configureState: ConfigureState) => void;
 
 } | undefined>(undefined);
 
-const initalObjectConfigurationsState: ObjectConfigurationsState = {};
+const initialObjectConfigurationsState: ObjectConfigurationsState = {};
 
 // Custom hook to access and update the configuration state
 export function useConfigureState() {
@@ -47,7 +47,7 @@ export function ConfigurationProvider(
   const [
     objectConfigurationsState,
     setObjectConfigurationsState,
-  ] = useState<ObjectConfigurationsState>(initalObjectConfigurationsState);
+  ] = useState<ObjectConfigurationsState>(initialObjectConfigurationsState);
   const config = installation?.config;
 
   useEffect(() => {
