@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
-import { useLoadingState } from './LoadingStateProvider';
+import { useLoadingState } from './LoadingStateContext';
 import { api, Project } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
