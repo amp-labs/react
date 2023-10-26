@@ -28,7 +28,7 @@ export function generateConfigurationState(
   const object = action && getStandardObjectFromAction(action, objectName);
 
   const requiredFields = object && getRequiredFieldsFromObject(object);
-  const optionalFields = object
+  let optionalFields = object
     ? getOptionalFieldsFromObject(object)?.map((field) => ({
       ...field,
       value: getValueFromConfigExist(
@@ -38,6 +38,11 @@ export function generateConfigurationState(
         getFieldKeyValue(field),
       ),
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
+
+  // remove optional fields that are required
+  optionalFields = optionalFields?.filter((field) => {
+    return !!requiredFields?.find((requiredField) => getFieldKeyValue(requiredField) !== getFieldKeyValue(field));
+  }) || [];
 
   // todo map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
