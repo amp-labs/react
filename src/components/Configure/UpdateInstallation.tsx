@@ -32,7 +32,6 @@ export function UpdateInstallation(
   const { selectedObjectName } = useSelectedObjectName();
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
-  console.log(selectedObjectName)
   // when no installation or config exists, render create flow
   const { config } = installation;
 
@@ -42,14 +41,10 @@ export function UpdateInstallation(
   const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  console.log("configureState", selectedObjectName, configureState)
   const resetState = useCallback(
     () => {
       resetBoundary(ErrorBoundary.MAPPING, setErrorState);
       // set configurationState when hydratedRevision is loaded
-      const actions = hydratedRevision?.content?.actions;
-      console.log("actions", actions)
-
       if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
         resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
       }
