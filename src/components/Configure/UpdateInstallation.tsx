@@ -32,7 +32,6 @@ export function UpdateInstallation(
   const { selectedObjectName } = useSelectedObjectName();
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
-
   // when no installation or config exists, render create flow
   const { config } = installation;
 
@@ -42,7 +41,6 @@ export function UpdateInstallation(
   const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-
   const resetState = useCallback(
     () => {
       resetBoundary(ErrorBoundary.MAPPING, setErrorState);

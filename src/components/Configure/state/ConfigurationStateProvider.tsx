@@ -18,7 +18,7 @@ const ConfigurationContext = createContext<{
 
 } | undefined>(undefined);
 
-const initalObjectConfigurationsState: ObjectConfigurationsState = {};
+const initialObjectConfigurationsState: ObjectConfigurationsState = {};
 
 // Custom hook to access and update the configuration state
 export function useConfigureState() {
@@ -47,7 +47,7 @@ export function ConfigurationProvider(
   const [
     objectConfigurationsState,
     setObjectConfigurationsState,
-  ] = useState<ObjectConfigurationsState>(initalObjectConfigurationsState);
+  ] = useState<ObjectConfigurationsState>(initialObjectConfigurationsState);
   const config = installation?.config;
 
   useEffect(() => {

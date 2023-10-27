@@ -16,20 +16,22 @@ export function OptionalFields() {
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    const { optionalFields } = configureState;
-    const optionalFieldToUpdate = optionalFields?.find((field) => field.fieldName === name);
 
-    if (optionalFieldToUpdate && selectedObjectName) {
+    if (selectedObjectName) {
       // Update the value property to new checked value
-      optionalFieldToUpdate.value = checked;
+      let { selectedOptionalFields } = configureState || {};
+      selectedOptionalFields = selectedOptionalFields || {};
+      selectedOptionalFields[name] = checked;
 
       // update state
       setConfigureState(
         selectedObjectName,
-        { ...configureState, optionalFields: [...optionalFields || []] },
+        { ...configureState, selectedOptionalFields },
       );
     }
   };
+
+  const { selectedOptionalFields } = configureState || {};
 
   return (
     <>
@@ -49,7 +51,7 @@ export function OptionalFields() {
                 <Checkbox
                   name={field.fieldName}
                   id={field.fieldName}
-                  isChecked={!!field.value}
+                  isChecked={!!selectedOptionalFields?.[field?.fieldName]}
                   onChange={onCheckboxChange}
                 >
                   {field.displayName}
