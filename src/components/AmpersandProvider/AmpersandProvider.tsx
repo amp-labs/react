@@ -24,7 +24,7 @@ interface AmpersandProviderProps {
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options: { apiKey, projectId }, children } = props;
-  
+
   return (
     <ThemeProvider>
       <ErrorStateProvider>

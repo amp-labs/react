@@ -43,20 +43,18 @@ export function ProjectProvider(
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
   useEffect(() => {
-    if (apiKey) {
-      setLoadingState(true);
-      api().getProject({ projectId }, {
-        headers: {
-          'X-Api-Key': apiKey ?? '',
-        },
-      }).then((_project) => {
-        setLoadingState(false);
-        setProject(_project);
-      }).catch((err) => {
-        setLoadingState(false);
-        console.error('ERROR: ', err);
-      });
-    }
+    if (!project) setLoadingState(true);
+    api().getProject({ projectId }, {
+      headers: {
+        'X-Api-Key': apiKey ?? '',
+      },
+    }).then((_project) => {
+      setLoadingState(false);
+      setProject(_project);
+    }).catch((err) => {
+      setLoadingState(false);
+      console.error('ERROR: ', err);
+    });
   }, [projectId, apiKey, setLoadingState]);
 
   const contextValue = useMemo(() => ({
