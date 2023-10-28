@@ -1,12 +1,12 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext,
+  useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Project } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
-import { useLoadingState } from './LoadingStateContext';
 
 interface ProjectContextValue {
   project: Project | null;
@@ -40,8 +40,8 @@ export function ProjectProvider(
 ) {
   const [project, setProject] = useState<Project | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  const [isLoading, setLoadingState] = useState<boolean>(true);
 
-  const { isLoading, setLoadingState } = useLoadingState();
   useEffect(() => {
     setLoadingState(true);
     api().getProject({ projectId }, {
