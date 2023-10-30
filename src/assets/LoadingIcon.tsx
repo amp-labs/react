@@ -10,7 +10,8 @@ export function LoadingIcon() {
       width="100%"
       display="flex"
       justifyContent="center"
-      marginTop="200px"
+      marginTop="20%"
+      marginBottom="20%"
     >
       <Stack alignItems="center">
         <Spinner

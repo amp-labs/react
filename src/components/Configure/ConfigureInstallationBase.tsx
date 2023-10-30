@@ -5,6 +5,7 @@ import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
+import { LoadingIcon } from '../../assets/LoadingIcon';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 
 import { OptionalFields } from './fields/OptionalFields';
@@ -25,11 +26,18 @@ export function ConfigureInstallationBase(
   return (
     <form onSubmit={onSave}>
       <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
-        <Button backgroundColor="gray.800" _hover={{ backgroundColor: 'gray.600' }} type="submit">Save</Button>
+        <Button
+          backgroundColor="gray.800"
+          _hover={{ backgroundColor: 'gray.600' }}
+          type="submit"
+          isDisabled={loading}
+        >Save
+        </Button>
         <Button
           backgroundColor="gray.200"
           color="blackAlpha.700"
           _hover={{ backgroundColor: 'gray.300' }}
+          isDisabled={loading}
           onClick={onReset}
         >Reset
         </Button>
@@ -48,7 +56,7 @@ export function ConfigureInstallationBase(
         overflowY="scroll"
       >
         {error && <div>{error}</div>}
-        {loading && <div>Loading...</div>}
+        {loading && <LoadingIcon />}
         {hydratedRevision && (
           <>
             <RequiredFields />
