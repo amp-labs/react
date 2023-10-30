@@ -2,6 +2,7 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
+import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Connection } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
@@ -44,6 +45,7 @@ export function ConnectionsProvider({
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const apiKey = useContext(ApiKeyContext);
+  const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
     api().listConnections({ projectId, groupRef, provider }, {
@@ -51,8 +53,10 @@ export function ConnectionsProvider({
         'X-Api-Key': apiKey ?? '',
       },
     }).then((_connections) => {
+      setLoadingState(false);
       setConnections(_connections);
     }).catch((err) => {
+      setLoadingState(false);
       console.error('ERROR: ', err);
     });
   }, [projectId, apiKey, groupRef, provider]);
@@ -66,7 +70,7 @@ export function ConnectionsProvider({
 
   return (
     <ConnectionsContext.Provider value={contextValue}>
-      {children}
+      {isLoading ? <LoadingIcon /> : children}
     </ConnectionsContext.Provider>
   );
 }
