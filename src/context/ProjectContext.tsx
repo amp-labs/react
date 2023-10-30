@@ -40,10 +40,9 @@ export function ProjectProvider(
 ) {
   const [project, setProject] = useState<Project | null>(null);
   const apiKey = useContext(ApiKeyContext);
-  const [isLoading, setLoadingState] = useState<boolean>(false);
+  const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!project) setLoadingState(true);
     api().getProject({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
