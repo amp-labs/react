@@ -112,19 +112,17 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
   const { requiredFields, selectedOptionalFields } = configureState;
   const fields = new Set<string>();
   requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
-  // adds optional fields that are selected (true)
 
   // convert set to object for config
-  let selectedFields = Array.from(fields).reduce((acc, field) => ({
+  const selectedFields = Array.from(fields).reduce((acc, field) => ({
     ...acc,
     [field]: true,
   }), {});
 
-  selectedFields = {
+  return {
     ...selectedFields,
-    ...(selectedOptionalFields || {}),
+    ...(selectedOptionalFields || {}), // adds optional fields that are selected (true)
   };
-  return selectedFields;
 };
 
 /**
