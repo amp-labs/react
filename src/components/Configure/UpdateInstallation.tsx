@@ -1,5 +1,5 @@
 import {
-  useCallback, useContext, useEffect, useMemo, useState
+  useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
@@ -113,7 +113,7 @@ export function UpdateInstallation(
       if (res) {
         res.finally(() => {
           setLoadingState(false);
-        })
+        });
       } else {
         setLoadingState(false);
       }

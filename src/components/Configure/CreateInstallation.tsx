@@ -1,7 +1,9 @@
 /**
  * this page is wip: untested
  */
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
@@ -17,7 +19,6 @@ import { useConfigureState } from './state/ConfigurationStateProvider';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
-import { set } from 'lodash';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -36,7 +37,6 @@ export function CreateInstallation() {
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const [isLoading, setLoadingState] = useState<boolean>(false);
-
 
   const resetState = useCallback(
     () => {
@@ -97,7 +97,7 @@ export function CreateInstallation() {
       if (res) {
         res.finally(() => {
           setLoadingState(false);
-        })
+        });
       } else {
         setLoadingState(false);
       }
