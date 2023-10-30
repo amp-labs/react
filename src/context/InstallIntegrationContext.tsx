@@ -3,6 +3,7 @@ import {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 
+import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Installation, Integration } from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
@@ -67,6 +68,8 @@ export function InstallIntegrationProvider({
     [integration, integrations],
   );
 
+  const [isLoading, setLoadingState] = useState<boolean>(true);
+
   useEffect(() => {
     if (integrationObj === null && integrations?.length) {
       console.error(`Integration "${integration}" not found in integration list`);
@@ -89,9 +92,13 @@ export function InstallIntegrationProvider({
         },
       })
         .then((_installations) => {
+          setLoadingState(false);
           setInstallations(_installations || []);
         })
-        .catch((err) => { console.error('ERROR: ', err); });
+        .catch((err) => {
+          setLoadingState(false);
+          console.error('ERROR: ', err);
+        });
     }
   }, [projectId, integrationObj?.id, apiKey, groupRef]);
 
@@ -110,7 +117,7 @@ export function InstallIntegrationProvider({
 
   return (
     <InstallIntegrationContext.Provider value={props}>
-      {children}
+      {isLoading ? <LoadingIcon /> : children}
     </InstallIntegrationContext.Provider>
   );
 }
