@@ -25,9 +25,9 @@ export function useSelectedObjectName() {
   return { selectedObjectName: selectedNavObjectName }; // Return as an object
 }
 
-  type ObjectManagementNavProps = {
-    children?: React.ReactNode;
-  };
+type ObjectManagementNavProps = {
+  children?: React.ReactNode;
+};
 
 function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject | undefined {
   return navObjects?.[tabIndex];
@@ -38,7 +38,7 @@ export function ObjectManagementNav({
   children,
 }: ObjectManagementNavProps) {
   const { installation } = useInstallIntegrationProps();
-  const { hydratedRevision, loading, error } = useHydratedRevision();
+  const { hydratedRevision, error } = useHydratedRevision();
   const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
   const [tabIndex, setTabIndex] = useState(0);
@@ -65,7 +65,6 @@ export function ObjectManagementNav({
           <Text>Salesforce integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {error && <p>Error</p>}
-          {loading && <p>Loading...</p>}
           {navObjects && (
             <Tabs
               index={tabIndex}
