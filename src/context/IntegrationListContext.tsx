@@ -3,6 +3,7 @@ import {
   useMemo, useState,
 } from 'react';
 
+import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
@@ -37,6 +38,7 @@ export function IntegrationListProvider(
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
   const { setErrorState } = useErrorState();
+  const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
     api().listIntegrations({ projectId }, {
@@ -44,8 +46,10 @@ export function IntegrationListProvider(
         'X-Api-Key': apiKey ?? '',
       },
     }).then((_integrations) => {
+      setLoadingState(false);
       setIntegrations(_integrations || []);
     }).catch((err) => {
+      setLoadingState(false);
       setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', setErrorState);
       console.error('ERROR: ', err);
     });
@@ -57,7 +61,7 @@ export function IntegrationListProvider(
 
   return (
     <IntegrationListContext.Provider value={contextValue}>
-      {children}
+      {isLoading ? <LoadingIcon /> : children}
     </IntegrationListContext.Provider>
   );
 }
