@@ -3,11 +3,11 @@ import {
   useMemo, useState,
 } from 'react';
 
+import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
 import { ErrorBoundary, setError, useErrorState } from './ErrorContextProvider';
-import { LoadingIcon } from '../assets/LoadingIcon';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
