@@ -5,7 +5,6 @@ package.json
 src/apis/DefaultApi.ts
 src/apis/index.ts
 src/index.ts
-src/models/ActionType.ts
 src/models/BaseConfigContent.ts
 src/models/BaseReadConfig.ts
 src/models/BaseReadConfigStandardObject.ts
@@ -27,10 +26,10 @@ src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/Group.ts
 src/models/HydratedIntegration.ts
-src/models/HydratedIntegrationAction.ts
 src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
 src/models/HydratedIntegrationObject.ts
+src/models/HydratedIntegrationRead.ts
 src/models/HydratedRevision.ts
 src/models/ImportConnectionRequest.ts
 src/models/ImportInstallationRequest.ts
@@ -38,11 +37,11 @@ src/models/ImportInstallationRequestConfig.ts
 src/models/Installation.ts
 src/models/Integration.ts
 src/models/Integration1.ts
-src/models/IntegrationAction.ts
 src/models/IntegrationField.ts
 src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
+src/models/IntegrationRead.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts
 src/models/OperationError.ts

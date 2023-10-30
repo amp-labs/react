@@ -45,7 +45,7 @@ export function UpdateInstallation(
     () => {
       resetBoundary(ErrorBoundary.MAPPING, setErrorState);
       // set configurationState when hydratedRevision is loaded
-      if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+      if (hydratedRevision?.content && !loading && selectedObjectName) {
         resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
       }
     },
@@ -63,19 +63,14 @@ export function UpdateInstallation(
     resetState();
   }, [resetState]);
 
-  const { readActions, hydratedObject } = useMemo(() => {
-    const actions = hydratedRevision?.content?.actions?.find(
-      (
-        action,
-      ) => action?.type === 'read',
-    );
-    const hydrated = actions?.standardObjects?.find(
+  const hydratedObject = useMemo(() => {
+    const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
       (
         obj,
       ) => obj?.objectName === selectedObjectName,
     );
 
-    return { readActions: actions, hydratedObject: hydrated };
+    return hydrated;
   }, [hydratedRevision, selectedObjectName]);
 
   const onSave = (e: any) => {
@@ -101,8 +96,7 @@ export function UpdateInstallation(
       && selectedObjectName
       && apiKey
       && projectId
-      && hydratedObject
-      && readActions) {
+      && hydratedObject) {
       onSaveUpdate(
         projectId,
         integrationObj.id,
@@ -112,7 +106,6 @@ export function UpdateInstallation(
         configureState,
         setInstallation,
         hydratedObject,
-        readActions?.schedule || '',
       );
     } else {
       console.error('update installation props missing');

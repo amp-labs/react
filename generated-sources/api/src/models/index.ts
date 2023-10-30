@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './ActionType';
 export * from './BaseConfigContent';
 export * from './BaseReadConfig';
 export * from './BaseReadConfigStandardObject';
@@ -22,10 +21,10 @@ export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
 export * from './Group';
 export * from './HydratedIntegration';
-export * from './HydratedIntegrationAction';
 export * from './HydratedIntegrationField';
 export * from './HydratedIntegrationFieldExistent';
 export * from './HydratedIntegrationObject';
+export * from './HydratedIntegrationRead';
 export * from './HydratedRevision';
 export * from './ImportConnectionRequest';
 export * from './ImportInstallationRequest';
@@ -33,11 +32,11 @@ export * from './ImportInstallationRequestConfig';
 export * from './Installation';
 export * from './Integration';
 export * from './Integration1';
-export * from './IntegrationAction';
 export * from './IntegrationField';
 export * from './IntegrationFieldExistent';
 export * from './IntegrationFieldMapping';
 export * from './IntegrationObject';
+export * from './IntegrationRead';
 export * from './OauthConnectRequest';
 export * from './Operation';
 export * from './OperationError';

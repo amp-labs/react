@@ -68,7 +68,6 @@ export const onSaveUpdate = (
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
-  schedule: string,
 ) => {
   // get configuration state
   // transform configuration state to update shape
@@ -76,7 +75,7 @@ export const onSaveUpdate = (
     configureState,
     selectedObjectName || '',
     hydratedObject,
-    schedule,
+    hydratedObject.schedule,
   );
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {

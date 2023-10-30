@@ -52,7 +52,7 @@ export function ConfigurationProvider(
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (hydratedRevision?.content?.actions && !loading) {
+    if (hydratedRevision?.content && !loading) {
       resetAllObjectsConfigurationState(
         hydratedRevision,
         config,

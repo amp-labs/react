@@ -10,36 +10,18 @@ import {
 import { ConfigureState } from '../types';
 
 /**
- * looks through list of actions for read action type
- * assumes a single read action in list
- * @param hydratedRevision
- * @returns read action or null
- */
-const getReadActionFromHydratedRevision = (hydratedRevision: HydratedRevision) => {
-  const { actions } = hydratedRevision.content;
-  const readAction = actions.find((action) => action.type === 'read') || null;
-  return readAction;
-};
-
-/**
- * gets matching object destination from hydratedRevision
+ * gets matching object from hydratedRevision
  * @param hydratedRevision
  * @param objectName
  * @returns
  */
-const getDestinationFromHydratedRevision = (
+const getObjectFromHydratedRevision = (
   hydratedRevision: HydratedRevision,
   objectName: string,
 ) => {
-  const readAction = getReadActionFromHydratedRevision(hydratedRevision);
+  const readAction = hydratedRevision.content.read;
   const standardObjects = readAction?.standardObjects;
-  const standardObject = standardObjects?.find((obj) => obj.objectName === objectName);
-  return standardObject?.destination;
-};
-
-const getScheduleFromHydratedRevision = (hydratedRevision: HydratedRevision) => {
-  const readAction = getReadActionFromHydratedRevision(hydratedRevision);
-  return readAction?.schedule;
+  return standardObjects?.find((obj) => obj.objectName === objectName);
 };
 
 /**
@@ -62,27 +44,30 @@ const generateCreateConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
-): CreateInstallationRequestConfig => {
+): (CreateInstallationRequestConfig | null) => {
   const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
     configureState,
   );
 
-  const schedule = getScheduleFromHydratedRevision(hydratedRevision);
-  const destination = getDestinationFromHydratedRevision(hydratedRevision, objectName);
+  const obj = getObjectFromHydratedRevision(hydratedRevision, objectName);
+  if (!obj) {
+    console.error(`Error when getting object from hydratedRevision for objectName: ${objectName}`);
+    return null;
+  }
 
   // create config request object
   const createConfigObj: CreateInstallationRequestConfig = {
     revisionId: hydratedRevision.id,
     createdBy: `consumer:${consumerRef}`,
     content: {
-      api: hydratedRevision.content.api,
+      provider: hydratedRevision.content.provider,
       read: {
         standardObjects: {
           [objectName]: {
             objectName,
-            schedule,
-            destination,
+            schedule: obj.schedule,
+            destination: obj.destination,
             selectedFields,
             selectedFieldMappings,
           },
@@ -112,6 +97,10 @@ export const onSaveCreate = (
     hydratedRevision,
     consumerRef,
   );
+  if (!createConfig) {
+    console.error('Error when generating createConfig from configureState');
+    return;
+  }
   const createInstallationRequest: CreateInstallationOperationRequest = {
     projectId,
     integrationId,

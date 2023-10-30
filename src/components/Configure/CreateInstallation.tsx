@@ -38,7 +38,7 @@ export function CreateInstallation() {
   const resetState = useCallback(
     () => {
       resetBoundary(ErrorBoundary.MAPPING, setErrorState);
-      if (hydratedRevision?.content?.actions && !loading && selectedObjectName) {
+      if (hydratedRevision?.content && !loading && selectedObjectName) {
         resetConfigurationState(
           hydratedRevision,
           UNDEFINED_CONFIG,
@@ -52,7 +52,7 @@ export function CreateInstallation() {
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (!configureState && hydratedRevision?.content?.actions && !loading) {
+    if (!configureState && hydratedRevision?.content && !loading) {
       resetState();
     }
   }, [configureState, objectConfigurationsState, hydratedRevision, loading, resetState]);

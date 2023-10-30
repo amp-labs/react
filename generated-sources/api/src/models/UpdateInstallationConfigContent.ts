@@ -31,7 +31,7 @@ export interface UpdateInstallationConfigContent {
      * @type {string}
      * @memberof UpdateInstallationConfigContent
      */
-    api?: string;
+    provider?: string;
     /**
      * 
      * @type {BaseReadConfig}
@@ -59,7 +59,7 @@ export function UpdateInstallationConfigContentFromJSONTyped(json: any, ignoreDi
     }
     return {
         
-        'api': !exists(json, 'api') ? undefined : json['api'],
+        'provider': !exists(json, 'provider') ? undefined : json['provider'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
     };
 }
@@ -73,7 +73,7 @@ export function UpdateInstallationConfigContentToJSON(value?: UpdateInstallation
     }
     return {
         
-        'api': value.api,
+        'provider': value.provider,
         'read': BaseReadConfigToJSON(value.read),
     };
 }
