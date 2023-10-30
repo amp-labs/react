@@ -68,7 +68,7 @@ export const onSaveUpdate = (
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
-) => {
+): Promise<any> => {
   // get configuration state
   // transform configuration state to update shape
   const updateConfig = generateUpdateConfigFromConfigureState(
@@ -93,7 +93,7 @@ export const onSaveUpdate = (
   };
 
   // call api.updateInstallation
-  api().updateInstallation(updateInstallationRequest, {
+  return api().updateInstallation(updateInstallationRequest, {
     headers: {
       'X-Api-Key': apiKey,
       'Content-Type': 'application/json',

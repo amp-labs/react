@@ -90,7 +90,7 @@ export const onSaveCreate = (
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
-) => {
+): Promise<any> | null => {
   const createConfig = generateCreateConfigFromConfigureState(
     configureState,
     objectName,
@@ -99,7 +99,7 @@ export const onSaveCreate = (
   );
   if (!createConfig) {
     console.error('Error when generating createConfig from configureState');
-    return;
+    return null;
   }
   const createInstallationRequest: CreateInstallationOperationRequest = {
     projectId,
@@ -111,7 +111,7 @@ export const onSaveCreate = (
     },
   };
 
-  api().createInstallation(createInstallationRequest, {
+  return api().createInstallation(createInstallationRequest, {
     headers: {
       'X-Api-Key': apiKey,
       'Content-Type': 'application/json',
