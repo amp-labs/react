@@ -8,6 +8,7 @@ import {
   ConfigureStateIntegrationField,
   ConfigureStateMappingIntegrationField,
   ObjectConfigurationsState,
+  SavedConfigureFields,
 } from '../types';
 import {
   generateNavObjects,
@@ -15,12 +16,51 @@ import {
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
+  isIntegrationFieldMapping,
 } from '../utils';
+
+export function createSavedFields(
+  fields:
+  ConfigureStateIntegrationField[] | ConfigureStateMappingIntegrationField[] | null | undefined,
+): SavedConfigureFields {
+  const savedFields: SavedConfigureFields = {};
+
+  fields?.forEach((field) => {
+    const { value } = field;
+    if (value) {
+      if (isIntegrationFieldMapping(field)) {
+        savedFields[field.mapToName] = value;
+      } else {
+        savedFields[field.fieldName] = value;
+      }
+    }
+  });
+
+  return savedFields;
+}
+
+export function checkFieldsEquality(
+  prevOptionalFields: SavedConfigureFields,
+  currentOptionalFields: SavedConfigureFields,
+): boolean {
+  // Check if savedConfigureFields are present in both prevOptionalFields and currentOptionalFields
+  const savedConfigureFields = Object.keys(prevOptionalFields);
+  const savedFieldsPresentInPrev = savedConfigureFields
+    .every((field) => field in prevOptionalFields);
+  const savedFieldsPresentInCurrent = savedConfigureFields
+    .every((field) => field in currentOptionalFields);
+
+  // Check if currentOptionalFields are equal to prevOptionalFields
+  const areFieldsEqual = JSON
+    .stringify(prevOptionalFields) === JSON.stringify(currentOptionalFields);
+
+  return savedFieldsPresentInPrev && savedFieldsPresentInCurrent && areFieldsEqual;
+}
 
 export function generateConfigurationState(
   action: HydratedIntegrationRead,
   objectName: string,
-  config?: any,
+  config?: Config,
 ): ConfigureState {
   const object = getStandardObjectFromAction(action, objectName);
 
@@ -28,28 +68,31 @@ export function generateConfigurationState(
   const optionalFields = object
     ? getOptionalFieldsFromObject(object)?.map((field) => ({
       ...field,
-      value: getValueFromConfigExist(
+      value: config ? getValueFromConfigExist(
         config,
         objectName,
         // should only use fieldName for existant fields
         getFieldKeyValue(field),
-      ),
+      ) : false,
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
 
   // todo map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
     ?.map((field) => ({
       ...field,
-      value: getValueFromConfigCustomMapping(
+      value: config ? getValueFromConfigCustomMapping(
         config,
         objectName,
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
-      ),
+      ) : '',
     })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
   const selectedFields = config?.content?.read?.standardObjects?.[objectName]?.selectedFields || {};
+
+  const optionalFieldsSaved = { ...selectedFields };
+  const requiredMapFieldsSaved = createSavedFields(requiredMapFields);
 
   return {
     allFields,
@@ -57,6 +100,11 @@ export function generateConfigurationState(
     optionalFields,
     requiredMapFields,
     selectedOptionalFields: selectedFields,
+    modified: false,
+    savedConfig: {
+      optionalFields: optionalFieldsSaved,
+      requiredMapFields: requiredMapFieldsSaved,
+    },
   };
 }
 
@@ -161,7 +209,8 @@ export const setRequiredCustomMapFieldValue = (
   );
 
   if (requiredField) {
-    // Update the custome field value property to new value
+    // todo update modified state based on whether value is different from saved value
+    // Update the custom field value property to new value
     requiredField.value = value;
     const newState = {
       ...configureState,
