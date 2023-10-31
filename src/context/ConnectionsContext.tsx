@@ -1,11 +1,16 @@
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback,
+  useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
+import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Connection } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import {
+  ErrorBoundary, isError, setError, useErrorState,
+} from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
 
 interface ConnectionsContextValue {
@@ -46,6 +51,7 @@ export function ConnectionsProvider({
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const apiKey = useContext(ApiKeyContext);
   const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { errorState, setErrorState } = useErrorState();
 
   useEffect(() => {
     api().listConnections({ projectId, groupRef, provider }, {
@@ -57,6 +63,7 @@ export function ConnectionsProvider({
       setConnections(_connections);
     }).catch((err) => {
       setLoadingState(false);
+      setError(ErrorBoundary.CONNECTION_LIST, projectId, setErrorState);
       console.error('ERROR: ', err);
     });
   }, [projectId, apiKey, groupRef, provider]);
@@ -69,8 +76,13 @@ export function ConnectionsProvider({
   }), [connections, selectedConnection, setConnections, setSelectedConnection]);
 
   return (
-    <ConnectionsContext.Provider value={contextValue}>
-      {isLoading ? <LoadingIcon /> : children}
-    </ConnectionsContext.Provider>
+    isError(ErrorBoundary.CONNECTION_LIST, projectId, errorState)
+      ? <ErrorTextBox message={`Error retrieving connection information for project '${projectId}'`} />
+      : (
+        <ConnectionsContext.Provider value={contextValue}>
+          {isLoading ? <LoadingIcon /> : children}
+        </ConnectionsContext.Provider>
+      )
+
   );
 }
