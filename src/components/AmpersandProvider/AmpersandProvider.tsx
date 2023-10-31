@@ -29,11 +29,11 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     <ThemeProvider>
       <ErrorStateProvider>
         <ApiKeyProvider value={apiKey}>
-          <IntegrationListProvider projectId={projectId}>
-            <ProjectProvider projectId={projectId}>
+          <ProjectProvider projectId={projectId}>
+            <IntegrationListProvider projectId={projectId}>
               {children}
-            </ProjectProvider>
-          </IntegrationListProvider>
+            </IntegrationListProvider>
+          </ProjectProvider>
         </ApiKeyProvider>
       </ErrorStateProvider>
     </ThemeProvider>

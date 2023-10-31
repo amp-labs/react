@@ -7,7 +7,7 @@ import { LoadingIcon } from '../assets/LoadingIcon';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
-import { ErrorBoundary, setError, useErrorState } from './ErrorContextProvider';
+import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
@@ -37,7 +37,7 @@ export function IntegrationListProvider(
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
-  const { setErrorState } = useErrorState();
+  const { setError } = useErrorState();
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
@@ -50,10 +50,10 @@ export function IntegrationListProvider(
       setIntegrations(_integrations || []);
     }).catch((err) => {
       setLoadingState(false);
-      setError(ErrorBoundary.INTEGRATION_LIST, 'apiError', setErrorState);
+      setError(ErrorBoundary.INTEGRATION_LIST, projectId);
       console.error('ERROR: ', err);
     });
-  }, [projectId, apiKey, setErrorState]);
+  }, [projectId, apiKey, setError]);
 
   const contextValue = useMemo(() => ({
     integrations,
