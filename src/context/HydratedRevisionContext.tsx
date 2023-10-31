@@ -51,6 +51,7 @@ export function HydratedRevisionProvider({
   const { selectedConnection } = useConnections();
   const connectionId = selectedConnection?.id;
   const revisionId = integrationObj?.latestRevision?.id;
+  const errorIntegrationIdentifier = integrationObj?.name || integrationId;
 
   useEffect(() => {
     // Fetch the hydrated revision data using your API call
@@ -60,7 +61,7 @@ export function HydratedRevisionProvider({
       && revisionId
       && connectionId
       && apiKey
-      && !isError(ErrorBoundary.HYDRATED_REVISION, integrationId)
+      && !isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)
     ) {
       api().getHydratedRevision({
         projectId,
@@ -75,14 +76,14 @@ export function HydratedRevisionProvider({
         .then((data) => {
           setHydratedRevision(data);
           setLoading(false);
-          if (isError(ErrorBoundary.HYDRATED_REVISION, integrationId)) {
-            removeError(ErrorBoundary.HYDRATED_REVISION, integrationId);
+          if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
+            removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
           }
         })
         .catch((err) => {
-          console.error('ERROR: ', err);
+          console.error(`Error loading integration ${errorIntegrationIdentifier}`, err)
           setLoading(false);
-          setError(ErrorBoundary.HYDRATED_REVISION, integrationId);
+          setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         });
     }
   }, [
@@ -94,7 +95,8 @@ export function HydratedRevisionProvider({
     integrations,
     isError,
     removeError,
-    setError]);
+    setError,
+    errorIntegrationIdentifier]);
 
   const contextValue = useMemo(() => ({
     hydratedRevision,
