@@ -1,5 +1,5 @@
 import React, {
-  createContext, useCallback,
+  createContext,
   useContext, useEffect, useMemo, useState,
 } from 'react';
 
@@ -9,7 +9,7 @@ import { api, Connection } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
 import {
-  ErrorBoundary, isError, setError, useErrorState,
+  ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
 
@@ -51,7 +51,7 @@ export function ConnectionsProvider({
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const apiKey = useContext(ApiKeyContext);
   const [isLoading, setLoadingState] = useState<boolean>(true);
-  const { errorState, setErrorState } = useErrorState();
+  const { setError, isError } = useErrorState();
 
   useEffect(() => {
     api().listConnections({ projectId, groupRef, provider }, {
@@ -63,10 +63,10 @@ export function ConnectionsProvider({
       setConnections(_connections);
     }).catch((err) => {
       setLoadingState(false);
-      setError(ErrorBoundary.CONNECTION_LIST, projectId, setErrorState);
+      setError(ErrorBoundary.CONNECTION_LIST, projectId);
       console.error('ERROR: ', err);
     });
-  }, [projectId, apiKey, groupRef, provider]);
+  }, [projectId, apiKey, groupRef, provider, setError]);
 
   const contextValue = useMemo(() => ({
     connections,
@@ -76,7 +76,7 @@ export function ConnectionsProvider({
   }), [connections, selectedConnection, setConnections, setSelectedConnection]);
 
   return (
-    isError(ErrorBoundary.CONNECTION_LIST, projectId, errorState)
+    isError(ErrorBoundary.CONNECTION_LIST, projectId)
       ? <ErrorTextBox message={`Error retrieving connection information for project '${projectId}'`} />
       : (
         <ConnectionsContext.Provider value={contextValue}>
