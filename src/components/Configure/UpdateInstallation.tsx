@@ -110,13 +110,9 @@ export function UpdateInstallation(
         hydratedObject,
       );
 
-      if (res) {
-        res.finally(() => {
-          setLoadingState(false);
-        });
-      } else {
+      res.finally(() => {
         setLoadingState(false);
-      }
+      });
     } else {
       console.error('update installation props missing');
     }

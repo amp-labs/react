@@ -90,7 +90,7 @@ export const onSaveCreate = (
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
-): Promise<any> | null => {
+): Promise<any> => {
   const createConfig = generateCreateConfigFromConfigureState(
     configureState,
     objectName,
@@ -99,7 +99,7 @@ export const onSaveCreate = (
   );
   if (!createConfig) {
     console.error('Error when generating createConfig from configureState');
-    return null;
+    return Promise.resolve(null);
   }
   const createInstallationRequest: CreateInstallationOperationRequest = {
     projectId,

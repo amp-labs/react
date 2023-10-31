@@ -94,13 +94,9 @@ export function CreateInstallation() {
         setInstallation,
       );
 
-      if (res) {
-        res.finally(() => {
-          setLoadingState(false);
-        });
-      } else {
+      res.finally(() => {
         setLoadingState(false);
-      }
+      });
     } else {
       console.error('OnSaveCreate: missing required props');
     }
