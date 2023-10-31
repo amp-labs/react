@@ -4,11 +4,11 @@ import {
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
+import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
-import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
@@ -61,10 +61,12 @@ export function IntegrationListProvider(
   }), [integrations]);
 
   return (
-    (isError(ErrorBoundary.INTEGRATION_LIST, projectId) ? (<ErrorTextBox message={`Error retieving integration information for project "${projectId}"`} />) :
-      (<IntegrationListContext.Provider value={contextValue}>
-        {isLoading ? <LoadingIcon /> : children
-        }
-      </IntegrationListContext.Provider >)
-    )
+    isError(ErrorBoundary.INTEGRATION_LIST, projectId)
+      ? <ErrorTextBox message={`Error retieving integration information for project "${projectId}"`} />
+      : (
+        <IntegrationListContext.Provider value={contextValue}>
+          {isLoading ? <LoadingIcon /> : children}
+        </IntegrationListContext.Provider>
+      )
+  );
 }
