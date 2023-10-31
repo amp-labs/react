@@ -1,7 +1,9 @@
 /**
  * this page is wip: untested
  */
-import { useCallback, useContext, useEffect } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
@@ -34,6 +36,7 @@ export function CreateInstallation() {
   const { setErrorState } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const [isLoading, setLoadingState] = useState<boolean>(false);
 
   const resetState = useCallback(
     () => {
@@ -77,7 +80,8 @@ export function CreateInstallation() {
 
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {
-      onSaveCreate(
+      setLoadingState(true);
+      const res = onSaveCreate(
         projectId,
         integrationId,
         groupRef,
@@ -89,6 +93,10 @@ export function CreateInstallation() {
         configureState,
         setInstallation,
       );
+
+      res.finally(() => {
+        setLoadingState(false);
+      });
     } else {
       console.error('OnSaveCreate: missing required props');
     }
@@ -96,6 +104,7 @@ export function CreateInstallation() {
 
   return (
     <ConfigureInstallationBase
+      isLoading={isLoading}
       onSave={onSave}
       onReset={resetState}
     />

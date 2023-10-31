@@ -1,5 +1,5 @@
 import {
-  useCallback, useContext, useEffect, useMemo,
+  useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
@@ -34,6 +34,7 @@ export function UpdateInstallation(
   const { projectId } = useProject();
   // when no installation or config exists, render create flow
   const { config } = installation;
+  const [isLoading, setLoadingState] = useState<boolean>(false);
 
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)
@@ -97,7 +98,8 @@ export function UpdateInstallation(
       && apiKey
       && projectId
       && hydratedObject) {
-      onSaveUpdate(
+      setLoadingState(true);
+      const res = onSaveUpdate(
         projectId,
         integrationObj.id,
         installation.id,
@@ -107,6 +109,10 @@ export function UpdateInstallation(
         setInstallation,
         hydratedObject,
       );
+
+      res.finally(() => {
+        setLoadingState(false);
+      });
     } else {
       console.error('update installation props missing');
     }
@@ -116,6 +122,7 @@ export function UpdateInstallation(
     <ConfigureInstallationBase
       onSave={onSave}
       onReset={resetState}
+      isLoading={isLoading}
     />
   );
 }
