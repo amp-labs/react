@@ -64,7 +64,7 @@ export function ConnectionsProvider({
     }).catch((err) => {
       setLoadingState(false);
       setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      console.error('ERROR: ', err);
+      console.error(`Error retrieving connection information for project ${projectId || 'unkown'}:`, err);
     });
   }, [projectId, apiKey, groupRef, provider, setError]);
 
