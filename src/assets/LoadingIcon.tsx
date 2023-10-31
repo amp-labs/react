@@ -29,7 +29,7 @@ export function LoadingIcon({ message }: LoadingIconProps) {
           size="xl"
           margin="20px"
         />
-        {message && <Text fontSize="40px" color="#4299e1">Loading...</Text>}
+        {message && <Text fontSize="40px" color="#4299e1">{message}</Text>}
       </Stack>
 
     </Box>
