@@ -31,7 +31,6 @@ export function LoadingIcon({ message }: LoadingIconProps) {
         />
         {message && <Text fontSize="40px" color="#4299e1">{message}</Text>}
       </Stack>
-
     </Box>
   );
 }
