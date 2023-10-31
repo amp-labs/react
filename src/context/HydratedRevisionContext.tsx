@@ -81,7 +81,7 @@ export function HydratedRevisionProvider({
           }
         })
         .catch((err) => {
-          console.error(`Error loading integration ${errorIntegrationIdentifier}`, err)
+          console.error(`Error loading integration ${errorIntegrationIdentifier}`, err);
           setLoading(false);
           setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         });
@@ -105,7 +105,7 @@ export function HydratedRevisionProvider({
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, integrationId) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId || "unknown integration"}. This is sometimes caused by insufficient permissions with your credentials'`} /> : children}
+      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId || 'unknown integration'}. This is sometimes caused by insufficient permissions with your credentials'`} /> : children}
     </HydratedRevisionContext.Provider>
   );
 }
