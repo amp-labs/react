@@ -61,8 +61,10 @@ export function UpdateInstallation(
   );
 
   useEffect(() => {
-    resetState();
-  }, [resetState]);
+    if (!config) {
+      resetState();
+    }
+  }, [resetState, config]);
 
   const hydratedObject = useMemo(() => {
     const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(

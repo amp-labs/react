@@ -79,6 +79,7 @@ export function InstallIntegrationProvider({
   // default set the installations array with a single installation object
   // may need to find and update the installation object in the future
   const setInstallation = useCallback((installationObj: Installation) => {
+    console.log('setting installation', installationObj);
     setInstallations([installationObj]);
   }, [setInstallations]);
 

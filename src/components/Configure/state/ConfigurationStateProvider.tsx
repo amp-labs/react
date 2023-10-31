@@ -52,7 +52,8 @@ export function ConfigurationProvider(
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (hydratedRevision?.content && !loading) {
+    if (hydratedRevision?.content && !loading && !config) {
+      console.log('resetting configuration state', { config });
       resetAllObjectsConfigurationState(
         hydratedRevision,
         config,

@@ -137,6 +137,7 @@ export const resetAllObjectsConfigurationState = (
   config: Config | undefined,
   setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>,
 ) => {
+  console.log('resetting all objects configuration state');
   const navObjects = generateNavObjects(config, hydratedRevision);
   const objectConfigurationsState: ObjectConfigurationsState = {};
   navObjects.forEach(({ name, completed }) => {

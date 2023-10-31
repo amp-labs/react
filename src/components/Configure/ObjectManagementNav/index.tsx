@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useState,
+  createContext, useContext, useEffect, useState,
 } from 'react';
 import { Box, Tabs, Text } from '@chakra-ui/react';
 
@@ -48,6 +48,10 @@ export function ObjectManagementNav({
   const selectedObject = getSelectedObject(navObjects || [], tabIndex);
   const { project } = useProject();
   const appName = project?.appName || '';
+
+  useEffect(() => {
+    console.log('objectConfigurationsState', objectConfigurationsState);
+  }, [objectConfigurationsState]);
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
