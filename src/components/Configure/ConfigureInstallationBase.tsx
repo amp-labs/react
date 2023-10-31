@@ -22,7 +22,7 @@ interface ConfigureInstallationBaseProps {
 export function ConfigureInstallationBase(
   { onSave, onReset, isLoading }: ConfigureInstallationBaseProps,
 ) {
-  const { hydratedRevision, loading, error } = useHydratedRevision();
+  const { hydratedRevision, loading } = useHydratedRevision();
 
   return (
     isLoading ? <LoadingIcon />
@@ -58,14 +58,13 @@ export function ConfigureInstallationBase(
             maxHeight="100%"
             overflowY="scroll"
           >
-            {error && <div>{error}</div>}
             {loading && <LoadingIcon />}
             {hydratedRevision && (
-            <>
-              <RequiredFields />
-              <RequiredFieldMappings />
-              <OptionalFields />
-            </>
+              <>
+                <RequiredFields />
+                <RequiredFieldMappings />
+                <OptionalFields />
+              </>
             )}
           </Box>
         </form>
