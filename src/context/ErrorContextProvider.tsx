@@ -19,7 +19,7 @@ export type ErrorState = {
 export const ErrorContext = createContext<{
   errorState: ErrorState;
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>;
-  resetBoundary:(boundary: ErrorBoundary) => void;
+  resetBoundary: (boundary: ErrorBoundary) => void;
   setError: (boundary: ErrorBoundary, key: string) => void;
   isError: (boundary: ErrorBoundary, key: string) => boolean;
   removeError: (boundary: ErrorBoundary, key: string) => void;
@@ -80,7 +80,7 @@ export function ErrorStateProvider(
       const newErrorState = {
         ...prevState,
       };
-      delete newErrorState[boundary][key];
+      delete newErrorState[boundary]?.[key];
       return newErrorState;
     });
   }, [setErrorState]);
