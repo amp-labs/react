@@ -105,7 +105,7 @@ export function HydratedRevisionProvider({
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, integrationId) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId}'`} /> : children}
+      {isError(ErrorBoundary.HYDRATED_REVISION, integrationId) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId || "unknown integration"}. This is sometimes caused by insufficient permissions with your credentials'`} /> : children}
     </HydratedRevisionContext.Provider>
   );
 }
