@@ -6,8 +6,9 @@ import React, {
 export enum ErrorBoundary {
   MAPPING = 'mappingError',
   INTEGRATION_LIST = 'integrationListError',
-  PROJECT_ERROR_BOUNDARY = 'projectError',
+  PROJECT = 'projectError',
   CONNECTION_LIST = 'connectionListError',
+  HYDRATED_REVISION = 'hydratedRevisionError',
 }
 
 export type ErrorState = {

@@ -38,7 +38,7 @@ export function ObjectManagementNav({
   children,
 }: ObjectManagementNavProps) {
   const { installation } = useInstallIntegrationProps();
-  const { hydratedRevision, error } = useHydratedRevision();
+  const { hydratedRevision } = useHydratedRevision();
   const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
   const [tabIndex, setTabIndex] = useState(0);
@@ -64,7 +64,6 @@ export function ObjectManagementNav({
         <Box minWidth="12rem" paddingRight={6}>
           <Text>Salesforce integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
-          {error && <p>Error</p>}
           {navObjects && (
             <Tabs
               index={tabIndex}
