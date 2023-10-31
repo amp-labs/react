@@ -6,7 +6,7 @@ import { useCallback, useContext, useEffect } from 'react';
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import { useConnections } from '../../context/ConnectionsContext';
 import {
-  ErrorBoundary, resetBoundary, setErrors, useErrorState,
+  ErrorBoundary, useErrorState,
 } from '../../context/ErrorContextProvider';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
@@ -31,13 +31,13 @@ export function CreateInstallation() {
   const { selectedConnection } = useConnections();
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
-  const { setErrorState } = useErrorState();
+  const { resetBoundary, setErrors } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   const resetState = useCallback(
     () => {
-      resetBoundary(ErrorBoundary.MAPPING, setErrorState);
+      resetBoundary(ErrorBoundary.MAPPING);
       if (hydratedRevision?.content && !loading && selectedObjectName) {
         resetConfigurationState(
           hydratedRevision,
@@ -47,7 +47,7 @@ export function CreateInstallation() {
         );
       }
     },
-    [hydratedRevision, loading, selectedObjectName, setConfigureState, setErrorState],
+    [hydratedRevision, loading, selectedObjectName, setConfigureState, resetBoundary],
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function CreateInstallation() {
       || [];
 
     const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
-    setErrors(ErrorBoundary.MAPPING, errList, setErrorState);
+    setErrors(ErrorBoundary.MAPPING, errList);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {

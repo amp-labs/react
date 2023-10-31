@@ -1,11 +1,13 @@
 import React, {
-  createContext, useContext, useMemo, useState,
+  createContext, useCallback,
+  useContext, useMemo, useState,
 } from 'react';
 
 export enum ErrorBoundary {
   MAPPING = 'mappingError',
   INTEGRATION_LIST = 'integrationListError',
   PROJECT_ERROR_BOUNDARY = 'projectError',
+  CONNECTION_LIST = 'connectionListError',
 }
 
 export type ErrorState = {
@@ -17,6 +19,11 @@ export type ErrorState = {
 export const ErrorContext = createContext<{
   errorState: ErrorState;
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>;
+  resetBoundary:(boundary: ErrorBoundary) => void;
+  setError: (boundary: ErrorBoundary, key: string) => void;
+  isError: (boundary: ErrorBoundary, key: string) => boolean;
+  removeError: (boundary: ErrorBoundary, key: string) => void;
+  setErrors: (boundary: ErrorBoundary, keys: string[]) => void;
 } | undefined>(undefined);
 
 export function useErrorState() {
@@ -46,9 +53,72 @@ export function ErrorStateProvider(
 ) {
   const [errorState, setErrorState] = useState<ErrorState>(initialState);
 
+  const setError = useCallback((
+    boundary: ErrorBoundary,
+    key: string,
+  ) => {
+    setErrorState((prevState) => {
+      const newErrorState = {
+        ...prevState,
+      };
+      newErrorState[boundary] = newErrorState[boundary] || {};
+      newErrorState[boundary][key] = true;
+      return newErrorState;
+    });
+  }, [setErrorState]);
+
+  const isError = useCallback((
+    boundary: ErrorBoundary,
+    key: string,
+  ): boolean => !!errorState[boundary]?.[key], [errorState]);
+
+  const removeError = useCallback((
+    boundary: ErrorBoundary,
+    key: string,
+  ) => {
+    setErrorState((prevState) => {
+      const newErrorState = {
+        ...prevState,
+      };
+      delete newErrorState[boundary][key];
+      return newErrorState;
+    });
+  }, [setErrorState]);
+
+  const resetBoundary = useCallback((
+    boundary: ErrorBoundary,
+  ) => {
+    setErrorState((prevState) => {
+      const newErrorState = {
+        ...prevState,
+      };
+      newErrorState[boundary] = {};
+      return newErrorState;
+    });
+  }, [setErrorState]);
+
+  const setErrors = useCallback((
+    boundary: ErrorBoundary,
+    keys: string[],
+
+  ) => {
+    setErrorState((prevState) => {
+      const newErrorState = {
+        ...prevState,
+      };
+      newErrorState[boundary] = newErrorState[boundary] || {};
+      keys.forEach((key) => {
+        newErrorState[boundary][key] = true;
+      });
+      return newErrorState;
+    });
+  }, [setErrorState]);
+
   const contextValue = useMemo(
-    () => ({ errorState, setErrorState }),
-    [errorState, setErrorState],
+    () => ({
+      errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors,
+    }),
+    [errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors],
   );
 
   return (
@@ -57,68 +127,3 @@ export function ErrorStateProvider(
     </ErrorContext.Provider>
   );
 }
-
-export const setError = (
-  boundary: ErrorBoundary,
-  key: string,
-  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
-) => {
-  setErrorState((prevState) => {
-    const newErrorState = {
-      ...prevState,
-    };
-    newErrorState[boundary] = newErrorState[boundary] || {};
-    newErrorState[boundary][key] = true;
-    return newErrorState;
-  });
-};
-
-export const isError = (
-  boundary: ErrorBoundary,
-  key: string,
-  errorState: ErrorState,
-) => !!errorState[boundary]?.[key];
-
-export const removeError = (
-  boundary: ErrorBoundary,
-  key: string,
-  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
-) => {
-  setErrorState((prevState) => {
-    const newErrorState = {
-      ...prevState,
-    };
-    delete newErrorState[boundary][key];
-    return newErrorState;
-  });
-};
-
-export const resetBoundary = (
-  boundary: ErrorBoundary,
-  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
-) => {
-  setErrorState((prevState) => {
-    const newErrorState = {
-      ...prevState,
-    };
-    newErrorState[boundary] = {};
-    return newErrorState;
-  });
-};
-
-export const setErrors = (
-  boundary: ErrorBoundary,
-  keys: string[],
-  setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>,
-) => {
-  setErrorState((prevState) => {
-    const newErrorState = {
-      ...prevState,
-    };
-    newErrorState[boundary] = newErrorState[boundary] || {};
-    keys.forEach((key) => {
-      newErrorState[boundary][key] = true;
-    });
-    return newErrorState;
-  });
-};

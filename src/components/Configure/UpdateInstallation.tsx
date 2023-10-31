@@ -4,7 +4,7 @@ import {
 
 import { ApiKeyContext } from '../../context/ApiKeyContext';
 import {
-  ErrorBoundary, resetBoundary, setErrors,
+  ErrorBoundary,
   useErrorState,
 } from '../../context/ErrorContextProvider';
 import { useHydratedRevision } from '../../context/HydratedRevisionContext';
@@ -38,12 +38,12 @@ export function UpdateInstallation(
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
-  const { setErrorState } = useErrorState();
+  const { resetBoundary, setErrors } = useErrorState();
   const { setConfigureState, objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const resetState = useCallback(
     () => {
-      resetBoundary(ErrorBoundary.MAPPING, setErrorState);
+      resetBoundary(ErrorBoundary.MAPPING);
       // set configurationState when hydratedRevision is loaded
       if (hydratedRevision?.content && !loading && selectedObjectName) {
         resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
@@ -55,7 +55,7 @@ export function UpdateInstallation(
       config,
       selectedObjectName,
       setConfigureState,
-      setErrorState,
+      resetBoundary,
     ],
   );
 
@@ -84,7 +84,7 @@ export function UpdateInstallation(
       || [];
 
     const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
-    setErrors(ErrorBoundary.MAPPING, errList, setErrorState);
+    setErrors(ErrorBoundary.MAPPING, errList);
 
     // if requires fields are not met, set error fields and return
     if (fieldsWithRequirementsNotMet?.length) {

@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react';
 
 import {
-  ErrorBoundary, isError, removeError, useErrorState,
+  ErrorBoundary, useErrorState,
 } from '../../../context/ErrorContextProvider';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
@@ -19,7 +19,7 @@ export function RequiredFieldMappings() {
   const { selectedObjectName } = useSelectedObjectName();
   const { objectConfigurationsState, setConfigureState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  const { errorState, setErrorState } = useErrorState();
+  const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
@@ -33,8 +33,8 @@ export function RequiredFieldMappings() {
       setConfigureState(selectedObjectName, newState);
     }
 
-    if (isError(ErrorBoundary.MAPPING, name, errorState)) {
-      removeError(ErrorBoundary.MAPPING, name, setErrorState);
+    if (isError(ErrorBoundary.MAPPING, name)) {
+      removeError(ErrorBoundary.MAPPING, name);
     }
   };
 
@@ -56,7 +56,6 @@ export function RequiredFieldMappings() {
               isError(
                 ErrorBoundary.MAPPING,
                 field.mapToName,
-                errorState,
               )
             }
           >
