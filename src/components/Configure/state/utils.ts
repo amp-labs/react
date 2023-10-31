@@ -100,7 +100,8 @@ export function generateConfigurationState(
     optionalFields,
     requiredMapFields,
     selectedOptionalFields: selectedFields,
-    modified: false,
+    isOptionalFieldsModified: false,
+    isRequiredMapFieldsModified: false,
     savedConfig: {
       optionalFields: optionalFieldsSaved,
       requiredMapFields: requiredMapFieldsSaved,
@@ -204,17 +205,25 @@ export const setRequiredCustomMapFieldValue = (
 ) => {
   const { requiredMapFields } = configureState;
 
-  const requiredField = requiredMapFields?.find(
+  const updatedRequiredMapFields = [...requiredMapFields || []];
+  const updatedRequiredMapField = updatedRequiredMapFields?.find(
     (field) => field.mapToName === objectName,
   );
 
-  if (requiredField) {
+  const savedFields = configureState.savedConfig.requiredMapFields;
+
+  if (updatedRequiredMapField) {
     // todo update modified state based on whether value is different from saved value
     // Update the custom field value property to new value
-    requiredField.value = value;
+    updatedRequiredMapField.value = value;
+
+    const updatedFields = createSavedFields(updatedRequiredMapFields);
+    const isModified = !checkFieldsEquality(savedFields, updatedFields);
+
     const newState = {
       ...configureState,
-      requiredMapFields: [...requiredMapFields || []],
+      requiredMapFields: updatedRequiredMapFields,
+      isRequiredMapFieldsModified: isModified,
     };
 
     return { isUpdated: true, newState };

@@ -41,7 +41,7 @@ export function OptionalFields() {
         {
           ...configureState,
           selectedOptionalFields: updatedSelectOptionalFields,
-          modified: isModified,
+          isOptionalFieldsModified: isModified,
         },
       );
     }

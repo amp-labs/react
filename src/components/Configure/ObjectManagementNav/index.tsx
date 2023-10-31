@@ -77,7 +77,10 @@ export function ObjectManagementNav({
                   key={object.name}
                   objectName={object.name}
                   completed={object.completed}
-                  pending={objectConfigurationsState[object.name]?.modified}
+                  pending={
+                    objectConfigurationsState[object.name]?.isOptionalFieldsModified
+                    || objectConfigurationsState[object.name]?.isRequiredMapFieldsModified
+                  }
                 />
               ))}
             </Tabs>

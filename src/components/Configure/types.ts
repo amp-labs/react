@@ -29,7 +29,8 @@ export type ConfigureState = {
   optionalFields: ConfigureStateIntegrationField[] | null,
   requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
   selectedOptionalFields: SelectOptionalFields | null,
-  modified: boolean,
+  isOptionalFieldsModified: boolean, // checks if selected optional fields is modified
+  isRequiredMapFieldsModified: boolean, // checks if required map fields is modified
   savedConfig: SavedConfigureState, // check when to know if config is saved / modified
 };
 
