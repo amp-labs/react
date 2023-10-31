@@ -61,7 +61,6 @@ export function HydratedRevisionProvider({
       && revisionId
       && connectionId
       && apiKey
-      && !isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)
     ) {
       api().getHydratedRevision({
         projectId,
@@ -76,9 +75,7 @@ export function HydratedRevisionProvider({
         .then((data) => {
           setHydratedRevision(data);
           setLoading(false);
-          if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
-            removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-          }
+          removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         })
         .catch((err) => {
           console.error(`Error loading integration ${errorIntegrationIdentifier}`, err);
@@ -93,7 +90,6 @@ export function HydratedRevisionProvider({
     connectionId,
     apiKey,
     integrations,
-    isError,
     removeError,
     setError,
     errorIntegrationIdentifier]);
