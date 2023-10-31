@@ -8,7 +8,7 @@ import { api, HydratedRevision } from '../services/api';
 import { ApiKeyContext } from './ApiKeyContext';
 import { useConnections } from './ConnectionsContext';
 import {
-  ErrorBoundary, isError, removeError, setError, useErrorState,
+  ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
 import { useIntegrationList } from './IntegrationListContext';
@@ -46,7 +46,7 @@ export function HydratedRevisionProvider({
   const { integrations } = useIntegrationList();
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { errorState, setErrorState } = useErrorState();
+  const { isError, removeError, setError } = useErrorState();
   const apiKey = useContext(ApiKeyContext);
   const { selectedConnection } = useConnections();
   const connectionId = selectedConnection?.id;
@@ -54,7 +54,14 @@ export function HydratedRevisionProvider({
 
   useEffect(() => {
     // Fetch the hydrated revision data using your API call
-    if (projectId && integrationId && revisionId && connectionId && apiKey) {
+    if (
+      projectId
+      && integrationId
+      && revisionId
+      && connectionId
+      && apiKey
+      && !isError(ErrorBoundary.HYDRATED_REVISION, integrationId)
+    ) {
       api().getHydratedRevision({
         projectId,
         integrationId,
@@ -68,17 +75,26 @@ export function HydratedRevisionProvider({
         .then((data) => {
           setHydratedRevision(data);
           setLoading(false);
-          if (isError(ErrorBoundary.HYDRATED_REVISION, integrationId, errorState)) {
-            removeError(ErrorBoundary.HYDRATED_REVISION, integrationId, setErrorState);
+          if (isError(ErrorBoundary.HYDRATED_REVISION, integrationId)) {
+            removeError(ErrorBoundary.HYDRATED_REVISION, integrationId);
           }
         })
         .catch((err) => {
           console.error('ERROR: ', err);
           setLoading(false);
-          setError(ErrorBoundary.HYDRATED_REVISION, integrationId, setErrorState);
+          setError(ErrorBoundary.HYDRATED_REVISION, integrationId);
         });
     }
-  }, [projectId, integrationId, revisionId, connectionId, apiKey, integrations]);
+  }, [
+    projectId,
+    integrationId,
+    revisionId,
+    connectionId,
+    apiKey,
+    integrations,
+    isError,
+    removeError,
+    setError]);
 
   const contextValue = useMemo(() => ({
     hydratedRevision,
@@ -87,7 +103,7 @@ export function HydratedRevisionProvider({
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, integrationId, errorState) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId}'`} /> : children}
+      {isError(ErrorBoundary.HYDRATED_REVISION, integrationId) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId}'`} /> : children}
     </HydratedRevisionContext.Provider>
   );
 }

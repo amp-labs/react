@@ -56,7 +56,7 @@ export function ProjectProvider(
       setLoadingState(false);
       setProject(_project);
     }).catch((err) => {
-      setError(ErrorBoundary.PROJECT_ERROR_BOUNDARY, projectId);
+      setError(ErrorBoundary.PROJECT, projectId);
       setLoadingState(false);
       console.error('Error loading Ampersand project: ', err);
     });
@@ -67,7 +67,7 @@ export function ProjectProvider(
   }), [projectId, project]);
 
   return (
-    isError(ErrorBoundary.PROJECT_ERROR_BOUNDARY, projectId)
+    isError(ErrorBoundary.PROJECT, projectId)
       ? <ErrorTextBox message={`Error loading project ${projectId}`} />
       : (
         <ProjectContext.Provider value={contextValue}>
