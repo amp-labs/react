@@ -4,10 +4,12 @@ import {
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
+import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Installation, Integration } from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useIntegrationList } from './IntegrationListContext';
 import { useProject } from './ProjectContext';
 
@@ -69,6 +71,7 @@ export function InstallIntegrationProvider({
   );
 
   const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { setError, isError } = useErrorState();
 
   useEffect(() => {
     if (integrationObj === null && integrations?.length) {
@@ -81,6 +84,8 @@ export function InstallIntegrationProvider({
   const setInstallation = useCallback((installationObj: Installation) => {
     setInstallations([installationObj]);
   }, [setInstallations]);
+
+  const integrationErrorKey: string = integrationObj?.id || '';
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
@@ -96,11 +101,12 @@ export function InstallIntegrationProvider({
           setInstallations(_installations || []);
         })
         .catch((err) => {
+          setError(ErrorBoundary.INSTALLATION_LIST, integrationObj.id);
           setLoadingState(false);
-          console.error('ERROR: ', err);
+          console.error('Error retrieving installation information: ', err);
         });
     }
-  }, [projectId, integrationObj?.id, apiKey, groupRef]);
+  }, [projectId, integrationObj?.id, apiKey, groupRef, setError]);
 
   const props = useMemo(() => ({
     integrationId: integrationObj?.id || '',
@@ -116,8 +122,9 @@ export function InstallIntegrationProvider({
     groupName, installation, setInstallation]);
 
   return (
-    <InstallIntegrationContext.Provider value={props}>
-      {isLoading ? <LoadingIcon /> : children}
-    </InstallIntegrationContext.Provider>
-  );
+    isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey)) ? <ErrorTextBox message={`Error retrieving installation information for integration "${integrationObj?.name || 'unknown'}"`} /> : (
+      <InstallIntegrationContext.Provider value={props}>
+        {isLoading ? <LoadingIcon /> : children}
+      </InstallIntegrationContext.Provider>
+    );
 }
