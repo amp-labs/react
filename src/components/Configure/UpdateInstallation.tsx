@@ -40,7 +40,11 @@ export function UpdateInstallation(
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
   const { resetBoundary, setErrors } = useErrorState();
-  const { setConfigureState, objectConfigurationsState } = useConfigureState();
+  const {
+    setConfigureState,
+    objectConfigurationsState,
+    resetPendingConfigurationState,
+  } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const resetState = useCallback(
     () => {
@@ -61,8 +65,8 @@ export function UpdateInstallation(
   );
 
   useEffect(() => {
-    resetState();
-  }, [resetState]);
+    if (!configureState) { resetState(); }
+  }, [configureState, resetState]);
 
   const hydratedObject = useMemo(() => {
     const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
@@ -112,6 +116,7 @@ export function UpdateInstallation(
 
       res.finally(() => {
         setLoadingState(false);
+        resetPendingConfigurationState(selectedObjectName);
       });
     } else {
       console.error('update installation props missing');
