@@ -77,7 +77,7 @@ export function ConnectionsProvider({
 
   return (
     isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message={`Error retrieving existing connections`} />
+      ? <ErrorTextBox message="Error retrieving existing connections" />
       : (
         <ConnectionsContext.Provider value={contextValue}>
           {isLoading ? <LoadingIcon /> : children}
