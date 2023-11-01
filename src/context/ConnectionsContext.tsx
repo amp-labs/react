@@ -1,11 +1,16 @@
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext,
+  useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
+import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Connection } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
+import {
+  ErrorBoundary, useErrorState,
+} from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
 
 interface ConnectionsContextValue {
@@ -46,6 +51,7 @@ export function ConnectionsProvider({
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const apiKey = useContext(ApiKeyContext);
   const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { setError, isError } = useErrorState();
 
   useEffect(() => {
     api().listConnections({ projectId, groupRef, provider }, {
@@ -57,9 +63,10 @@ export function ConnectionsProvider({
       setConnections(_connections);
     }).catch((err) => {
       setLoadingState(false);
-      console.error('ERROR: ', err);
+      setError(ErrorBoundary.CONNECTION_LIST, projectId);
+      console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}:`, err);
     });
-  }, [projectId, apiKey, groupRef, provider]);
+  }, [projectId, apiKey, groupRef, provider, setError]);
 
   const contextValue = useMemo(() => ({
     connections,
@@ -69,8 +76,13 @@ export function ConnectionsProvider({
   }), [connections, selectedConnection, setConnections, setSelectedConnection]);
 
   return (
-    <ConnectionsContext.Provider value={contextValue}>
-      {isLoading ? <LoadingIcon /> : children}
-    </ConnectionsContext.Provider>
+    isError(ErrorBoundary.CONNECTION_LIST, projectId)
+      ? <ErrorTextBox message="Error retrieving existing connections" />
+      : (
+        <ConnectionsContext.Provider value={contextValue}>
+          {isLoading ? <LoadingIcon /> : children}
+        </ConnectionsContext.Provider>
+      )
+
   );
 }
