@@ -196,19 +196,27 @@ export const setRequiredCustomMapFieldValue = (
   configureState: ConfigureState,
 ) => {
   const { requiredMapFields } = configureState;
+  if (requiredMapFields === null) {
+    return { isUpdated: false, newState: configureState };
+  }
 
-  const updatedRequiredMapFields = [...requiredMapFields || []];
-  const updatedRequiredMapField = updatedRequiredMapFields?.find(
-    (field) => field.mapToName === objectName,
-  );
+  // flag to know if field was updated
+  let isUpdated = false;
+  const updatedRequiredMapFields = requiredMapFields.map((field) => {
+    // updated field
+    if (field.mapToName === objectName) {
+      isUpdated = true;
+      return {
+        ...field,
+        value,
+      };
+    }
+    // else return a copy of the field
+    return { ...field };
+  });
 
-  const savedFields = configureState.savedConfig.requiredMapFields;
-
-  if (updatedRequiredMapField) {
-    // todo update modified state based on whether value is different from saved value
-    // Update the custom field value property to new value
-    updatedRequiredMapField.value = value;
-
+  if (isUpdated) {
+    const savedFields = configureState.savedConfig.requiredMapFields;
     const updatedFields = createSavedFields(updatedRequiredMapFields);
     const isModified = !checkFieldsEquality(savedFields, updatedFields);
 
@@ -218,7 +226,7 @@ export const setRequiredCustomMapFieldValue = (
       isRequiredMapFieldsModified: isModified,
     };
 
-    return { isUpdated: true, newState };
+    return { isUpdated, newState };
   }
 
   return { isUpdated: false, newState: configureState };
