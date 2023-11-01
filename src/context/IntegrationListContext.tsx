@@ -4,6 +4,7 @@ import {
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
+import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Integration } from '../services/api';
 
 import { ApiKeyContext } from './ApiKeyContext';
@@ -37,7 +38,7 @@ export function IntegrationListProvider(
 ) {
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const apiKey = useContext(ApiKeyContext);
-  const { setError } = useErrorState();
+  const { setError, isError } = useErrorState();
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export function IntegrationListProvider(
     }).catch((err) => {
       setLoadingState(false);
       setError(ErrorBoundary.INTEGRATION_LIST, projectId);
-      console.error('ERROR: ', err);
+      console.error('Error retrieving integration information for : ', err);
     });
   }, [projectId, apiKey, setError]);
 
@@ -60,8 +61,12 @@ export function IntegrationListProvider(
   }), [integrations]);
 
   return (
-    <IntegrationListContext.Provider value={contextValue}>
-      {isLoading ? <LoadingIcon /> : children}
-    </IntegrationListContext.Provider>
+    isError(ErrorBoundary.INTEGRATION_LIST, projectId)
+      ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
+      : (
+        <IntegrationListContext.Provider value={contextValue}>
+          {isLoading ? <LoadingIcon /> : children}
+        </IntegrationListContext.Provider>
+      )
   );
 }
