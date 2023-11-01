@@ -1,3 +1,5 @@
+import isEqual from 'lodash.isequal';
+
 import {
   Config, HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
@@ -39,22 +41,12 @@ export function createSavedFields(
   return savedFields;
 }
 
+// uses lodash deep equality check to compare two saved fields objects
 export function checkFieldsEquality(
-  prevOptionalFields: SavedConfigureFields,
-  currentOptionalFields: SavedConfigureFields,
+  prevFields: SavedConfigureFields,
+  currentFields: SavedConfigureFields,
 ): boolean {
-  // Check if savedConfigureFields are present in both prevOptionalFields and currentOptionalFields
-  const savedConfigureFields = Object.keys(prevOptionalFields);
-  const savedFieldsPresentInPrev = savedConfigureFields
-    .every((field) => field in prevOptionalFields);
-  const savedFieldsPresentInCurrent = savedConfigureFields
-    .every((field) => field in currentOptionalFields);
-
-  // Check if currentOptionalFields are equal to prevOptionalFields
-  const areFieldsEqual = JSON
-    .stringify(prevOptionalFields) === JSON.stringify(currentOptionalFields);
-
-  return savedFieldsPresentInPrev && savedFieldsPresentInCurrent && areFieldsEqual;
+  return isEqual(prevFields, currentFields);
 }
 
 export function generateConfigurationState(
