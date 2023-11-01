@@ -46,10 +46,10 @@ export function RequiredFieldMappings() {
   );
 
   return (
-    <Box>
+    integrationFieldMappings.length ? <Box>
       <FieldHeader string="Map the following fields (required)" />
       <Stack>
-        {integrationFieldMappings.map((field) => (
+        {integrationFieldMappings.map((field: any) => (
           <FormControl
             key={field.mapToName}
             isInvalid={
@@ -67,9 +67,8 @@ export function RequiredFieldMappings() {
             <FormErrorMessage> * required</FormErrorMessage>
           </FormControl>
         ))}
-
       </Stack>
     </Box>
-
+      : null
   );
 }

@@ -37,7 +37,7 @@ export function OptionalFields() {
   };
 
   return (
-    <>
+    (configureState?.optionalFields || []).length > 0 && <>
       <FieldHeader string={`${appName} reads the following optional fields`} />
       <Stack
         marginBottom={10}
