@@ -2,10 +2,10 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
+import { useHydratedRevision } from './HydratedRevisionContext';
 import {
   resetAllObjectsConfigurationState,
 } from './utils';

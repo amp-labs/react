@@ -1,10 +1,10 @@
 import { ConnectionsProvider } from '../../context/ConnectionsContext';
 import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
-import { HydratedRevisionProvider } from '../../context/HydratedRevisionContext';
 import { InstallIntegrationProvider, useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
 
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
+import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 import { CreateInstallation } from './CreateInstallation';
 import { ErrorTextBox } from './ErrorTextBox';
 import { ObjectManagementNav } from './ObjectManagementNav';

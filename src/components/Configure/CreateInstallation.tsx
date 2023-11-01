@@ -10,12 +10,12 @@ import { useConnections } from '../../context/ConnectionsContext';
 import {
   ErrorBoundary, useErrorState,
 } from '../../context/ErrorContextProvider';
-import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
 
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
+import { useHydratedRevision } from './state/HydratedRevisionContext';
 import { getConfigureState, resetConfigurationState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';

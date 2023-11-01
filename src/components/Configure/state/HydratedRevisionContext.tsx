@@ -2,16 +2,15 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
-import { api, HydratedRevision } from '../services/api';
-
-import { ApiKeyContext } from './ApiKeyContext';
-import { useConnections } from './ConnectionsContext';
+import { ApiKeyContext } from '../../../context/ApiKeyContext';
+import { useConnections } from '../../../context/ConnectionsContext';
 import {
   ErrorBoundary, useErrorState,
-} from './ErrorContextProvider';
-import { useInstallIntegrationProps } from './InstallIntegrationContext';
-import { useIntegrationList } from './IntegrationListContext';
+} from '../../../context/ErrorContextProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useIntegrationList } from '../../../context/IntegrationListContext';
+import { api, HydratedRevision } from '../../../services/api';
+import { ErrorTextBox } from '../ErrorTextBox';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
