@@ -3,7 +3,8 @@ import { Box, Checkbox, Stack } from '@chakra-ui/react';
 import { useProject } from '../../../context/ProjectContext';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { getConfigureState } from '../state/utils';
+import { checkFieldsEquality, getConfigureState } from '../state/utils';
+import { SelectOptionalFields } from '../types';
 import { isIntegrationFieldMapping } from '../utils';
 
 import { FieldHeader } from './FieldHeader';
@@ -18,19 +19,29 @@ export function OptionalFields() {
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    if (selectedObjectName) {
+    if (selectedObjectName && configureState) {
       // Update the value property to new checked value
-      const updatedSelectedOptionalFields = {
+      const updatedSelectOptionalFields: SelectOptionalFields = {
         ...selectedOptionalFields,
         [name]: checked,
       };
+
+      // removed from check fields if not checked
+      if (!checked) { delete updatedSelectOptionalFields[name]; }
+
+      // Compare saved fields from updated fields
+      const savedOptionalFields = configureState.savedConfig?.optionalFields;
+
+      // Check if the optionalFields are modified
+      const isModified = !checkFieldsEquality(savedOptionalFields, updatedSelectOptionalFields);
 
       // update state
       setConfigureState(
         selectedObjectName,
         {
           ...configureState,
-          selectedOptionalFields: updatedSelectedOptionalFields,
+          selectedOptionalFields: updatedSelectOptionalFields,
+          isOptionalFieldsModified: isModified,
         },
       );
     }

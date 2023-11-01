@@ -63,6 +63,7 @@ export function ConfigurationProvider(
 
   // set configure state of single object
   const setConfigureState = useCallback((objectName: string, configureState: ConfigureState) => {
+    // consider moving check modified state here
     setObjectConfigurationsState((prevState) => ({
       ...prevState,
       [objectName]: configureState,

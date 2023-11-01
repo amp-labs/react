@@ -6,6 +6,7 @@ import { Box, Tabs, Text } from '@chakra-ui/react';
 import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { NavObject } from '../types';
 import { generateNavObjects } from '../utils';
 
@@ -39,6 +40,7 @@ export function ObjectManagementNav({
 }: ObjectManagementNavProps) {
   const { installation } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
+  const { objectConfigurationsState } = useConfigureState();
   const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
   const [tabIndex, setTabIndex] = useState(0);
@@ -75,6 +77,10 @@ export function ObjectManagementNav({
                   key={object.name}
                   objectName={object.name}
                   completed={object.completed}
+                  pending={
+                    objectConfigurationsState[object.name]?.isOptionalFieldsModified
+                    || objectConfigurationsState[object.name]?.isRequiredMapFieldsModified
+                  }
                 />
               ))}
             </Tabs>

@@ -1,3 +1,5 @@
+import isEqual from 'lodash.isequal';
+
 import {
   Config, HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
@@ -8,6 +10,7 @@ import {
   ConfigureStateIntegrationField,
   ConfigureStateMappingIntegrationField,
   ObjectConfigurationsState,
+  SavedConfigureFields,
 } from '../types';
 import {
   generateNavObjects,
@@ -17,10 +20,29 @@ import {
   getValueFromConfigCustomMapping, getValueFromConfigExist,
 } from '../utils';
 
+export function createSavedFields(
+  fields: ConfigureStateMappingIntegrationField[] | null | undefined,
+): SavedConfigureFields {
+  const savedFields: SavedConfigureFields = {};
+  fields?.forEach((field) => {
+    const { value } = field;
+    if (value) { savedFields[field.mapToName] = value; }
+  });
+  return savedFields;
+}
+
+// uses lodash deep equality check to compare two saved fields objects
+export function checkFieldsEquality(
+  prevFields: SavedConfigureFields,
+  currentFields: SavedConfigureFields,
+): boolean {
+  return isEqual(prevFields, currentFields);
+}
+
 export function generateConfigurationState(
   action: HydratedIntegrationRead,
   objectName: string,
-  config?: any,
+  config?: Config,
 ): ConfigureState {
   const object = getStandardObjectFromAction(action, objectName);
 
@@ -28,28 +50,31 @@ export function generateConfigurationState(
   const optionalFields = object
     ? getOptionalFieldsFromObject(object)?.map((field) => ({
       ...field,
-      value: getValueFromConfigExist(
+      value: config ? getValueFromConfigExist(
         config,
         objectName,
         // should only use fieldName for existant fields
         getFieldKeyValue(field),
-      ),
+      ) : false,
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
 
-  // todo map over requiredMapFields and get value from config
+  // map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
     ?.map((field) => ({
       ...field,
-      value: getValueFromConfigCustomMapping(
+      value: config ? getValueFromConfigCustomMapping(
         config,
         objectName,
         // should only use mapToName for custom mapping fields
         getFieldKeyValue(field),
-      ),
+      ) : '',
     })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
   const selectedFields = config?.content?.read?.standardObjects?.[objectName]?.selectedFields || {};
+
+  const optionalFieldsSaved = { ...selectedFields };
+  const requiredMapFieldsSaved = createSavedFields(requiredMapFields);
 
   return {
     allFields,
@@ -57,6 +82,12 @@ export function generateConfigurationState(
     optionalFields,
     requiredMapFields,
     selectedOptionalFields: selectedFields,
+    isOptionalFieldsModified: false,
+    isRequiredMapFieldsModified: false,
+    savedConfig: {
+      optionalFields: optionalFieldsSaved,
+      requiredMapFields: requiredMapFieldsSaved,
+    },
   };
 }
 
@@ -155,20 +186,37 @@ export const setRequiredCustomMapFieldValue = (
   configureState: ConfigureState,
 ) => {
   const { requiredMapFields } = configureState;
+  if (requiredMapFields === null) {
+    return { isUpdated: false, newState: configureState };
+  }
 
-  const requiredField = requiredMapFields?.find(
-    (field) => field.mapToName === objectName,
-  );
+  // flag to know if field was updated
+  let isUpdated = false;
+  const updatedRequiredMapFields = requiredMapFields.map((field) => {
+    // updated field
+    if (field.mapToName === objectName) {
+      isUpdated = true;
+      return {
+        ...field,
+        value,
+      };
+    }
+    // else return a copy of the field
+    return { ...field };
+  });
 
-  if (requiredField) {
-    // Update the custome field value property to new value
-    requiredField.value = value;
+  if (isUpdated) {
+    const savedFields = configureState.savedConfig.requiredMapFields;
+    const updatedFields = createSavedFields(updatedRequiredMapFields);
+    const isModified = !checkFieldsEquality(savedFields, updatedFields);
+
     const newState = {
       ...configureState,
-      requiredMapFields: [...requiredMapFields || []],
+      requiredMapFields: updatedRequiredMapFields,
+      isRequiredMapFieldsModified: isModified,
     };
 
-    return { isUpdated: true, newState };
+    return { isUpdated, newState };
   }
 
   return { isUpdated: false, newState: configureState };
