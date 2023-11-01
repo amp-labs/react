@@ -18,26 +18,16 @@ import {
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
   getValueFromConfigCustomMapping, getValueFromConfigExist,
-  isIntegrationFieldMapping,
 } from '../utils';
 
 export function createSavedFields(
-  fields:
-  ConfigureStateIntegrationField[] | ConfigureStateMappingIntegrationField[] | null | undefined,
+  fields: ConfigureStateMappingIntegrationField[] | null | undefined,
 ): SavedConfigureFields {
   const savedFields: SavedConfigureFields = {};
-
   fields?.forEach((field) => {
     const { value } = field;
-    if (value) {
-      if (isIntegrationFieldMapping(field)) {
-        savedFields[field.mapToName] = value;
-      } else {
-        savedFields[field.fieldName] = value;
-      }
-    }
+    if (value) { savedFields[field.mapToName] = value; }
   });
-
   return savedFields;
 }
 
@@ -68,7 +58,7 @@ export function generateConfigurationState(
       ) : false,
     })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
 
-  // todo map over requiredMapFields and get value from config
+  // map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
     ?.map((field) => ({
       ...field,
