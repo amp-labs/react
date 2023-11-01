@@ -36,7 +36,7 @@ export function OptionalFields() {
     }
   };
 
-  const shouldRender = !!(configureState?.optionalFields && configureState?.optionalFields)
+  const shouldRender = !!(configureState?.optionalFields && configureState?.optionalFields);
   return (
     shouldRender && (
       <>
