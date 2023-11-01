@@ -62,7 +62,7 @@ export function IntegrationListProvider(
 
   return (
     isError(ErrorBoundary.INTEGRATION_LIST, projectId)
-      ? <ErrorTextBox message={`Error retieving integration information for project "${projectId}"`} />
+      ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
       : (
         <IntegrationListContext.Provider value={contextValue}>
           {isLoading ? <LoadingIcon /> : children}
