@@ -9,6 +9,7 @@ export enum ErrorBoundary {
   PROJECT = 'projectError',
   CONNECTION_LIST = 'connectionListError',
   HYDRATED_REVISION = 'hydratedRevisionError',
+  INSTALLATION_LIST = 'installationListError',
 }
 
 export type ErrorState = {
