@@ -64,7 +64,7 @@ export function ConnectionsProvider({
     }).catch((err) => {
       setLoadingState(false);
       setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      console.error(`Error retrieving connection information for project ${projectId || 'unkown'}:`, err);
+      console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}:`, err);
     });
   }, [projectId, apiKey, groupRef, provider, setError]);
 
@@ -77,7 +77,7 @@ export function ConnectionsProvider({
 
   return (
     isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message={`Error retrieving connection information for project '${projectId}'`} />
+      ? <ErrorTextBox message={`Error retrieving existing connections`} />
       : (
         <ConnectionsContext.Provider value={contextValue}>
           {isLoading ? <LoadingIcon /> : children}
