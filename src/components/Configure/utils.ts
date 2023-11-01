@@ -53,7 +53,9 @@ export function getRequiredMapFieldsFromObject(object: HydratedIntegrationObject
 // 3. get optional fields
 export function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
   : HydratedIntegrationField[] | null {
-  return object?.optionalFields || null;
+  return object?.optionalFields?.filter(
+    (rf: HydratedIntegrationField) => !isIntegrationFieldMapping(rf) && !!rf.fieldName,
+  ) || null;
 }
 
 export const getReadObject = (

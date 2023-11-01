@@ -6,11 +6,11 @@ import {
 } from '@chakra-ui/react';
 
 import { LoadingIcon } from '../../assets/LoadingIcon';
-import { useHydratedRevision } from '../../context/HydratedRevisionContext';
 
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredFieldMappings } from './fields/RequiredFieldMappings';
 import { RequiredFields } from './fields/RequiredFields';
+import { useHydratedRevision } from './state/HydratedRevisionContext';
 
 interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,

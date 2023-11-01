@@ -3,10 +3,10 @@ import {
 } from 'react';
 import { Box, Tabs, Text } from '@chakra-ui/react';
 
-import { useHydratedRevision } from '../../../context/HydratedRevisionContext';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { NavObject } from '../types';
 import { generateNavObjects } from '../utils';
 

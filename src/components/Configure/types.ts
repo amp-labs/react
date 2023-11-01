@@ -26,7 +26,7 @@ type SavedConfigureState = {
 export type ConfigureState = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
-  optionalFields: ConfigureStateIntegrationField[] | null,
+  optionalFields: HydratedIntegrationField[] | null,
   requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
   selectedOptionalFields: SelectOptionalFields | null,
   isOptionalFieldsModified: boolean, // checks if selected optional fields is modified

@@ -7,7 +7,6 @@ import {
 } from '../../../services/api';
 import {
   ConfigureState,
-  ConfigureStateIntegrationField,
   ConfigureStateMappingIntegrationField,
   ObjectConfigurationsState,
   SavedConfigureFields,
@@ -17,7 +16,7 @@ import {
   getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
-  getValueFromConfigCustomMapping, getValueFromConfigExist,
+  getValueFromConfigCustomMapping,
 } from '../utils';
 
 export function createSavedFields(
@@ -45,19 +44,10 @@ export function generateConfigurationState(
   config?: Config,
 ): ConfigureState {
   const object = getStandardObjectFromAction(action, objectName);
-
   const requiredFields = object && getRequiredFieldsFromObject(object);
-  const optionalFields = object
-    ? getOptionalFieldsFromObject(object)?.map((field) => ({
-      ...field,
-      value: config ? getValueFromConfigExist(
-        config,
-        objectName,
-        // should only use fieldName for existant fields
-        getFieldKeyValue(field),
-      ) : false,
-    })) as ConfigureStateIntegrationField[] : null; // type hack - TODO fix
+  const optionalFields = object && getOptionalFieldsFromObject(object);
 
+  // todo refactor requiredMapFields to separate form state from hydrated revision
   // map over requiredMapFields and get value from config
   const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
     ?.map((field) => ({
@@ -77,16 +67,16 @@ export function generateConfigurationState(
   const requiredMapFieldsSaved = createSavedFields(requiredMapFields);
 
   return {
-    allFields,
-    requiredFields,
-    optionalFields,
-    requiredMapFields,
+    allFields, // from hydrated revision
+    requiredFields, // from hydrated revision
+    optionalFields, // from hydrated revision
+    requiredMapFields, // hydrated revision and form state
     selectedOptionalFields: selectedFields,
     isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
     savedConfig: {
-      optionalFields: optionalFieldsSaved,
-      requiredMapFields: requiredMapFieldsSaved,
+      optionalFields: optionalFieldsSaved, // from config
+      requiredMapFields: requiredMapFieldsSaved, // from config
     },
   };
 }
@@ -175,13 +165,13 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
 
 /**
  * returns a new configure state with one of its FieldMappings updated with a new value.
- * @param objectName
+ * @param fieldKey
  * @param value
  * @param configureState
  * @returns
  */
 export const setRequiredCustomMapFieldValue = (
-  objectName: string,
+  fieldKey: string,
   value: string,
   configureState: ConfigureState,
 ) => {
@@ -194,7 +184,7 @@ export const setRequiredCustomMapFieldValue = (
   let isUpdated = false;
   const updatedRequiredMapFields = requiredMapFields.map((field) => {
     // updated field
-    if (field.mapToName === objectName) {
+    if (field.mapToName === fieldKey) {
       isUpdated = true;
       return {
         ...field,
