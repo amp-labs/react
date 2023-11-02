@@ -27,7 +27,7 @@ export function ConfigureInstallationBase(
   return (
     isLoading ? <LoadingIcon />
       : (
-        <form onSubmit={onSave}>
+        <form style={{ width: '100%', maxWidth: '50rem' }} onSubmit={onSave}>
           <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
             <Button
               backgroundColor="gray.800"
@@ -47,8 +47,7 @@ export function ConfigureInstallationBase(
           </Stack>
           <Box
             p={8}
-            maxWidth="900px"
-            minWidth="500px"
+            width="100%"
             border="1px solid #EFEFEF"
             borderRadius={8}
             boxShadow="md"

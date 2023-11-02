@@ -1,7 +1,9 @@
 import {
   createContext, useContext, useState,
 } from 'react';
-import { Box, Tabs, Text } from '@chakra-ui/react';
+import {
+  Box, Tabs, Text,
+} from '@chakra-ui/react';
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
@@ -53,17 +55,17 @@ export function ObjectManagementNav({
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
       <Box
         p={8}
-        maxWidth="1024px"
+        maxWidth="55rem"
         border="1px solid #EFEFEF"
         borderRadius={6}
         boxShadow="md"
-        textAlign={['left']}
         margin="auto"
         bgColor="whitesmoke"
         display="flex"
+        gap="6"
         minHeight="100%"
       >
-        <Box minWidth="12rem" paddingRight={6}>
+        <Box width="20rem">
           <Text>Salesforce integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {navObjects && (
