@@ -2,7 +2,7 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ApiKeyContext } from '../../../context/ApiKeyContext';
+import { useApiKey } from '../../../context/ApiKeyProvider';
 import { useConnections } from '../../../context/ConnectionsContext';
 import {
   ErrorBoundary, useErrorState,
@@ -41,13 +41,15 @@ export function HydratedRevisionProvider({
   projectId,
   children,
 }: HydratedRevisionProviderProps) {
-  const { integrationId, integrationObj } = useInstallIntegrationProps();
+  const { selectedConnection } = useConnections();
   const { integrations } = useIntegrationList();
+  const { integrationId, integrationObj } = useInstallIntegrationProps();
+
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { isError, removeError, setError } = useErrorState();
-  const apiKey = useContext(ApiKeyContext);
-  const { selectedConnection } = useConnections();
+  const apiKey = useApiKey();
+
   const connectionId = selectedConnection?.id;
   const revisionId = integrationObj?.latestRevision?.id;
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;

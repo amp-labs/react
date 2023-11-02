@@ -2,10 +2,10 @@
  * this page is wip: untested
  */
 import {
-  useCallback, useContext, useEffect, useState,
+  useCallback, useEffect, useState,
 } from 'react';
 
-import { ApiKeyContext } from '../../context/ApiKeyContext';
+import { useApiKey } from '../../context/ApiKeyProvider';
 import { useConnections } from '../../context/ConnectionsContext';
 import {
   ErrorBoundary, useErrorState,
@@ -31,7 +31,7 @@ export function CreateInstallation() {
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   const { selectedConnection } = useConnections();
-  const apiKey = useContext(ApiKeyContext);
+  const apiKey = useApiKey();
   const { projectId } = useProject();
   const { resetBoundary, setErrors } = useErrorState();
   const {
@@ -70,8 +70,7 @@ export function CreateInstallation() {
     const { requiredMapFields } = configureState;
     const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
       (field) => !field.value,
-    )
-      || [];
+    ) || [];
 
     const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
     setErrors(ErrorBoundary.MAPPING, errList);

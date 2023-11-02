@@ -5,11 +5,10 @@
  */
 
 import React, {
-  useCallback,
-  useContext, useEffect, useRef, useState,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
 
-import { ApiKeyContext } from '../../context/ApiKeyContext';
+import { useApiKey } from '../../context/ApiKeyProvider';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useProject } from '../../context/ProjectContext';
 import { AMP_SERVER, api } from '../../services/api';
@@ -52,13 +51,13 @@ function OAuthPopup({
   children,
   onClose,
 }: PopupProps) {
+  const { projectId } = useProject();
+  const apiKey = useApiKey();
   const [externalWindow, setExternalWindow] = useState<Window | null>();
   const intervalRef = useRef<number>();
 
   const clearTimer = () => window.clearInterval(intervalRef.current);
   const { setSelectedConnection } = useConnections();
-  const { projectId } = useProject();
-  const apiKey = useContext(ApiKeyContext);
 
   useEffect(() => {
     if (url) setExternalWindow(createPopup({ url, title }));

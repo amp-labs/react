@@ -8,7 +8,7 @@ import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Installation, Integration } from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
-import { ApiKeyContext } from './ApiKeyContext';
+import { useApiKey } from './ApiKeyProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useIntegrationList } from './IntegrationListContext';
 import { useProject } from './ProjectContext';
@@ -60,18 +60,20 @@ interface InstallIntegrationProviderProps {
 export function InstallIntegrationProvider({
   children, integration, consumerRef, consumerName, groupRef, groupName,
 }: InstallIntegrationProviderProps) {
+  const apiKey = useApiKey();
   const { projectId } = useProject();
-  const [installations, setInstallations] = useState<Installation[]>([]);
-  const installation = installations?.[0] || null; // there should only be one installation for mvp
-  const apiKey = useContext(ApiKeyContext);
   const { integrations } = useIntegrationList();
+
+  const [installations, setInstallations] = useState<Installation[]>([]);
+  const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { setError, isError } = useErrorState();
+
+  const installation = installations?.[0] || null; // there should only be one installation for mvp
+
   const integrationObj = useMemo(
     () => findIntegrationFromList(integration, integrations || []),
     [integration, integrations],
   );
-
-  const [isLoading, setLoadingState] = useState<boolean>(true);
-  const { setError, isError } = useErrorState();
 
   useEffect(() => {
     if (integrationObj === null && integrations?.length) {
