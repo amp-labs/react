@@ -34,7 +34,11 @@ export function CreateInstallation() {
   const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
   const { resetBoundary, setErrors } = useErrorState();
-  const { setConfigureState, objectConfigurationsState } = useConfigureState();
+  const {
+    setConfigureState,
+    objectConfigurationsState,
+    resetPendingConfigurationState,
+  } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
@@ -96,6 +100,7 @@ export function CreateInstallation() {
 
       res.finally(() => {
         setLoadingState(false);
+        resetPendingConfigurationState(selectedObjectName);
       });
     } else {
       console.error('OnSaveCreate: missing required props');

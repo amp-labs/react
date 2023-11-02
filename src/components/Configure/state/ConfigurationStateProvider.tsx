@@ -15,7 +15,7 @@ const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
   setConfigureState:(objectName: string, configureState: ConfigureState) => void;
-
+  resetPendingConfigurationState:(objectName: string) => void;
 } | undefined>(undefined);
 
 const initialObjectConfigurationsState: ObjectConfigurationsState = {};
@@ -52,14 +52,15 @@ export function ConfigurationProvider(
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
-    if (hydratedRevision?.content && !loading) {
+    // only reset when objectConfigurationsState does not exist
+    if (hydratedRevision?.content && !loading && config && !objectConfigurationsState) {
       resetAllObjectsConfigurationState(
         hydratedRevision,
         config,
         setObjectConfigurationsState,
       );
     }
-  }, [hydratedRevision, loading, config]);
+  }, [hydratedRevision, loading, config, objectConfigurationsState]);
 
   // set configure state of single object
   const setConfigureState = useCallback((objectName: string, configureState: ConfigureState) => {
@@ -70,13 +71,28 @@ export function ConfigurationProvider(
     }));
   }, [setObjectConfigurationsState]);
 
+  // set configure state of single object
+  const resetPendingConfigurationState = useCallback((
+    objectName: string,
+  ) => {
+    setObjectConfigurationsState((prevObjectsConfigurationsState) => ({
+      ...prevObjectsConfigurationsState,
+      [objectName]: {
+        ...prevObjectsConfigurationsState[objectName],
+        isOptionalFieldsModified: false,
+        isRequiredMapFieldsModified: false,
+      },
+    }));
+  }, [setObjectConfigurationsState]);
+
   const contextValue = useMemo(
     () => ({
       objectConfigurationsState,
       setObjectConfigurationsState,
       setConfigureState,
+      resetPendingConfigurationState,
     }),
-    [objectConfigurationsState, setConfigureState],
+    [objectConfigurationsState, resetPendingConfigurationState, setConfigureState],
   );
 
   return (
