@@ -6,8 +6,9 @@ import {
 import { HydratedIntegrationFieldExistent } from '../../../services/api';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
 import { ConfigureStateMappingIntegrationField } from '../types';
+
+import { setFieldMapping } from './setFieldMapping';
 
 interface FieldMappingProps {
   field: ConfigureStateMappingIntegrationField,
@@ -21,25 +22,19 @@ export function FieldMapping(
   { field, onSelectChange, allFields }: FieldMappingProps,
 ) {
   const { selectedObjectName } = useSelectedObjectName();
-  const { objectConfigurationsState, setConfigureState } = useConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const { setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
+    // set default value if no value exists
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
     if (!!field._default && !field.value) {
-      const { isUpdated, newState } = setRequiredCustomMapFieldValue(
-        field.mapToName,
-        field._default, /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-        configureState,
-      );
-
-      if (isUpdated && selectedObjectName) {
-        setConfigureState(selectedObjectName, newState);
+      if (selectedObjectName && !!field._default && !field.value) {
+        setFieldMapping(selectedObjectName, setConfigureState, field.mapToName, field._default);
       }
     }
     setDisabled(false);
-  }, [field, allFields, configureState, setConfigureState, selectedObjectName]);
+  }, [field, setConfigureState, selectedObjectName]);
 
   const options = useMemo(() => allFields?.map(
     (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,
