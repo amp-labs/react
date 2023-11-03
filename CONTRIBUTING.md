@@ -27,10 +27,10 @@ To integrate VSCode with this repo's `eslint` settings, please install the "ESLi
 ## SDK generation
 
 ### Repo Setup
-To generate the server api sdk from the swagger spec:
+To generate the SDK from the openapi spec in the server repo, follow these steps:
 
-#### Java
-java is required for sdk generation (```yarn generate-api```)
+#### Install Java
+java is required for sdk generation
 
 To install java on Mac
 ```
@@ -57,17 +57,17 @@ sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk \
      /Library/Java/JavaVirtualMachines/openjdk.jdk
 ```
 
-[https://stackoverflow.com/a/65601197](https://stackoverflow.com/a/65601197)
+More info at [https://stackoverflow.com/a/65601197](https://stackoverflow.com/a/65601197)
 
-#### clone server repo
-We need to first clone the `server` repo as a sibling directory [https://github.com/amp-labs/server](https://github.com/amp-labs/server)
+#### Clone server repo
+We need to clone the [server repo](https://github.com/amp-labs/server) as a sibling directory, meaning that it lives in the same nesting level as this repo, here is an example directory structure:
 ```
 - amp-labs
 -- server
 -- react
 ```
 
-#### to generate an updated SDK
+#### Generate the SDK
 cd into `react` directory and run the following:
 
 ```yarn generate-api```
