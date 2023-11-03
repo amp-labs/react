@@ -23,3 +23,51 @@ npm run lint
 ```
 
 To integrate VSCode with this repo's `eslint` settings, please install the "ESLint" Extension. The rules in the `.vscode/settings.json` file of this repo defines the behavior of the extension on this workspace.
+
+## SDK generation
+
+### Repo Setup
+To generate the server api sdk from the swagger spec:
+
+#### Java
+java is required for sdk generation (```yarn generate-api```)
+
+To install java on Mac
+```
+brew install java
+```
+
+Then check your installation by running
+
+```
+java -version
+```
+
+If you see this:
+
+```
+The operation couldn’t be completed. Unable to locate a Java Runtime.
+Please visit http://www.java.com for information on installing Java.
+```
+
+Then you need to create a symlink for the system Java wrappers to find this JDK:
+
+```
+sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk \
+     /Library/Java/JavaVirtualMachines/openjdk.jdk
+```
+
+[https://stackoverflow.com/a/65601197](https://stackoverflow.com/a/65601197)
+
+#### clone server repo
+We need to first clone the `server` repo as a sibling directory [https://github.com/amp-labs/server](https://github.com/amp-labs/server)
+```
+- amp-labs
+-- server
+-- react
+```
+
+#### to generate an updated SDK
+cd into `react` directory and run the following:
+
+```yarn generate-api```
