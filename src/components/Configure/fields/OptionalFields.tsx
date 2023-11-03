@@ -20,6 +20,7 @@ function setOptionalField(
   setConfigureState(selectedObjectName, (currentConfigureStateDraft: Draft<ConfigureState>) => {
     const draftSelectedOptionalFields = currentConfigureStateDraft?.selectedOptionalFields || {};
     draftSelectedOptionalFields[fieldKey] = checked;
+    if (!checked) { delete draftSelectedOptionalFields[fieldKey]; } // remove key if unchecked
 
     // Compare saved fields from updated fields
     const savedOptionalFields = currentConfigureStateDraft.savedConfig?.optionalFields;
