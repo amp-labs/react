@@ -47,35 +47,38 @@ export function OptionalFields() {
     }
   };
 
+  const shouldRender = !!(configureState?.optionalFields && configureState?.optionalFields);
   return (
-    <>
-      <FieldHeader string={`${appName} reads the following optional fields`} />
-      <Stack
-        marginBottom={10}
-        height={300}
-        overflowY="scroll"
-        border="2px solid #EFEFEF"
-        borderRadius={8}
-        padding={4}
-      >
-        {configureState?.optionalFields?.map((field) => {
-          if (!isIntegrationFieldMapping(field)) {
-            return (
-              <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
-                <Checkbox
-                  name={field.fieldName}
-                  id={field.fieldName}
-                  isChecked={!!selectedOptionalFields?.[field?.fieldName]}
-                  onChange={onCheckboxChange}
-                >
-                  {field.displayName}
-                </Checkbox>
-              </Box>
-            );
-          }
-          return null; // fallback for customed mapped fields
-        })}
-      </Stack>
-    </>
+    shouldRender && (
+      <>
+        <FieldHeader string={`${appName} reads the following optional fields`} />
+        <Stack
+          marginBottom={10}
+          height={300}
+          overflowY="scroll"
+          border="2px solid #EFEFEF"
+          borderRadius={8}
+          padding={4}
+        >
+          {configureState?.optionalFields?.map((field) => {
+            if (!isIntegrationFieldMapping(field)) {
+              return (
+                <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
+                  <Checkbox
+                    name={field.fieldName}
+                    id={field.fieldName}
+                    isChecked={!!selectedOptionalFields?.[field?.fieldName]}
+                    onChange={onCheckboxChange}
+                  >
+                    {field.displayName}
+                  </Checkbox>
+                </Box>
+              );
+            }
+            return null; // fallback for customed mapped fields
+          })}
+        </Stack>
+      </>
+    )
   );
 }
