@@ -1,17 +1,11 @@
 {
   "name": "@amp-labs/react",
-  "version": "0.1.4",
+  "version": "1.0.1",
   "description": "Ampersand React library.",
   "author": {
     "name": "Ampersand Labs",
     "url": "http://withampersand.com"
   },
-  "contributors": [
-    {
-      "name": "Joey Yang",
-      "email": "joey@thirdslant.com"
-    }
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amp-labs/react/issues"
