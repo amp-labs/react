@@ -1,3 +1,4 @@
+import { Draft } from 'immer';
 import isEqual from 'lodash.isequal';
 
 import {
@@ -82,7 +83,7 @@ export function generateConfigurationState(
 }
 
 // resets configure state for single object to hydrated revision values
-export const resetConfigurationState = (
+export const setHydrateConfigState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
   selectedObjectName: string,

@@ -16,7 +16,7 @@ import { useProject } from '../../context/ProjectContext';
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState, resetConfigurationState } from './state/utils';
+import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 
@@ -35,7 +35,7 @@ export function CreateInstallation() {
   const { projectId } = useProject();
   const { resetBoundary, setErrors } = useErrorState();
   const {
-    setConfigureState,
+    resetConfigureState,
     objectConfigurationsState,
     resetPendingConfigurationState,
   } = useConfigureState();
@@ -46,15 +46,15 @@ export function CreateInstallation() {
     () => {
       resetBoundary(ErrorBoundary.MAPPING);
       if (hydratedRevision?.content && !loading && selectedObjectName) {
-        resetConfigurationState(
+        setHydrateConfigState(
           hydratedRevision,
           UNDEFINED_CONFIG,
           selectedObjectName,
-          setConfigureState,
+          resetConfigureState,
         );
       }
     },
-    [hydratedRevision, loading, selectedObjectName, setConfigureState, resetBoundary],
+    [resetBoundary, hydratedRevision, loading, selectedObjectName, resetConfigureState],
   );
 
   useEffect(() => {

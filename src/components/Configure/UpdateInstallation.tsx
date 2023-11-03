@@ -14,7 +14,7 @@ import { Installation, Integration } from '../../services/api';
 import { onSaveUpdate } from './actions/onSaveUpdate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState, resetConfigurationState } from './state/utils';
+import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
 
@@ -42,7 +42,7 @@ export function UpdateInstallation(
   // 3. generate the configuration state from the hydrated revision and config
   const { resetBoundary, setErrors } = useErrorState();
   const {
-    setConfigureState,
+    resetConfigureState,
     objectConfigurationsState,
     resetPendingConfigurationState,
   } = useConfigureState();
@@ -52,17 +52,10 @@ export function UpdateInstallation(
       resetBoundary(ErrorBoundary.MAPPING);
       // set configurationState when hydratedRevision is loaded
       if (hydratedRevision?.content && !loading && selectedObjectName) {
-        resetConfigurationState(hydratedRevision, config, selectedObjectName, setConfigureState);
+        setHydrateConfigState(hydratedRevision, config, selectedObjectName, resetConfigureState);
       }
     },
-    [
-      hydratedRevision,
-      loading,
-      config,
-      selectedObjectName,
-      setConfigureState,
-      resetBoundary,
-    ],
+    [resetBoundary, hydratedRevision, loading, selectedObjectName, config, resetConfigureState],
   );
 
   useEffect(() => {

@@ -16,6 +16,7 @@ const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
   setConfigureState:(objectName: string, producer: (draft: Draft<ConfigureState>) => void,) => void;
+  resetConfigureState:(objectName: string, configureState: ConfigureState) => void;
   resetPendingConfigurationState:(objectName: string) => void;
 } | undefined>(undefined);
 
@@ -64,7 +65,7 @@ export function ConfigurationProvider(
     }
   }, [hydratedRevision, loading, config, objectConfigurationsState]);
 
-  // set configure state of single object
+  // mutate configure state of single object using a producer method
   const setConfigureState = useCallback((
     objectName: string,
     producer: (draft: Draft<ConfigureState>) => void,
@@ -73,7 +74,19 @@ export function ConfigurationProvider(
     setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
       // immer exception when mutating a draft
       // eslint-disable-next-line no-param-reassign
-      if (draft[objectName]) { draft[objectName] = produce(draft[objectName], producer); }
+      draft[objectName] = produce(draft[objectName], producer);
+    }));
+  }, [setObjectConfigurationsState]);
+
+  // set configure state of single object by assigning a new state
+  const resetConfigureState = useCallback((
+    objectName: string,
+    configureState: ConfigureState,
+  ) => {
+    setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
+    // immer exception when mutating a draft
+    // eslint-disable-next-line no-param-reassign
+      draft[objectName] = configureState;
     }));
   }, [setObjectConfigurationsState]);
 
@@ -97,9 +110,11 @@ export function ConfigurationProvider(
       objectConfigurationsState,
       setObjectConfigurationsState,
       setConfigureState,
+      resetConfigureState,
       resetPendingConfigurationState,
     }),
-    [objectConfigurationsState, resetPendingConfigurationState, setConfigureState],
+    [objectConfigurationsState,
+      resetConfigureState, resetPendingConfigurationState, setConfigureState],
   );
 
   return (
