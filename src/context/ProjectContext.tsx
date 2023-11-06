@@ -1,13 +1,12 @@
 import {
-  createContext,
-  useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Project } from '../services/api';
 
-import { ApiKeyContext } from './ApiKeyContext';
+import { useApiKey } from './ApiKeyProvider';
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
@@ -42,10 +41,10 @@ type ProjectProviderProps = {
 export function ProjectProvider(
   { projectId, children }: ProjectProviderProps,
 ) {
-  const [project, setProject] = useState<Project | null>(null);
-  const apiKey = useContext(ApiKeyContext);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
+  const apiKey = useApiKey();
   const { isError, setError } = useErrorState();
+  const [project, setProject] = useState<Project | null>(null);
+  const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
     api().getProject({ projectId }, {

@@ -1,8 +1,8 @@
 import {
-  useCallback, useContext, useEffect, useMemo, useState,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 
-import { ApiKeyContext } from '../../context/ApiKeyContext';
+import { useApiKey } from '../../context/ApiKeyProvider';
 import {
   ErrorBoundary,
   useErrorState,
@@ -27,14 +27,15 @@ interface UpdateInstallationProps {
 export function UpdateInstallation(
   { installation, integrationObj }: UpdateInstallationProps,
 ) {
+  const apiKey = useApiKey();
   const { setInstallation } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
-  const apiKey = useContext(ApiKeyContext);
   const { projectId } = useProject();
+  const [isLoading, setLoadingState] = useState<boolean>(false);
+
   // when no installation or config exists, render create flow
   const { config } = installation;
-  const [isLoading, setLoadingState] = useState<boolean>(false);
 
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)

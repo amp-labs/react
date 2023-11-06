@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext, useEffect, useMemo, useState,
 } from 'react';
@@ -7,7 +7,7 @@ import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Connection } from '../services/api';
 
-import { ApiKeyContext } from './ApiKeyContext';
+import { useApiKey } from './ApiKeyProvider';
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
@@ -46,10 +46,11 @@ export function ConnectionsProvider({
   projectId,
   children,
 }: ConnectionsProviderProps) {
+  const apiKey = useApiKey();
   const { groupRef, provider } = useInstallIntegrationProps();
+
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
-  const apiKey = useContext(ApiKeyContext);
   const [isLoading, setLoadingState] = useState<boolean>(true);
   const { setError, isError } = useErrorState();
 

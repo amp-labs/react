@@ -7,7 +7,7 @@ import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/Configure/ErrorTextBox';
 import { api, Integration } from '../services/api';
 
-import { ApiKeyContext } from './ApiKeyContext';
+import { useApiKey } from './ApiKeyProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {
@@ -36,9 +36,9 @@ type IntegrationListContextProviderProps = {
 export function IntegrationListProvider(
   { projectId, children }: IntegrationListContextProviderProps,
 ) {
-  const [integrations, setIntegrations] = useState<Integration[] | null>(null);
-  const apiKey = useContext(ApiKeyContext);
+  const apiKey = useApiKey();
   const { setError, isError } = useErrorState();
+  const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {

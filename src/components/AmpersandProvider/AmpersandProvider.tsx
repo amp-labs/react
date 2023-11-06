@@ -7,7 +7,7 @@
 
 import React, { createContext, useContext } from 'react';
 
-import { ApiKeyProvider } from '../../context/ApiKeyContext';
+import { ApiKeyProvider } from '../../context/ApiKeyProvider';
 import { ErrorStateProvider } from '../../context/ErrorContextProvider';
 import { IntegrationListProvider } from '../../context/IntegrationListContext';
 import { ProjectProvider } from '../../context/ProjectContext';

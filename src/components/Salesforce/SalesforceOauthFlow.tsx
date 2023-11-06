@@ -3,9 +3,7 @@
  * that Salesforce instance.
  */
 
-import {
-  useCallback, useContext, useState,
-} from 'react';
+import { useCallback, useState } from 'react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Alert, AlertDescription, AlertIcon, Box, Button, Container, Flex, FormControl,
@@ -13,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 import { PROVIDER_SALESFORCE } from '../../constants';
-import { ApiKeyContext } from '../../context/ApiKeyContext';
+import { useApiKey } from '../../context/ApiKeyProvider';
 import { useProject } from '../../context/ProjectContext';
 import { api, ProviderApp } from '../../services/api';
 import OAuthPopup from '../OAuthPopup/OAuthPopup';
@@ -51,12 +49,12 @@ interface SalesforceOauthFlowProps {
 function SalesforceOauthFlow({
   consumerRef, consumerName, groupRef, groupName,
 }: SalesforceOauthFlowProps) {
+  const { projectId } = useProject();
+  const apiKey = useApiKey();
+
   const [workspace, setWorkspace] = useState<string>('');
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const { projectId } = useProject();
-  const apiKey = useContext(ApiKeyContext);
 
   const handleSubmit = async () => {
     setError(null);
