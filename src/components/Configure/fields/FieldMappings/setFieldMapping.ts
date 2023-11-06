@@ -1,7 +1,7 @@
 import { Draft } from 'immer';
 
-import { checkFieldsEquality, createSavedFields } from '../state/utils';
-import { ConfigureState } from '../types';
+import { checkFieldsEquality, createSavedFields } from '../../state/utils';
+import { ConfigureState } from '../../types';
 
 export function setFieldMapping(
   selectedObjectName: string,

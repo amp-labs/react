@@ -6,15 +6,15 @@ import {
 
 import {
   ErrorBoundary, useErrorState,
-} from '../../../context/ErrorContextProvider';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
+} from '../../../../context/ErrorContextProvider';
+import { useSelectedObjectName } from '../../ObjectManagementNav';
+import { useConfigureState } from '../../state/ConfigurationStateProvider';
 import {
   getConfigureState,
-} from '../state/utils';
-import { isIntegrationFieldMapping } from '../utils';
+} from '../../state/utils';
+import { isIntegrationFieldMapping } from '../../utils';
+import { FieldHeader } from '../FieldHeader';
 
-import { FieldHeader } from './FieldHeader';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
@@ -31,7 +31,6 @@ export function RequiredFieldMappings() {
       return;
     }
 
-    // const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
     if (selectedObjectName) {
       setFieldMapping(selectedObjectName, setConfigureState, name, value);
     }
