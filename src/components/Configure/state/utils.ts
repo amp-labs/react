@@ -1,4 +1,3 @@
-import { Draft } from 'immer';
 import isEqual from 'lodash.isequal';
 
 import {
@@ -162,55 +161,6 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
     };
   }, {});
   return requiredMapFieldsConfig;
-};
-
-/**
- * returns a new configure state with one of its FieldMappings updated with a new value.
- * @param fieldKey
- * @param value
- * @param configureState
- * @returns
- */
-export const setRequiredCustomMapFieldValue = (
-  fieldKey: string,
-  value: string,
-  configureState: ConfigureState,
-) => {
-  const { requiredMapFields } = configureState;
-  if (requiredMapFields === null) {
-    return { isUpdated: false, newState: configureState };
-  }
-
-  // flag to know if field was updated
-  let isUpdated = false;
-  const updatedRequiredMapFields = requiredMapFields.map((field) => {
-    // updated field
-    if (field.mapToName === fieldKey) {
-      isUpdated = true;
-      return {
-        ...field,
-        value,
-      };
-    }
-    // else return a copy of the field
-    return { ...field };
-  });
-
-  if (isUpdated) {
-    const savedFields = configureState.savedConfig.requiredMapFields;
-    const updatedFields = createSavedFields(updatedRequiredMapFields);
-    const isModified = !checkFieldsEquality(savedFields, updatedFields);
-
-    const newState = {
-      ...configureState,
-      requiredMapFields: updatedRequiredMapFields,
-      isRequiredMapFieldsModified: isModified,
-    };
-
-    return { isUpdated, newState };
-  }
-
-  return { isUpdated: false, newState: configureState };
 };
 
 // get configure state of single object

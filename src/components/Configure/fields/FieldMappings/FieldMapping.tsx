@@ -3,10 +3,10 @@ import {
   Select, Stack, Text,
 } from '@chakra-ui/react';
 
-import { HydratedIntegrationFieldExistent } from '../../../services/api';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { ConfigureStateMappingIntegrationField } from '../types';
+import { HydratedIntegrationFieldExistent } from '../../../../services/api';
+import { useSelectedObjectName } from '../../ObjectManagementNav';
+import { useConfigureState } from '../../state/ConfigurationStateProvider';
+import { ConfigureStateMappingIntegrationField } from '../../types';
 
 import { setFieldMapping } from './setFieldMapping';
 
