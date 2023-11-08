@@ -18,6 +18,8 @@ function setFieldMappingProducer(
     // immer exception if we try to set a value
     // eslint-disable-next-line no-param-reassign
     draft.isRequiredMapFieldsModified = isModified;
+  } else {
+    console.warn(`Could not find field with key ${fieldKey}`);
   }
 }
 
