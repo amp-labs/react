@@ -4,31 +4,26 @@ import {
   IntegrationFieldMapping,
 } from '../../services/api';
 
-export type ConfigureStateIntegrationField = HydratedIntegrationFieldExistent & {
-  value: string | number | boolean | null,
-};
-
-export type ConfigureStateMappingIntegrationField = IntegrationFieldMapping & {
-  value: string | number | undefined,
-};
-
 export type SelectOptionalFields = {
   [key: string]: boolean,
 };
 
-export type SavedConfigureFields = Record<string, string | number | boolean | null>;
+export type SelectMappingFields = {
+  [key: string]: string | undefined,
+};
 
 type SavedConfigureState = {
   optionalFields: SelectOptionalFields,
-  requiredMapFields: SavedConfigureFields,
+  requiredMapFields: SelectMappingFields,
 };
 
 export type ConfigureState = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: HydratedIntegrationField[] | null,
-  requiredMapFields: ConfigureStateMappingIntegrationField[] | null,
+  requiredMapFields: IntegrationFieldMapping[] | null,
   selectedOptionalFields: SelectOptionalFields | null,
+  selectedFieldMappings: SelectMappingFields | null,
   isOptionalFieldsModified: boolean, // checks if selected optional fields is modified
   isRequiredMapFieldsModified: boolean, // checks if required map fields is modified
   savedConfig: SavedConfigureState, // check when to know if config is saved / modified
