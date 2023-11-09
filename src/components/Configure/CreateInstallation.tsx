@@ -19,6 +19,7 @@ import { useHydratedRevision } from './state/HydratedRevisionContext';
 import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
+import { validateFieldMappings } from './utils';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -66,20 +67,14 @@ export function CreateInstallation() {
 
   const onSave = (e: any) => {
     e.preventDefault();
-
-    const { requiredMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
-      (field) => !field.value,
-    ) || [];
-
-    const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
-    setErrors(ErrorBoundary.MAPPING, errList);
-
-    // if requires fields are not met, set error fields and return
-    if (fieldsWithRequirementsNotMet?.length) {
-      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
-      return;
-    }
+    // check if fields with requirements are met
+    const { requiredMapFields, selectedFieldMappings } = configureState || {};
+    const { errorList } = validateFieldMappings(
+      requiredMapFields,
+      selectedFieldMappings,
+      setErrors,
+    );
+    if (errorList.length > 0) { return; } // skip if there are errors
 
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {

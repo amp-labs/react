@@ -3,15 +3,15 @@ import {
   Select, Stack, Text,
 } from '@chakra-ui/react';
 
-import { HydratedIntegrationFieldExistent } from '../../../../services/api';
+import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from '../../../../services/api';
 import { useSelectedObjectName } from '../../ObjectManagementNav';
 import { useConfigureState } from '../../state/ConfigurationStateProvider';
-import { ConfigureStateMappingIntegrationField } from '../../types';
+import { getConfigureState } from '../../state/utils';
 
 import { setFieldMapping } from './setFieldMapping';
 
 interface FieldMappingProps {
-  field: ConfigureStateMappingIntegrationField,
+  field: IntegrationFieldMapping,
   onSelectChange: (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void,
@@ -22,19 +22,20 @@ export function FieldMapping(
   { field, onSelectChange, allFields }: FieldMappingProps,
 ) {
   const { selectedObjectName } = useSelectedObjectName();
-  const { setConfigureState } = useConfigureState();
+  const { objectConfigurationsState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const { selectedFieldMappings: selectedRequiredMapFields } = configureState || {};
+  const fieldValue = selectedRequiredMapFields?.[field.mapToName];
 
   useEffect(() => {
-    // set default value if no value exists
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    if (!!field._default && !field.value) {
-      if (selectedObjectName && !!field._default && !field.value) {
-        setFieldMapping(selectedObjectName, setConfigureState, field.mapToName, field._default);
-      }
+    if (!!field._default && !fieldValue && selectedObjectName && !!configureState) {
+      // set field mapping default value if no value exists
+      setFieldMapping(selectedObjectName, setConfigureState, field.mapToName, field._default);
     }
     setDisabled(false);
-  }, [field, setConfigureState, selectedObjectName]);
+  }, [field, setConfigureState, selectedObjectName, fieldValue, configureState]);
 
   const options = useMemo(() => allFields?.map(
     (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,
@@ -47,9 +48,9 @@ export function FieldMapping(
       <Select
         name={field.mapToName}
         variant="flushed"
-        value={field.value}
+        value={fieldValue || undefined}
         onChange={onSelectChange}
-        placeholder={!field.value ? 'Please select one' : undefined} // remove placeholder when value is selected
+        placeholder={!fieldValue ? 'Please select one' : undefined} // remove placeholder when value is selected
         disabled={disabled}
       >
         {options}

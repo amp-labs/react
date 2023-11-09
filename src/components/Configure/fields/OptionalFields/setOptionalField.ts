@@ -10,6 +10,9 @@ function setOptionalFieldProducer(
 ) {
   const draftSelectedOptionalFields = draft?.selectedOptionalFields || {};
   draftSelectedOptionalFields[fieldKey] = checked;
+  if (!checked) {
+    delete draftSelectedOptionalFields[fieldKey];
+  }
   const savedFields = draft.savedConfig.optionalFields;
   const updatedFields = draftSelectedOptionalFields;
   const isModified = !checkFieldsEquality(savedFields, updatedFields);

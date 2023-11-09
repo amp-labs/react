@@ -17,6 +17,7 @@ import { useHydratedRevision } from './state/HydratedRevisionContext';
 import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
+import { validateFieldMappings } from './utils';
 
 interface UpdateInstallationProps {
   installation: Installation,
@@ -76,18 +77,13 @@ export function UpdateInstallation(
     e.preventDefault();
 
     // check if fields with requirements are met
-    const { requiredMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
-      (field) => !field.value,
-    )
-      || [];
-
-    const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
-    setErrors(ErrorBoundary.MAPPING, errList);
-
-    // if requires fields are not met, set error fields and return
-    if (fieldsWithRequirementsNotMet?.length) {
-      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
+    const { requiredMapFields, selectedFieldMappings } = configureState || {};
+    const { errorList } = validateFieldMappings(
+      requiredMapFields,
+      selectedFieldMappings,
+      setErrors,
+    );
+    if (errorList.length > 0) {
       return;
     }
 
