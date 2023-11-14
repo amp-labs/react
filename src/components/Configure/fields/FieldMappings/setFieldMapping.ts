@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-import { checkFieldsEquality } from '../../state/utils';
+import { isFieldObjectEqual } from '../../state/utils';
 import { ConfigureState } from '../../types';
 
 function setFieldMappingProducer(
@@ -12,7 +12,7 @@ function setFieldMappingProducer(
   draftRequiredMapFields[fieldKey] = newValue;
   const savedFields = draft.savedConfig.requiredMapFields;
   const updatedFields = draftRequiredMapFields;
-  const isModified = !checkFieldsEquality(savedFields, updatedFields);
+  const isModified = !isFieldObjectEqual(savedFields, updatedFields);
   // immer exception if we try to set a value
   // eslint-disable-next-line no-param-reassign
   draft.isRequiredMapFieldsModified = isModified;
