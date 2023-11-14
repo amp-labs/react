@@ -68,12 +68,6 @@ export const getReadObject = (
   objectName: string,
 ) => config?.content?.read?.standardObjects?.[objectName];
 
-// 4a. get value for field
-export function getValueFromConfigExist(config: Config, objectName: string, key: string): boolean {
-  const object = getReadObject(config, objectName);
-  return object?.selectedFields?.[key] || false;
-}
-
 // aux. get field value based on type guard
 export function getFieldKeyValue(field: HydratedIntegrationField): string {
   if (isIntegrationFieldMapping(field)) {

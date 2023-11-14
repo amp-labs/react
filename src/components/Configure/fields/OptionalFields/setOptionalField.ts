@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-import { checkFieldsEquality } from '../../state/utils';
+import { isFieldObjectEqual } from '../../state/utils';
 import { ConfigureState } from '../../types';
 
 function setOptionalFieldProducer(
@@ -15,7 +15,7 @@ function setOptionalFieldProducer(
   }
   const savedFields = draft.savedConfig.optionalFields;
   const updatedFields = draftSelectedOptionalFields;
-  const isModified = !checkFieldsEquality(savedFields, updatedFields);
+  const isModified = !isFieldObjectEqual(savedFields, updatedFields);
   // immer exception if we try to set a value
   // eslint-disable-next-line no-param-reassign
   draft.isOptionalFieldsModified = isModified;

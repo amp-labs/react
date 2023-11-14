@@ -20,7 +20,7 @@ import {
 } from '../utils';
 
 // uses lodash deep equality check to compare two saved fields objects
-export function checkFieldsEquality(
+export function isFieldObjectEqual(
   prevFields: SelectMappingFields | SelectOptionalFields,
   currentFields: SelectMappingFields | SelectOptionalFields,
 ): boolean {
