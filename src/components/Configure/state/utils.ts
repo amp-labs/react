@@ -52,7 +52,6 @@ export function generateConfigurationState(
     requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
-    /// ////////////////////////////////
     // selected state
     selectedOptionalFields: selectedFields,
     selectedFieldMappings,
