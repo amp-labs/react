@@ -1,39 +1,28 @@
 import isEqual from 'lodash.isequal';
 
 import {
-  Config, HydratedIntegrationFieldExistent,
+  Config,
+  HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
   HydratedRevision,
 } from '../../../services/api';
 import {
   ConfigureState,
-  ConfigureStateMappingIntegrationField,
   ObjectConfigurationsState,
-  SavedConfigureFields,
+  SelectMappingFields,
+  SelectOptionalFields,
 } from '../types';
 import {
   generateNavObjects,
   getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
-  getValueFromConfigCustomMapping,
 } from '../utils';
 
-export function createSavedFields(
-  fields: ConfigureStateMappingIntegrationField[] | null | undefined,
-): SavedConfigureFields {
-  const savedFields: SavedConfigureFields = {};
-  fields?.forEach((field) => {
-    const { value } = field;
-    if (value) { savedFields[field.mapToName] = value; }
-  });
-  return savedFields;
-}
-
 // uses lodash deep equality check to compare two saved fields objects
-export function checkFieldsEquality(
-  prevFields: SavedConfigureFields,
-  currentFields: SavedConfigureFields,
+export function isFieldObjectEqual(
+  prevFields: SelectMappingFields | SelectOptionalFields,
+  currentFields: SelectMappingFields | SelectOptionalFields,
 ): boolean {
   return isEqual(prevFields, currentFields);
 }
@@ -43,35 +32,29 @@ export function generateConfigurationState(
   objectName: string,
   config?: Config,
 ): ConfigureState {
+  // refactor this section to be immutable at hydrated revision level
   const object = getStandardObjectFromAction(action, objectName);
   const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
-
-  // todo refactor requiredMapFields to separate form state from hydrated revision
-  // map over requiredMapFields and get value from config
-  const requiredMapFields = object ? getRequiredMapFieldsFromObject(object)
-    ?.map((field) => ({
-      ...field,
-      value: config ? getValueFromConfigCustomMapping(
-        config,
-        objectName,
-        // should only use mapToName for custom mapping fields
-        getFieldKeyValue(field),
-      ) : '',
-    })) as ConfigureStateMappingIntegrationField[] : null; // type hack - TODO fix
+  const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
+  /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
   const selectedFields = config?.content?.read?.standardObjects?.[objectName]?.selectedFields || {};
+  const selectedFieldMappings = config?.content?.read?.standardObjects?.
+    [objectName]?.selectedFieldMappings || {};
 
   const optionalFieldsSaved = { ...selectedFields };
-  const requiredMapFieldsSaved = createSavedFields(requiredMapFields);
+  const requiredMapFieldsSaved = { ...selectedFieldMappings };
 
   return {
     allFields, // from hydrated revision
     requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
-    requiredMapFields, // hydrated revision and form state
+    requiredMapFields, // from hydrated revision
+    // selected state
     selectedOptionalFields: selectedFields,
+    selectedFieldMappings,
     isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
     savedConfig: {
@@ -82,7 +65,7 @@ export function generateConfigurationState(
 }
 
 // resets configure state for single object to hydrated revision values
-export const resetConfigurationState = (
+export const setHydrateConfigState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
   selectedObjectName: string,
@@ -152,64 +135,22 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
  * @returns
  */
 export const generateSelectedFieldMappingsFromConfigureState = (configureState: ConfigureState) => {
-  const { requiredMapFields } = configureState;
-  const requiredMapFieldsConfig = (requiredMapFields || []).reduce((acc, field) => {
-    const key = getFieldKeyValue(field);
-    return {
-      ...acc,
-      [key]: field.value,
-    };
-  }, {});
-  return requiredMapFieldsConfig;
-};
-
-/**
- * returns a new configure state with one of its FieldMappings updated with a new value.
- * @param fieldKey
- * @param value
- * @param configureState
- * @returns
- */
-export const setRequiredCustomMapFieldValue = (
-  fieldKey: string,
-  value: string,
-  configureState: ConfigureState,
-) => {
-  const { requiredMapFields } = configureState;
-  if (requiredMapFields === null) {
-    return { isUpdated: false, newState: configureState };
+  const { selectedFieldMappings: selectedRequiredMapFields } = configureState;
+  // filter out undefined values of selectedRequiredMapFields
+  const selectedRequiredMapFieldsSubmit : Record<string, string> = {};
+  if (selectedRequiredMapFields) {
+    Object.keys(selectedRequiredMapFields).forEach(
+      (key) => {
+        if (selectedRequiredMapFields[key] !== undefined) {
+          selectedRequiredMapFieldsSubmit[key] = selectedRequiredMapFields[key] || '';
+        } else {
+          console.warn(`Error undefined when generating selectedRequiredMapFieldsSubmit for key: ${key}`);
+        }
+      },
+    );
   }
 
-  // flag to know if field was updated
-  let isUpdated = false;
-  const updatedRequiredMapFields = requiredMapFields.map((field) => {
-    // updated field
-    if (field.mapToName === fieldKey) {
-      isUpdated = true;
-      return {
-        ...field,
-        value,
-      };
-    }
-    // else return a copy of the field
-    return { ...field };
-  });
-
-  if (isUpdated) {
-    const savedFields = configureState.savedConfig.requiredMapFields;
-    const updatedFields = createSavedFields(updatedRequiredMapFields);
-    const isModified = !checkFieldsEquality(savedFields, updatedFields);
-
-    const newState = {
-      ...configureState,
-      requiredMapFields: updatedRequiredMapFields,
-      isRequiredMapFieldsModified: isModified,
-    };
-
-    return { isUpdated, newState };
-  }
-
-  return { isUpdated: false, newState: configureState };
+  return selectedRequiredMapFieldsSubmit;
 };
 
 // get configure state of single object

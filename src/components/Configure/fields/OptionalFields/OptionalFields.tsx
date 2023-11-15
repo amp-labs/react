@@ -1,13 +1,13 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
-import { useProject } from '../../../context/ProjectContext';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { checkFieldsEquality, getConfigureState } from '../state/utils';
-import { SelectOptionalFields } from '../types';
-import { isIntegrationFieldMapping } from '../utils';
+import { useProject } from '../../../../context/ProjectContext';
+import { useSelectedObjectName } from '../../ObjectManagementNav';
+import { useConfigureState } from '../../state/ConfigurationStateProvider';
+import { getConfigureState } from '../../state/utils';
+import { isIntegrationFieldMapping } from '../../utils';
+import { FieldHeader } from '../FieldHeader';
 
-import { FieldHeader } from './FieldHeader';
+import { setOptionalField } from './setOptionalField';
 
 export function OptionalFields() {
   const { appName } = useProject();
@@ -20,30 +20,7 @@ export function OptionalFields() {
     const { name, checked } = e.target;
 
     if (selectedObjectName && configureState) {
-      // Update the value property to new checked value
-      const updatedSelectOptionalFields: SelectOptionalFields = {
-        ...selectedOptionalFields,
-        [name]: checked,
-      };
-
-      // removed from check fields if not checked
-      if (!checked) { delete updatedSelectOptionalFields[name]; }
-
-      // Compare saved fields from updated fields
-      const savedOptionalFields = configureState.savedConfig?.optionalFields;
-
-      // Check if the optionalFields are modified
-      const isModified = !checkFieldsEquality(savedOptionalFields, updatedSelectOptionalFields);
-
-      // update state
-      setConfigureState(
-        selectedObjectName,
-        {
-          ...configureState,
-          selectedOptionalFields: updatedSelectOptionalFields,
-          isOptionalFieldsModified: isModified,
-        },
-      );
+      setOptionalField(selectedObjectName, setConfigureState, name, checked);
     }
   };
 

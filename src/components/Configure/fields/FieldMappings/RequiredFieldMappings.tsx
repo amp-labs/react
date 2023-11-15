@@ -6,14 +6,17 @@ import {
 
 import {
   ErrorBoundary, useErrorState,
-} from '../../../context/ErrorContextProvider';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { getConfigureState, setRequiredCustomMapFieldValue } from '../state/utils';
-import { isIntegrationFieldMapping } from '../utils';
+} from '../../../../context/ErrorContextProvider';
+import { useSelectedObjectName } from '../../ObjectManagementNav';
+import { useConfigureState } from '../../state/ConfigurationStateProvider';
+import {
+  getConfigureState,
+} from '../../state/utils';
+import { isIntegrationFieldMapping } from '../../utils';
+import { FieldHeader } from '../FieldHeader';
 
-import { FieldHeader } from './FieldHeader';
 import { FieldMapping } from './FieldMapping';
+import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
   const { selectedObjectName } = useSelectedObjectName();
@@ -28,9 +31,8 @@ export function RequiredFieldMappings() {
       return;
     }
 
-    const { isUpdated, newState } = setRequiredCustomMapFieldValue(name, value, configureState);
-    if (isUpdated && selectedObjectName) {
-      setConfigureState(selectedObjectName, newState);
+    if (selectedObjectName) {
+      setFieldMapping(selectedObjectName, setConfigureState, name, value);
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {

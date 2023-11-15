@@ -7,8 +7,8 @@ import {
 
 import { LoadingIcon } from '../../assets/LoadingIcon';
 
+import { RequiredFieldMappings } from './fields/FieldMappings';
 import { OptionalFields } from './fields/OptionalFields';
-import { RequiredFieldMappings } from './fields/RequiredFieldMappings';
 import { RequiredFields } from './fields/RequiredFields';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
 

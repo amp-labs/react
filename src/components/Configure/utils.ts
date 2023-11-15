@@ -1,4 +1,7 @@
 import {
+  ErrorBoundary,
+} from '../../context/ErrorContextProvider';
+import {
   Config,
   HydratedIntegrationField,
   HydratedIntegrationObject,
@@ -9,6 +12,7 @@ import {
 
 import {
   NavObject,
+  SelectMappingFields,
 } from './types';
 
 /**
@@ -44,10 +48,11 @@ export function getRequiredFieldsFromObject(object: HydratedIntegrationObject)
 
 // 2b. get required custom mapping fields
 export function getRequiredMapFieldsFromObject(object: HydratedIntegrationObject)
-  : HydratedIntegrationField[] | null {
-  return object?.requiredFields?.filter(
+  : IntegrationFieldMapping[] | null {
+  const requiredMapFields = object?.requiredFields?.filter(
     (rf: HydratedIntegrationField) => isIntegrationFieldMapping(rf) && !!rf.mapToName,
-  ) || null;
+  ) || [];
+  return requiredMapFields as IntegrationFieldMapping[]; // type hack
 }
 
 // 3. get optional fields
@@ -62,19 +67,6 @@ export const getReadObject = (
   config: Config,
   objectName: string,
 ) => config?.content?.read?.standardObjects?.[objectName];
-
-// 4a. get value for field
-export function getValueFromConfigExist(config: Config, objectName: string, key: string): boolean {
-  const object = getReadObject(config, objectName);
-  return object?.selectedFields?.[key] || false;
-}
-
-// 4b. get value for custom mapping field
-export function getValueFromConfigCustomMapping(config: Config, objectName: string, key: string)
-  : string {
-  const object = getReadObject(config, objectName);
-  return object?.selectedFieldMappings?.[key] || '';
-}
 
 // aux. get field value based on type guard
 export function getFieldKeyValue(field: HydratedIntegrationField): string {
@@ -99,4 +91,25 @@ export function generateNavObjects(config: Config | undefined, hydratedRevision:
   });
 
   return navObjects;
+}
+
+// validates whether required fields are filled out or throws error
+export function validateFieldMappings(
+  requiredMapFields: IntegrationFieldMapping[] | null,
+  selectedRequiredMapFields: SelectMappingFields | null,
+  setErrors: (boundary: ErrorBoundary, errors: string[]) => void,
+) {
+  // check if fields with requirements are met
+  const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
+    (field) => !selectedRequiredMapFields?.[field?.mapToName],
+  ) || [];
+
+  const errorList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
+  setErrors(ErrorBoundary.MAPPING, errorList);
+
+  // if requires fields are not met, set error fields and return
+  if (fieldsWithRequirementsNotMet?.length) {
+    console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
+  }
+  return { errorList };
 }

@@ -1,6 +1,7 @@
 import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
+import { Draft, produce } from 'immer';
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
@@ -14,7 +15,8 @@ import {
 const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
-  setConfigureState:(objectName: string, configureState: ConfigureState) => void;
+  setConfigureState:(objectName: string, producer: (draft: Draft<ConfigureState>) => void,) => void;
+  resetConfigureState:(objectName: string, configureState: ConfigureState) => void;
   resetPendingConfigurationState:(objectName: string) => void;
 } | undefined>(undefined);
 
@@ -53,7 +55,8 @@ export function ConfigurationProvider(
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     // only reset when objectConfigurationsState does not exist
-    if (hydratedRevision?.content && !loading && config && !objectConfigurationsState) {
+    if (hydratedRevision?.content && !loading
+      && config && !(Object.entries(objectConfigurationsState).length > 0)) {
       resetAllObjectsConfigurationState(
         hydratedRevision,
         config,
@@ -62,12 +65,28 @@ export function ConfigurationProvider(
     }
   }, [hydratedRevision, loading, config, objectConfigurationsState]);
 
-  // set configure state of single object
-  const setConfigureState = useCallback((objectName: string, configureState: ConfigureState) => {
+  // mutate configure state of single object using a producer method
+  const setConfigureState = useCallback((
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void,
+  ) => {
     // consider moving check modified state here
-    setObjectConfigurationsState((prevState) => ({
-      ...prevState,
-      [objectName]: configureState,
+    setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
+      // immer exception when mutating a draft
+      // eslint-disable-next-line no-param-reassign
+      draft[objectName] = produce(draft[objectName], producer);
+    }));
+  }, [setObjectConfigurationsState]);
+
+  // set configure state of single object by assigning a new state
+  const resetConfigureState = useCallback((
+    objectName: string,
+    configureState: ConfigureState,
+  ) => {
+    setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
+    // immer exception when mutating a draft
+    // eslint-disable-next-line no-param-reassign
+      draft[objectName] = configureState;
     }));
   }, [setObjectConfigurationsState]);
 
@@ -75,14 +94,15 @@ export function ConfigurationProvider(
   const resetPendingConfigurationState = useCallback((
     objectName: string,
   ) => {
-    setObjectConfigurationsState((prevObjectsConfigurationsState) => ({
-      ...prevObjectsConfigurationsState,
-      [objectName]: {
-        ...prevObjectsConfigurationsState[objectName],
-        isOptionalFieldsModified: false,
-        isRequiredMapFieldsModified: false,
-      },
-    }));
+    setObjectConfigurationsState(
+      produce((draft) => {
+        // immer exception when mutating a draft
+        // eslint-disable-next-line no-param-reassign
+        draft[objectName].isOptionalFieldsModified = false;
+        // eslint-disable-next-line no-param-reassign
+        draft[objectName].isRequiredMapFieldsModified = false;
+      }),
+    );
   }, [setObjectConfigurationsState]);
 
   const contextValue = useMemo(
@@ -90,9 +110,11 @@ export function ConfigurationProvider(
       objectConfigurationsState,
       setObjectConfigurationsState,
       setConfigureState,
+      resetConfigureState,
       resetPendingConfigurationState,
     }),
-    [objectConfigurationsState, resetPendingConfigurationState, setConfigureState],
+    [objectConfigurationsState,
+      resetConfigureState, resetPendingConfigurationState, setConfigureState],
   );
 
   return (

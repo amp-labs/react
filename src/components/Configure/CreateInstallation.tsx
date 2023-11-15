@@ -16,9 +16,10 @@ import { useProject } from '../../context/ProjectContext';
 import { onSaveCreate } from './actions/onSaveCreate';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState, resetConfigurationState } from './state/utils';
+import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useSelectedObjectName } from './ObjectManagementNav';
+import { validateFieldMappings } from './utils';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -35,7 +36,7 @@ export function CreateInstallation() {
   const { projectId } = useProject();
   const { resetBoundary, setErrors } = useErrorState();
   const {
-    setConfigureState,
+    resetConfigureState,
     objectConfigurationsState,
     resetPendingConfigurationState,
   } = useConfigureState();
@@ -46,15 +47,15 @@ export function CreateInstallation() {
     () => {
       resetBoundary(ErrorBoundary.MAPPING);
       if (hydratedRevision?.content && !loading && selectedObjectName) {
-        resetConfigurationState(
+        setHydrateConfigState(
           hydratedRevision,
           UNDEFINED_CONFIG,
           selectedObjectName,
-          setConfigureState,
+          resetConfigureState,
         );
       }
     },
-    [hydratedRevision, loading, selectedObjectName, setConfigureState, resetBoundary],
+    [resetBoundary, hydratedRevision, loading, selectedObjectName, resetConfigureState],
   );
 
   useEffect(() => {
@@ -66,20 +67,14 @@ export function CreateInstallation() {
 
   const onSave = (e: any) => {
     e.preventDefault();
-
-    const { requiredMapFields } = configureState;
-    const fieldsWithRequirementsNotMet = requiredMapFields?.filter(
-      (field) => !field.value,
-    ) || [];
-
-    const errList = fieldsWithRequirementsNotMet.map((field) => field.mapToName);
-    setErrors(ErrorBoundary.MAPPING, errList);
-
-    // if requires fields are not met, set error fields and return
-    if (fieldsWithRequirementsNotMet?.length) {
-      console.error('required fields not met', fieldsWithRequirementsNotMet.map((field) => field.mapToDisplayName));
-      return;
-    }
+    // check if fields with requirements are met
+    const { requiredMapFields, selectedFieldMappings } = configureState || {};
+    const { errorList } = validateFieldMappings(
+      requiredMapFields,
+      selectedFieldMappings,
+      setErrors,
+    );
+    if (errorList.length > 0) { return; } // skip if there are errors
 
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {
