@@ -8,6 +8,8 @@ src/index.ts
 src/models/BaseConfigContent.ts
 src/models/BaseReadConfig.ts
 src/models/BaseReadConfigStandardObject.ts
+src/models/BaseWriteConfig.ts
+src/models/BaseWriteConfigObject.ts
 src/models/BatchUpsertIntegrationsRequest.ts
 src/models/Config.ts
 src/models/ConfigContent.ts
@@ -30,6 +32,8 @@ src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedIntegrationRead.ts
+src/models/HydratedIntegrationWrite.ts
+src/models/HydratedIntegrationWriteObject.ts
 src/models/HydratedRevision.ts
 src/models/ImportConnectionRequest.ts
 src/models/ImportInstallationRequest.ts
@@ -42,6 +46,8 @@ src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
 src/models/IntegrationRead.ts
+src/models/IntegrationWrite.ts
+src/models/IntegrationWriteObject.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts
 src/models/OperationError.ts
@@ -50,6 +56,7 @@ src/models/Project.ts
 src/models/ProjectMembership.ts
 src/models/ProviderApp.ts
 src/models/Revision.ts
+src/models/SignedUrl.ts
 src/models/UpdateInstallationConfigContent.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts

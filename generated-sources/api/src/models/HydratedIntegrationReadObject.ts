@@ -29,63 +29,63 @@ import {
 /**
  * 
  * @export
- * @interface HydratedIntegrationObject
+ * @interface HydratedIntegrationReadObject
  */
-export interface HydratedIntegrationObject {
+export interface HydratedIntegrationReadObject {
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     objectName: string;
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     displayName: string;
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     destination: string;
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     schedule: string;
     /**
      * 
      * @type {Array<HydratedIntegrationField>}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     requiredFields?: Array<HydratedIntegrationField>;
     /**
      * 
      * @type {Array<HydratedIntegrationField>}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     optionalFields?: Array<HydratedIntegrationField>;
     /**
      * 
      * @type {OptionalFieldsAutoOption}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     optionalFieldsAuto?: OptionalFieldsAutoOption;
     /**
      * This is a list of all fields on the object for a particular SaaS instance. This is used to populate the UI during configuration.
      * @type {Array<HydratedIntegrationField>}
-     * @memberof HydratedIntegrationObject
+     * @memberof HydratedIntegrationReadObject
      */
     allFields?: Array<HydratedIntegrationField>;
 }
 
 /**
- * Check if a given object implements the HydratedIntegrationObject interface.
+ * Check if a given object implements the HydratedIntegrationReadObject interface.
  */
-export function instanceOfHydratedIntegrationObject(value: object): boolean {
+export function instanceOfHydratedIntegrationReadObject(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "displayName" in value;
@@ -95,11 +95,11 @@ export function instanceOfHydratedIntegrationObject(value: object): boolean {
     return isInstance;
 }
 
-export function HydratedIntegrationObjectFromJSON(json: any): HydratedIntegrationObject {
-    return HydratedIntegrationObjectFromJSONTyped(json, false);
+export function HydratedIntegrationReadObjectFromJSON(json: any): HydratedIntegrationReadObject {
+    return HydratedIntegrationReadObjectFromJSONTyped(json, false);
 }
 
-export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationObject {
+export function HydratedIntegrationReadObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationReadObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -116,7 +116,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObject | null): any {
+export function HydratedIntegrationReadObjectToJSON(value?: HydratedIntegrationReadObject | null): any {
     if (value === undefined) {
         return undefined;
     }
