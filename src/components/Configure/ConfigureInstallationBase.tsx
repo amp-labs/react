@@ -10,7 +10,10 @@ import { LoadingIcon } from '../../assets/LoadingIcon';
 import { RequiredFieldMappings } from './fields/FieldMappings';
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredFields } from './fields/RequiredFields';
+import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
+import { getConfigureState } from './state/utils';
+import { useSelectedObjectName } from './ObjectManagementNav';
 
 interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
@@ -23,6 +26,12 @@ export function ConfigureInstallationBase(
   { onSave, onReset, isLoading }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading } = useHydratedRevision();
+  const { selectedObjectName } = useSelectedObjectName();
+  const { objectConfigurationsState } = useConfigureState();
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const isDisabled = loading || isLoading || !configureState
+   || !selectedObjectName
+    || (!configureState.isOptionalFieldsModified && !configureState.isRequiredMapFieldsModified);
 
   return (
     isLoading ? <LoadingIcon />
@@ -33,14 +42,14 @@ export function ConfigureInstallationBase(
               backgroundColor="gray.800"
               _hover={{ backgroundColor: 'gray.600' }}
               type="submit"
-              isDisabled={loading || isLoading}
+              isDisabled={isDisabled}
             >Save
             </Button>
             <Button
               backgroundColor="gray.200"
               color="blackAlpha.700"
               _hover={{ backgroundColor: 'gray.300' }}
-              isDisabled={loading || isLoading}
+              isDisabled={isDisabled}
               onClick={onReset}
             >Reset
             </Button>
