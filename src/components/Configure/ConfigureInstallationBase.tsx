@@ -29,9 +29,9 @@ export function ConfigureInstallationBase(
   const { selectedObjectName } = useSelectedObjectName();
   const { objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  const isDisabled = loading || isLoading || !configureState
-   || !selectedObjectName
-    || (!configureState.isOptionalFieldsModified && !configureState.isRequiredMapFieldsModified);
+  const isPending = configureState.isOptionalFieldsModified
+  || configureState.isRequiredMapFieldsModified;
+  const isDisabled = loading || isLoading || !configureState || !selectedObjectName || !isPending;
 
   return (
     isLoading ? <LoadingIcon />
