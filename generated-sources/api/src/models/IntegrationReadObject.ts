@@ -29,51 +29,51 @@ import {
 /**
  * 
  * @export
- * @interface IntegrationObject
+ * @interface IntegrationReadObject
  */
-export interface IntegrationObject {
+export interface IntegrationReadObject {
     /**
      * 
      * @type {string}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     objectName: string;
     /**
      * 
      * @type {string}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     destination: string;
     /**
      * 
      * @type {string}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     schedule: string;
     /**
      * 
      * @type {Array<IntegrationField>}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     requiredFields?: Array<IntegrationField>;
     /**
      * 
      * @type {Array<IntegrationField>}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     optionalFields?: Array<IntegrationField>;
     /**
      * 
      * @type {OptionalFieldsAutoOption}
-     * @memberof IntegrationObject
+     * @memberof IntegrationReadObject
      */
     optionalFieldsAuto?: OptionalFieldsAutoOption;
 }
 
 /**
- * Check if a given object implements the IntegrationObject interface.
+ * Check if a given object implements the IntegrationReadObject interface.
  */
-export function instanceOfIntegrationObject(value: object): boolean {
+export function instanceOfIntegrationReadObject(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "destination" in value;
@@ -82,11 +82,11 @@ export function instanceOfIntegrationObject(value: object): boolean {
     return isInstance;
 }
 
-export function IntegrationObjectFromJSON(json: any): IntegrationObject {
-    return IntegrationObjectFromJSONTyped(json, false);
+export function IntegrationReadObjectFromJSON(json: any): IntegrationReadObject {
+    return IntegrationReadObjectFromJSONTyped(json, false);
 }
 
-export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationObject {
+export function IntegrationReadObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationReadObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -101,7 +101,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
+export function IntegrationReadObjectToJSON(value?: IntegrationReadObject | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -16,42 +16,42 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface IntegrationFieldExistent
+ * @interface IntegrationWriteObject
  */
-export interface IntegrationFieldExistent {
+export interface IntegrationWriteObject {
     /**
      * 
      * @type {string}
-     * @memberof IntegrationFieldExistent
+     * @memberof IntegrationWriteObject
      */
-    fieldName: string;
+    objectName: string;
 }
 
 /**
- * Check if a given object implements the IntegrationFieldExistent interface.
+ * Check if a given object implements the IntegrationWriteObject interface.
  */
-export function instanceOfIntegrationFieldExistent(value: object): boolean {
+export function instanceOfIntegrationWriteObject(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "fieldName" in value;
+    isInstance = isInstance && "objectName" in value;
 
     return isInstance;
 }
 
-export function IntegrationFieldExistentFromJSON(json: any): IntegrationFieldExistent {
-    return IntegrationFieldExistentFromJSONTyped(json, false);
+export function IntegrationWriteObjectFromJSON(json: any): IntegrationWriteObject {
+    return IntegrationWriteObjectFromJSONTyped(json, false);
 }
 
-export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationFieldExistent {
+export function IntegrationWriteObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationWriteObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'fieldName': json['fieldName'],
+        'objectName': json['objectName'],
     };
 }
 
-export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent | null): any {
+export function IntegrationWriteObjectToJSON(value?: IntegrationWriteObject | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +60,7 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
     }
     return {
         
-        'fieldName': value.fieldName,
+        'objectName': value.objectName,
     };
 }
 

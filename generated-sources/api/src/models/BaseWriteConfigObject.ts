@@ -16,42 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface IntegrationFieldExistent
+ * @interface BaseWriteConfigObject
  */
-export interface IntegrationFieldExistent {
+export interface BaseWriteConfigObject {
     /**
-     * 
+     * The name of the object to write to.
      * @type {string}
-     * @memberof IntegrationFieldExistent
+     * @memberof BaseWriteConfigObject
      */
-    fieldName: string;
+    objectName?: string;
 }
 
 /**
- * Check if a given object implements the IntegrationFieldExistent interface.
+ * Check if a given object implements the BaseWriteConfigObject interface.
  */
-export function instanceOfIntegrationFieldExistent(value: object): boolean {
+export function instanceOfBaseWriteConfigObject(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "fieldName" in value;
 
     return isInstance;
 }
 
-export function IntegrationFieldExistentFromJSON(json: any): IntegrationFieldExistent {
-    return IntegrationFieldExistentFromJSONTyped(json, false);
+export function BaseWriteConfigObjectFromJSON(json: any): BaseWriteConfigObject {
+    return BaseWriteConfigObjectFromJSONTyped(json, false);
 }
 
-export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationFieldExistent {
+export function BaseWriteConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseWriteConfigObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'fieldName': json['fieldName'],
+        'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
     };
 }
 
-export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent | null): any {
+export function BaseWriteConfigObjectToJSON(value?: BaseWriteConfigObject | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +59,7 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
     }
     return {
         
-        'fieldName': value.fieldName,
+        'objectName': value.objectName,
     };
 }
 

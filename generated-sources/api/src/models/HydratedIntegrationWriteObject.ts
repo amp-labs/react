@@ -16,50 +16,50 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface HydratedIntegrationFieldExistent
+ * @interface HydratedIntegrationWriteObject
  */
-export interface HydratedIntegrationFieldExistent {
+export interface HydratedIntegrationWriteObject {
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof HydratedIntegrationWriteObject
      */
-    fieldName: string;
+    objectName: string;
     /**
      * 
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof HydratedIntegrationWriteObject
      */
     displayName: string;
 }
 
 /**
- * Check if a given object implements the HydratedIntegrationFieldExistent interface.
+ * Check if a given object implements the HydratedIntegrationWriteObject interface.
  */
-export function instanceOfHydratedIntegrationFieldExistent(value: object): boolean {
+export function instanceOfHydratedIntegrationWriteObject(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "fieldName" in value;
+    isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "displayName" in value;
 
     return isInstance;
 }
 
-export function HydratedIntegrationFieldExistentFromJSON(json: any): HydratedIntegrationFieldExistent {
-    return HydratedIntegrationFieldExistentFromJSONTyped(json, false);
+export function HydratedIntegrationWriteObjectFromJSON(json: any): HydratedIntegrationWriteObject {
+    return HydratedIntegrationWriteObjectFromJSONTyped(json, false);
 }
 
-export function HydratedIntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationFieldExistent {
+export function HydratedIntegrationWriteObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationWriteObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'fieldName': json['fieldName'],
+        'objectName': json['objectName'],
         'displayName': json['displayName'],
     };
 }
 
-export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrationFieldExistent | null): any {
+export function HydratedIntegrationWriteObjectToJSON(value?: HydratedIntegrationWriteObject | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -68,7 +68,7 @@ export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrati
     }
     return {
         
-        'fieldName': value.fieldName,
+        'objectName': value.objectName,
         'displayName': value.displayName,
     };
 }
