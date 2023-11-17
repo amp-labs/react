@@ -13,6 +13,7 @@ import { NavObject } from '../types';
 import { generateNavObjects } from '../utils';
 
 import { NavObjectItem } from './NavObjectItem';
+import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
 // Create a context for the selected navObject's name
 const SelectedObjectNameContext = createContext<string | null | undefined>(null);
@@ -33,7 +34,12 @@ type ObjectManagementNavProps = {
 };
 
 function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject | undefined {
-  return navObjects?.[tabIndex];
+  if (navObjects?.[tabIndex]) {
+    return navObjects[tabIndex];
+  } if (tabIndex > navObjects.length - 1) {
+    return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
+  }
+  return undefined;
 }
 
 // note: when the object key exists in the config; the user has already completed the object before
@@ -85,6 +91,12 @@ export function ObjectManagementNav({
                   }
                 />
               ))}
+              {installation && (
+              <UninstallInstallation
+                key="uninstall-intallation"
+                text="Uninstall"
+              />
+              )}
             </Tabs>
           )}
         </Box>
