@@ -7,7 +7,7 @@ export function UninstallContent() {
         configuration will be lost, and you app may stop working.
       </div>
       {/* todo create warning variants */}
-      <Button>Uninstall</Button>
+      <Button variant="warning">Uninstall</Button>
     </Stack>
   );
 }

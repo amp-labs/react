@@ -21,9 +21,8 @@ export const UninstallInstallation = forwardRef<HTMLButtonElement, NavObjectItem
 
     return (
       <Button
-        __css={styles.redTab}
+        __css={styles.warningTab}
         {...tabProps}
-        variant="outline"
         minHeight={15}
       >
         <Box

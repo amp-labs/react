@@ -1,5 +1,7 @@
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from '@chakra-ui/react';
 
+import { buttonVariants } from './Button';
+
 const customTheme = extendTheme({
   components: {
     Tabs: {
@@ -20,8 +22,8 @@ const customTheme = extendTheme({
             },
           },
         },
-        // todo: create variants
-        redTab: {
+        // consider creating a warning variant tab
+        warningTab: {
           width: '100%',
           borderRadius: '4px',
           _hover: {
@@ -38,6 +40,9 @@ const customTheme = extendTheme({
           },
         },
       },
+    },
+    Button: {
+      variants: buttonVariants,
     },
   },
 });
