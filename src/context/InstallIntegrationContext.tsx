@@ -24,6 +24,7 @@ interface InstallIntegrationContextValue {
   groupName?: string;
   installation?: Installation;
   setInstallation: (installationObj: Installation) => void;
+  resetInstallations: () => void;
 }
 // Create a context to pass down the props
 const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -36,6 +37,7 @@ const InstallIntegrationContext = createContext<InstallIntegrationContextValue>(
   groupName: '',
   installation: undefined,
   setInstallation: () => { },
+  resetInstallations: () => { },
 });
 
 // Create a custom hook to access the props
@@ -87,28 +89,37 @@ export function InstallIntegrationProvider({
     setInstallations([installationObj]);
   }, [setInstallations]);
 
+  const resetInstallations = useCallback(
+    () => {
+      if (integrationObj?.id) {
+      // check if installation exists on selected integration
+        api().listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
+          headers: {
+            'X-Api-Key': apiKey ?? '',
+          },
+        })
+          .then((_installations) => {
+            setLoadingState(false);
+            setInstallations(_installations || []);
+          })
+          .catch((err) => {
+            setError(ErrorBoundary.INSTALLATION_LIST, integrationObj.id);
+            setLoadingState(false);
+            console.error('Error retrieving installation information: ', err);
+          });
+      }
+    },
+    [integrationObj, projectId, apiKey, setError, groupRef],
+  );
+
   const integrationErrorKey: string = integrationObj?.id || '';
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
-    if (integrationObj?.id) {
-      // check if installation exists on selected integration
-      api().listInstallations({ projectId, integrationId: integrationObj.id, groupRef }, {
-        headers: {
-          'X-Api-Key': apiKey ?? '',
-        },
-      })
-        .then((_installations) => {
-          setLoadingState(false);
-          setInstallations(_installations || []);
-        })
-        .catch((err) => {
-          setError(ErrorBoundary.INSTALLATION_LIST, integrationObj.id);
-          setLoadingState(false);
-          console.error('Error retrieving installation information: ', err);
-        });
+    if (!installation || !installations?.length) {
+      resetInstallations();
     }
-  }, [projectId, integrationObj?.id, apiKey, groupRef, setError]);
+  }, [resetInstallations, installation, installations]);
 
   const props = useMemo(() => ({
     integrationId: integrationObj?.id || '',
@@ -120,8 +131,9 @@ export function InstallIntegrationProvider({
     groupName,
     installation,
     setInstallation,
+    resetInstallations,
   }), [integrationObj, consumerRef, consumerName, groupRef,
-    groupName, installation, setInstallation]);
+    groupName, installation, setInstallation, resetInstallations]);
 
   return (
     isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey)) ? <ErrorTextBox message={`Error retrieving installation information for integration "${integrationObj?.name || 'unknown'}"`} /> : (
