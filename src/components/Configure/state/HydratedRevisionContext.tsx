@@ -8,7 +8,6 @@ import {
   ErrorBoundary, useErrorState,
 } from '../../../context/ErrorContextProvider';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useIntegrationList } from '../../../context/IntegrationListContext';
 import { api, HydratedRevision } from '../../../services/api';
 import { ErrorTextBox } from '../ErrorTextBox';
 
@@ -42,7 +41,6 @@ export function HydratedRevisionProvider({
   children,
 }: HydratedRevisionProviderProps) {
   const { selectedConnection } = useConnections();
-  const { integrations } = useIntegrationList();
   const { integrationId, integrationObj } = useInstallIntegrationProps();
 
   const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
@@ -90,7 +88,6 @@ export function HydratedRevisionProvider({
     revisionId,
     connectionId,
     apiKey,
-    integrations,
     removeError,
     setError,
     errorIntegrationIdentifier]);

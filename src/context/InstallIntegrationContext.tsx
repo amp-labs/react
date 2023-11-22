@@ -116,10 +116,8 @@ export function InstallIntegrationProvider({
 
   // check if integration has been installed in AmpersandProvider
   useEffect(() => {
-    if (!installation || !installations?.length) {
-      resetInstallations();
-    }
-  }, [resetInstallations, installation, installations]);
+    resetInstallations();
+  }, [resetInstallations]);
 
   const props = useMemo(() => ({
     integrationId: integrationObj?.id || '',
