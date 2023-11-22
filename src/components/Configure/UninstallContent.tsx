@@ -23,7 +23,7 @@ export function UninstallContent() {
           { projectId, integrationId, installationId: installation.id },
         );
         resetInstallations();
-        console.log('successfully uninstalled installation: ', installation.id);
+        console.warn('successfully uninstalled installation: ', installation.id);
       } catch (e) {
         console.error('error uninstalling installation', e);
       } finally {
