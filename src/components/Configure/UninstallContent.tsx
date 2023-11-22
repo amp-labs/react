@@ -35,12 +35,12 @@ export function UninstallContent() {
   const buttonContent = loading ? 'Uninstalling...' : 'Yes, uninstall';
   const content = installation?.id ? `Once you uninstall this integration with Salesforce, all of your current historical
   configuration will be lost, and you app may stop working.`
-    : 'The uninstallation process was successful.';
+    : "You've successfully uninstalled the integration.";
 
   return (
     <Stack>
       <div>{content}</div>
-      {/* todo create warning variants */}
+
       { installation?.id && (
       <Button onClick={onDelete} variant="warning" isDisabled={isDisabled}>
         {buttonContent}
