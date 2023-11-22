@@ -41,9 +41,11 @@ export function UninstallContent() {
     <Stack>
       <div>{content}</div>
       {/* todo create warning variants */}
+      { installation?.id && (
       <Button onClick={onDelete} variant="warning" isDisabled={isDisabled}>
         {buttonContent}
       </Button>
+      )}
     </Stack>
   );
 }
