@@ -10,10 +10,12 @@ import { LoadingIcon } from '../../assets/LoadingIcon';
 import { RequiredFieldMappings } from './fields/FieldMappings';
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredFields } from './fields/RequiredFields';
+import { UNINSTALL_INSTALLATION_CONST } from './ObjectManagementNav/UninstallInstallation';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
 import { getConfigureState } from './state/utils';
 import { useSelectedObjectName } from './ObjectManagementNav';
+import { UninstallContent } from './UninstallContent';
 
 interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
@@ -32,6 +34,7 @@ export function ConfigureInstallationBase(
   const isPending = configureState?.isOptionalFieldsModified
   || configureState?.isRequiredMapFieldsModified;
   const isDisabled = loading || isLoading || !configureState || !selectedObjectName || !isPending;
+  const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
   return (
     isLoading ? <LoadingIcon />
@@ -67,13 +70,14 @@ export function ConfigureInstallationBase(
             overflowY="scroll"
           >
             {loading && <LoadingIcon />}
-            {hydratedRevision && (
+            {hydratedRevision && !isUninstall && (
               <>
                 <RequiredFields />
                 <RequiredFieldMappings />
                 <OptionalFields />
               </>
             )}
+            {!loading && isUninstall && <UninstallContent />}
           </Box>
         </form>
       )
