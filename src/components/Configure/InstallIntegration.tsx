@@ -8,7 +8,7 @@ import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 import { CreateInstallation } from './CreateInstallation';
 import { ErrorTextBox } from './ErrorTextBox';
 import { ObjectManagementNav } from './ObjectManagementNav';
-import { ProtectedInstallIntegrationLayout } from './ProtectedConnectionLayout';
+import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
 import { UpdateInstallation } from './UpdateInstallation';
 
 // todo : add the install integration provider to supply these properties
@@ -59,8 +59,13 @@ export function InstallIntegration(
       groupRef={groupRef}
       groupName={groupName}
     >
-      <ConnectionsProvider projectId={projectId}>
-        <ProtectedInstallIntegrationLayout>
+      <ConnectionsProvider groupRef={groupRef}>
+        <ProtectedConnectionLayout
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        >
           <HydratedRevisionProvider projectId={projectId}>
             <ConfigurationProvider>
               <ObjectManagementNav>
@@ -68,9 +73,8 @@ export function InstallIntegration(
               </ObjectManagementNav>
             </ConfigurationProvider>
           </HydratedRevisionProvider>
-        </ProtectedInstallIntegrationLayout>
+        </ProtectedConnectionLayout>
       </ConnectionsProvider>
     </InstallIntegrationProvider>
-
   );
 }

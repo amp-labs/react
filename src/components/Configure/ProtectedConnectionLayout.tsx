@@ -6,7 +6,7 @@ import { useInstallIntegrationProps } from '../../context/InstallIntegrationCont
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
 interface ProtectedConnectionLayoutProps {
-  provider: string,
+  provider?: string,
   consumerRef: string,
   consumerName?: string,
   groupRef: string,
@@ -25,6 +25,10 @@ export function ProtectedConnectionLayout({
     }
   }, [connections, selectedConnection, setSelectedConnection]);
 
+  const { provider: providerFromProps } = useInstallIntegrationProps();
+  if (!provider && !providerFromProps) {
+    throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');
+  }
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
@@ -40,31 +44,5 @@ export function ProtectedConnectionLayout({
   }
   return (
     <div>Unsupported provider</div>
-  );
-}
-
-interface ProtectedInstallIntegrationLayoutProps {
-  children: JSX.Element,
-}
-
-// If connection does not exist, render OAuth flow, otherwise render children.
-export function ProtectedInstallIntegrationLayout(
-  { children }: ProtectedInstallIntegrationLayoutProps,
-) {
-  const {
-    consumerRef, consumerName, groupRef, groupName,
-  } = useInstallIntegrationProps();
-
-  // TODO: get the provider from the integration.
-  return (
-    <ProtectedConnectionLayout
-      provider="salesforce"
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-    >
-      {children}
-    </ProtectedConnectionLayout>
   );
 }
