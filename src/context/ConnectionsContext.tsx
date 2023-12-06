@@ -31,7 +31,7 @@ export const useConnections = (): ConnectionsContextValue => {
   const context = useContext(ConnectionsContext);
 
   if (!context) {
-    throw new Error('useConnections must be used within a ConnectionsListProvider');
+    throw new Error('useConnections must be used within a ConnectionsProvider');
   }
 
   return context;

@@ -1,18 +1,21 @@
 import { useEffect } from 'react';
 
+import { PROVIDER_SALESFORCE } from '../../constants';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
 
-interface ConfigureIntegrationBaseProps {
+interface ProtectedConnectionLayoutProps {
+  provider: string,
+  consumerRef: string,
+  consumerName?: string,
+  groupRef: string,
+  groupName?: string,
   children: JSX.Element,
 }
-
-// if connection does not exist, render SalesforceOauthFlow
-export function ProtectedConnectionLayout({ children }: ConfigureIntegrationBaseProps) {
-  const {
-    consumerRef, consumerName, groupRef, groupName,
-  } = useInstallIntegrationProps();
+export function ProtectedConnectionLayout({
+  provider, consumerRef, consumerName, groupRef, groupName, children,
+}: ProtectedConnectionLayoutProps) {
   const { selectedConnection, setSelectedConnection, connections } = useConnections();
 
   useEffect(() => {
@@ -25,13 +28,43 @@ export function ProtectedConnectionLayout({ children }: ConfigureIntegrationBase
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
-  // Require user to login to Saleforce if there are no connections yet.
+  if (provider === PROVIDER_SALESFORCE) {
+    return (
+      <SalesforceOauthFlow
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+      />
+    );
+  }
   return (
-    <SalesforceOauthFlow
+    <div>Unsupported provider</div>
+  );
+}
+
+interface ProtectedInstallIntegrationLayoutProps {
+  children: JSX.Element,
+}
+
+// If connection does not exist, render OAuth flow, otherwise render children.
+export function ProtectedInstallIntegrationLayout(
+  { children }: ProtectedInstallIntegrationLayoutProps,
+) {
+  const {
+    consumerRef, consumerName, groupRef, groupName,
+  } = useInstallIntegrationProps();
+
+  // TODO: get the provider from the integration.
+  return (
+    <ProtectedConnectionLayout
+      provider="salesforce"
       consumerRef={consumerRef}
       consumerName={consumerName}
       groupRef={groupRef}
       groupName={groupName}
-    />
+    >
+      {children}
+    </ProtectedConnectionLayout>
   );
 }

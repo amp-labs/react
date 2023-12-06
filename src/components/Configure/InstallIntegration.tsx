@@ -8,7 +8,7 @@ import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 import { CreateInstallation } from './CreateInstallation';
 import { ErrorTextBox } from './ErrorTextBox';
 import { ObjectManagementNav } from './ObjectManagementNav';
-import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
+import { ProtectedInstallIntegrationLayout } from './ProtectedConnectionLayout';
 import { UpdateInstallation } from './UpdateInstallation';
 
 // todo : add the install integration provider to supply these properties
@@ -39,7 +39,6 @@ interface InstallIntegrationProps {
   groupName?: string,
 }
 
-// TODO consider creating an integration obj context
 export function InstallIntegration(
   {
     integration, consumerRef, consumerName, groupRef, groupName,
@@ -61,7 +60,7 @@ export function InstallIntegration(
       groupName={groupName}
     >
       <ConnectionsProvider projectId={projectId}>
-        <ProtectedConnectionLayout>
+        <ProtectedInstallIntegrationLayout>
           <HydratedRevisionProvider projectId={projectId}>
             <ConfigurationProvider>
               <ObjectManagementNav>
@@ -69,7 +68,7 @@ export function InstallIntegration(
               </ObjectManagementNav>
             </ConfigurationProvider>
           </HydratedRevisionProvider>
-        </ProtectedConnectionLayout>
+        </ProtectedInstallIntegrationLayout>
       </ConnectionsProvider>
     </InstallIntegrationProvider>
 
