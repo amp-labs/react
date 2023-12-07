@@ -16,7 +16,6 @@ function ConnectedSuccessBox({ provider }: ConnectedSuccessBoxProps) {
 
   return (
     <Container>
-      {/* TODO: create a "ShadowedBox" component that has the shadow and border styling. */}
       <Box p={8} maxWidth="600px" minHeight="290px" borderWidth={1} borderRadius={8} boxShadow="lg" margin="auto" marginTop="40px" bgColor="white" paddingTop="100px">
         <Box width="100%" display="flex" alignContent="center" justifyContent="center">
           <Box margin="auto">{CheckMarkIcon}</Box>
