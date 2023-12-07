@@ -32,7 +32,7 @@ export function ProtectedConnectionLayout({
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
-  if (provider === PROVIDER_SALESFORCE) {
+  if (provider === PROVIDER_SALESFORCE || providerFromProps === PROVIDER_SALESFORCE) {
     return (
       <SalesforceOauthFlow
         consumerRef={consumerRef}
