@@ -1,12 +1,11 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
-  Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Link,
+  Box, Container,
 } from '@chakra-ui/react';
 
 import { ConnectionsProvider } from '../../context/ConnectionsContext';
-import { ProtectedConnectionLayout } from '../Configure/ProtectedConnectionLayout';
 import { useProject } from '../../context/ProjectContext';
 import { capitalize } from '../../utils';
+import { ProtectedConnectionLayout } from '../Configure/ProtectedConnectionLayout';
 
 interface ConnectProviderProps {
   provider: string,
