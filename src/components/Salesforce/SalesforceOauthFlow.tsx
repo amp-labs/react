@@ -14,7 +14,7 @@ import { PROVIDER_SALESFORCE } from '../../constants';
 import { useApiKey } from '../../context/ApiKeyProvider';
 import { useProject } from '../../context/ProjectContext';
 import { api, ProviderApp } from '../../services/api';
-import OAuthPopup from '../OAuthPopup/OAuthPopup';
+import OAuthPopup from '../Connect/OAuthPopup';
 
 interface OAuthErrorAlertProps {
   error: string | null;

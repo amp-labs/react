@@ -39,7 +39,6 @@ interface InstallIntegrationProps {
   groupName?: string,
 }
 
-// TODO consider creating an integration obj context
 export function InstallIntegration(
   {
     integration, consumerRef, consumerName, groupRef, groupName,
@@ -60,8 +59,13 @@ export function InstallIntegration(
       groupRef={groupRef}
       groupName={groupName}
     >
-      <ConnectionsProvider projectId={projectId}>
-        <ProtectedConnectionLayout>
+      <ConnectionsProvider groupRef={groupRef}>
+        <ProtectedConnectionLayout
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        >
           <HydratedRevisionProvider projectId={projectId}>
             <ConfigurationProvider>
               <ObjectManagementNav>
@@ -72,6 +76,5 @@ export function InstallIntegration(
         </ProtectedConnectionLayout>
       </ConnectionsProvider>
     </InstallIntegrationProvider>
-
   );
 }

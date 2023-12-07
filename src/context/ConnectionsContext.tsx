@@ -12,6 +12,7 @@ import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContext';
+import { useProject } from './ProjectContext';
 
 interface ConnectionsContextValue {
   connections: Connection[] | null;
@@ -31,28 +32,37 @@ export const useConnections = (): ConnectionsContextValue => {
   const context = useContext(ConnectionsContext);
 
   if (!context) {
-    throw new Error('useConnections must be used within a ConnectionsListProvider');
+    throw new Error('useConnections must be used within a ConnectionsProvider');
   }
 
   return context;
 };
 
 type ConnectionsProviderProps = {
-  projectId: string;
+  provider?: string,
+  groupRef: string,
   children?: React.ReactNode;
 };
 
 export function ConnectionsProvider({
-  projectId,
-  children,
+  provider, groupRef, children,
 }: ConnectionsProviderProps) {
   const apiKey = useApiKey();
-  const { groupRef, provider } = useInstallIntegrationProps();
+  const { projectId } = useProject();
 
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
   const { setError, isError } = useErrorState();
+  const { provider: providerFromProps } = useInstallIntegrationProps();
+
+  if (!projectId) {
+    throw new Error('ConnectionsProvider must be used within AmpersandProvider');
+  }
+
+  if (!provider && !providerFromProps) {
+    throw new Error('ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider');
+  }
 
   useEffect(() => {
     api().listConnections({ projectId, groupRef, provider }, {
@@ -84,6 +94,5 @@ export function ConnectionsProvider({
           {isLoading ? <LoadingIcon /> : children}
         </ConnectionsContext.Provider>
       )
-
   );
 }
