@@ -25,9 +25,7 @@ function OAuthErrorAlert({ error }: OAuthErrorAlertProps) {
     return (
       <Alert status="error" marginTop="2em">
         <AlertIcon />
-        <AlertDescription>
-          {error}
-        </AlertDescription>
+        <AlertDescription>{error}</AlertDescription>
       </Alert>
     );
   }
@@ -96,9 +94,9 @@ const fetchOAuthCallbackURL = async (
   workspace: string,
   consumerRef: string,
   groupRef: string,
-  consumerName?: string,
-  groupName?: string,
-  apiKey?: string,
+  consumerName: string,
+  groupName: string,
+  apiKey: string,
   provider = PROVIDER_SALESFORCE,
 ): Promise<string> => {
   const providerApps = await api().listProviderApps({ projectId }, {
@@ -146,13 +144,14 @@ function SalesforceOauthFlow({
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const isButtonDisabled = workspace.length === 0;
+  const provider = PROVIDER_SALESFORCE;
 
   // 1. fetch provider apps
   // 2. find matching app to provider
   // 3. fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
-    if (workspace) {
+    if (workspace && consumerName && groupName && apiKey) {
       try {
         const url = await fetchOAuthCallbackURL(
           projectId,
@@ -162,12 +161,15 @@ function SalesforceOauthFlow({
           consumerName,
           groupName,
           apiKey,
+          provider,
         );
         setOAuthCallbackURL(url);
       } catch (err: any) {
         console.error(err);
         setError(err.message ?? 'Unexpected error');
       }
+    } else {
+      setError('missing required fields');
     }
   };
 
