@@ -1,4 +1,4 @@
-# Ampersand React library
+# Ampersand React Library
 
 ## Overview
 Ampersand is a config-first platform for SaaS builders who are creating user-facing integrations.
