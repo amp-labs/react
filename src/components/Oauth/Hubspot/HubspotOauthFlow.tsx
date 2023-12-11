@@ -64,7 +64,7 @@ export function HubspotOauthFlow({
 
   return (
     <OAuthPopup
-      title="Connect to Salesforce"
+      title="Connect to Hubspot"
       url={oAuthCallbackURL}
       onClose={onClose}
     >
