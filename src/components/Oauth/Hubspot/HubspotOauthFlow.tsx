@@ -1,6 +1,5 @@
 /**
  * Hubspot landing component, which then will launch to create an OAuth connection to Hubspot.
- * that Salesforce instance.
  */
 
 import { useCallback, useState } from 'react';
