@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../constants';
+import { PROVIDER_HUBSPOT, PROVIDER_SALESFORCE } from '../../constants';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import SalesforceOauthFlow from '../Salesforce/SalesforceOauthFlow';
+import { HubspotOauthFlow } from '../Oauth/Hubspot/HubspotOauthFlow';
+import { SalesforceOauthFlow } from '../Oauth/Salesforce/SalesforceOauthFlow';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -42,6 +43,18 @@ export function ProtectedConnectionLayout({
       />
     );
   }
+
+  if (provider === PROVIDER_HUBSPOT || providerFromProps === PROVIDER_HUBSPOT) {
+    return (
+      <HubspotOauthFlow
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+      />
+    );
+  }
+
   return (
     <div>Unsupported provider</div>
   );
