@@ -7,6 +7,7 @@ import {
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
+import { capitalize } from '../../../utils';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { NavObject } from '../types';
@@ -46,7 +47,7 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
 export function ObjectManagementNav({
   children,
 }: ObjectManagementNavProps) {
-  const { installation } = useInstallIntegrationProps();
+  const { installation, provider } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useConfigureState();
   const config = installation?.config;
@@ -72,7 +73,7 @@ export function ObjectManagementNav({
         minHeight="100%"
       >
         <Box width="20rem">
-          <Text>Salesforce integration</Text>
+          <Text>{capitalize(provider)} integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {navObjects && (
             <Tabs
