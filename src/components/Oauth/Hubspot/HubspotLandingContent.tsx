@@ -1,7 +1,6 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
-  Box, Button, Container, Flex, FormControl,
-  FormLabel, Heading, Input, Link, Text,
+  Box, Button, Container, FormControl,
+  FormLabel, Heading,
 } from '@chakra-ui/react';
 
 import { OAuthErrorAlert } from '../OAuthErrorAlert';

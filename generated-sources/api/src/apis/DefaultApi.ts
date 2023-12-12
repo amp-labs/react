@@ -166,6 +166,11 @@ export interface GetHydratedRevisionRequest {
     connectionId: string;
 }
 
+export interface GetOperationRequest {
+    projectId: string;
+    operationId: string;
+}
+
 export interface GetProjectRequest {
     projectId: string;
 }
@@ -483,7 +488,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary get a connection
+     * @summary Get a connection
      * @param {string} projectId 
      * @param {string} connectionId 
      * @param {*} [options] Override http request option.
@@ -493,7 +498,7 @@ export interface DefaultApiInterface {
     getConnectionRaw(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * get a connection
+     * Get a connection
      */
     getConnection(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
 
@@ -514,6 +519,22 @@ export interface DefaultApiInterface {
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      */
     getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision>;
+
+    /**
+     * 
+     * @summary Get an operation
+     * @param {string} projectId 
+     * @param {string} operationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    getOperationRaw(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Operation>>;
+
+    /**
+     * Get an operation
+     */
+    getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation>;
 
     /**
      * 
@@ -1294,7 +1315,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * get a connection
+     * Get a connection
      */
     async getConnectionRaw(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
@@ -1320,7 +1341,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * get a connection
+     * Get a connection
      */
     async getConnection(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.getConnectionRaw(requestParameters, initOverrides);
@@ -1370,6 +1391,40 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
      */
     async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision> {
         const response = await this.getHydratedRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an operation
+     */
+    async getOperationRaw(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Operation>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getOperation.');
+        }
+
+        if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
+            throw new runtime.RequiredError('operationId','Required parameter requestParameters.operationId was null or undefined when calling getOperation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/operations/{operationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an operation
+     */
+    async getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation> {
+        const response = await this.getOperationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

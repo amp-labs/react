@@ -45,13 +45,13 @@ export function SalesforceOauthFlow({
       try {
         const url = await fetchOAuthCallbackURL(
           projectId,
-          workspace,
           consumerRef,
           groupRef,
           consumerName,
           groupName,
           apiKey,
           provider,
+          workspace,
         );
         setOAuthCallbackURL(url);
       } catch (err: any) {

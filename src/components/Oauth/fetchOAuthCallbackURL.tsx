@@ -3,13 +3,13 @@ import { api, ProviderApp } from '../../services/api';
 
 export const fetchOAuthCallbackURL = async (
   projectId: string,
-  workspace: string,
   consumerRef: string,
   groupRef: string,
   consumerName: string,
   groupName: string,
   apiKey: string,
   provider = PROVIDER_SALESFORCE,
+  workspace?: string,
 ): Promise<string> => {
   const providerApps = await api().listProviderApps({ projectId }, {
     headers: { 'X-Api-Key': apiKey ?? '' },
