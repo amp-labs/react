@@ -33,11 +33,11 @@ export interface CreateInstallationRequest {
      */
     groupRef: string;
     /**
-     * The ID of the SaaS connection tied to this installation.
+     * The ID of the SaaS connection tied to this installation. If omitted the default connection for this group will be used.
      * @type {string}
      * @memberof CreateInstallationRequest
      */
-    connectionId: string;
+    connectionId?: string;
     /**
      * 
      * @type {CreateInstallationRequestConfig}
@@ -52,7 +52,6 @@ export interface CreateInstallationRequest {
 export function instanceOfCreateInstallationRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "groupRef" in value;
-    isInstance = isInstance && "connectionId" in value;
     isInstance = isInstance && "config" in value;
 
     return isInstance;
@@ -69,7 +68,7 @@ export function CreateInstallationRequestFromJSONTyped(json: any, ignoreDiscrimi
     return {
         
         'groupRef': json['groupRef'],
-        'connectionId': json['connectionId'],
+        'connectionId': !exists(json, 'connectionId') ? undefined : json['connectionId'],
         'config': CreateInstallationRequestConfigFromJSON(json['config']),
     };
 }

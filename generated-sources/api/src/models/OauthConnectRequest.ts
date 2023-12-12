@@ -24,7 +24,7 @@ export interface OauthConnectRequest {
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    providerWorkspaceRef: string;
+    providerWorkspaceRef?: string;
     /**
      * The project ID.
      * @type {string}
@@ -74,7 +74,6 @@ export interface OauthConnectRequest {
  */
 export function instanceOfOauthConnectRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "providerWorkspaceRef" in value;
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "consumerRef" in value;
@@ -94,7 +93,7 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'providerWorkspaceRef': json['providerWorkspaceRef'],
+        'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
         'projectId': json['projectId'],
         'groupRef': json['groupRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],

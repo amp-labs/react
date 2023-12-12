@@ -45,6 +45,12 @@ export interface Operation {
      */
     objectName: string;
     /**
+     * The operation ID.
+     * @type {string}
+     * @memberof Operation
+     */
+    id: string;
+    /**
      * The Ampersand installation ID.
      * @type {string}
      * @memberof Operation
@@ -56,18 +62,6 @@ export interface Operation {
      * @memberof Operation
      */
     status?: string;
-    /**
-     * The workflow reference.
-     * @type {string}
-     * @memberof Operation
-     */
-    workflowRef: string;
-    /**
-     * The run reference.
-     * @type {string}
-     * @memberof Operation
-     */
-    runRef: string;
     /**
      * The error history of the operation.
      * @type {Array<OperationError>}
@@ -90,9 +84,8 @@ export function instanceOfOperation(value: object): boolean {
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "actionType" in value;
     isInstance = isInstance && "objectName" in value;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "installationId" in value;
-    isInstance = isInstance && "workflowRef" in value;
-    isInstance = isInstance && "runRef" in value;
 
     return isInstance;
 }
@@ -110,10 +103,9 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'projectId': json['projectId'],
         'actionType': json['actionType'],
         'objectName': json['objectName'],
+        'id': json['id'],
         'installationId': json['installationId'],
         'status': !exists(json, 'status') ? undefined : json['status'],
-        'workflowRef': json['workflowRef'],
-        'runRef': json['runRef'],
         'errorHistory': !exists(json, 'errorHistory') ? undefined : ((json['errorHistory'] as Array<any>).map(OperationErrorFromJSON)),
         'createTime': !exists(json, 'createTime') ? undefined : (new Date(json['createTime'])),
     };
@@ -131,10 +123,9 @@ export function OperationToJSON(value?: Operation | null): any {
         'projectId': value.projectId,
         'actionType': value.actionType,
         'objectName': value.objectName,
+        'id': value.id,
         'installationId': value.installationId,
         'status': value.status,
-        'workflowRef': value.workflowRef,
-        'runRef': value.runRef,
         'errorHistory': value.errorHistory === undefined ? undefined : ((value.errorHistory as Array<any>).map(OperationErrorToJSON)),
         'createTime': value.createTime === undefined ? undefined : (value.createTime.toISOString()),
     };

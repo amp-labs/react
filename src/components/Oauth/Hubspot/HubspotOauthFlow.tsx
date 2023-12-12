@@ -4,9 +4,11 @@
 
 import { useCallback, useState } from 'react';
 
+import { PROVIDER_HUBSPOT } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyProvider';
 import { useProject } from '../../../context/ProjectContext';
 import OAuthPopup from '../../Connect/OAuthPopup';
+import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
 
 import { HubspotLandingContent } from './HubspotLandingContent';
 
@@ -37,18 +39,16 @@ export function HubspotOauthFlow({
     setError(null);
     if (consumerName && groupName && apiKey) {
       try {
-        // Todo: fetchOAuthCallbackURL and set url
-        console.warn('HubspotOauthFlow attempt', {
+        const url = await fetchOAuthCallbackURL(
+          projectId,
           consumerRef,
-          consumerName,
           groupRef,
+          consumerName,
           groupName,
           apiKey,
-          projectId,
-          oAuthCallbackURL,
-          error,
-        });
-        setOAuthCallbackURL('hubspot-oauth-callback-url');
+          PROVIDER_HUBSPOT,
+        );
+        setOAuthCallbackURL(url);
       } catch (err: any) {
         console.error(err);
         setError(err.message ?? 'Unexpected error');

@@ -27,17 +27,17 @@ import {
  */
 export interface CreateInstallationRequestConfig {
     /**
-     * The ID of the revision that this config is based on.
+     * The ID of the revision that this config is based on. If omitted, the latest revision is assumed.
      * @type {string}
      * @memberof CreateInstallationRequestConfig
      */
-    revisionId: string;
+    revisionId?: string;
     /**
      * The person who created the config, in the format of "consumer:{consumer-id}" or "builder:{builder-id}".
      * @type {string}
      * @memberof CreateInstallationRequestConfig
      */
-    createdBy: string;
+    createdBy?: string;
     /**
      * 
      * @type {ConfigContent}
@@ -51,8 +51,6 @@ export interface CreateInstallationRequestConfig {
  */
 export function instanceOfCreateInstallationRequestConfig(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "revisionId" in value;
-    isInstance = isInstance && "createdBy" in value;
     isInstance = isInstance && "content" in value;
 
     return isInstance;
@@ -68,8 +66,8 @@ export function CreateInstallationRequestConfigFromJSONTyped(json: any, ignoreDi
     }
     return {
         
-        'revisionId': json['revisionId'],
-        'createdBy': json['createdBy'],
+        'revisionId': !exists(json, 'revisionId') ? undefined : json['revisionId'],
+        'createdBy': !exists(json, 'createdBy') ? undefined : json['createdBy'],
         'content': ConfigContentFromJSON(json['content']),
     };
 }
