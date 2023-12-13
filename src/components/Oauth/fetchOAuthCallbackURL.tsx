@@ -1,5 +1,6 @@
 import { PROVIDER_SALESFORCE } from '../../constants';
 import { api, ProviderApp } from '../../services/api';
+import { capitalize } from '../../utils';
 
 export const fetchOAuthCallbackURL = async (
   projectId: string,
@@ -17,7 +18,7 @@ export const fetchOAuthCallbackURL = async (
   const app = providerApps.find((a: ProviderApp) => a.provider === provider);
 
   if (!app) {
-    throw new Error(`You must first set up a ${provider} Connected App using the Ampersand Console.`);
+    throw new Error(`You must first set up a ${capitalize(provider)} Connected App using the Ampersand Console.`);
   }
 
   const url = await api().oauthConnect({
