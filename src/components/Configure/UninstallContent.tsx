@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Button, Stack, Text } from '@chakra-ui/react';
 
+import { useApiKey } from '../../context/ApiKeyProvider';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
 import { api } from '../../services/api';
 
 export function UninstallContent() {
+  const apiKey = useApiKey();
   const { projectId, appName } = useProject();
   const { integrationId, installation, resetInstallations } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,6 +23,12 @@ export function UninstallContent() {
       try {
         await api().deleteInstallation(
           { projectId, integrationId, installationId: installation.id },
+          {
+            headers: {
+              'X-Api-Key': apiKey,
+              'Content-Type': 'application/json',
+            },
+          },
         );
         resetInstallations();
         console.warn('successfully uninstalled installation: ', installation.id);
