@@ -59,7 +59,8 @@ export function ConfigureInstallationBase(
               _hover={{ backgroundColor: 'gray.600' }}
               type="submit"
               isDisabled={isDisabled}
-            >Save
+            >
+              { isCreateMode ? 'Install' : 'Save'}
             </Button>
             <Button
               backgroundColor="gray.200"
