@@ -10,6 +10,8 @@ import { LoadingIcon } from '../../assets/LoadingIcon';
 import { RequiredFieldMappings } from './fields/FieldMappings';
 import { OptionalFields } from './fields/OptionalFields';
 import { RequiredFields } from './fields/RequiredFields';
+import { WriteFields } from './fields/WriteFields';
+import { OTHER_CONST } from './ObjectManagementNav/OtherTab';
 import { UNINSTALL_INSTALLATION_CONST } from './ObjectManagementNav/UninstallInstallation';
 import { useConfigureState } from './state/ConfigurationStateProvider';
 import { useHydratedRevision } from './state/HydratedRevisionContext';
@@ -45,6 +47,9 @@ export function ConfigureInstallationBase(
   // should the save button be disabled?
   const isDisabled = loading || isLoading || !configureState || !selectedObjectName
    || !isStateNew;
+
+  // is other selected?
+  const isNonConfigurableWrite = selectedObjectName === OTHER_CONST;
 
   // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
@@ -84,13 +89,14 @@ export function ConfigureInstallationBase(
             overflowY="scroll"
           >
             {loading && <LoadingIcon />}
-            {hydratedRevision && !isUninstall && (
+            {hydratedRevision && !isUninstall && !isNonConfigurableWrite && (
               <>
                 <RequiredFields />
                 <RequiredFieldMappings />
                 <OptionalFields />
               </>
             )}
+            {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}
             {!loading && isUninstall && <UninstallContent />}
           </Box>
         </form>
