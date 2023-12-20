@@ -29,7 +29,7 @@ export function WriteFields() {
   return (
     shouldRender && (
       <>
-        <FieldHeader string={`Allow ${appName} to write to the following fields`} />
+        <FieldHeader string={`Allow ${appName} to write to these object`} />
         <Stack
           marginBottom={10}
           height={300}
