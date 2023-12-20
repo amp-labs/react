@@ -18,6 +18,7 @@ import { useSelectedObjectName } from './ObjectManagementNav';
 import { UninstallContent } from './UninstallContent';
 
 interface ConfigureInstallationBaseProps {
+  isCreateMode?: boolean,
   onSave: FormEventHandler,
   onReset: () => void,
   isLoading: boolean,
@@ -25,15 +26,27 @@ interface ConfigureInstallationBaseProps {
 
 // Installation UI Base
 export function ConfigureInstallationBase(
-  { onSave, onReset, isLoading }: ConfigureInstallationBaseProps,
+  {
+    onSave, onReset, isLoading, isCreateMode = false,
+  }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   const { objectConfigurationsState } = useConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  const isPending = configureState?.isOptionalFieldsModified
-  || configureState?.isRequiredMapFieldsModified;
-  const isDisabled = loading || isLoading || !configureState || !selectedObjectName || !isPending;
+
+  // has the form been modified?
+  const isModified = configureState?.isOptionalFieldsModified
+    || configureState?.isRequiredMapFieldsModified;
+
+  // is this a new state (modified or creating a new state)
+  const isStateNew = isModified || isCreateMode;
+
+  // should the save button be disabled?
+  const isDisabled = loading || isLoading || !configureState || !selectedObjectName
+   || !isStateNew;
+
+  // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
   return (
@@ -46,7 +59,8 @@ export function ConfigureInstallationBase(
               _hover={{ backgroundColor: 'gray.600' }}
               type="submit"
               isDisabled={isDisabled}
-            >Save
+            >
+              { isCreateMode ? 'Install' : 'Save'}
             </Button>
             <Button
               backgroundColor="gray.200"

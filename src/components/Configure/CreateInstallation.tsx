@@ -103,6 +103,7 @@ export function CreateInstallation() {
 
   return (
     <ConfigureInstallationBase
+      isCreateMode
       isLoading={isLoading}
       onSave={onSave}
       onReset={resetState}
