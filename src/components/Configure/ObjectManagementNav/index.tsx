@@ -2,7 +2,7 @@ import {
   createContext, useContext, useState,
 } from 'react';
 import {
-  Box, Tabs, Text,
+  Box, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
@@ -14,6 +14,7 @@ import { NavObject } from '../types';
 import { generateNavObjects } from '../utils';
 
 import { NavObjectItem } from './NavObjectItem';
+import { OTHER_CONST, OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
 // Create a context for the selected navObject's name
@@ -36,8 +37,14 @@ type ObjectManagementNavProps = {
 
 function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject | undefined {
   if (navObjects?.[tabIndex]) {
+    // read tabs
     return navObjects[tabIndex];
-  } if (tabIndex > navObjects.length - 1) {
+  } if (tabIndex === navObjects.length) {
+    // other - non configurable write tab
+    return { name: OTHER_CONST, completed: false };
+  }
+  if (tabIndex > navObjects.length - 1) {
+    // uninstall tab
     return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
   }
   return undefined;
@@ -81,6 +88,7 @@ export function ObjectManagementNav({
               onChange={handleTabsChange}
               orientation="horizontal"
             >
+              {/* Read tab */}
               {navObjects.map((object) => (
                 <NavObjectItem
                   key={object.name}
@@ -92,11 +100,20 @@ export function ObjectManagementNav({
                   }
                 />
               ))}
+
+              {/* Other tab - write */}
+              <OtherTab />
+
+              {/* Uninstall tab */}
               {installation && (
-              <UninstallInstallation
-                key="uninstall-intallation"
-                text="Uninstall"
-              />
+                <>
+                  <Divider marginTop={10} marginBottom={3} />
+                  <UninstallInstallation
+                    key="uninstall-intallation"
+                    text="Uninstall"
+                  />
+                </>
+
               )}
             </Tabs>
           )}
