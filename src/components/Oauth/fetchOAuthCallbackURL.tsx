@@ -1,4 +1,3 @@
-import { PROVIDER_SALESFORCE } from '../../constants';
 import { api, ProviderApp } from '../../services/api';
 import { capitalize } from '../../utils';
 
@@ -9,7 +8,7 @@ export const fetchOAuthCallbackURL = async (
   consumerName: string,
   groupName: string,
   apiKey: string,
-  provider = PROVIDER_SALESFORCE,
+  provider: string,
   workspace?: string,
 ): Promise<string> => {
   const providerApps = await api().listProviderApps({ projectId }, {
