@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { PROVIDER_HUBSPOT, PROVIDER_SALESFORCE } from '../../constants';
+import { PROVIDER_SALESFORCE } from '../../constants';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import { HubspotOauthFlow } from '../Oauth/Hubspot/HubspotOauthFlow';
+import { NoSubdomainOauthFlow } from '../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
 import { SalesforceOauthFlow } from '../Oauth/Salesforce/SalesforceOauthFlow';
 
 interface ProtectedConnectionLayoutProps {
@@ -33,7 +33,9 @@ export function ProtectedConnectionLayout({
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
-  if (provider === PROVIDER_SALESFORCE || providerFromProps === PROVIDER_SALESFORCE) {
+  const selectedProvider = provider || providerFromProps;
+
+  if (selectedProvider === PROVIDER_SALESFORCE) {
     return (
       <SalesforceOauthFlow
         consumerRef={consumerRef}
@@ -44,18 +46,13 @@ export function ProtectedConnectionLayout({
     );
   }
 
-  if (provider === PROVIDER_HUBSPOT || providerFromProps === PROVIDER_HUBSPOT) {
-    return (
-      <HubspotOauthFlow
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      />
-    );
-  }
-
   return (
-    <div>Unsupported provider</div>
+    <NoSubdomainOauthFlow
+      provider={selectedProvider}
+      consumerRef={consumerRef}
+      consumerName={consumerName}
+      groupRef={groupRef}
+      groupName={groupName}
+    />
   );
 }

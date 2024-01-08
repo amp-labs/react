@@ -3,17 +3,19 @@ import {
   FormLabel, Heading,
 } from '@chakra-ui/react';
 
+import { capitalize } from '../../../utils';
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
-type HubspotLandingContentProps = {
+type LandingContentProps = {
+  provider: string;
   handleSubmit: () => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
-export function HubspotLandingContent({
-  handleSubmit, error, isButtonDisabled,
-}: HubspotLandingContentProps) {
+export function LandingContent({
+  provider, handleSubmit, error, isButtonDisabled,
+}: LandingContentProps) {
   return (
     <Container>
       <Box
@@ -29,7 +31,7 @@ export function HubspotLandingContent({
       >
         <FormControl>
           <FormLabel marginTop="16" marginBottom="0">
-            <Heading as="h4" size="md">Set up HubSpot integration</Heading>
+            <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
           </FormLabel>
           <OAuthErrorAlert error={error} />
           <br />

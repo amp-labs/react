@@ -1,18 +1,19 @@
 /**
- * Hubspot landing component, which then will launch to create an OAuth connection to Hubspot.
+ * OAuth flow for any providers that do not require the consumer to enter a subdomain first.
  */
 
 import { useCallback, useState } from 'react';
 
-import { PROVIDER_HUBSPOT } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyProvider';
 import { useProject } from '../../../context/ProjectContext';
+import { capitalize } from '../../../utils';
 import OAuthPopup from '../../Connect/OAuthPopup';
 import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
 
-import { HubspotLandingContent } from './HubspotLandingContent';
+import { LandingContent } from './LandingContent';
 
-interface HubspotOauthFlowProps {
+interface NoSubdomainOauthFlowProps {
+  provider: string;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
@@ -20,12 +21,12 @@ interface HubspotOauthFlowProps {
 }
 
 /**
- * HubspotOauthFlow first prompts user with a next button,
+ * NoSubdomainOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function HubspotOauthFlow({
-  consumerRef, consumerName, groupRef, groupName,
-}: HubspotOauthFlowProps) {
+export function NoSubdomainOauthFlow({
+  provider, consumerRef, consumerName, groupRef, groupName,
+}: NoSubdomainOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
 
@@ -46,7 +47,7 @@ export function HubspotOauthFlow({
           consumerName,
           groupName,
           apiKey,
-          PROVIDER_HUBSPOT,
+          provider,
         );
         setOAuthCallbackURL(url);
       } catch (err: any) {
@@ -63,11 +64,11 @@ export function HubspotOauthFlow({
 
   return (
     <OAuthPopup
-      title="Connect to Hubspot"
+      title={`Connect to ${capitalize(provider)}`}
       url={oAuthCallbackURL}
       onClose={onClose}
     >
-      <HubspotLandingContent handleSubmit={handleSubmit} error={error} />
+      <LandingContent provider={provider} handleSubmit={handleSubmit} error={error} />
     </OAuthPopup>
   );
 }
