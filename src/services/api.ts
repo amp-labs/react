@@ -5,7 +5,7 @@ import {
   Configuration, Connection,
   CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
-  DefaultApi, HydratedIntegrationField,
+  HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   HydratedIntegrationRead,
@@ -17,6 +17,7 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '../../generated-sources/api/src';
+import { DefaultApi } from '../../generated-sources/api/src/apis/DefaultApi';
 
 /**
    * To update the api you need to
