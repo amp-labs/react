@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
 import { useProject } from '../../../../context/ProjectContext';
+import { useConfigureState } from '../../state/ConfigurationStateProvider';
 import { FieldHeader } from '../FieldHeader';
 
 // TODO - remove and fetch data from configuration state populated from hydrated revison
@@ -19,11 +21,16 @@ const WRITE_DUMMY_DATA = {
 
 export function WriteFields() {
   const { appName } = useProject();
+  const { objectConfigurationsState } = useConfigureState();
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     console.warn('Checking Write Fields', { name, checked });
   };
+
+  useEffect(() => {
+    console.log('objectConfigurationsState', objectConfigurationsState);
+  }, [objectConfigurationsState]);
 
   const shouldRender = !!(WRITE_DUMMY_DATA);
   return (

@@ -48,18 +48,20 @@ export function generateConfigurationState(
   const requiredMapFieldsSaved = { ...selectedFieldMappings };
 
   return {
-    allFields, // from hydrated revision
-    requiredFields, // from hydrated revision
-    optionalFields, // from hydrated revision
-    requiredMapFields, // from hydrated revision
-    // selected state
-    selectedOptionalFields: selectedFields,
-    selectedFieldMappings,
-    isOptionalFieldsModified: false,
-    isRequiredMapFieldsModified: false,
-    savedConfig: {
-      optionalFields: optionalFieldsSaved, // from config
-      requiredMapFields: requiredMapFieldsSaved, // from config
+    read: {
+      allFields, // from hydrated revision
+      requiredFields, // from hydrated revision
+      optionalFields, // from hydrated revision
+      requiredMapFields, // from hydrated revision
+      // selected state
+      selectedOptionalFields: selectedFields,
+      selectedFieldMappings,
+      isOptionalFieldsModified: false,
+      isRequiredMapFieldsModified: false,
+      savedConfig: {
+        optionalFields: optionalFieldsSaved, // from config
+        requiredMapFields: requiredMapFieldsSaved, // from config
+      },
     },
   };
 }
@@ -113,7 +115,7 @@ export const resetAllObjectsConfigurationState = (
  * @returns
  */
 export const generateSelectedFieldsFromConfigureState = (configureState: ConfigureState) => {
-  const { requiredFields, selectedOptionalFields } = configureState;
+  const { requiredFields, selectedOptionalFields } = configureState?.read || {};
   const fields = new Set<string>();
   requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
 
@@ -135,7 +137,7 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
  * @returns
  */
 export const generateSelectedFieldMappingsFromConfigureState = (configureState: ConfigureState) => {
-  const { selectedFieldMappings: selectedRequiredMapFields } = configureState;
+  const { selectedFieldMappings: selectedRequiredMapFields } = configureState?.read || {};
   // filter out undefined values of selectedRequiredMapFields
   const selectedRequiredMapFieldsSubmit : Record<string, string> = {};
   if (selectedRequiredMapFields) {

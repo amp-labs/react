@@ -11,7 +11,6 @@ import { ObjectManagementNav } from './ObjectManagementNav';
 import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
 import { UpdateInstallation } from './UpdateInstallation';
 
-// todo : add the install integration provider to supply these properties
 function InstallationContent() {
   const { integrationObj, installation } = useInstallIntegrationProps();
 

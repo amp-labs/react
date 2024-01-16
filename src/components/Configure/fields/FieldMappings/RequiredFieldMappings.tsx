@@ -41,7 +41,7 @@ export function RequiredFieldMappings() {
   };
 
   const integrationFieldMappings = useMemo(
-    () => configureState?.requiredMapFields?.filter(
+    () => configureState?.read?.requiredMapFields?.filter(
       isIntegrationFieldMapping,
     ) || [],
     [configureState],
@@ -63,7 +63,7 @@ export function RequiredFieldMappings() {
             }
             >
               <FieldMapping
-                allFields={configureState.allFields || []}
+                allFields={configureState.read?.allFields || []}
                 field={field}
                 onSelectChange={onSelectChange}
               />

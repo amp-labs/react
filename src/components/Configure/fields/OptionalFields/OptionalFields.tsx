@@ -14,7 +14,7 @@ export function OptionalFields() {
   const { objectConfigurationsState, setConfigureState } = useConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  const { selectedOptionalFields } = configureState || {};
+  const selectedOptionalFields = configureState?.read?.selectedOptionalFields;
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -24,7 +24,8 @@ export function OptionalFields() {
     }
   };
 
-  const shouldRender = !!(configureState?.optionalFields && configureState?.optionalFields);
+  const shouldRender = !!(configureState?.read?.optionalFields
+    && configureState?.read?.optionalFields);
   return (
     shouldRender && (
       <>
@@ -37,7 +38,7 @@ export function OptionalFields() {
           borderRadius={8}
           padding={4}
         >
-          {configureState?.optionalFields?.map((field) => {
+          {configureState?.read?.optionalFields?.map((field) => {
             if (!isIntegrationFieldMapping(field)) {
               return (
                 <Box key={field.fieldName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">

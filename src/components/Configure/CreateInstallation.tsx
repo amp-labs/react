@@ -68,7 +68,7 @@ export function CreateInstallation() {
   const onSave = (e: any) => {
     e.preventDefault();
     // check if fields with requirements are met
-    const { requiredMapFields, selectedFieldMappings } = configureState || {};
+    const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
     const { errorList } = validateFieldMappings(
       requiredMapFields,
       selectedFieldMappings,

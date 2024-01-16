@@ -25,7 +25,7 @@ export function FieldMapping(
   const { objectConfigurationsState, setConfigureState } = useConfigureState();
   const [disabled, setDisabled] = useState(true);
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-  const { selectedFieldMappings: selectedRequiredMapFields } = configureState || {};
+  const selectedRequiredMapFields = configureState?.read?.selectedFieldMappings;
   const fieldValue = selectedRequiredMapFields?.[field.mapToName];
 
   useEffect(() => {
