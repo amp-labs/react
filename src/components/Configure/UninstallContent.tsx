@@ -21,7 +21,7 @@ export function UninstallContent() {
         { projectId, integrationId, installationId: installation.id },
       );
       try {
-        await api().deleteInstallation(
+        await api().installationApi.deleteInstallation(
           { projectId, integrationId, installationId: installation.id },
           {
             headers: {

@@ -50,6 +50,12 @@ export interface ProviderApp {
      */
     clientId: string;
     /**
+     * The OAuth scopes for this app.
+     * @type {Array<string>}
+     * @memberof ProviderApp
+     */
+    scopes?: Array<string>;
+    /**
      * The time the provider app was created.
      * @type {Date}
      * @memberof ProviderApp
@@ -92,6 +98,7 @@ export function ProviderAppFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'externalRef': !exists(json, 'externalRef') ? undefined : json['externalRef'],
         'provider': json['provider'],
         'clientId': json['clientId'],
+        'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
@@ -111,6 +118,7 @@ export function ProviderAppToJSON(value?: ProviderApp | null): any {
         'externalRef': value.externalRef,
         'provider': value.provider,
         'clientId': value.clientId,
+        'scopes': value.scopes,
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };

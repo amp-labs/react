@@ -61,7 +61,7 @@ export function HydratedRevisionProvider({
       && connectionId
       && apiKey
     ) {
-      api().getHydratedRevision({
+      api().revisionApi.getHydratedRevision({
         projectId,
         integrationId,
         revisionId,

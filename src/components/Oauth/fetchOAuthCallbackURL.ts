@@ -11,7 +11,7 @@ export const fetchOAuthCallbackURL = async (
   provider: string,
   workspace?: string,
 ): Promise<string> => {
-  const providerApps = await api().listProviderApps({ projectId }, {
+  const providerApps = await api().providerAppApi.listProviderApps({ projectId }, {
     headers: { 'X-Api-Key': apiKey ?? '' },
   });
   const app = providerApps.find((a: ProviderApp) => a.provider === provider);
@@ -20,7 +20,7 @@ export const fetchOAuthCallbackURL = async (
     throw new Error(`You must first set up a ${capitalize(provider)} Connected App using the Ampersand Console.`);
   }
 
-  const url = await api().oauthConnect({
+  const url = await api().oAuthApi.oauthConnect({
     connectOAuthParams: {
       providerWorkspaceRef: workspace,
       projectId,

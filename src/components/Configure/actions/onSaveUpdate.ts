@@ -93,7 +93,7 @@ export const onSaveUpdate = (
   };
 
   // call api.updateInstallation
-  return api().updateInstallation(updateInstallationRequest, {
+  return api().installationApi.updateInstallation(updateInstallationRequest, {
     headers: {
       'X-Api-Key': apiKey,
       'Content-Type': 'application/json',

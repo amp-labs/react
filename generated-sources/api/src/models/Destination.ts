@@ -13,43 +13,43 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { CreateDestinationRequestMetadata } from './CreateDestinationRequestMetadata';
+import type { DestinationMetadata } from './DestinationMetadata';
 import {
-    CreateDestinationRequestMetadataFromJSON,
-    CreateDestinationRequestMetadataFromJSONTyped,
-    CreateDestinationRequestMetadataToJSON,
-} from './CreateDestinationRequestMetadata';
+    DestinationMetadataFromJSON,
+    DestinationMetadataFromJSONTyped,
+    DestinationMetadataToJSON,
+} from './DestinationMetadata';
 
 /**
  * 
  * @export
- * @interface CreateDestinationRequest
+ * @interface Destination
  */
-export interface CreateDestinationRequest {
+export interface Destination {
     /**
      * User-friendly name for the destination
      * @type {string}
-     * @memberof CreateDestinationRequest
+     * @memberof Destination
      */
     name: string;
     /**
      * The type of the destination
      * @type {string}
-     * @memberof CreateDestinationRequest
+     * @memberof Destination
      */
     type: string;
     /**
      * 
-     * @type {CreateDestinationRequestMetadata}
-     * @memberof CreateDestinationRequest
+     * @type {DestinationMetadata}
+     * @memberof Destination
      */
-    metadata: CreateDestinationRequestMetadata;
+    metadata: DestinationMetadata;
 }
 
 /**
- * Check if a given object implements the CreateDestinationRequest interface.
+ * Check if a given object implements the Destination interface.
  */
-export function instanceOfCreateDestinationRequest(value: object): boolean {
+export function instanceOfDestination(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "type" in value;
@@ -58,11 +58,11 @@ export function instanceOfCreateDestinationRequest(value: object): boolean {
     return isInstance;
 }
 
-export function CreateDestinationRequestFromJSON(json: any): CreateDestinationRequest {
-    return CreateDestinationRequestFromJSONTyped(json, false);
+export function DestinationFromJSON(json: any): Destination {
+    return DestinationFromJSONTyped(json, false);
 }
 
-export function CreateDestinationRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateDestinationRequest {
+export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Destination {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -70,11 +70,11 @@ export function CreateDestinationRequestFromJSONTyped(json: any, ignoreDiscrimin
         
         'name': json['name'],
         'type': json['type'],
-        'metadata': CreateDestinationRequestMetadataFromJSON(json['metadata']),
+        'metadata': DestinationMetadataFromJSON(json['metadata']),
     };
 }
 
-export function CreateDestinationRequestToJSON(value?: CreateDestinationRequest | null): any {
+export function DestinationToJSON(value?: Destination | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -85,7 +85,7 @@ export function CreateDestinationRequestToJSON(value?: CreateDestinationRequest 
         
         'name': value.name,
         'type': value.type,
-        'metadata': CreateDestinationRequestMetadataToJSON(value.metadata),
+        'metadata': DestinationMetadataToJSON(value.metadata),
     };
 }
 

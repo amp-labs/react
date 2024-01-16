@@ -5,7 +5,7 @@ import {
   Configuration, Connection,
   CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
-  DefaultApi, HydratedIntegrationField,
+  HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   HydratedIntegrationRead,
@@ -17,6 +17,8 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '../../generated-sources/api/src';
+
+import { ApiService } from './ApiService';
 
 /**
    * To update the api you need to
@@ -75,10 +77,10 @@ const config = new Configuration({
   basePath: AMP_API_ROOT,
 });
 
-let apiValue = new DefaultApi(config);
+let apiValue = new ApiService(config);
 
 // For testing, etc. we may want to use a different API configuration than the default
-export const setApi = (api: DefaultApi) => {
+export const setApi = (api: ApiService) => {
   apiValue = api;
 };
 

@@ -111,7 +111,7 @@ export const onSaveCreate = (
     },
   };
 
-  return api().createInstallation(createInstallationRequest, {
+  return api().installationApi.createInstallation(createInstallationRequest, {
     headers: {
       'X-Api-Key': apiKey,
       'Content-Type': 'application/json',
