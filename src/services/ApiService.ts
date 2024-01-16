@@ -13,6 +13,7 @@ import {
  * This allows us to inject the configuration object into every api service.
  *
  * New or legacy services need to be added or deleted here after services are generated.
+ * Note: some services are not used in this repo.
  */
 export class ApiService {
   public allowedDomainApi: AllowedDomainApi;
