@@ -47,7 +47,7 @@ export const useIsIntegrationInstalled = (
   useEffect(() => {
     if (!integrationToCheck) return;
 
-    api().listInstallations({
+    api().installationApi.listInstallations({
       projectId,
       integrationId: integrationToCheck.id,
       groupRef,

@@ -64,7 +64,7 @@ function OAuthPopup({
   }, [url, title]);
 
   const refreshConnections = useCallback(async (connectionId: string) => {
-    const connection = await api().getConnection({ projectId, connectionId }, {
+    const connection = await api().connectionApi.getConnection({ projectId, connectionId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },

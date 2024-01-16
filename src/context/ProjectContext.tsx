@@ -47,7 +47,7 @@ export function ProjectProvider(
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    api().getProject({ projectId }, {
+    api().projectApi.getProject({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },

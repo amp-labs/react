@@ -42,7 +42,7 @@ export function IntegrationListProvider(
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    api().listIntegrations({ projectId }, {
+    api().integrationApi.listIntegrations({ projectId }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
