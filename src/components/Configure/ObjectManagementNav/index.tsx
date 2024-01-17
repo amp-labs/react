@@ -41,14 +41,14 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
   if (navObjects?.[tabIndex]) {
     // read tabs
     return navObjects[tabIndex];
-  } if (tabIndex === navObjects.length) {
+  } if (WRITE_FEATURE_FLAG && tabIndex === navObjects.length) {
     // other - non configurable write tab
     return { name: OTHER_CONST, completed: false };
   }
-  if (tabIndex > navObjects.length - 1) {
-    // uninstall tab
-    return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
-  }
+
+  // uninstall tab
+  return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
+
   return undefined;
 }
 
