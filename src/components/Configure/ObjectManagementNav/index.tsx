@@ -17,6 +17,8 @@ import { NavObjectItem } from './NavObjectItem';
 import { OTHER_CONST, OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
+const WRITE_FEATURE_FLAG = false; // hide write tab
+
 // Create a context for the selected navObject's name
 const SelectedObjectNameContext = createContext<string | null | undefined>(null);
 
@@ -102,7 +104,7 @@ export function ObjectManagementNav({
               ))}
 
               {/* Other tab - write */}
-              <OtherTab />
+              { WRITE_FEATURE_FLAG && <OtherTab /> }
 
               {/* Uninstall tab */}
               {installation && (
