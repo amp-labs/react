@@ -2,22 +2,22 @@ import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
-import { useApiKey } from '../../context/ApiKeyProvider';
+import { useApiKey } from '../../../context/ApiKeyProvider';
 import {
   ErrorBoundary,
   useErrorState,
-} from '../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
-import { Installation, Integration } from '../../services/api';
+} from '../../../context/ErrorContextProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useProject } from '../../../context/ProjectContext';
+import { Installation, Integration } from '../../../services/api';
+import { onSaveUpdate } from '../actions/onSaveUpdate';
+import { useSelectedObjectName } from '../ObjectManagementNav';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../state/HydratedRevisionContext';
+import { getConfigureState, setHydrateConfigState } from '../state/utils';
+import { validateFieldMappings } from '../utils';
 
-import { onSaveUpdate } from './actions/onSaveUpdate';
-import { useConfigureState } from './state/ConfigurationStateProvider';
-import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
-import { useSelectedObjectName } from './ObjectManagementNav';
-import { validateFieldMappings } from './utils';
 
 interface UpdateInstallationProps {
   installation: Installation,

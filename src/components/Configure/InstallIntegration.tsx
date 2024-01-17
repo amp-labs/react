@@ -1,34 +1,14 @@
 import { ConnectionsProvider } from '../../context/ConnectionsContext';
 import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
-import { InstallIntegrationProvider, useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
+import { InstallIntegrationProvider } from '../../context/InstallIntegrationContext';
 import { useProject } from '../../context/ProjectContext';
+import { ErrorTextBox } from '../ErrorTextBox';
 
+import { InstallationContent } from './content/InstallationContent';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-import { CreateInstallation } from './CreateInstallation';
-import { ErrorTextBox } from './ErrorTextBox';
 import { ObjectManagementNav } from './ObjectManagementNav';
 import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
-import { UpdateInstallation } from './UpdateInstallation';
-
-function InstallationContent() {
-  const { integrationObj, installation } = useInstallIntegrationProps();
-
-  if (!integrationObj) {
-    return <ErrorTextBox message={"We can't load the integration"} />;
-  }
-
-  return installation && integrationObj ? (
-    // If installation exists, render update installation flow
-    <UpdateInstallation
-      installation={installation}
-      integrationObj={integrationObj}
-    />
-  ) : (
-    // No installation, render create installation flow
-    <CreateInstallation />
-  );
-}
 
 interface InstallIntegrationProps {
   integration: string, // integration name

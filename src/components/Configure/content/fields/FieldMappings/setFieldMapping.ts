@@ -1,7 +1,7 @@
 import { Draft } from 'immer';
 
-import { isFieldObjectEqual } from '../../state/utils';
-import { ConfigureState } from '../../types';
+import { isFieldObjectEqual } from '../../../state/utils';
+import { ConfigureState } from '../../../types';
 
 function setFieldMappingProducer(
   draft: Draft<ConfigureState>,

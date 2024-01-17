@@ -6,13 +6,13 @@ import {
 
 import {
   ErrorBoundary, useErrorState,
-} from '../../../../context/ErrorContextProvider';
-import { useSelectedObjectName } from '../../ObjectManagementNav';
-import { useConfigureState } from '../../state/ConfigurationStateProvider';
+} from '../../../../../context/ErrorContextProvider';
+import { useSelectedObjectName } from '../../../ObjectManagementNav';
+import { useConfigureState } from '../../../state/ConfigurationStateProvider';
 import {
   getConfigureState,
-} from '../../state/utils';
-import { isIntegrationFieldMapping } from '../../utils';
+} from '../../../state/utils';
+import { isIntegrationFieldMapping } from '../../../utils';
 import { FieldHeader } from '../FieldHeader';
 
 import { FieldMapping } from './FieldMapping';

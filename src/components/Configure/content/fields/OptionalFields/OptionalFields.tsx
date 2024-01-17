@@ -1,10 +1,10 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
-import { useProject } from '../../../../context/ProjectContext';
-import { useSelectedObjectName } from '../../ObjectManagementNav';
-import { useConfigureState } from '../../state/ConfigurationStateProvider';
-import { getConfigureState } from '../../state/utils';
-import { isIntegrationFieldMapping } from '../../utils';
+import { useProject } from '../../../../../context/ProjectContext';
+import { useSelectedObjectName } from '../../../ObjectManagementNav';
+import { useConfigureState } from '../../../state/ConfigurationStateProvider';
+import { getConfigureState } from '../../../state/utils';
+import { isIntegrationFieldMapping } from '../../../utils';
 import { FieldHeader } from '../FieldHeader';
 
 import { setOptionalField } from './setOptionalField';
