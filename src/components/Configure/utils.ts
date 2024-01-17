@@ -76,8 +76,13 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
   return field.fieldName; // existant field
 }
 
-// generates standard objects and whether they are complete based on config and hydrated revision
-export function generateNavObjects(config: Config | undefined, hydratedRevision: HydratedRevision) {
+/**
+ * generates Nav Objects for read action
+ * @param config
+ * @param hydratedRevision
+ * @returns NavObject[]
+ */
+const generateReadNavObjects = (config: Config | undefined, hydratedRevision: HydratedRevision) => {
   const navObjects: NavObject[] = [];
   hydratedRevision.content?.read?.standardObjects?.forEach((object) => {
     navObjects.push(
@@ -91,12 +96,21 @@ export function generateNavObjects(config: Config | undefined, hydratedRevision:
   });
 
   return navObjects;
+};
+
+// generates standard objects and whether they are complete based on config and hydrated revision
+export function generateNavObjects(
+  config: Config | undefined,
+  hydratedRevision: HydratedRevision,
+) {
+  const navObjects: NavObject[] = generateReadNavObjects(config, hydratedRevision);
+  return navObjects;
 }
 
 // validates whether required fields are filled out or throws error
 export function validateFieldMappings(
-  requiredMapFields: IntegrationFieldMapping[] | null,
-  selectedRequiredMapFields: SelectMappingFields | null,
+  requiredMapFields: IntegrationFieldMapping[] | null | undefined,
+  selectedRequiredMapFields: SelectMappingFields | null | undefined,
   setErrors: (boundary: ErrorBoundary, errors: string[]) => void,
 ) {
   // check if fields with requirements are met

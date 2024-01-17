@@ -8,17 +8,22 @@ function setOptionalFieldProducer(
   fieldKey: string,
   checked: boolean,
 ) {
-  const draftSelectedOptionalFields = draft?.selectedOptionalFields || {};
+  const draftSelectedOptionalFields = draft?.read?.selectedOptionalFields || {};
   draftSelectedOptionalFields[fieldKey] = checked;
   if (!checked) {
     delete draftSelectedOptionalFields[fieldKey];
   }
-  const savedFields = draft.savedConfig.optionalFields;
-  const updatedFields = draftSelectedOptionalFields;
-  const isModified = !isFieldObjectEqual(savedFields, updatedFields);
-  // immer exception if we try to set a value
-  // eslint-disable-next-line no-param-reassign
-  draft.isOptionalFieldsModified = isModified;
+
+  if (draft.read?.savedConfig.optionalFields) {
+    const savedFields = draft.read.savedConfig.optionalFields;
+    const updatedFields = draftSelectedOptionalFields;
+    const isModified = !isFieldObjectEqual(savedFields, updatedFields);
+    // immer exception if we try to set a value
+    // eslint-disable-next-line no-param-reassign
+    draft.read.isOptionalFieldsModified = isModified;
+  } else {
+    console.warn('read.savedConfig.optionalFields is undefined');
+  }
 }
 
 export function setOptionalField(

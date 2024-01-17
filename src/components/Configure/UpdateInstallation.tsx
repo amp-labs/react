@@ -77,7 +77,7 @@ export function UpdateInstallation(
     e.preventDefault();
 
     // check if fields with requirements are met
-    const { requiredMapFields, selectedFieldMappings } = configureState || {};
+    const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
     const { errorList } = validateFieldMappings(
       requiredMapFields,
       selectedFieldMappings,

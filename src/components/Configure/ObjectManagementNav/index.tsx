@@ -66,6 +66,7 @@ export function ObjectManagementNav({
   const selectedObject = getSelectedObject(navObjects || [], tabIndex);
   const { project } = useProject();
   const appName = project?.appName || '';
+  const isWriteSupported = !!hydratedRevision?.content?.write;
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
@@ -97,14 +98,14 @@ export function ObjectManagementNav({
                   objectName={object.name}
                   completed={object.completed}
                   pending={
-                    objectConfigurationsState[object.name]?.isOptionalFieldsModified
-                    || objectConfigurationsState[object.name]?.isRequiredMapFieldsModified
+                    objectConfigurationsState[object.name]?.read?.isOptionalFieldsModified
+                    || objectConfigurationsState[object.name]?.read?.isRequiredMapFieldsModified
                   }
                 />
               ))}
 
               {/* Other tab - write */}
-              { WRITE_FEATURE_FLAG && <OtherTab /> }
+              { WRITE_FEATURE_FLAG && isWriteSupported && <OtherTab /> }
 
               {/* Uninstall tab */}
               {installation && (

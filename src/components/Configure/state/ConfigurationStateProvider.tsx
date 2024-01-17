@@ -96,11 +96,11 @@ export function ConfigurationProvider(
   ) => {
     setObjectConfigurationsState(
       produce((draft) => {
-        // immer exception when mutating a draft
-        // eslint-disable-next-line no-param-reassign
-        draft[objectName].isOptionalFieldsModified = false;
-        // eslint-disable-next-line no-param-reassign
-        draft[objectName].isRequiredMapFieldsModified = false;
+        const readDraft = draft[objectName].read;
+        if (readDraft) {
+          readDraft.isOptionalFieldsModified = false;
+          readDraft.isRequiredMapFieldsModified = false;
+        }
       }),
     );
   }, [setObjectConfigurationsState]);

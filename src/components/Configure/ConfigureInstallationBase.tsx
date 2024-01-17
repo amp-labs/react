@@ -38,8 +38,8 @@ export function ConfigureInstallationBase(
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   // has the form been modified?
-  const isModified = configureState?.isOptionalFieldsModified
-    || configureState?.isRequiredMapFieldsModified;
+  const isModified = configureState?.read?.isOptionalFieldsModified
+    || configureState?.read?.isRequiredMapFieldsModified;
 
   // is this a new state (modified or creating a new state)
   const isStateNew = isModified || isCreateMode;
