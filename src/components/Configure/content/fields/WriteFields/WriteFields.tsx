@@ -1,6 +1,6 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
-import { useProject } from '../../../../context/ProjectContext';
+import { useProject } from '../../../../../context/ProjectContext';
 import { FieldHeader } from '../FieldHeader';
 
 // TODO - remove and fetch data from configuration state populated from hydrated revison

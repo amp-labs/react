@@ -1,22 +1,20 @@
 import {
-  FormEventHandler,
+  FormEventHandler, useEffect,
 } from 'react';
 import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
-import { LoadingIcon } from '../../assets/LoadingIcon';
+import { LoadingIcon } from '../../../assets/LoadingIcon';
+import { useSelectedObjectName } from '../ObjectManagementNav';
+import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { UNINSTALL_INSTALLATION_CONST } from '../ObjectManagementNav/UninstallInstallation';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../state/HydratedRevisionContext';
+import { getConfigureState } from '../state/utils';
 
-import { RequiredFieldMappings } from './fields/FieldMappings';
-import { OptionalFields } from './fields/OptionalFields';
-import { RequiredFields } from './fields/RequiredFields';
+import { ReadFields } from './fields/ReadFields';
 import { WriteFields } from './fields/WriteFields';
-import { OTHER_CONST } from './ObjectManagementNav/OtherTab';
-import { UNINSTALL_INSTALLATION_CONST } from './ObjectManagementNav/UninstallInstallation';
-import { useConfigureState } from './state/ConfigurationStateProvider';
-import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState } from './state/utils';
-import { useSelectedObjectName } from './ObjectManagementNav';
 import { UninstallContent } from './UninstallContent';
 
 interface ConfigureInstallationBaseProps {
@@ -89,13 +87,7 @@ export function ConfigureInstallationBase(
             overflowY="scroll"
           >
             {loading && <LoadingIcon />}
-            {hydratedRevision && !isUninstall && !isNonConfigurableWrite && (
-              <>
-                <RequiredFields />
-                <RequiredFieldMappings />
-                <OptionalFields />
-              </>
-            )}
+            {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
             {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}
             {!loading && isUninstall && <UninstallContent />}
           </Box>

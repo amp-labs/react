@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button, Stack, Text } from '@chakra-ui/react';
 
-import { useApiKey } from '../../context/ApiKeyProvider';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
-import { api } from '../../services/api';
+import { useApiKey } from '../../../context/ApiKeyProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useProject } from '../../../context/ProjectContext';
+import { api } from '../../../services/api';
 
 export function UninstallContent() {
   const apiKey = useApiKey();

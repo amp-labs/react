@@ -9,7 +9,7 @@ import {
 } from '../../../context/ErrorContextProvider';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { api, HydratedRevision } from '../../../services/api';
-import { ErrorTextBox } from '../ErrorTextBox';
+import { ErrorTextBox } from '../../ErrorTextBox';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;

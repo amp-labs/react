@@ -5,21 +5,21 @@ import {
   useCallback, useEffect, useState,
 } from 'react';
 
-import { useApiKey } from '../../context/ApiKeyProvider';
-import { useConnections } from '../../context/ConnectionsContext';
+import { useApiKey } from '../../../context/ApiKeyProvider';
+import { useConnections } from '../../../context/ConnectionsContext';
 import {
   ErrorBoundary, useErrorState,
-} from '../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
+} from '../../../context/ErrorContextProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useProject } from '../../../context/ProjectContext';
+import { onSaveCreate } from '../actions/onSaveCreate';
+import { useSelectedObjectName } from '../ObjectManagementNav';
+import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../state/HydratedRevisionContext';
+import { getConfigureState, setHydrateConfigState } from '../state/utils';
+import { validateFieldMappings } from '../utils';
 
-import { onSaveCreate } from './actions/onSaveCreate';
-import { useConfigureState } from './state/ConfigurationStateProvider';
-import { useHydratedRevision } from './state/HydratedRevisionContext';
-import { getConfigureState, setHydrateConfigState } from './state/utils';
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
-import { useSelectedObjectName } from './ObjectManagementNav';
-import { validateFieldMappings } from './utils';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
