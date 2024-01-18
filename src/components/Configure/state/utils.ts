@@ -79,11 +79,9 @@ const generateConfigurationStateWrite = (
     return null;
   }
 
-  // todo add logic for selectedNonConfigurableWriteFields
-  console.log('adding config state write logic', config);
-
   return {
     writeObjects: writeAction?.objects || null,
+    // TODO: add logic for selectedNonConfigurableWriteFields
     selectedNonConfigurableWriteFields: config ? null : {},
   };
 };
