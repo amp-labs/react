@@ -4,10 +4,13 @@ import {
   Config,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
+  HydratedIntegrationWrite,
   HydratedRevision,
 } from '../../../services/api';
 import {
   ConfigureState,
+  ConfigureStateRead,
+  ConfigureStateWrite,
   ObjectConfigurationsState,
   SelectMappingFields,
   SelectOptionalFields,
@@ -27,42 +30,75 @@ export function isFieldObjectEqual(
   return isEqual(prevFields, currentFields);
 }
 
-export function generateConfigurationState(
-  action: HydratedIntegrationRead,
+const generateConfigurationStateRead = (
+  readAction: HydratedIntegrationRead | undefined,
   objectName: string,
   config?: Config,
-): ConfigureState {
+): ConfigureStateRead | null => {
+  if (!readAction) {
+    return null;
+  }
   // refactor this section to be immutable at hydrated revision level
-  const object = getStandardObjectFromAction(action, objectName);
+  const object = getStandardObjectFromAction(readAction, objectName);
   const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
   const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
   /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
-  const selectedFields = config?.content?.read?.standardObjects?.[objectName]?.selectedFields || {};
-  const selectedFieldMappings = config?.content?.read?.standardObjects?.
+  const content = config?.content;
+  const readSelectedFields = content?.read?.standardObjects?.[objectName]?.selectedFields || {};
+  const selectedFieldMappings = content?.read?.standardObjects?.
     [objectName]?.selectedFieldMappings || {};
 
-  const optionalFieldsSaved = { ...selectedFields };
+  const optionalFieldsSaved = { ...readSelectedFields };
   const requiredMapFieldsSaved = { ...selectedFieldMappings };
 
   return {
-    read: {
-      allFields, // from hydrated revision
-      requiredFields, // from hydrated revision
-      optionalFields, // from hydrated revision
-      requiredMapFields, // from hydrated revision
-      // selected state
-      selectedOptionalFields: selectedFields,
-      selectedFieldMappings,
-      isOptionalFieldsModified: false,
-      isRequiredMapFieldsModified: false,
-      savedConfig: {
-        optionalFields: optionalFieldsSaved, // from config
-        requiredMapFields: requiredMapFieldsSaved, // from config
-      },
+    allFields, // from hydrated revision
+    requiredFields, // from hydrated revision
+    optionalFields, // from hydrated revision
+    requiredMapFields, // from hydrated revision
+    // selected state
+    selectedOptionalFields: readSelectedFields,
+    selectedFieldMappings,
+    isOptionalFieldsModified: false,
+    isRequiredMapFieldsModified: false,
+    savedConfig: {
+      optionalFields: optionalFieldsSaved, // from config
+      requiredMapFields: requiredMapFieldsSaved, // from config
     },
+  };
+};
+
+const generateConfigurationStateWrite = (
+  writeAction: HydratedIntegrationWrite | undefined,
+  config?: Config,
+): ConfigureStateWrite | null => {
+  if (!writeAction) {
+    return null;
+  }
+
+  // todo add logic for selectedNonConfigurableWriteFields
+  console.log('adding config state write logic', config);
+
+  return {
+    writeObjects: writeAction?.objects || null,
+    selectedNonConfigurableWriteFields: config ? null : {},
+  };
+};
+
+export function generateConfigurationState(
+  hydratedRevision: HydratedRevision,
+  objectName: string,
+  config?: Config,
+): ConfigureState {
+  const readAction = hydratedRevision?.content?.read;
+  const writeAction = hydratedRevision?.content?.write;
+
+  return {
+    read: generateConfigurationStateRead(readAction, objectName, config),
+    write: generateConfigurationStateWrite(writeAction, config),
   };
 }
 
@@ -73,12 +109,8 @@ export const setHydrateConfigState = (
   selectedObjectName: string,
   setConfigureState: (objectName: string, configureState: ConfigureState) => void,
 ) => {
-  const readAction = hydratedRevision?.content?.read;
-  if (!readAction) {
-    return;
-  }
   const state = generateConfigurationState(
-    readAction,
+    hydratedRevision,
     selectedObjectName,
     config,
   );
@@ -97,10 +129,9 @@ export const resetAllObjectsConfigurationState = (
   const navObjects = generateNavObjects(config, hydratedRevision);
   const objectConfigurationsState: ObjectConfigurationsState = {};
   navObjects.forEach(({ name, completed }) => {
-    const readAction = hydratedRevision?.content?.read;
-    if (completed && readAction) {
+    if (completed) {
       objectConfigurationsState[name] = generateConfigurationState(
-        readAction,
+        hydratedRevision,
         name,
         config,
       );
