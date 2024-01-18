@@ -3,29 +3,22 @@ import { Box, Checkbox, Stack } from '@chakra-ui/react';
 import { FieldHeader } from '../FieldHeader';
 import { useFields } from '../useFields';
 
-// TODO - remove and fetch data from configuration state populated from hydrated revison
-const WRITE_DUMMY_DATA = {
-  objects: [
-    {
-      objectName: 'account',
-      displayName: 'Account',
-    },
-    {
-      objectName: 'contact',
-      displayName: 'Contact',
-    },
-  ],
-};
+import { setNonConfigurableWriteField } from './setNonConfigurableWriteField';
 
 export function WriteFields() {
-  const { appName, configureState, setConfigureState } = useFields();
+  const {
+    appName, selectedObjectName, configureState, setConfigureState,
+  } = useFields();
+  const selectedWriteFields = configureState?.write?.selectedNonConfigurableWriteFields;
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    console.warn('Checking Write Fields', { name, checked });
+    if (selectedObjectName && configureState) {
+      setNonConfigurableWriteField(selectedObjectName, setConfigureState, name, checked);
+    }
   };
 
-  const shouldRender = !!(WRITE_DUMMY_DATA);
+  const shouldRender = !!(configureState?.write?.writeObjects);
   return (
     shouldRender && (
       <>
@@ -38,12 +31,13 @@ export function WriteFields() {
           borderRadius={8}
           padding={4}
         >
-          {WRITE_DUMMY_DATA?.objects?.map((field) => (
+          {configureState?.write?.writeObjects?.map((field) => (
             <Box key={field.objectName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
               <Checkbox
                 name={field.objectName}
                 id={field.objectName}
                 onChange={onCheckboxChange}
+                isChecked={!!selectedWriteFields?.[field.objectName]}
               >
                 {field.displayName}
               </Checkbox>

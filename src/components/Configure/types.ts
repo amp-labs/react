@@ -11,7 +11,7 @@ type SelectedNonConfigurableWriteFields = {
 
 // write state slice
 export type ConfigureStateWrite = {
-  writeObjects: Array<HydratedIntegrationWriteObject> | null,
+  writeObjects: HydratedIntegrationWriteObject[] | null,
   selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields | null,
 };
 
