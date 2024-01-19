@@ -2,22 +2,16 @@ import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
 import {
   ErrorBoundary,
-  useErrorState,
 } from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
 import { Installation, Integration } from '../../../services/api';
 import { onSaveUpdate } from '../actions/onSaveUpdate';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { getConfigureState, setHydrateConfigState } from '../state/utils';
+import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
+import { useMutateInstallation } from './useMutateInstallation';
 
 interface UpdateInstallationProps {
   installation: Installation,
@@ -28,11 +22,13 @@ interface UpdateInstallationProps {
 export function UpdateInstallation(
   { installation, integrationObj }: UpdateInstallationProps,
 ) {
-  const apiKey = useApiKey();
-  const { setInstallation } = useInstallIntegrationProps();
-  const { hydratedRevision, loading } = useHydratedRevision();
-  const { selectedObjectName } = useSelectedObjectName();
-  const { projectId } = useProject();
+  const {
+    setInstallation, hydratedRevision,
+    loading, selectedObjectName, apiKey, projectId,
+    resetBoundary, setErrors,
+    resetConfigureState, resetPendingConfigurationState, configureState,
+  } = useMutateInstallation();
+
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
   // when no installation or config exists, render create flow
@@ -41,13 +37,7 @@ export function UpdateInstallation(
   // 1. get config from installations (contains form selection state)
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
-  const { resetBoundary, setErrors } = useErrorState();
-  const {
-    resetConfigureState,
-    objectConfigurationsState,
-    resetPendingConfigurationState,
-  } = useConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+
   const resetState = useCallback(
     () => {
       resetBoundary(ErrorBoundary.MAPPING);
@@ -65,9 +55,7 @@ export function UpdateInstallation(
 
   const hydratedObject = useMemo(() => {
     const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
-      (
-        obj,
-      ) => obj?.objectName === selectedObjectName,
+      (obj) => obj?.objectName === selectedObjectName,
     );
 
     return hydrated;

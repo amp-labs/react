@@ -5,21 +5,15 @@ import {
   useCallback, useEffect, useState,
 } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useConnections } from '../../../context/ConnectionsContext';
 import {
-  ErrorBoundary, useErrorState,
+  ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
 import { onSaveCreate } from '../actions/onSaveCreate';
-import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { getConfigureState, setHydrateConfigState } from '../state/utils';
+import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
+import { useMutateInstallation } from './useMutateInstallation';
 
 // the config should be undefined for create flow
 const UNDEFINED_CONFIG = undefined;
@@ -27,20 +21,11 @@ const UNDEFINED_CONFIG = undefined;
 //  Create Installation Flow
 export function CreateInstallation() {
   const {
-    integrationId, groupRef, consumerRef, setInstallation,
-  } = useInstallIntegrationProps();
-  const { hydratedRevision, loading } = useHydratedRevision();
-  const { selectedObjectName } = useSelectedObjectName();
-  const { selectedConnection } = useConnections();
-  const apiKey = useApiKey();
-  const { projectId } = useProject();
-  const { resetBoundary, setErrors } = useErrorState();
-  const {
-    resetConfigureState,
-    objectConfigurationsState,
-    resetPendingConfigurationState,
-  } = useConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+    integrationId, groupRef, consumerRef, setInstallation, hydratedRevision,
+    loading, selectedObjectName, selectedConnection, apiKey, projectId,
+    resetBoundary, setErrors,
+    resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
+  } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
   const resetState = useCallback(

@@ -1,17 +1,19 @@
 import {
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
+  HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
 } from '../../services/api';
 
-// type SelectedNonConfigurableWriteFields = {
-//   [key: string]: boolean,
-// };
+type SelectedNonConfigurableWriteFields = {
+  [key: string]: boolean,
+};
 
 // write state slice
-// type ConfigureStateWrite = {
-//   selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields | null,
-// };
+export type ConfigureStateWrite = {
+  writeObjects: Array<HydratedIntegrationWriteObject> | null,
+  selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields | null,
+};
 
 export type SelectOptionalFields = {
   [key: string]: boolean,
@@ -21,7 +23,7 @@ export type SelectMappingFields = {
   [key: string]: string | undefined,
 };
 
-type ConfigureStateRead = {
+export type ConfigureStateRead = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: HydratedIntegrationField[] | null,
@@ -42,7 +44,7 @@ export type ConfigureState = {
   // read state slice
   read: ConfigureStateRead | null,
   // separating write for possible state slice
-  // write: ConfigureStateWrite | null,
+  write: ConfigureStateWrite | null,
 };
 
 // maps to all object keys in hydrated revision
