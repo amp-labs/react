@@ -4,7 +4,7 @@ import { useErrorState } from '../../../context/ErrorContextProvider';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
 import { useSelectedObjectName } from '../ObjectManagementNav';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getConfigureState } from '../state/utils';
 
@@ -23,7 +23,7 @@ export const useMutateInstallation = () => {
   const { resetBoundary, setErrors } = useErrorState();
   const {
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState,
-  } = useConfigureState();
+  } = useObjectsConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   return {

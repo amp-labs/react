@@ -7,14 +7,14 @@ import {
   ErrorBoundary, useErrorState,
 } from '../../../../../context/ErrorContextProvider';
 import { isIntegrationFieldMapping } from '../../../utils';
+import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
-import { useFields } from '../useFields';
 
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
-  const { selectedObjectName, configureState, setConfigureState } = useFields();
+  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

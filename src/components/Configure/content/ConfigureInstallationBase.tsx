@@ -1,21 +1,19 @@
 import {
-  FormEventHandler, useEffect,
+  FormEventHandler,
 } from 'react';
 import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
 import { LoadingIcon } from '../../../assets/LoadingIcon';
-import { useSelectedObjectName } from '../ObjectManagementNav';
 import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { UNINSTALL_INSTALLATION_CONST } from '../ObjectManagementNav/UninstallInstallation';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { getConfigureState } from '../state/utils';
 
 import { ReadFields } from './fields/ReadFields';
 import { WriteFields } from './fields/WriteFields';
 import { UninstallContent } from './UninstallContent';
+import { useSelectedConfigureState } from './useSelectedConfigureState';
 
 interface ConfigureInstallationBaseProps {
   isCreateMode?: boolean,
@@ -31,9 +29,7 @@ export function ConfigureInstallationBase(
   }: ConfigureInstallationBaseProps,
 ) {
   const { hydratedRevision, loading } = useHydratedRevision();
-  const { selectedObjectName } = useSelectedObjectName();
-  const { objectConfigurationsState } = useConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const { configureState, selectedObjectName } = useSelectedConfigureState();
 
   // has the form been modified?
   const isModified = configureState?.read?.isOptionalFieldsModified
