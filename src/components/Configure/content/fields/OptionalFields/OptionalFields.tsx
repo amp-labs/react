@@ -1,19 +1,15 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
-import { useProject } from '../../../../../context/ProjectContext';
-import { useSelectedObjectName } from '../../../ObjectManagementNav';
-import { useConfigureState } from '../../../state/ConfigurationStateProvider';
-import { getConfigureState } from '../../../state/utils';
 import { isIntegrationFieldMapping } from '../../../utils';
 import { FieldHeader } from '../FieldHeader';
+import { useFields } from '../useFields';
 
 import { setOptionalField } from './setOptionalField';
 
 export function OptionalFields() {
-  const { appName } = useProject();
-  const { objectConfigurationsState, setConfigureState } = useConfigureState();
-  const { selectedObjectName } = useSelectedObjectName();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const {
+    appName, configureState, setConfigureState, selectedObjectName,
+  } = useFields();
   const selectedOptionalFields = configureState?.read?.selectedOptionalFields;
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {

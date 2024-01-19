@@ -1,27 +1,20 @@
 import { useMemo } from 'react';
 import {
-  Box, FormControl,
-  FormErrorMessage, Stack,
+  Box, FormControl, FormErrorMessage, Stack,
 } from '@chakra-ui/react';
 
 import {
   ErrorBoundary, useErrorState,
 } from '../../../../../context/ErrorContextProvider';
-import { useSelectedObjectName } from '../../../ObjectManagementNav';
-import { useConfigureState } from '../../../state/ConfigurationStateProvider';
-import {
-  getConfigureState,
-} from '../../../state/utils';
 import { isIntegrationFieldMapping } from '../../../utils';
 import { FieldHeader } from '../FieldHeader';
+import { useFields } from '../useFields';
 
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
-  const { selectedObjectName } = useSelectedObjectName();
-  const { objectConfigurationsState, setConfigureState } = useConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const { selectedObjectName, configureState, setConfigureState } = useFields();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
