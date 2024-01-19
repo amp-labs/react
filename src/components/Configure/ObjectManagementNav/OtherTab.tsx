@@ -4,14 +4,20 @@ import { NavObjectItem } from './NavObjectItem';
 
 export const OTHER_CONST = 'other';
 
-export function OtherTab() {
+type OtherTabProps = {
+  pending?: boolean,
+  completed: boolean,
+};
+
+export function OtherTab({ pending, completed }: OtherTabProps) {
   return (
     <>
       <Divider marginY={3} />
       <NavObjectItem
         key="other-write"
         objectName={OTHER_CONST}
-        completed={false}
+        completed={completed}
+        pending={pending}
       />
     </>
 

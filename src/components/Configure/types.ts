@@ -9,10 +9,16 @@ type SelectedNonConfigurableWriteFields = {
   [key: string]: boolean,
 };
 
+type SavedWriteConfigureState = {
+  selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields,
+};
+
 // write state slice
 export type ConfigureStateWrite = {
   writeObjects: HydratedIntegrationWriteObject[] | null,
   selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields | null,
+  isWriteModified: boolean,
+  savedConfig: SavedWriteConfigureState, // check when to know if config is saved / modified
 };
 
 export type SelectOptionalFields = {

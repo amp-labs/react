@@ -1,5 +1,6 @@
 import { Draft } from 'immer';
 
+import { isFieldObjectEqual } from '../../../state/utils';
 import { ConfigureState } from '../../../types';
 
 function setNonConfigurableWriteFieldProducer(
@@ -21,7 +22,15 @@ function setNonConfigurableWriteFieldProducer(
       delete draftSelectedWriteFields[fieldKey];
     }
 
-    // TODO: add isModified check
+    // check is modified
+    if (draft?.write?.savedConfig?.selectedNonConfigurableWriteFields) {
+      const savedFields = draft.write.savedConfig.selectedNonConfigurableWriteFields;
+      const updatedFields = draftSelectedWriteFields;
+      const isModified = !isFieldObjectEqual(savedFields, updatedFields);
+      // immer syntax to set a value
+      // eslint-disable-next-line no-param-reassign
+      draft.write.isWriteModified = isModified;
+    }
   }
 }
 

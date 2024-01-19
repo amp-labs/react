@@ -79,10 +79,16 @@ const generateConfigurationStateWrite = (
     return null;
   }
 
+  const selectedWriteFields = config?.content?.write?.selectedNonConfigurableWriteFields || {};
+  const savedFields = { ...selectedWriteFields };
+
   return {
-    writeObjects: writeAction?.objects || null,
-    // TODO: add logic for selectedNonConfigurableWriteFields
-    selectedNonConfigurableWriteFields: config ? null : {},
+    writeObjects: writeAction?.objects || [],
+    selectedNonConfigurableWriteFields: selectedWriteFields,
+    isWriteModified: false,
+    savedConfig: {
+      selectedNonConfigurableWriteFields: savedFields,
+    },
   };
 };
 

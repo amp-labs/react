@@ -11,10 +11,10 @@ import { capitalize } from '../../../utils';
 import { useConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { NavObject } from '../types';
-import { generateNavObjects } from '../utils';
+import { generateNavObjects, generateOtherNavObject } from '../utils';
 
 import { NavObjectItem } from './NavObjectItem';
-import { OTHER_CONST, OtherTab } from './OtherTab';
+import { OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
 const WRITE_FEATURE_FLAG = false; // hide write tab
@@ -41,32 +41,34 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
   if (navObjects?.[tabIndex]) {
     // read tabs
     return navObjects[tabIndex];
-  } if (WRITE_FEATURE_FLAG && tabIndex === navObjects.length) {
-    // other - non configurable write tab
-    return { name: OTHER_CONST, completed: false };
   }
 
   // uninstall tab
   return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
-
-  return undefined;
 }
 
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNav({
   children,
 }: ObjectManagementNavProps) {
+  const { project } = useProject();
   const { installation, provider } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useConfigureState();
   const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
+
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabsChange = (index: number) => { setTabIndex(index); };
-  const selectedObject = getSelectedObject(navObjects || [], tabIndex);
-  const { project } = useProject();
-  const appName = project?.appName || '';
+
   const isWriteSupported = !!hydratedRevision?.content?.write;
+  const otherNavObject = WRITE_FEATURE_FLAG && isWriteSupported
+    ? generateOtherNavObject(config) : undefined;
+
+  const appName = project?.appName || '';
+  const allNavObjects = [...(navObjects || [])];
+  if (otherNavObject && isWriteSupported) { allNavObjects.push(otherNavObject); }
+  const selectedObject = getSelectedObject(allNavObjects, tabIndex);
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
@@ -105,7 +107,12 @@ export function ObjectManagementNav({
               ))}
 
               {/* Other tab - write */}
-              { WRITE_FEATURE_FLAG && isWriteSupported && <OtherTab /> }
+              { isWriteSupported && otherNavObject && (
+                <OtherTab
+                  completed={otherNavObject.completed}
+                  pending={objectConfigurationsState?.other?.write?.isWriteModified}
+                />
+              ) }
 
               {/* Uninstall tab */}
               {installation && (
