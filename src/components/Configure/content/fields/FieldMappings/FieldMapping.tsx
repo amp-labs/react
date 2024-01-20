@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from '../../../../../services/api';
-import { useFields } from '../useFields';
+import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
 import { setFieldMapping } from './setFieldMapping';
 
@@ -19,7 +19,7 @@ interface FieldMappingProps {
 export function FieldMapping(
   { field, onSelectChange, allFields }: FieldMappingProps,
 ) {
-  const { configureState, selectedObjectName, setConfigureState } = useFields();
+  const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
   const selectedRequiredMapFields = configureState?.read?.selectedFieldMappings;

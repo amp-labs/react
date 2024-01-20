@@ -8,7 +8,7 @@ import {
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
 import { useProject } from '../../../context/ProjectContext';
 import { capitalize } from '../../../utils';
-import { useConfigureState } from '../state/ConfigurationStateProvider';
+import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { NavObject } from '../types';
 import { generateNavObjects } from '../utils';
@@ -58,7 +58,7 @@ export function ObjectManagementNav({
 }: ObjectManagementNavProps) {
   const { installation, provider } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
-  const { objectConfigurationsState } = useConfigureState();
+  const { objectConfigurationsState } = useObjectsConfigureState();
   const config = installation?.config;
   const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
   const [tabIndex, setTabIndex] = useState(0);

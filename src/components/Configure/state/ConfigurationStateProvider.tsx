@@ -22,11 +22,13 @@ const ConfigurationContext = createContext<{
 
 const initialObjectConfigurationsState: ObjectConfigurationsState = {};
 
-// Custom hook to access and update the configuration state
-export function useConfigureState() {
+/**
+ * Custom hook to access and update the configuration state for all objects
+*/
+export function useObjectsConfigureState() {
   const context = useContext(ConfigurationContext);
   if (!context) {
-    throw new Error('useConfigureState must be used within a ConfigurationProvider');
+    throw new Error('useObjectsConfigureState must be used within a ConfigurationProvider');
   }
   return context;
 }

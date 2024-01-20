@@ -1,14 +1,14 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
+import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
-import { useFields } from '../useFields';
 
 import { setNonConfigurableWriteField } from './setNonConfigurableWriteField';
 
 export function WriteFields() {
   const {
     appName, selectedObjectName, configureState, setConfigureState,
-  } = useFields();
+  } = useSelectedConfigureState();
   const selectedWriteFields = configureState?.write?.selectedNonConfigurableWriteFields;
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
