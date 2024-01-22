@@ -10,11 +10,11 @@ import {
   IntegrationFieldMapping,
 } from '../../services/api';
 
+import { OTHER_CONST } from './ObjectManagementNav/OtherTab';
 import {
   NavObject,
   SelectMappingFields,
 } from './types';
-
 /**
  * type guard for IntegrationFieldMapping | IntegrationFieldExistent
  *
@@ -96,6 +96,16 @@ const generateReadNavObjects = (config: Config | undefined, hydratedRevision: Hy
   });
 
   return navObjects;
+};
+
+export const generateOtherNavObject = (
+  config: Config | undefined,
+) => {
+  const navObject: NavObject = {
+    name: OTHER_CONST,
+    completed: config ? !!config?.content?.write : false,
+  };
+  return navObject;
 };
 
 // generates standard objects and whether they are complete based on config and hydrated revision
