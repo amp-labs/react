@@ -39,7 +39,7 @@ const getObjectFromHydratedRevision = (
  * @param consumerRef
  * @returns
  */
-const generateCreateConfigFromConfigureState = (
+const generateCreateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedRevision: HydratedRevision,
@@ -79,7 +79,7 @@ const generateCreateConfigFromConfigureState = (
   return createConfigObj;
 };
 
-export const onSaveCreate = (
+export const onSaveReadCreateInstallation = (
   projectId: string,
   integrationId: string,
   groupRef: string,
@@ -90,8 +90,8 @@ export const onSaveCreate = (
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
-): Promise<any> => {
-  const createConfig = generateCreateConfigFromConfigureState(
+): Promise<void | null> => {
+  const createConfig = generateCreateReadConfigFromConfigureState(
     configureState,
     objectName,
     hydratedRevision,

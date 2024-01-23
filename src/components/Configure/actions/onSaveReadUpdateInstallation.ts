@@ -27,7 +27,7 @@ import { ConfigureState } from '../types';
  * @param schedule
  * @returns
  */
-const generateUpdateConfigFromConfigureState = (
+const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedObject: HydratedIntegrationObject,
@@ -59,7 +59,7 @@ const generateUpdateConfigFromConfigureState = (
   return updateConfigObject;
 };
 
-export const onSaveUpdate = (
+export const onSaveReadUpdateInstallation = (
   projectId: string,
   integrationId: string,
   installationId: string,
@@ -68,15 +68,20 @@ export const onSaveUpdate = (
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
-): Promise<any> => {
+): Promise<void | null> => {
   // get configuration state
   // transform configuration state to update shape
-  const updateConfig = generateUpdateConfigFromConfigureState(
+  const updateConfig = generateUpdateReadConfigFromConfigureState(
     configureState,
     selectedObjectName || '',
     hydratedObject,
     hydratedObject.schedule,
   );
+
+  if (!updateConfig) {
+    console.error('Error when generating updateConfig from configureState');
+    return Promise.resolve(null);
+  }
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
     projectId,

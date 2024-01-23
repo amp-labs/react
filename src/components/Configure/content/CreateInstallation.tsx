@@ -8,7 +8,9 @@ import {
 import {
   ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
-import { onSaveCreate } from '../actions/onSaveCreate';
+import { onSaveReadCreateInstallation } from '../actions/onSaveReadCreateInstallation';
+// import { onSaveWriteCreateInstallation } from '../actions/onSaveWriteCreateInstallation';
+import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -27,6 +29,9 @@ export function CreateInstallation() {
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
+
+  // is other selected?
+  const isOtherSelected = selectedObjectName === OTHER_CONST;
 
   const resetState = useCallback(
     () => {
@@ -50,8 +55,7 @@ export function CreateInstallation() {
     }
   }, [configureState, objectConfigurationsState, hydratedRevision, loading, resetState]);
 
-  const onSave = (e: any) => {
-    e.preventDefault();
+  const onSaveRead = () => {
     // check if fields with requirements are met
     const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
     const { errorList } = validateFieldMappings(
@@ -62,9 +66,9 @@ export function CreateInstallation() {
     if (errorList.length > 0) { return; } // skip if there are errors
 
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
-      && integrationId && groupRef && consumerRef && hydratedRevision) {
+       && integrationId && groupRef && consumerRef && hydratedRevision) {
       setLoadingState(true);
-      const res = onSaveCreate(
+      const res = onSaveReadCreateInstallation(
         projectId,
         integrationId,
         groupRef,
@@ -82,7 +86,45 @@ export function CreateInstallation() {
         resetPendingConfigurationState(selectedObjectName);
       });
     } else {
-      console.error('OnSaveCreate: missing required props');
+      console.error('CreateInstallallation - onSaveReadCreate: missing required props');
+    }
+  };
+
+  const onSaveWrite = () => {
+  // TODO: followup
+
+    // check if fields with requirements are met
+    // if (selectedObjectName && selectedConnection?.id && apiKey && projectId
+    //   && integrationId && groupRef && consumerRef && hydratedRevision) {
+    //   setLoadingState(true);
+    //   const res = onSaveWriteCreateInstallation(
+    //     projectId,
+    //     integrationId,
+    //     groupRef,
+    //     consumerRef,
+    //     selectedConnection.id,
+    //     apiKey,
+    //     hydratedRevision,
+    //     configureState,
+    //     setInstallation,
+    //   );
+
+    //   res.finally(() => {
+    //     setLoadingState(false);
+    //     resetPendingConfigurationState(selectedObjectName);
+    // reset write pending/isModified state
+    //   });
+    // } else {
+    //   console.error('CreateInstallallation - onSaveWriteCreate: missing required props');
+    // }
+  };
+
+  const onSave = (e: any) => {
+    e.preventDefault();
+    if (!isOtherSelected) {
+      onSaveRead();
+    } else {
+      onSaveWrite();
     }
   };
 

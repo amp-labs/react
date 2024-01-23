@@ -6,7 +6,8 @@ import {
   ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
 import { Installation, Integration } from '../../../services/api';
-import { onSaveUpdate } from '../actions/onSaveUpdate';
+import { onSaveReadUpdateInstallation } from '../actions/onSaveReadUpdateInstallation';
+import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -30,6 +31,8 @@ export function UpdateInstallation(
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
+  // is other selected?
+  const isOtherSelected = selectedObjectName === OTHER_CONST;
 
   // when no installation or config exists, render create flow
   const { config } = installation;
@@ -61,9 +64,7 @@ export function UpdateInstallation(
     return hydrated;
   }, [hydratedRevision, selectedObjectName]);
 
-  const onSave = (e: any) => {
-    e.preventDefault();
-
+  const onSaveRead = () => {
     // check if fields with requirements are met
     const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
     const { errorList } = validateFieldMappings(
@@ -81,7 +82,7 @@ export function UpdateInstallation(
       && projectId
       && hydratedObject) {
       setLoadingState(true);
-      const res = onSaveUpdate(
+      const res = onSaveReadUpdateInstallation(
         projectId,
         integrationObj.id,
         installation.id,
@@ -97,7 +98,22 @@ export function UpdateInstallation(
         resetPendingConfigurationState(selectedObjectName);
       });
     } else {
-      console.error('update installation props missing');
+      console.error('UpdateInstallation - onSaveUpdate missing required props');
+    }
+  };
+
+  const onSaveWrite = () => {
+    // TODO - followup
+    console.warn('onSaveWrite Update');
+  };
+
+  const onSave = (e: any) => {
+    e.preventDefault();
+
+    if (!isOtherSelected) {
+      onSaveRead();
+    } else {
+      onSaveWrite();
     }
   };
 
