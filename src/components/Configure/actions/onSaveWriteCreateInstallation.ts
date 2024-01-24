@@ -96,6 +96,10 @@ const generateCreateWriteConfigFromConfigureState = (
     createdBy: `consumer:${consumerRef}`,
     content: {
       provider: hydratedRevision.content.provider,
+      // need empty read.standarObjects for update read
+      read: {
+        standardObjects: {},
+      },
       write: {
         objects: configWriteObjects,
       },

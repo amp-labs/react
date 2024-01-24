@@ -12,6 +12,7 @@ import {
   ConfigureStateRead,
   ConfigureStateWrite,
   ObjectConfigurationsState,
+  SelectedNonConfigurableWriteFields,
   SelectMappingFields,
   SelectOptionalFields,
 } from '../types';
@@ -79,7 +80,11 @@ const generateConfigurationStateWrite = (
     return null;
   }
 
-  const selectedWriteFields = config?.content?.write?.selectedNonConfigurableWriteFields || {};
+  const writeObjects = config?.content?.write?.objects;
+  const fields = Object.keys(writeObjects || {});
+
+  const selectedWriteFields: SelectedNonConfigurableWriteFields = {};
+  fields.forEach((field) => { selectedWriteFields[field] = true; });
   const savedFields = { ...selectedWriteFields };
 
   return {
