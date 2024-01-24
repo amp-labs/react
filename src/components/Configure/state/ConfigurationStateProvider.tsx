@@ -4,13 +4,13 @@ import React, {
 import { Draft, produce } from 'immer';
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import { useHydratedRevision } from './HydratedRevisionContext';
 import {
   resetAllObjectsConfigurationState,
 } from './utils';
-
 // Create a context for the configuration state
 const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
@@ -92,13 +92,21 @@ export function ConfigurationProvider(
     }));
   }, [setObjectConfigurationsState]);
 
-  // set configure state of single object
-  const resetPendingConfigurationState = useCallback((
-    objectName: string,
-  ) => {
+  const resetWritePendingConfigurationState = useCallback(() => {
     setObjectConfigurationsState(
       produce((draft) => {
-        const readDraft = draft[objectName].read;
+        const writeDraft = draft.other.write;
+        if (writeDraft) {
+          writeDraft.isWriteModified = false;
+        }
+      }),
+    );
+  }, [setObjectConfigurationsState]);
+
+  const resetReadPendingConfigurationState = useCallback(() => {
+    setObjectConfigurationsState(
+      produce((draft) => {
+        const readDraft = draft.other.read;
         if (readDraft) {
           readDraft.isOptionalFieldsModified = false;
           readDraft.isRequiredMapFieldsModified = false;
@@ -106,6 +114,19 @@ export function ConfigurationProvider(
       }),
     );
   }, [setObjectConfigurationsState]);
+
+  // set configure state of single object
+  const resetPendingConfigurationState = useCallback((
+    objectName: string,
+  ) => {
+    // write case
+    if (objectName === OTHER_CONST) {
+      resetWritePendingConfigurationState();
+    } else {
+      // read case
+      resetReadPendingConfigurationState();
+    }
+  }, [resetReadPendingConfigurationState, resetWritePendingConfigurationState]);
 
   const contextValue = useMemo(
     () => ({

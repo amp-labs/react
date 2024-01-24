@@ -9,7 +9,7 @@ import {
   ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
 import { onSaveReadCreateInstallation } from '../actions/onSaveReadCreateInstallation';
-// import { onSaveWriteCreateInstallation } from '../actions/onSaveWriteCreateInstallation';
+import { onSaveWriteCreateInstallation } from '../actions/onSaveWriteCreateInstallation';
 import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
@@ -91,32 +91,29 @@ export function CreateInstallation() {
   };
 
   const onSaveWrite = () => {
-  // TODO: followup
-
     // check if fields with requirements are met
-    // if (selectedObjectName && selectedConnection?.id && apiKey && projectId
-    //   && integrationId && groupRef && consumerRef && hydratedRevision) {
-    //   setLoadingState(true);
-    //   const res = onSaveWriteCreateInstallation(
-    //     projectId,
-    //     integrationId,
-    //     groupRef,
-    //     consumerRef,
-    //     selectedConnection.id,
-    //     apiKey,
-    //     hydratedRevision,
-    //     configureState,
-    //     setInstallation,
-    //   );
+    if (selectedObjectName && selectedConnection?.id && apiKey && projectId
+      && integrationId && groupRef && consumerRef && hydratedRevision) {
+      setLoadingState(true);
+      const res = onSaveWriteCreateInstallation(
+        projectId,
+        integrationId,
+        groupRef,
+        consumerRef,
+        selectedConnection.id,
+        apiKey,
+        hydratedRevision,
+        configureState,
+        setInstallation,
+      );
 
-    //   res.finally(() => {
-    //     setLoadingState(false);
-    //     resetPendingConfigurationState(selectedObjectName);
-    // reset write pending/isModified state
-    //   });
-    // } else {
-    //   console.error('CreateInstallallation - onSaveWriteCreate: missing required props');
-    // }
+      res.finally(() => {
+        setLoadingState(false);
+        resetPendingConfigurationState(selectedObjectName);// reset write pending/isModified state
+      });
+    } else {
+      console.error('CreateInstallallation - onSaveWriteCreate: missing required props');
+    }
   };
 
   const onSave = (e: any) => {
