@@ -45,15 +45,16 @@ type WriteObjects = {
  * @returns
  */
 const generateConfigWriteObjects = (configureState: ConfigureState) => {
-  const configWriteObjects: WriteObjects = {}; // any is listed type in generated spec
+  const configWriteObjects: WriteObjects = {}; // `any` is listed type in generated SDK
   const configStateWriteObjects = configureState.write?.writeObjects;
   if (configStateWriteObjects) {
     configStateWriteObjects.forEach((configStateWriteObject) => {
+      const obj = configStateWriteObject.objectName;
       // object exists in config form
-      if (configStateWriteObject.objectName) {
+      if (obj) {
         // insert objectName into configWriteObjects
-        configWriteObjects[configStateWriteObject.objectName] = {
-          objectName: configStateWriteObject.objectName,
+        configWriteObjects[obj] = {
+          objectName: obj,
         };
       }
     });
