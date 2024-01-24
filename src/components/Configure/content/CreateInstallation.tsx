@@ -2,14 +2,14 @@
  * this page is wip: untested
  */
 import {
-  useCallback, useEffect, useState,
+  FormEvent, useCallback, useEffect, useState,
 } from 'react';
 
 import {
   ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
 import { onSaveReadCreateInstallation } from '../actions/onSaveReadCreateInstallation';
-import { onSaveWriteCreateInstallation } from '../actions/onSaveWriteCreateInstallation';
+import { onSaveWriteCreateInstallation } from '../actions/write/onSaveWriteCreateInstallation';
 import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
@@ -116,7 +116,7 @@ export function CreateInstallation() {
     }
   };
 
-  const onSave = (e: any) => {
+  const onSave = (e: FormEvent) => {
     e.preventDefault();
     if (!isOtherSelected) {
       onSaveRead();
