@@ -5,7 +5,7 @@ import {
   IntegrationFieldMapping,
 } from '../../services/api';
 
-type SelectedNonConfigurableWriteFields = {
+export type SelectedNonConfigurableWriteFields = {
   [key: string]: boolean,
 };
 
