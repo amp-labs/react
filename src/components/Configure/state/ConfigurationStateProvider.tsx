@@ -103,10 +103,10 @@ export function ConfigurationProvider(
     );
   }, [setObjectConfigurationsState]);
 
-  const resetReadPendingConfigurationState = useCallback(() => {
+  const resetReadPendingConfigurationState = useCallback((objectName: string) => {
     setObjectConfigurationsState(
       produce((draft) => {
-        const readDraft = draft.other.read;
+        const readDraft = draft[objectName]?.read;
         if (readDraft) {
           readDraft.isOptionalFieldsModified = false;
           readDraft.isRequiredMapFieldsModified = false;
@@ -124,7 +124,7 @@ export function ConfigurationProvider(
       resetWritePendingConfigurationState();
     } else {
       // read case
-      resetReadPendingConfigurationState();
+      resetReadPendingConfigurationState(objectName);
     }
   }, [resetReadPendingConfigurationState, resetWritePendingConfigurationState]);
 
