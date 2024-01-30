@@ -26,11 +26,14 @@ type WriteObjects = {
 export const generateConfigWriteObjects = (configureState: ConfigureState) => {
   const configWriteObjects: WriteObjects = {}; // `any` is listed type in generated SDK
   const configStateWriteObjects = configureState.write?.writeObjects;
+  const selected = configureState.write?.selectedNonConfigurableWriteFields;
+  const selectedKeys = selected ? Object.keys(selected) : [];
+
   if (configStateWriteObjects) {
     configStateWriteObjects.forEach((configStateWriteObject) => {
       const obj = configStateWriteObject.objectName;
       // object exists in config form
-      if (obj) {
+      if (selectedKeys.includes(obj)) {
         // insert objectName into configWriteObjects
         configWriteObjects[obj] = {
           objectName: obj,
