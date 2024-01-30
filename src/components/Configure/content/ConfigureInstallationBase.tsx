@@ -34,7 +34,8 @@ export function ConfigureInstallationBase(
   // has the form been modified?
   const isReadModified = configureState?.read?.isOptionalFieldsModified
   || configureState?.read?.isRequiredMapFieldsModified;
-  const isModified = isReadModified || configureState?.write?.isWriteModified;
+  const isWriteModified = configureState?.write?.isWriteModified;
+  const isModified = isReadModified || isWriteModified;
 
   // is this a new state (modified or creating a new state)
   const isStateNew = isModified || isCreateMode;
