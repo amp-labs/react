@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { PROVIDER_SALESFORCE } from '../../constants';
 import { useConnections } from '../../context/ConnectionsContext';
 import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
+import { useConnectionHandler } from '../Connect/useConnectionHandler';
 import { NoSubdomainOauthFlow } from '../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
 import { SalesforceOauthFlow } from '../Oauth/Salesforce/SalesforceOauthFlow';
 
@@ -12,12 +13,16 @@ interface ProtectedConnectionLayoutProps {
   consumerName?: string,
   groupRef: string,
   groupName?: string,
+  onSuccess?: (connectionID: string) => void;
+  onError?: (error: string) => void;
   children: JSX.Element,
 }
 export function ProtectedConnectionLayout({
-  provider, consumerRef, consumerName, groupRef, groupName, children,
+  provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onError,
 }: ProtectedConnectionLayoutProps) {
+  const { provider: providerFromProps } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection, connections } = useConnections();
+  useConnectionHandler({ onSuccess, onError });
 
   useEffect(() => {
     if (!selectedConnection && connections && connections.length > 0) {
@@ -26,7 +31,6 @@ export function ProtectedConnectionLayout({
     }
   }, [connections, selectedConnection, setSelectedConnection]);
 
-  const { provider: providerFromProps } = useInstallIntegrationProps();
   if (!provider && !providerFromProps) {
     throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');
   }
