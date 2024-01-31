@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Text } from '@chakra-ui/react';
 
 type RedirectHandlerProps = {
   redirectURL?: string;
@@ -23,7 +24,7 @@ export function RedirectHandler({ redirectURL, children } : RedirectHandlerProps
   }, [redirectURL]);
 
   // show a loading message if a redirect URL is present
-  if (redirectURL) return <div>redirecting...</div>;
+  if (redirectURL) return <Text textAlign="center">redirecting...</Text>;
 
   // render children if no redirect URL is present
   return children;
