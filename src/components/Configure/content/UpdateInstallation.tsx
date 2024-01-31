@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useState,
+  FormEvent, useCallback, useEffect, useMemo, useState,
 } from 'react';
 
 import {
@@ -7,6 +7,7 @@ import {
 } from '../../../context/ErrorContextProvider';
 import { Installation, Integration } from '../../../services/api';
 import { onSaveReadUpdateInstallation } from '../actions/onSaveReadUpdateInstallation';
+import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
 import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
@@ -56,6 +57,11 @@ export function UpdateInstallation(
     if (!configureState) { resetState(); }
   }, [configureState, resetState]);
 
+  // reset state when installation (i.e. config) is reloaded.
+  useEffect(() => {
+    if (installation) resetState();
+  }, [installation, resetState]);
+
   const hydratedObject = useMemo(() => {
     const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
       (obj) => obj?.objectName === selectedObjectName,
@@ -76,11 +82,7 @@ export function UpdateInstallation(
       return;
     }
 
-    if (installation
-      && selectedObjectName
-      && apiKey
-      && projectId
-      && hydratedObject) {
+    if (installation && selectedObjectName && apiKey && projectId && hydratedObject) {
       setLoadingState(true);
       const res = onSaveReadUpdateInstallation(
         projectId,
@@ -103,11 +105,27 @@ export function UpdateInstallation(
   };
 
   const onSaveWrite = () => {
-    // TODO - followup
-    console.warn('onSaveWrite Update');
+    if (installation && selectedObjectName && apiKey && projectId) {
+      setLoadingState(true);
+      const res = onSaveWriteUpdateInstallation(
+        projectId,
+        integrationObj.id,
+        installation.id,
+        apiKey,
+        configureState,
+        setInstallation,
+      );
+
+      res.finally(() => {
+        setLoadingState(false);
+        resetPendingConfigurationState(selectedObjectName);
+      });
+    } else {
+      console.error('UpdateInstallation - onSaveUpdate missing required props');
+    }
   };
 
-  const onSave = (e: any) => {
+  const onSave = (e: FormEvent) => {
     e.preventDefault();
 
     if (!isOtherSelected) {
