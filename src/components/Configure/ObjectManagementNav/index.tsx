@@ -55,18 +55,21 @@ export function ObjectManagementNav({
   const { installation, provider } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useObjectsConfigureState();
-  const config = installation?.config;
-  const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
 
+  // Object Nav Tab Index
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabsChange = (index: number) => { setTabIndex(index); };
+
+  const appName = project?.appName || '';
+  const config = installation?.config;
+  const readNavObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
+  const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
   const otherNavObject = WRITE_FEATURE_FLAG && isWriteSupported
     ? generateOtherNavObject(config) : undefined;
 
-  const appName = project?.appName || '';
-  const allNavObjects = [...(navObjects || [])];
+  const allNavObjects = [...(readNavObjects || [])];
   if (otherNavObject && isWriteSupported) { allNavObjects.push(otherNavObject); }
   const selectedObject = getSelectedObject(allNavObjects, tabIndex);
 
@@ -87,14 +90,14 @@ export function ObjectManagementNav({
         <Box width="20rem">
           <Text>{capitalize(provider)} integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
-          {navObjects && (
+          {isNavObjectsReady && (
             <Tabs
               index={tabIndex}
               onChange={handleTabsChange}
               orientation="horizontal"
             >
               {/* Read tab */}
-              {navObjects.map((object) => (
+              {readNavObjects.map((object) => (
                 <NavObjectItem
                   key={object.name}
                   objectName={object.name}
@@ -111,6 +114,7 @@ export function ObjectManagementNav({
                 <OtherTab
                   completed={otherNavObject.completed}
                   pending={objectConfigurationsState?.other?.write?.isWriteModified}
+                  displayName={readNavObjects?.length ? 'other' : 'write'}
                 />
               ) }
 
