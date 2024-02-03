@@ -60,7 +60,7 @@ export function ConnectionsProvider({
     throw new Error('ConnectionsProvider must be used within AmpersandProvider');
   }
 
-  const selectedProvider = provider ?? providerFromProps;
+  const selectedProvider = provider || providerFromProps;
 
   if (!selectedProvider) {
     throw new Error('ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider');
