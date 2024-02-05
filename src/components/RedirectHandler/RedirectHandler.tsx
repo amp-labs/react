@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+
+import { LoadingIcon } from '../../assets/LoadingIcon';
 
 type RedirectHandlerProps = {
   redirectURL?: string;
@@ -24,7 +26,13 @@ export function RedirectHandler({ redirectURL, children } : RedirectHandlerProps
   }, [redirectURL]);
 
   // show a loading message if a redirect URL is present
-  if (redirectURL) return <Text textAlign="center">redirecting...</Text>;
+  if (redirectURL) {
+    return (
+      <Box display="flex" alignItems="center" justifyContent="center">
+        <LoadingIcon message="Redirecting..." />
+      </Box>
+    );
+  }
 
   // render children if no redirect URL is present
   return children;
