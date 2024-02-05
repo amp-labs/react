@@ -7,6 +7,7 @@ import { ConnectionsProvider } from '../../context/ConnectionsContext';
 import { useProject } from '../../context/ProjectContext';
 import { capitalize } from '../../utils';
 import { ProtectedConnectionLayout } from '../Configure/ProtectedConnectionLayout';
+import { RedirectHandler } from '../RedirectHandler';
 
 interface ConnectedSuccessBoxProps {
   provider: string;
@@ -34,11 +35,12 @@ interface ConnectProviderProps {
   consumerName?: string,
   groupRef: string,
   groupName?: string,
+  redirectUrl?: string,
 }
 
 export function ConnectProvider(
   {
-    provider, consumerRef, consumerName, groupRef, groupName,
+    provider, consumerRef, consumerName, groupRef, groupName, redirectUrl,
   }: ConnectProviderProps,
 ) {
   return (
@@ -50,7 +52,9 @@ export function ConnectProvider(
         groupRef={groupRef}
         groupName={groupName}
       >
-        <ConnectedSuccessBox provider={provider} />
+        <RedirectHandler redirectURL={redirectUrl}>
+          <ConnectedSuccessBox provider={provider} />
+        </RedirectHandler>
       </ProtectedConnectionLayout>
     </ConnectionsProvider>
   );
