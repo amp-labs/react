@@ -1,4 +1,4 @@
-import { useProject } from '../../../context/ProjectContext';
+import { useProject } from '../../../context/ProjectContextProvider';
 import { useSelectedObjectName } from '../ObjectManagementNav';
 import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { getConfigureState } from '../state/utils';

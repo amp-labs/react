@@ -1,7 +1,7 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContext';
+import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
-import { InstallIntegrationProvider } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
+import { InstallIntegrationProvider } from '../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../context/ProjectContextProvider';
 import { ErrorTextBox } from '../ErrorTextBox';
 
 import { InstallationContent } from './content/InstallationContent';

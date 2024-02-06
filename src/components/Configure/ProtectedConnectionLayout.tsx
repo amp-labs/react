@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 import { PROVIDER_SALESFORCE } from '../../constants';
-import { useConnections } from '../../context/ConnectionsContext';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContext';
+import { useConnections } from '../../context/ConnectionsContextProvider';
+import { useInstallIntegrationProps } from '../../context/InstallIntegrationContextProvider';
 import { useConnectionHandler } from '../Connect/useConnectionHandler';
 import { NoSubdomainOauthFlow } from '../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
 import { SalesforceOauthFlow } from '../Oauth/Salesforce/SalesforceOauthFlow';
