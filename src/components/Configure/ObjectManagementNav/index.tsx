@@ -17,8 +17,6 @@ import { NavObjectItem } from './NavObjectItem';
 import { OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
-const WRITE_FEATURE_FLAG = false; // hide write tab
-
 // Create a context for the selected navObject's name
 const SelectedObjectNameContext = createContext<string | null | undefined>(null);
 
@@ -66,8 +64,7 @@ export function ObjectManagementNav({
   const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const otherNavObject = WRITE_FEATURE_FLAG && isWriteSupported
-    ? generateOtherNavObject(config) : undefined;
+  const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
 
   const allNavObjects = [...(readNavObjects || [])];
   if (otherNavObject && isWriteSupported) { allNavObjects.push(otherNavObject); }
