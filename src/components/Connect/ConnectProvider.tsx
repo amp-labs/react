@@ -11,13 +11,12 @@ interface ConnectProviderProps {
   groupRef: string,
   groupName?: string,
   redirectUrl?: string,
-  onSuccess: (connectionID: string) => void;
-  onError: (error: string) => void;
+  onSuccess?: (connectionID: string) => void;
 }
 
 export function ConnectProvider(
   {
-    provider, consumerRef, consumerName, groupRef, groupName, redirectUrl, onSuccess, onError,
+    provider, consumerRef, consumerName, groupRef, groupName, redirectUrl, onSuccess,
   }: ConnectProviderProps,
 ) {
   return (
@@ -29,7 +28,6 @@ export function ConnectProvider(
         groupRef={groupRef}
         groupName={groupName}
         onSuccess={onSuccess}
-        onError={onError}
       >
         <RedirectHandler redirectURL={redirectUrl}>
           <ConnectedSuccessBox provider={provider} />

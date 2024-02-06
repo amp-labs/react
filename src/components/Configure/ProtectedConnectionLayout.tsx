@@ -14,15 +14,14 @@ interface ProtectedConnectionLayoutProps {
   groupRef: string,
   groupName?: string,
   onSuccess?: (connectionID: string) => void;
-  onError?: (error: string) => void;
   children: JSX.Element,
 }
 export function ProtectedConnectionLayout({
-  provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onError,
+  provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess,
 }: ProtectedConnectionLayoutProps) {
   const { provider: providerFromProps } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection, connections } = useConnections();
-  useConnectionHandler({ onSuccess, onError });
+  useConnectionHandler({ onSuccess });
 
   useEffect(() => {
     if (!selectedConnection && connections && connections.length > 0) {
