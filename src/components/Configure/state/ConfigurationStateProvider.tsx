@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { Draft, produce } from 'immer';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 

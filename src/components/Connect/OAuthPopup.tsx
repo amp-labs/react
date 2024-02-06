@@ -8,9 +8,9 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 
-import { useApiKey } from '../../context/ApiKeyProvider';
-import { useConnections } from '../../context/ConnectionsContext';
-import { useProject } from '../../context/ProjectContext';
+import { useApiKey } from '../../context/ApiKeyContextProvider';
+import { useConnections } from '../../context/ConnectionsContextProvider';
+import { useProject } from '../../context/ProjectContextProvider';
 import { AMP_SERVER, api } from '../../services/api';
 
 const DEFAULT_WIDTH = 600; // px

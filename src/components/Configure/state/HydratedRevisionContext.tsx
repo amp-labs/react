@@ -2,12 +2,12 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useConnections } from '../../../context/ConnectionsContext';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useConnections } from '../../../context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { api, HydratedRevision } from '../../../services/api';
 import { ErrorTextBox } from '../../ErrorTextBox';
 

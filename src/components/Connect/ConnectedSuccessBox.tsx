@@ -1,7 +1,7 @@
 import { Box, Container } from '@chakra-ui/react';
 
 import { CheckMarkIcon } from '../../assets/NavIcon';
-import { useProject } from '../../context/ProjectContext';
+import { useProject } from '../../context/ProjectContextProvider';
 import { capitalize } from '../../utils';
 
 interface ConnectedSuccessBoxProps {

@@ -7,10 +7,10 @@
 
 import React, { createContext, useContext } from 'react';
 
-import { ApiKeyProvider } from '../../context/ApiKeyProvider';
+import { ApiKeyProvider } from '../../context/ApiKeyContextProvider';
 import { ErrorStateProvider } from '../../context/ErrorContextProvider';
-import { IntegrationListProvider } from '../../context/IntegrationListContext';
-import { ProjectProvider } from '../../context/ProjectContext';
+import { IntegrationListProvider } from '../../context/IntegrationListContextProvider';
+import { ProjectProvider } from '../../context/ProjectContextProvider';
 import { ThemeProvider } from '../ThemeProvider';
 
 interface AmpersandProviderProps {

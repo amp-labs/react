@@ -8,10 +8,10 @@ import { ErrorTextBox } from '../components/ErrorTextBox';
 import { api, Installation, Integration } from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
-import { useApiKey } from './ApiKeyProvider';
+import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
-import { useIntegrationList } from './IntegrationListContext';
-import { useProject } from './ProjectContext';
+import { useIntegrationList } from './IntegrationListContextProvider';
+import { useProject } from './ProjectContextProvider';
 
 // Define the context value type
 interface InstallIntegrationContextValue {

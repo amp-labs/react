@@ -4,8 +4,8 @@
 
 import { useCallback, useState } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useProject } from '../../../context/ProjectContext';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
 import OAuthPopup from '../../Connect/OAuthPopup';
 import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';

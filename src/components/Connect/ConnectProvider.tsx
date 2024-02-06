@@ -1,4 +1,4 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContext';
+import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
 import { ProtectedConnectionLayout } from '../Configure/ProtectedConnectionLayout';
 import { RedirectHandler } from '../RedirectHandler';
 
