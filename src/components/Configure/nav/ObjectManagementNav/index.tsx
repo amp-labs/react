@@ -5,13 +5,13 @@ import {
   Box, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
-import { capitalize } from '../../../utils';
-import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { NavObject } from '../types';
-import { generateNavObjects, generateOtherNavObject } from '../utils';
+import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../../../context/ProjectContextProvider';
+import { capitalize } from '../../../../utils';
+import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../../state/HydratedRevisionContext';
+import { NavObject } from '../../types';
+import { generateNavObjects, generateOtherNavObject } from '../../utils';
 
 import { NavObjectItem } from './NavObjectItem';
 import { OtherTab } from './OtherTab';

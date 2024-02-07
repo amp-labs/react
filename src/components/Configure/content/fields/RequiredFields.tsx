@@ -1,6 +1,6 @@
 import { Box, Tag } from '@chakra-ui/react';
 
-import { useProject } from '../../../../context/ProjectContext';
+import { useProject } from '../../../../context/ProjectContextProvider';
 import { isIntegrationFieldMapping } from '../../utils';
 import { useSelectedConfigureState } from '../useSelectedConfigureState';
 

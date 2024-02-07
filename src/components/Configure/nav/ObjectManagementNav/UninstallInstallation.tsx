@@ -3,7 +3,7 @@ import {
   Box, Button, Text, useMultiStyleConfig, useTab,
 } from '@chakra-ui/react';
 
-import { TrashIcon } from '../../../assets/TrashIcon';
+import { TrashIcon } from '../../../../assets/TrashIcon';
 
 interface NavObjectItemProps {
   text?: string;

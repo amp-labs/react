@@ -1,5 +1,5 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContext';
-import { ProtectedConnectionLayout } from '../Configure/ProtectedConnectionLayout';
+import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
+import { ProtectedConnectionLayout } from '../Configure/layout/ProtectedConnectionLayout';
 import { RedirectHandler } from '../RedirectHandler';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';

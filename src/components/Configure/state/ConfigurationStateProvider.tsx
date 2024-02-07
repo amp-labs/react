@@ -3,8 +3,8 @@ import React, {
 } from 'react';
 import { Draft, produce } from 'immer';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import { useHydratedRevision } from './HydratedRevisionContext';

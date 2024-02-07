@@ -6,10 +6,10 @@
 import { useCallback, useState } from 'react';
 
 import { PROVIDER_SALESFORCE } from '../../../constants';
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useProject } from '../../../context/ProjectContext';
-import OAuthPopup from '../../Connect/OAuthPopup';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useProject } from '../../../context/ProjectContextProvider';
 import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
+import OAuthPopup from '../OAuthPopup';
 
 import { SubdomainEntry } from './SubdomainEntry';
 

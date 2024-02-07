@@ -7,7 +7,7 @@ import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/ErrorTextBox';
 import { api, Integration } from '../services/api';
 
-import { useApiKey } from './ApiKeyProvider';
+import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {

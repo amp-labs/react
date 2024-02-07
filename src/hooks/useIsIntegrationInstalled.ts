@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useApiKey } from '../context/ApiKeyProvider';
-import { useIntegrationList } from '../context/IntegrationListContext';
-import { useProject } from '../context/ProjectContext';
+import { useApiKey } from '../context/ApiKeyContextProvider';
+import { useIntegrationList } from '../context/IntegrationListContextProvider';
+import { useProject } from '../context/ProjectContextProvider';
 import { api, Installation, Integration } from '../services/api';
 
 interface UseIsIntegrationInstalledResult {
