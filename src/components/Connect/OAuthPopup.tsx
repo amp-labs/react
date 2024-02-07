@@ -89,7 +89,8 @@ function OAuthPopup({
           if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
-          onClose(event.data.data?.message ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
+          onClose(event.data.data?.message
+            ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
           if (externalWindow) externalWindow.close();
         }
       }

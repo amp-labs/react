@@ -16,10 +16,11 @@ module.exports = {
     'react',
     '@typescript-eslint',
     'simple-import-sort',
-    'react-hooks'
+    'react-hooks',
   ],
   rules: {
-    'no-console': ["error", { allow: ["warn", "error"] }],
+    'max-len': ['warn', { code: 125 }],
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     'import/no-unresolved': 0,
     'react/jsx-one-expression-per-line': 0,
     'react/no-unescaped-entities': 0,
@@ -27,7 +28,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 0,
     'react/require-default-props': 0,
     'react-hooks/exhaustive-deps': 'warn',
-    '@typescript-eslint/no-unused-vars': 'warn', //TODO: delete this once codebase is more stable.
+    '@typescript-eslint/no-unused-vars': 'warn', // TODO: delete this once codebase is more stable.
   },
   overrides: [
     {
