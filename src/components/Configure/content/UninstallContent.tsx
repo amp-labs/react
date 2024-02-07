@@ -41,7 +41,8 @@ export function UninstallContent() {
   };
 
   const buttonContent = loading ? 'Uninstalling...' : 'Yes, uninstall';
-  const content = installation?.id ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
+  const content = installation?.id
+    ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
     : "You've successfully uninstalled the integration.";
 
   return (

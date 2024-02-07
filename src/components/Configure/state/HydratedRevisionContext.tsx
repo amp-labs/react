@@ -97,9 +97,14 @@ export function HydratedRevisionProvider({
     loading,
   }), [hydratedRevision, loading]);
 
+  const errorMsg = `Error retrieving integration details for '${
+    integrationObj?.name || integrationId || 'unknown integration'
+  }. This is sometimes caused by insufficient permissions with your credentials'`;
+
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId || 'unknown integration'}. This is sometimes caused by insufficient permissions with your credentials'`} /> : children}
+      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)
+        ? <ErrorTextBox message={errorMsg} /> : children}
     </HydratedRevisionContext.Provider>
   );
 }
