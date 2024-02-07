@@ -8,7 +8,7 @@ import {
 import { Installation, Integration } from '../../../services/api';
 import { onSaveReadUpdateInstallation } from '../actions/onSaveReadUpdateInstallation';
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 

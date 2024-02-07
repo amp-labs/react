@@ -4,7 +4,7 @@ import React, {
 import { Draft, produce } from 'immer';
 
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import { useHydratedRevision } from './HydratedRevisionContext';

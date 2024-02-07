@@ -5,10 +5,10 @@ import { useProject } from '../../context/ProjectContextProvider';
 import { ErrorTextBox } from '../ErrorTextBox';
 
 import { InstallationContent } from './content/InstallationContent';
+import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
+import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-import { ObjectManagementNav } from './ObjectManagementNav';
-import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
 
 interface InstallIntegrationProps {
   integration: string, // integration name

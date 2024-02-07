@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../constants';
-import { useConnections } from '../../context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from '../../context/InstallIntegrationContextProvider';
-import { useConnectionHandler } from '../Connect/useConnectionHandler';
-import { NoSubdomainOauthFlow } from '../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
-import { SalesforceOauthFlow } from '../Oauth/Salesforce/SalesforceOauthFlow';
+import { PROVIDER_SALESFORCE } from '../../../constants';
+import { useConnections } from '../../../context/ConnectionsContextProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { useConnectionHandler } from '../../Connect/useConnectionHandler';
+import { NoSubdomainOauthFlow } from '../../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
+import { SalesforceOauthFlow } from '../../Oauth/Salesforce/SalesforceOauthFlow';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,

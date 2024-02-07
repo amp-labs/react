@@ -3,7 +3,7 @@ import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useErrorState } from '../../../context/ErrorContextProvider';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
-import { useSelectedObjectName } from '../ObjectManagementNav';
+import { useSelectedObjectName } from '../nav/ObjectManagementNav';
 import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getConfigureState } from '../state/utils';

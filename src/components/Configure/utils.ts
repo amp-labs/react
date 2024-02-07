@@ -10,7 +10,7 @@ import {
   IntegrationFieldMapping,
 } from '../../services/api';
 
-import { OTHER_CONST } from './ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from './nav/ObjectManagementNav/constant';
 import {
   NavObject,
   SelectMappingFields,

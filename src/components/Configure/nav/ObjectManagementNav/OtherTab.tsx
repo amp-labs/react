@@ -1,8 +1,7 @@
 import { Divider } from '@chakra-ui/react';
 
+import { OTHER_CONST } from './constant';
 import { NavObjectItem } from './NavObjectItem';
-
-export const OTHER_CONST = 'other';
 
 type OtherTabProps = {
   pending?: boolean,

@@ -10,7 +10,7 @@ import {
 } from '../../../context/ErrorContextProvider';
 import { onSaveReadCreateInstallation } from '../actions/onSaveReadCreateInstallation';
 import { onSaveWriteCreateInstallation } from '../actions/write/onSaveWriteCreateInstallation';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
