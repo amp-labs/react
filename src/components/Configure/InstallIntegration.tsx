@@ -18,11 +18,12 @@ interface InstallIntegrationProps {
   groupRef: string,
   groupName?: string,
   onInstallSuccess?: (installationId: string, config: Config) => void,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 }
 
 export function InstallIntegration(
   {
-    integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess,
+    integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
@@ -40,6 +41,7 @@ export function InstallIntegration(
       groupRef={groupRef}
       groupName={groupName}
       onInstallSuccess={onInstallSuccess}
+      onUpdateSuccess={onUpdateSuccess}
     >
       <ConnectionsProvider groupRef={groupRef}>
         <ProtectedConnectionLayout

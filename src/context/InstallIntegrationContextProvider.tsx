@@ -28,6 +28,7 @@ interface InstallIntegrationContextValue {
   setInstallation: (installationObj: Installation) => void;
   resetInstallations: () => void;
   onInstallSuccess?: (installationId: string, config: Config) => void;
+  onUpdateSuccess?: (installationId: string, config: Config) => void;
 }
 // Create a context to pass down the props
 const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -42,6 +43,7 @@ const InstallIntegrationContext = createContext<InstallIntegrationContextValue>(
   setInstallation: () => { },
   resetInstallations: () => { },
   onInstallSuccess: undefined,
+  onUpdateSuccess: undefined,
 });
 
 // Create a custom hook to access the props
@@ -61,11 +63,12 @@ interface InstallIntegrationProviderProps {
   groupName?: string,
   children: React.ReactNode,
   onInstallSuccess?: (installationId: string, config: Config) => void,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 }
 
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
-  children, integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess,
+  children, integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -141,8 +144,9 @@ export function InstallIntegrationProvider({
     setInstallation,
     resetInstallations,
     onInstallSuccess,
+    onUpdateSuccess,
   }), [integrationObj, consumerRef, consumerName, groupRef,
-    groupName, installation, setInstallation, resetInstallations, onInstallSuccess]);
+    groupName, installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess]);
 
   const errorMessage = `Error retrieving installation information for integration "${integrationObj?.name || 'unknown'}"`;
 
