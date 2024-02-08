@@ -13,7 +13,7 @@ import { getConfigureState } from '../state/utils';
  * */
 export const useMutateInstallation = () => {
   const {
-    integrationId, groupRef, consumerRef, setInstallation,
+    integrationId, groupRef, consumerRef, setInstallation, onInstallSuccess,
   } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
@@ -43,5 +43,6 @@ export const useMutateInstallation = () => {
     objectConfigurationsState,
     resetPendingConfigurationState,
     configureState,
+    onInstallSuccess,
   };
 };

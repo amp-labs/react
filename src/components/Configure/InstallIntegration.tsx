@@ -2,6 +2,7 @@ import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
 import { InstallIntegrationProvider } from '../../context/InstallIntegrationContextProvider';
 import { useProject } from '../../context/ProjectContextProvider';
+import { Config } from '../../services/api';
 import { ErrorTextBox } from '../ErrorTextBox';
 
 import { InstallationContent } from './content/InstallationContent';
@@ -16,11 +17,12 @@ interface InstallIntegrationProps {
   consumerName?: string,
   groupRef: string,
   groupName?: string,
+  onInstallSuccess?: (installationId: string, config: Config) => void,
 }
 
 export function InstallIntegration(
   {
-    integration, consumerRef, consumerName, groupRef, groupName,
+    integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess,
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
@@ -37,6 +39,7 @@ export function InstallIntegration(
       consumerName={consumerName}
       groupRef={groupRef}
       groupName={groupName}
+      onInstallSuccess={onInstallSuccess}
     >
       <ConnectionsProvider groupRef={groupRef}>
         <ProtectedConnectionLayout
