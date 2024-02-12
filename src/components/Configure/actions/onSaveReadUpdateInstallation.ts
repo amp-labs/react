@@ -1,5 +1,5 @@
 import {
-  api,
+  api, Config,
   HydratedIntegrationObject,
   Installation,
   UpdateInstallationOperationRequest,
@@ -68,6 +68,7 @@ export const onSaveReadUpdateInstallation = (
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 ): Promise<void | null> => {
   // get configuration state
   // transform configuration state to update shape
@@ -103,9 +104,10 @@ export const onSaveReadUpdateInstallation = (
       'X-Api-Key': apiKey,
       'Content-Type': 'application/json',
     },
-  }).then((data) => {
+  }).then((installation) => {
     // update local installation state
-    setInstallation(data);
+    setInstallation(installation);
+    onUpdateSuccess?.(installation.id, installation.config);
   }).catch((err) => {
     console.error('ERROR: ', err);
   });
