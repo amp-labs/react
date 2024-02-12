@@ -138,13 +138,19 @@ export function InstallIntegrationProvider({
   }), [integrationObj, consumerRef, consumerName, groupRef,
     groupName, installation, setInstallation, resetInstallations]);
 
-  const errorMessage = `Error retrieving installation information for integration "${integrationObj?.name || 'unknown'}"`;
+  if (integrationObj !== null) {
+    const errorMessage = 'Error retrieving installation information for integration '
+     + `"${integrationObj?.name || 'unknown'}"`;
 
-  return (
-    isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey))
-    ? <ErrorTextBox message={errorMessage} /> : (
-      <InstallIntegrationContext.Provider value={props}>
-        {isLoading ? <LoadingIcon /> : children}
-      </InstallIntegrationContext.Provider>
-    );
+    return (
+      isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey))
+      ? <ErrorTextBox message={errorMessage} /> : (
+        <InstallIntegrationContext.Provider value={props}>
+          {isLoading ? <LoadingIcon /> : children}
+        </InstallIntegrationContext.Provider>
+      );
+  }
+
+  // if integration not found, return error message
+  return <ErrorTextBox message={`Integration "${integration}" not found`} />;
 }
