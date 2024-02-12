@@ -20,9 +20,7 @@ type ConnectionHandlerPropsProps = {
 
 /**
  * ConnectionHandler is a component that handles onSuccess and onError callbacks
- *
- * @param redirectURL
- * @param children
+ * @param onSuccess - callback function to be called when a connection is successful
  * @returns
  */
 export function useConnectionHandler({ onSuccess } : ConnectionHandlerPropsProps) {

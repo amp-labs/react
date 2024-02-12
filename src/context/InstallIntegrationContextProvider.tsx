@@ -5,7 +5,9 @@ import {
 
 import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/ErrorTextBox';
-import { api, Installation, Integration } from '../services/api';
+import {
+  api, Config, Installation, Integration,
+} from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
 import { useApiKey } from './ApiKeyContextProvider';
@@ -25,6 +27,8 @@ interface InstallIntegrationContextValue {
   installation?: Installation;
   setInstallation: (installationObj: Installation) => void;
   resetInstallations: () => void;
+  onInstallSuccess?: (installationId: string, config: Config) => void;
+  onUpdateSuccess?: (installationId: string, config: Config) => void;
 }
 // Create a context to pass down the props
 const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -38,6 +42,8 @@ const InstallIntegrationContext = createContext<InstallIntegrationContextValue>(
   installation: undefined,
   setInstallation: () => { },
   resetInstallations: () => { },
+  onInstallSuccess: undefined,
+  onUpdateSuccess: undefined,
 });
 
 // Create a custom hook to access the props
@@ -56,11 +62,13 @@ interface InstallIntegrationProviderProps {
   groupRef: string,
   groupName?: string,
   children: React.ReactNode,
+  onInstallSuccess?: (installationId: string, config: Config) => void,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 }
 
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
-  children, integration, consumerRef, consumerName, groupRef, groupName,
+  children, integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -135,8 +143,10 @@ export function InstallIntegrationProvider({
     installation,
     setInstallation,
     resetInstallations,
+    onInstallSuccess,
+    onUpdateSuccess,
   }), [integrationObj, consumerRef, consumerName, groupRef,
-    groupName, installation, setInstallation, resetInstallations]);
+    groupName, installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess]);
 
   if (integrationObj !== null) {
     const errorMessage = 'Error retrieving installation information for integration '

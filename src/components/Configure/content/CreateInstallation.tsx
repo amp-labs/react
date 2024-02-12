@@ -27,6 +27,7 @@ export function CreateInstallation() {
     loading, selectedObjectName, selectedConnection, apiKey, projectId,
     resetBoundary, setErrors,
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
+    onInstallSuccess,
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
@@ -79,6 +80,7 @@ export function CreateInstallation() {
         hydratedRevision,
         configureState,
         setInstallation,
+        onInstallSuccess,
       );
 
       res.finally(() => {
@@ -105,6 +107,7 @@ export function CreateInstallation() {
         hydratedRevision,
         configureState,
         setInstallation,
+        onInstallSuccess,
       );
 
       res.finally(() => {
