@@ -12,7 +12,7 @@ import {
   resetAllObjectsConfigurationState,
 } from './utils';
 // Create a context for the configuration state
-const ConfigurationContext = createContext<{
+export const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
   setConfigureState:(objectName: string, producer: (draft: Draft<ConfigureState>) => void,) => void;

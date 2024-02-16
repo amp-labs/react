@@ -5,10 +5,13 @@ import { useIntegrationList } from '../context/IntegrationListContextProvider';
 import { useProject } from '../context/ProjectContextProvider';
 import { api, Installation, Integration } from '../services/api';
 
-interface UseIsIntegrationInstalledResult {
-  isLoaded: boolean;
-  isIntegrationInstalled: boolean | null;
-}
+type UseIsIntegrationInstalledResult = {
+  isLoaded: false;
+  isIntegrationInstalled: null;
+} | {
+  isLoaded: true;
+  isIntegrationInstalled: boolean;
+};
 
 export const useIsIntegrationInstalled = (
   integration: string,

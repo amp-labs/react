@@ -31,7 +31,7 @@ interface InstallIntegrationContextValue {
   onUpdateSuccess?: (installationId: string, config: Config) => void;
 }
 // Create a context to pass down the props
-const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
+export const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
   integrationId: '',
   provider: '',
   integrationObj: undefined,
