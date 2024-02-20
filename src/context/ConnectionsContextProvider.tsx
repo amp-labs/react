@@ -60,12 +60,14 @@ export function ConnectionsProvider({
     throw new Error('ConnectionsProvider must be used within AmpersandProvider');
   }
 
-  if (!provider && !providerFromProps) {
+  const selectedProvider = provider || providerFromProps;
+
+  if (!selectedProvider) {
     throw new Error('ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider');
   }
 
   useEffect(() => {
-    api().connectionApi.listConnections({ projectId, groupRef, provider }, {
+    api().connectionApi.listConnections({ projectId, groupRef, provider: selectedProvider }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
@@ -77,7 +79,7 @@ export function ConnectionsProvider({
       setError(ErrorBoundary.CONNECTION_LIST, projectId);
       console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}:`, err);
     });
-  }, [projectId, apiKey, groupRef, provider, setError]);
+  }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 
   const contextValue = useMemo(() => ({
     connections,

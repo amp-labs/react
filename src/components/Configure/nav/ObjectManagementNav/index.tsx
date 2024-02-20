@@ -119,7 +119,7 @@ export function ObjectManagementNav({
                 <>
                   <Divider marginTop={10} marginBottom={3} />
                   <UninstallInstallation
-                    key="uninstall-intallation"
+                    key="uninstall-installation"
                     text="Uninstall"
                   />
                 </>

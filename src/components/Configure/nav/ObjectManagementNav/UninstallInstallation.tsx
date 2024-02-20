@@ -9,7 +9,7 @@ interface NavObjectItemProps {
   text?: string;
 }
 
-export const UNINSTALL_INSTALLATION_CONST = 'uninstall-intallation';
+export const UNINSTALL_INSTALLATION_CONST = 'uninstall-installation';
 
 export const UninstallInstallation = forwardRef<HTMLButtonElement, NavObjectItemProps>(
   ({ text = 'Uninstall' }, ref) => {
