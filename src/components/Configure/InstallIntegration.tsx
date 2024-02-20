@@ -5,11 +5,9 @@ import { useProject } from '../../context/ProjectContextProvider';
 import { Config } from '../../services/api';
 import { ErrorTextBox } from '../ErrorTextBox';
 
-import { InstallationContent } from './content/InstallationContent';
+import { ConfigureInstallation } from './ConfigureInstallation/ConfigureInstallation';
+import { HydratedRevisionProvider } from './context/HydratedRevisionContextProvider';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
-import { ObjectManagementNav } from './nav/ObjectManagementNav';
-import { ConfigurationProvider } from './state/ConfigurationStateProvider';
-import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 
 interface InstallIntegrationProps {
   integration: string, // integration name
@@ -51,11 +49,7 @@ export function InstallIntegration(
           groupName={groupName}
         >
           <HydratedRevisionProvider projectId={projectId}>
-            <ConfigurationProvider>
-              <ObjectManagementNav>
-                <InstallationContent />
-              </ObjectManagementNav>
-            </ConfigurationProvider>
+            <ConfigureInstallation />
           </HydratedRevisionProvider>
         </ProtectedConnectionLayout>
       </ConnectionsProvider>
