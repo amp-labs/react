@@ -48,6 +48,8 @@ function getApiEndpoint(): string {
       return 'https://api.withampersand.com';
     case 'mock':
       return 'http://127.0.0.1:4010';
+    case '':
+      return 'https://api.withampersand.com';
     default:
       // The user may provide an arbitrary URL here if they want to, or else the
       // default prod url will be used.
