@@ -30,7 +30,7 @@ export function isIntegrationFieldMapping(field: HydratedIntegrationField):
 /**
  *
  * @param action HydratedIntegrationAction
- * @param objectName string (account, contect, etc...)
+ * @param objectName string (account, contact, etc...)
  * @returns HydratedIntegrationObject | null
  */
 export function getStandardObjectFromAction(action: HydratedIntegrationRead, objectName: string)
@@ -73,7 +73,7 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
   if (isIntegrationFieldMapping(field)) {
     return field.mapToName; // custom mapping
   }
-  return field.fieldName; // existant field
+  return field.fieldName; // existent field
 }
 
 /**
