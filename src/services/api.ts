@@ -37,7 +37,7 @@ import { ApiService } from './ApiService';
 const VERSION = 'v1';
 
 function getApiEndpoint(): string {
-  switch (process.env?.REACT_APP_AMP_SERVER) {
+  switch (process?.env?.REACT_APP_AMP_SERVER) {
     case 'local':
       return 'http://localhost:8080';
     case 'dev':
@@ -53,7 +53,7 @@ function getApiEndpoint(): string {
     default:
       // The user may provide an arbitrary URL here if they want to, or else the
       // default prod url will be used.
-      return process.env?.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
+      return process?.env?.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
   }
 }
 
