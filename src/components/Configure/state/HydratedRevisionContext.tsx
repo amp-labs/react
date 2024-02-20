@@ -2,12 +2,12 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useConnections } from '../../../context/ConnectionsContext';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useConnections } from '../../../context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { api, HydratedRevision } from '../../../services/api';
 import { ErrorTextBox } from '../../ErrorTextBox';
 
@@ -97,9 +97,14 @@ export function HydratedRevisionProvider({
     loading,
   }), [hydratedRevision, loading]);
 
+  const errorMsg = `Error retrieving integration details for '${
+    integrationObj?.name || integrationId || 'unknown integration'
+  }. This is sometimes caused by insufficient permissions with your credentials'`;
+
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier) ? <ErrorTextBox message={`Error retrieving integration details for '${integrationObj?.name || integrationId || 'unknown integration'}. This is sometimes caused by insufficient permissions with your credentials'`} /> : children}
+      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)
+        ? <ErrorTextBox message={errorMsg} /> : children}
     </HydratedRevisionContext.Provider>
   );
 }

@@ -5,13 +5,15 @@ import {
 
 import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/ErrorTextBox';
-import { api, Installation, Integration } from '../services/api';
+import {
+  api, Config, Installation, Integration,
+} from '../services/api';
 import { findIntegrationFromList } from '../utils';
 
-import { useApiKey } from './ApiKeyProvider';
+import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
-import { useIntegrationList } from './IntegrationListContext';
-import { useProject } from './ProjectContext';
+import { useIntegrationList } from './IntegrationListContextProvider';
+import { useProject } from './ProjectContextProvider';
 
 // Define the context value type
 interface InstallIntegrationContextValue {
@@ -25,9 +27,11 @@ interface InstallIntegrationContextValue {
   installation?: Installation;
   setInstallation: (installationObj: Installation) => void;
   resetInstallations: () => void;
+  onInstallSuccess?: (installationId: string, config: Config) => void;
+  onUpdateSuccess?: (installationId: string, config: Config) => void;
 }
 // Create a context to pass down the props
-const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
+export const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
   integrationId: '',
   provider: '',
   integrationObj: undefined,
@@ -38,6 +42,8 @@ const InstallIntegrationContext = createContext<InstallIntegrationContextValue>(
   installation: undefined,
   setInstallation: () => { },
   resetInstallations: () => { },
+  onInstallSuccess: undefined,
+  onUpdateSuccess: undefined,
 });
 
 // Create a custom hook to access the props
@@ -56,11 +62,13 @@ interface InstallIntegrationProviderProps {
   groupRef: string,
   groupName?: string,
   children: React.ReactNode,
+  onInstallSuccess?: (installationId: string, config: Config) => void,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 }
 
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
-  children, integration, consumerRef, consumerName, groupRef, groupName,
+  children, integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -135,13 +143,24 @@ export function InstallIntegrationProvider({
     installation,
     setInstallation,
     resetInstallations,
+    onInstallSuccess,
+    onUpdateSuccess,
   }), [integrationObj, consumerRef, consumerName, groupRef,
-    groupName, installation, setInstallation, resetInstallations]);
+    groupName, installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess]);
 
-  return (
-    isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey)) ? <ErrorTextBox message={`Error retrieving installation information for integration "${integrationObj?.name || 'unknown'}"`} /> : (
-      <InstallIntegrationContext.Provider value={props}>
-        {isLoading ? <LoadingIcon /> : children}
-      </InstallIntegrationContext.Provider>
-    );
+  if (integrationObj !== null) {
+    const errorMessage = 'Error retrieving installation information for integration '
+     + `"${integrationObj?.name || 'unknown'}"`;
+
+    return (
+      isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey))
+      ? <ErrorTextBox message={errorMessage} /> : (
+        <InstallIntegrationContext.Provider value={props}>
+          {isLoading ? <LoadingIcon /> : children}
+        </InstallIntegrationContext.Provider>
+      );
+  }
+
+  // if integration not found, return error message
+  return <ErrorTextBox message={`Integration "${integration}" not found`} />;
 }

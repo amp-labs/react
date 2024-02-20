@@ -1,4 +1,4 @@
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { ErrorTextBox } from '../../ErrorTextBox';
 
 import { CreateInstallation } from './CreateInstallation';

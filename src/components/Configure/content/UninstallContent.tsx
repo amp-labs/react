@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button, Stack, Text } from '@chakra-ui/react';
 
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../../context/ProjectContextProvider';
 import { api } from '../../../services/api';
 
 export function UninstallContent() {
@@ -41,7 +41,8 @@ export function UninstallContent() {
   };
 
   const buttonContent = loading ? 'Uninstalling...' : 'Yes, uninstall';
-  const content = installation?.id ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
+  const content = installation?.id
+    ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
     : "You've successfully uninstalled the integration.";
 
   return (

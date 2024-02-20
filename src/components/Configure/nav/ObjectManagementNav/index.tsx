@@ -5,20 +5,20 @@ import {
   Box, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
-import { capitalize } from '../../../utils';
-import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { NavObject } from '../types';
-import { generateNavObjects, generateOtherNavObject } from '../utils';
+import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../../../context/ProjectContextProvider';
+import { capitalize } from '../../../../utils';
+import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../../state/HydratedRevisionContext';
+import { NavObject } from '../../types';
+import { generateNavObjects, generateOtherNavObject } from '../../utils';
 
 import { NavObjectItem } from './NavObjectItem';
 import { OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
 
 // Create a context for the selected navObject's name
-const SelectedObjectNameContext = createContext<string | null | undefined>(null);
+export const SelectedObjectNameContext = createContext<string | null | undefined>(null);
 
 // Custom hook to access the selected navObject's name
 export function useSelectedObjectName() {
@@ -56,7 +56,6 @@ export function ObjectManagementNav({
 
   // Object Nav Tab Index
   const [tabIndex, setTabIndex] = useState(0);
-  const handleTabsChange = (index: number) => { setTabIndex(index); };
 
   const appName = project?.appName || '';
   const config = installation?.config;
@@ -90,7 +89,7 @@ export function ObjectManagementNav({
           {isNavObjectsReady && (
             <Tabs
               index={tabIndex}
-              onChange={handleTabsChange}
+              onChange={setTabIndex}
               orientation="horizontal"
             >
               {/* Read tab */}
