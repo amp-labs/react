@@ -10,7 +10,7 @@ type RedirectHandlerProps = {
 
 /**
  * RedirectHandler is a component that redirects to a specified URL when mounted or
- * will render the childen if no redirect URL is present.
+ * will render the children if no redirect URL is present.
  *
  * @param redirectURL
  * @param children
