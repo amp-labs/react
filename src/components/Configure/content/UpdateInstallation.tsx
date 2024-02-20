@@ -8,7 +8,7 @@ import {
 import { Installation, Integration } from '../../../services/api';
 import { onSaveReadUpdateInstallation } from '../actions/onSaveReadUpdateInstallation';
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -28,7 +28,7 @@ export function UpdateInstallation(
     setInstallation, hydratedRevision,
     loading, selectedObjectName, apiKey, projectId,
     resetBoundary, setErrors,
-    resetConfigureState, resetPendingConfigurationState, configureState,
+    resetConfigureState, resetPendingConfigurationState, configureState, onUpdateSuccess,
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
@@ -93,6 +93,7 @@ export function UpdateInstallation(
         configureState,
         setInstallation,
         hydratedObject,
+        onUpdateSuccess,
       );
 
       res.finally(() => {
@@ -114,6 +115,7 @@ export function UpdateInstallation(
         apiKey,
         configureState,
         setInstallation,
+        onUpdateSuccess,
       );
 
       res.finally(() => {

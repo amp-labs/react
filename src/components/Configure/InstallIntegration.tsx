@@ -1,14 +1,15 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContext';
+import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
-import { InstallIntegrationProvider } from '../../context/InstallIntegrationContext';
-import { useProject } from '../../context/ProjectContext';
+import { InstallIntegrationProvider } from '../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../context/ProjectContextProvider';
+import { Config } from '../../services/api';
 import { ErrorTextBox } from '../ErrorTextBox';
 
 import { InstallationContent } from './content/InstallationContent';
+import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
+import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-import { ObjectManagementNav } from './ObjectManagementNav';
-import { ProtectedConnectionLayout } from './ProtectedConnectionLayout';
 
 interface InstallIntegrationProps {
   integration: string, // integration name
@@ -16,11 +17,13 @@ interface InstallIntegrationProps {
   consumerName?: string,
   groupRef: string,
   groupName?: string,
+  onInstallSuccess?: (installationId: string, config: Config) => void,
+  onUpdateSuccess?: (installationId: string, config: Config) => void,
 }
 
 export function InstallIntegration(
   {
-    integration, consumerRef, consumerName, groupRef, groupName,
+    integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
@@ -37,6 +40,8 @@ export function InstallIntegration(
       consumerName={consumerName}
       groupRef={groupRef}
       groupName={groupName}
+      onInstallSuccess={onInstallSuccess}
+      onUpdateSuccess={onUpdateSuccess}
     >
       <ConnectionsProvider groupRef={groupRef}>
         <ProtectedConnectionLayout

@@ -1,9 +1,9 @@
-import { useApiKey } from '../../../context/ApiKeyProvider';
-import { useConnections } from '../../../context/ConnectionsContext';
+import { useApiKey } from '../../../context/ApiKeyContextProvider';
+import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useErrorState } from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
-import { useSelectedObjectName } from '../ObjectManagementNav';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../../context/ProjectContextProvider';
+import { useSelectedObjectName } from '../nav/ObjectManagementNav';
 import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getConfigureState } from '../state/utils';
@@ -13,7 +13,7 @@ import { getConfigureState } from '../state/utils';
  * */
 export const useMutateInstallation = () => {
   const {
-    integrationId, groupRef, consumerRef, setInstallation,
+    integrationId, groupRef, consumerRef, setInstallation, onInstallSuccess, onUpdateSuccess,
   } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
@@ -43,5 +43,7 @@ export const useMutateInstallation = () => {
     objectConfigurationsState,
     resetPendingConfigurationState,
     configureState,
+    onInstallSuccess,
+    onUpdateSuccess,
   };
 };

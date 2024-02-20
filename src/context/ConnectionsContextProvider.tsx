@@ -7,12 +7,12 @@ import { LoadingIcon } from '../assets/LoadingIcon';
 import { ErrorTextBox } from '../components/ErrorTextBox';
 import { api, Connection } from '../services/api';
 
-import { useApiKey } from './ApiKeyProvider';
+import { useApiKey } from './ApiKeyContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
-import { useInstallIntegrationProps } from './InstallIntegrationContext';
-import { useProject } from './ProjectContext';
+import { useInstallIntegrationProps } from './InstallIntegrationContextProvider';
+import { useProject } from './ProjectContextProvider';
 
 interface ConnectionsContextValue {
   connections: Connection[] | null;

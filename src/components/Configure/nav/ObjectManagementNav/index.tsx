@@ -5,13 +5,13 @@ import {
   Box, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { useProject } from '../../../context/ProjectContext';
-import { capitalize } from '../../../utils';
-import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { NavObject } from '../types';
-import { generateNavObjects, generateOtherNavObject } from '../utils';
+import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
+import { useProject } from '../../../../context/ProjectContextProvider';
+import { capitalize } from '../../../../utils';
+import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
+import { useHydratedRevision } from '../../state/HydratedRevisionContext';
+import { NavObject } from '../../types';
+import { generateNavObjects, generateOtherNavObject } from '../../utils';
 
 import { NavObjectItem } from './NavObjectItem';
 import { OtherTab } from './OtherTab';
@@ -20,7 +20,7 @@ import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './Uninstall
 const WRITE_FEATURE_FLAG = false; // hide write tab
 
 // Create a context for the selected navObject's name
-const SelectedObjectNameContext = createContext<string | null | undefined>(null);
+export const SelectedObjectNameContext = createContext<string | null | undefined>(null);
 
 // Custom hook to access the selected navObject's name
 export function useSelectedObjectName() {
@@ -55,18 +55,20 @@ export function ObjectManagementNav({
   const { installation, provider } = useInstallIntegrationProps();
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useObjectsConfigureState();
-  const config = installation?.config;
-  const navObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
 
+  // Object Nav Tab Index
   const [tabIndex, setTabIndex] = useState(0);
-  const handleTabsChange = (index: number) => { setTabIndex(index); };
+
+  const appName = project?.appName || '';
+  const config = installation?.config;
+  const readNavObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
+  const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
   const otherNavObject = WRITE_FEATURE_FLAG && isWriteSupported
     ? generateOtherNavObject(config) : undefined;
 
-  const appName = project?.appName || '';
-  const allNavObjects = [...(navObjects || [])];
+  const allNavObjects = [...(readNavObjects || [])];
   if (otherNavObject && isWriteSupported) { allNavObjects.push(otherNavObject); }
   const selectedObject = getSelectedObject(allNavObjects, tabIndex);
 
@@ -87,14 +89,14 @@ export function ObjectManagementNav({
         <Box width="20rem">
           <Text>{capitalize(provider)} integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
-          {navObjects && (
+          {isNavObjectsReady && (
             <Tabs
               index={tabIndex}
-              onChange={handleTabsChange}
+              onChange={setTabIndex}
               orientation="horizontal"
             >
               {/* Read tab */}
-              {navObjects.map((object) => (
+              {readNavObjects.map((object) => (
                 <NavObjectItem
                   key={object.name}
                   objectName={object.name}
@@ -111,6 +113,7 @@ export function ObjectManagementNav({
                 <OtherTab
                   completed={otherNavObject.completed}
                   pending={objectConfigurationsState?.other?.write?.isWriteModified}
+                  displayName={readNavObjects?.length ? 'other' : 'write'}
                 />
               ) }
 

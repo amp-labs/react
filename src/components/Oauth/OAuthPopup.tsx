@@ -8,9 +8,9 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 
-import { useApiKey } from '../../context/ApiKeyProvider';
-import { useConnections } from '../../context/ConnectionsContext';
-import { useProject } from '../../context/ProjectContext';
+import { useApiKey } from '../../context/ApiKeyContextProvider';
+import { useConnections } from '../../context/ConnectionsContextProvider';
+import { useProject } from '../../context/ProjectContextProvider';
 import { AMP_SERVER, api } from '../../services/api';
 
 const DEFAULT_WIDTH = 600; // px
@@ -65,9 +65,7 @@ function OAuthPopup({
 
   const refreshConnections = useCallback(async (connectionId: string) => {
     const connection = await api().connectionApi.getConnection({ projectId, connectionId }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
+      headers: { 'X-Api-Key': apiKey ?? '' },
     });
     setSelectedConnection(connection);
   }, [projectId, apiKey, setSelectedConnection]);
@@ -91,7 +89,8 @@ function OAuthPopup({
           if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
-          onClose(event.data.data?.message ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
+          onClose(event.data.data?.message
+            ?? 'There was an error logging into your Salesforce subdomain. Please try again.');
           if (externalWindow) externalWindow.close();
         }
       }

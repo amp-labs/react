@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useApiKey } from '../context/ApiKeyProvider';
-import { useIntegrationList } from '../context/IntegrationListContext';
-import { useProject } from '../context/ProjectContext';
+import { useApiKey } from '../context/ApiKeyContextProvider';
+import { useIntegrationList } from '../context/IntegrationListContextProvider';
+import { useProject } from '../context/ProjectContextProvider';
 import { api, Installation, Integration } from '../services/api';
 
-interface UseIsIntegrationInstalledResult {
-  isLoaded: boolean;
-  isIntegrationInstalled: boolean | null;
-}
+type UseIsIntegrationInstalledResult = {
+  isLoaded: false;
+  isIntegrationInstalled: null;
+} | {
+  isLoaded: true;
+  isIntegrationInstalled: boolean;
+};
 
 export const useIsIntegrationInstalled = (
   integration: string,

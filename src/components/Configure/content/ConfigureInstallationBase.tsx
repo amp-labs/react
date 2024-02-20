@@ -6,8 +6,8 @@ import {
 } from '@chakra-ui/react';
 
 import { LoadingIcon } from '../../../assets/LoadingIcon';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
-import { UNINSTALL_INSTALLATION_CONST } from '../ObjectManagementNav/UninstallInstallation';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
+import { UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/UninstallInstallation';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 
 import { ReadFields } from './fields/ReadFields';

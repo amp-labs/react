@@ -1,5 +1,5 @@
 import {
-  api, CreateInstallationOperationRequest,
+  api, Config, CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
   HydratedRevision,
   Installation,
@@ -78,6 +78,7 @@ export const onSaveWriteCreateInstallation = (
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
+  onInstallSuccess?: (installationId: string, config: Config) => void,
 ): Promise<void | null> => {
   const createConfig = generateCreateWriteConfigFromConfigureState(
     configureState,
@@ -107,6 +108,7 @@ export const onSaveWriteCreateInstallation = (
     .then((installation) => {
       // update local installation state
       setInstallation(installation);
+      onInstallSuccess?.(installation.id, installation.config);
     })
     .catch((err) => {
       console.error('ERROR: ', err);

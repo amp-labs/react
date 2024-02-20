@@ -10,7 +10,7 @@ import {
 } from '../../../context/ErrorContextProvider';
 import { onSaveReadCreateInstallation } from '../actions/onSaveReadCreateInstallation';
 import { onSaveWriteCreateInstallation } from '../actions/write/onSaveWriteCreateInstallation';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -27,6 +27,7 @@ export function CreateInstallation() {
     loading, selectedObjectName, selectedConnection, apiKey, projectId,
     resetBoundary, setErrors,
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
+    onInstallSuccess,
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
@@ -79,6 +80,7 @@ export function CreateInstallation() {
         hydratedRevision,
         configureState,
         setInstallation,
+        onInstallSuccess,
       );
 
       res.finally(() => {
@@ -105,6 +107,7 @@ export function CreateInstallation() {
         hydratedRevision,
         configureState,
         setInstallation,
+        onInstallSuccess,
       );
 
       res.finally(() => {

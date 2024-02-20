@@ -3,8 +3,8 @@ import React, {
 } from 'react';
 import { Draft, produce } from 'immer';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContext';
-import { OTHER_CONST } from '../ObjectManagementNav/OtherTab';
+import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import { useHydratedRevision } from './HydratedRevisionContext';
@@ -12,7 +12,7 @@ import {
   resetAllObjectsConfigurationState,
 } from './utils';
 // Create a context for the configuration state
-const ConfigurationContext = createContext<{
+export const ConfigurationContext = createContext<{
   objectConfigurationsState: ObjectConfigurationsState;
   setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
   setConfigureState:(objectName: string, producer: (draft: Draft<ConfigureState>) => void,) => void;
