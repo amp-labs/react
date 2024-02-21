@@ -6,7 +6,7 @@ import {
 
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
-const SALESFORCE_HELP_URL = 'https://help.salesforce.com/articleView?id=domain_name_not_found.htm&type=5';
+const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';
 
 type SubdomainEntryProps = {
   handleSubmit: () => void;
