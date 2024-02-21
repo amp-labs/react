@@ -37,6 +37,12 @@ import { ApiService } from './ApiService';
 const VERSION = 'v1';
 
 function getApiEndpoint(): string {
+  const prodEndpoint = 'https://api.withampersand.com';
+
+  if (typeof process === 'undefined') {
+    return prodEndpoint;
+  }
+
   switch (process?.env?.REACT_APP_AMP_SERVER) {
     case 'local':
       return 'http://localhost:8080';
@@ -45,15 +51,15 @@ function getApiEndpoint(): string {
     case 'staging':
       return 'https://staging-api.withampersand.com';
     case 'prod':
-      return 'https://api.withampersand.com';
+      return prodEndpoint;
     case 'mock':
       return 'http://127.0.0.1:4010';
     case '':
-      return 'https://api.withampersand.com';
+      return prodEndpoint;
     default:
       // The user may provide an arbitrary URL here if they want to, or else the
       // default prod url will be used.
-      return process?.env?.REACT_APP_AMP_SERVER ?? 'https://api.withampersand.com';
+      return process?.env?.REACT_APP_AMP_SERVER ?? prodEndpoint;
   }
 }
 
