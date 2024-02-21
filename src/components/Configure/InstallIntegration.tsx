@@ -7,6 +7,7 @@ import { ErrorTextBox } from '../ErrorTextBox';
 
 import { ConfigureInstallation } from './ConfigureInstallation/ConfigureInstallation';
 import { HydratedRevisionProvider } from './context/HydratedRevisionContextProvider';
+import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 
 interface InstallIntegrationProps {
@@ -49,7 +50,9 @@ export function InstallIntegration(
           groupName={groupName}
         >
           <HydratedRevisionProvider projectId={projectId}>
-            <ConfigureInstallation />
+            <ConditionalProxyLayout>
+              <ConfigureInstallation />
+            </ConditionalProxyLayout>
           </HydratedRevisionProvider>
         </ProtectedConnectionLayout>
       </ConnectionsProvider>
