@@ -6,6 +6,7 @@ import { Config } from '../../services/api';
 import { ErrorTextBox } from '../ErrorTextBox';
 
 import { InstallationContent } from './content/InstallationContent';
+import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
@@ -51,11 +52,13 @@ export function InstallIntegration(
           groupName={groupName}
         >
           <HydratedRevisionProvider projectId={projectId}>
-            <ConfigurationProvider>
-              <ObjectManagementNav>
-                <InstallationContent />
-              </ObjectManagementNav>
-            </ConfigurationProvider>
+            <ConditionalProxyLayout>
+              <ConfigurationProvider>
+                <ObjectManagementNav>
+                  <InstallationContent />
+                </ObjectManagementNav>
+              </ConfigurationProvider>
+            </ConditionalProxyLayout>
           </HydratedRevisionProvider>
         </ProtectedConnectionLayout>
       </ConnectionsProvider>
