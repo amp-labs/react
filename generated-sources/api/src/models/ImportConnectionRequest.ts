@@ -68,7 +68,7 @@ export interface ImportConnectionRequest {
      */
     refreshToken: string;
     /**
-     * The OAuth scopes for this token. If it is unknown, then leave this field empty.
+     * The OAuth scopes for this token. If omitted, will default to the scopes of the Provider App.
      * @type {Array<string>}
      * @memberof ImportConnectionRequest
      */

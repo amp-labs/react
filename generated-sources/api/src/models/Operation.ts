@@ -13,13 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { OperationError } from './OperationError';
-import {
-    OperationErrorFromJSON,
-    OperationErrorFromJSONTyped,
-    OperationErrorToJSON,
-} from './OperationError';
-
 /**
  * 
  * @export
@@ -33,17 +26,23 @@ export interface Operation {
      */
     projectId: string;
     /**
+     * The integration ID.
+     * @type {string}
+     * @memberof Operation
+     */
+    integrationId: string;
+    /**
+     * The config ID.
+     * @type {string}
+     * @memberof Operation
+     */
+    configId: string;
+    /**
      * The action type to perform for the given object.
      * @type {string}
      * @memberof Operation
      */
     actionType: string;
-    /**
-     * The provider object name to perform the action for
-     * @type {string}
-     * @memberof Operation
-     */
-    objectName: string;
     /**
      * The operation ID.
      * @type {string}
@@ -61,13 +60,25 @@ export interface Operation {
      * @type {string}
      * @memberof Operation
      */
-    status?: string;
+    status: string;
     /**
-     * The error history of the operation.
-     * @type {Array<OperationError>}
+     * The result of the operation.
+     * @type {string}
      * @memberof Operation
      */
-    errorHistory?: Array<OperationError>;
+    result?: string;
+    /**
+     * The latest operation event ID.
+     * @type {string}
+     * @memberof Operation
+     */
+    latestOperationEventId?: string;
+    /**
+     * Metadata associated with the operation.
+     * @type {object}
+     * @memberof Operation
+     */
+    metadata?: object;
     /**
      * The time the operation was created.
      * @type {Date}
@@ -82,10 +93,12 @@ export interface Operation {
 export function instanceOfOperation(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "projectId" in value;
+    isInstance = isInstance && "integrationId" in value;
+    isInstance = isInstance && "configId" in value;
     isInstance = isInstance && "actionType" in value;
-    isInstance = isInstance && "objectName" in value;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "installationId" in value;
+    isInstance = isInstance && "status" in value;
 
     return isInstance;
 }
@@ -101,12 +114,15 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     return {
         
         'projectId': json['projectId'],
+        'integrationId': json['integrationId'],
+        'configId': json['configId'],
         'actionType': json['actionType'],
-        'objectName': json['objectName'],
         'id': json['id'],
         'installationId': json['installationId'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
-        'errorHistory': !exists(json, 'errorHistory') ? undefined : ((json['errorHistory'] as Array<any>).map(OperationErrorFromJSON)),
+        'status': json['status'],
+        'result': !exists(json, 'result') ? undefined : json['result'],
+        'latestOperationEventId': !exists(json, 'latestOperationEventId') ? undefined : json['latestOperationEventId'],
+        'metadata': !exists(json, 'metadata') ? undefined : json['metadata'],
         'createTime': !exists(json, 'createTime') ? undefined : (new Date(json['createTime'])),
     };
 }
@@ -121,12 +137,15 @@ export function OperationToJSON(value?: Operation | null): any {
     return {
         
         'projectId': value.projectId,
+        'integrationId': value.integrationId,
+        'configId': value.configId,
         'actionType': value.actionType,
-        'objectName': value.objectName,
         'id': value.id,
         'installationId': value.installationId,
         'status': value.status,
-        'errorHistory': value.errorHistory === undefined ? undefined : ((value.errorHistory as Array<any>).map(OperationErrorToJSON)),
+        'result': value.result,
+        'latestOperationEventId': value.latestOperationEventId,
+        'metadata': value.metadata,
         'createTime': value.createTime === undefined ? undefined : (value.createTime.toISOString()),
     };
 }

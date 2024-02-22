@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { IntegrationProxy } from './IntegrationProxy';
+import {
+    IntegrationProxyFromJSON,
+    IntegrationProxyFromJSONTyped,
+    IntegrationProxyToJSON,
+} from './IntegrationProxy';
 import type { IntegrationRead } from './IntegrationRead';
 import {
     IntegrationReadFromJSON,
@@ -62,6 +68,12 @@ export interface Integration1 {
      * @memberof Integration1
      */
     write?: IntegrationWrite;
+    /**
+     * 
+     * @type {IntegrationProxy}
+     * @memberof Integration1
+     */
+    proxy?: IntegrationProxy;
 }
 
 /**
@@ -90,6 +102,7 @@ export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolea
         'provider': json['provider'],
         'read': !exists(json, 'read') ? undefined : IntegrationReadFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : IntegrationWriteFromJSON(json['write']),
+        'proxy': !exists(json, 'proxy') ? undefined : IntegrationProxyFromJSON(json['proxy']),
     };
 }
 
@@ -107,6 +120,7 @@ export function Integration1ToJSON(value?: Integration1 | null): any {
         'provider': value.provider,
         'read': IntegrationReadToJSON(value.read),
         'write': IntegrationWriteToJSON(value.write),
+        'proxy': IntegrationProxyToJSON(value.proxy),
     };
 }
 

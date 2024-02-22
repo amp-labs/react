@@ -1,6 +1,5 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 README.md
 package.json
 src/apis/AllowedDomainApi.ts
@@ -21,6 +20,7 @@ src/apis/UploadURLApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/BaseConfigContent.ts
+src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
 src/models/BaseReadConfigStandardObject.ts
 src/models/BaseWriteConfig.ts
@@ -46,6 +46,7 @@ src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
 src/models/HydratedIntegrationObject.ts
+src/models/HydratedIntegrationProxy.ts
 src/models/HydratedIntegrationRead.ts
 src/models/HydratedIntegrationWrite.ts
 src/models/HydratedIntegrationWriteObject.ts
@@ -60,12 +61,12 @@ src/models/IntegrationField.ts
 src/models/IntegrationFieldExistent.ts
 src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
+src/models/IntegrationProxy.ts
 src/models/IntegrationRead.ts
 src/models/IntegrationWrite.ts
 src/models/IntegrationWriteObject.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts
-src/models/OperationError.ts
 src/models/OperationLog.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Project.ts
