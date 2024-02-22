@@ -35,15 +35,12 @@ import { ApiService } from './ApiService';
    *
    * */
 const VERSION = 'v1';
+const prodEndpoint = 'https://api.withampersand.com';
 
 function getApiEndpoint(): string {
-  const prodEndpoint = 'https://api.withampersand.com';
+  const ENV_SERVER = process.env.REACT_APP_AMP_SERVER || 'prod';
 
-  if (typeof process === 'undefined') {
-    return prodEndpoint;
-  }
-
-  switch (process?.env?.REACT_APP_AMP_SERVER) {
+  switch (ENV_SERVER) {
     case 'local':
       return 'http://localhost:8080';
     case 'dev':
