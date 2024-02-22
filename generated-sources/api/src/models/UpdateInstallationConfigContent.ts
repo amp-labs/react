@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BaseProxyConfig } from './BaseProxyConfig';
+import {
+    BaseProxyConfigFromJSON,
+    BaseProxyConfigFromJSONTyped,
+    BaseProxyConfigToJSON,
+} from './BaseProxyConfig';
 import type { BaseReadConfig } from './BaseReadConfig';
 import {
     BaseReadConfigFromJSON,
@@ -50,6 +56,12 @@ export interface UpdateInstallationConfigContent {
      * @memberof UpdateInstallationConfigContent
      */
     write?: BaseWriteConfig;
+    /**
+     * 
+     * @type {BaseProxyConfig}
+     * @memberof UpdateInstallationConfigContent
+     */
+    proxy?: BaseProxyConfig;
 }
 
 /**
@@ -74,6 +86,7 @@ export function UpdateInstallationConfigContentFromJSONTyped(json: any, ignoreDi
         'provider': !exists(json, 'provider') ? undefined : json['provider'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : BaseWriteConfigFromJSON(json['write']),
+        'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
     };
 }
 
@@ -89,6 +102,7 @@ export function UpdateInstallationConfigContentToJSON(value?: UpdateInstallation
         'provider': value.provider,
         'read': BaseReadConfigToJSON(value.read),
         'write': BaseWriteConfigToJSON(value.write),
+        'proxy': BaseProxyConfigToJSON(value.proxy),
     };
 }
 

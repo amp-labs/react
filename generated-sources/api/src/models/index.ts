@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './BaseConfigContent';
+export * from './BaseProxyConfig';
 export * from './BaseReadConfig';
 export * from './BaseReadConfigStandardObject';
 export * from './BaseWriteConfig';
@@ -26,6 +27,7 @@ export * from './HydratedIntegration';
 export * from './HydratedIntegrationField';
 export * from './HydratedIntegrationFieldExistent';
 export * from './HydratedIntegrationObject';
+export * from './HydratedIntegrationProxy';
 export * from './HydratedIntegrationRead';
 export * from './HydratedIntegrationWrite';
 export * from './HydratedIntegrationWriteObject';
@@ -40,12 +42,12 @@ export * from './IntegrationField';
 export * from './IntegrationFieldExistent';
 export * from './IntegrationFieldMapping';
 export * from './IntegrationObject';
+export * from './IntegrationProxy';
 export * from './IntegrationRead';
 export * from './IntegrationWrite';
 export * from './IntegrationWriteObject';
 export * from './OauthConnectRequest';
 export * from './Operation';
-export * from './OperationError';
 export * from './OperationLog';
 export * from './OptionalFieldsAutoOption';
 export * from './Project';

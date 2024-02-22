@@ -20,19 +20,19 @@ import { exists, mapValues } from '../runtime';
  */
 export interface OauthConnectRequest {
     /**
-     * The identifier for the provider workspace (e.g. "salesforce-instance-domain")
+     * The identifier for the provider workspace
      * @type {string}
      * @memberof OauthConnectRequest
      */
     providerWorkspaceRef?: string;
     /**
-     * The project ID.
+     * The Ampersand project ID.
      * @type {string}
      * @memberof OauthConnectRequest
      */
     projectId: string;
     /**
-     * The group reference that will be used along with projectId as unique identifier.
+     * The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.
      * @type {string}
      * @memberof OauthConnectRequest
      */
@@ -44,7 +44,7 @@ export interface OauthConnectRequest {
      */
     groupName?: string;
     /**
-     * The consumer reference.
+     * The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow.
      * @type {string}
      * @memberof OauthConnectRequest
      */
@@ -56,11 +56,11 @@ export interface OauthConnectRequest {
      */
     consumerName?: string;
     /**
-     * The provider app ID.
+     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Console is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    providerAppId: string;
+    providerAppId?: string;
     /**
      * The provider that this app connects to.
      * @type {string}
@@ -77,7 +77,6 @@ export function instanceOfOauthConnectRequest(value: object): boolean {
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "consumerRef" in value;
-    isInstance = isInstance && "providerAppId" in value;
     isInstance = isInstance && "provider" in value;
 
     return isInstance;
@@ -99,7 +98,7 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
         'consumerRef': json['consumerRef'],
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
-        'providerAppId': json['providerAppId'],
+        'providerAppId': !exists(json, 'providerAppId') ? undefined : json['providerAppId'],
         'provider': json['provider'],
     };
 }

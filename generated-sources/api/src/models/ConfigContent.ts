@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BaseProxyConfig } from './BaseProxyConfig';
+import {
+    BaseProxyConfigFromJSON,
+    BaseProxyConfigFromJSONTyped,
+    BaseProxyConfigToJSON,
+} from './BaseProxyConfig';
+
 /**
  * 
  * @export
@@ -37,6 +44,12 @@ export interface ConfigContent {
      * @memberof ConfigContent
      */
     write?: any | null;
+    /**
+     * 
+     * @type {BaseProxyConfig}
+     * @memberof ConfigContent
+     */
+    proxy?: BaseProxyConfig;
 }
 
 /**
@@ -62,6 +75,7 @@ export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boole
         'provider': json['provider'],
         'read': !exists(json, 'read') ? undefined : json['read'],
         'write': !exists(json, 'write') ? undefined : json['write'],
+        'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
     };
 }
 
@@ -77,6 +91,7 @@ export function ConfigContentToJSON(value?: ConfigContent | null): any {
         'provider': value.provider,
         'read': value.read,
         'write': value.write,
+        'proxy': BaseProxyConfigToJSON(value.proxy),
     };
 }
 

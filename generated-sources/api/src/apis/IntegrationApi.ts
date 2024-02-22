@@ -207,14 +207,10 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
 
         const queryParameters: any = {};
 
-        if (requestParameters.integrationId !== undefined) {
-            queryParameters['integrationId'] = requestParameters.integrationId;
-        }
-
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectId}/integrations/{integrationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

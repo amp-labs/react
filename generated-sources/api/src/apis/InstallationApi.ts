@@ -43,6 +43,12 @@ export interface DeleteInstallationRequest {
     installationId: string;
 }
 
+export interface GetInstallationRequest {
+    projectId: string;
+    integrationId: string;
+    installationId: string;
+}
+
 export interface ImportInstallationOperationRequest {
     projectId: string;
     integrationId: string;
@@ -102,6 +108,23 @@ export interface InstallationApiInterface {
      * Delete an installation
      */
     deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get an installation
+     * @param {string} projectId 
+     * @param {string} integrationId 
+     * @param {string} installationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    getInstallationRaw(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
+
+    /**
+     * Get an installation
+     */
+    getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
      * 
@@ -238,6 +261,44 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      */
     async deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteInstallationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get an installation
+     */
+    async getInstallationRaw(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getInstallation.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling getInstallation.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling getInstallation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InstallationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an installation
+     */
+    async getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
+        const response = await this.getInstallationRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

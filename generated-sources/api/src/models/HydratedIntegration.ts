@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { HydratedIntegrationProxy } from './HydratedIntegrationProxy';
+import {
+    HydratedIntegrationProxyFromJSON,
+    HydratedIntegrationProxyFromJSONTyped,
+    HydratedIntegrationProxyToJSON,
+} from './HydratedIntegrationProxy';
 import type { HydratedIntegrationRead } from './HydratedIntegrationRead';
 import {
     HydratedIntegrationReadFromJSON,
@@ -62,6 +68,12 @@ export interface HydratedIntegration {
      * @memberof HydratedIntegration
      */
     write?: HydratedIntegrationWrite;
+    /**
+     * 
+     * @type {HydratedIntegrationProxy}
+     * @memberof HydratedIntegration
+     */
+    proxy?: HydratedIntegrationProxy;
 }
 
 /**
@@ -90,6 +102,7 @@ export function HydratedIntegrationFromJSONTyped(json: any, ignoreDiscriminator:
         'provider': json['provider'],
         'read': !exists(json, 'read') ? undefined : HydratedIntegrationReadFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : HydratedIntegrationWriteFromJSON(json['write']),
+        'proxy': !exists(json, 'proxy') ? undefined : HydratedIntegrationProxyFromJSON(json['proxy']),
     };
 }
 
@@ -107,6 +120,7 @@ export function HydratedIntegrationToJSON(value?: HydratedIntegration | null): a
         'provider': value.provider,
         'read': HydratedIntegrationReadToJSON(value.read),
         'write': HydratedIntegrationWriteToJSON(value.write),
+        'proxy': HydratedIntegrationProxyToJSON(value.proxy),
     };
 }
 

@@ -32,6 +32,10 @@ export interface GetDestinationRequest {
     destinationName: string;
 }
 
+export interface ListDestinationsRequest {
+    projectId: string;
+}
+
 /**
  * DestinationApi - interface
  * 
@@ -70,6 +74,21 @@ export interface DestinationApiInterface {
      * Get a destination
      */
     getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination>;
+
+    /**
+     * 
+     * @summary List destinations
+     * @param {string} projectId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    listDestinationsRaw(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Destination>>>;
+
+    /**
+     * List destinations
+     */
+    listDestinations(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Destination>>;
 
 }
 
@@ -145,6 +164,36 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      */
     async getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination> {
         const response = await this.getDestinationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List destinations
+     */
+    async listDestinationsRaw(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Destination>>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listDestinations.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/destinations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DestinationFromJSON));
+    }
+
+    /**
+     * List destinations
+     */
+    async listDestinations(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Destination>> {
+        const response = await this.listDestinationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
