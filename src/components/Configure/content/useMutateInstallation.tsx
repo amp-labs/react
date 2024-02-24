@@ -24,7 +24,7 @@ export const useMutateInstallation = () => {
   const {
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState,
   } = useObjectsConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState ?? {});
 
   return {
     integrationId,
