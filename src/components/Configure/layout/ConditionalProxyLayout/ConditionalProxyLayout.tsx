@@ -5,12 +5,12 @@ import { useApiKey } from '../../../../context/ApiKeyContextProvider';
 import { useConnections } from '../../../../context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
 import { useProject } from '../../../../context/ProjectContextProvider';
+import { hasKeys } from '../../../../utils';
 import { ErrorTextBox } from '../../../ErrorTextBox';
 import { createInstallationProxyOnly } from '../../actions/proxy/createInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
-import { supportedNonProxyTypes } from './constants';
-import { hasDisqualifyingKey } from './hasDisqualifyingKey';
+import { nonProxyActionList } from './constants';
 import { InstalledSuccessBox } from './InstalledSuccessBox';
 
 interface ConditionalProxyLayoutProps {
@@ -36,7 +36,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const provider = hydratedRevision?.content?.provider;
 
   const actionKeys = Object.keys(hydratedRevision?.content || {});
-  const isProxyOnly: boolean = hasDisqualifyingKey(actionKeys, supportedNonProxyTypes);
+  const isProxyOnly: boolean = hasKeys(actionKeys, nonProxyActionList);
 
   useEffect(() => {
     if (hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
