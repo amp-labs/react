@@ -61,8 +61,6 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
     selectedConnection, apiKey, projectId, integrationObj?.id, groupRef, consumerRef, setInstallation]);
 
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
-
-  // add loading for create installation
   if (isLoading) return <LoadingIcon />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
