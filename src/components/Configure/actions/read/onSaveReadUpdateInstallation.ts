@@ -1,15 +1,15 @@
 import {
-  api, Config,
+  Config,
   HydratedIntegrationObject,
   Installation,
-  UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '../../../services/api';
+} from '../../../../services/api';
+import { updateInstallationReducer } from '../../reducers/updateInstallationReducer';
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
-} from '../state/utils';
-import { ConfigureState } from '../types';
+} from '../../state/utils';
+import { ConfigureState } from '../../types';
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -84,31 +84,14 @@ export const onSaveReadUpdateInstallation = (
     return Promise.resolve(null);
   }
 
-  const updateInstallationRequest: UpdateInstallationOperationRequest = {
+  return updateInstallationReducer({
+    updateConfig,
     projectId,
-    installationId,
     integrationId,
-    installationUpdate: {
-      // update mask will recurse to the object path and replace the object at the object path
-      // this example will replace the object at the object (i.e. accounts)
-      updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
-      installation: {
-        config: updateConfig,
-      },
-    },
-  };
-
-  // call api.updateInstallation
-  return api().installationApi.updateInstallation(updateInstallationRequest, {
-    headers: {
-      'X-Api-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  }).then((installation) => {
-    // update local installation state
-    setInstallation(installation);
-    onUpdateSuccess?.(installation.id, installation.config);
-  }).catch((err) => {
-    console.error('ERROR: ', err);
+    installationId,
+    apiKey,
+    selectedObjectName,
+    setInstallation,
+    onUpdateSuccess,
   });
 };

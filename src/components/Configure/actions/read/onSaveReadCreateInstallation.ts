@@ -2,14 +2,13 @@ import {
   Config,
   CreateInstallationRequestConfig, HydratedRevision,
   Installation,
-} from '../../../services/api';
+} from '../../../../services/api';
+import { createInstallationReducer } from '../../reducers/createInstallationReducer';
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
-} from '../state/utils';
-import { ConfigureState } from '../types';
-
-import { createInstallationReducer } from './createInstallationReducer';
+} from '../../state/utils';
+import { ConfigureState } from '../../types';
 /**
  * gets matching object from hydratedRevision
  * @param hydratedRevision

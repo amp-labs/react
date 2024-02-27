@@ -4,8 +4,8 @@ import {
   HydratedRevision,
   Installation,
 } from '../../../../services/api';
+import { createInstallationReducer } from '../../reducers/createInstallationReducer';
 import { ConfigureState } from '../../types';
-import { createInstallationReducer } from '../createInstallationReducer';
 
 import { generateConfigWriteObjects } from './generateConfigWriteObjects';
 

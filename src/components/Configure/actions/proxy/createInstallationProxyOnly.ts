@@ -2,7 +2,7 @@ import {
   CreateInstallationRequestConfig,
   HydratedRevision,
 } from '../../../../services/api';
-import { createInstallationReducer, CreateInstallationSharedProps } from '../createInstallationReducer';
+import { createInstallationReducer, CreateInstallationSharedProps } from '../../reducers/createInstallationReducer';
 
 /**
  * given a hydratedRevision and consumerRef,
