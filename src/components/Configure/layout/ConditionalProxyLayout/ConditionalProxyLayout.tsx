@@ -5,13 +5,19 @@ import { useApiKey } from '../../../../context/ApiKeyContextProvider';
 import { useConnections } from '../../../../context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
 import { useProject } from '../../../../context/ProjectContextProvider';
-import { hasKeys } from '../../../../utils';
+import { HydratedRevision } from '../../../../services/api';
 import { ErrorTextBox } from '../../../ErrorTextBox';
 import { createInstallationProxyOnly } from '../../actions/proxy/createInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
-import { nonProxyActionList } from './constants';
 import { InstalledSuccessBox } from './InstalledSuccessBox';
+
+// explicity check other actions (i.e. read, write) to determine if it's proxy only
+// returns false if it's not proxy only or no hydratedRevision
+const getIsProxyOnly = (hydratedRevision: HydratedRevision | null) => {
+  const { read, write, proxy } = hydratedRevision?.content ?? {};
+  return (!read && !write && proxy?.enabled) || false;
+};
 
 interface ConditionalProxyLayoutProps {
   children: React.ReactNode;
@@ -34,10 +40,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const isLoading = hydratedRevisionLoading || createInstallLoading;
 
   const provider = hydratedRevision?.content?.provider;
-
-  const actionKeys = Object.keys(hydratedRevision?.content || {});
-
-  const isProxyOnly: boolean = !hasKeys(actionKeys, nonProxyActionList);
+  const isProxyOnly: boolean = getIsProxyOnly(hydratedRevision);
 
   useEffect(() => {
     if (hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
