@@ -13,12 +13,14 @@ import {
 } from './utils';
 // Create a context for the configuration state
 export const ConfigurationContext = createContext<{
-  objectConfigurationsState: ObjectConfigurationsState | null;
-  setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState | null>>;
+  objectConfigurationsState: ObjectConfigurationsState;
+  setObjectConfigurationsState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>;
   setConfigureState:(objectName: string, producer: (draft: Draft<ConfigureState>) => void,) => void;
   resetConfigureState:(objectName: string, configureState: ConfigureState) => void;
   resetPendingConfigurationState:(objectName: string) => void;
 } | undefined>(undefined);
+
+const initialObjectConfigurationsState: ObjectConfigurationsState = {};
 
 /**
  * Custom hook to access and update the configuration state for all objects
@@ -49,13 +51,14 @@ export function ConfigurationProvider(
   const [
     objectConfigurationsState,
     setObjectConfigurationsState,
-  ] = useState<ObjectConfigurationsState | null>(null);
+  ] = useState<ObjectConfigurationsState>(initialObjectConfigurationsState);
   const config = installation?.config;
 
   useEffect(() => {
     // set configurationState when hydratedRevision is loaded
     // only reset when objectConfigurationsState does not exist
-    if (hydratedRevision?.content && !loading && config && objectConfigurationsState === null) {
+    if (hydratedRevision?.content && !loading
+      && config && !(Object.entries(objectConfigurationsState).length > 0)) {
       resetAllObjectsConfigurationState(
         hydratedRevision,
         config,
@@ -71,7 +74,6 @@ export function ConfigurationProvider(
   ) => {
     // consider moving check modified state here
     setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
-      if (!draft) return;
       // immer exception when mutating a draft
       // eslint-disable-next-line no-param-reassign
       draft[objectName] = produce(draft[objectName], producer);
@@ -84,9 +86,8 @@ export function ConfigurationProvider(
     configureState: ConfigureState,
   ) => {
     setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
-      if (!draft) return;
-      // immer exception when mutating a draft
-      // eslint-disable-next-line no-param-reassign
+    // immer exception when mutating a draft
+    // eslint-disable-next-line no-param-reassign
       draft[objectName] = configureState;
     }));
   }, [setObjectConfigurationsState]);
@@ -94,7 +95,6 @@ export function ConfigurationProvider(
   const resetWritePendingConfigurationState = useCallback(() => {
     setObjectConfigurationsState(
       produce((draft) => {
-        if (!draft) return;
         const writeDraft = draft.other.write;
         if (writeDraft) {
           writeDraft.isWriteModified = false;
@@ -106,7 +106,6 @@ export function ConfigurationProvider(
   const resetReadPendingConfigurationState = useCallback((objectName: string) => {
     setObjectConfigurationsState(
       produce((draft) => {
-        if (!draft) return;
         const readDraft = draft[objectName]?.read;
         if (readDraft) {
           readDraft.isOptionalFieldsModified = false;

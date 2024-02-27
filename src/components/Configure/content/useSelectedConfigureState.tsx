@@ -11,7 +11,7 @@ export const useSelectedConfigureState = () => {
   const { appName } = useProject();
   const { objectConfigurationsState, setConfigureState } = useObjectsConfigureState();
   const { selectedObjectName } = useSelectedObjectName();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState ?? {});
+  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
 
   return {
     appName,

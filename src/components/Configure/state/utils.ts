@@ -133,7 +133,7 @@ export const setHydrateConfigState = (
 export const resetAllObjectsConfigurationState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
-  setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState | null>>,
+  setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>,
 ) => {
   const navObjects = generateNavObjects(config, hydratedRevision);
   const objectConfigurationsState: ObjectConfigurationsState = {};
