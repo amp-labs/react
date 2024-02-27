@@ -1,10 +1,11 @@
 import {
-  api, Config, CreateInstallationOperationRequest,
+  Config,
   CreateInstallationRequestConfig,
   HydratedRevision,
   Installation,
 } from '../../../../services/api';
 import { ConfigureState } from '../../types';
+import { createInstallationReducer } from '../createInstallationReducer';
 
 import { generateConfigWriteObjects } from './generateConfigWriteObjects';
 
@@ -89,28 +90,15 @@ export const onSaveWriteCreateInstallation = (
     console.error('Error when generating createConfig from configureState');
     return Promise.resolve(null);
   }
-  const createInstallationRequest: CreateInstallationOperationRequest = {
+
+  return createInstallationReducer({
+    createConfig,
     projectId,
     integrationId,
-    installation: {
-      groupRef,
-      connectionId,
-      config: createConfig,
-    },
-  };
-
-  return api().installationApi.createInstallation(createInstallationRequest, {
-    headers: {
-      'X-Api-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((installation) => {
-      // update local installation state
-      setInstallation(installation);
-      onInstallSuccess?.(installation.id, installation.config);
-    })
-    .catch((err) => {
-      console.error('ERROR: ', err);
-    });
+    groupRef,
+    connectionId,
+    apiKey,
+    setInstallation,
+    onInstallSuccess,
+  });
 };
