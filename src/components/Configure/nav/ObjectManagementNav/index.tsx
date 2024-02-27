@@ -99,8 +99,8 @@ export function ObjectManagementNav({
                   objectName={object.name}
                   completed={object.completed}
                   pending={
-                    objectConfigurationsState?.[object.name]?.read?.isOptionalFieldsModified
-                    || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified
+                    objectConfigurationsState[object.name]?.read?.isOptionalFieldsModified
+                    || objectConfigurationsState[object.name]?.read?.isRequiredMapFieldsModified
                   }
                 />
               ))}
