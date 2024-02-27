@@ -13,6 +13,12 @@ import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 import { nonProxyActionList } from './constants';
 import { InstalledSuccessBox } from './InstalledSuccessBox';
 
+function getDefinedKeys<T extends object>(obj: T): (keyof T)[] {
+  return Object.keys(obj).filter(
+    (key: keyof T) => obj[key] !== undefined,
+  ) as (keyof T)[];
+}
+
 interface ConditionalProxyLayoutProps {
   children: React.ReactNode;
 }
@@ -36,7 +42,8 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const provider = hydratedRevision?.content?.provider;
 
   const actionKeys = Object.keys(hydratedRevision?.content || {});
-  const isProxyOnly: boolean = hasKeys(actionKeys, nonProxyActionList);
+
+  const isProxyOnly: boolean = !hasKeys(actionKeys, nonProxyActionList);
 
   useEffect(() => {
     if (hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
