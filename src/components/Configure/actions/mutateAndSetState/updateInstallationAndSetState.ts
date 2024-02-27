@@ -2,7 +2,7 @@ import {
   api, Config, Installation,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '../../../services/api';
+} from '../../../../services/api';
 
 type UpdateInstallationSharedProps = {
   projectId: string;
@@ -13,12 +13,12 @@ type UpdateInstallationSharedProps = {
   setInstallation: (installationObj: Installation) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
 };
-type UpdateInstallationReducer = UpdateInstallationSharedProps & {
+type UpdateInstallationAndSetStateProps = UpdateInstallationSharedProps & {
   updateConfig: UpdateInstallationRequestInstallationConfig;
 };
-export function updateInstallationReducer({
+export function updateInstallationAndSetState({
   updateConfig, projectId, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
-}: UpdateInstallationReducer) {
+}: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
     projectId,
     installationId,

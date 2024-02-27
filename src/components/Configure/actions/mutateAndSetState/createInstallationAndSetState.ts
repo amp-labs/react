@@ -1,7 +1,7 @@
 import {
   api, Config, CreateInstallationOperationRequest,
   CreateInstallationRequestConfig, Installation,
-} from '../../../services/api';
+} from '../../../../services/api';
 
 export type CreateInstallationSharedProps = {
   projectId: string;
@@ -13,14 +13,14 @@ export type CreateInstallationSharedProps = {
   onInstallSuccess?: (installationId: string, config: Config) => void;
 };
 
-type CreateInstallationReducer = CreateInstallationSharedProps & {
+type CreateInstallationAndSetStateProps = CreateInstallationSharedProps & {
   createConfig: CreateInstallationRequestConfig;
 };
 
-export function createInstallationReducer(
+export function createInstallationAndSetState(
   {
     createConfig, projectId, integrationId, groupRef, connectionId, apiKey, setInstallation, onInstallSuccess,
-  }: CreateInstallationReducer,
+  }: CreateInstallationAndSetStateProps,
 ) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
     projectId,

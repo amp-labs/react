@@ -2,7 +2,10 @@ import {
   CreateInstallationRequestConfig,
   HydratedRevision,
 } from '../../../../services/api';
-import { createInstallationReducer, CreateInstallationSharedProps } from '../../reducers/createInstallationReducer';
+import {
+  createInstallationAndSetState,
+  CreateInstallationSharedProps,
+} from '../mutateAndSetState/createInstallationAndSetState';
 
 /**
  * given a hydratedRevision and consumerRef,
@@ -36,7 +39,7 @@ type CreateInstallationProxyOnlyProps = CreateInstallationSharedProps & {
   consumerRef: string;
 } ;
 
-export function createInstallationProxyOnly({
+export function onCreateInstallationProxyOnly({
   projectId,
   integrationId,
   groupRef,
@@ -56,7 +59,7 @@ export function createInstallationProxyOnly({
     return Promise.resolve(null);
   }
 
-  return createInstallationReducer({
+  return createInstallationAndSetState({
     createConfig,
     projectId,
     integrationId,

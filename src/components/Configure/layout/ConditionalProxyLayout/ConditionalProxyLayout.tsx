@@ -7,7 +7,7 @@ import { useInstallIntegrationProps } from '../../../../context/InstallIntegrati
 import { useProject } from '../../../../context/ProjectContextProvider';
 import { HydratedRevision } from '../../../../services/api';
 import { ErrorTextBox } from '../../../ErrorTextBox';
-import { createInstallationProxyOnly } from '../../actions/proxy/createInstallationProxyOnly';
+import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
 import { InstalledSuccessBox } from './InstalledSuccessBox';
@@ -45,7 +45,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   useEffect(() => {
     if (hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
       setCreateInstallLoading(true);
-      createInstallationProxyOnly({
+      onCreateInstallationProxyOnly({
         apiKey,
         projectId,
         integrationId: integrationObj?.id,

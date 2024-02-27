@@ -4,8 +4,8 @@ import {
   HydratedRevision,
   Installation,
 } from '../../../../services/api';
-import { createInstallationReducer } from '../../reducers/createInstallationReducer';
 import { ConfigureState } from '../../types';
+import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
 
 import { generateConfigWriteObjects } from './generateConfigWriteObjects';
 
@@ -91,7 +91,7 @@ export const onSaveWriteCreateInstallation = (
     return Promise.resolve(null);
   }
 
-  return createInstallationReducer({
+  return createInstallationAndSetState({
     createConfig,
     projectId,
     integrationId,

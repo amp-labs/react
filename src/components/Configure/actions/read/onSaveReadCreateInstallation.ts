@@ -3,12 +3,12 @@ import {
   CreateInstallationRequestConfig, HydratedRevision,
   Installation,
 } from '../../../../services/api';
-import { createInstallationReducer } from '../../reducers/createInstallationReducer';
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
 } from '../../state/utils';
 import { ConfigureState } from '../../types';
+import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
 /**
  * gets matching object from hydratedRevision
  * @param hydratedRevision
@@ -103,7 +103,7 @@ export const onSaveReadCreateInstallation = (
     return Promise.resolve(null);
   }
 
-  return createInstallationReducer({
+  return createInstallationAndSetState({
     createConfig,
     projectId,
     integrationId,

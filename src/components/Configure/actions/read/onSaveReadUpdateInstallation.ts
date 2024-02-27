@@ -4,12 +4,12 @@ import {
   Installation,
   UpdateInstallationRequestInstallationConfig,
 } from '../../../../services/api';
-import { updateInstallationReducer } from '../../reducers/updateInstallationReducer';
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
 } from '../../state/utils';
 import { ConfigureState } from '../../types';
+import { updateInstallationAndSetState } from '../mutateAndSetState/updateInstallationAndSetState';
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -84,7 +84,7 @@ export const onSaveReadUpdateInstallation = (
     return Promise.resolve(null);
   }
 
-  return updateInstallationReducer({
+  return updateInstallationAndSetState({
     updateConfig,
     projectId,
     integrationId,
