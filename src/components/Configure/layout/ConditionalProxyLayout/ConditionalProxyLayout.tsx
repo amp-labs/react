@@ -13,12 +13,6 @@ import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 import { nonProxyActionList } from './constants';
 import { InstalledSuccessBox } from './InstalledSuccessBox';
 
-function getDefinedKeys<T extends object>(obj: T): (keyof T)[] {
-  return Object.keys(obj).filter(
-    (key: keyof T) => obj[key] !== undefined,
-  ) as (keyof T)[];
-}
-
 interface ConditionalProxyLayoutProps {
   children: React.ReactNode;
 }
