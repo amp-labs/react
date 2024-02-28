@@ -1,6 +1,7 @@
 import {
   Config,
   HydratedIntegrationObject,
+  HydratedRevision,
   Installation,
   UpdateInstallationRequestInstallationConfig,
 } from '../../../../services/api';
@@ -32,6 +33,7 @@ const generateUpdateReadConfigFromConfigureState = (
   objectName: string,
   hydratedObject: HydratedIntegrationObject,
   schedule: string,
+  hydratedRevision: HydratedRevision,
 ): UpdateInstallationRequestInstallationConfig => {
   const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
@@ -56,6 +58,14 @@ const generateUpdateReadConfigFromConfigureState = (
     },
   };
 
+  // insert proxy into config if it is enabled
+  const isProxyEnabled = hydratedRevision?.content?.proxy?.enabled;
+
+  if (isProxyEnabled) {
+    if (!updateConfigObject.content) updateConfigObject.content = {};
+    updateConfigObject.content.proxy = { enabled: true };
+  }
+
   return updateConfigObject;
 };
 
@@ -68,6 +78,7 @@ export const onSaveReadUpdateInstallation = (
   configureState: ConfigureState,
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
+  hydratedRevision: HydratedRevision,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
 ): Promise<void | null> => {
   // get configuration state
@@ -77,6 +88,7 @@ export const onSaveReadUpdateInstallation = (
     selectedObjectName || '',
     hydratedObject,
     hydratedObject.schedule,
+    hydratedRevision,
   );
 
   if (!updateConfig) {

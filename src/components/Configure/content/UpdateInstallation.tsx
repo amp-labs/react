@@ -82,7 +82,7 @@ export function UpdateInstallation(
       return;
     }
 
-    if (installation && selectedObjectName && apiKey && projectId && hydratedObject) {
+    if (hydratedRevision && installation && selectedObjectName && apiKey && projectId && hydratedObject) {
       setLoadingState(true);
       const res = onSaveReadUpdateInstallation(
         projectId,
@@ -93,6 +93,7 @@ export function UpdateInstallation(
         configureState,
         setInstallation,
         hydratedObject,
+        hydratedRevision,
         onUpdateSuccess,
       );
 
