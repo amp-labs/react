@@ -6,7 +6,7 @@ import {
   ErrorBoundary,
 } from '../../../context/ErrorContextProvider';
 import { Installation, Integration } from '../../../services/api';
-import { onSaveReadUpdateInstallation } from '../actions/onSaveReadUpdateInstallation';
+import { onSaveReadUpdateInstallation } from '../actions/read/onSaveReadUpdateInstallation';
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';

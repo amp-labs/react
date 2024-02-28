@@ -5,7 +5,7 @@ import {
   Installation,
 } from '../../../../services/api';
 import { ConfigureState } from '../../types';
-import { createInstallationReducer } from '../createInstallationReducer';
+import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
 
 import { generateConfigWriteObjects } from './generateConfigWriteObjects';
 
@@ -91,7 +91,7 @@ export const onSaveWriteCreateInstallation = (
     return Promise.resolve(null);
   }
 
-  return createInstallationReducer({
+  return createInstallationAndSetState({
     createConfig,
     projectId,
     integrationId,
