@@ -107,7 +107,7 @@ export function UpdateInstallation(
   };
 
   const onSaveWrite = () => {
-    if (installation && selectedObjectName && apiKey && projectId) {
+    if (installation && selectedObjectName && apiKey && projectId && hydratedRevision) {
       setLoadingState(true);
       const res = onSaveWriteUpdateInstallation(
         projectId,
@@ -115,6 +115,7 @@ export function UpdateInstallation(
         installation.id,
         apiKey,
         configureState,
+        hydratedRevision,
         setInstallation,
         onUpdateSuccess,
       );

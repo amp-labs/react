@@ -66,6 +66,12 @@ const generateCreateWriteConfigFromConfigureState = (
     },
   };
 
+  // insert proxy into config if it is enabled
+  const isProxyEnabled = hydratedRevision.content.proxy?.enabled;
+  if (isProxyEnabled) {
+    createConfigObj.content.proxy = { enabled: true };
+  }
+
   return createConfigObj;
 };
 
