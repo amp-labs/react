@@ -82,7 +82,7 @@ export function UpdateInstallation(
       return;
     }
 
-    if (installation && selectedObjectName && apiKey && projectId && hydratedObject) {
+    if (hydratedRevision && installation && selectedObjectName && apiKey && projectId && hydratedObject) {
       setLoadingState(true);
       const res = onSaveReadUpdateInstallation(
         projectId,
@@ -93,6 +93,7 @@ export function UpdateInstallation(
         configureState,
         setInstallation,
         hydratedObject,
+        hydratedRevision,
         onUpdateSuccess,
       );
 
@@ -106,7 +107,7 @@ export function UpdateInstallation(
   };
 
   const onSaveWrite = () => {
-    if (installation && selectedObjectName && apiKey && projectId) {
+    if (installation && selectedObjectName && apiKey && projectId && hydratedRevision) {
       setLoadingState(true);
       const res = onSaveWriteUpdateInstallation(
         projectId,
@@ -114,6 +115,7 @@ export function UpdateInstallation(
         installation.id,
         apiKey,
         configureState,
+        hydratedRevision,
         setInstallation,
         onUpdateSuccess,
       );
