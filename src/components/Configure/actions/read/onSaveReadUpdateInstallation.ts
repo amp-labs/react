@@ -11,6 +11,7 @@ import {
 } from '../../state/utils';
 import { ConfigureState } from '../../types';
 import { updateInstallationAndSetState } from '../mutateAndSetState/updateInstallationAndSetState';
+import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -59,7 +60,7 @@ const generateUpdateReadConfigFromConfigureState = (
   };
 
   // insert proxy into config if it is enabled
-  const isProxyEnabled = hydratedRevision?.content?.proxy?.enabled;
+  const isProxyEnabled = getIsProxyEnabled(hydratedRevision);
 
   if (isProxyEnabled) {
     if (!updateConfigObject.content) updateConfigObject.content = {};

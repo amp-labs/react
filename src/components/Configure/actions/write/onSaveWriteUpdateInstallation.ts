@@ -7,6 +7,7 @@ import {
   UpdateInstallationRequestInstallationConfig,
 } from '../../../../services/api';
 import { ConfigureState } from '../../types';
+import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
 
 import {
   generateConfigWriteObjects,
@@ -35,7 +36,7 @@ const generateUpdateWriteConfigFromConfigureState = (
   };
 
   // insert proxy into config if it is enabled
-  const isProxyEnabled = hydratedRevision.content.proxy?.enabled;
+  const isProxyEnabled = getIsProxyEnabled(hydratedRevision);
   if (isProxyEnabled) {
     if (!updateConfigObject.content) updateConfigObject.content = {};
     updateConfigObject.content.proxy = { enabled: true };

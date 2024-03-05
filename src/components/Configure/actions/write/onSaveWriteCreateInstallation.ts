@@ -6,6 +6,7 @@ import {
 } from '../../../../services/api';
 import { ConfigureState } from '../../types';
 import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
+import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
 
 import { generateConfigWriteObjects } from './generateConfigWriteObjects';
 
@@ -56,7 +57,8 @@ const generateCreateWriteConfigFromConfigureState = (
     createdBy: `consumer:${consumerRef}`,
     content: {
       provider: hydratedRevision.content.provider,
-      // need empty read.standardObjects for update read
+      // hack: need empty read.standardObjects to be initialized for update read
+      // https://linear.app/ampersand/issue/ENG-780/bug-write-createupdate-installation-without-read
       read: {
         standardObjects: {},
       },
@@ -67,7 +69,7 @@ const generateCreateWriteConfigFromConfigureState = (
   };
 
   // insert proxy into config if it is enabled
-  const isProxyEnabled = hydratedRevision.content.proxy?.enabled;
+  const isProxyEnabled = getIsProxyEnabled(hydratedRevision);
   if (isProxyEnabled) {
     createConfigObj.content.proxy = { enabled: true };
   }
