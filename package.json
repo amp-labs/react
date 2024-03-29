@@ -24,7 +24,7 @@
     "test": "jest",
     "watch": "npm run prepbuild && tsc -p tsconfig.json --watch",
     "build": "npm run prepbuild && tsc -p tsconfig.json",
-    "prepbuild": "npm run clean",
+    "prepbuild": "npm run clean && node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" | sed \"s|\\\"|'|g\" > src/services/version.ts",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
     "lint": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/ --fix",
