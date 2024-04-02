@@ -41,20 +41,21 @@ const generateUpdateReadConfigFromConfigureState = (
     configureState,
   );
 
-  // config request object type needs to be fixed
+  const objList = {
+    [objectName]: {
+      objectName,
+      // these two fields are copied from previous config, otherwise they will override existing values with null
+      schedule,
+      destination: hydratedObject?.destination || '',
+      selectedFields,
+      selectedFieldMappings,
+    },
+  };
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
     content: {
       read: {
-        standardObjects: {
-          [objectName]: {
-            objectName,
-            // these two fields are copied from previous config, otherwise they will override null
-            schedule,
-            destination: hydratedObject?.destination || '',
-            selectedFields,
-            selectedFieldMappings,
-          },
-        },
+        objects: objList,
+        standardObjects: objList,
       },
     },
   };

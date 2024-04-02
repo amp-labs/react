@@ -1,6 +1,7 @@
 import {
   Config,
-  CreateInstallationRequestConfig, HydratedRevision,
+  CreateInstallationRequestConfig,
+  HydratedRevision,
   Installation,
 } from '../../../../services/api';
 import {
@@ -21,12 +22,12 @@ const getObjectFromHydratedRevision = (
   objectName: string,
 ) => {
   const readAction = hydratedRevision.content.read;
-  const standardObjects = readAction?.standardObjects;
-  return standardObjects?.find((obj) => obj.objectName === objectName);
+  const objects = readAction?.objects || readAction?.standardObjects;
+  return objects?.find((obj) => obj.objectName === objectName);
 };
 
 /**
- * given a configureState, objectName, hyrdatedRevision, and consumerRef
+ * given a configureState, objectName, hydratedRevision, and consumerRef
  * generate the config object that is need for update installation request.
  *
  * 1. get required fields from configureState
@@ -57,6 +58,16 @@ const generateCreateReadConfigFromConfigureState = (
     return null;
   }
 
+  const objList = {
+    [objectName]: {
+      objectName,
+      schedule: obj.schedule,
+      destination: obj.destination,
+      selectedFields,
+      selectedFieldMappings,
+    },
+  };
+
   // create config request object
   const createConfigObj: CreateInstallationRequestConfig = {
     revisionId: hydratedRevision.id,
@@ -64,15 +75,8 @@ const generateCreateReadConfigFromConfigureState = (
     content: {
       provider: hydratedRevision.content.provider,
       read: {
-        standardObjects: {
-          [objectName]: {
-            objectName,
-            schedule: obj.schedule,
-            destination: obj.destination,
-            selectedFields,
-            selectedFieldMappings,
-          },
-        },
+        objects: objList,
+        standardObjects: objList,
       },
     },
   };

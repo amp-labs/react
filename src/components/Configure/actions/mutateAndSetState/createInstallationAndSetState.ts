@@ -3,6 +3,14 @@ import {
   CreateInstallationRequestConfig, Installation,
 } from '../../../../services/api';
 
+// type CompatibleCreateInstallationRequestConfig = CreateInstallationRequestConfig & {
+//   content: {
+//     read?: {
+//       objects?: Array<Installation>
+//     }
+//   }
+// };
+
 export type CreateInstallationSharedProps = {
   projectId: string;
   integrationId: string;

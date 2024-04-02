@@ -26,16 +26,17 @@ export function isIntegrationFieldMapping(field: HydratedIntegrationField):
   return (field as IntegrationFieldMapping).mapToName !== undefined;
 }
 
-// 1. get standard object
+// 1. get read object
 /**
  *
  * @param action HydratedIntegrationAction
  * @param objectName string (account, contact, etc...)
  * @returns HydratedIntegrationObject | null
  */
-export function getStandardObjectFromAction(action: HydratedIntegrationRead, objectName: string)
+export function getObjectFromReadAction(action: HydratedIntegrationRead, objectName: string)
   : HydratedIntegrationObject | null {
-  return action?.standardObjects?.find((object) => object.objectName === objectName) || null;
+  const objects = action?.objects || action?.standardObjects;
+  return objects?.find((object) => object.objectName === objectName) || null;
 }
 
 // 2a. get required fields
@@ -66,7 +67,7 @@ export function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
 export const getReadObject = (
   config: Config,
   objectName: string,
-) => config?.content?.read?.standardObjects?.[objectName];
+) => (config?.content?.read?.objects || config?.content?.read?.standardObjects)?.[objectName];
 
 // aux. get field value based on type guard
 export function getFieldKeyValue(field: HydratedIntegrationField): string {
@@ -84,7 +85,8 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
  */
 const generateReadNavObjects = (config: Config | undefined, hydratedRevision: HydratedRevision) => {
   const navObjects: NavObject[] = [];
-  hydratedRevision.content?.read?.standardObjects?.forEach((object) => {
+  const objects = hydratedRevision.content?.read?.objects || hydratedRevision.content?.read?.standardObjects;
+  objects?.forEach((object) => {
     navObjects.push(
       {
         name: object?.objectName,

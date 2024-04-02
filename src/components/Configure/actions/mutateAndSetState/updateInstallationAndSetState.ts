@@ -25,13 +25,18 @@ export function updateInstallationAndSetState({
     integrationId,
     installationUpdate: {
       // update mask will recurse to the object path and replace the object at the object path
-      // this example will replace the object at the object (i.e. accounts)
-      updateMask: [`config.content.read.standardObjects.${selectedObjectName}`],
+      updateMask: [
+        // `config.content.read.standardObjects.${selectedObjectName}`,
+        `config.content.read.objects.${selectedObjectName}`,
+
+      ],
       installation: {
         config: updateConfig,
       },
     },
   };
+
+  console.log("about to call updateInstallation with request: ", JSON.stringify(updateInstallationRequest, null, 2))
 
   // call api.updateInstallation
   return api().installationApi.updateInstallation(updateInstallationRequest, {

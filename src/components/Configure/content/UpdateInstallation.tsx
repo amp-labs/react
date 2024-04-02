@@ -10,7 +10,7 @@ import { onSaveReadUpdateInstallation } from '../actions/read/onSaveReadUpdateIn
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
-import { validateFieldMappings } from '../utils';
+import { getObjectFromReadAction, validateFieldMappings } from '../utils';
 
 import { ConfigureInstallationBase } from './ConfigureInstallationBase';
 import { useMutateInstallation } from './useMutateInstallation';
@@ -63,11 +63,9 @@ export function UpdateInstallation(
   }, [installation, resetState]);
 
   const hydratedObject = useMemo(() => {
-    const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
-      (obj) => obj?.objectName === selectedObjectName,
-    );
-
-    return hydrated;
+    const action = hydratedRevision?.content?.read;
+    if (!action || !selectedObjectName) return null;
+    return getObjectFromReadAction(action, selectedObjectName);
   }, [hydratedRevision, selectedObjectName]);
 
   const onSaveRead = () => {

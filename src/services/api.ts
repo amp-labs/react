@@ -1,5 +1,5 @@
-/* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
+
 import {
   Config,
   Configuration, Connection,
@@ -8,19 +8,20 @@ import {
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
-  HydratedIntegrationRead,
   HydratedIntegrationWrite,
   HydratedIntegrationWriteObject,
-  HydratedRevision,
   Installation, Integration,
   IntegrationFieldMapping,
   Project,
   ProviderApp,
   UpdateInstallationOperationRequest,
-  UpdateInstallationRequestInstallationConfig,
 } from '../../generated-sources/api/src';
 
 import { ApiService } from './ApiService';
+import {
+  CompatHydratedIntegrationRead,
+  CompatHydratedRevision, CompatUpdateInstallationRequestInstallationConfig,
+} from './compatibility';
 import { LIB_VERSION } from './version';
 
 /**
@@ -107,12 +108,10 @@ export type {
   Connection,
   CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
-  HydratedIntegrationRead,
   HydratedIntegrationWrite,
   HydratedIntegrationWriteObject,
   HydratedIntegrationObject,
   HydratedIntegrationField,
-  HydratedRevision,
   Installation,
   Integration,
   HydratedIntegrationFieldExistent,
@@ -120,5 +119,6 @@ export type {
   Project,
   ProviderApp,
   UpdateInstallationOperationRequest,
-  UpdateInstallationRequestInstallationConfig,
+  CompatHydratedIntegrationRead as HydratedIntegrationRead,
+  CompatHydratedRevision as HydratedRevision, CompatUpdateInstallationRequestInstallationConfig as UpdateInstallationRequestInstallationConfig,
 };

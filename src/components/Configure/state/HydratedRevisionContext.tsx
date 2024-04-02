@@ -61,7 +61,8 @@ export function HydratedRevisionProvider({
       && connectionId
       && apiKey
     ) {
-      api().revisionApi.getHydratedRevision({
+      api().compatibilityApi.getHydratedRevision({
+      // api().revisionApi.getHydratedRevision({
         projectId,
         integrationId,
         revisionId,
@@ -72,7 +73,8 @@ export function HydratedRevisionProvider({
         },
       })
         .then((data) => {
-          setHydratedRevision(data);
+          // console.log("got hydratedRevision data: ", JSON.stringify(data, null, 2))
+          setHydratedRevision(data as HydratedRevision);
           setLoading(false);
           removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         })

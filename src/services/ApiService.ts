@@ -6,6 +6,9 @@ import {
   OAuthApi, OperationApi, OperationLogApi, ProjectApi, ProjectMembershipApi,
   ProviderAppApi, RevisionApi, UploadURLApi,
 } from '../../generated-sources/api/src';
+import { CompatibilityApi } from './compatibility';
+
+// import { CompatibilityApi, CompatibilityRevisionApi } from './api';
 
 /**
  * ApiService is a wrapper around the generated API client, which exposes
@@ -46,6 +49,8 @@ export class ApiService {
 
   public uploadURLApi: UploadURLApi;
 
+  public compatibilityApi: CompatibilityApi;
+
   constructor(config: Configuration) {
     this.allowedDomainApi = new AllowedDomainApi(config);
     this.connectionApi = new ConnectionApi(config);
@@ -62,5 +67,6 @@ export class ApiService {
     this.providerAppApi = new ProviderAppApi(config);
     this.revisionApi = new RevisionApi(config);
     this.uploadURLApi = new UploadURLApi(config);
+    this.compatibilityApi = new CompatibilityApi(config);
   }
 }
