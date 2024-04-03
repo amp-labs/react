@@ -23,81 +23,58 @@ import {
 /**
  * 
  * @export
- * @interface Destination
+ * @interface CreateDestinationRequest
  */
-export interface Destination {
+export interface CreateDestinationRequest {
     /**
-     * The destination ID.
+     * Name for the new destination
      * @type {string}
-     * @memberof Destination
-     */
-    id: string;
-    /**
-     * User-defined name for the destination
-     * @type {string}
-     * @memberof Destination
+     * @memberof CreateDestinationRequest
      */
     name: string;
     /**
      * The type of the destination
      * @type {string}
-     * @memberof Destination
+     * @memberof CreateDestinationRequest
      */
     type: string;
     /**
      * 
      * @type {CreateDestinationRequestMetadata}
-     * @memberof Destination
+     * @memberof CreateDestinationRequest
      */
     metadata: CreateDestinationRequestMetadata;
-    /**
-     * The time the destination was created.
-     * @type {Date}
-     * @memberof Destination
-     */
-    createTime: Date;
-    /**
-     * The time the destination was updated.
-     * @type {Date}
-     * @memberof Destination
-     */
-    updateTime?: Date;
 }
 
 /**
- * Check if a given object implements the Destination interface.
+ * Check if a given object implements the CreateDestinationRequest interface.
  */
-export function instanceOfDestination(value: object): boolean {
+export function instanceOfCreateDestinationRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "type" in value;
     isInstance = isInstance && "metadata" in value;
-    isInstance = isInstance && "createTime" in value;
 
     return isInstance;
 }
 
-export function DestinationFromJSON(json: any): Destination {
-    return DestinationFromJSONTyped(json, false);
+export function CreateDestinationRequestFromJSON(json: any): CreateDestinationRequest {
+    return CreateDestinationRequestFromJSONTyped(json, false);
 }
 
-export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Destination {
+export function CreateDestinationRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateDestinationRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
         'name': json['name'],
         'type': json['type'],
         'metadata': CreateDestinationRequestMetadataFromJSON(json['metadata']),
-        'createTime': (new Date(json['createTime'])),
-        'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
 }
 
-export function DestinationToJSON(value?: Destination | null): any {
+export function CreateDestinationRequestToJSON(value?: CreateDestinationRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -106,12 +83,9 @@ export function DestinationToJSON(value?: Destination | null): any {
     }
     return {
         
-        'id': value.id,
         'name': value.name,
         'type': value.type,
         'metadata': CreateDestinationRequestMetadataToJSON(value.metadata),
-        'createTime': (value.createTime.toISOString()),
-        'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };
 }
 

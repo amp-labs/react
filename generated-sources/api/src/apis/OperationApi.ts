@@ -15,14 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
+  Log,
   Operation,
 } from '../models';
 import {
+    LogFromJSON,
+    LogToJSON,
     OperationFromJSON,
     OperationToJSON,
 } from '../models';
 
 export interface GetOperationRequest {
+    projectId: string;
+    operationId: string;
+}
+
+export interface ListOperationLogsRequest {
     projectId: string;
     operationId: string;
 }
@@ -55,6 +63,22 @@ export interface OperationApiInterface {
      * Get an operation
      */
     getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation>;
+
+    /**
+     * 
+     * @summary List logs for an operation
+     * @param {string} projectId 
+     * @param {string} operationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OperationApiInterface
+     */
+    listOperationLogsRaw(requestParameters: ListOperationLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Log>>>;
+
+    /**
+     * List logs for an operation
+     */
+    listOperationLogs(requestParameters: ListOperationLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Log>>;
 
     /**
      * 
@@ -111,6 +135,40 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
      */
     async getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation> {
         const response = await this.getOperationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List logs for an operation
+     */
+    async listOperationLogsRaw(requestParameters: ListOperationLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Log>>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperationLogs.');
+        }
+
+        if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
+            throw new runtime.RequiredError('operationId','Required parameter requestParameters.operationId was null or undefined when calling listOperationLogs.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/operations/{operationId}/logs`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LogFromJSON));
+    }
+
+    /**
+     * List logs for an operation
+     */
+    async listOperationLogs(requestParameters: ListOperationLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Log>> {
+        const response = await this.listOperationLogsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
