@@ -84,10 +84,6 @@ export const AMP_API_ROOT = assignRoot();
 
 const config = new Configuration({
   basePath: AMP_API_ROOT,
-  headers: {
-    'X-Amp-Client': 'react',
-    'X-Amp-Client-Version': LIB_VERSION,
-  },
 });
 
 let apiValue = new ApiService(config);
