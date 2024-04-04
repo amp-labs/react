@@ -6,6 +6,9 @@ import { useInstallIntegrationProps } from '../../../context/InstallIntegrationC
 import { useConnectionHandler } from '../../Connect/useConnectionHandler';
 import { NoSubdomainOauthFlow } from '../../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
 import { SalesforceOauthFlow } from '../../Oauth/Salesforce/SalesforceOauthFlow';
+import { WorkspaceOauthFlow } from '../../Oauth/WorkspaceEntry/WorkspaceOauthFlow';
+
+const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -16,6 +19,7 @@ interface ProtectedConnectionLayoutProps {
   onSuccess?: (connectionID: string) => void;
   children: JSX.Element,
 }
+
 export function ProtectedConnectionLayout({
   provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess,
 }: ProtectedConnectionLayoutProps) {
@@ -37,6 +41,18 @@ export function ProtectedConnectionLayout({
   if (selectedConnection) return children;
 
   const selectedProvider = provider || providerFromProps;
+
+  if (GENERIC_WORKSPACE_FEATURE_FLAG && selectedProvider === PROVIDER_SALESFORCE) {
+    return (
+      <WorkspaceOauthFlow
+        provider={selectedProvider}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+      />
+    );
+  }
 
   if (selectedProvider === PROVIDER_SALESFORCE) {
     return (
