@@ -15,16 +15,27 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateDestinationRequest,
   Destination,
+  UpdateDestinationRequest,
 } from '../models';
 import {
+    CreateDestinationRequestFromJSON,
+    CreateDestinationRequestToJSON,
     DestinationFromJSON,
     DestinationToJSON,
+    UpdateDestinationRequestFromJSON,
+    UpdateDestinationRequestToJSON,
 } from '../models';
 
-export interface CreateDestinationRequest {
+export interface CreateDestinationOperationRequest {
     projectId: string;
-    destination: Destination;
+    destination: CreateDestinationRequest;
+}
+
+export interface DeleteDestinationRequest {
+    projectId: string;
+    destinationId: string;
 }
 
 export interface GetDestinationRequest {
@@ -34,6 +45,12 @@ export interface GetDestinationRequest {
 
 export interface ListDestinationsRequest {
     projectId: string;
+}
+
+export interface UpdateDestinationOperationRequest {
+    projectId: string;
+    destinationId: string;
+    destinationUpdate: UpdateDestinationRequest;
 }
 
 /**
@@ -47,17 +64,33 @@ export interface DestinationApiInterface {
      * 
      * @summary Create a new destination
      * @param {string} projectId 
-     * @param {Destination} destination 
+     * @param {CreateDestinationRequest} destination 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
      */
-    createDestinationRaw(requestParameters: CreateDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    createDestinationRaw(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>>;
 
     /**
      * Create a new destination
      */
-    createDestination(requestParameters: CreateDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    createDestination(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination>;
+
+    /**
+     * 
+     * @summary Delete a destination
+     * @param {string} projectId 
+     * @param {string} destinationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    deleteDestinationRaw(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete a destination
+     */
+    deleteDestination(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -90,6 +123,23 @@ export interface DestinationApiInterface {
      */
     listDestinations(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Destination>>;
 
+    /**
+     * 
+     * @summary Update a destination
+     * @param {string} projectId 
+     * @param {string} destinationId 
+     * @param {UpdateDestinationRequest} destinationUpdate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    updateDestinationRaw(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>>;
+
+    /**
+     * Update a destination
+     */
+    updateDestination(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination>;
+
 }
 
 /**
@@ -100,7 +150,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
     /**
      * Create a new destination
      */
-    async createDestinationRaw(requestParameters: CreateDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createDestinationRaw(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
         if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
             throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createDestination.');
         }
@@ -120,17 +170,51 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: DestinationToJSON(requestParameters.destination),
+            body: CreateDestinationRequestToJSON(requestParameters.destination),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DestinationFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a new destination
+     */
+    async createDestination(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination> {
+        const response = await this.createDestinationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete a destination
+     */
+    async deleteDestinationRaw(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteDestination.');
+        }
+
+        if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
+            throw new runtime.RequiredError('destinationId','Required parameter requestParameters.destinationId was null or undefined when calling deleteDestination.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/destinations/{destinationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
 
     /**
-     * Create a new destination
+     * Delete a destination
      */
-    async createDestination(requestParameters: CreateDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.createDestinationRaw(requestParameters, initOverrides);
+    async deleteDestination(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteDestinationRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -194,6 +278,47 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      */
     async listDestinations(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Destination>> {
         const response = await this.listDestinationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a destination
+     */
+    async updateDestinationRaw(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateDestination.');
+        }
+
+        if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
+            throw new runtime.RequiredError('destinationId','Required parameter requestParameters.destinationId was null or undefined when calling updateDestination.');
+        }
+
+        if (requestParameters.destinationUpdate === null || requestParameters.destinationUpdate === undefined) {
+            throw new runtime.RequiredError('destinationUpdate','Required parameter requestParameters.destinationUpdate was null or undefined when calling updateDestination.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/projects/{projectId}/destinations/{destinationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateDestinationRequestToJSON(requestParameters.destinationUpdate),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DestinationFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a destination
+     */
+    async updateDestination(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination> {
+        const response = await this.updateDestinationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

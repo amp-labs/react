@@ -3,7 +3,7 @@
 import {
   AllowedDomainApi, Configuration, ConnectionApi, ConsumerApi,
   DestinationApi, GroupApi, InstallationApi, IntegrationApi,
-  OAuthApi, OperationApi, OperationLogApi, ProjectApi, ProjectMembershipApi,
+  OAuthApi, OperationApi, ProjectApi, ProjectMembershipApi, ProviderApi,
   ProviderAppApi, RevisionApi, UploadURLApi,
 } from '../../generated-sources/api/src';
 
@@ -34,11 +34,11 @@ export class ApiService {
 
   public operationApi: OperationApi;
 
-  public operationLogApi: OperationLogApi;
-
   public projectApi: ProjectApi;
 
   public projectMembershipApi: ProjectMembershipApi;
+
+  public providerApi: ProviderApi;
 
   public providerAppApi: ProviderAppApi;
 
@@ -56,9 +56,9 @@ export class ApiService {
     this.integrationApi = new IntegrationApi(config);
     this.oAuthApi = new OAuthApi(config);
     this.operationApi = new OperationApi(config);
-    this.operationLogApi = new OperationLogApi(config);
     this.projectApi = new ProjectApi(config);
     this.projectMembershipApi = new ProjectMembershipApi(config);
+    this.providerApi = new ProviderApi(config);
     this.providerAppApi = new ProviderAppApi(config);
     this.revisionApi = new RevisionApi(config);
     this.uploadURLApi = new UploadURLApi(config);
