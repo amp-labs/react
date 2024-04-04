@@ -1,28 +1,22 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box, Button, Container, Flex, FormControl,
-  FormLabel, Heading, Input, Link, Text,
+  FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
+import { capitalize } from '../../../utils';
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
-const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';
-
-type SubdomainEntryProps = {
+type WorkspaceEntryProps = {
+  provider: string,
   handleSubmit: () => void;
   setWorkspace: (workspace: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
-/**
- * Salesforce specific subdomain entry component, use workspace entry for other providers.
- * @param param0
- * @returns
- */
-export function SubdomainEntry({
-  handleSubmit, setWorkspace, error, isButtonDisabled,
-}: SubdomainEntryProps) {
+export function WorkspaceEntry({
+  provider, handleSubmit, setWorkspace, error, isButtonDisabled,
+}: WorkspaceEntryProps) {
   return (
     <Container>
       <Box
@@ -38,19 +32,14 @@ export function SubdomainEntry({
       >
         <FormControl>
           <FormLabel marginTop="16" marginBottom="0">
-            <Heading as="h4" size="md">Enter your Salesforce subdomain</Heading>
+            <Heading as="h4" size="md">Enter your {capitalize(provider)} workspace</Heading>
           </FormLabel>
-          <Link href={SALESFORCE_HELP_URL} color="blackAlpha.600" isExternal>
-            What is my Salesforce subdomain?
-            <ExternalLinkIcon mx="2px" />
-          </Link>
           <OAuthErrorAlert error={error} />
           <Flex marginTop="1em">
             <Input
-              placeholder="MyDomain"
+              placeholder="MyWorkspace"
               onChange={(event) => setWorkspace(event.currentTarget.value)}
             />
-            <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
           </Flex>
           <br />
           <Button
