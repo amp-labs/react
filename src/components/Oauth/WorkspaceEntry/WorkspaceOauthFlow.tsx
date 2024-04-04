@@ -37,6 +37,10 @@ export function WorkspaceOauthFlow({
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
+    if (!workspace) {
+      setError('Workspace is required');
+      return;
+    }
     if (consumerName && groupName && apiKey && workspace) {
       try {
         const url = await fetchOAuthCallbackURL(
