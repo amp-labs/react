@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
@@ -10,9 +9,10 @@ import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry
 
 import { WorkspaceEntry } from './WorkspaceEntry';
 
+const PROVIDER_SALESFORCE = 'salesforce';
 const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
-interface NoSubdomainOauthFlowProps {
+interface WorkspaceOauthFlowProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -26,7 +26,7 @@ interface NoSubdomainOauthFlowProps {
  */
 export function WorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName,
-}: NoSubdomainOauthFlowProps) {
+}: WorkspaceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
 
