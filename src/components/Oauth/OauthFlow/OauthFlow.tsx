@@ -33,8 +33,7 @@ export function OauthFlow({
 
   const workspaceRequired = providerInfo?.oauthOpts?.explicitWorkspaceRequired ?? false;
 
-  // generic required workspace
-
+  // required workspace
   if (workspaceRequired) {
     return (
       <WorkspaceOauthFlow
