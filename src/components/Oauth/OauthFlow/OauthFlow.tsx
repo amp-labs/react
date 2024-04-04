@@ -26,7 +26,7 @@ export function OauthFlow({
   useEffect(() => {
     if (provider && api) {
       api().providerApi.getProvider({ provider }, {
-        headers: { 'X-Api-Key': apiKey ?? '', 'Content-Type': 'application/json' },
+        headers: { 'X-Api-Key': apiKey ?? '' },
       }).then((_providerInfo) => {
         setProviderInfo(_providerInfo);
       }).catch((err) => {
@@ -35,7 +35,7 @@ export function OauthFlow({
     }
   }, [apiKey, provider]);
 
-  const requiredWorkspace = providerInfo?.oauthOpts?.explicitWorkspaceRequired ?? false;
+  const workspaceRequired = providerInfo?.oauthOpts?.explicitWorkspaceRequired ?? false;
 
   // custom logic for Salesforce
   if (provider === PROVIDER_SALESFORCE && !GENERIC_WORKSPACE_FEATURE_FLAG) {
@@ -50,7 +50,7 @@ export function OauthFlow({
   }
 
   // generic required workspace
-  if (GENERIC_WORKSPACE_FEATURE_FLAG && requiredWorkspace) {
+  if (GENERIC_WORKSPACE_FEATURE_FLAG && workspaceRequired) {
     return (
       <WorkspaceOauthFlow
         provider={provider}
