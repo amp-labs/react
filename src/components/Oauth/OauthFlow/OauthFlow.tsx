@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { api, ProviderInfo } from '../../../services/api';
 import { NoWorkspaceOauthFlow } from '../NoWorkspaceEntry/NoWorkspaceOauthFlow';
-import { SalesforceOauthFlow } from '../Salesforce/SalesforceOauthFlow';
 import { WorkspaceOauthFlow } from '../WorkspaceEntry/WorkspaceOauthFlow';
-
-const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
 type OauthFlowProps = {
   provider: string;
@@ -37,20 +33,9 @@ export function OauthFlow({
 
   const workspaceRequired = providerInfo?.oauthOpts?.explicitWorkspaceRequired ?? false;
 
-  // custom logic for Salesforce
-  if (provider === PROVIDER_SALESFORCE && !GENERIC_WORKSPACE_FEATURE_FLAG) {
-    return (
-      <SalesforceOauthFlow
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      />
-    );
-  }
-
   // generic required workspace
-  if (GENERIC_WORKSPACE_FEATURE_FLAG && workspaceRequired) {
+
+  if (workspaceRequired) {
     return (
       <WorkspaceOauthFlow
         provider={provider}

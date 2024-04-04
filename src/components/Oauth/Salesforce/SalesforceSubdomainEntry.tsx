@@ -21,7 +21,7 @@ type SubdomainEntryProps = {
  * @param param0
  * @returns
  */
-export function SubdomainEntry({
+export function SalesforceSubdomainEntry({
   handleSubmit, setWorkspace, error, isButtonDisabled,
 }: SubdomainEntryProps) {
   return (

@@ -1,16 +1,16 @@
-/**
- * OAuth flow for any providers that do not require the consumer to enter a subdomain first.
- */
-
 import { useCallback, useState } from 'react';
 
+import { PROVIDER_SALESFORCE } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
 import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
 import OAuthPopup from '../OAuthPopup';
+import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry';
 
 import { WorkspaceEntry } from './WorkspaceEntry';
+
+const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
 interface NoSubdomainOauthFlowProps {
   provider: string;
@@ -62,12 +62,16 @@ export function WorkspaceOauthFlow({
     setOAuthCallbackURL(null);
   }, []);
 
-  return (
-    <OAuthPopup
-      title={`Connect to ${capitalize(provider)}`}
-      url={oAuthCallbackURL}
-      onClose={onClose}
-    >
+  // custom entry component for Salesforce if feature flag is not enabled
+  const workspaceEntryComponent = (provider === PROVIDER_SALESFORCE && !GENERIC_WORKSPACE_FEATURE_FLAG)
+    ? (
+      <SalesforceSubdomainEntry
+        handleSubmit={handleSubmit}
+        setWorkspace={setWorkspace}
+        error={error}
+        isButtonDisabled={workspace.length === 0}
+      />
+    ) : (
       <WorkspaceEntry
         provider={provider}
         handleSubmit={handleSubmit}
@@ -75,6 +79,15 @@ export function WorkspaceOauthFlow({
         error={error}
         isButtonDisabled={workspace.length === 0}
       />
+    );
+
+  return (
+    <OAuthPopup
+      title={`Connect to ${capitalize(provider)}`}
+      url={oAuthCallbackURL}
+      onClose={onClose}
+    >
+      {workspaceEntryComponent}
     </OAuthPopup>
   );
 }
