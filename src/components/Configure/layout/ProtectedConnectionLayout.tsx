@@ -1,14 +1,9 @@
 import { useEffect } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../../constants';
 import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
 import { useConnectionHandler } from '../../Connect/useConnectionHandler';
-import { NoSubdomainOauthFlow } from '../../Oauth/NoSubdomainEntry/NoSubdomainOauthFlow';
-import { SalesforceOauthFlow } from '../../Oauth/Salesforce/SalesforceOauthFlow';
-import { WorkspaceOauthFlow } from '../../Oauth/WorkspaceEntry/WorkspaceOauthFlow';
-
-const GENERIC_WORKSPACE_FEATURE_FLAG = false;
+import { OauthFlow } from '../../Oauth/OauthFlow/OauthFlow';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -37,36 +32,14 @@ export function ProtectedConnectionLayout({
   if (!provider && !providerFromProps) {
     throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');
   }
+
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
   const selectedProvider = provider || providerFromProps;
 
-  if (GENERIC_WORKSPACE_FEATURE_FLAG && selectedProvider === PROVIDER_SALESFORCE) {
-    return (
-      <WorkspaceOauthFlow
-        provider={selectedProvider}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      />
-    );
-  }
-
-  if (selectedProvider === PROVIDER_SALESFORCE) {
-    return (
-      <SalesforceOauthFlow
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      />
-    );
-  }
-
   return (
-    <NoSubdomainOauthFlow
+    <OauthFlow
       provider={selectedProvider}
       consumerRef={consumerRef}
       consumerName={consumerName}
