@@ -12,7 +12,7 @@ import OAuthPopup from '../OAuthPopup';
 
 import { LandingContent } from './LandingContent';
 
-interface NoSubdomainOauthFlowProps {
+interface NoWorkspaceOauthFlowProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -21,21 +21,19 @@ interface NoSubdomainOauthFlowProps {
 }
 
 /**
- * NoSubdomainOauthFlow first prompts user with a next button,
+ * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function NoSubdomainOauthFlow({
+export function NoWorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName,
-}: NoSubdomainOauthFlowProps) {
+}: NoWorkspaceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
 
   const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // 1. fetch provider apps
-  // 2. find matching app to provider
-  // 3. fetch OAuth callback URL from connection so that oath popup can be launched
+  //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
     if (consumerName && groupName && apiKey) {
