@@ -16,6 +16,7 @@ import {
   IntegrationFieldMapping,
   Project,
   ProviderApp,
+  ProviderInfo,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '../../generated-sources/api/src';
@@ -119,6 +120,7 @@ export type {
   IntegrationFieldMapping,
   Project,
   ProviderApp,
+  ProviderInfo,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 };
