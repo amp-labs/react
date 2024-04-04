@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 
-import { PROVIDER_SALESFORCE } from '../../../constants';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
@@ -10,9 +9,10 @@ import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry
 
 import { WorkspaceEntry } from './WorkspaceEntry';
 
+const PROVIDER_SALESFORCE = 'salesforce';
 const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
-interface NoSubdomainOauthFlowProps {
+interface WorkspaceOauthFlowProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -26,7 +26,7 @@ interface NoSubdomainOauthFlowProps {
  */
 export function WorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName,
-}: NoSubdomainOauthFlowProps) {
+}: WorkspaceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
 
@@ -37,6 +37,10 @@ export function WorkspaceOauthFlow({
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
+    if (!workspace) {
+      setError('Workspace is required');
+      return;
+    }
     if (consumerName && groupName && apiKey && workspace) {
       try {
         const url = await fetchOAuthCallbackURL(

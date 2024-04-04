@@ -1,5 +1,5 @@
 /**
- * OAuth flow for any providers that do not require the consumer to enter a subdomain first.
+ * OAuth flow for any providers that do not require the consumer to enter a workspace first.
  */
 
 import { useCallback, useState } from 'react';
