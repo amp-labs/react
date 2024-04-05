@@ -13,3 +13,5 @@ jobs:
       run: yarn
     - name: Run linter
       run: yarn lint:dry
+    - name: Build project
+      run: yarn build
