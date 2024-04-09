@@ -86,12 +86,10 @@ function OAuthPopup({
             refreshConnections(connectionId);
             onClose(null);
           }
-          if (externalWindow) externalWindow.close();
         } else if (event.data?.eventType === FAILURE_EVENT) {
           clearTimer();
           onClose(event.data.data?.message
             ?? 'There was an error logging you in. Please try again.');
-          if (externalWindow) externalWindow.close();
         }
       }
     });
