@@ -10,7 +10,6 @@ import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry
 import { WorkspaceEntry } from './WorkspaceEntry';
 
 const PROVIDER_SALESFORCE = 'salesforce';
-const GENERIC_WORKSPACE_FEATURE_FLAG = false;
 
 interface WorkspaceOauthFlowProps {
   provider: string;
@@ -21,6 +20,7 @@ interface WorkspaceOauthFlowProps {
 }
 
 /**
+ * Chooses workspace/subdomain entry component based on provider.
  * WorkspaceEntry is generic for any provider that requires a workspace to be entered first,
  * then launches a popup with the OAuth flow.
  */
@@ -66,8 +66,8 @@ export function WorkspaceOauthFlow({
     setOAuthCallbackURL(null);
   }, []);
 
-  // custom entry component for Salesforce if feature flag is not enabled
-  const workspaceEntryComponent = (provider === PROVIDER_SALESFORCE && !GENERIC_WORKSPACE_FEATURE_FLAG)
+  // custom entry component for Salesforce provider
+  const workspaceEntryComponent = (provider === PROVIDER_SALESFORCE)
     ? (
       <SalesforceSubdomainEntry
         handleSubmit={handleSubmit}
@@ -76,6 +76,7 @@ export function WorkspaceOauthFlow({
         isButtonDisabled={workspace.length === 0}
       />
     ) : (
+  // general workspace entry component
       <WorkspaceEntry
         provider={provider}
         handleSubmit={handleSubmit}
