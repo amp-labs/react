@@ -17,6 +17,7 @@ export function OauthCardLayout({ children }: OauthCardLayoutProps) {
         margin="auto"
         marginTop="40px"
         bgColor="white"
+        color="gray.800"
       >
         {children}
       </Box>
