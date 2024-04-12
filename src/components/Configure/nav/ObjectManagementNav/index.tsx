@@ -82,6 +82,8 @@ export function ObjectManagementNav({
         display="flex"
         gap="6"
         minHeight="100%"
+        color="gray.800"
+        fontSize="md"
       >
         <Box width="20rem">
           <Text>{capitalize(provider)} integration</Text>

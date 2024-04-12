@@ -19,6 +19,8 @@ export function SuccessTextBox({ text }: ConnectedSuccessBoxProps) {
         marginTop="40px"
         bgColor="white"
         paddingTop="100px"
+        color="gray.800"
+        fontSize="md"
       >
         <Box width="100%" display="flex" alignContent="center" justifyContent="center">
           <Box margin="auto"><SuccessCheckmarkIcon /></Box>

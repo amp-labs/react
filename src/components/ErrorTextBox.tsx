@@ -37,7 +37,7 @@ export function ErrorTextBox({ message }: ErrorTextBoxProps) {
         border="2px solid #FECACA"
         background="#FEF2F2"
       >
-        <Text color="#991B1B">
+        <Text color="#991B1B" fontSize="md">
           {message}
         </Text>
       </Box>
