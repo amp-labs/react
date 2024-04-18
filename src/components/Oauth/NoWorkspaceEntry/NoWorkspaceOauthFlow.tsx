@@ -36,22 +36,21 @@ export function NoWorkspaceOauthFlow({
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
-    if (consumerName && groupName && apiKey) {
-      try {
-        const url = await fetchOAuthCallbackURL(
-          projectId,
-          consumerRef,
-          groupRef,
-          consumerName,
-          groupName,
-          apiKey,
-          provider,
-        );
-        setOAuthCallbackURL(url);
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message ?? 'Unexpected error');
-      }
+    try {
+      const url = await fetchOAuthCallbackURL(
+        projectId,
+        consumerRef,
+        groupRef,
+        apiKey,
+        provider,
+        undefined,
+        consumerName,
+        groupName,
+      );
+      setOAuthCallbackURL(url);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message ?? 'Unexpected error');
     }
   };
 

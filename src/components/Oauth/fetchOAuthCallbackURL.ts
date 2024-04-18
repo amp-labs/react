@@ -5,11 +5,11 @@ export const fetchOAuthCallbackURL = async (
   projectId: string,
   consumerRef: string,
   groupRef: string,
-  consumerName: string,
-  groupName: string,
   apiKey: string,
   provider: string,
   workspace?: string,
+  consumerName?: string,
+  groupName?: string,
 ): Promise<string> => {
   const providerApps = await api().providerAppApi.listProviderApps({ projectId }, {
     headers: { 'X-Api-Key': apiKey ?? '' },
