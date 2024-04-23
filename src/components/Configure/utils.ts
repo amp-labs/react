@@ -82,7 +82,7 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
  * @param hydratedRevision
  * @returns NavObject[]
  */
-const generateReadNavObjects = (config: Config | undefined, hydratedRevision: HydratedRevision) => {
+export const generateReadNavObjects = (config: Config | undefined, hydratedRevision: HydratedRevision) => {
   const navObjects: NavObject[] = [];
   hydratedRevision.content?.read?.standardObjects?.forEach((object) => {
     navObjects.push(
@@ -109,11 +109,14 @@ export const generateOtherNavObject = (
 };
 
 // generates standard objects and whether they are complete based on config and hydrated revision
-export function generateNavObjects(
+export function generateAllNavObjects(
   config: Config | undefined,
   hydratedRevision: HydratedRevision,
 ) {
   const navObjects: NavObject[] = generateReadNavObjects(config, hydratedRevision);
+  const isWriteSupported = !!hydratedRevision?.content?.write;
+  const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
+  if (otherNavObject) { navObjects.push(otherNavObject); }
   return navObjects;
 }
 
