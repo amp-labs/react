@@ -41,23 +41,22 @@ export function WorkspaceOauthFlow({
       setError('Workspace is required');
       return;
     }
-    if (consumerName && groupName && apiKey && workspace) {
-      try {
-        const url = await fetchOAuthCallbackURL(
-          projectId,
-          consumerRef,
-          groupRef,
-          consumerName,
-          groupName,
-          apiKey,
-          provider,
-          workspace,
-        );
-        setOAuthCallbackURL(url);
-      } catch (err: any) {
-        console.error(err);
-        setError(err?.message ?? 'Unexpected error');
-      }
+
+    try {
+      const url = await fetchOAuthCallbackURL(
+        projectId,
+        consumerRef,
+        groupRef,
+        apiKey,
+        provider,
+        workspace,
+        consumerName,
+        groupName,
+      );
+      setOAuthCallbackURL(url);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message ?? 'Unexpected error');
     }
   };
 
