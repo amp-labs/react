@@ -17,7 +17,7 @@ import {
   SelectOptionalFields,
 } from '../types';
 import {
-  generateNavObjects,
+  generateAllNavObjects,
   getFieldKeyValue, getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
   getStandardObjectFromAction,
@@ -135,7 +135,8 @@ export const resetAllObjectsConfigurationState = (
   config: Config | undefined,
   setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>,
 ) => {
-  const navObjects = generateNavObjects(config, hydratedRevision);
+  // read nav objects from hydrated revision
+  const navObjects = generateAllNavObjects(config, hydratedRevision);
   const objectConfigurationsState: ObjectConfigurationsState = {};
   navObjects.forEach(({ name, completed }) => {
     if (completed) {
@@ -146,6 +147,7 @@ export const resetAllObjectsConfigurationState = (
       );
     }
   });
+
   setObjectConfiguresState(objectConfigurationsState);
 };
 

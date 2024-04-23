@@ -11,7 +11,7 @@ import { capitalize } from '../../../../utils';
 import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 import { NavObject } from '../../types';
-import { generateNavObjects, generateOtherNavObject } from '../../utils';
+import { generateOtherNavObject, generateReadNavObjects } from '../../utils';
 
 import { NavObjectItem } from './NavObjectItem';
 import { OtherTab } from './OtherTab';
@@ -59,7 +59,7 @@ export function ObjectManagementNav({
 
   const appName = project?.appName || '';
   const config = installation?.config;
-  const readNavObjects = hydratedRevision && generateNavObjects(config, hydratedRevision);
+  const readNavObjects = hydratedRevision && generateReadNavObjects(config, hydratedRevision);
   const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
