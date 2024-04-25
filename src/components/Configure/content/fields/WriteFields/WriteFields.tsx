@@ -18,11 +18,29 @@ export function WriteFields() {
     }
   };
 
+  const onSelectAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+    if (selectedObjectName && configureState) {
+      configureState?.write?.writeObjects?.forEach((field) => {
+        setNonConfigurableWriteField(selectedObjectName, setConfigureState, field.objectName, checked);
+      });
+    }
+  };
+
   const shouldRender = !!(configureState?.write?.writeObjects);
   return (
     shouldRender && (
       <>
         <FieldHeader string={`Allow ${appName} to write to these object`} />
+        <Checkbox
+          name="selectAll"
+          id="selectAll"
+          onChange={onSelectAllCheckboxChange}
+          isChecked={Object.keys(selectedWriteFields || {}).length === configureState?.write?.writeObjects?.length}
+          style={{ marginBottom: '10px' }}
+        >
+          Select All Fields
+        </Checkbox>
         <Stack
           marginBottom={10}
           height={300}
