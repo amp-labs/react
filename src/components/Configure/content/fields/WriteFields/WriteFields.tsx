@@ -10,6 +10,7 @@ export function WriteFields() {
     appName, selectedObjectName, configureState, setConfigureState,
   } = useSelectedConfigureState();
   const selectedWriteFields = configureState?.write?.selectedNonConfigurableWriteFields;
+  const writeObjects = configureState?.write?.writeObjects;
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -18,21 +19,54 @@ export function WriteFields() {
     }
   };
 
-  const shouldRender = !!(configureState?.write?.writeObjects);
+  const onSelectAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+    if (selectedObjectName && configureState) {
+      configureState?.write?.writeObjects?.forEach((field) => {
+        setNonConfigurableWriteField(selectedObjectName, setConfigureState, field.objectName, checked);
+      });
+    }
+  };
+
+  const shouldRender = !!(writeObjects);
+  const isAllChecked = Object.keys(selectedWriteFields || {}).length === configureState?.write?.writeObjects?.length;
+  const isIndeterminate = !isAllChecked && Object.keys(selectedWriteFields || {}).length > 0;
+
   return (
     shouldRender && (
       <>
         <FieldHeader string={`Allow ${appName} to write to these object`} />
         <Stack
           marginBottom={10}
-          height={300}
+          maxHeight={300}
           overflowY="scroll"
           border="2px solid #EFEFEF"
           borderRadius={8}
-          padding={4}
+          gap={0}
         >
-          {configureState?.write?.writeObjects?.map((field) => (
-            <Box key={field.objectName} display="flex" gap="5px" borderBottom="1px" borderColor="gray.100">
+          {(writeObjects?.length || 0) >= 2 && (
+          <Box backgroundColor="gray.50" paddingX={4} paddingY={2}>
+            <Checkbox
+              name="selectAll"
+              id="selectAll"
+              onChange={onSelectAllCheckboxChange}
+              isIndeterminate={isIndeterminate}
+              isChecked={isAllChecked}
+            >
+              Select all
+            </Checkbox>
+          </Box>
+          )}
+          {writeObjects.map((field) => (
+            <Box
+              key={field.objectName}
+              display="flex"
+              alignItems="center"
+              borderBottom="1px"
+              borderColor="gray.100"
+              paddingX={4}
+              paddingY={2}
+            >
               <Checkbox
                 name={field.objectName}
                 id={field.objectName}
@@ -43,7 +77,6 @@ export function WriteFields() {
               </Checkbox>
             </Box>
           ))}
-
         </Stack>
       </>
     )
