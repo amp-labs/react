@@ -83,6 +83,7 @@ export function ConfigureInstallationBase(
             bgColor="white"
             maxHeight="100%"
             overflowY="scroll"
+            minHeight={300}
           >
             {loading && <LoadingIcon />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
