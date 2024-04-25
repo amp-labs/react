@@ -29,6 +29,9 @@ export function WriteFields() {
   };
 
   const shouldRender = !!(writeObjects);
+  const isAllChecked = Object.keys(selectedWriteFields || {}).length === configureState?.write?.writeObjects?.length;
+  const isIndeterminate = !isAllChecked && Object.keys(selectedWriteFields || {}).length > 0;
+
   return (
     shouldRender && (
       <>
@@ -42,13 +45,13 @@ export function WriteFields() {
           gap={0}
         >
           {(writeObjects?.length || 0) >= 2 && (
-          <Box backgroundColor="gray.100" paddingX={4} paddingTop={2}>
+          <Box backgroundColor="gray.50" paddingX={4} paddingY={2}>
             <Checkbox
               name="selectAll"
               id="selectAll"
               onChange={onSelectAllCheckboxChange}
-              isChecked={Object.keys(selectedWriteFields || {}).length === configureState?.write?.writeObjects?.length}
-              style={{ marginBottom: '10px' }}
+              isIndeterminate={isIndeterminate}
+              isChecked={isAllChecked}
             >
               Select all
             </Checkbox>
