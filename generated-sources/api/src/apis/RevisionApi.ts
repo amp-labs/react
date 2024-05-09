@@ -15,14 +15,20 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   BatchUpsertIntegrationsRequest,
   HydratedRevision,
+  InputValidationProblem,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     BatchUpsertIntegrationsRequestFromJSON,
     BatchUpsertIntegrationsRequestToJSON,
     HydratedRevisionFromJSON,
     HydratedRevisionToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
 } from '../models';
 
 export interface CreateRevisionRequest {

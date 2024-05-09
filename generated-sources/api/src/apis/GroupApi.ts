@@ -15,11 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   CreateGroupRequest,
+  InputValidationProblem,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     CreateGroupRequestFromJSON,
     CreateGroupRequestToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
 } from '../models';
 
 export interface CreateGroupOperationRequest {

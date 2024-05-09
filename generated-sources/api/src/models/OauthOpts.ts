@@ -31,6 +31,12 @@ export interface OauthOpts {
      * @type {string}
      * @memberof OauthOpts
      */
+    grantType: OauthOptsGrantTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthOpts
+     */
     authURL: string;
     /**
      * 
@@ -58,11 +64,24 @@ export interface OauthOpts {
     tokenMetadataFields: TokenMetadataFields;
 }
 
+
+/**
+ * @export
+ */
+export const OauthOptsGrantTypeEnum = {
+    AuthorizationCode: 'authorizationCode',
+    ClientCredentials: 'clientCredentials',
+    Pkce: 'PKCE'
+} as const;
+export type OauthOptsGrantTypeEnum = typeof OauthOptsGrantTypeEnum[keyof typeof OauthOptsGrantTypeEnum];
+
+
 /**
  * Check if a given object implements the OauthOpts interface.
  */
 export function instanceOfOauthOpts(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "grantType" in value;
     isInstance = isInstance && "authURL" in value;
     isInstance = isInstance && "tokenURL" in value;
     isInstance = isInstance && "explicitScopesRequired" in value;
@@ -82,6 +101,7 @@ export function OauthOptsFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'grantType': json['grantType'],
         'authURL': json['authURL'],
         'tokenURL': json['tokenURL'],
         'explicitScopesRequired': json['explicitScopesRequired'],
@@ -99,6 +119,7 @@ export function OauthOptsToJSON(value?: OauthOpts | null): any {
     }
     return {
         
+        'grantType': value.grantType,
         'authURL': value.authURL,
         'tokenURL': value.tokenURL,
         'explicitScopesRequired': value.explicitScopesRequired,

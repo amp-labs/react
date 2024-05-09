@@ -17,6 +17,8 @@ import * as runtime from '../runtime';
 import type {
   ApiKey,
   ApiKeyRequest,
+  ApiProblem,
+  InputValidationProblem,
   PatchApiKeyRequest,
 } from '../models';
 import {
@@ -24,6 +26,10 @@ import {
     ApiKeyToJSON,
     ApiKeyRequestFromJSON,
     ApiKeyRequestToJSON,
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     PatchApiKeyRequestFromJSON,
     PatchApiKeyRequestToJSON,
 } from '../models';

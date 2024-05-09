@@ -16,37 +16,37 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CreateDestinationRequestMetadata
+ * @interface UpdateDestinationRequestDestinationMetadata
  */
-export interface CreateDestinationRequestMetadata {
+export interface UpdateDestinationRequestDestinationMetadata {
     /**
-     * Webhook URL, must start with "https://".
+     * Webhook URL
      * @type {string}
-     * @memberof CreateDestinationRequestMetadata
+     * @memberof UpdateDestinationRequestDestinationMetadata
      */
     url?: string;
     /**
      * Additional headers to add when Ampersand sends a webhook message
      * @type {{ [key: string]: string; }}
-     * @memberof CreateDestinationRequestMetadata
+     * @memberof UpdateDestinationRequestDestinationMetadata
      */
     headers?: { [key: string]: string; } | null;
 }
 
 /**
- * Check if a given object implements the CreateDestinationRequestMetadata interface.
+ * Check if a given object implements the UpdateDestinationRequestDestinationMetadata interface.
  */
-export function instanceOfCreateDestinationRequestMetadata(value: object): boolean {
+export function instanceOfUpdateDestinationRequestDestinationMetadata(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function CreateDestinationRequestMetadataFromJSON(json: any): CreateDestinationRequestMetadata {
-    return CreateDestinationRequestMetadataFromJSONTyped(json, false);
+export function UpdateDestinationRequestDestinationMetadataFromJSON(json: any): UpdateDestinationRequestDestinationMetadata {
+    return UpdateDestinationRequestDestinationMetadataFromJSONTyped(json, false);
 }
 
-export function CreateDestinationRequestMetadataFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateDestinationRequestMetadata {
+export function UpdateDestinationRequestDestinationMetadataFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateDestinationRequestDestinationMetadata {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -57,7 +57,7 @@ export function CreateDestinationRequestMetadataFromJSONTyped(json: any, ignoreD
     };
 }
 
-export function CreateDestinationRequestMetadataToJSON(value?: CreateDestinationRequestMetadata | null): any {
+export function UpdateDestinationRequestDestinationMetadataToJSON(value?: UpdateDestinationRequestDestinationMetadata | null): any {
     if (value === undefined) {
         return undefined;
     }

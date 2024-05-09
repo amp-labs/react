@@ -14,6 +14,16 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ApiProblem,
+  InputValidationProblem,
+} from '../models';
+import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
+} from '../models';
 
 export interface ListAllowedDomainsForProjectRequest {
     projectId: string;

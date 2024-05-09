@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LogMessage } from './LogMessage';
+import {
+    LogMessageFromJSON,
+    LogMessageFromJSONTyped,
+    LogMessageToJSON,
+} from './LogMessage';
+
 /**
  * 
  * @export
@@ -26,11 +33,11 @@ export interface Log {
      */
     timestamp: string;
     /**
-     * The log message.
-     * @type {object}
+     * 
+     * @type {LogMessage}
      * @memberof Log
      */
-    message: object;
+    message: LogMessage;
     /**
      * The severity of the log.
      * @type {string}
@@ -62,7 +69,7 @@ export function LogFromJSONTyped(json: any, ignoreDiscriminator: boolean): Log {
     return {
         
         'timestamp': json['timestamp'],
-        'message': json['message'],
+        'message': LogMessageFromJSON(json['message']),
         'severity': json['severity'],
     };
 }
@@ -77,7 +84,7 @@ export function LogToJSON(value?: Log | null): any {
     return {
         
         'timestamp': value.timestamp,
-        'message': value.message,
+        'message': LogMessageToJSON(value.message),
         'severity': value.severity,
     };
 }

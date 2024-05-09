@@ -15,9 +15,15 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
+  InputValidationProblem,
   SignedUrl,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     SignedUrlFromJSON,
     SignedUrlToJSON,
 } from '../models';

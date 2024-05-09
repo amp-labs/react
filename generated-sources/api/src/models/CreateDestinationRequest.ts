@@ -27,7 +27,7 @@ import {
  */
 export interface CreateDestinationRequest {
     /**
-     * Name for the new destination
+     * Name for the new destination. Must be unique within the project and can only contain letters, numbers and dashes.
      * @type {string}
      * @memberof CreateDestinationRequest
      */

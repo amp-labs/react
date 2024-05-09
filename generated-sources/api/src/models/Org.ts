@@ -16,80 +16,73 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Project
+ * @interface Org
  */
-export interface Project {
+export interface Org {
     /**
-     * The project ID.
+     * The organization ID.
      * @type {string}
-     * @memberof Project
+     * @memberof Org
      */
     id: string;
     /**
-     * The project name.
+     * The organization label.
      * @type {string}
-     * @memberof Project
+     * @memberof Org
      */
-    name: string;
+    label: string;
     /**
-     * The name of the application, which is displayed to end users.
+     * The ID of the Everyone team for the org.
      * @type {string}
-     * @memberof Project
+     * @memberof Org
      */
-    appName: string;
+    defaultTeamId: string;
     /**
-     * The organization ID that this project belongs to.
-     * @type {string}
-     * @memberof Project
-     */
-    orgId?: string;
-    /**
-     * The time the project was created.
+     * The time the organization was created.
      * @type {Date}
-     * @memberof Project
+     * @memberof Org
      */
     createTime: Date;
     /**
-     * The time the project was updated.
+     * The time the organization was updated.
      * @type {Date}
-     * @memberof Project
+     * @memberof Org
      */
     updateTime?: Date;
 }
 
 /**
- * Check if a given object implements the Project interface.
+ * Check if a given object implements the Org interface.
  */
-export function instanceOfProject(value: object): boolean {
+export function instanceOfOrg(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "appName" in value;
+    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "defaultTeamId" in value;
     isInstance = isInstance && "createTime" in value;
 
     return isInstance;
 }
 
-export function ProjectFromJSON(json: any): Project {
-    return ProjectFromJSONTyped(json, false);
+export function OrgFromJSON(json: any): Org {
+    return OrgFromJSONTyped(json, false);
 }
 
-export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): Project {
+export function OrgFromJSONTyped(json: any, ignoreDiscriminator: boolean): Org {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'name': json['name'],
-        'appName': json['appName'],
-        'orgId': !exists(json, 'orgId') ? undefined : json['orgId'],
+        'label': json['label'],
+        'defaultTeamId': json['defaultTeamId'],
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
 }
 
-export function ProjectToJSON(value?: Project | null): any {
+export function OrgToJSON(value?: Org | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -99,9 +92,8 @@ export function ProjectToJSON(value?: Project | null): any {
     return {
         
         'id': value.id,
-        'name': value.name,
-        'appName': value.appName,
-        'orgId': value.orgId,
+        'label': value.label,
+        'defaultTeamId': value.defaultTeamId,
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };

@@ -15,11 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   CreateConsumerRequest,
+  InputValidationProblem,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     CreateConsumerRequestFromJSON,
     CreateConsumerRequestToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
 } from '../models';
 
 export interface CreateConsumerOperationRequest {

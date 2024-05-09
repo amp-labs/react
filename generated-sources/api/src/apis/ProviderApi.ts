@@ -15,9 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   ProviderInfo,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     ProviderInfoFromJSON,
     ProviderInfoToJSON,
 } from '../models';

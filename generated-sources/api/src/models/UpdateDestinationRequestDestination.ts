@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { CreateDestinationRequestMetadata } from './CreateDestinationRequestMetadata';
+import type { UpdateDestinationRequestDestinationMetadata } from './UpdateDestinationRequestDestinationMetadata';
 import {
-    CreateDestinationRequestMetadataFromJSON,
-    CreateDestinationRequestMetadataFromJSONTyped,
-    CreateDestinationRequestMetadataToJSON,
-} from './CreateDestinationRequestMetadata';
+    UpdateDestinationRequestDestinationMetadataFromJSON,
+    UpdateDestinationRequestDestinationMetadataFromJSONTyped,
+    UpdateDestinationRequestDestinationMetadataToJSON,
+} from './UpdateDestinationRequestDestinationMetadata';
 
 /**
  * 
@@ -34,10 +34,10 @@ export interface UpdateDestinationRequestDestination {
     name?: string;
     /**
      * 
-     * @type {CreateDestinationRequestMetadata}
+     * @type {UpdateDestinationRequestDestinationMetadata}
      * @memberof UpdateDestinationRequestDestination
      */
-    metadata?: CreateDestinationRequestMetadata;
+    metadata?: UpdateDestinationRequestDestinationMetadata;
 }
 
 /**
@@ -60,7 +60,7 @@ export function UpdateDestinationRequestDestinationFromJSONTyped(json: any, igno
     return {
         
         'name': !exists(json, 'name') ? undefined : json['name'],
-        'metadata': !exists(json, 'metadata') ? undefined : CreateDestinationRequestMetadataFromJSON(json['metadata']),
+        'metadata': !exists(json, 'metadata') ? undefined : UpdateDestinationRequestDestinationMetadataFromJSON(json['metadata']),
     };
 }
 
@@ -74,7 +74,7 @@ export function UpdateDestinationRequestDestinationToJSON(value?: UpdateDestinat
     return {
         
         'name': value.name,
-        'metadata': CreateDestinationRequestMetadataToJSON(value.metadata),
+        'metadata': UpdateDestinationRequestDestinationMetadataToJSON(value.metadata),
     };
 }
 
