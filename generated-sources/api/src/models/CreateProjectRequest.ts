@@ -31,6 +31,12 @@ export interface CreateProjectRequest {
      * @memberof CreateProjectRequest
      */
     name: string;
+    /**
+     * The organization ID.
+     * @type {string}
+     * @memberof CreateProjectRequest
+     */
+    orgId: string;
 }
 
 /**
@@ -40,6 +46,7 @@ export function instanceOfCreateProjectRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "appName" in value;
     isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "orgId" in value;
 
     return isInstance;
 }
@@ -56,6 +63,7 @@ export function CreateProjectRequestFromJSONTyped(json: any, ignoreDiscriminator
         
         'appName': json['appName'],
         'name': json['name'],
+        'orgId': json['orgId'],
     };
 }
 
@@ -70,6 +78,7 @@ export function CreateProjectRequestToJSON(value?: CreateProjectRequest | null):
         
         'appName': value.appName,
         'name': value.name,
+        'orgId': value.orgId,
     };
 }
 

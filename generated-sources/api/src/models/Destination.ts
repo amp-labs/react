@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { CreateDestinationRequestMetadata } from './CreateDestinationRequestMetadata';
+import type { UpdateDestinationRequestDestinationMetadata } from './UpdateDestinationRequestDestinationMetadata';
 import {
-    CreateDestinationRequestMetadataFromJSON,
-    CreateDestinationRequestMetadataFromJSONTyped,
-    CreateDestinationRequestMetadataToJSON,
-} from './CreateDestinationRequestMetadata';
+    UpdateDestinationRequestDestinationMetadataFromJSON,
+    UpdateDestinationRequestDestinationMetadataFromJSONTyped,
+    UpdateDestinationRequestDestinationMetadataToJSON,
+} from './UpdateDestinationRequestDestinationMetadata';
 
 /**
  * 
@@ -46,10 +46,10 @@ export interface Destination {
     type: string;
     /**
      * 
-     * @type {CreateDestinationRequestMetadata}
+     * @type {UpdateDestinationRequestDestinationMetadata}
      * @memberof Destination
      */
-    metadata: CreateDestinationRequestMetadata;
+    metadata: UpdateDestinationRequestDestinationMetadata;
     /**
      * The time the destination was created.
      * @type {Date}
@@ -91,7 +91,7 @@ export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'id': json['id'],
         'name': json['name'],
         'type': json['type'],
-        'metadata': CreateDestinationRequestMetadataFromJSON(json['metadata']),
+        'metadata': UpdateDestinationRequestDestinationMetadataFromJSON(json['metadata']),
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
@@ -109,7 +109,7 @@ export function DestinationToJSON(value?: Destination | null): any {
         'id': value.id,
         'name': value.name,
         'type': value.type,
-        'metadata': CreateDestinationRequestMetadataToJSON(value.metadata),
+        'metadata': UpdateDestinationRequestDestinationMetadataToJSON(value.metadata),
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };

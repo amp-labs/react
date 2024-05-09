@@ -18,7 +18,8 @@
  * @export
  */
 export const AuthType = {
-    Oauth2: 'oauth2'
+    Oauth2: 'oauth2',
+    None: 'none'
 } as const;
 export type AuthType = typeof AuthType[keyof typeof AuthType];
 

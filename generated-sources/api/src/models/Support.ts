@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BulkWriteSupport } from './BulkWriteSupport';
+import {
+    BulkWriteSupportFromJSON,
+    BulkWriteSupportFromJSONTyped,
+    BulkWriteSupportToJSON,
+} from './BulkWriteSupport';
+
 /**
  * 
  * @export
@@ -21,10 +28,10 @@ import { exists, mapValues } from '../runtime';
 export interface Support {
     /**
      * 
-     * @type {boolean}
+     * @type {BulkWriteSupport}
      * @memberof Support
      */
-    bulkWrite: boolean;
+    bulkWrite: BulkWriteSupport;
     /**
      * 
      * @type {boolean}
@@ -75,7 +82,7 @@ export function SupportFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
     }
     return {
         
-        'bulkWrite': json['bulkWrite'],
+        'bulkWrite': BulkWriteSupportFromJSON(json['bulkWrite']),
         'proxy': json['proxy'],
         'read': json['read'],
         'subscribe': json['subscribe'],
@@ -92,7 +99,7 @@ export function SupportToJSON(value?: Support | null): any {
     }
     return {
         
-        'bulkWrite': value.bulkWrite,
+        'bulkWrite': BulkWriteSupportToJSON(value.bulkWrite),
         'proxy': value.proxy,
         'read': value.read,
         'subscribe': value.subscribe,

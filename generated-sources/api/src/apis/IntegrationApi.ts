@@ -15,15 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   BatchUpsertIntegrationsRequest,
   CreateIntegrationRequest,
+  InputValidationProblem,
   Integration,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     BatchUpsertIntegrationsRequestFromJSON,
     BatchUpsertIntegrationsRequestToJSON,
     CreateIntegrationRequestFromJSON,
     CreateIntegrationRequestToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     IntegrationFromJSON,
     IntegrationToJSON,
 } from '../models';

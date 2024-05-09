@@ -15,10 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
+  InputValidationProblem,
   ProjectMembership,
   UpsertProjectMembershipRequest,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     ProjectMembershipFromJSON,
     ProjectMembershipToJSON,
     UpsertProjectMembershipRequestFromJSON,

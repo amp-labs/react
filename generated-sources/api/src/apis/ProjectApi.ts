@@ -15,13 +15,19 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   CreateProjectRequest,
+  InputValidationProblem,
   Project,
   UpdateProjectRequest,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     CreateProjectRequestFromJSON,
     CreateProjectRequestToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     ProjectFromJSON,
     ProjectToJSON,
     UpdateProjectRequestFromJSON,
@@ -60,12 +66,12 @@ export interface ProjectApiInterface {
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
      */
-    createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
      * Create a new project
      */
-    createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
      * 
@@ -123,7 +129,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     /**
      * Create a new project
      */
-    async createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
         if (requestParameters.project === null || requestParameters.project === undefined) {
             throw new runtime.RequiredError('project','Required parameter requestParameters.project was null or undefined when calling createProject.');
         }
@@ -142,14 +148,15 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
             body: CreateProjectRequestToJSON(requestParameters.project),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
     }
 
     /**
      * Create a new project
      */
-    async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.createProjectRaw(requestParameters, initOverrides);
+    async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
+        const response = await this.createProjectRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

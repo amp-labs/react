@@ -15,15 +15,27 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
+  InputValidationProblem,
   Log,
   OperationEvent,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     LogFromJSON,
     LogToJSON,
     OperationEventFromJSON,
     OperationEventToJSON,
 } from '../models';
+
+export interface GetOperationEventRequest {
+    projectId: string;
+    operationId: string;
+    eventId: string;
+}
 
 export interface ListOperationEventLogsRequest {
     projectId: string;
@@ -45,6 +57,23 @@ export interface ListOperationEventsRequest {
  * @interface OperationEventApiInterface
  */
 export interface OperationEventApiInterface {
+    /**
+     * 
+     * @summary Get an operation event
+     * @param {string} projectId 
+     * @param {string} operationId 
+     * @param {string} eventId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OperationEventApiInterface
+     */
+    getOperationEventRaw(requestParameters: GetOperationEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationEvent>>;
+
+    /**
+     * Get an operation event
+     */
+    getOperationEvent(requestParameters: GetOperationEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationEvent>;
+
     /**
      * 
      * @summary List logs for an operation event
@@ -86,6 +115,44 @@ export interface OperationEventApiInterface {
  * 
  */
 export class OperationEventApi extends runtime.BaseAPI implements OperationEventApiInterface {
+
+    /**
+     * Get an operation event
+     */
+    async getOperationEventRaw(requestParameters: GetOperationEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationEvent>> {
+        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
+            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getOperationEvent.');
+        }
+
+        if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
+            throw new runtime.RequiredError('operationId','Required parameter requestParameters.operationId was null or undefined when calling getOperationEvent.');
+        }
+
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling getOperationEvent.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects/{projectId}/operations/{operationId}/events/{eventId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationEventFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an operation event
+     */
+    async getOperationEvent(requestParameters: GetOperationEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationEvent> {
+        const response = await this.getOperationEventRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * List logs for an operation event

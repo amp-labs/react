@@ -15,16 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   CreateInstallationRequest,
   ImportInstallationRequest,
+  InputValidationProblem,
   Installation,
   UpdateInstallationRequest,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     CreateInstallationRequestFromJSON,
     CreateInstallationRequestToJSON,
     ImportInstallationRequestFromJSON,
     ImportInstallationRequestToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
     InstallationFromJSON,
     InstallationToJSON,
     UpdateInstallationRequestFromJSON,

@@ -15,11 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiProblem,
   Connection,
+  InputValidationProblem,
 } from '../models';
 import {
+    ApiProblemFromJSON,
+    ApiProblemToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
+    InputValidationProblemFromJSON,
+    InputValidationProblemToJSON,
 } from '../models';
 
 export interface GetConnectionRequest {
