@@ -43,7 +43,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const isProxyOnly: boolean = getIsProxyOnly(hydratedRevision);
 
   useEffect(() => {
-    if (hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
+    if (!isLoading && hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
         apiKey,
@@ -62,7 +62,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
       });
     }
   }, [hydratedRevision, isProxyOnly, installation,
-    selectedConnection, apiKey, projectId, integrationObj?.id, groupRef, consumerRef, setInstallation]);
+    selectedConnection, apiKey, projectId, integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading]);
 
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
   if (isLoading) return <LoadingIcon />;
