@@ -3,7 +3,6 @@
 README.md
 package.json
 src/apis/APIKeyApi.ts
-src/apis/AllowedDomainApi.ts
 src/apis/ConnectionApi.ts
 src/apis/ConsumerApi.ts
 src/apis/DestinationApi.ts
@@ -15,7 +14,6 @@ src/apis/OperationApi.ts
 src/apis/OperationEventApi.ts
 src/apis/OrgApi.ts
 src/apis/ProjectApi.ts
-src/apis/ProjectMembershipApi.ts
 src/apis/ProviderApi.ts
 src/apis/ProviderAppApi.ts
 src/apis/RevisionApi.ts
@@ -117,7 +115,6 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
-src/models/UpsertProjectMembershipRequest.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

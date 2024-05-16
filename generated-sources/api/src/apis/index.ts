@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './APIKeyApi';
-export * from './AllowedDomainApi';
 export * from './ConnectionApi';
 export * from './ConsumerApi';
 export * from './DestinationApi';
@@ -13,7 +12,6 @@ export * from './OperationApi';
 export * from './OperationEventApi';
 export * from './OrgApi';
 export * from './ProjectApi';
-export * from './ProjectMembershipApi';
 export * from './ProviderApi';
 export * from './ProviderAppApi';
 export * from './RevisionApi';
