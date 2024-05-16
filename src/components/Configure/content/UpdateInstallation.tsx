@@ -63,7 +63,7 @@ export function UpdateInstallation(
   }, [installation, resetState]);
 
   const hydratedObject = useMemo(() => {
-    const hydrated = hydratedRevision?.content?.read?.standardObjects?.find(
+    const hydrated = hydratedRevision?.content?.read?.objects?.find(
       (obj) => obj?.objectName === selectedObjectName,
     );
 

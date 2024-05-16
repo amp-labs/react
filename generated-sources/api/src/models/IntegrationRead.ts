@@ -31,7 +31,7 @@ export interface IntegrationRead {
      * @type {Array<IntegrationObject>}
      * @memberof IntegrationRead
      */
-    standardObjects?: Array<IntegrationObject>;
+    objects?: Array<IntegrationObject>;
 }
 
 /**
@@ -53,7 +53,7 @@ export function IntegrationReadFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'standardObjects': !exists(json, 'standardObjects') ? undefined : ((json['standardObjects'] as Array<any>).map(IntegrationObjectFromJSON)),
+        'objects': !exists(json, 'objects') ? undefined : ((json['objects'] as Array<any>).map(IntegrationObjectFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function IntegrationReadToJSON(value?: IntegrationRead | null): any {
     }
     return {
         
-        'standardObjects': value.standardObjects === undefined ? undefined : ((value.standardObjects as Array<any>).map(IntegrationObjectToJSON)),
+        'objects': value.objects === undefined ? undefined : ((value.objects as Array<any>).map(IntegrationObjectToJSON)),
     };
 }
 

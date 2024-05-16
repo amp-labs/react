@@ -18,9 +18,9 @@ import {
 } from '../types';
 import {
   generateAllNavObjects,
-  getFieldKeyValue, getOptionalFieldsFromObject,
+  getFieldKeyValue, getObjectFromAction,
+  getOptionalFieldsFromObject,
   getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
-  getStandardObjectFromAction,
 } from '../utils';
 
 // uses lodash deep equality check to compare two saved fields objects
@@ -40,7 +40,7 @@ const generateConfigurationStateRead = (
     return null;
   }
   // refactor this section to be immutable at hydrated revision level
-  const object = getStandardObjectFromAction(readAction, objectName);
+  const object = getObjectFromAction(readAction, objectName);
   const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
   const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
@@ -48,8 +48,8 @@ const generateConfigurationStateRead = (
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
   const content = config?.content;
-  const readSelectedFields = content?.read?.standardObjects?.[objectName]?.selectedFields || {};
-  const selectedFieldMappings = content?.read?.standardObjects?.
+  const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
+  const selectedFieldMappings = content?.read?.objects?.
     [objectName]?.selectedFieldMappings || {};
 
   const optionalFieldsSaved = { ...readSelectedFields };

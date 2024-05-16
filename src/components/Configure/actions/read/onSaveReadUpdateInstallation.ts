@@ -45,7 +45,7 @@ const generateUpdateReadConfigFromConfigureState = (
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
     content: {
       read: {
-        standardObjects: {
+        objects: {
           [objectName]: {
             objectName,
             // these two fields are copied from previous config, otherwise they will override null

@@ -21,8 +21,8 @@ const getObjectFromHydratedRevision = (
   objectName: string,
 ) => {
   const readAction = hydratedRevision.content.read;
-  const standardObjects = readAction?.standardObjects;
-  return standardObjects?.find((obj) => obj.objectName === objectName);
+  const objects = readAction?.objects;
+  return objects?.find((obj) => obj.objectName === objectName);
 };
 
 /**
@@ -64,7 +64,7 @@ const generateCreateReadConfigFromConfigureState = (
     content: {
       provider: hydratedRevision.content.provider,
       read: {
-        standardObjects: {
+        objects: {
           [objectName]: {
             objectName,
             schedule: obj.schedule,
