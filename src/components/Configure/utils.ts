@@ -84,7 +84,6 @@ export function getFieldKeyValue(field: HydratedIntegrationField): string {
  */
 export const generateReadNavObjects = (config: Config | undefined, hydratedRevision: HydratedRevision) => {
   const navObjects: NavObject[] = [];
-  console.log('hydratedRevision', JSON.stringify(hydratedRevision, null, 2));
   hydratedRevision.content?.read?.objects?.forEach((object) => {
     navObjects.push(
       {
