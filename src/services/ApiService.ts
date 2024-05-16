@@ -1,9 +1,9 @@
 /* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import {
-  AllowedDomainApi, Configuration, ConnectionApi, ConsumerApi,
+  Configuration, ConnectionApi, ConsumerApi,
   DestinationApi, GroupApi, InstallationApi, IntegrationApi,
-  OAuthApi, OperationApi, ProjectApi, ProjectMembershipApi, ProviderApi,
+  OAuthApi, OperationApi, ProjectApi, ProviderApi,
   ProviderAppApi, RevisionApi, UploadURLApi,
 } from '../../generated-sources/api/src';
 
@@ -16,8 +16,6 @@ import {
  * Note: some services are not used in this repo.
  */
 export class ApiService {
-  public allowedDomainApi: AllowedDomainApi;
-
   public connectionApi: ConnectionApi;
 
   public consumerApi: ConsumerApi;
@@ -36,8 +34,6 @@ export class ApiService {
 
   public projectApi: ProjectApi;
 
-  public projectMembershipApi: ProjectMembershipApi;
-
   public providerApi: ProviderApi;
 
   public providerAppApi: ProviderAppApi;
@@ -47,7 +43,6 @@ export class ApiService {
   public uploadURLApi: UploadURLApi;
 
   constructor(config: Configuration) {
-    this.allowedDomainApi = new AllowedDomainApi(config);
     this.connectionApi = new ConnectionApi(config);
     this.consumerApi = new ConsumerApi(config);
     this.destinationApi = new DestinationApi(config);
@@ -57,7 +52,6 @@ export class ApiService {
     this.oAuthApi = new OAuthApi(config);
     this.operationApi = new OperationApi(config);
     this.projectApi = new ProjectApi(config);
-    this.projectMembershipApi = new ProjectMembershipApi(config);
     this.providerApi = new ProviderApi(config);
     this.providerAppApi = new ProviderAppApi(config);
     this.revisionApi = new RevisionApi(config);

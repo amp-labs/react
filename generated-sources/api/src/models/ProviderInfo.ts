@@ -68,6 +68,18 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     providerOpts: { [key: string]: string; };
+    /**
+     * The display name of the provider, if omitted, defaults to provider name.
+     * @type {string}
+     * @memberof ProviderInfo
+     */
+    displayName?: string;
+    /**
+     * If true, we require additional information after auth to start making requests.
+     * @type {boolean}
+     * @memberof ProviderInfo
+     */
+    postAuthInfoNeeded?: boolean;
 }
 
 /**
@@ -99,6 +111,8 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'oauthOpts': OauthOptsFromJSON(json['oauthOpts']),
         'support': SupportFromJSON(json['support']),
         'providerOpts': json['providerOpts'],
+        'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
     };
 }
 
@@ -116,6 +130,8 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'oauthOpts': OauthOptsToJSON(value.oauthOpts),
         'support': SupportToJSON(value.support),
         'providerOpts': value.providerOpts,
+        'displayName': value.displayName,
+        'postAuthInfoNeeded': value.postAuthInfoNeeded,
     };
 }
 
