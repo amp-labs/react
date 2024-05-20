@@ -57,10 +57,10 @@ const generateCreateWriteConfigFromConfigureState = (
     createdBy: `consumer:${consumerRef}`,
     content: {
       provider: hydratedRevision.content.provider,
-      // hack: need empty read.standardObjects to be initialized for update read
+      // hack: need empty read.objects to be initialized for update read
       // https://linear.app/ampersand/issue/ENG-780/bug-write-createupdate-installation-without-read
       read: {
-        standardObjects: {},
+        objects: {},
       },
       write: {
         objects: configWriteObjects,

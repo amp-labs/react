@@ -29,7 +29,7 @@ src/models/AuthType.ts
 src/models/BaseConfigContent.ts
 src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
-src/models/BaseReadConfigStandardObject.ts
+src/models/BaseReadConfigObject.ts
 src/models/BaseWriteConfig.ts
 src/models/BaseWriteConfigObject.ts
 src/models/BatchUpsertIntegrationsRequest.ts

@@ -31,7 +31,7 @@ export interface HydratedIntegrationRead {
      * @type {Array<HydratedIntegrationObject>}
      * @memberof HydratedIntegrationRead
      */
-    standardObjects?: Array<HydratedIntegrationObject>;
+    objects?: Array<HydratedIntegrationObject>;
 }
 
 /**
@@ -53,7 +53,7 @@ export function HydratedIntegrationReadFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'standardObjects': !exists(json, 'standardObjects') ? undefined : ((json['standardObjects'] as Array<any>).map(HydratedIntegrationObjectFromJSON)),
+        'objects': !exists(json, 'objects') ? undefined : ((json['objects'] as Array<any>).map(HydratedIntegrationObjectFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function HydratedIntegrationReadToJSON(value?: HydratedIntegrationRead | 
     }
     return {
         
-        'standardObjects': value.standardObjects === undefined ? undefined : ((value.standardObjects as Array<any>).map(HydratedIntegrationObjectToJSON)),
+        'objects': value.objects === undefined ? undefined : ((value.objects as Array<any>).map(HydratedIntegrationObjectToJSON)),
     };
 }
 

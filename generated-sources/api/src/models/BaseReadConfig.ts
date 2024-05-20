@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { BaseReadConfigStandardObject } from './BaseReadConfigStandardObject';
+import type { BaseReadConfigObject } from './BaseReadConfigObject';
 import {
-    BaseReadConfigStandardObjectFromJSON,
-    BaseReadConfigStandardObjectFromJSONTyped,
-    BaseReadConfigStandardObjectToJSON,
-} from './BaseReadConfigStandardObject';
+    BaseReadConfigObjectFromJSON,
+    BaseReadConfigObjectFromJSONTyped,
+    BaseReadConfigObjectToJSON,
+} from './BaseReadConfigObject';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface BaseReadConfig {
     /**
      * This is a map of object names to their configuration.
-     * @type {{ [key: string]: BaseReadConfigStandardObject; }}
+     * @type {{ [key: string]: BaseReadConfigObject; }}
      * @memberof BaseReadConfig
      */
-    standardObjects?: { [key: string]: BaseReadConfigStandardObject; };
+    objects?: { [key: string]: BaseReadConfigObject; };
 }
 
 /**
@@ -53,7 +53,7 @@ export function BaseReadConfigFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'standardObjects': !exists(json, 'standardObjects') ? undefined : (mapValues(json['standardObjects'], BaseReadConfigStandardObjectFromJSON)),
+        'objects': !exists(json, 'objects') ? undefined : (mapValues(json['objects'], BaseReadConfigObjectFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function BaseReadConfigToJSON(value?: BaseReadConfig | null): any {
     }
     return {
         
-        'standardObjects': value.standardObjects === undefined ? undefined : (mapValues(value.standardObjects, BaseReadConfigStandardObjectToJSON)),
+        'objects': value.objects === undefined ? undefined : (mapValues(value.objects, BaseReadConfigObjectToJSON)),
     };
 }
 

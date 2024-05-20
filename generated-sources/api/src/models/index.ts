@@ -8,7 +8,7 @@ export * from './AuthType';
 export * from './BaseConfigContent';
 export * from './BaseProxyConfig';
 export * from './BaseReadConfig';
-export * from './BaseReadConfigStandardObject';
+export * from './BaseReadConfigObject';
 export * from './BaseWriteConfig';
 export * from './BaseWriteConfigObject';
 export * from './BatchUpsertIntegrationsRequest';

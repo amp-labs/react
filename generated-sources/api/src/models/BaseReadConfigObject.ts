@@ -16,55 +16,55 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface BaseReadConfigStandardObject
+ * @interface BaseReadConfigObject
  */
-export interface BaseReadConfigStandardObject {
+export interface BaseReadConfigObject {
     /**
      * The name of the object to read from.
      * @type {string}
-     * @memberof BaseReadConfigStandardObject
+     * @memberof BaseReadConfigObject
      */
     objectName?: string;
     /**
      * The schedule for reading the object, in cron syntax.
      * @type {string}
-     * @memberof BaseReadConfigStandardObject
+     * @memberof BaseReadConfigObject
      */
     schedule?: string;
     /**
      * The name of the destination that the result should be sent to.
      * @type {string}
-     * @memberof BaseReadConfigStandardObject
+     * @memberof BaseReadConfigObject
      */
     destination?: string;
     /**
      * This is a map of field names to booleans indicating whether they should be read.
      * @type {{ [key: string]: boolean; }}
-     * @memberof BaseReadConfigStandardObject
+     * @memberof BaseReadConfigObject
      */
     selectedFields?: { [key: string]: boolean; };
     /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}
-     * @memberof BaseReadConfigStandardObject
+     * @memberof BaseReadConfigObject
      */
     selectedFieldMappings?: { [key: string]: string; };
 }
 
 /**
- * Check if a given object implements the BaseReadConfigStandardObject interface.
+ * Check if a given object implements the BaseReadConfigObject interface.
  */
-export function instanceOfBaseReadConfigStandardObject(value: object): boolean {
+export function instanceOfBaseReadConfigObject(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function BaseReadConfigStandardObjectFromJSON(json: any): BaseReadConfigStandardObject {
-    return BaseReadConfigStandardObjectFromJSONTyped(json, false);
+export function BaseReadConfigObjectFromJSON(json: any): BaseReadConfigObject {
+    return BaseReadConfigObjectFromJSONTyped(json, false);
 }
 
-export function BaseReadConfigStandardObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseReadConfigStandardObject {
+export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseReadConfigObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -78,7 +78,7 @@ export function BaseReadConfigStandardObjectFromJSONTyped(json: any, ignoreDiscr
     };
 }
 
-export function BaseReadConfigStandardObjectToJSON(value?: BaseReadConfigStandardObject | null): any {
+export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null): any {
     if (value === undefined) {
         return undefined;
     }
