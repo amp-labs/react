@@ -43,7 +43,8 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const isProxyOnly: boolean = getIsProxyOnly(hydratedRevision);
 
   useEffect(() => {
-    if (!isLoading && hydratedRevision && isProxyOnly && !installation && selectedConnection && apiKey && integrationObj?.id) {
+    if (!isLoading && hydratedRevision && isProxyOnly
+      && !installation && selectedConnection && apiKey && integrationObj?.id) {
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
         apiKey,

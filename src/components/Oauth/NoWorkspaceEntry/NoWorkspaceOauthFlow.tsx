@@ -8,7 +8,7 @@ import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
 import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
-import OAuthPopup from '../OAuthPopup';
+import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 
 import { LandingContent } from './LandingContent';
 
@@ -49,7 +49,7 @@ export function NoWorkspaceOauthFlow({
       );
       setOAuthCallbackURL(url);
     } catch (err: any) {
-      console.error(err);
+      console.error('Could not fetch OAuthCallback URL', { err });
       setError(err.message ?? 'Unexpected error');
     }
   };
@@ -60,12 +60,12 @@ export function NoWorkspaceOauthFlow({
   }, []);
 
   return (
-    <OAuthPopup
-      title={`Connect to ${capitalize(provider)}`}
-      url={oAuthCallbackURL}
+    <OAuthWindow
+      windowTitle={`Connect to ${capitalize(provider)}`}
+      oauthUrl={oAuthCallbackURL}
       onClose={onClose}
     >
       <LandingContent provider={provider} handleSubmit={handleSubmit} error={error} />
-    </OAuthPopup>
+    </OAuthWindow>
   );
 }

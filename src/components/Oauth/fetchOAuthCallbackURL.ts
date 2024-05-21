@@ -1,4 +1,4 @@
-import { api, ProviderApp } from '../../services/api';
+import { api, OauthConnectOperationRequest, ProviderApp } from '../../services/api';
 import { capitalize } from '../../utils';
 
 export const fetchOAuthCallbackURL = async (
@@ -20,7 +20,7 @@ export const fetchOAuthCallbackURL = async (
     throw new Error(`You must first set up a ${capitalize(provider)} Connected App using the Ampersand Console.`);
   }
 
-  const url = await api().oAuthApi.oauthConnect({
+  const request: OauthConnectOperationRequest = {
     connectOAuthParams: {
       providerWorkspaceRef: workspace,
       projectId,
@@ -31,6 +31,8 @@ export const fetchOAuthCallbackURL = async (
       providerAppId: app.id,
       provider,
     },
-  });
+  };
+
+  const url = await api().oAuthApi.oauthConnect(request);
   return url;
 };

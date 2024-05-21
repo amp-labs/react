@@ -1,6 +1,6 @@
 /**
  * OAuthPopup.tsx
- *
+ * @deprecated - this page will be deleted in the future
  * Takes a URL and creates a popup showing that page.
  */
 
@@ -45,6 +45,12 @@ const createPopup = ({
   return popup;
 };
 
+/**
+ * v1 popup to manage oauth flow
+ * @deprecated
+ * @param param0
+ * @returns
+ */
 function OAuthPopup({
   title = '',
   url,
