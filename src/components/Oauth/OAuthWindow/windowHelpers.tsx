@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { AMP_SERVER, api, Connection } from '../../../services/api';
 
-import { ToastConnectError, ToastOauthFailed } from './OauthWindowToast';
+import { useOAuthWindowToast } from './useOAuthWindowToast';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -65,10 +65,11 @@ export function openWindow(
 export function receiveMessageEvent(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
 ) {
+  const { ToastConnectError, ToastOauthFailed } = useOAuthWindowToast();
+
   return useCallback((event: MessageEvent) => {
     // Ignore messages from unexpected origins
     if (event.origin !== AMP_SERVER) {
-      console.error('Cross Origin Error: ', { event });
       return;
     }
 
@@ -90,5 +91,5 @@ export function receiveMessageEvent(
       console.error('OAuth failed: ', { event });
       // do not close the window if error occurs
     }
-  }, [setConnectionId]);
+  }, [ToastConnectError, ToastOauthFailed, setConnectionId]);
 }
