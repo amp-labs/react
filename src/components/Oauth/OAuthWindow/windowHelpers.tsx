@@ -15,7 +15,7 @@ const FAILURE_EVENT = 'AUTHORIZATION_FAILED';
  * @param setSelectedConnection
  * @returns
  */
-export function getRefreshConnection(
+export function getRefreshConnectionHandler(
   projectId: string,
   apiKey: string,
   setSelectedConnection: React.Dispatch<React.SetStateAction<Connection | null>>,
@@ -37,7 +37,7 @@ export function getRefreshConnection(
  * @param receiveMessage
  * @returns a function to open the oauth window
  */
-export function getOpenWindow(
+export function getOpenWindowHandler(
   windowTitle: string,
   setOauthWindow: React.Dispatch<React.SetStateAction<Window | null>>,
   receiveMessage: (event: MessageEvent) => void,
@@ -60,7 +60,7 @@ export function getOpenWindow(
 /**
   * returns a function to handle the message event
   */
-export function getReceiveMessageEvent(
+export function getReceiveMessageEventHandler(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
 ) {
   return useCallback((event: MessageEvent) => {

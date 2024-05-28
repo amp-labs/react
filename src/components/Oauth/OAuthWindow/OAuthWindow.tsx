@@ -4,7 +4,11 @@ import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 
-import { getOpenWindow, getReceiveMessageEvent, getRefreshConnection } from './windowHelpers';
+import {
+  getOpenWindowHandler,
+  getReceiveMessageEventHandler,
+  getRefreshConnectionHandler,
+} from './windowHelpers';
 
 type OAuthWindowProps = {
   children: React.ReactNode;
@@ -27,9 +31,9 @@ export function OAuthWindow({
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const { setSelectedConnection } = useConnections();
 
-  const receiveMessage = getReceiveMessageEvent(setConnectionId);
-  const openOAuthWindow = getOpenWindow(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
-  const refreshConnections = getRefreshConnection(projectId, apiKey, setSelectedConnection);
+  const receiveMessage = getReceiveMessageEventHandler(setConnectionId);
+  const openOAuthWindow = getOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
+  const refreshConnections = getRefreshConnectionHandler(projectId, apiKey, setSelectedConnection);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
