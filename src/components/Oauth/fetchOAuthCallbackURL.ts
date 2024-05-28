@@ -1,7 +1,7 @@
 import { api, OauthConnectOperationRequest, ProviderApp } from '../../services/api';
 import { capitalize } from '../../utils';
 
-export const fetchOAuthCallbackURL = async (
+export const fetchOAuthPopupURL = async (
   projectId: string,
   consumerRef: string,
   groupRef: string,
