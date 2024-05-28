@@ -2,8 +2,6 @@ import { useCallback } from 'react';
 
 import { AMP_SERVER, api, Connection } from '../../../services/api';
 
-import { useOAuthWindowToast } from './useOAuthWindowToast';
-
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
 
@@ -65,8 +63,6 @@ export function openWindow(
 export function receiveMessageEvent(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
 ) {
-  const { ToastConnectError, ToastOauthFailed } = useOAuthWindowToast();
-
   return useCallback((event: MessageEvent) => {
     // Ignore messages from unexpected origins
     if (event.origin !== AMP_SERVER) {
@@ -80,16 +76,14 @@ export function receiveMessageEvent(
         setConnectionId(connection);
         // do not close the window if connection is successful yet
       } else {
-        ToastConnectError();
         console.error('Connection ID not found in event data: ', { event });
       }
     }
 
     // failure case
     if (event.data.eventType === FAILURE_EVENT) {
-      ToastOauthFailed();
       console.error('OAuth failed: ', { event });
       // do not close the window if error occurs
     }
-  }, [ToastConnectError, ToastOauthFailed, setConnectionId]);
+  }, [setConnectionId]);
 }

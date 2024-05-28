@@ -4,7 +4,6 @@ import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 
-import { useOAuthWindowToast } from './useOAuthWindowToast';
 import { openWindow, receiveMessageEvent, refreshConnection } from './windowHelpers';
 
 type OAuthWindowProps = {
@@ -27,7 +26,6 @@ export function OAuthWindow({
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const { setSelectedConnection } = useConnections();
-  const { ToastSuccessConnection, ToastOauthFailed } = useOAuthWindowToast();
 
   const receiveMessage = receiveMessageEvent(setConnectionId);
   const openOAuthWindow = openWindow(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
@@ -46,14 +44,13 @@ export function OAuthWindow({
       refreshConnections(connectionId)
         .then(() => {
           oauthWindow?.close(); // only close the window if connection is successful
-          // show success toast if connection is successful
-          ToastSuccessConnection();
+          // console.debug('Connection successful');
         }).catch((err) => {
           console.error('Error refreshing connection: ', err);
           onClose(err.message ?? 'Unexpected error: not able to refresh connection');
         });
     }
-  }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onClose, ToastSuccessConnection]);
+  }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onClose]);
 
   // check if the window is closed
   const interval = oauthWindow && setInterval(() => {
@@ -66,14 +63,14 @@ export function OAuthWindow({
 
       if (!connectionId) {
         // if connectionId is not set, then set OAuth failed error
-        ToastOauthFailed();
+        console.error('OAuth failed. Please try again.');
         if (onClose) onClose('OAuth failed. Please try again.');
       } else if (connectionId && onClose) {
-      // if connectionId is set, then set OAuth success -- no error in
+        // if connectionId is set, then set OAuth success -- no error in
         onClose(null);
       }
     }
   }, 500);
 
-  return <div>{ children }</div>;
+  return <div>{children}</div>;
 }
