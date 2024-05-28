@@ -4,7 +4,7 @@ import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useConnections } from '../../../context/ConnectionsContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 
-import { openWindow, receiveMessageEvent, refreshConnection } from './windowHelpers';
+import { getOpenWindow, getReceiveMessageEvent, getRefreshConnection } from './windowHelpers';
 
 type OAuthWindowProps = {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ type OAuthWindowProps = {
  * @returns
  */
 export function OAuthWindow({
-  children, oauthUrl, windowTitle = 'OAuthWindow', onClose,
+  children, oauthUrl, windowTitle = 'Connect to Provider', onClose,
 }: OAuthWindowProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -27,9 +27,9 @@ export function OAuthWindow({
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const { setSelectedConnection } = useConnections();
 
-  const receiveMessage = receiveMessageEvent(setConnectionId);
-  const openOAuthWindow = openWindow(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
-  const refreshConnections = refreshConnection(projectId, apiKey, setSelectedConnection);
+  const receiveMessage = getReceiveMessageEvent(setConnectionId);
+  const openOAuthWindow = getOpenWindow(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
+  const refreshConnections = getRefreshConnection(projectId, apiKey, setSelectedConnection);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
@@ -66,7 +66,7 @@ export function OAuthWindow({
         console.error('OAuth failed. Please try again.');
         if (onClose) onClose('OAuth failed. Please try again.');
       } else if (connectionId && onClose) {
-        // if connectionId is set, then set OAuth success -- no error in
+        // if connectionId is set, then set OAuth success -- no error in onClose
         onClose(null);
       }
     }
