@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
-import { fetchOAuthPopupURL } from '../fetchOAuthCallbackURL';
+import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import OAuthPopup from '../OAuthPopup';
 import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry';
 
