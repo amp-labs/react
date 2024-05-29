@@ -7,8 +7,8 @@ import { useCallback, useState } from 'react';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
-import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
-import OAuthPopup from '../OAuthPopup';
+import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
+import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 
 import { LandingContent } from './LandingContent';
 
@@ -30,14 +30,14 @@ export function NoWorkspaceOauthFlow({
   const { projectId } = useProject();
   const apiKey = useApiKey();
 
-  const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
+  const [oAuthPopupURL, setOAuthPopupURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
     try {
-      const url = await fetchOAuthCallbackURL(
+      const url = await fetchOAuthPopupURL(
         projectId,
         consumerRef,
         groupRef,
@@ -47,25 +47,25 @@ export function NoWorkspaceOauthFlow({
         consumerName,
         groupName,
       );
-      setOAuthCallbackURL(url);
+      setOAuthPopupURL(url);
     } catch (err: any) {
-      console.error(err);
+      console.error('Could not fetch OAuth popup URL', { err });
       setError(err.message ?? 'Unexpected error');
     }
   };
 
   const onClose = useCallback((err: string | null) => {
     setError(err);
-    setOAuthCallbackURL(null);
+    setOAuthPopupURL(null);
   }, []);
 
   return (
-    <OAuthPopup
-      title={`Connect to ${capitalize(provider)}`}
-      url={oAuthCallbackURL}
+    <OAuthWindow
+      windowTitle={`Connect to ${capitalize(provider)}`}
+      oauthUrl={oAuthPopupURL}
       onClose={onClose}
     >
       <LandingContent provider={provider} handleSubmit={handleSubmit} error={error} />
-    </OAuthPopup>
+    </OAuthWindow>
   );
 }

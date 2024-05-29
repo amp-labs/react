@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
-import { fetchOAuthCallbackURL } from '../fetchOAuthCallbackURL';
+import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import OAuthPopup from '../OAuthPopup';
 import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry';
 
@@ -43,7 +43,7 @@ export function WorkspaceOauthFlow({
     }
 
     try {
-      const url = await fetchOAuthCallbackURL(
+      const url = await fetchOAuthPopupURL(
         projectId,
         consumerRef,
         groupRef,
