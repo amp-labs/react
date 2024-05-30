@@ -4,7 +4,7 @@ import { useApiKey } from '../../../context/ApiKeyContextProvider';
 import { useProject } from '../../../context/ProjectContextProvider';
 import { capitalize } from '../../../utils';
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
-import OAuthPopup from '../OAuthPopup';
+import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry';
 
 import { WorkspaceEntry } from './WorkspaceEntry';
@@ -86,12 +86,12 @@ export function WorkspaceOauthFlow({
     );
 
   return (
-    <OAuthPopup
-      title={`Connect to ${capitalize(provider)}`}
-      url={oAuthCallbackURL}
+    <OAuthWindow
+      windowTitle={`Connect to ${capitalize(provider)}`}
+      oauthUrl={oAuthCallbackURL}
       onClose={onClose}
     >
       {workspaceEntryComponent}
-    </OAuthPopup>
+    </OAuthWindow>
   );
 }
