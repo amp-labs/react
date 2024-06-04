@@ -20,8 +20,24 @@ export function OptionalFields() {
     }
   };
 
-  const shouldRender = !!(configureState?.read?.optionalFields
-    && configureState?.read?.optionalFields);
+  const readOptionalFields = configureState?.read?.optionalFields;
+
+  const onSelectAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+
+    if (selectedObjectName && readOptionalFields) {
+      readOptionalFields.forEach((field) => {
+        if (!isIntegrationFieldMapping(field)) {
+          setOptionalField(selectedObjectName, setConfigureState, field.fieldName, checked);
+        }
+      });
+    }
+  };
+
+  const shouldRender = !!(readOptionalFields && readOptionalFields.length > 0);
+  const isAllChecked = Object.keys(selectedOptionalFields || {}).length === readOptionalFields?.length;
+  const isIndeterminate = !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
+
   return (
     shouldRender && (
       <>
@@ -34,7 +50,20 @@ export function OptionalFields() {
           borderRadius={8}
           gap={0}
         >
-          {configureState?.read?.optionalFields?.map((field) => {
+          {(readOptionalFields?.length || 0) >= 2 && (
+            <Box backgroundColor="gray.50" paddingX={4} paddingY={2}>
+              <Checkbox
+                name="selectAll"
+                id="selectAll"
+                onChange={onSelectAllCheckboxChange}
+                isIndeterminate={isIndeterminate}
+                isChecked={isAllChecked}
+              >
+                Select all
+              </Checkbox>
+            </Box>
+          )}
+          {readOptionalFields.map((field) => {
             if (!isIntegrationFieldMapping(field)) {
               return (
                 <Box key={field.fieldName} paddingX={4} paddingY={2} borderBottom="1px" borderColor="gray.100">
