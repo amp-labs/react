@@ -31,7 +31,7 @@ export function OauthFlow({
     }
   }, [apiKey, provider]);
 
-  const workspaceRequired = providerInfo?.oauthOpts?.explicitWorkspaceRequired ?? false;
+  const workspaceRequired = providerInfo?.oauth2Opts?.explicitWorkspaceRequired ?? false;
 
   // required workspace
   if (workspaceRequired) {
