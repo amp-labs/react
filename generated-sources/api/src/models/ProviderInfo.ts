@@ -13,18 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ApiKeyOpts } from './ApiKeyOpts';
+import {
+    ApiKeyOptsFromJSON,
+    ApiKeyOptsFromJSONTyped,
+    ApiKeyOptsToJSON,
+} from './ApiKeyOpts';
 import type { AuthType } from './AuthType';
 import {
     AuthTypeFromJSON,
     AuthTypeFromJSONTyped,
     AuthTypeToJSON,
 } from './AuthType';
-import type { OauthOpts } from './OauthOpts';
+import type { Oauth2Opts } from './Oauth2Opts';
 import {
-    OauthOptsFromJSON,
-    OauthOptsFromJSONTyped,
-    OauthOptsToJSON,
-} from './OauthOpts';
+    Oauth2OptsFromJSON,
+    Oauth2OptsFromJSONTyped,
+    Oauth2OptsToJSON,
+} from './Oauth2Opts';
 import type { Support } from './Support';
 import {
     SupportFromJSON,
@@ -40,6 +46,12 @@ import {
 export interface ProviderInfo {
     /**
      * 
+     * @type {string}
+     * @memberof ProviderInfo
+     */
+    name: string;
+    /**
+     * 
      * @type {AuthType}
      * @memberof ProviderInfo
      */
@@ -52,10 +64,16 @@ export interface ProviderInfo {
     baseURL: string;
     /**
      * 
-     * @type {OauthOpts}
+     * @type {Oauth2Opts}
      * @memberof ProviderInfo
      */
-    oauthOpts: OauthOpts;
+    oauth2Opts?: Oauth2Opts;
+    /**
+     * 
+     * @type {ApiKeyOpts}
+     * @memberof ProviderInfo
+     */
+    apiKeyOpts?: ApiKeyOpts;
     /**
      * 
      * @type {Support}
@@ -87,9 +105,9 @@ export interface ProviderInfo {
  */
 export function instanceOfProviderInfo(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
     isInstance = isInstance && "authType" in value;
     isInstance = isInstance && "baseURL" in value;
-    isInstance = isInstance && "oauthOpts" in value;
     isInstance = isInstance && "support" in value;
     isInstance = isInstance && "providerOpts" in value;
 
@@ -106,9 +124,11 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
+        'name': json['name'],
         'authType': AuthTypeFromJSON(json['authType']),
         'baseURL': json['baseURL'],
-        'oauthOpts': OauthOptsFromJSON(json['oauthOpts']),
+        'oauth2Opts': !exists(json, 'oauth2Opts') ? undefined : Oauth2OptsFromJSON(json['oauth2Opts']),
+        'apiKeyOpts': !exists(json, 'apiKeyOpts') ? undefined : ApiKeyOptsFromJSON(json['apiKeyOpts']),
         'support': SupportFromJSON(json['support']),
         'providerOpts': json['providerOpts'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
@@ -125,9 +145,11 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
     }
     return {
         
+        'name': value.name,
         'authType': AuthTypeToJSON(value.authType),
         'baseURL': value.baseURL,
-        'oauthOpts': OauthOptsToJSON(value.oauthOpts),
+        'oauth2Opts': Oauth2OptsToJSON(value.oauth2Opts),
+        'apiKeyOpts': ApiKeyOptsToJSON(value.apiKeyOpts),
         'support': SupportToJSON(value.support),
         'providerOpts': value.providerOpts,
         'displayName': value.displayName,

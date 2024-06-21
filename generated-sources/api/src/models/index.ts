@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AcceptInviteRequest';
 export * from './ApiKey';
+export * from './ApiKeyOpts';
 export * from './ApiKeyRequest';
 export * from './ApiProblem';
 export * from './AuthType';
@@ -64,8 +65,8 @@ export * from './IntegrationWriteObject';
 export * from './Invite';
 export * from './Log';
 export * from './LogMessage';
+export * from './Oauth2Opts';
 export * from './OauthConnectRequest';
-export * from './OauthOpts';
 export * from './Operation';
 export * from './OperationEvent';
 export * from './OptionalFieldsAutoOption';
@@ -74,7 +75,6 @@ export * from './PatchApiKeyRequest';
 export * from './PatchApiKeyRequestApiKey';
 export * from './Problem';
 export * from './Project';
-export * from './ProjectMembership';
 export * from './ProviderApp';
 export * from './ProviderInfo';
 export * from './Revision';

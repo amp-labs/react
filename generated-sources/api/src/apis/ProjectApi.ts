@@ -105,6 +105,20 @@ export interface ProjectApiInterface {
 
     /**
      * 
+     * @summary List all projects that the API key or user credential has access to
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectApiInterface
+     */
+    listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
+
+    /**
+     * List all projects that the API key or user credential has access to
+     */
+    listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
+
+    /**
+     * 
      * @summary Update a project
      * @param {string} projectId 
      * @param {UpdateProjectRequest} projectUpdate 
@@ -215,6 +229,32 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
      */
     async getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
         const response = await this.getProjectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List all projects that the API key or user credential has access to
+     */
+    async listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/projects`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProjectFromJSON));
+    }
+
+    /**
+     * List all projects that the API key or user credential has access to
+     */
+    async listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
+        const response = await this.listProjectsRaw(initOverrides);
         return await response.value();
     }
 
