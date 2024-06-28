@@ -29,12 +29,12 @@ import {
 } from '../models';
 
 export interface GetConnectionRequest {
-    projectId: string;
+    projectIdOrName: string;
     connectionId: string;
 }
 
 export interface ListConnectionsRequest {
-    projectId: string;
+    projectIdOrName: string;
     provider?: string;
     groupRef?: string;
     consumerRef?: string;
@@ -50,7 +50,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary Get a connection
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} connectionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -66,7 +66,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary List connections
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} [provider] The provider name (e.g. \&quot;salesforce\&quot;, \&quot;hubspot\&quot;)
      * @param {string} [groupRef] The ID of the user group that has access to this installation.
      * @param {string} [consumerRef] The consumer reference.
@@ -92,8 +92,8 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
      * Get a connection
      */
     async getConnectionRaw(requestParameters: GetConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getConnection.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getConnection.');
         }
 
         if (requestParameters.connectionId === null || requestParameters.connectionId === undefined) {
@@ -105,7 +105,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/connections/{connectionId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
+            path: `/projects/{projectIdOrName}/connections/{connectionId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -126,8 +126,8 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
      * List connections
      */
     async listConnectionsRaw(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Connection>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listConnections.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listConnections.');
         }
 
         const queryParameters: any = {};
@@ -147,7 +147,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/connections`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/connections`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

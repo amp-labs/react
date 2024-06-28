@@ -29,7 +29,7 @@ import {
 } from '../models';
 
 export interface CreateGroupOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     group: CreateGroupRequest;
 }
 
@@ -43,7 +43,7 @@ export interface GroupApiInterface {
     /**
      * 
      * @summary Create a new group
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {CreateGroupRequest} group 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -67,8 +67,8 @@ export class GroupApi extends runtime.BaseAPI implements GroupApiInterface {
      * Create a new group
      */
     async createGroupRaw(requestParameters: CreateGroupOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createGroup.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createGroup.');
         }
 
         if (requestParameters.group === null || requestParameters.group === undefined) {
@@ -82,7 +82,7 @@ export class GroupApi extends runtime.BaseAPI implements GroupApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/groups`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/groups`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

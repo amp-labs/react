@@ -21,7 +21,7 @@ export function getRefreshConnectionHandler(
   setSelectedConnection: React.Dispatch<React.SetStateAction<Connection | null>>,
 ) {
   return useCallback(async (_connectionId: string) => {
-    const connection = await api().connectionApi.getConnection({ projectId, connectionId: _connectionId }, {
+    const connection = await api().connectionApi.getConnection({ projectIdOrName: projectId, connectionId: _connectionId }, {
       headers: { 'X-Api-Key': apiKey ?? '' },
     });
     setSelectedConnection(connection);

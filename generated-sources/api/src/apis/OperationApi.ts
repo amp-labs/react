@@ -32,17 +32,17 @@ import {
 } from '../models';
 
 export interface GetOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     operationId: string;
 }
 
 export interface ListOperationLogsRequest {
-    projectId: string;
+    projectIdOrName: string;
     operationId: string;
 }
 
 export interface ListOperationsRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installationId: string;
 }
@@ -57,7 +57,7 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary Get an operation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} operationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -73,7 +73,7 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary List logs for an operation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} operationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -89,7 +89,7 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary List operations
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
      * @param {*} [options] Override http request option.
@@ -114,8 +114,8 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
      * Get an operation
      */
     async getOperationRaw(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Operation>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getOperation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getOperation.');
         }
 
         if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
@@ -127,7 +127,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/operations/{operationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            path: `/projects/{projectIdOrName}/operations/{operationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -148,8 +148,8 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
      * List logs for an operation
      */
     async listOperationLogsRaw(requestParameters: ListOperationLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Log>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperationLogs.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listOperationLogs.');
         }
 
         if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
@@ -161,7 +161,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/operations/{operationId}/logs`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            path: `/projects/{projectIdOrName}/operations/{operationId}/logs`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -182,8 +182,8 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
      * List operations
      */
     async listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Operation>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperations.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listOperations.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -199,7 +199,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}/operations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

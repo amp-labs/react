@@ -35,26 +35,26 @@ import {
 } from '../models';
 
 export interface CreateDestinationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     destination: CreateDestinationRequest;
 }
 
 export interface DeleteDestinationRequest {
-    projectId: string;
+    projectIdOrName: string;
     destinationId: string;
 }
 
 export interface GetDestinationRequest {
-    projectId: string;
+    projectIdOrName: string;
     destinationName: string;
 }
 
 export interface ListDestinationsRequest {
-    projectId: string;
+    projectIdOrName: string;
 }
 
 export interface UpdateDestinationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     destinationId: string;
     destinationUpdate: UpdateDestinationRequest;
 }
@@ -69,7 +69,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Create a new destination
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {CreateDestinationRequest} destination 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -85,7 +85,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Delete a destination
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} destinationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -101,7 +101,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Get a destination
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} destinationName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -117,7 +117,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary List destinations
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -132,7 +132,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Update a destination
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} destinationId 
      * @param {UpdateDestinationRequest} destinationUpdate 
      * @param {*} [options] Override http request option.
@@ -157,8 +157,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      * Create a new destination
      */
     async createDestinationRaw(requestParameters: CreateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createDestination.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createDestination.');
         }
 
         if (requestParameters.destination === null || requestParameters.destination === undefined) {
@@ -172,7 +172,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/destinations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/destinations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -194,8 +194,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      * Delete a destination
      */
     async deleteDestinationRaw(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteDestination.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteDestination.');
         }
 
         if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
@@ -207,7 +207,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/destinations/{destinationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            path: `/projects/{projectIdOrName}/destinations/{destinationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -227,8 +227,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      * Get a destination
      */
     async getDestinationRaw(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getDestination.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getDestination.');
         }
 
         if (requestParameters.destinationName === null || requestParameters.destinationName === undefined) {
@@ -240,7 +240,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/destinations/{destinationName}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"destinationName"}}`, encodeURIComponent(String(requestParameters.destinationName))),
+            path: `/projects/{projectIdOrName}/destinations/{destinationName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationName"}}`, encodeURIComponent(String(requestParameters.destinationName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -261,8 +261,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      * List destinations
      */
     async listDestinationsRaw(requestParameters: ListDestinationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Destination>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listDestinations.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listDestinations.');
         }
 
         const queryParameters: any = {};
@@ -270,7 +270,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/destinations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/destinations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -291,8 +291,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      * Update a destination
      */
     async updateDestinationRaw(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateDestination.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateDestination.');
         }
 
         if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
@@ -310,7 +310,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/destinations/{destinationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            path: `/projects/{projectIdOrName}/destinations/{destinationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

@@ -35,27 +35,27 @@ import {
 } from '../models';
 
 export interface CreateApiKeyRequest {
-    projectId: string;
+    projectIdOrName: string;
     apiKey: ApiKeyRequest;
 }
 
 export interface DeleteApiKeyRequest {
-    projectId: string;
+    projectIdOrName: string;
     apiKey: string;
 }
 
 export interface GetApiKeyRequest {
-    projectId: string;
+    projectIdOrName: string;
     apiKey: string;
 }
 
 export interface ListApiKeysRequest {
-    projectId: string;
+    projectIdOrName: string;
     active?: boolean;
 }
 
 export interface UpdateApiKeyRequest {
-    projectId: string;
+    projectIdOrName: string;
     apiKey: string;
     patchApiKeyRequest: PatchApiKeyRequest;
 }
@@ -70,7 +70,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Create a new API key
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {ApiKeyRequest} apiKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -86,7 +86,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Delete an API key
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} apiKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -102,7 +102,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Get an API key
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} apiKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -118,7 +118,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary List API keys
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {boolean} [active] Whether to include only active API keys. If false, all API keys are included.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -134,7 +134,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Update an API key
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} apiKey 
      * @param {PatchApiKeyRequest} patchApiKeyRequest 
      * @param {*} [options] Override http request option.
@@ -159,8 +159,8 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
      * Create a new API key
      */
     async createApiKeyRaw(requestParameters: CreateApiKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiKey>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createApiKey.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createApiKey.');
         }
 
         if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
@@ -174,7 +174,7 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/api-keys`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/api-keys`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -196,8 +196,8 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
      * Delete an API key
      */
     async deleteApiKeyRaw(requestParameters: DeleteApiKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteApiKey.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteApiKey.');
         }
 
         if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
@@ -209,7 +209,7 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/api-keys/{apiKey}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -229,8 +229,8 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
      * Get an API key
      */
     async getApiKeyRaw(requestParameters: GetApiKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiKey>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getApiKey.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getApiKey.');
         }
 
         if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
@@ -242,7 +242,7 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/api-keys/{apiKey}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -263,8 +263,8 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
      * List API keys
      */
     async listApiKeysRaw(requestParameters: ListApiKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApiKey>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listApiKeys.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listApiKeys.');
         }
 
         const queryParameters: any = {};
@@ -276,7 +276,7 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/api-keys`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/api-keys`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -297,8 +297,8 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
      * Update an API key
      */
     async updateApiKeyRaw(requestParameters: UpdateApiKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiKey>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateApiKey.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateApiKey.');
         }
 
         if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
@@ -316,7 +316,7 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/api-keys/{apiKey}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

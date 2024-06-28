@@ -65,7 +65,7 @@ export const onSaveWriteUpdateInstallation = (
   }
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
-    projectId,
+    projectIdOrName: projectId,
     installationId,
     integrationId,
     installationUpdate: {

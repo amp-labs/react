@@ -26,7 +26,7 @@ export interface CreateProjectRequest {
      */
     appName: string;
     /**
-     * The project name.
+     * The project name. Must be alphanumerics and hyphens only. Project names will be save in lowercase.
      * @type {string}
      * @memberof CreateProjectRequest
      */
