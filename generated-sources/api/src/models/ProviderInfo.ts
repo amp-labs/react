@@ -57,7 +57,7 @@ export interface ProviderInfo {
      */
     authType: AuthType;
     /**
-     * 
+     * The base URL for making API requests.
      * @type {string}
      * @memberof ProviderInfo
      */

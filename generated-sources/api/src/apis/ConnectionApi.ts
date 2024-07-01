@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   Connection,
+  GenerateConnectionRequest,
   InputValidationProblem,
 } from '../models';
 import {
@@ -24,9 +25,16 @@ import {
     ApiProblemToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
+    GenerateConnectionRequestFromJSON,
+    GenerateConnectionRequestToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
 } from '../models';
+
+export interface GenerateConnectionOperationRequest {
+    projectIdOrName: string;
+    generateConnectionParams?: GenerateConnectionRequest;
+}
 
 export interface GetConnectionRequest {
     projectIdOrName: string;
@@ -47,6 +55,22 @@ export interface ListConnectionsRequest {
  * @interface ConnectionApiInterface
  */
 export interface ConnectionApiInterface {
+    /**
+     * 
+     * @summary Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * @param {string} projectIdOrName 
+     * @param {GenerateConnectionRequest} [generateConnectionParams] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ConnectionApiInterface
+     */
+    generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
+
+    /**
+     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     */
+    generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
+
     /**
      * 
      * @summary Get a connection
@@ -87,6 +111,39 @@ export interface ConnectionApiInterface {
  * 
  */
 export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInterface {
+
+    /**
+     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     */
+    async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling generateConnection.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/connections:generate`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GenerateConnectionRequestToJSON(requestParameters.generateConnectionParams),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionFromJSON(jsonValue));
+    }
+
+    /**
+     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     */
+    async generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
+        const response = await this.generateConnectionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get a connection

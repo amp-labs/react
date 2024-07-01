@@ -13,36 +13,43 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ApiKeyOptsHeader } from './ApiKeyOptsHeader';
+import {
+    ApiKeyOptsHeaderFromJSON,
+    ApiKeyOptsHeaderFromJSONTyped,
+    ApiKeyOptsHeaderToJSON,
+} from './ApiKeyOptsHeader';
+import type { ApiKeyOptsQuery } from './ApiKeyOptsQuery';
+import {
+    ApiKeyOptsQueryFromJSON,
+    ApiKeyOptsQueryFromJSONTyped,
+    ApiKeyOptsQueryToJSON,
+} from './ApiKeyOptsQuery';
+
 /**
- * 
+ * Configuration for API key. Must be provided if authType is apiKey.
  * @export
  * @interface ApiKeyOpts
  */
 export interface ApiKeyOpts {
     /**
-     * 
+     * How the API key should be attached to requests.
      * @type {string}
      * @memberof ApiKeyOpts
      */
-    type: ApiKeyOptsTypeEnum;
+    attachmentType: ApiKeyOptsAttachmentTypeEnum;
     /**
      * 
-     * @type {string}
+     * @type {ApiKeyOptsQuery}
      * @memberof ApiKeyOpts
      */
-    queryParamName?: string;
+    query?: ApiKeyOptsQuery;
     /**
      * 
-     * @type {string}
+     * @type {ApiKeyOptsHeader}
      * @memberof ApiKeyOpts
      */
-    headerName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApiKeyOpts
-     */
-    valuePrefix?: string;
+    header?: ApiKeyOptsHeader;
     /**
      * URL with more information about how to get or use an API key.
      * @type {string}
@@ -55,11 +62,11 @@ export interface ApiKeyOpts {
 /**
  * @export
  */
-export const ApiKeyOptsTypeEnum = {
-    Query: 'in-query',
-    Header: 'in-header'
+export const ApiKeyOptsAttachmentTypeEnum = {
+    Query: 'query',
+    Header: 'header'
 } as const;
-export type ApiKeyOptsTypeEnum = typeof ApiKeyOptsTypeEnum[keyof typeof ApiKeyOptsTypeEnum];
+export type ApiKeyOptsAttachmentTypeEnum = typeof ApiKeyOptsAttachmentTypeEnum[keyof typeof ApiKeyOptsAttachmentTypeEnum];
 
 
 /**
@@ -67,7 +74,7 @@ export type ApiKeyOptsTypeEnum = typeof ApiKeyOptsTypeEnum[keyof typeof ApiKeyOp
  */
 export function instanceOfApiKeyOpts(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "type" in value;
+    isInstance = isInstance && "attachmentType" in value;
 
     return isInstance;
 }
@@ -82,10 +89,9 @@ export function ApiKeyOptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'type': json['type'],
-        'queryParamName': !exists(json, 'queryParamName') ? undefined : json['queryParamName'],
-        'headerName': !exists(json, 'headerName') ? undefined : json['headerName'],
-        'valuePrefix': !exists(json, 'valuePrefix') ? undefined : json['valuePrefix'],
+        'attachmentType': json['attachmentType'],
+        'query': !exists(json, 'query') ? undefined : ApiKeyOptsQueryFromJSON(json['query']),
+        'header': !exists(json, 'header') ? undefined : ApiKeyOptsHeaderFromJSON(json['header']),
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
     };
 }
@@ -99,10 +105,9 @@ export function ApiKeyOptsToJSON(value?: ApiKeyOpts | null): any {
     }
     return {
         
-        'type': value.type,
-        'queryParamName': value.queryParamName,
-        'headerName': value.headerName,
-        'valuePrefix': value.valuePrefix,
+        'attachmentType': value.attachmentType,
+        'query': ApiKeyOptsQueryToJSON(value.query),
+        'header': ApiKeyOptsHeaderToJSON(value.header),
         'docsURL': value.docsURL,
     };
 }

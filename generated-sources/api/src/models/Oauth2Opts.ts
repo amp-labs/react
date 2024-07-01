@@ -21,7 +21,7 @@ import {
 } from './TokenMetadataFields';
 
 /**
- * 
+ * Configuration for OAuth2.0. Must be provided if authType is oauth2.
  * @export
  * @interface Oauth2Opts
  */
@@ -33,41 +33,53 @@ export interface Oauth2Opts {
      */
     grantType: Oauth2OptsGrantTypeEnum;
     /**
-     * 
+     * The authorization URL.
      * @type {string}
      * @memberof Oauth2Opts
      */
     authURL?: string;
     /**
-     * 
+     * The token URL.
      * @type {string}
      * @memberof Oauth2Opts
      */
     tokenURL: string;
     /**
-     * 
+     * Whether scopes are required to be known ahead of the OAuth flow.
      * @type {boolean}
      * @memberof Oauth2Opts
      */
     explicitScopesRequired: boolean;
     /**
-     * 
+     * Whether the workspace is required to be known ahead of the OAuth flow.
      * @type {boolean}
      * @memberof Oauth2Opts
      */
     explicitWorkspaceRequired: boolean;
     /**
-     * 
-     * @type {string}
+     * A list of URLs that represent the audience for the token, which is needed for some client credential grant flows.
+     * @type {Array<string>}
      * @memberof Oauth2Opts
      */
-    audience?: string;
+    audience?: Array<string>;
     /**
      * 
      * @type {TokenMetadataFields}
      * @memberof Oauth2Opts
      */
     tokenMetadataFields: TokenMetadataFields;
+    /**
+     * URL with more information about where to retrieve Client ID and Client Secret, etc.
+     * @type {string}
+     * @memberof Oauth2Opts
+     */
+    docsURL?: string;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof Oauth2Opts
+     */
+    authURLParams?: { [key: string]: string; };
 }
 
 
@@ -114,6 +126,8 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'explicitWorkspaceRequired': json['explicitWorkspaceRequired'],
         'audience': !exists(json, 'audience') ? undefined : json['audience'],
         'tokenMetadataFields': TokenMetadataFieldsFromJSON(json['tokenMetadataFields']),
+        'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
+        'authURLParams': !exists(json, 'authURLParams') ? undefined : json['authURLParams'],
     };
 }
 
@@ -133,6 +147,8 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'explicitWorkspaceRequired': value.explicitWorkspaceRequired,
         'audience': value.audience,
         'tokenMetadataFields': TokenMetadataFieldsToJSON(value.tokenMetadataFields),
+        'docsURL': value.docsURL,
+        'authURLParams': value.authURLParams,
     };
 }
 
