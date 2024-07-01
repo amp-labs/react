@@ -39,15 +39,15 @@ export interface CreateProjectOperationRequest {
 }
 
 export interface DeleteProjectRequest {
-    projectId: string;
+    projectIdOrName: string;
 }
 
 export interface GetProjectRequest {
-    projectId: string;
+    projectIdOrName: string;
 }
 
 export interface UpdateProjectOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     projectUpdate: UpdateProjectRequest;
 }
 
@@ -76,7 +76,7 @@ export interface ProjectApiInterface {
     /**
      * 
      * @summary Delete a project
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -91,7 +91,7 @@ export interface ProjectApiInterface {
     /**
      * 
      * @summary Get a project
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -120,7 +120,7 @@ export interface ProjectApiInterface {
     /**
      * 
      * @summary Update a project
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {UpdateProjectRequest} projectUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -177,8 +177,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
      * Delete a project
      */
     async deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteProject.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteProject.');
         }
 
         const queryParameters: any = {};
@@ -186,7 +186,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -206,8 +206,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
      * Get a project
      */
     async getProjectRaw(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getProject.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getProject.');
         }
 
         const queryParameters: any = {};
@@ -215,7 +215,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -262,8 +262,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
      * Update a project
      */
     async updateProjectRaw(requestParameters: UpdateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateProject.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateProject.');
         }
 
         if (requestParameters.projectUpdate === null || requestParameters.projectUpdate === undefined) {
@@ -277,7 +277,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

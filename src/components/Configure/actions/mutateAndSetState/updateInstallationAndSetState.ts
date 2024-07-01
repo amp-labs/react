@@ -5,7 +5,7 @@ import {
 } from '../../../../services/api';
 
 type UpdateInstallationSharedProps = {
-  projectId: string;
+  projectIdOrName: string;
   integrationId: string;
   installationId: string;
   apiKey: string;
@@ -17,10 +17,10 @@ type UpdateInstallationAndSetStateProps = UpdateInstallationSharedProps & {
   updateConfig: UpdateInstallationRequestInstallationConfig;
 };
 export function updateInstallationAndSetState({
-  updateConfig, projectId, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
+  updateConfig, projectIdOrName, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
 }: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
-    projectId,
+    projectIdOrName,
     installationId,
     integrationId,
     installationUpdate: {

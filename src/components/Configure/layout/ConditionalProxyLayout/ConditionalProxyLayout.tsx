@@ -48,7 +48,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
         apiKey,
-        projectId,
+        projectIdOrName: projectId,
         integrationId: integrationObj?.id,
         groupRef,
         consumerRef,

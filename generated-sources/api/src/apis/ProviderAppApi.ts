@@ -35,21 +35,21 @@ import {
 } from '../models';
 
 export interface CreateProviderAppOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     providerApp: CreateProviderAppRequest;
 }
 
 export interface DeleteProviderAppRequest {
-    projectId: string;
+    projectIdOrName: string;
     providerAppId: string;
 }
 
 export interface ListProviderAppsRequest {
-    projectId: string;
+    projectIdOrName: string;
 }
 
 export interface UpdateProviderAppOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     providerAppId: string;
     providerAppUpdate: UpdateProviderAppRequest;
 }
@@ -64,7 +64,7 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary Create a new provider app
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {CreateProviderAppRequest} providerApp 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -80,7 +80,7 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary Delete a provider app
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} providerAppId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -96,7 +96,7 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary List provider apps
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProviderAppApiInterface
@@ -111,7 +111,7 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary Update a provider app
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} providerAppId 
      * @param {UpdateProviderAppRequest} providerAppUpdate 
      * @param {*} [options] Override http request option.
@@ -136,8 +136,8 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
      * Create a new provider app
      */
     async createProviderAppRaw(requestParameters: CreateProviderAppOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderApp>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createProviderApp.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createProviderApp.');
         }
 
         if (requestParameters.providerApp === null || requestParameters.providerApp === undefined) {
@@ -151,7 +151,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/provider-apps`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/provider-apps`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -173,8 +173,8 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
      * Delete a provider app
      */
     async deleteProviderAppRaw(requestParameters: DeleteProviderAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteProviderApp.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteProviderApp.');
         }
 
         if (requestParameters.providerAppId === null || requestParameters.providerAppId === undefined) {
@@ -186,7 +186,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/provider-apps/{providerAppId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"providerAppId"}}`, encodeURIComponent(String(requestParameters.providerAppId))),
+            path: `/projects/{projectIdOrName}/provider-apps/{providerAppId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"providerAppId"}}`, encodeURIComponent(String(requestParameters.providerAppId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -206,8 +206,8 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
      * List provider apps
      */
     async listProviderAppsRaw(requestParameters: ListProviderAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProviderApp>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listProviderApps.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listProviderApps.');
         }
 
         const queryParameters: any = {};
@@ -215,7 +215,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/provider-apps`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/provider-apps`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -236,8 +236,8 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
      * Update a provider app
      */
     async updateProviderAppRaw(requestParameters: UpdateProviderAppOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderApp>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateProviderApp.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateProviderApp.');
         }
 
         if (requestParameters.providerAppId === null || requestParameters.providerAppId === undefined) {
@@ -255,7 +255,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/provider-apps/{providerAppId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"providerAppId"}}`, encodeURIComponent(String(requestParameters.providerAppId))),
+            path: `/projects/{projectIdOrName}/provider-apps/{providerAppId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"providerAppId"}}`, encodeURIComponent(String(requestParameters.providerAppId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

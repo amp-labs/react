@@ -24,9 +24,12 @@ src/index.ts
 src/models/AcceptInviteRequest.ts
 src/models/ApiKey.ts
 src/models/ApiKeyOpts.ts
+src/models/ApiKeyOptsHeader.ts
+src/models/ApiKeyOptsQuery.ts
 src/models/ApiKeyRequest.ts
 src/models/ApiProblem.ts
 src/models/AuthType.ts
+src/models/Backfill.ts
 src/models/BaseConfigContent.ts
 src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
@@ -56,7 +59,9 @@ src/models/CreateOrgInviteRequest.ts
 src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
+src/models/DefaultPeriod.ts
 src/models/Destination.ts
+src/models/GenerateConnectionRequest.ts
 src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts

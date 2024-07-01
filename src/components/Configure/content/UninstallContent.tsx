@@ -22,7 +22,7 @@ export function UninstallContent() {
       );
       try {
         await api().installationApi.deleteInstallation(
-          { projectId, integrationId, installationId: installation.id },
+          { projectIdOrName: projectId, integrationId, installationId: installation.id },
           {
             headers: {
               'X-Api-Key': apiKey,

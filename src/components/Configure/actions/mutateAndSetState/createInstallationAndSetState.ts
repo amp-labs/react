@@ -4,7 +4,7 @@ import {
 } from '../../../../services/api';
 
 export type CreateInstallationSharedProps = {
-  projectId: string;
+  projectIdOrName: string;
   integrationId: string;
   groupRef: string;
   connectionId: string;
@@ -19,11 +19,11 @@ type CreateInstallationAndSetStateProps = CreateInstallationSharedProps & {
 
 export function createInstallationAndSetState(
   {
-    createConfig, projectId, integrationId, groupRef, connectionId, apiKey, setInstallation, onInstallSuccess,
+    createConfig, projectIdOrName, integrationId, groupRef, connectionId, apiKey, setInstallation, onInstallSuccess,
   }: CreateInstallationAndSetStateProps,
 ) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
-    projectId,
+    projectIdOrName,
     integrationId,
     installation: {
       groupRef,

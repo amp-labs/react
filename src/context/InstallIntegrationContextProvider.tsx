@@ -102,7 +102,7 @@ export function InstallIntegrationProvider({
       if (integrationObj?.id) {
       // check if installation exists on selected integration
         api().installationApi.listInstallations({
-          projectId,
+          projectIdOrName: projectId,
           integrationId:
           integrationObj.id,
           groupRef,

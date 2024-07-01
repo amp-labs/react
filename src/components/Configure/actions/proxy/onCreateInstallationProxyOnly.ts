@@ -40,7 +40,7 @@ type CreateInstallationProxyOnlyProps = CreateInstallationSharedProps & {
 } ;
 
 export function onCreateInstallationProxyOnly({
-  projectId,
+  projectIdOrName,
   integrationId,
   groupRef,
   consumerRef,
@@ -61,7 +61,7 @@ export function onCreateInstallationProxyOnly({
 
   return createInstallationAndSetState({
     createConfig,
-    projectId,
+    projectIdOrName,
     integrationId,
     groupRef,
     connectionId,

@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Backfill } from './Backfill';
+import {
+    BackfillFromJSON,
+    BackfillFromJSONTyped,
+    BackfillToJSON,
+} from './Backfill';
+
 /**
  * 
  * @export
@@ -50,11 +57,11 @@ export interface BaseReadConfigObject {
      */
     selectedFieldMappings?: { [key: string]: string; };
     /**
-     * The history configuration for the object.
-     * @type {string}
+     * 
+     * @type {Backfill}
      * @memberof BaseReadConfigObject
      */
-    history?: string;
+    backfill?: Backfill;
 }
 
 /**
@@ -81,7 +88,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
-        'history': !exists(json, 'history') ? undefined : json['history'],
+        'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
 
@@ -99,7 +106,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedFieldMappings': value.selectedFieldMappings,
-        'history': value.history,
+        'backfill': BackfillToJSON(value.backfill),
     };
 }
 

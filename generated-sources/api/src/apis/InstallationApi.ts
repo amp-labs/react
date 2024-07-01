@@ -38,37 +38,37 @@ import {
 } from '../models';
 
 export interface CreateInstallationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installation: CreateInstallationRequest;
 }
 
 export interface DeleteInstallationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installationId: string;
 }
 
 export interface GetInstallationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installationId: string;
 }
 
 export interface ImportInstallationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installation: ImportInstallationRequest;
 }
 
 export interface ListInstallationsRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     groupRef?: string;
 }
 
 export interface UpdateInstallationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installationId: string;
     installationUpdate: UpdateInstallationRequest;
@@ -84,7 +84,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Create a new installation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {CreateInstallationRequest} installation 
      * @param {*} [options] Override http request option.
@@ -101,7 +101,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Delete an installation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
      * @param {*} [options] Override http request option.
@@ -118,7 +118,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Get an installation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
      * @param {*} [options] Override http request option.
@@ -135,7 +135,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Import an existing installation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {ImportInstallationRequest} installation 
      * @param {*} [options] Override http request option.
@@ -152,7 +152,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary List installations
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} [groupRef] 
      * @param {*} [options] Override http request option.
@@ -169,7 +169,7 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Update an installation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
      * @param {UpdateInstallationRequest} installationUpdate 
@@ -195,8 +195,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * Create a new installation
      */
     async createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createInstallation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createInstallation.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -214,7 +214,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -236,8 +236,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * Delete an installation
      */
     async deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteInstallation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteInstallation.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -253,7 +253,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -273,8 +273,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * Get an installation
      */
     async getInstallationRaw(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getInstallation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getInstallation.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -290,7 +290,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -311,8 +311,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * Import an existing installation
      */
     async importInstallationRaw(requestParameters: ImportInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling importInstallation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling importInstallation.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -330,7 +330,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations:import`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations:import`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -352,8 +352,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * List installations
      */
     async listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listInstallations.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listInstallations.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -369,7 +369,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -390,8 +390,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling updateInstallation.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateInstallation.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -413,7 +413,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

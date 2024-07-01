@@ -71,7 +71,7 @@ const generateUpdateReadConfigFromConfigureState = (
 };
 
 export const onSaveReadUpdateInstallation = (
-  projectId: string,
+  projectIdOrName: string,
   integrationId: string,
   installationId: string,
   selectedObjectName: string,
@@ -99,7 +99,7 @@ export const onSaveReadUpdateInstallation = (
 
   return updateInstallationAndSetState({
     updateConfig,
-    projectId,
+    projectIdOrName,
     integrationId,
     installationId,
     apiKey,
