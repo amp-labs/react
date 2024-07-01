@@ -67,7 +67,7 @@ export function ConnectionsProvider({
   }
 
   useEffect(() => {
-    api().connectionApi.listConnections({ projectId, groupRef, provider: selectedProvider }, {
+    api().connectionApi.listConnections({ projectIdOrName: projectId, groupRef, provider: selectedProvider }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },

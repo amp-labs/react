@@ -32,13 +32,13 @@ import {
 } from '../models';
 
 export interface CreateRevisionRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     revision?: BatchUpsertIntegrationsRequest;
 }
 
 export interface GetHydratedRevisionRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     revisionId: string;
     connectionId: string;
@@ -54,7 +54,7 @@ export interface RevisionApiInterface {
     /**
      * 
      * @summary Create a new revision
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {BatchUpsertIntegrationsRequest} [revision] 
      * @param {*} [options] Override http request option.
@@ -71,7 +71,7 @@ export interface RevisionApiInterface {
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      * @summary Hydrate a revision
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} revisionId 
      * @param {string} connectionId 
@@ -98,8 +98,8 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
      * Create a new revision
      */
     async createRevisionRaw(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createRevision.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createRevision.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -113,7 +113,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/revisions`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/revisions`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -135,8 +135,8 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
      * Hydrate a revision
      */
     async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getHydratedRevision.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getHydratedRevision.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -160,7 +160,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/revisions/{revisionId}:hydrate`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"revisionId"}}`, encodeURIComponent(String(requestParameters.revisionId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/revisions/{revisionId}:hydrate`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"revisionId"}}`, encodeURIComponent(String(requestParameters.revisionId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

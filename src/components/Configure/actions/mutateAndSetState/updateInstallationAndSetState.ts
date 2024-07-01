@@ -20,7 +20,7 @@ export function updateInstallationAndSetState({
   updateConfig, projectId, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
 }: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
-    projectId,
+    projectIdOrName: projectId,
     installationId,
     integrationId,
     installationUpdate: {

@@ -29,7 +29,7 @@ import {
 } from '../models';
 
 export interface CreateConsumerOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     consumer: CreateConsumerRequest;
 }
 
@@ -43,7 +43,7 @@ export interface ConsumerApiInterface {
     /**
      * 
      * @summary Create a new consumer
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {CreateConsumerRequest} consumer 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -67,8 +67,8 @@ export class ConsumerApi extends runtime.BaseAPI implements ConsumerApiInterface
      * Create a new consumer
      */
     async createConsumerRaw(requestParameters: CreateConsumerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createConsumer.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createConsumer.');
         }
 
         if (requestParameters.consumer === null || requestParameters.consumer === undefined) {
@@ -82,7 +82,7 @@ export class ConsumerApi extends runtime.BaseAPI implements ConsumerApiInterface
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/consumers`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/consumers`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

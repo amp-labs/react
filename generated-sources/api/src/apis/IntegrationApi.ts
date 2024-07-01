@@ -35,22 +35,22 @@ import {
 } from '../models';
 
 export interface BatchUpsertIntegrationsOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     batchUpsertIntegrationsRequest?: BatchUpsertIntegrationsRequest;
 }
 
 export interface CreateIntegrationOperationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integration: CreateIntegrationRequest;
 }
 
 export interface DeleteIntegrationRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
 }
 
 export interface ListIntegrationsRequest {
-    projectId: string;
+    projectIdOrName: string;
 }
 
 /**
@@ -63,7 +63,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary Batch upsert a group of integrations
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {BatchUpsertIntegrationsRequest} [batchUpsertIntegrationsRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -79,7 +79,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary Create a new integration
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {CreateIntegrationRequest} integration 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -95,7 +95,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary Delete an integration
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -111,7 +111,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary List integrations
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -134,8 +134,8 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
      * Batch upsert a group of integrations
      */
     async batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling batchUpsertIntegrations.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling batchUpsertIntegrations.');
         }
 
         const queryParameters: any = {};
@@ -145,7 +145,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations:batch`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/integrations:batch`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -167,8 +167,8 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
      * Create a new integration
      */
     async createIntegrationRaw(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling createIntegration.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createIntegration.');
         }
 
         if (requestParameters.integration === null || requestParameters.integration === undefined) {
@@ -182,7 +182,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/integrations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -203,8 +203,8 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
      * Delete an integration
      */
     async deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling deleteIntegration.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteIntegration.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -216,7 +216,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -236,8 +236,8 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
      * List integrations
      */
     async listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listIntegrations.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listIntegrations.');
         }
 
         const queryParameters: any = {};
@@ -245,7 +245,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))),
+            path: `/projects/{projectIdOrName}/integrations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

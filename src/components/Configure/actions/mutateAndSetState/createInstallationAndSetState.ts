@@ -23,7 +23,7 @@ export function createInstallationAndSetState(
   }: CreateInstallationAndSetStateProps,
 ) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
-    projectId,
+    projectIdOrName: projectId,
     integrationId,
     installation: {
       groupRef,

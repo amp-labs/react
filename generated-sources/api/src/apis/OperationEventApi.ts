@@ -32,19 +32,19 @@ import {
 } from '../models';
 
 export interface GetOperationEventRequest {
-    projectId: string;
+    projectIdOrName: string;
     operationId: string;
     eventId: string;
 }
 
 export interface ListOperationEventLogsRequest {
-    projectId: string;
+    projectIdOrName: string;
     operationId: string;
     eventId: string;
 }
 
 export interface ListOperationEventsRequest {
-    projectId: string;
+    projectIdOrName: string;
     integrationId: string;
     installationId: string;
     operationId: string;
@@ -60,7 +60,7 @@ export interface OperationEventApiInterface {
     /**
      * 
      * @summary Get an operation event
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} operationId 
      * @param {string} eventId 
      * @param {*} [options] Override http request option.
@@ -77,7 +77,7 @@ export interface OperationEventApiInterface {
     /**
      * 
      * @summary List logs for an operation event
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} operationId 
      * @param {string} eventId 
      * @param {*} [options] Override http request option.
@@ -94,7 +94,7 @@ export interface OperationEventApiInterface {
     /**
      * 
      * @summary List events for an operation
-     * @param {string} projectId 
+     * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
      * @param {string} operationId 
@@ -120,8 +120,8 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
      * Get an operation event
      */
     async getOperationEventRaw(requestParameters: GetOperationEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationEvent>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling getOperationEvent.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getOperationEvent.');
         }
 
         if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
@@ -137,7 +137,7 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/operations/{operationId}/events/{eventId}`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            path: `/projects/{projectIdOrName}/operations/{operationId}/events/{eventId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -158,8 +158,8 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
      * List logs for an operation event
      */
     async listOperationEventLogsRaw(requestParameters: ListOperationEventLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Log>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperationEventLogs.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listOperationEventLogs.');
         }
 
         if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
@@ -175,7 +175,7 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/operations/{operationId}/events/{eventId}/logs`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            path: `/projects/{projectIdOrName}/operations/{operationId}/events/{eventId}/logs`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -196,8 +196,8 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
      * List events for an operation
      */
     async listOperationEventsRaw(requestParameters: ListOperationEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OperationEvent>>> {
-        if (requestParameters.projectId === null || requestParameters.projectId === undefined) {
-            throw new runtime.RequiredError('projectId','Required parameter requestParameters.projectId was null or undefined when calling listOperationEvents.');
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listOperationEvents.');
         }
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
@@ -217,7 +217,7 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/projects/{projectId}/integrations/{integrationId}/installations/{installationId}/operations/{operationId}/events`.replace(`{${"projectId"}}`, encodeURIComponent(String(requestParameters.projectId))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations/{operationId}/events`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

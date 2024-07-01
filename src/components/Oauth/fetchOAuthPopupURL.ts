@@ -11,7 +11,7 @@ export const fetchOAuthPopupURL = async (
   consumerName?: string,
   groupName?: string,
 ): Promise<string> => {
-  const providerApps = await api().providerAppApi.listProviderApps({ projectId }, {
+  const providerApps = await api().providerAppApi.listProviderApps({ projectIdOrName: projectId }, {
     headers: { 'X-Api-Key': apiKey ?? '' },
   });
   const app = providerApps.find((a: ProviderApp) => a.provider === provider);
