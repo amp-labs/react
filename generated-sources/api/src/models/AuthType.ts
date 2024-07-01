@@ -19,7 +19,7 @@
  */
 export const AuthType = {
     Oauth2: 'oauth2',
-    ApiKey: 'api_key',
+    ApiKey: 'apiKey',
     Basic: 'basic',
     None: 'none'
 } as const;
