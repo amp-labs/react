@@ -3,6 +3,8 @@
 export * from './AcceptInviteRequest';
 export * from './ApiKey';
 export * from './ApiKeyOpts';
+export * from './ApiKeyOptsHeader';
+export * from './ApiKeyOptsQuery';
 export * from './ApiKeyRequest';
 export * from './ApiProblem';
 export * from './AuthType';
@@ -38,6 +40,7 @@ export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
 export * from './DefaultPeriod';
 export * from './Destination';
+export * from './GenerateConnectionRequest';
 export * from './Group';
 export * from './HydratedIntegration';
 export * from './HydratedIntegrationField';
