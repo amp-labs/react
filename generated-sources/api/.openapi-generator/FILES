@@ -62,6 +62,9 @@ src/models/CreateProviderAppRequest.ts
 src/models/DefaultPeriod.ts
 src/models/Destination.ts
 src/models/GenerateConnectionRequest.ts
+src/models/GenerateConnectionRequestBasicAuth.ts
+src/models/GenerateConnectionRequestOauth2ClientCredentials.ts
+src/models/GenerateConnectionRequestOauth2Password.ts
 src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
