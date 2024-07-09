@@ -13,6 +13,25 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { GenerateConnectionRequestBasicAuth } from './GenerateConnectionRequestBasicAuth';
+import {
+    GenerateConnectionRequestBasicAuthFromJSON,
+    GenerateConnectionRequestBasicAuthFromJSONTyped,
+    GenerateConnectionRequestBasicAuthToJSON,
+} from './GenerateConnectionRequestBasicAuth';
+import type { GenerateConnectionRequestOauth2ClientCredentials } from './GenerateConnectionRequestOauth2ClientCredentials';
+import {
+    GenerateConnectionRequestOauth2ClientCredentialsFromJSON,
+    GenerateConnectionRequestOauth2ClientCredentialsFromJSONTyped,
+    GenerateConnectionRequestOauth2ClientCredentialsToJSON,
+} from './GenerateConnectionRequestOauth2ClientCredentials';
+import type { GenerateConnectionRequestOauth2Password } from './GenerateConnectionRequestOauth2Password';
+import {
+    GenerateConnectionRequestOauth2PasswordFromJSON,
+    GenerateConnectionRequestOauth2PasswordFromJSONTyped,
+    GenerateConnectionRequestOauth2PasswordToJSON,
+} from './GenerateConnectionRequestOauth2Password';
+
 /**
  * 
  * @export
@@ -61,6 +80,30 @@ export interface GenerateConnectionRequest {
      * @memberof GenerateConnectionRequest
      */
     provider: string;
+    /**
+     * The API key to use for the connection.
+     * @type {string}
+     * @memberof GenerateConnectionRequest
+     */
+    apiKey?: string;
+    /**
+     * 
+     * @type {GenerateConnectionRequestBasicAuth}
+     * @memberof GenerateConnectionRequest
+     */
+    basicAuth?: GenerateConnectionRequestBasicAuth;
+    /**
+     * 
+     * @type {GenerateConnectionRequestOauth2ClientCredentials}
+     * @memberof GenerateConnectionRequest
+     */
+    oauth2ClientCredentials?: GenerateConnectionRequestOauth2ClientCredentials;
+    /**
+     * 
+     * @type {GenerateConnectionRequestOauth2Password}
+     * @memberof GenerateConnectionRequest
+     */
+    oauth2Password?: GenerateConnectionRequestOauth2Password;
 }
 
 /**
@@ -93,6 +136,10 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
         'consumerRef': json['consumerRef'],
         'provider': json['provider'],
+        'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
+        'basicAuth': !exists(json, 'basicAuth') ? undefined : GenerateConnectionRequestBasicAuthFromJSON(json['basicAuth']),
+        'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : GenerateConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
+        'oauth2Password': !exists(json, 'oauth2Password') ? undefined : GenerateConnectionRequestOauth2PasswordFromJSON(json['oauth2Password']),
     };
 }
 
@@ -112,6 +159,10 @@ export function GenerateConnectionRequestToJSON(value?: GenerateConnectionReques
         'consumerName': value.consumerName,
         'consumerRef': value.consumerRef,
         'provider': value.provider,
+        'apiKey': value.apiKey,
+        'basicAuth': GenerateConnectionRequestBasicAuthToJSON(value.basicAuth),
+        'oauth2ClientCredentials': GenerateConnectionRequestOauth2ClientCredentialsToJSON(value.oauth2ClientCredentials),
+        'oauth2Password': GenerateConnectionRequestOauth2PasswordToJSON(value.oauth2Password),
     };
 }
 
