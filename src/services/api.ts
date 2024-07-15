@@ -20,7 +20,7 @@ import {
   ProviderInfo,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '../../generated-sources/api/src';
+} from '@generated/api/src';
 
 import { ApiService } from './ApiService';
 import { LIB_VERSION } from './version';
