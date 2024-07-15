@@ -24,11 +24,14 @@
       "require": "./build/amp-react.cjs.js"
     }
   },
-  "files": [ "build"  ],
+  "files": [
+    "build"
+  ],
   "scripts": {
     "test": "jest",
     "watch": "npm run prepbuild && vite build --watch",
     "build": "npm run prepbuild && vite build",
+    "analyze": "npm run prepbuild && vite build --mode development",
     "prepbuild": "npm run clean && node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" | sed \"s|\\\"|'|g\" > src/services/version.ts",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
@@ -71,6 +74,7 @@
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "jest": "^29.7.0",
     "react-test-renderer": "^18.2.0",
+    "rollup-plugin-visualizer": "^5.12.0",
     "typescript": "^5.2.2",
     "vite": "^5.3.3",
     "vite-plugin-dts": "^3.9.1"

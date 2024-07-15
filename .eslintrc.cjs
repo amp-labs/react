@@ -22,6 +22,7 @@ module.exports = {
     'max-len': ['warn', { code: 125 }],
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'import/no-unresolved': 0,
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/jsx-one-expression-per-line': 0,
     'react/no-unescaped-entities': 0,
     'import/prefer-default-export': 0,
