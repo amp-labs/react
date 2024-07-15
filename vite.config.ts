@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
     },
     rollupOptions: {
       external: [...Object.keys(packageJson.peerDependencies),
-        'react/jsx-runtime', '@chakra-ui/react'],
+        'react/jsx-runtime'],
     },
   },
 }));

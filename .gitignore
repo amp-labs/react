@@ -16,3 +16,6 @@ build/
 src/services/version.ts
 
 .idea/
+
+# bundle analyzer report
+stats.html
