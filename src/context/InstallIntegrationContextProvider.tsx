@@ -2,13 +2,13 @@ import {
   createContext, useCallback,
   useContext, useEffect, useMemo, useState,
 } from 'react';
-
-import { LoadingIcon } from '../assets/LoadingIcon';
-import { ErrorTextBox } from '../components/ErrorTextBox';
+import { LoadingIcon } from 'assets/LoadingIcon';
 import {
   api, Config, Installation, Integration,
-} from '../services/api';
-import { findIntegrationFromList } from '../utils';
+} from 'services/api';
+import { findIntegrationFromList } from 'src/utils';
+
+import { ErrorTextBox } from 'components/ErrorTextBox';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
