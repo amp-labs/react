@@ -4,9 +4,10 @@
 
 import { useCallback, useState } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyContextProvider';
-import { useProject } from '../../../context/ProjectContextProvider';
-import { capitalize } from '../../../utils';
+import { useApiKey } from 'context/ApiKeyContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
+import { capitalize } from 'src/utils';
+
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { AMP_SERVER, api, Connection } from '../../../services/api';
+import { AMP_SERVER, api, Connection } from 'services/api';
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px

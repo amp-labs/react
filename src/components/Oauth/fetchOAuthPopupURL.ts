@@ -1,5 +1,5 @@
-import { api, OauthConnectOperationRequest, ProviderApp } from '../../services/api';
-import { capitalize } from '../../utils';
+import { api, OauthConnectOperationRequest, ProviderApp } from 'services/api';
+import { capitalize } from 'src/utils';
 
 export const fetchOAuthPopupURL = async (
   projectId: string,

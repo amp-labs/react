@@ -1,6 +1,6 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
-import { ProtectedConnectionLayout } from '../Configure/layout/ProtectedConnectionLayout';
-import { RedirectHandler } from '../RedirectHandler';
+import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
+import { RedirectHandler } from 'components/RedirectHandler';
+import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';
 

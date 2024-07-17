@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { LoadingIcon } from '../../../../assets/LoadingIcon';
-import { useApiKey } from '../../../../context/ApiKeyContextProvider';
-import { useConnections } from '../../../../context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
-import { useProject } from '../../../../context/ProjectContextProvider';
-import { HydratedRevision } from '../../../../services/api';
-import { ErrorTextBox } from '../../../ErrorTextBox';
+import { LoadingIcon } from 'assets/LoadingIcon';
+import { ErrorTextBox } from 'components/ErrorTextBox';
+import { useApiKey } from 'context/ApiKeyContextProvider';
+import { useConnections } from 'context/ConnectionsContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
+import { HydratedRevision } from 'services/api';
+
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 

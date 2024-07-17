@@ -4,7 +4,7 @@ import {
   useMultiStyleConfig, useTab,
 } from '@chakra-ui/react';
 
-import { NavIcon } from '../../../../assets/NavIcon';
+import { NavIcon } from 'assets/NavIcon';
 
 interface NavObjectItemProps {
   objectName: string;

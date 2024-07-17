@@ -2,10 +2,10 @@ import {
   createContext, useContext, useEffect,
   useMemo, useState,
 } from 'react';
-import { LoadingIcon } from 'assets/LoadingIcon';
-import { api, Integration } from 'services/api';
 
+import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox';
+import { api, Integration } from 'services/api';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';

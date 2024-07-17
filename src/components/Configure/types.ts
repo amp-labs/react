@@ -3,7 +3,7 @@ import {
   HydratedIntegrationFieldExistent,
   HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
-} from '../../services/api';
+} from 'services/api';
 
 export type SelectedNonConfigurableWriteFields = {
   [key: string]: boolean,

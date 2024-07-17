@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyContextProvider';
-import { api, ProviderInfo } from '../../../services/api';
+import { useApiKey } from 'context/ApiKeyContextProvider';
+import { api, ProviderInfo } from 'services/api';
+
 import { NoWorkspaceOauthFlow } from '../NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import { WorkspaceOauthFlow } from '../WorkspaceEntry/WorkspaceOauthFlow';
 

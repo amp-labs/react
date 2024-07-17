@@ -1,7 +1,7 @@
 import {
   api, Config, CreateInstallationOperationRequest,
   CreateInstallationRequestConfig, Installation,
-} from '../../../../services/api';
+} from 'services/api';
 
 export type CreateInstallationSharedProps = {
   projectId: string;

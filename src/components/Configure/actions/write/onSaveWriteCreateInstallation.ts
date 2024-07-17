@@ -3,7 +3,8 @@ import {
   CreateInstallationRequestConfig,
   HydratedRevision,
   Installation,
-} from '../../../../services/api';
+} from 'services/api';
+
 import { ConfigureState } from '../../types';
 import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
 import { getIsProxyEnabled } from '../proxy/isProxyEnabled';

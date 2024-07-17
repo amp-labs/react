@@ -5,7 +5,8 @@ import {
 
 import {
   ErrorBoundary, useErrorState,
-} from '../../../../../context/ErrorContextProvider';
+} from 'context/ErrorContextProvider';
+
 import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';

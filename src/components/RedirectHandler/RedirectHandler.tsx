@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 
-import { LoadingIcon } from '../../assets/LoadingIcon';
+import { LoadingIcon } from 'assets/LoadingIcon';
 
 type RedirectHandlerProps = {
   redirectURL?: string;

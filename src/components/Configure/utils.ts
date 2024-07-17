@@ -1,6 +1,4 @@
-import {
-  ErrorBoundary,
-} from '../../context/ErrorContextProvider';
+import { ErrorBoundary } from 'context/ErrorContextProvider';
 import {
   Config,
   HydratedIntegrationField,
@@ -8,7 +6,7 @@ import {
   HydratedIntegrationRead,
   HydratedRevision,
   IntegrationFieldMapping,
-} from '../../services/api';
+} from 'services/api';
 
 import { OTHER_CONST } from './nav/ObjectManagementNav/constant';
 import {

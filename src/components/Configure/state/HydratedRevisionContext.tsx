@@ -2,14 +2,14 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyContextProvider';
-import { useConnections } from '../../../context/ConnectionsContextProvider';
+import { ErrorTextBox } from 'components/ErrorTextBox';
+import { useApiKey } from 'context/ApiKeyContextProvider';
+import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
-} from '../../../context/ErrorContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
-import { api, HydratedRevision } from '../../../services/api';
-import { ErrorTextBox } from '../../ErrorTextBox';
+} from 'context/ErrorContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { api, HydratedRevision } from 'services/api';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;

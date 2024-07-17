@@ -3,7 +3,8 @@ import {
   FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
-import { capitalize } from '../../../utils';
+import { capitalize } from 'src/utils';
+
 import { OauthCardLayout } from '../OauthCardLayout';
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 

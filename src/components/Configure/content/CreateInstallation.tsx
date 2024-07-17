@@ -7,7 +7,8 @@ import {
 
 import {
   ErrorBoundary,
-} from '../../../context/ErrorContextProvider';
+} from 'context/ErrorContextProvider';
+
 import { onSaveReadCreateInstallation } from '../actions/read/onSaveReadCreateInstallation';
 import { onSaveWriteCreateInstallation } from '../actions/write/onSaveWriteCreateInstallation';
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';

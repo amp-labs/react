@@ -6,7 +6,8 @@ import {
   HydratedIntegrationRead,
   HydratedIntegrationWrite,
   HydratedRevision,
-} from '../../../services/api';
+} from 'services/api';
+
 import {
   ConfigureState,
   ConfigureStateRead,

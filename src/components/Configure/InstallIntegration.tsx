@@ -1,9 +1,9 @@
-import { ConnectionsProvider } from '../../context/ConnectionsContextProvider';
-import { ErrorBoundary, useErrorState } from '../../context/ErrorContextProvider';
-import { InstallIntegrationProvider } from '../../context/InstallIntegrationContextProvider';
-import { useProject } from '../../context/ProjectContextProvider';
-import { Config } from '../../services/api';
-import { ErrorTextBox } from '../ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
+import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
+import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
+import { Config } from 'services/api';
 
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';

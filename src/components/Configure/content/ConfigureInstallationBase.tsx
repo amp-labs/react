@@ -5,7 +5,8 @@ import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
-import { LoadingIcon } from '../../../assets/LoadingIcon';
+import { LoadingIcon } from 'assets/LoadingIcon';
+
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/UninstallInstallation';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';

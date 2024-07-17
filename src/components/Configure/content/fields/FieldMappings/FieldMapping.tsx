@@ -3,7 +3,8 @@ import {
   Select, Stack, Text,
 } from '@chakra-ui/react';
 
-import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from '../../../../../services/api';
+import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
+
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
 import { setFieldMapping } from './setFieldMapping';

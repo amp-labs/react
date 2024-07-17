@@ -2,7 +2,7 @@ import {
   api, Config, Installation,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '../../../../services/api';
+} from 'services/api';
 
 type UpdateInstallationSharedProps = {
   projectId: string;
