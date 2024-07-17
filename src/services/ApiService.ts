@@ -5,7 +5,7 @@ import {
   DestinationApi, GroupApi, InstallationApi, IntegrationApi,
   OAuthApi, OperationApi, ProjectApi, ProviderApi,
   ProviderAppApi, RevisionApi, UploadURLApi,
-} from '../../generated-sources/api/src';
+} from '@generated/api/src';
 
 /**
  * ApiService is a wrapper around the generated API client, which exposes
