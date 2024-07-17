@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { useApiKey } from '../../../context/ApiKeyContextProvider';
-import { useConnections } from '../../../context/ConnectionsContextProvider';
-import { useProject } from '../../../context/ProjectContextProvider';
+import { useApiKey } from 'context/ApiKeyContextProvider';
+import { useConnections } from 'context/ConnectionsContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
 
 import {
   getOpenWindowHandler,

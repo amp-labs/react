@@ -1,6 +1,6 @@
 import { Box, Container } from '@chakra-ui/react';
 
-import { SuccessCheckmarkIcon } from '../assets/SuccessIcon';
+import { SuccessCheckmarkIcon } from 'assets/SuccessIcon';
 
 interface ConnectedSuccessBoxProps {
   text: string;

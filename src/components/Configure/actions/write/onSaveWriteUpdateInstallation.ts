@@ -5,7 +5,8 @@ import {
   Installation,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '../../../../services/api';
+} from 'services/api';
+
 import { ConfigureState } from '../../types';
 import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
 

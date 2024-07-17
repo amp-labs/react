@@ -1,7 +1,8 @@
 import {
   CreateInstallationRequestConfig,
   HydratedRevision,
-} from '../../../../services/api';
+} from 'services/api';
+
 import {
   createInstallationAndSetState,
   CreateInstallationSharedProps,

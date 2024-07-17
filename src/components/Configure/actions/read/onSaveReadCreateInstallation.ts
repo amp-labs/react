@@ -2,7 +2,8 @@ import {
   Config,
   CreateInstallationRequestConfig, HydratedRevision,
   Installation,
-} from '../../../../services/api';
+} from 'services/api';
+
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,

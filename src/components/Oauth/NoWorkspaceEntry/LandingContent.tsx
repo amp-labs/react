@@ -2,7 +2,8 @@ import {
   Button, FormControl, FormLabel, Heading,
 } from '@chakra-ui/react';
 
-import { capitalize } from '../../../utils';
+import { capitalize } from 'src/utils';
+
 import { OauthCardLayout } from '../OauthCardLayout';
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 

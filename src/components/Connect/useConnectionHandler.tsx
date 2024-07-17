@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useConnections } from '../../context/ConnectionsContextProvider';
+import { useConnections } from 'context/ConnectionsContextProvider';
 
 function useOnSuccessHandler(onSuccess?: (connectionID: string) => void) {
   const { selectedConnection } = useConnections();

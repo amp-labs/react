@@ -1,5 +1,5 @@
-import { capitalize } from '../../../../utils';
-import { SuccessTextBox } from '../../../SuccessTextBox';
+import { SuccessTextBox } from 'components/SuccessTextBox';
+import { capitalize } from 'src/utils';
 
 type InstalledSuccessBoxProps = {
   provider: string;

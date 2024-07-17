@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { useConnections } from '../../../context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
-import { useConnectionHandler } from '../../Connect/useConnectionHandler';
-import { OauthFlow } from '../../Oauth/OauthFlow/OauthFlow';
+import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
+import { OauthFlow } from 'components/Oauth/OauthFlow/OauthFlow';
+import { useConnections } from 'context/ConnectionsContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,

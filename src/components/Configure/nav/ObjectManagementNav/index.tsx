@@ -5,9 +5,10 @@ import {
   Box, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
-import { useInstallIntegrationProps } from '../../../../context/InstallIntegrationContextProvider';
-import { useProject } from '../../../../context/ProjectContextProvider';
-import { capitalize } from '../../../../utils';
+import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
+import { capitalize } from 'src/utils';
+
 import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 import { NavObject } from '../../types';

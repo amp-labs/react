@@ -1,5 +1,6 @@
-import { useProject } from '../../context/ProjectContextProvider';
-import { capitalize } from '../../utils';
+import { useProject } from 'context/ProjectContextProvider';
+import { capitalize } from 'src/utils';
+
 import { SuccessTextBox } from '../SuccessTextBox';
 
 interface ConnectedSuccessBoxProps {

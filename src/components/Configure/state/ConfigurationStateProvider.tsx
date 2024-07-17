@@ -3,7 +3,8 @@ import React, {
 } from 'react';
 import { Draft, produce } from 'immer';
 
-import { useInstallIntegrationProps } from '../../../context/InstallIntegrationContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 

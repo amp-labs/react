@@ -2,11 +2,10 @@ import {
   createContext,
   useContext, useEffect, useMemo, useState,
 } from 'react';
-import { api, Connection } from 'services/api';
 
+import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox';
-
-import { LoadingIcon } from '../assets/LoadingIcon';
+import { api, Connection } from 'services/api';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import {
