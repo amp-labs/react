@@ -4,8 +4,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, type PluginOption } from 'vite';
 import dts from 'vite-plugin-dts';
 
-import * as packageJson from './package.json';
-
 export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
@@ -34,9 +32,9 @@ export default defineConfig(({ mode }) => ({
       formats: ['es', 'cjs'],
       fileName: (format) => `amp-react.${format}.js`,
     },
-    rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies),
-        'react/jsx-runtime'],
-    },
+    // rollupOptions: {
+    //   external: [...Object.keys(packageJson.peerDependencies),
+    //     'react/jsx-runtime'],
+    // },
   },
 }));
