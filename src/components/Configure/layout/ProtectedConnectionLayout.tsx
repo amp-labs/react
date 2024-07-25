@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { ApiKeyAuthFlow } from 'components/ApiKeyAuth/ApiKeyAuthFlow/ApiKeyAuthFlow';
+import { BasicAuthFlow } from 'components/BasicAuth/BasicAuthFlow/BasicAuthFlow';
 import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
 import { NoAuthFlow } from 'components/NoAuth/NoAuthFlow/NoAuthFlow';
 import { OauthFlow } from 'components/Oauth/OauthFlow/OauthFlow';
@@ -7,7 +9,6 @@ import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, ProviderInfo } from 'services/api';
-import {BasicAuthFlow} from "components/BasicAuth/BasicAuthFlow/BasicAuthFlow";
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -96,6 +97,21 @@ export function ProtectedConnectionLayout({
       >
         {children}
       </BasicAuthFlow>
+    );
+  }
+
+  if (providerInfo.authType === 'apiKey') {
+    return (
+      <ApiKeyAuthFlow
+        provider={selectedProvider}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        setSelectedConnection={setSelectedConnection}
+        groupRef={groupRef}
+        groupName={groupName}
+      >
+        {children}
+      </ApiKeyAuthFlow>
     );
   }
 
