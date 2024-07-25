@@ -1,7 +1,12 @@
-import { ProviderInfo } from 'services/api';
-
-import { NoWorkspaceOauthFlow } from '../NoWorkspaceEntry/NoWorkspaceOauthFlow';
-import { WorkspaceOauthFlow } from '../WorkspaceEntry/WorkspaceOauthFlow';
+import {
+  NoWorkspaceOauthClientCredsFlow,
+} from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthClientCredsFlow';
+import { NoWorkspaceOauthFlow } from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
+import {
+  WorkspaceOauthClientCredsFlow,
+} from 'components/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
+import { WorkspaceOauthFlow } from 'components/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
+import { Connection, ProviderInfo } from 'services/api';
 
 type OauthFlowProps = {
   provider: string;
@@ -10,10 +15,11 @@ type OauthFlowProps = {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  setSelectedConnection: (connection: Connection) => void;
 };
 
 export function OauthFlow({
-  provider, providerInfo, consumerRef, consumerName, groupRef, groupName,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, setSelectedConnection,
 }: OauthFlowProps) {
   if (providerInfo.oauth2Opts === undefined) {
     return <>Provider is missing OAuth2 options</>;
@@ -49,7 +55,29 @@ export function OauthFlow({
   }
 
   if (grantType === 'clientCredentials') {
-    return <>Client credentials flow not supported yet</>;
+    if (workspaceRequired) {
+      return (
+        <WorkspaceOauthClientCredsFlow
+          provider={provider}
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+          setSelectedConnection={setSelectedConnection}
+        />
+      );
+    }
+
+    return (
+      <NoWorkspaceOauthClientCredsFlow
+        provider={provider}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+        setSelectedConnection={setSelectedConnection}
+      />
+    );
   }
 
   if (grantType === 'password') {
