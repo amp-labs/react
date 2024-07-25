@@ -118,6 +118,7 @@ export function ProtectedConnectionLayout({
   return (
     <OauthFlow
       provider={selectedProvider}
+      providerInfo={providerInfo}
       consumerRef={consumerRef}
       consumerName={consumerName}
       groupRef={groupRef}

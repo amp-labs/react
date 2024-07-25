@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
-
-import { useApiKey } from 'context/ApiKeyContextProvider';
-import { api, ProviderInfo } from 'services/api';
+import { ProviderInfo } from 'services/api';
 
 import { NoWorkspaceOauthFlow } from '../NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import { WorkspaceOauthFlow } from '../WorkspaceEntry/WorkspaceOauthFlow';
 
 type OauthFlowProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
@@ -15,29 +13,32 @@ type OauthFlowProps = {
 };
 
 export function OauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName,
 }: OauthFlowProps) {
-  const apiKey = useApiKey();
-  const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
+  if (providerInfo.oauth2Opts === undefined) {
+    return <>Provider is missing OAuth2 options</>;
+  }
 
-  useEffect(() => {
-    if (provider && api) {
-      api().providerApi.getProvider({ provider }, {
-        headers: { 'X-Api-Key': apiKey ?? '' },
-      }).then((_providerInfo) => {
-        setProviderInfo(_providerInfo);
-      }).catch((err) => {
-        console.error('Error loading provider info: ', err);
-      });
+  const { grantType } = providerInfo.oauth2Opts;
+  const workspaceRequired = providerInfo.oauth2Opts.explicitWorkspaceRequired;
+
+  if (grantType === 'authorizationCode') {
+    // required workspace
+    if (workspaceRequired) {
+      return (
+        <WorkspaceOauthFlow
+          provider={provider}
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        />
+      );
     }
-  }, [apiKey, provider]);
 
-  const workspaceRequired = providerInfo?.oauth2Opts?.explicitWorkspaceRequired ?? false;
-
-  // required workspace
-  if (workspaceRequired) {
+    // no workspace required
     return (
-      <WorkspaceOauthFlow
+      <NoWorkspaceOauthFlow
         provider={provider}
         consumerRef={consumerRef}
         consumerName={consumerName}
@@ -47,14 +48,17 @@ export function OauthFlow({
     );
   }
 
-  // no workspace required
-  return (
-    <NoWorkspaceOauthFlow
-      provider={provider}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-    />
-  );
+  if (grantType === 'clientCredentials') {
+    return <>Client credentials flow not supported yet</>;
+  }
+
+  if (grantType === 'password') {
+    return <>Password flow not supported yet</>;
+  }
+
+  if (grantType === 'PKCE') {
+    return <>PKCE flow not supported yet</>;
+  }
+
+  return <>Unsupported grant type: {grantType}</>;
 }
