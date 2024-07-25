@@ -123,6 +123,7 @@ export function ProtectedConnectionLayout({
       consumerName={consumerName}
       groupRef={groupRef}
       groupName={groupName}
+      setSelectedConnection={setSelectedConnection}
     />
   );
 }
