@@ -9,11 +9,12 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
+import { DocsURL } from 'components/Docs/Docs';
 import { capitalize } from 'src/utils';
-import { ProviderInfo } from '@generated/api/src';
 
 type LandingContentProps = {
   provider: string;
@@ -57,6 +58,12 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
+
+        <br />
+
+        <DocsURL url={providerInfo.apiKeyOpts?.docsURL}>
+          Where can I find my {provider} API key?
+        </DocsURL>
 
         <br />
 
