@@ -89,6 +89,7 @@ export function ProtectedConnectionLayout({
     return (
       <BasicAuthFlow
         provider={selectedProvider}
+        providerInfo={providerInfo}
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}
@@ -104,6 +105,7 @@ export function ProtectedConnectionLayout({
     return (
       <ApiKeyAuthFlow
         provider={selectedProvider}
+        providerInfo={providerInfo}
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}
