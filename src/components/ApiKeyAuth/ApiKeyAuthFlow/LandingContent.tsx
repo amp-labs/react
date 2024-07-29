@@ -9,20 +9,23 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
+import { DocsURL } from 'components/Docs/Docs';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (value: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
@@ -56,6 +59,12 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
+
+        <br />
+
+        <DocsURL url={providerInfo.apiKeyOpts?.docsURL}>
+          Where can I find my {provider} API key?
+        </DocsURL>
 
         <br />
 

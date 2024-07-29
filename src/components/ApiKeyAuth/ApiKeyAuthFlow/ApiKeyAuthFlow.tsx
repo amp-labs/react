@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GenerateConnectionRequest } from '@generated/api/src';
+import { GenerateConnectionRequest, ProviderInfo } from '@generated/api/src';
 
 import { LandingContent } from 'components/ApiKeyAuth/ApiKeyAuthFlow/LandingContent';
 import { useApiKey } from 'context/ApiKeyContextProvider';
@@ -8,6 +8,7 @@ import { api, Connection } from 'services/api';
 
 type ApiKeyAuthFlowProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
@@ -18,7 +19,8 @@ type ApiKeyAuthFlowProps = {
 };
 
 export function ApiKeyAuthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, children, selectedConnection, setSelectedConnection,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, children,
+  selectedConnection, setSelectedConnection,
 }: ApiKeyAuthFlowProps) {
   const project = useProject();
   const [nextStep, setNextStep] = useState<boolean>(false);
@@ -54,7 +56,7 @@ export function ApiKeyAuthFlow({
   };
 
   if (selectedConnection === null) {
-    return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
+    return <LandingContent provider={provider} providerInfo={providerInfo} handleSubmit={onNext} error={null} />;
   }
 
   return children;

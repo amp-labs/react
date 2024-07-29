@@ -9,6 +9,7 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
