@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   FormControl,
@@ -12,7 +13,6 @@ import {
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
 import { capitalize } from 'src/utils';
-import { useState } from 'react';
 
 type LandingContentProps = {
   provider: string;
