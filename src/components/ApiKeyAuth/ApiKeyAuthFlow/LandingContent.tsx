@@ -46,7 +46,7 @@ export function LandingContent({
               onChange={handlePasswordChange}
               pr="4.5rem"
               type={show ? 'text' : 'password'}
-              placeholder="Password"
+              placeholder="API Key"
             />
             <InputRightElement width="4.5rem">
               <Button h="1.75rem" size="sm" onClick={handleClick}>
