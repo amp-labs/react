@@ -13,16 +13,18 @@ import {
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
 import { capitalize } from 'src/utils';
+import { ProviderInfo } from "@generated/api/src";
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (user: string, pass: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
