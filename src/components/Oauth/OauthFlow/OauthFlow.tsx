@@ -81,12 +81,12 @@ export function OauthFlow({
   }
 
   if (grantType === 'password') {
-    return <>Password flow not supported yet</>;
+    return <em>Password flow not supported yet</em>;
   }
 
   if (grantType === 'PKCE') {
-    return <>PKCE flow not supported yet</>;
+    return <em>PKCE flow not supported yet</em>;
   }
 
-  return <>Unsupported grant type: {grantType}</>;
+  return <em>Unsupported grant type: {grantType}</em>;
 }
