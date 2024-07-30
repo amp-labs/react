@@ -13,6 +13,7 @@ import { ProviderInfo } from '@generated/api/src';
 
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
+import { DocsURL } from 'components/Docs/Docs';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
@@ -63,6 +64,12 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
+
+        <br />
+
+        <DocsURL url={providerInfo.basicOpts?.docsURL}>
+          Where can I find my {provider} basic auth credentials?
+        </DocsURL>
 
         <br />
 
