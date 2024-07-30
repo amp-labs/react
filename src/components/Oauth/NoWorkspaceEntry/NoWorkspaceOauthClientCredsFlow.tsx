@@ -69,5 +69,5 @@ export function NoWorkspaceOauthClientCredsFlow({
     setSelectedConnection(connection);
   });
 
-  return <>Loading...</>;
+  return <em>Loading...</em>;
 }
