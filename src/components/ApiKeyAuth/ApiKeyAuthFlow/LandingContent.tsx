@@ -25,7 +25,7 @@ export function LandingContent({
   provider, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
+  const onToggleShowHide = () => setShow(!show);
   const [apiKey, setApiKey] = useState('');
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setApiKey(event.currentTarget.value);
   const apiKeyValid = apiKey.length > 0;
@@ -49,7 +49,7 @@ export function LandingContent({
               placeholder="API Key"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" size="sm" onClick={onToggleShowHide}>
                 {show ? 'Hide' : 'Show'}
               </Button>
             </InputRightElement>

@@ -68,7 +68,7 @@ export function ProtectedConnectionLayout({
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
-  if (providerInfo == null) return <>Provider not found</>;
+  if (providerInfo == null) return <strong>Provider not found</strong>;
 
   if (providerInfo.authType === 'none') {
     return (

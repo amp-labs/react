@@ -25,7 +25,7 @@ export function LandingContent({
   provider, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
+  const onToggleShowHide = () => setShow(!show);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -55,7 +55,7 @@ export function LandingContent({
               placeholder="Password"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" size="sm" onClick={onToggleShowHide}>
                 {show ? 'Hide' : 'Show'}
               </Button>
             </InputRightElement>

@@ -64,6 +64,9 @@ export function BasicAuthFlow({
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
 
-  setSelectedConnection(connection);
+  useEffect(() => {
+    setSelectedConnection(connection);
+  });
+
   return children;
 }

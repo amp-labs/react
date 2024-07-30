@@ -31,12 +31,11 @@ export function ClientCredentialsContent({
   provider, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
-
   const [clientSecret, setClientSecret] = useState('');
   const [clientId, setClientId] = useState('');
   const [workspace, setWorkspace] = useState('');
 
+  const onToggleShowHide = () => setShow(!show);
   const handleClientSecretChange = (event: React.FormEvent<HTMLInputElement>) => setClientSecret(event.currentTarget.value);
   const handleClientIdChange = (event: React.FormEvent<HTMLInputElement>) => setClientId(event.currentTarget.value);
   const handleWorkspaceChange = (event: React.FormEvent<HTMLInputElement>) => setWorkspace(event.currentTarget.value);
@@ -70,7 +69,7 @@ export function ClientCredentialsContent({
               placeholder="Client Secret"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" size="sm" onClick={onToggleShowHide}>
                 {show ? 'Hide' : 'Show'}
               </Button>
             </InputRightElement>
