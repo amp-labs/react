@@ -56,7 +56,7 @@ export interface OauthConnectRequest {
      */
     consumerName?: string;
     /**
-     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Console is assumed.
+     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */
