@@ -22,7 +22,7 @@ export function OauthFlow({
   provider, providerInfo, consumerRef, consumerName, groupRef, groupName, setSelectedConnection,
 }: OauthFlowProps) {
   if (providerInfo.oauth2Opts === undefined) {
-    return <>Provider is missing OAuth2 options</>;
+    return <em>Provider is missing OAuth2 options</em>;
   }
 
   const { grantType } = providerInfo.oauth2Opts;
