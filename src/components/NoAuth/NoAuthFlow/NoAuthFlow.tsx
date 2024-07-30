@@ -20,9 +20,9 @@ export function NoAuthFlow({
   provider, consumerRef, consumerName, groupRef, groupName, children, setSelectedConnection,
 }: NoAuthFlowProps) {
   const project = useProject();
+  const apiKey = useApiKey();
   const [connection, setConnection] = useState<Connection | null>(null);
   const [nextStep, setNextStep] = useState<boolean>(false);
-  const apiKey = useApiKey();
 
   useEffect(() => {
     if (provider && api && nextStep) {
@@ -53,6 +53,9 @@ export function NoAuthFlow({
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
 
-  setSelectedConnection(connection);
+  useEffect(() => {
+    setSelectedConnection(connection);
+  });
+
   return children;
 }

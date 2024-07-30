@@ -2,7 +2,7 @@
  * OAuth flow for any providers that do not require the consumer to enter a workspace first.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Connection, GenerateConnectionRequest } from '@generated/api/src';
 
 import {
@@ -66,6 +66,9 @@ export function WorkspaceOauthClientCredsFlow({
     return <ClientCredentialsContent provider={provider} handleSubmit={handleSubmit} error={error} />;
   }
 
-  setSelectedConnection(connection);
-  return <>Loading...</>;
+  useEffect(() => {
+    setSelectedConnection(connection);
+  });
+
+  return <em>Loading...</em>;
 }
