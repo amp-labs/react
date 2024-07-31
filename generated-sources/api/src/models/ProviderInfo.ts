@@ -25,6 +25,18 @@ import {
     AuthTypeFromJSONTyped,
     AuthTypeToJSON,
 } from './AuthType';
+import type { BasicAuthOpts } from './BasicAuthOpts';
+import {
+    BasicAuthOptsFromJSON,
+    BasicAuthOptsFromJSONTyped,
+    BasicAuthOptsToJSON,
+} from './BasicAuthOpts';
+import type { Media } from './Media';
+import {
+    MediaFromJSON,
+    MediaFromJSONTyped,
+    MediaToJSON,
+} from './Media';
 import type { Oauth2Opts } from './Oauth2Opts';
 import {
     Oauth2OptsFromJSON,
@@ -76,6 +88,12 @@ export interface ProviderInfo {
     apiKeyOpts?: ApiKeyOpts;
     /**
      * 
+     * @type {BasicAuthOpts}
+     * @memberof ProviderInfo
+     */
+    basicOpts?: BasicAuthOpts;
+    /**
+     * 
      * @type {Support}
      * @memberof ProviderInfo
      */
@@ -98,6 +116,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     postAuthInfoNeeded?: boolean;
+    /**
+     * 
+     * @type {Media}
+     * @memberof ProviderInfo
+     */
+    media?: Media;
 }
 
 /**
@@ -129,10 +153,12 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'baseURL': json['baseURL'],
         'oauth2Opts': !exists(json, 'oauth2Opts') ? undefined : Oauth2OptsFromJSON(json['oauth2Opts']),
         'apiKeyOpts': !exists(json, 'apiKeyOpts') ? undefined : ApiKeyOptsFromJSON(json['apiKeyOpts']),
+        'basicOpts': !exists(json, 'basicOpts') ? undefined : BasicAuthOptsFromJSON(json['basicOpts']),
         'support': SupportFromJSON(json['support']),
         'providerOpts': json['providerOpts'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
+        'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
     };
 }
 
@@ -150,10 +176,12 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'baseURL': value.baseURL,
         'oauth2Opts': Oauth2OptsToJSON(value.oauth2Opts),
         'apiKeyOpts': ApiKeyOptsToJSON(value.apiKeyOpts),
+        'basicOpts': BasicAuthOptsToJSON(value.basicOpts),
         'support': SupportToJSON(value.support),
         'providerOpts': value.providerOpts,
         'displayName': value.displayName,
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
+        'media': MediaToJSON(value.media),
     };
 }
 

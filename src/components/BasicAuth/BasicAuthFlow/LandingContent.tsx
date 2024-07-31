@@ -9,20 +9,23 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
+import { DocsURL } from 'components/Docs/Docs';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (user: string, pass: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
@@ -61,6 +64,12 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
+
+        <br />
+
+        <DocsURL url={providerInfo.basicOpts?.docsURL}>
+          Where can I find my {provider} basic auth credentials?
+        </DocsURL>
 
         <br />
 

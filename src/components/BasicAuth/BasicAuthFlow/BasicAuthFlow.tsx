@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GenerateConnectionRequest } from '@generated/api/src';
+import { GenerateConnectionRequest, ProviderInfo } from '@generated/api/src';
 
 import { LandingContent } from 'components/BasicAuth/BasicAuthFlow/LandingContent';
 import { useApiKey } from 'context/ApiKeyContextProvider';
@@ -8,6 +8,7 @@ import { api, Connection } from 'services/api';
 
 type BasicAuthFlowProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
@@ -22,7 +23,7 @@ type BasicCreds = {
 };
 
 export function BasicAuthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, children, setSelectedConnection,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, children, setSelectedConnection,
 }: BasicAuthFlowProps) {
   const project = useProject();
   const [connection, setConnection] = useState<Connection | null>(null);
@@ -67,7 +68,14 @@ export function BasicAuthFlow({
   };
 
   if (connection === null) {
-    return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
+    return (
+      <LandingContent
+        providerInfo={providerInfo}
+        provider={provider}
+        handleSubmit={onNext}
+        error={null}
+      />
+    );
   }
 
   return children;

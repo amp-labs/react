@@ -20,11 +20,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface DefaultPeriod {
     /**
-     * 
+     * Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.
      * @type {number}
      * @memberof DefaultPeriod
      */
     days?: number;
+    /**
+     * If true, backfill all history. Required if days is not set.
+     * @type {boolean}
+     * @memberof DefaultPeriod
+     */
+    fullHistory?: boolean;
 }
 
 /**
@@ -47,6 +53,7 @@ export function DefaultPeriodFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'days': !exists(json, 'days') ? undefined : json['days'],
+        'fullHistory': !exists(json, 'fullHistory') ? undefined : json['fullHistory'],
     };
 }
 
@@ -60,6 +67,7 @@ export function DefaultPeriodToJSON(value?: DefaultPeriod | null): any {
     return {
         
         'days': value.days,
+        'fullHistory': value.fullHistory,
     };
 }
 
