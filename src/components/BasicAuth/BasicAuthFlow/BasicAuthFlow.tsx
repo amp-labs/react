@@ -31,6 +31,12 @@ export function BasicAuthFlow({
   const apiKey = useApiKey();
 
   useEffect(() => {
+    if (connection !== null) {
+      setSelectedConnection(connection);
+    }
+  }, [connection, setSelectedConnection]);
+
+  useEffect(() => {
     if (provider && api && nextStep && creds != null) {
       const req: GenerateConnectionRequest = {
         projectId: project.projectId,
@@ -63,10 +69,6 @@ export function BasicAuthFlow({
   if (connection === null) {
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
-
-  useEffect(() => {
-    setSelectedConnection(connection);
-  });
 
   return children;
 }

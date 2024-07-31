@@ -25,6 +25,12 @@ export function NoAuthFlow({
   const [nextStep, setNextStep] = useState<boolean>(false);
 
   useEffect(() => {
+    if (connection !== null) {
+      setSelectedConnection(connection);
+    }
+  }, [connection, setSelectedConnection]);
+
+  useEffect(() => {
     if (provider && api && nextStep) {
       const req: GenerateConnectionRequest = {
         projectId: project.projectId,
@@ -52,10 +58,6 @@ export function NoAuthFlow({
   if (connection === null) {
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
-
-  useEffect(() => {
-    setSelectedConnection(connection);
-  });
 
   return children;
 }

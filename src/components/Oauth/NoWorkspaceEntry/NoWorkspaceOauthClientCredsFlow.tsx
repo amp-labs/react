@@ -35,6 +35,12 @@ export function NoWorkspaceOauthClientCredsFlow({
   const [connection, setConnection] = useState<Connection | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (connection !== null) {
+      setSelectedConnection(connection);
+    }
+  }, [setSelectedConnection, connection]);
+
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async (creds: ClientCredentialsCreds) => {
     setError(null);
@@ -64,10 +70,6 @@ export function NoWorkspaceOauthClientCredsFlow({
   if (connection === null) {
     return <ClientCredentialsContent provider={provider} handleSubmit={handleSubmit} error={error} />;
   }
-
-  useEffect(() => {
-    setSelectedConnection(connection);
-  });
 
   return <em>Loading...</em>;
 }
