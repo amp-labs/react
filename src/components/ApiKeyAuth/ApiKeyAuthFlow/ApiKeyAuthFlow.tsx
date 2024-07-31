@@ -26,6 +26,12 @@ export function ApiKeyAuthFlow({
   const apiKey = useApiKey();
 
   useEffect(() => {
+    if (connection !== null) {
+      setSelectedConnection(connection);
+    }
+  }, [connection, setSelectedConnection]);
+
+  useEffect(() => {
     if (provider && api && nextStep && userApiKey != null) {
       const req: GenerateConnectionRequest = {
         projectId: project.projectId,
@@ -55,10 +61,6 @@ export function ApiKeyAuthFlow({
   if (connection === null) {
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
-
-  useEffect(() => {
-    setSelectedConnection(connection);
-  });
 
   return children;
 }
