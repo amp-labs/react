@@ -19,7 +19,8 @@ interface NoWorkspaceOauthClientCredsFlowProps {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
-  setSelectedConnection: (connection: Connection) => void;
+  selectedConnection: Connection | null;
+  setSelectedConnection: (connection: Connection | null) => void;
 }
 
 /**

@@ -15,11 +15,12 @@ type OauthFlowProps = {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
-  setSelectedConnection: (connection: Connection) => void;
+  selectedConnection: Connection | null;
+  setSelectedConnection: (connection: Connection | null) => void;
 };
 
 export function OauthFlow({
-  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, setSelectedConnection,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection,
 }: OauthFlowProps) {
   if (providerInfo.oauth2Opts === undefined) {
     return <em>Provider is missing OAuth2 options</em>;
@@ -64,6 +65,7 @@ export function OauthFlow({
           groupRef={groupRef}
           groupName={groupName}
           setSelectedConnection={setSelectedConnection}
+          selectedConnection={selectedConnection}
         />
       );
     }
@@ -76,6 +78,7 @@ export function OauthFlow({
         groupRef={groupRef}
         groupName={groupName}
         setSelectedConnection={setSelectedConnection}
+        selectedConnection={selectedConnection}
       />
     );
   }

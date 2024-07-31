@@ -77,6 +77,7 @@ export function ProtectedConnectionLayout({
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}
+        selectedConnection={selectedConnection}
         groupRef={groupRef}
         groupName={groupName}
       >
@@ -92,6 +93,7 @@ export function ProtectedConnectionLayout({
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}
+        selectedConnection={selectedConnection}
         groupRef={groupRef}
         groupName={groupName}
       >
@@ -107,6 +109,7 @@ export function ProtectedConnectionLayout({
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}
+        selectedConnection={selectedConnection}
         groupRef={groupRef}
         groupName={groupName}
       >
@@ -124,6 +127,7 @@ export function ProtectedConnectionLayout({
       groupRef={groupRef}
       groupName={groupName}
       setSelectedConnection={setSelectedConnection}
+      selectedConnection={selectedConnection}
     />
   );
 }

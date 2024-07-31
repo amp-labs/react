@@ -13,23 +13,17 @@ type ApiKeyAuthFlowProps = {
   groupRef: string;
   groupName?: string;
   children: JSX.Element,
-  setSelectedConnection: (connection: Connection) => void;
+  selectedConnection: Connection | null;
+  setSelectedConnection: (connection: Connection | null) => void;
 };
 
 export function ApiKeyAuthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, children, setSelectedConnection,
+  provider, consumerRef, consumerName, groupRef, groupName, children, selectedConnection, setSelectedConnection,
 }: ApiKeyAuthFlowProps) {
   const project = useProject();
-  const [connection, setConnection] = useState<Connection | null>(null);
   const [nextStep, setNextStep] = useState<boolean>(false);
   const [userApiKey, setUserApiKey] = useState<string | null>(null);
   const apiKey = useApiKey();
-
-  useEffect(() => {
-    if (connection !== null) {
-      setSelectedConnection(connection);
-    }
-  }, [connection, setSelectedConnection]);
 
   useEffect(() => {
     if (provider && api && nextStep && userApiKey != null) {
@@ -46,7 +40,7 @@ export function ApiKeyAuthFlow({
       api().connectionApi.generateConnection({ projectIdOrName: project.projectId, generateConnectionParams: req }, {
         headers: { 'X-Api-Key': apiKey ?? '', 'Content-Type': 'application/json' },
       }).then((conn) => {
-        setConnection(conn);
+        setSelectedConnection(conn);
       }).catch((err) => {
         console.error('Error loading provider info: ', err);
       });
@@ -58,7 +52,7 @@ export function ApiKeyAuthFlow({
     setNextStep(true);
   };
 
-  if (connection === null) {
+  if (selectedConnection === null) {
     return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
   }
 
