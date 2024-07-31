@@ -53,7 +53,8 @@ export function BasicAuthFlow({
         console.error('Error loading provider info: ', err);
       });
     }
-  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef, project, creds]);
+  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName,
+    groupRef, project, creds, setSelectedConnection]);
 
   const onNext = (user: string, pass: string) => {
     setCreds({ user, pass });

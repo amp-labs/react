@@ -43,7 +43,7 @@ export function NoAuthFlow({
         console.error('Error loading provider info: ', err);
       });
     }
-  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef, project]);
+  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef, setSelectedConnection, project]);
 
   const onNext = () => {
     setNextStep(true);

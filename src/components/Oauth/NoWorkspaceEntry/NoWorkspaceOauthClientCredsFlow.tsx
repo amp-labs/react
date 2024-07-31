@@ -2,7 +2,7 @@
  * OAuth flow for any providers that do not require the consumer to enter a workspace first.
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Connection, GenerateConnectionRequest } from '@generated/api/src';
 
 import {
