@@ -22,11 +22,11 @@ export function ApiKeyAuthFlow({
 }: ApiKeyAuthFlowProps) {
   const project = useProject();
   const [nextStep, setNextStep] = useState<boolean>(false);
-  const [userApiKey, setUserApiKey] = useState<string | null>(null);
+  const [providerApiKey, setProviderApiKey] = useState<string | null>(null);
   const apiKey = useApiKey();
 
   useEffect(() => {
-    if (provider && api && nextStep && userApiKey != null) {
+    if (provider && api && nextStep && providerApiKey != null) {
       const req: GenerateConnectionRequest = {
         projectId: project.projectId,
         groupName,
@@ -34,7 +34,7 @@ export function ApiKeyAuthFlow({
         consumerName,
         consumerRef,
         provider,
-        apiKey: userApiKey,
+        apiKey: providerApiKey,
       };
 
       api().connectionApi.generateConnection({ projectIdOrName: project.projectId, generateConnectionParams: req }, {
@@ -45,10 +45,11 @@ export function ApiKeyAuthFlow({
         console.error('Error loading provider info: ', err);
       });
     }
-  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef, project, userApiKey]);
+  }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef,
+    project, setSelectedConnection, providerApiKey]);
 
   const onNext = (value: string) => {
-    setUserApiKey(value);
+    setProviderApiKey(value);
     setNextStep(true);
   };
 

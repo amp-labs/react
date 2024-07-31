@@ -28,19 +28,11 @@ interface NoWorkspaceOauthClientCredsFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function WorkspaceOauthClientCredsFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, setSelectedConnection,
+  provider, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection,
 }: NoWorkspaceOauthClientCredsFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
-
-  const [connection, setConnection] = useState<Connection | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (connection !== null) {
-      setSelectedConnection(connection);
-    }
-  }, [connection, setSelectedConnection]);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async (creds: WorkspaceClientCredentialsCreds) => {
@@ -62,14 +54,14 @@ export function WorkspaceOauthClientCredsFlow({
     api().connectionApi.generateConnection({ projectIdOrName: projectId, generateConnectionParams: req }, {
       headers: { 'X-Api-Key': apiKey ?? '', 'Content-Type': 'application/json' },
     }).then((conn) => {
-      setConnection(conn);
+      setSelectedConnection(conn);
     }).catch((err) => {
       console.error('Error loading provider info: ', err);
       setError('Error loading provider info');
     });
   };
 
-  if (connection === null) {
+  if (selectedConnection === null) {
     return <ClientCredentialsContent provider={provider} handleSubmit={handleSubmit} error={error} />;
   }
 
