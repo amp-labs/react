@@ -28,7 +28,9 @@ export function LandingContent({
   const onToggleShowHide = () => setShow(!show);
   const [apiKey, setApiKey] = useState('');
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setApiKey(event.currentTarget.value);
+
   const apiKeyValid = apiKey.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !apiKeyValid;
 
   return (
     <ApiKeyAuthCardLayout>
@@ -42,7 +44,6 @@ export function LandingContent({
         <Stack spacing={4}>
           <InputGroup size="md">
             <Input
-              isInvalid={!apiKeyValid}
               onChange={handlePasswordChange}
               pr="4.5rem"
               type={show ? 'text' : 'password'}
@@ -59,8 +60,7 @@ export function LandingContent({
         <br />
 
         <Button
-          disabled={!apiKeyValid}
-          isDisabled={isButtonDisabled}
+          isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"
           onClick={() => {

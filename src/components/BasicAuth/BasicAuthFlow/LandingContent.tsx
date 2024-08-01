@@ -34,6 +34,7 @@ export function LandingContent({
 
   const userValid = username.length > 0;
   const passValid = password.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !userValid || !passValid;
 
   return (
     <BasicAuthCardLayout>
@@ -45,10 +46,9 @@ export function LandingContent({
         <br />
 
         <Stack spacing={4}>
-          <Input isInvalid={!userValid} placeholder="Username" onChange={handleUsernameChange} />
+          <Input placeholder="Username" onChange={handleUsernameChange} />
           <InputGroup size="md">
             <Input
-              isInvalid={!passValid}
               onChange={handlePasswordChange}
               pr="4.5rem"
               type={show ? 'text' : 'password'}
@@ -65,8 +65,7 @@ export function LandingContent({
         <br />
 
         <Button
-          disabled={!userValid || !passValid}
-          isDisabled={isButtonDisabled}
+          isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"
           onClick={() => {

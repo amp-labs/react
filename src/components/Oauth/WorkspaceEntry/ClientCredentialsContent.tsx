@@ -43,6 +43,7 @@ export function ClientCredentialsContent({
   const clientSecretValid = clientSecret.length > 0;
   const clientIdValid = clientId.length > 0;
   const workspaceValid = workspace.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !clientSecretValid || !clientIdValid || !workspaceValid;
 
   return (
     <OauthCardLayout>
@@ -59,10 +60,9 @@ export function ClientCredentialsContent({
             placeholder="MyWorkspace"
             onChange={handleWorkspaceChange}
           />
-          <Input isInvalid={!clientIdValid} placeholder="Client ID" onChange={handleClientIdChange} />
+          <Input placeholder="Client ID" onChange={handleClientIdChange} />
           <InputGroup size="md">
             <Input
-              isInvalid={!clientSecretValid}
               onChange={handleClientSecretChange}
               pr="4.5rem"
               type={show ? 'text' : 'password'}
@@ -79,7 +79,7 @@ export function ClientCredentialsContent({
         <br />
 
         <Button
-          isDisabled={!workspaceValid || !clientIdValid || !clientSecretValid || isButtonDisabled}
+          isDisabled={!isSubmitDisabled}
           width="100%"
           type="submit"
           onClick={() => {
