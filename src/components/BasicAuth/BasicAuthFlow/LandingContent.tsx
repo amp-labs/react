@@ -32,9 +32,9 @@ export function LandingContent({
   const handleUsernameChange = (event: React.FormEvent<HTMLInputElement>) => setUsername(event.currentTarget.value);
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
-  const userValid = username.length > 0;
-  const passValid = password.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !userValid || !passValid;
+  const isUserValid = username.length > 0;
+  const isPassValid = password.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
 
   return (
     <BasicAuthCardLayout>

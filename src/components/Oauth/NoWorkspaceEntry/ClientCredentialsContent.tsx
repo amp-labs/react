@@ -38,9 +38,9 @@ export function ClientCredentialsContent({
   const handleClientSecretChange = (event: React.FormEvent<HTMLInputElement>) => setClientSecret(event.currentTarget.value);
   const handleClientIdChange = (event: React.FormEvent<HTMLInputElement>) => setClientId(event.currentTarget.value);
 
-  const clientSecretValid = clientSecret.length > 0;
-  const clientIdValid = clientId.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !clientSecretValid || !clientIdValid;
+  const isClientSecretValid = clientSecret.length > 0;
+  const isClientIdValid = clientId.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !isClientSecretValid || !isClientIdValid;
 
   return (
     <OauthCardLayout>

@@ -29,8 +29,8 @@ export function LandingContent({
   const [apiKey, setApiKey] = useState('');
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setApiKey(event.currentTarget.value);
 
-  const apiKeyValid = apiKey.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !apiKeyValid;
+  const isApiKeyValid = apiKey.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
 
   return (
     <ApiKeyAuthCardLayout>

@@ -40,10 +40,10 @@ export function ClientCredentialsContent({
   const handleClientIdChange = (event: React.FormEvent<HTMLInputElement>) => setClientId(event.currentTarget.value);
   const handleWorkspaceChange = (event: React.FormEvent<HTMLInputElement>) => setWorkspace(event.currentTarget.value);
 
-  const clientSecretValid = clientSecret.length > 0;
-  const clientIdValid = clientId.length > 0;
-  const workspaceValid = workspace.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !clientSecretValid || !clientIdValid || !workspaceValid;
+  const isClientSecretValid = clientSecret.length > 0;
+  const isClientIdValid = clientId.length > 0;
+  const isWorkspaceValid = workspace.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !isClientSecretValid || !isClientIdValid || !isWorkspaceValid;
 
   return (
     <OauthCardLayout>
