@@ -56,7 +56,6 @@ export function ClientCredentialsContent({
 
         <Stack spacing={4}>
           <Input
-            isInvalid={!workspaceValid}
             placeholder="MyWorkspace"
             onChange={handleWorkspaceChange}
           />
