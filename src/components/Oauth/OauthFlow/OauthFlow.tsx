@@ -1,43 +1,51 @@
-import { useEffect, useState } from 'react';
-
-import { useApiKey } from 'context/ApiKeyContextProvider';
-import { api, ProviderInfo } from 'services/api';
-
-import { NoWorkspaceOauthFlow } from '../NoWorkspaceEntry/NoWorkspaceOauthFlow';
-import { WorkspaceOauthFlow } from '../WorkspaceEntry/WorkspaceOauthFlow';
+import {
+  NoWorkspaceOauthClientCredsFlow,
+} from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthClientCredsFlow';
+import { NoWorkspaceOauthFlow } from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
+import {
+  WorkspaceOauthClientCredsFlow,
+} from 'components/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
+import { WorkspaceOauthFlow } from 'components/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
+import { Connection, ProviderInfo } from 'services/api';
 
 type OauthFlowProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  selectedConnection: Connection | null;
+  setSelectedConnection: (connection: Connection | null) => void;
 };
 
 export function OauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName,
+  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection,
 }: OauthFlowProps) {
-  const apiKey = useApiKey();
-  const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
+  if (providerInfo.oauth2Opts === undefined) {
+    return <em>Provider is missing OAuth2 options</em>;
+  }
 
-  useEffect(() => {
-    if (provider && api) {
-      api().providerApi.getProvider({ provider }, {
-        headers: { 'X-Api-Key': apiKey ?? '' },
-      }).then((_providerInfo) => {
-        setProviderInfo(_providerInfo);
-      }).catch((err) => {
-        console.error('Error loading provider info: ', err);
-      });
+  const { grantType } = providerInfo.oauth2Opts;
+  const workspaceRequired = providerInfo.oauth2Opts.explicitWorkspaceRequired;
+
+  if (grantType === 'authorizationCode') {
+    // required workspace
+    if (workspaceRequired) {
+      return (
+        <WorkspaceOauthFlow
+          provider={provider}
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        />
+      );
     }
-  }, [apiKey, provider]);
 
-  const workspaceRequired = providerInfo?.oauth2Opts?.explicitWorkspaceRequired ?? false;
-
-  // required workspace
-  if (workspaceRequired) {
+    // no workspace required
     return (
-      <WorkspaceOauthFlow
+      <NoWorkspaceOauthFlow
         provider={provider}
         consumerRef={consumerRef}
         consumerName={consumerName}
@@ -47,14 +55,41 @@ export function OauthFlow({
     );
   }
 
-  // no workspace required
-  return (
-    <NoWorkspaceOauthFlow
-      provider={provider}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-    />
-  );
+  if (grantType === 'clientCredentials') {
+    if (workspaceRequired) {
+      return (
+        <WorkspaceOauthClientCredsFlow
+          provider={provider}
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+          setSelectedConnection={setSelectedConnection}
+          selectedConnection={selectedConnection}
+        />
+      );
+    }
+
+    return (
+      <NoWorkspaceOauthClientCredsFlow
+        provider={provider}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+        setSelectedConnection={setSelectedConnection}
+        selectedConnection={selectedConnection}
+      />
+    );
+  }
+
+  if (grantType === 'password') {
+    return <em>Password flow not supported yet</em>;
+  }
+
+  if (grantType === 'PKCE') {
+    return <em>PKCE flow not supported yet</em>;
+  }
+
+  return <em>Unsupported grant type: {grantType}</em>;
 }

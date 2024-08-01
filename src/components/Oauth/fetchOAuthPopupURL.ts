@@ -11,28 +11,42 @@ export const fetchOAuthPopupURL = async (
   consumerName?: string,
   groupName?: string,
 ): Promise<string> => {
-  const providerApps = await api().providerAppApi.listProviderApps({ projectIdOrName: projectId }, {
+  const provInfo = await api().providerApi.getProvider({ provider }, {
     headers: { 'X-Api-Key': apiKey ?? '' },
   });
-  const app = providerApps.find((a: ProviderApp) => a.provider === provider);
-
-  if (!app) {
-    throw new Error(`You must first set up a ${capitalize(provider)} Provider App using the Ampersand Console.`);
+  if (!provInfo) {
+    throw new Error(`Provider ${provider} not found`);
   }
 
-  const request: OauthConnectOperationRequest = {
-    connectOAuthParams: {
-      providerWorkspaceRef: workspace,
-      projectId,
-      groupRef,
-      groupName,
-      consumerRef,
-      consumerName,
-      providerAppId: app.id,
-      provider,
-    },
-  };
+  if (provInfo.authType === 'oauth2') {
+    if (provInfo.oauth2Opts?.grantType === 'authorizationCode') {
+      const providerApps = await api().providerAppApi.listProviderApps({ projectIdOrName: projectId }, {
+        headers: { 'X-Api-Key': apiKey ?? '' },
+      });
 
-  const url = await api().oAuthApi.oauthConnect(request);
-  return url;
+      const app = providerApps.find((a: ProviderApp) => a.provider === provider);
+
+      if (!app) {
+        throw new Error(`You must first set up a ${capitalize(provider)} Provider App using the Ampersand Console.`);
+      }
+
+      const request: OauthConnectOperationRequest = {
+        connectOAuthParams: {
+          providerWorkspaceRef: workspace,
+          projectId,
+          groupRef,
+          groupName,
+          consumerRef,
+          consumerName,
+          providerAppId: app.id,
+          provider,
+        },
+      };
+
+      const url = await api().oAuthApi.oauthConnect(request);
+      return url;
+    }
+  }
+
+  throw new Error(`Provider ${provider} does not support an OAuth2 web flow.`);
 };
