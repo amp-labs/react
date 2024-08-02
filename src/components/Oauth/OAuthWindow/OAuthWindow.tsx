@@ -5,9 +5,9 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 
 import {
-  getOpenWindowHandler,
-  getReceiveMessageEventHandler,
-  getRefreshConnectionHandler,
+  useOpenWindowHandler,
+  useReceiveMessageEventHandler,
+  useRefreshConnectionHandler,
 } from './windowHelpers';
 
 type OAuthWindowProps = {
@@ -31,9 +31,9 @@ export function OAuthWindow({
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const { setSelectedConnection } = useConnections();
 
-  const receiveMessage = getReceiveMessageEventHandler(setConnectionId);
-  const openOAuthWindow = getOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
-  const refreshConnections = getRefreshConnectionHandler(projectId, apiKey, setSelectedConnection);
+  const receiveMessage = useReceiveMessageEventHandler(setConnectionId);
+  const openOAuthWindow = useOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
+  const refreshConnections = useRefreshConnectionHandler(projectId, apiKey, setSelectedConnection);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {

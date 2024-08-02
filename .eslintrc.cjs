@@ -28,7 +28,8 @@ module.exports = {
     'import/prefer-default-export': 0,
     'react/jsx-props-no-spreading': 0,
     'react/require-default-props': 0,
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/rules-of-hooks': 'error',
     '@typescript-eslint/no-unused-vars': 'warn', // TODO: delete this once codebase is more stable.
   },
   overrides: [
