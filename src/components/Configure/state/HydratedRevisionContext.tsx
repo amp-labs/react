@@ -72,7 +72,6 @@ export function HydratedRevisionProvider({
         },
       })
         .then((data) => {
-          console.log('Hydrated revision data from source:', data);
           setHydratedRevision(data);
           setLoading(false);
           removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
