@@ -72,6 +72,7 @@ export function HydratedRevisionProvider({
         },
       })
         .then((data) => {
+          console.log('Hydrated revision data from source:', data);
           setHydratedRevision(data);
           setLoading(false);
           removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
@@ -97,9 +98,8 @@ export function HydratedRevisionProvider({
     loading,
   }), [hydratedRevision, loading]);
 
-  const errorMsg = `Error retrieving integration details for '${
-    integrationObj?.name || integrationId || 'unknown integration'
-  }. This is sometimes caused by insufficient permissions with your credentials'`;
+  const errorMsg = `Error retrieving integration details for '${integrationObj?.name || integrationId || 'unknown integration'
+    }. This is sometimes caused by insufficient permissions with your credentials'`;
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>

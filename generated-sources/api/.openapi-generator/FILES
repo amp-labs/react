@@ -30,12 +30,14 @@ src/models/ApiKeyRequest.ts
 src/models/ApiProblem.ts
 src/models/AuthType.ts
 src/models/Backfill.ts
+src/models/BackfillConfig.ts
 src/models/BaseConfigContent.ts
 src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
 src/models/BaseReadConfigObject.ts
 src/models/BaseWriteConfig.ts
 src/models/BaseWriteConfigObject.ts
+src/models/BasicAuthOpts.ts
 src/models/BatchUpsertIntegrationsRequest.ts
 src/models/Builder.ts
 src/models/BuilderInfo.ts
@@ -60,6 +62,7 @@ src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/DefaultPeriod.ts
+src/models/DefaultPeriodConfig.ts
 src/models/Destination.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
@@ -94,6 +97,9 @@ src/models/IntegrationWriteObject.ts
 src/models/Invite.ts
 src/models/Log.ts
 src/models/LogMessage.ts
+src/models/Media.ts
+src/models/MediaTypeDarkMode.ts
+src/models/MediaTypeRegular.ts
 src/models/Oauth2Opts.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts

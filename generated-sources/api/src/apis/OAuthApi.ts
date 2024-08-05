@@ -55,21 +55,6 @@ export interface OAuthApiInterface {
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
-    /**
-     * Options endpoint for CORS preflight request
-     * @summary Options endpoint
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OAuthApiInterface
-     */
-    oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Options endpoint for CORS preflight request
-     * Options endpoint
-     */
-    oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
 }
 
 /**
@@ -114,33 +99,6 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.oauthConnectRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Options endpoint for CORS preflight request
-     * Options endpoint
-     */
-    async oauthConnectCorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/oauth-connect`,
-            method: 'OPTIONS',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Options endpoint for CORS preflight request
-     * Options endpoint
-     */
-    async oauthConnectCors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.oauthConnectCorsRaw(initOverrides);
     }
 
 }

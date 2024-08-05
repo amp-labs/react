@@ -72,6 +72,7 @@ const generateCreateReadConfigFromConfigureState = (
             destination: obj.destination,
             selectedFields,
             selectedFieldMappings,
+            backfill: obj.backfill,
           },
         },
       },

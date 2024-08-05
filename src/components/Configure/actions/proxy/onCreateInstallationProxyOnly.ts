@@ -38,7 +38,7 @@ const generateProxyOnlyConfig = (
 type CreateInstallationProxyOnlyProps = CreateInstallationSharedProps & {
   hydratedRevision: HydratedRevision;
   consumerRef: string;
-} ;
+};
 
 export function onCreateInstallationProxyOnly({
   projectId,
