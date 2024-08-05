@@ -14,44 +14,43 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * Configuration for API key in query parameter. Must be provided if type is in-query.
+ * Configuration for Basic Auth. Optional.
  * @export
- * @interface ApiKeyOptsQuery
+ * @interface BasicAuthOpts
  */
-export interface ApiKeyOptsQuery {
+export interface BasicAuthOpts {
     /**
-     * The name of the query parameter to be used for the API key.
+     * URL with more information about how to get or use an API key.
      * @type {string}
-     * @memberof ApiKeyOptsQuery
+     * @memberof BasicAuthOpts
      */
-    name: string;
+    docsURL?: string;
 }
 
 /**
- * Check if a given object implements the ApiKeyOptsQuery interface.
+ * Check if a given object implements the BasicAuthOpts interface.
  */
-export function instanceOfApiKeyOptsQuery(value: object): boolean {
+export function instanceOfBasicAuthOpts(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
 
-export function ApiKeyOptsQueryFromJSON(json: any): ApiKeyOptsQuery {
-    return ApiKeyOptsQueryFromJSONTyped(json, false);
+export function BasicAuthOptsFromJSON(json: any): BasicAuthOpts {
+    return BasicAuthOptsFromJSONTyped(json, false);
 }
 
-export function ApiKeyOptsQueryFromJSONTyped(json: any, ignoreDiscriminator: boolean): ApiKeyOptsQuery {
+export function BasicAuthOptsFromJSONTyped(json: any, ignoreDiscriminator: boolean): BasicAuthOpts {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
+        'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
     };
 }
 
-export function ApiKeyOptsQueryToJSON(value?: ApiKeyOptsQuery | null): any {
+export function BasicAuthOptsToJSON(value?: BasicAuthOpts | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +59,7 @@ export function ApiKeyOptsQueryToJSON(value?: ApiKeyOptsQuery | null): any {
     }
     return {
         
-        'name': value.name,
+        'docsURL': value.docsURL,
     };
 }
 

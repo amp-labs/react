@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Backfill } from './Backfill';
+import {
+    BackfillFromJSON,
+    BackfillFromJSONTyped,
+    BackfillToJSON,
+} from './Backfill';
 import type { HydratedIntegrationField } from './HydratedIntegrationField';
 import {
     HydratedIntegrationFieldFromJSON,
@@ -80,6 +86,12 @@ export interface HydratedIntegrationObject {
      * @memberof HydratedIntegrationObject
      */
     allFields?: Array<HydratedIntegrationField>;
+    /**
+     * 
+     * @type {Backfill}
+     * @memberof HydratedIntegrationObject
+     */
+    backfill?: Backfill;
 }
 
 /**
@@ -113,6 +125,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
         'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
+        'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
 
@@ -133,6 +146,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
         'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
+        'backfill': BackfillToJSON(value.backfill),
     };
 }
 

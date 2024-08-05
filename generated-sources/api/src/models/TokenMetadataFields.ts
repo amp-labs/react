@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * Fields to be used to extract token metadata from the token response.
  * @export
  * @interface TokenMetadataFields
  */

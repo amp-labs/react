@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Backfill } from './Backfill';
+import {
+    BackfillFromJSON,
+    BackfillFromJSONTyped,
+    BackfillToJSON,
+} from './Backfill';
 import type { IntegrationField } from './IntegrationField';
 import {
     IntegrationFieldFromJSON,
@@ -68,6 +74,12 @@ export interface IntegrationObject {
      * @memberof IntegrationObject
      */
     optionalFieldsAuto?: OptionalFieldsAutoOption;
+    /**
+     * 
+     * @type {Backfill}
+     * @memberof IntegrationObject
+     */
+    backfill?: Backfill;
 }
 
 /**
@@ -98,6 +110,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
+        'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
 
@@ -116,6 +129,7 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
+        'backfill': BackfillToJSON(value.backfill),
     };
 }
 

@@ -16,37 +16,37 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface DefaultPeriod
+ * @interface DefaultPeriodConfig
  */
-export interface DefaultPeriod {
+export interface DefaultPeriodConfig {
     /**
      * Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.
      * @type {number}
-     * @memberof DefaultPeriod
+     * @memberof DefaultPeriodConfig
      */
     days?: number;
     /**
      * If true, backfill all history. Required if days is not set.
      * @type {boolean}
-     * @memberof DefaultPeriod
+     * @memberof DefaultPeriodConfig
      */
     fullHistory?: boolean;
 }
 
 /**
- * Check if a given object implements the DefaultPeriod interface.
+ * Check if a given object implements the DefaultPeriodConfig interface.
  */
-export function instanceOfDefaultPeriod(value: object): boolean {
+export function instanceOfDefaultPeriodConfig(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function DefaultPeriodFromJSON(json: any): DefaultPeriod {
-    return DefaultPeriodFromJSONTyped(json, false);
+export function DefaultPeriodConfigFromJSON(json: any): DefaultPeriodConfig {
+    return DefaultPeriodConfigFromJSONTyped(json, false);
 }
 
-export function DefaultPeriodFromJSONTyped(json: any, ignoreDiscriminator: boolean): DefaultPeriod {
+export function DefaultPeriodConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean): DefaultPeriodConfig {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -57,7 +57,7 @@ export function DefaultPeriodFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-export function DefaultPeriodToJSON(value?: DefaultPeriod | null): any {
+export function DefaultPeriodConfigToJSON(value?: DefaultPeriodConfig | null): any {
     if (value === undefined) {
         return undefined;
     }
