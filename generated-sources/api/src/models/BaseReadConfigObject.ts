@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Backfill } from './Backfill';
+import type { BackfillConfig } from './BackfillConfig';
 import {
-    BackfillFromJSON,
-    BackfillFromJSONTyped,
-    BackfillToJSON,
-} from './Backfill';
+    BackfillConfigFromJSON,
+    BackfillConfigFromJSONTyped,
+    BackfillConfigToJSON,
+} from './BackfillConfig';
 
 /**
  * 
@@ -58,10 +58,10 @@ export interface BaseReadConfigObject {
     selectedFieldMappings?: { [key: string]: string; };
     /**
      * 
-     * @type {Backfill}
+     * @type {BackfillConfig}
      * @memberof BaseReadConfigObject
      */
-    backfill?: Backfill;
+    backfill?: BackfillConfig;
 }
 
 /**
@@ -88,7 +88,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
-        'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
+        'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
     };
 }
 
@@ -106,7 +106,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedFieldMappings': value.selectedFieldMappings,
-        'backfill': BackfillToJSON(value.backfill),
+        'backfill': BackfillConfigToJSON(value.backfill),
     };
 }
 

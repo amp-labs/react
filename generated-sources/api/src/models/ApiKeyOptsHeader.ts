@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * Configuration for API key in header. Must be provided if type is in-header.
  * @export
  * @interface ApiKeyOptsHeader
  */

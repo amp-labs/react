@@ -31,7 +31,7 @@ export interface Backfill {
      * @type {DefaultPeriod}
      * @memberof Backfill
      */
-    defaultPeriod?: DefaultPeriod;
+    defaultPeriod: DefaultPeriod;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface Backfill {
  */
 export function instanceOfBackfill(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "defaultPeriod" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function BackfillFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'defaultPeriod': !exists(json, 'defaultPeriod') ? undefined : DefaultPeriodFromJSON(json['defaultPeriod']),
+        'defaultPeriod': DefaultPeriodFromJSON(json['defaultPeriod']),
     };
 }
 
