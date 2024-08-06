@@ -18,7 +18,7 @@ interface AmpersandProviderProps {
   options: {
     apiKey: string,
     /**
-     * Use `project` instead of `projectId`. 
+     * Use `project` instead of `projectId`.
      * @deprecated
      */
     projectId?: string,
@@ -35,14 +35,14 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options: { apiKey, projectId, project }, children } = props;
   const projectIdOrName = project || projectId;
   if (projectId && project) {
-    throw new Error(`Use AmpersandProvider either with projectId or project but not both.`);
+    throw new Error('Use AmpersandProvider either with projectId or project but not both.');
   }
   if (!projectIdOrName) {
-    throw new Error(`Cannot use AmpersandProvider without a projectId or name.`);
+    throw new Error('Cannot use AmpersandProvider without a projectId or name.');
   }
 
-  if(!apiKey) {
-    throw new Error(`Cannot use AmpersandProvider without an apiKey.`);
+  if (!apiKey) {
+    throw new Error('Cannot use AmpersandProvider without an apiKey.');
   }
 
   return (
