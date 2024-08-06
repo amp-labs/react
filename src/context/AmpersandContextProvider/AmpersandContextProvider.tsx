@@ -13,24 +13,45 @@ import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
 import { IntegrationListProvider } from '../IntegrationListContextProvider';
 import { ProjectProvider } from '../ProjectContextProvider';
+import { deprecate } from 'util';
 
 interface AmpersandProviderProps {
   options: {
     apiKey: string,
-    projectId: string,
+    /**
+     * Use `project` instead of `projectId`. 
+     * @deprecated
+     */
+    projectId?: string,
+    /**
+     * `project` is the project ID or name.
+     */
+    project?: string,
     styles?: object,
   },
   children: React.ReactNode
 }
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const { options: { apiKey, projectId }, children } = props;
+  const { options: { apiKey, projectId, project }, children } = props;
+  const projectIdOrName = project || projectId;
+  if (projectId && project) {
+    throw new Error(`Use AmpersandProvider either with projectId or project but not both.`);
+  }
+  if (!projectIdOrName) {
+    throw new Error(`Cannot use AmpersandProvider without a projectId or name.`);
+  }
+  
+  if(!apiKey) {
+    throw new Error(`Cannot use AmpersandProvider without an apiKey.`);
+  }
+
   return (
     <ThemeProvider>
       <ErrorStateProvider>
         <ApiKeyProvider value={apiKey}>
-          <ProjectProvider projectId={projectId}>
-            <IntegrationListProvider projectId={projectId}>
+          <ProjectProvider projectIdOrName={projectIdOrName}>
+            <IntegrationListProvider projectIdOrName={projectIdOrName}>
               {children}
             </IntegrationListProvider>
           </ProjectProvider>
