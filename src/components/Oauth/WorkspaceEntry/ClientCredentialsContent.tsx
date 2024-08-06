@@ -78,7 +78,7 @@ export function ClientCredentialsContent({
         <br />
 
         <Button
-          isDisabled={!isSubmitDisabled}
+          isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"
           onClick={() => {
