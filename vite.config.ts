@@ -29,14 +29,51 @@ export default defineConfig(({ mode }) => ({
     }) as PluginOption],
   build: {
     outDir: './build',
-    lib: {
-      entry: './src/index.ts',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `amp-react.${format}.js`,
-    },
+    // lib: {
+    //   entry: './src/index.ts',
+    //   formats: ['es', 'cjs'],
+    //   fileName: (format) => `amp-react.${format}.js`,
+    // },
     rollupOptions: {
+      input: {
+        lib: path.resolve(__dirname, './src/index.ts'),
+        webComponent: path.resolve(__dirname, './src/webcomponents/index.tsx'),
+      },
+      output: [
+        // Output for React library
+        {
+          dir: 'build/lib',
+          format: 'es',
+          entryFileNames: 'amp-react.es.js',
+          chunkFileNames: '[name]-[hash].js',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+        {
+          dir: 'build/lib',
+          format: 'cjs',
+          entryFileNames: 'amp-react.cjs.js',
+          chunkFileNames: '[name]-[hash].js',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+        // Output for Web Component
+        {
+          dir: 'build/web-component',
+          format: 'es',
+          entryFileNames: 'my-web-component.js',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+      ],
       external: [...Object.keys(packageJson.peerDependencies),
-        'react/jsx-runtime'],
+        'react/jsx-runtime', 'react-dom/client'],
     },
   },
 }));

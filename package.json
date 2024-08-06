@@ -22,6 +22,10 @@
     ".": {
       "import": "./build/amp-react.es.js",
       "require": "./build/amp-react.cjs.js"
+    },
+    "./web-component": {
+      "import": "./build/web-component/my-web-component.js",
+      "require": "./build/web-component/my-web-component.js"
     }
   },
   "files": [
@@ -55,6 +59,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@jest/globals": "^29.5.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@r2wc/react-to-web-component": "^2.0.3",
     "@types/lodash.isequal": "^4.5.7",
     "@types/node": "^22.0.0",
     "@types/react": "^18.2.33",
