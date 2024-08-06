@@ -13,7 +13,6 @@ import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
 import { IntegrationListProvider } from '../IntegrationListContextProvider';
 import { ProjectProvider } from '../ProjectContextProvider';
-import { deprecate } from 'util';
 
 interface AmpersandProviderProps {
   options: {
@@ -41,7 +40,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   if (!projectIdOrName) {
     throw new Error(`Cannot use AmpersandProvider without a projectId or name.`);
   }
-  
+
   if(!apiKey) {
     throw new Error(`Cannot use AmpersandProvider without an apiKey.`);
   }
