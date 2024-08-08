@@ -12,6 +12,7 @@ import {
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
+import { LoadingIcon } from 'src/assets/LoadingIcon';
 
 interface NoWorkspaceOauthClientCredsFlowProps {
   provider: string;
@@ -65,5 +66,5 @@ export function WorkspaceOauthClientCredsFlow({
     return <ClientCredentialsContent provider={provider} handleSubmit={handleSubmit} error={error} />;
   }
 
-  return <em>Loading...</em>;
+  return <LoadingIcon />;
 }

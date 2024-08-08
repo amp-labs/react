@@ -33,8 +33,9 @@ export function LandingContent({
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
   const isUserValid = username.length > 0;
-  const isPassValid = password.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
+  // password is optional in basic auth
+  // (Some providers (like Chargebee) actually wants the password field to be left empty)
+  const isSubmitDisabled = isButtonDisabled || !isUserValid;
 
   return (
     <BasicAuthCardLayout>
