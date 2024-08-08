@@ -34,12 +34,12 @@ export const useProject = (): ProjectContextValue => {
 };
 
 type ProjectProviderProps = {
-  projectId: string,
+  projectIdOrName: string,
   children?: React.ReactNode;
 };
 
 export function ProjectProvider(
-  { projectId, children }: ProjectProviderProps,
+  { projectIdOrName, children }: ProjectProviderProps,
 ) {
   const apiKey = useApiKey();
   const { isError, setError } = useErrorState();
@@ -47,7 +47,7 @@ export function ProjectProvider(
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    api().projectApi.getProject({ projectIdOrName: projectId }, {
+    api().projectApi.getProject({ projectIdOrName }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
@@ -55,19 +55,19 @@ export function ProjectProvider(
       setLoadingState(false);
       setProject(_project);
     }).catch((err) => {
-      setError(ErrorBoundary.PROJECT, projectId);
+      setError(ErrorBoundary.PROJECT, projectIdOrName);
       setLoadingState(false);
       console.error('Error loading Ampersand project: ', err);
     });
-  }, [projectId, apiKey, setLoadingState, setError]);
+  }, [projectIdOrName, apiKey, setLoadingState, setError]);
 
   const contextValue = useMemo(() => ({
-    projectId, project, appName: project?.appName || '',
-  }), [projectId, project]);
+    projectId: projectIdOrName, project, appName: project?.appName || '',
+  }), [projectIdOrName, project]);
 
   return (
-    isError(ErrorBoundary.PROJECT, projectId)
-      ? <ErrorTextBox message={`Error loading project ${projectId}`} />
+    isError(ErrorBoundary.PROJECT, projectIdOrName)
+      ? <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />
       : (
         <ProjectContext.Provider value={contextValue}>
           {isLoading ? <LoadingIcon /> : children}

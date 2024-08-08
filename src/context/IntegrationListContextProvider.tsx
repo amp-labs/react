@@ -29,12 +29,12 @@ export const useIntegrationList = (): IntegrationListContextValue => {
 };
 
 type IntegrationListContextProviderProps = {
-  projectId: string,
+  projectIdOrName: string,
   children?: React.ReactNode;
 };
 
 export function IntegrationListProvider(
-  { projectId, children }: IntegrationListContextProviderProps,
+  { projectIdOrName, children }: IntegrationListContextProviderProps,
 ) {
   const apiKey = useApiKey();
   const { setError, isError } = useErrorState();
@@ -42,7 +42,7 @@ export function IntegrationListProvider(
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    api().integrationApi.listIntegrations({ projectIdOrName: projectId }, {
+    api().integrationApi.listIntegrations({ projectIdOrName }, {
       headers: {
         'X-Api-Key': apiKey ?? '',
       },
@@ -51,17 +51,17 @@ export function IntegrationListProvider(
       setIntegrations(_integrations || []);
     }).catch((err) => {
       setLoadingState(false);
-      setError(ErrorBoundary.INTEGRATION_LIST, projectId);
+      setError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName);
       console.error('Error retrieving integration information for : ', err);
     });
-  }, [projectId, apiKey, setError]);
+  }, [projectIdOrName, apiKey, setError]);
 
   const contextValue = useMemo(() => ({
     integrations,
   }), [integrations]);
 
   return (
-    isError(ErrorBoundary.INTEGRATION_LIST, projectId)
+    isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)
       ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
       : (
         <IntegrationListContext.Provider value={contextValue}>
