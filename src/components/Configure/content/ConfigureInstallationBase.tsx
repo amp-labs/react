@@ -46,9 +46,10 @@ export function ConfigureInstallationBase(
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
 
-  // is this a new state (modified or creating a new state)
   // if the read object is not completed, it is a new state
-  const isStateNew = isModified || isCreateMode || (selectedObjectName !== OTHER_CONST && !isSelectedReadConfigComplete);
+  const isSelectedReadObjectComplete = (selectedObjectName !== OTHER_CONST && !isSelectedReadConfigComplete);
+  // is this a new state (modified or creating a new state)
+  const isStateNew = isModified || isCreateMode || isSelectedReadObjectComplete;
 
   // should the save button be disabled?
   const isDisabled = loading || isLoading || !configureState || !selectedObjectName
