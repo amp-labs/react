@@ -1,16 +1,28 @@
-import { Text } from '@chakra-ui/react';
+import { Link, Text } from '@chakra-ui/react';
 
-export function DocsURL({ url, children }: { url: string | undefined, children: React.ReactNode; }) {
+type DocsURLProps = {
+  url: string | undefined;
+  provider: string;
+  credentialName: string;
+};
+
+export function DocsURL({ url, provider, credentialName }: DocsURLProps) {
   if (!url) {
     return null;
   }
 
   return (
-    <Text align="right" color="darkgray">
+    <Text align="left" color="darkgray">
       <em>
-        <a href={url} target="_blank" rel="noreferrer">
-          {children}
-        </a>
+        <Link
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          color="blackAlpha.600"
+          isExternal
+        >
+          Learn more
+        </Link> about where to find your {provider} {credentialName}.
       </em>
     </Text>
   );

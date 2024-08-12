@@ -18,13 +18,14 @@ import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (user: string, pass: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
@@ -51,6 +52,8 @@ export function LandingContent({
         <BasicAuthErrorAlert error={error} />
         <br />
 
+        <DocsURL url={providerInfo.apiKeyOpts?.docsURL} provider={provider} credentialName="basic auth credentials" />
+
         <Stack spacing={4}>
           <Input placeholder="Username" onChange={handleUsernameChange} />
           <InputGroup size="md">
@@ -67,12 +70,6 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
-
-        <br />
-
-        <DocsURL url={providerInfo.basicOpts?.docsURL}>
-          Where can I find my {provider} basic auth credentials?
-        </DocsURL>
 
         <br />
 

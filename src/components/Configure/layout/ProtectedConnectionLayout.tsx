@@ -90,6 +90,7 @@ export function ProtectedConnectionLayout({
     return (
       <BasicAuthFlow
         provider={selectedProvider}
+        providerInfo={providerInfo}
         consumerRef={consumerRef}
         consumerName={consumerName}
         setSelectedConnection={setSelectedConnection}

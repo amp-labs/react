@@ -44,6 +44,8 @@ export function LandingContent({
         <ApiKeyAuthErrorAlert error={error} />
         <br />
 
+        <DocsURL url={providerInfo.apiKeyOpts?.docsURL} provider={provider} credentialName="API key" />
+
         <Stack spacing={4}>
           <InputGroup size="md">
             <Input
@@ -59,12 +61,6 @@ export function LandingContent({
             </InputRightElement>
           </InputGroup>
         </Stack>
-
-        <br />
-
-        <DocsURL url={providerInfo.apiKeyOpts?.docsURL}>
-          Where can I find my {provider} API key?
-        </DocsURL>
 
         <br />
 
