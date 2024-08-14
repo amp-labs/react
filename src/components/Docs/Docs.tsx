@@ -13,17 +13,15 @@ export function DocsURL({ url, provider, credentialName }: DocsURLProps) {
 
   return (
     <Text align="left" color="darkgray">
-      <em>
-        <Link
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-          color="blackAlpha.600"
-          isExternal
-        >
-          Learn more
-        </Link> about where to find your {provider} {credentialName}.
-      </em>
+      <Link
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        color="blackAlpha.600"
+        isExternal
+      >
+        Learn more
+      </Link> about where to find your {provider} {credentialName}.
     </Text>
   );
 }
