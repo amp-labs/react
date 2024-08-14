@@ -1,5 +1,6 @@
 # This is a builder image for the project. Feel free to use it, but it's
-# not an actual working environment meant for production, it's for releases.
+# not an actual working environment meant for production, it's for releases
+# and certain automations.
 FROM node:22-alpine3.19
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 WORKDIR /app
