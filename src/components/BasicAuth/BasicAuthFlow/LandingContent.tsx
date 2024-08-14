@@ -24,10 +24,6 @@ type LandingContentProps = {
   isButtonDisabled?: boolean;
 };
 
-function capitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 export function LandingContent({
   provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
@@ -39,7 +35,7 @@ export function LandingContent({
   const handleUsernameChange = (event: React.FormEvent<HTMLInputElement>) => setUsername(event.currentTarget.value);
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
-  const providerName = providerInfo.displayName ?? capitalizeFirstLetter(provider);
+  const providerName = providerInfo.displayName ?? capitalize(provider);
   const isUserValid = username.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isUserValid;
   // This is a workaround for the fact that some providers use Basic Auth
@@ -57,7 +53,11 @@ export function LandingContent({
         <BasicAuthErrorAlert error={error} />
         <br />
 
-        <DocsURL url={providerInfo.apiKeyOpts?.docsURL} provider={providerName} credentialName="basic auth credentials" />
+        <DocsURL
+          url={providerInfo.apiKeyOpts?.docsURL}
+          provider={providerName}
+          credentialName="basic auth credentials"
+        />
 
         <Stack spacing={4}>
           <Input placeholder="Username" onChange={handleUsernameChange} />
