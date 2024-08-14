@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {GenerateConnectionRequest, ProviderInfo} from '@generated/api/src';
+import { GenerateConnectionRequest, ProviderInfo } from '@generated/api/src';
 
 import { LandingContent } from 'components/BasicAuth/BasicAuthFlow/LandingContent';
 import { useApiKey } from 'context/ApiKeyContextProvider';
