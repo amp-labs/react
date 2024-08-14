@@ -36,6 +36,7 @@ export function LandingContent({
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
   const providerName = providerInfo.displayName ?? capitalize(provider);
+  const docsURL = providerInfo.apiKeyOpts?.docsURL;
   const isUserValid = username.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isUserValid;
   // This is a workaround for the fact that some providers use Basic Auth
@@ -53,13 +54,15 @@ export function LandingContent({
         <BasicAuthErrorAlert error={error} />
         <br />
 
-        <DocsURL
-          url={providerInfo.apiKeyOpts?.docsURL}
-          provider={providerName}
-          credentialName="basic auth credentials"
-        />
-
         <Stack spacing={4}>
+          {docsURL && (
+            <DocsURL
+              url={docsURL}
+              provider={providerName}
+              credentialName="basic auth credentials"
+            />
+          )}
+
           <Input placeholder="Username" onChange={handleUsernameChange} />
           <InputGroup size="md">
             <Input

@@ -1,16 +1,12 @@
 import { Link, Text } from '@chakra-ui/react';
 
 type DocsURLProps = {
-  url: string | undefined;
+  url: string;
   provider: string;
   credentialName: string;
 };
 
 export function DocsURL({ url, provider, credentialName }: DocsURLProps) {
-  if (!url) {
-    return null;
-  }
-
   return (
     <Text align="left" color="darkgray">
       <Link
@@ -20,7 +16,7 @@ export function DocsURL({ url, provider, credentialName }: DocsURLProps) {
         color="blackAlpha.600"
         isExternal
       >
-        Learn more
+        <span style={{ textDecoration: 'underline' }}>Learn more</span>
       </Link> about where to find your {provider} {credentialName}.
     </Text>
   );

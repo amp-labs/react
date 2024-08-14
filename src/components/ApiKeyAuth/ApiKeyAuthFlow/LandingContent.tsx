@@ -35,23 +35,25 @@ export function LandingContent({
   const isApiKeyValid = apiKey.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
   const providerName = providerInfo.displayName ?? capitalize(provider);
+  const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (
     <ApiKeyAuthCardLayout>
       <FormControl>
-        <FormLabel marginTop="16" marginBottom="0">
+        <FormLabel my="6">
           <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
         </FormLabel>
         <ApiKeyAuthErrorAlert error={error} />
-        <br />
-
-        <DocsURL
-          url={providerInfo.apiKeyOpts?.docsURL}
-          provider={providerName}
-          credentialName="API key"
-        />
 
         <Stack spacing={4}>
+          {docsURL && (
+            <DocsURL
+              url={docsURL}
+              provider={providerName}
+              credentialName="API key"
+            />
+          )}
+
           <InputGroup size="md">
             <Input
               onChange={handlePasswordChange}
