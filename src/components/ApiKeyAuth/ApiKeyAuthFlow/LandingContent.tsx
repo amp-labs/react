@@ -24,6 +24,10 @@ type LandingContentProps = {
   isButtonDisabled?: boolean;
 };
 
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function LandingContent({
   provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
@@ -34,6 +38,7 @@ export function LandingContent({
 
   const isApiKeyValid = apiKey.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
+  const providerName = providerInfo.displayName ?? capitalizeFirstLetter(provider);
 
   return (
     <ApiKeyAuthCardLayout>
@@ -44,7 +49,7 @@ export function LandingContent({
         <ApiKeyAuthErrorAlert error={error} />
         <br />
 
-        <DocsURL url={providerInfo.apiKeyOpts?.docsURL} provider={provider} credentialName="API key" />
+        <DocsURL url={providerInfo.apiKeyOpts?.docsURL} provider={providerName} credentialName="API key" />
 
         <Stack spacing={4}>
           <InputGroup size="md">
