@@ -4,8 +4,10 @@
 FROM node:22-alpine3.19
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 WORKDIR /app
+# Install dependencies
 RUN apk update && apk add --no-cache ca-certificates git bash openjdk11-jre jq openssh python3 && rm -rf /var/cache/apk/*
 COPY . .
+# Pre-cache node modules, set up ssh, install gh, and install gcloud
 RUN yarn install && \
     mv node_modules /tmp/ && \
     cd / && \
