@@ -9,20 +9,23 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
+import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (user: string, pass: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
@@ -32,6 +35,8 @@ export function LandingContent({
   const handleUsernameChange = (event: React.FormEvent<HTMLInputElement>) => setUsername(event.currentTarget.value);
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
+  const providerName = providerInfo.displayName ?? capitalize(provider);
+  const docsURL = providerInfo.basicOpts?.docsURL;
   const isUserValid = username.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isUserValid;
   // This is a workaround for the fact that some providers use Basic Auth
@@ -50,6 +55,14 @@ export function LandingContent({
         <br />
 
         <Stack spacing={4}>
+          {docsURL && (
+            <DocsHelperText
+              url={docsURL}
+              providerDisplayName={providerName}
+              credentialName="credentials"
+            />
+          )}
+
           <Input placeholder="Username" onChange={handleUsernameChange} />
           <InputGroup size="md">
             <Input

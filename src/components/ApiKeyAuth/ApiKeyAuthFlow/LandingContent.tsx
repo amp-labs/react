@@ -9,20 +9,23 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { ProviderInfo } from '@generated/api/src';
 
 import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
+import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
+  providerInfo: ProviderInfo;
   handleSubmit: (value: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow(!show);
@@ -31,17 +34,26 @@ export function LandingContent({
 
   const isApiKeyValid = apiKey.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
+  const providerName = providerInfo.displayName ?? capitalize(provider);
+  const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (
     <ApiKeyAuthCardLayout>
       <FormControl>
-        <FormLabel marginTop="16" marginBottom="0">
+        <FormLabel my="6">
           <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
         </FormLabel>
         <ApiKeyAuthErrorAlert error={error} />
-        <br />
 
         <Stack spacing={4}>
+          {docsURL && (
+            <DocsHelperText
+              url={docsURL}
+              providerDisplayName={providerName}
+              credentialName="API key"
+            />
+          )}
+
           <InputGroup size="md">
             <Input
               onChange={handlePasswordChange}
