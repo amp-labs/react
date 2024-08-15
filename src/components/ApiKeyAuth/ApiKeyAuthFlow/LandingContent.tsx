@@ -13,7 +13,7 @@ import { ProviderInfo } from '@generated/api/src';
 
 import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
-import { DocsURL } from 'components/Docs/Docs';
+import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
@@ -47,9 +47,9 @@ export function LandingContent({
 
         <Stack spacing={4}>
           {docsURL && (
-            <DocsURL
+            <DocsHelperText
               url={docsURL}
-              provider={providerName}
+              providerDisplayName={providerName}
               credentialName="API key"
             />
           )}

@@ -13,7 +13,7 @@ import { ProviderInfo } from '@generated/api/src';
 
 import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
-import { DocsURL } from 'components/Docs/Docs';
+import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
@@ -36,7 +36,7 @@ export function LandingContent({
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value);
 
   const providerName = providerInfo.displayName ?? capitalize(provider);
-  const docsURL = providerInfo.apiKeyOpts?.docsURL;
+  const docsURL = providerInfo.basicOpts?.docsURL;
   const isUserValid = username.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isUserValid;
   // This is a workaround for the fact that some providers use Basic Auth
@@ -56,10 +56,10 @@ export function LandingContent({
 
         <Stack spacing={4}>
           {docsURL && (
-            <DocsURL
+            <DocsHelperText
               url={docsURL}
-              provider={providerName}
-              credentialName="basic auth credentials"
+              providerDisplayName={providerName}
+              credentialName="credentials"
             />
           )}
 
