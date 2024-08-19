@@ -23,6 +23,7 @@ src/apis/index.ts
 src/index.ts
 src/models/AcceptInviteRequest.ts
 src/models/ApiKey.ts
+src/models/ApiKeyAsBasicOpts.ts
 src/models/ApiKeyOpts.ts
 src/models/ApiKeyOptsHeader.ts
 src/models/ApiKeyOptsQuery.ts

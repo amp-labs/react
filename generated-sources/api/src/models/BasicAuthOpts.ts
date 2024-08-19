@@ -13,12 +13,31 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ApiKeyAsBasicOpts } from './ApiKeyAsBasicOpts';
+import {
+    ApiKeyAsBasicOptsFromJSON,
+    ApiKeyAsBasicOptsFromJSONTyped,
+    ApiKeyAsBasicOptsToJSON,
+} from './ApiKeyAsBasicOpts';
+
 /**
  * Configuration for Basic Auth. Optional.
  * @export
  * @interface BasicAuthOpts
  */
 export interface BasicAuthOpts {
+    /**
+     * If true, the provider uses an API key which then gets encoded as a basic auth user:pass string.
+     * @type {boolean}
+     * @memberof BasicAuthOpts
+     */
+    apiKeyAsBasic?: boolean;
+    /**
+     * 
+     * @type {ApiKeyAsBasicOpts}
+     * @memberof BasicAuthOpts
+     */
+    apiKeyAsBasicOpts?: ApiKeyAsBasicOpts;
     /**
      * URL with more information about how to get or use an API key.
      * @type {string}
@@ -46,6 +65,8 @@ export function BasicAuthOptsFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
+        'apiKeyAsBasic': !exists(json, 'apiKeyAsBasic') ? undefined : json['apiKeyAsBasic'],
+        'apiKeyAsBasicOpts': !exists(json, 'apiKeyAsBasicOpts') ? undefined : ApiKeyAsBasicOptsFromJSON(json['apiKeyAsBasicOpts']),
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
     };
 }
@@ -59,6 +80,8 @@ export function BasicAuthOptsToJSON(value?: BasicAuthOpts | null): any {
     }
     return {
         
+        'apiKeyAsBasic': value.apiKeyAsBasic,
+        'apiKeyAsBasicOpts': ApiKeyAsBasicOptsToJSON(value.apiKeyAsBasicOpts),
         'docsURL': value.docsURL,
     };
 }

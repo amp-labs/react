@@ -31,6 +31,12 @@ export interface GenerateConnectionRequestOauth2ClientCredentials {
      * @memberof GenerateConnectionRequestOauth2ClientCredentials
      */
     clientSecret: string;
+    /**
+     * The scopes to use for the connection (optional).
+     * @type {Array<string>}
+     * @memberof GenerateConnectionRequestOauth2ClientCredentials
+     */
+    scopes?: Array<string>;
 }
 
 /**
@@ -56,6 +62,7 @@ export function GenerateConnectionRequestOauth2ClientCredentialsFromJSONTyped(js
         
         'clientId': json['clientId'],
         'clientSecret': json['clientSecret'],
+        'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
     };
 }
 
@@ -70,6 +77,7 @@ export function GenerateConnectionRequestOauth2ClientCredentialsToJSON(value?: G
         
         'clientId': value.clientId,
         'clientSecret': value.clientSecret,
+        'scopes': value.scopes,
     };
 }
 
