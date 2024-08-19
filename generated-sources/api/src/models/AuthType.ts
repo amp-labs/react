@@ -14,7 +14,7 @@
 
 
 /**
- * 
+ * The type of authentication required by the provider.
  * @export
  */
 export const AuthType = {

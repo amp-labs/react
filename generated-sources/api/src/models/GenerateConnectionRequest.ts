@@ -39,12 +39,6 @@ import {
  */
 export interface GenerateConnectionRequest {
     /**
-     * The ID of the project that this connection belongs to.
-     * @type {string}
-     * @memberof GenerateConnectionRequest
-     */
-    projectId: string;
-    /**
      * The ID of the provider workspace that this connection belongs to.
      * @type {string}
      * @memberof GenerateConnectionRequest
@@ -111,7 +105,6 @@ export interface GenerateConnectionRequest {
  */
 export function instanceOfGenerateConnectionRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "consumerRef" in value;
     isInstance = isInstance && "provider" in value;
@@ -129,7 +122,6 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'projectId': json['projectId'],
         'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
         'groupRef': json['groupRef'],
@@ -152,7 +144,6 @@ export function GenerateConnectionRequestToJSON(value?: GenerateConnectionReques
     }
     return {
         
-        'projectId': value.projectId,
         'providerWorkspaceRef': value.providerWorkspaceRef,
         'groupName': value.groupName,
         'groupRef': value.groupRef,

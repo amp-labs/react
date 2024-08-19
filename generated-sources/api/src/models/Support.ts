@@ -21,7 +21,7 @@ import {
 } from './BulkWriteSupport';
 
 /**
- * 
+ * The supported features for the provider.
  * @export
  * @interface Support
  */

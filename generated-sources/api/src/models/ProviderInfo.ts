@@ -99,7 +99,7 @@ export interface ProviderInfo {
      */
     support: Support;
     /**
-     * 
+     * Additional provider-specific metadata.
      * @type {{ [key: string]: string; }}
      * @memberof ProviderInfo
      */
@@ -122,6 +122,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     media?: Media;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof ProviderInfo
+     */
+    labels?: { [key: string]: string; };
 }
 
 /**
@@ -159,6 +165,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
+        'labels': !exists(json, 'labels') ? undefined : json['labels'],
     };
 }
 
@@ -182,6 +189,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'displayName': value.displayName,
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
         'media': MediaToJSON(value.media),
+        'labels': value.labels,
     };
 }
 

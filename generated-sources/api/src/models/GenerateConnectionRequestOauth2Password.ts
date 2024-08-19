@@ -43,6 +43,12 @@ export interface GenerateConnectionRequestOauth2Password {
      * @memberof GenerateConnectionRequestOauth2Password
      */
     clientSecret: string;
+    /**
+     * The scopes to use for the connection (optional).
+     * @type {Array<string>}
+     * @memberof GenerateConnectionRequestOauth2Password
+     */
+    scopes?: Array<string>;
 }
 
 /**
@@ -72,6 +78,7 @@ export function GenerateConnectionRequestOauth2PasswordFromJSONTyped(json: any, 
         'password': json['password'],
         'clientId': json['clientId'],
         'clientSecret': json['clientSecret'],
+        'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
     };
 }
 
@@ -88,6 +95,7 @@ export function GenerateConnectionRequestOauth2PasswordToJSON(value?: GenerateCo
         'password': value.password,
         'clientId': value.clientId,
         'clientSecret': value.clientSecret,
+        'scopes': value.scopes,
     };
 }
 

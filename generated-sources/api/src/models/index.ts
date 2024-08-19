@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AcceptInviteRequest';
 export * from './ApiKey';
+export * from './ApiKeyAsBasicOpts';
 export * from './ApiKeyOpts';
 export * from './ApiKeyOptsHeader';
 export * from './ApiKeyOptsQuery';
