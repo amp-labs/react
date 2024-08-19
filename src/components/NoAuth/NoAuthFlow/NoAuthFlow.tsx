@@ -27,7 +27,6 @@ export function NoAuthFlow({
   useEffect(() => {
     if (provider && api && nextStep) {
       const req: GenerateConnectionRequest = {
-        projectId: project.projectId,
         groupName,
         groupRef,
         consumerName,
