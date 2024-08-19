@@ -41,7 +41,7 @@ export function LandingContent({
     <ApiKeyAuthCardLayout>
       <FormControl>
         <FormLabel my="6">
-          <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
+          <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
         <ApiKeyAuthErrorAlert error={error} />
 

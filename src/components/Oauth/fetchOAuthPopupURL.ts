@@ -25,9 +25,10 @@ export const fetchOAuthPopupURL = async (
       });
 
       const app = providerApps.find((a: ProviderApp) => a.provider === provider);
+      const providerName = provInfo.displayName ?? capitalize(provider);
 
       if (!app) {
-        throw new Error(`You must first set up a ${capitalize(provider)} Provider App using the Ampersand Console.`);
+        throw new Error(`You must first set up a ${providerName} Provider App using the Ampersand Console.`);
       }
 
       const request: OauthConnectOperationRequest = {
