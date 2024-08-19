@@ -35,7 +35,6 @@ export function BasicAuthFlow({
   useEffect(() => {
     if (provider && api && nextStep && creds != null) {
       const req: GenerateConnectionRequest = {
-        projectId: project.projectId,
         groupName,
         groupRef,
         consumerName,

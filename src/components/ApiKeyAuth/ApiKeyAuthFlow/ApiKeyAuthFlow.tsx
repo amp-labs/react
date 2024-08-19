@@ -30,7 +30,6 @@ export function ApiKeyAuthFlow({
   useEffect(() => {
     if (provider && api && nextStep && providerApiKey != null) {
       const req: GenerateConnectionRequest = {
-        projectId: project.projectId,
         groupName,
         groupRef,
         consumerName,
