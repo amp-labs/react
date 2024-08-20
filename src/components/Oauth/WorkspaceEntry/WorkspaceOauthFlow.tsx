@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { capitalize } from 'src/utils';
 
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
@@ -18,6 +17,7 @@ interface WorkspaceOauthFlowProps {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  providerName?: string;
 }
 
 /**
@@ -26,7 +26,7 @@ interface WorkspaceOauthFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function WorkspaceOauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName,
+  provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: WorkspaceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
@@ -78,17 +78,17 @@ export function WorkspaceOauthFlow({
     ) : (
   // general workspace entry component
       <WorkspaceEntry
-        provider={provider}
         handleSubmit={handleSubmit}
         setWorkspace={setWorkspace}
         error={error}
         isButtonDisabled={workspace.length === 0}
+        providerName={providerName}
       />
     );
 
   return (
     <OAuthWindow
-      windowTitle={`Connect to ${capitalize(provider)}`}
+      windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthCallbackURL}
       onClose={onClose}
     >

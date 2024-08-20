@@ -7,7 +7,7 @@ import {
 
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { capitalize } from 'src/utils';
+import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
@@ -87,7 +87,7 @@ export function ObjectManagementNav({
         fontSize="md"
       >
         <Box width="20rem">
-          <Text>{capitalize(provider)} integration</Text>
+          <Text>{getProviderName(provider)} integration</Text>
           <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
           {isNavObjectsReady && (
             <Tabs

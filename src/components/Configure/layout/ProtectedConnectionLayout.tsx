@@ -9,6 +9,7 @@ import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, ProviderInfo } from 'services/api';
+import { capitalize } from 'src/utils';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -48,6 +49,8 @@ export function ProtectedConnectionLayout({
 
   const selectedProvider = provider || providerFromProps;
 
+  const providerName = providerInfo?.displayName ?? capitalize(selectedProvider);
+
   useEffect(() => {
     if (!selectedConnection && connections && connections.length > 0) {
       const [connection] = connections;
@@ -80,6 +83,7 @@ export function ProtectedConnectionLayout({
         selectedConnection={selectedConnection}
         groupRef={groupRef}
         groupName={groupName}
+        providerName={providerName}
       >
         {children}
       </NoAuthFlow>

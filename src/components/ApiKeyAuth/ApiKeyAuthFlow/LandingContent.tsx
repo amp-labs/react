@@ -14,7 +14,7 @@ import { ProviderInfo } from '@generated/api/src';
 import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
-import { capitalize } from 'src/utils';
+import { getProviderName } from 'src/utils';
 
 type LandingContentProps = {
   provider: string;
@@ -34,7 +34,7 @@ export function LandingContent({
 
   const isApiKeyValid = apiKey.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
-  const providerName = providerInfo.displayName ?? capitalize(provider);
+  const providerName = getProviderName(provider, providerInfo);
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (

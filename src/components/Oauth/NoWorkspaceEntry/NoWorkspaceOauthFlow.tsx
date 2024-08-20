@@ -6,7 +6,6 @@ import { useCallback, useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { capitalize } from 'src/utils';
 
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
@@ -19,6 +18,7 @@ interface NoWorkspaceOauthFlowProps {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  providerName?: string;
 }
 
 /**
@@ -26,7 +26,7 @@ interface NoWorkspaceOauthFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function NoWorkspaceOauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName,
+  provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: NoWorkspaceOauthFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
@@ -62,11 +62,11 @@ export function NoWorkspaceOauthFlow({
 
   return (
     <OAuthWindow
-      windowTitle={`Connect to ${capitalize(provider)}`}
+      windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthPopupURL}
       onClose={onClose}
     >
-      <LandingContent provider={provider} handleSubmit={handleSubmit} error={error} />
+      <LandingContent handleSubmit={handleSubmit} error={error} providerName={providerName} />
     </OAuthWindow>
   );
 }

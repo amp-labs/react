@@ -12,13 +12,15 @@ type NoAuthFlowProps = {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  providerName?: string;
   children: JSX.Element,
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
 };
 
 export function NoAuthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, children, selectedConnection, setSelectedConnection,
+  provider, consumerRef, consumerName, groupRef, groupName,
+  children, selectedConnection, setSelectedConnection, providerName,
 }: NoAuthFlowProps) {
   const project = useProject();
   const apiKey = useApiKey();
@@ -50,7 +52,7 @@ export function NoAuthFlow({
   };
 
   if (selectedConnection === null) {
-    return <LandingContent provider={provider} handleSubmit={onNext} error={null} />;
+    return <LandingContent handleSubmit={onNext} error={null} providerName={providerName} />;
   }
 
   return children;

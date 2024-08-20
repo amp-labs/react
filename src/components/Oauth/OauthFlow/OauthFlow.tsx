@@ -7,6 +7,7 @@ import {
 } from 'components/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
 import { WorkspaceOauthFlow } from 'components/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
 import { Connection, ProviderInfo } from 'services/api';
+import { getProviderName } from 'src/utils';
 
 type OauthFlowProps = {
   provider: string;
@@ -28,6 +29,7 @@ export function OauthFlow({
 
   const { grantType } = providerInfo.oauth2Opts;
   const workspaceRequired = providerInfo.oauth2Opts.explicitWorkspaceRequired;
+  const providerName = getProviderName(provider, providerInfo);
 
   if (grantType === 'authorizationCode') {
     // required workspace
@@ -39,6 +41,7 @@ export function OauthFlow({
           consumerName={consumerName}
           groupRef={groupRef}
           groupName={groupName}
+          providerName={providerName}
         />
       );
     }
@@ -51,6 +54,7 @@ export function OauthFlow({
         consumerName={consumerName}
         groupRef={groupRef}
         groupName={groupName}
+        providerName={providerName}
       />
     );
   }
@@ -66,6 +70,7 @@ export function OauthFlow({
           groupName={groupName}
           setSelectedConnection={setSelectedConnection}
           selectedConnection={selectedConnection}
+          providerName={providerName}
         />
       );
     }
@@ -79,6 +84,7 @@ export function OauthFlow({
         groupName={groupName}
         setSelectedConnection={setSelectedConnection}
         selectedConnection={selectedConnection}
+        providerName={providerName}
       />
     );
   }

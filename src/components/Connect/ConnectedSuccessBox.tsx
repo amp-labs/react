@@ -1,5 +1,5 @@
 import { useProject } from 'context/ProjectContextProvider';
-import { capitalize } from 'src/utils';
+import { getProviderName } from 'src/utils';
 
 import { SuccessTextBox } from '../SuccessTextBox';
 
@@ -8,7 +8,7 @@ interface ConnectedSuccessBoxProps {
 }
 export function ConnectedSuccessBox({ provider }: ConnectedSuccessBoxProps) {
   const { appName } = useProject();
-  const text = `You have successfully connected your ${capitalize(provider)} account to ${appName}.`;
+  const text = `You have successfully connected your ${getProviderName(provider)} account to ${appName}.`;
   return (
     <SuccessTextBox text={text} />
   );
