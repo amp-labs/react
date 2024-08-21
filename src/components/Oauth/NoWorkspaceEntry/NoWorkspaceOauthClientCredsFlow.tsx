@@ -39,7 +39,6 @@ export function NoWorkspaceOauthClientCredsFlow({
   const handleSubmit = async (creds: ClientCredentialsCreds) => {
     setError(null);
     const req: GenerateConnectionRequest = {
-      projectId,
       groupName,
       groupRef,
       consumerName,
