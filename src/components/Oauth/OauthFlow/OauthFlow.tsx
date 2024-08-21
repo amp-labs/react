@@ -9,6 +9,9 @@ import { WorkspaceOauthFlow } from 'components/Oauth/WorkspaceEntry/WorkspaceOau
 import { Connection, ProviderInfo } from 'services/api';
 import { getProviderName } from 'src/utils';
 
+const AUTHORIZATION_CODE = 'authorizationCode';
+const CLIENT_CREDENTIALS = 'clientCredentials';
+
 type OauthFlowProps = {
   provider: string;
   providerInfo: ProviderInfo;
@@ -27,13 +30,12 @@ export function OauthFlow({
     return <em>Provider is missing OAuth2 options</em>;
   }
 
-  const { grantType } = providerInfo.oauth2Opts;
-  const workspaceRequired = providerInfo.oauth2Opts.explicitWorkspaceRequired;
+  const { grantType, explicitScopesRequired, explicitWorkspaceRequired } = providerInfo.oauth2Opts;
   const providerName = getProviderName(provider, providerInfo);
 
-  if (grantType === 'authorizationCode') {
+  if (grantType === AUTHORIZATION_CODE) {
     // required workspace
-    if (workspaceRequired) {
+    if (explicitWorkspaceRequired) {
       return (
         <WorkspaceOauthFlow
           provider={provider}
@@ -59,8 +61,8 @@ export function OauthFlow({
     );
   }
 
-  if (grantType === 'clientCredentials') {
-    if (workspaceRequired) {
+  if (grantType === CLIENT_CREDENTIALS) {
+    if (explicitWorkspaceRequired) {
       return (
         <WorkspaceOauthClientCredsFlow
           provider={provider}
@@ -68,6 +70,7 @@ export function OauthFlow({
           consumerName={consumerName}
           groupRef={groupRef}
           groupName={groupName}
+          explicitScopesRequired={explicitScopesRequired}
           setSelectedConnection={setSelectedConnection}
           selectedConnection={selectedConnection}
           providerName={providerName}
@@ -82,6 +85,7 @@ export function OauthFlow({
         consumerName={consumerName}
         groupRef={groupRef}
         groupName={groupName}
+        explicitScopesRequired={explicitScopesRequired}
         setSelectedConnection={setSelectedConnection}
         selectedConnection={selectedConnection}
         providerName={providerName}

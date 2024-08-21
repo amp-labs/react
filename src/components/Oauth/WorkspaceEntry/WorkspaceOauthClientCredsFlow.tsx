@@ -21,6 +21,7 @@ interface NoWorkspaceOauthClientCredsFlowProps {
   groupRef: string;
   groupName?: string;
   providerName?: string;
+  explicitScopesRequired?: boolean;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
 }
@@ -30,7 +31,9 @@ interface NoWorkspaceOauthClientCredsFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function WorkspaceOauthClientCredsFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection, providerName,
+  provider, providerName,
+  consumerRef, consumerName, groupRef, groupName, explicitScopesRequired,
+  selectedConnection, setSelectedConnection,
 }: NoWorkspaceOauthClientCredsFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
@@ -49,6 +52,7 @@ export function WorkspaceOauthClientCredsFlow({
       oauth2ClientCredentials: {
         clientId: creds.clientId,
         clientSecret: creds.clientSecret,
+        scopes: creds.scopes,
       },
     };
 
@@ -63,7 +67,14 @@ export function WorkspaceOauthClientCredsFlow({
   };
 
   if (selectedConnection === null) {
-    return <ClientCredentialsContent handleSubmit={handleSubmit} error={error} providerName={providerName} />;
+    return (
+      <ClientCredentialsContent
+        providerName={providerName}
+        handleSubmit={handleSubmit}
+        error={error}
+        explicitScopesRequired={explicitScopesRequired}
+      />
+    );
   }
 
   return <LoadingIcon />;
