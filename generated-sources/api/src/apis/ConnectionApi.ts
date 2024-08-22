@@ -126,6 +126,10 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/projects/{projectIdOrName}/connections:generate`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
@@ -160,6 +164,10 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/connections/{connectionId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
@@ -202,6 +210,10 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/connections`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),

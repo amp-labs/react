@@ -84,6 +84,10 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/providers/{provider}`.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))),
             method: 'GET',
@@ -109,6 +113,10 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/providers`,

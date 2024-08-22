@@ -81,6 +81,10 @@ export class ConsumerApi extends runtime.BaseAPI implements ConsumerApiInterface
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/projects/{projectIdOrName}/consumers`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',

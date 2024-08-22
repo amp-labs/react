@@ -126,6 +126,10 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
@@ -159,6 +163,10 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}/logs`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
@@ -197,6 +205,10 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),

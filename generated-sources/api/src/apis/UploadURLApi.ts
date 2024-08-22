@@ -64,6 +64,10 @@ export class UploadURLApi extends runtime.BaseAPI implements UploadURLApiInterfa
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/generate-upload-url`,
             method: 'GET',

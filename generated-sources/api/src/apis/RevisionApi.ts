@@ -112,6 +112,10 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/revisions`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'POST',
@@ -158,6 +162,10 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/revisions/{revisionId}:hydrate`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"revisionId"}}`, encodeURIComponent(String(requestParameters.revisionId))),

@@ -136,6 +136,10 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}/events/{eventId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
             method: 'GET',
@@ -173,6 +177,10 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}/events/{eventId}/logs`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))).replace(`{${"eventId"}}`, encodeURIComponent(String(requestParameters.eventId))),
@@ -215,6 +223,10 @@ export class OperationEventApi extends runtime.BaseAPI implements OperationEvent
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations/{operationId}/events`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
