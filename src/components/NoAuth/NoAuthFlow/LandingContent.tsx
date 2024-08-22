@@ -4,23 +4,22 @@ import {
 
 import { NoAuthCardLayout } from 'components/NoAuth/NoAuthCardLayout';
 import { NoAuthErrorAlert } from 'components/NoAuth/NoAuthErrorAlert';
-import { capitalize } from 'src/utils';
 
 type LandingContentProps = {
-  provider: string;
   handleSubmit: () => void;
   error: string | null;
   isButtonDisabled?: boolean;
+  providerName?: string;
 };
 
 export function LandingContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  handleSubmit, error, isButtonDisabled, providerName,
 }: LandingContentProps) {
   return (
     <NoAuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
-          <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
+          <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
         <NoAuthErrorAlert error={error} />
         <br />

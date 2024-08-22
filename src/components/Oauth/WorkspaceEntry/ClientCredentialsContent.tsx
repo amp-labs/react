@@ -12,7 +12,6 @@ import {
 
 import { OauthCardLayout } from 'components/Oauth/OauthCardLayout';
 import { OAuthErrorAlert } from 'components/Oauth/OAuthErrorAlert';
-import { capitalize } from 'src/utils';
 
 export type WorkspaceClientCredentialsCreds = {
   workspace: string;
@@ -21,14 +20,14 @@ export type WorkspaceClientCredentialsCreds = {
 };
 
 type LandingContentProps = {
-  provider: string;
   handleSubmit: (creds: WorkspaceClientCredentialsCreds) => void;
   error: string | null;
   isButtonDisabled?: boolean;
+  providerName?: string;
 };
 
 export function ClientCredentialsContent({
-  provider, handleSubmit, error, isButtonDisabled,
+  handleSubmit, error, isButtonDisabled, providerName,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
@@ -49,7 +48,7 @@ export function ClientCredentialsContent({
     <OauthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
-          <Heading as="h4" size="md">{`Set up ${capitalize(provider)} integration`}</Heading>
+          <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
         <OAuthErrorAlert error={error} />
         <br />
