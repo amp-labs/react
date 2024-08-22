@@ -34,7 +34,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const apiKey = useApiKey();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
   const {
-    integrationObj, installation, groupRef, consumerRef, setInstallation,
+    integrationObj, installation, groupRef, consumerRef, setInstallation, onInstallSuccess,
   } = useInstallIntegrationProps();
   const { selectedConnection } = useConnections();
   const [createInstallLoading, setCreateInstallLoading] = useState(false);
@@ -56,6 +56,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
         connectionId: selectedConnection?.id,
         hydratedRevision,
         setInstallation,
+        onInstallSuccess,
       }).then(() => {
         setCreateInstallLoading(false);
       }).catch((e) => {
@@ -63,8 +64,8 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
         console.error('Error when creating proxy installation:', e);
       });
     }
-  }, [hydratedRevision, isProxyOnly, installation,
-    selectedConnection, apiKey, projectId, integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading]);
+  }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey, projectId,
+    integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess]);
 
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
   if (isLoading) return <LoadingIcon />;
