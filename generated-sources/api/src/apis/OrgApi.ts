@@ -231,6 +231,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/orgs`,
             method: 'POST',
@@ -263,6 +267,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/orgs/{orgId}/invites`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
@@ -299,6 +307,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/orgs/{orgId}/invites/{inviteId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))).replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters.inviteId))),
             method: 'DELETE',
@@ -327,6 +339,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/orgs/{orgId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
@@ -362,6 +378,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/orgs/{orgId}/invites/{inviteId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))).replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters.inviteId))),
             method: 'GET',
@@ -392,6 +412,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/orgs/{orgId}/builders`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'GET',
@@ -421,6 +445,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/orgs/{orgId}/invites`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
@@ -457,6 +485,10 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
 
         const response = await this.request({
             path: `/orgs/{orgId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
