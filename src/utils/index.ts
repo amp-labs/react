@@ -9,6 +9,15 @@ export function getProviderName(provider: string, providerInfo?: ProviderInfo) {
 }
 
 /**
+ * Converts a textarea input into an array of strings
+ */
+export const convertTextareaToArray = (inputValue: string) => {
+  // Split the input into an array of strings using newline as the separator
+  const newArray = inputValue.split('\n').filter((str) => str.trim() !== '');
+  return newArray;
+};
+
+/**
  * Given the name of an integration, return the integration object
  *
  * @param integrationName {string} Name of the integration.
