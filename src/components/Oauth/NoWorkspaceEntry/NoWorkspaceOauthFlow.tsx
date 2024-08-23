@@ -55,7 +55,7 @@ export function NoWorkspaceOauthFlow({
     }
   };
 
-  const onClose = useCallback((err: string | null) => {
+  const onError = useCallback((err: string | null) => {
     setError(err);
     setOAuthPopupURL(null);
   }, []);
@@ -64,7 +64,7 @@ export function NoWorkspaceOauthFlow({
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthPopupURL}
-      onClose={onClose}
+      onError={onError}
     >
       <LandingContent handleSubmit={handleSubmit} error={error} providerName={providerName} />
     </OAuthWindow>
