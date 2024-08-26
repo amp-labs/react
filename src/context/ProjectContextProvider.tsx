@@ -15,12 +15,14 @@ interface ProjectContextValue {
   project: Project | null;
   appName: string;
   projectId: string;
+  projectIdOrName: string;
 }
 
 export const ProjectContext = createContext<ProjectContextValue>({
   project: null,
   appName: '',
   projectId: '',
+  projectIdOrName: '',
 });
 
 export const useProject = (): ProjectContextValue => {
@@ -62,7 +64,7 @@ export function ProjectProvider(
   }, [projectIdOrName, apiKey, setLoadingState, setError]);
 
   const contextValue = useMemo(() => ({
-    projectId: projectIdOrName, project, appName: project?.appName || '',
+    projectId: project?.id || '', projectIdOrName: projectIdOrName, project, appName: project?.appName || '',
   }), [projectIdOrName, project]);
 
   return (
