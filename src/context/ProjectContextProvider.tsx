@@ -64,7 +64,7 @@ export function ProjectProvider(
   }, [projectIdOrName, apiKey, setLoadingState, setError]);
 
   const contextValue = useMemo(() => ({
-    projectId: project?.id || '', projectIdOrName: projectIdOrName, project, appName: project?.appName || '',
+    projectId: project?.id || '', projectIdOrName, project, appName: project?.appName || '',
   }), [projectIdOrName, project]);
 
   return (
