@@ -1,0 +1,43 @@
+name: Publish React SDK to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number for the SDK'
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install modules
+      run: yarn
+
+    - name: Update version number
+      run: yarn version --new-version ${{ github.event.inputs.version }} --no-git-tag-version
+
+    - name: Build project
+      run: yarn build
+
+    - name: Publish to npm
+      id: publish_to_npm
+      run: yarn publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Push changes back to repository
+      if: steps.publish_to_npm.conclusion == 'success'
+      run: |
+        git config --global user.email "devops@withampersand.com"
+        git config --global user.name "Ampersand Ops"
+        git add package.json src/services/version.ts 
+        git commit -m "[ampersand-ops] release: version ${{ github.event.inputs.version }}"
+        git tag v${{ github.event.inputs.version }}
+        git remote set-url origin https://x-access-token:${{ secrets.AMPERSAND_OPS_PAT }}@github.com/${{ github.repository }}
+        git push origin --tags
+        git push origin HEAD:${{ github.ref }}
+
