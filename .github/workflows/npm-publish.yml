@@ -14,6 +14,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        always-auth: true
+
+    - name: Install yarn
+      run: npm i -g yarn
+
     - name: Install modules
       run: yarn
 
@@ -25,7 +35,7 @@ jobs:
 
     - name: Publish to npm
       id: publish_to_npm
-      run: yarn publish
+      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
