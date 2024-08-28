@@ -19,6 +19,12 @@ import {
     BackfillFromJSONTyped,
     BackfillToJSON,
 } from './Backfill';
+import type { Delivery } from './Delivery';
+import {
+    DeliveryFromJSON,
+    DeliveryFromJSONTyped,
+    DeliveryToJSON,
+} from './Delivery';
 import type { IntegrationField } from './IntegrationField';
 import {
     IntegrationFieldFromJSON,
@@ -80,6 +86,12 @@ export interface IntegrationObject {
      * @memberof IntegrationObject
      */
     backfill?: Backfill;
+    /**
+     * 
+     * @type {Delivery}
+     * @memberof IntegrationObject
+     */
+    delivery?: Delivery;
 }
 
 /**
@@ -111,6 +123,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
+        'delivery': !exists(json, 'delivery') ? undefined : DeliveryFromJSON(json['delivery']),
     };
 }
 
@@ -130,6 +143,7 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
         'backfill': BackfillToJSON(value.backfill),
+        'delivery': DeliveryToJSON(value.delivery),
     };
 }
 

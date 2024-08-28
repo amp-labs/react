@@ -65,6 +65,7 @@ src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
+src/models/Delivery.ts
 src/models/Destination.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
