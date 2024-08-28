@@ -43,6 +43,7 @@ export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
 export * from './DefaultPeriod';
 export * from './DefaultPeriodConfig';
+export * from './Delivery';
 export * from './Destination';
 export * from './GenerateConnectionRequest';
 export * from './GenerateConnectionRequestBasicAuth';
