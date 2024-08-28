@@ -14,39 +14,39 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of souceZipUrl or sourceYaml is required.
+ * The source of the revision to create. One of sourceZipUrl or sourceYaml is required.
  * @export
- * @interface CreateIntegrationRequestLatestRevision
+ * @interface CreateRevisionRequest
  */
-export interface CreateIntegrationRequestLatestRevision {
+export interface CreateRevisionRequest {
     /**
      * URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL).
      * @type {string}
-     * @memberof CreateIntegrationRequestLatestRevision
+     * @memberof CreateRevisionRequest
      */
     sourceZipUrl?: string;
     /**
-     * A YAML string that defines the integration.
+     * The source YAML file that defines the revision.
      * @type {string}
-     * @memberof CreateIntegrationRequestLatestRevision
+     * @memberof CreateRevisionRequest
      */
     sourceYaml?: string;
 }
 
 /**
- * Check if a given object implements the CreateIntegrationRequestLatestRevision interface.
+ * Check if a given object implements the CreateRevisionRequest interface.
  */
-export function instanceOfCreateIntegrationRequestLatestRevision(value: object): boolean {
+export function instanceOfCreateRevisionRequest(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function CreateIntegrationRequestLatestRevisionFromJSON(json: any): CreateIntegrationRequestLatestRevision {
-    return CreateIntegrationRequestLatestRevisionFromJSONTyped(json, false);
+export function CreateRevisionRequestFromJSON(json: any): CreateRevisionRequest {
+    return CreateRevisionRequestFromJSONTyped(json, false);
 }
 
-export function CreateIntegrationRequestLatestRevisionFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateIntegrationRequestLatestRevision {
+export function CreateRevisionRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateRevisionRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -57,7 +57,7 @@ export function CreateIntegrationRequestLatestRevisionFromJSONTyped(json: any, i
     };
 }
 
-export function CreateIntegrationRequestLatestRevisionToJSON(value?: CreateIntegrationRequestLatestRevision | null): any {
+export function CreateRevisionRequestToJSON(value?: CreateRevisionRequest | null): any {
     if (value === undefined) {
         return undefined;
     }

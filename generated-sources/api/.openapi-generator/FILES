@@ -63,6 +63,7 @@ src/models/CreateOrgInviteRequest.ts
 src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
+src/models/CreateRevisionRequest.ts
 src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
 src/models/Delivery.ts

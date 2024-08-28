@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * The source of the integrations to upsert. One of sourceZipUrl or sourceYaml is required.
  * @export
  * @interface BatchUpsertIntegrationsRequest
  */
@@ -24,7 +24,13 @@ export interface BatchUpsertIntegrationsRequest {
      * @type {string}
      * @memberof BatchUpsertIntegrationsRequest
      */
-    sourceZipUrl: string;
+    sourceZipUrl?: string;
+    /**
+     * A YAML string that defines the integrations.
+     * @type {string}
+     * @memberof BatchUpsertIntegrationsRequest
+     */
+    sourceYaml?: string;
 }
 
 /**
@@ -32,7 +38,6 @@ export interface BatchUpsertIntegrationsRequest {
  */
 export function instanceOfBatchUpsertIntegrationsRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "sourceZipUrl" in value;
 
     return isInstance;
 }
@@ -47,7 +52,8 @@ export function BatchUpsertIntegrationsRequestFromJSONTyped(json: any, ignoreDis
     }
     return {
         
-        'sourceZipUrl': json['sourceZipUrl'],
+        'sourceZipUrl': !exists(json, 'sourceZipUrl') ? undefined : json['sourceZipUrl'],
+        'sourceYaml': !exists(json, 'sourceYaml') ? undefined : json['sourceYaml'],
     };
 }
 
@@ -61,6 +67,7 @@ export function BatchUpsertIntegrationsRequestToJSON(value?: BatchUpsertIntegrat
     return {
         
         'sourceZipUrl': value.sourceZipUrl,
+        'sourceYaml': value.sourceYaml,
     };
 }
 
