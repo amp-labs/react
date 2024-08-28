@@ -41,6 +41,7 @@ export * from './CreateOrgInviteRequest';
 export * from './CreateOrgRequest';
 export * from './CreateProjectRequest';
 export * from './CreateProviderAppRequest';
+export * from './CreateRevisionRequest';
 export * from './DefaultPeriod';
 export * from './DefaultPeriodConfig';
 export * from './Delivery';

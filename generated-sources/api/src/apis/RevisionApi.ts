@@ -16,25 +16,25 @@
 import * as runtime from '../runtime';
 import type {
   ApiProblem,
-  BatchUpsertIntegrationsRequest,
+  CreateRevisionRequest,
   HydratedRevision,
   InputValidationProblem,
 } from '../models';
 import {
     ApiProblemFromJSON,
     ApiProblemToJSON,
-    BatchUpsertIntegrationsRequestFromJSON,
-    BatchUpsertIntegrationsRequestToJSON,
+    CreateRevisionRequestFromJSON,
+    CreateRevisionRequestToJSON,
     HydratedRevisionFromJSON,
     HydratedRevisionToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
 } from '../models';
 
-export interface CreateRevisionRequest {
+export interface CreateRevisionOperationRequest {
     projectIdOrName: string;
     integrationId: string;
-    revision?: BatchUpsertIntegrationsRequest;
+    revision?: CreateRevisionRequest;
 }
 
 export interface GetHydratedRevisionRequest {
@@ -56,17 +56,17 @@ export interface RevisionApiInterface {
      * @summary Create a new revision
      * @param {string} projectIdOrName 
      * @param {string} integrationId 
-     * @param {BatchUpsertIntegrationsRequest} [revision] 
+     * @param {CreateRevisionRequest} [revision] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RevisionApiInterface
      */
-    createRevisionRaw(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Create a new revision
      */
-    createRevision(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
@@ -97,7 +97,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     /**
      * Create a new revision
      */
-    async createRevisionRaw(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createRevision.');
         }
@@ -121,7 +121,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: BatchUpsertIntegrationsRequestToJSON(requestParameters.revision),
+            body: CreateRevisionRequestToJSON(requestParameters.revision),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -130,7 +130,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     /**
      * Create a new revision
      */
-    async createRevision(requestParameters: CreateRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createRevisionRaw(requestParameters, initOverrides);
     }
 
