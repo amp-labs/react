@@ -1,4 +1,5 @@
 import {
+  BackfillConfig,
   Config,
   HydratedIntegrationObject,
   HydratedRevision,
@@ -36,6 +37,7 @@ const generateUpdateReadConfigFromConfigureState = (
   hydratedObject: HydratedIntegrationObject,
   schedule: string,
   hydratedRevision: HydratedRevision,
+  backfill?: BackfillConfig,
 ): UpdateInstallationRequestInstallationConfig => {
   const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
@@ -54,6 +56,7 @@ const generateUpdateReadConfigFromConfigureState = (
             destination: hydratedObject?.destination || '',
             selectedFields,
             selectedFieldMappings,
+            backfill,
           },
         },
       },
@@ -91,6 +94,7 @@ export const onSaveReadUpdateInstallation = (
     hydratedObject,
     hydratedObject.schedule,
     hydratedRevision,
+    hydratedObject.backfill,
   );
 
   if (!updateConfig) {
