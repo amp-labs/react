@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of souceZipUrl or sourceYaml is required.
+ * If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of sourceZipUrl or sourceYaml is required.
  * @export
  * @interface CreateIntegrationRequestLatestRevision
  */
