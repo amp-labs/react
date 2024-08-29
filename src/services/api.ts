@@ -1,6 +1,7 @@
 /* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import {
+  BackfillConfig,
   Config,
   Configuration, Connection,
   CreateInstallationOperationRequest,
@@ -105,6 +106,7 @@ export const api = () => apiValue;
    * Types exported from generated api
    */
 export type {
+  BackfillConfig,
   Config,
   Connection,
   CreateInstallationOperationRequest,
