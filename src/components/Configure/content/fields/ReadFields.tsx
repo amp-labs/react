@@ -1,5 +1,6 @@
+import { OptionalFields } from './OptionalFields/radix/OptionaFieldsRadix';
 import { RequiredFieldMappings } from './FieldMappings';
-import { OptionalFields } from './OptionalFields';
+// import { OptionalFields } from './OptionalFields';
 import { RequiredFields } from './RequiredFields';
 
 export function ReadFields() {

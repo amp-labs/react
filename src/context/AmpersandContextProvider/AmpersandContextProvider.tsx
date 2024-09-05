@@ -6,6 +6,7 @@
  */
 
 import React, { createContext, useContext } from 'react';
+import { Theme } from '@radix-ui/themes';
 
 import { ThemeProvider } from 'components/ThemeProvider';
 
@@ -13,6 +14,8 @@ import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
 import { IntegrationListProvider } from '../IntegrationListContextProvider';
 import { ProjectProvider } from '../ProjectContextProvider';
+
+import '@radix-ui/themes/styles.css';
 
 interface AmpersandProviderProps {
   options: {
@@ -46,17 +49,21 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   }
 
   return (
+
     <ThemeProvider>
-      <ErrorStateProvider>
-        <ApiKeyProvider value={apiKey}>
-          <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider projectIdOrName={projectIdOrName}>
-              {children}
-            </IntegrationListProvider>
-          </ProjectProvider>
-        </ApiKeyProvider>
-      </ErrorStateProvider>
+      <Theme>
+        <ErrorStateProvider>
+          <ApiKeyProvider value={apiKey}>
+            <ProjectProvider projectIdOrName={projectIdOrName}>
+              <IntegrationListProvider projectIdOrName={projectIdOrName}>
+                {children}
+              </IntegrationListProvider>
+            </ProjectProvider>
+          </ApiKeyProvider>
+        </ErrorStateProvider>
+      </Theme>
     </ThemeProvider>
+
   );
 }
 
