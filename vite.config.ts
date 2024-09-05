@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@generated': path.resolve(__dirname, './generated-sources'),
+      '@styled-system': path.resolve(__dirname, './styled-system'),
       src: path.resolve(__dirname, './src'),
       assets: path.resolve(__dirname, './src/assets'),
       components: path.resolve(__dirname, './src/components'),

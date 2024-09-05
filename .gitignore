@@ -19,3 +19,7 @@ src/services/version.ts
 
 # bundle analyzer report
 stats.html
+
+## Panda
+styled-system
+styled-system-studio

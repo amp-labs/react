@@ -57,7 +57,8 @@ type ThemeProviderProps = {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
-    <ChakraProvider theme={theme}>
+    // reset CSS is disabled because we are using Panda's CSS reset (preflight)
+    <ChakraProvider theme={theme} resetCSS>
       {children}
     </ChakraProvider>
   );

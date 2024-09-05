@@ -33,6 +33,7 @@
       "@generated/*": [
         "./generated-sources/*"
       ],
+      "@/styled-system/*": ["./styled-system/*"],
       "src/*": [
         "./src/*"
       ],
@@ -122,7 +123,7 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src", ".eslintrc.cjs", "vite.config.ts"],
+  "include": ["src", ".eslintrc.cjs", "vite.config.ts", "styled-system", "panda.config.ts", "panda.config.cjs"],
   "exclude": [
     "build",
     "test/**/*.test.ts",
