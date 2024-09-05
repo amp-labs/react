@@ -18,6 +18,14 @@ export default defineConfig(({ mode }) => ({
       services: path.resolve(__dirname, './src/services'),
     },
   },
+  css: {
+    modules: {
+      // Enable CSS Modules for all CSS files (or you can configure a specific pattern)
+      scopeBehaviour: 'local', // Default is 'local', change to 'global' for global styles
+      generateScopedName: '[name]__[local]___[hash:base64:5]', // Customize class naming
+      localsConvention: 'camelCase', // Convert class names to camelCase
+    },
+  },
   plugins: [
     react(),
     dts({ rollupTypes: true }),
