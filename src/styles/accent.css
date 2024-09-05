@@ -1,0 +1,133 @@
+:root, .light, .light-theme {
+    --violet-1: #fdfdff;
+    --violet-2: #f8f8ff;
+    --violet-3: #f0f0ff;
+    --violet-4: #e6e5ff;
+    --violet-5: #dbd9ff;
+    --violet-6: #cdcaff;
+    --violet-7: #b9b4ff;
+    --violet-8: #a094ff;
+    --violet-9: #6122e7;
+    --violet-10: #5500d5;
+    --violet-11: #6538e5;
+    --violet-12: #301c72;
+  
+    --violet-a1: #0000ff02;
+    --violet-a2: #0000ff07;
+    --violet-a3: #0000ff0f;
+    --violet-a4: #0a00ff1a;
+    --violet-a5: #0e00ff26;
+    --violet-a6: #0f00ff35;
+    --violet-a7: #1201ff4b;
+    --violet-a8: #1d01ff6b;
+    --violet-a9: #4900e3dd;
+    --violet-a10: #5500d5;
+    --violet-a11: #3a00dec7;
+    --violet-a12: #170061e3;
+  
+    --violet-contrast: #fff;
+    --violet-surface: #f6f6ffcc;
+    --violet-indicator: #6122e7;
+    --violet-track: #6122e7;
+
+    /* Semantic tokens */
+    --accent-color-1: var(--violet-1);
+    --accent-color-2: var(--violet-2);
+    --accent-color-3: var(--violet-3);
+    --accent-color-4: var(--violet-4);
+    --accent-color-5: var(--violet-5);
+    --accent-color-6: var(--violet-6);
+    --accent-color-7: var(--violet-7);
+    --accent-color-8: var(--violet-8);
+    --accent-color-9: var(--violet-9);
+    --accent-color-10: var(--violet-10);
+    --accent-color-11: var(--violet-11);
+    --accent-color-12: var(--violet-12);
+
+    --accent-color-a1: var(--violet-a1);
+    --accent-color-a2: var(--violet-a2);
+    --accent-color-a3: var(--violet-a3);
+    --accent-color-a4: var(--violet-a4);
+    --accent-color-a5: var(--violet-a5);
+    --accent-color-a6: var(--violet-a6);
+    --accent-color-a7: var(--violet-a7);
+    --accent-color-a8: var(--violet-a8);
+    --accent-color-a9: var(--violet-a9);
+    --accent-color-a10: var(--violet-a10);
+    --accent-color-a11: var(--violet-a11);
+    --accent-color-a12: var(--violet-a12);
+
+    --accent-color-contrast: var(--violet-contrast);
+    --accent-color-surface: var(--violet-surface);
+    --accent-color-indicator: var(--violet-indicator);
+    --accent-color-track: var(--violet-track);
+  }
+  
+  @supports (color: color(display-p3 1 1 1)) {
+    @media (color-gamut: p3) {
+      :root, .light, .light-theme {
+        --violet-1: oklch(99.4% 0.0037 286.2);
+        --violet-2: oklch(98.2% 0.013 286.2);
+        --violet-3: oklch(96.2% 0.025 286.2);
+        --violet-4: oklch(93.5% 0.0508 286.2);
+        --violet-5: oklch(90.4% 0.0754 286.2);
+        --violet-6: oklch(86.4% 0.0989 286.2);
+        --violet-7: oklch(80.8% 0.1251 286.2);
+        --violet-8: oklch(72.9% 0.1667 286.2);
+        --violet-9: oklch(48.8% 0.2597 286.2);
+        --violet-10: oklch(43.7% 0.2597 286.2);
+        --violet-11: oklch(51% 0.2402 286.2);
+        --violet-12: oklch(31.4% 0.1389 286.2);
+  
+        --violet-a1: color(display-p3 0.0196 0.0196 1 / 0.008);
+        --violet-a2: color(display-p3 0.0235 0.0235 0.8627 / 0.028);
+        --violet-a3: color(display-p3 0.0039 0.0039 0.9373 / 0.059);
+        --violet-a4: color(display-p3 0.0392 0.0039 0.9255 / 0.102);
+        --violet-a5: color(display-p3 0.0588 0.0078 0.9216 / 0.15);
+        --violet-a6: color(display-p3 0.0392 0.0039 0.9255 / 0.208);
+        --violet-a7: color(display-p3 0.0588 0.0039 0.9333 / 0.295);
+        --violet-a8: color(display-p3 0.0941 0.0039 0.9373 / 0.42);
+        --violet-a9: color(display-p3 0.2392 0 0.8471 / 0.851);
+        --violet-a10: color(display-p3 0.2745 0 0.7961 / 0.961);
+        --violet-a11: color(display-p3 0.1882 0 0.8235 / 0.773);
+        --violet-a12: color(display-p3 0.0706 0 0.3569 / 0.887);
+  
+        --violet-contrast: #fff;
+        --violet-surface: color(display-p3 0.9686 0.9686 1 / 0.8);
+        --violet-indicator: oklch(48.8% 0.2597 286.2);
+        --violet-track: oklch(48.8% 0.2597 286.2);
+
+        /* Semantic tokens */
+        --accent-color-1: var(--violet-1);
+        --accent-color-2: var(--violet-2);
+        --accent-color-3: var(--violet-3);
+        --accent-color-4: var(--violet-4);
+        --accent-color-5: var(--violet-5);
+        --accent-color-6: var(--violet-6);
+        --accent-color-7: var(--violet-7);
+        --accent-color-8: var(--violet-8);
+        --accent-color-9: var(--violet-9);
+        --accent-color-10: var(--violet-10);
+        --accent-color-11: var(--violet-11);
+        --accent-color-12: var(--violet-12);
+    
+        --accent-color-a1: var(--violet-a1);
+        --accent-color-a2: var(--violet-a2);
+        --accent-color-a3: var(--violet-a3);
+        --accent-color-a4: var(--violet-a4);
+        --accent-color-a5: var(--violet-a5);
+        --accent-color-a6: var(--violet-a6);
+        --accent-color-a7: var(--violet-a7);
+        --accent-color-a8: var(--violet-a8);
+        --accent-color-a9: var(--violet-a9);
+        --accent-color-a10: var(--violet-a10);
+        --accent-color-a11: var(--violet-a11);
+        --accent-color-a12: var(--violet-a12);
+    
+        --accent-color-contrast: var(--violet-contrast);
+        --accent-color-surface: var(--violet-surface);
+        --accent-color-indicator: var(--violet-indicator);
+        --accent-color-track: var(--violet-track);
+      }
+    }
+  }
