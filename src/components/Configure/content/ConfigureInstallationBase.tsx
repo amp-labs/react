@@ -67,17 +67,13 @@ export function ConfigureInstallationBase(
         <form style={{ width: '100%', maxWidth: '50rem' }} onSubmit={onSave}>
           <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
             <Button
-              backgroundColor="gray.800"
-              _hover={{ backgroundColor: 'gray.600' }}
+              variant="primary"
               type="submit"
               isDisabled={isDisabled}
             >
               {isCreateMode ? 'Install' : 'Save'}
             </Button>
             <Button
-              backgroundColor="gray.200"
-              color="blackAlpha.700"
-              _hover={{ backgroundColor: 'gray.300' }}
               isDisabled={isDisabled}
               onClick={onReset}
             >Reset
@@ -85,15 +81,11 @@ export function ConfigureInstallationBase(
           </Stack>
           <Box
             p={8}
-            width="100%"
-            border="1px solid #EFEFEF"
-            borderRadius={8}
-            boxShadow="md"
-            textAlign={['left']}
+            borderRadius={4}
+            boxShadow="sm"
             margin="auto"
-            bgColor="white"
-            maxHeight="100%"
-            overflowY="scroll"
+            backgroundColor="white"
+            border="1px solid gray.100"
             minHeight={300}
           >
             {loading && <LoadingIcon />}

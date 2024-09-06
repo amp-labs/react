@@ -104,6 +104,7 @@ export function ClientCredentialsContent({
         <br />
 
         <Button
+          variant="primary"
           isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"

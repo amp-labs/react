@@ -72,6 +72,7 @@ export function LandingContent({
         <br />
 
         <Button
+          variant="primary"
           isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"

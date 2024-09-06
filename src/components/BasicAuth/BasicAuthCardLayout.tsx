@@ -11,13 +11,9 @@ export function BasicAuthCardLayout({ children }: BasicAuthCardLayoutProps) {
         p={8}
         maxWidth="600px"
         borderWidth={1}
-        borderRadius={8}
-        boxShadow="lg"
-        textAlign={['left']}
+        borderRadius={4}
         margin="auto"
         marginTop="40px"
-        bgColor="white"
-        color="gray.800"
         fontSize="md"
       >
         {children}

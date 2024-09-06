@@ -32,6 +32,7 @@ export function WorkspaceEntry({
         </Flex>
         <br />
         <Button
+          variant="primary"
           isDisabled={isButtonDisabled}
           width="100%"
           type="submit"
