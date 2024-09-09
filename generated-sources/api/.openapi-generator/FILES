@@ -12,7 +12,6 @@ src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
 src/apis/OperationApi.ts
-src/apis/OperationEventApi.ts
 src/apis/OrgApi.ts
 src/apis/ProjectApi.ts
 src/apis/ProviderApi.ts
