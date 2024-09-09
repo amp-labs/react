@@ -10,7 +10,7 @@ export function UninstallContent() {
   const apiKey = useApiKey();
   const { projectId, appName } = useProject();
   const {
-    integrationId, installation, resetInstallations, setIntegrationDeleted,
+    integrationId, installation, resetInstallations, setIntegrationDeleted, onUninstallSuccess,
   } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
   const isDisabled = !projectId || !integrationId || !installation?.id || loading;
@@ -33,9 +33,10 @@ export function UninstallContent() {
           },
         );
 
+        console.warn('successfully uninstalled installation: ', installation.id);
+        onUninstallSuccess?.(installation?.id); // callback
         resetInstallations();
         setIntegrationDeleted();
-        console.warn('successfully uninstalled installation: ', installation.id);
       } catch (e) {
         console.error('error uninstalling installation', e);
       } finally {
