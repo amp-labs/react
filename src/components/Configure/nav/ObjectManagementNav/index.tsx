@@ -75,16 +75,15 @@ export function ObjectManagementNav({
       <Box
         p={8}
         maxWidth="55rem"
-        border="1px solid #EFEFEF"
-        borderRadius={6}
-        boxShadow="md"
+        borderRadius={4}
         margin="auto"
-        bgColor="whitesmoke"
         display="flex"
         gap="6"
         minHeight="100%"
-        color="gray.800"
         fontSize="md"
+        backgroundColor="#FCFCFC"
+        border="1px solid #EFEFEF"
+        boxShadow="0px 4px 8px rgba(0, 0, 0, 0.05)"
       >
         <Box width="20rem">
           <Text>{getProviderName(provider)} integration</Text>

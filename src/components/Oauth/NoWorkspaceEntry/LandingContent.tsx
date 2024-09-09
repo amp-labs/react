@@ -24,6 +24,7 @@ export function LandingContent({
         <OAuthErrorAlert error={error} />
         <br />
         <Button
+          variant="primary"
           isDisabled={isButtonDisabled}
           width="100%"
           type="submit"
