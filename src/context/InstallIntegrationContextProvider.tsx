@@ -10,6 +10,8 @@ import {
 } from 'services/api';
 import { findIntegrationFromList } from 'src/utils';
 
+import { useIsInstallationDeleted } from '../hooks/useIsInstallationDeleted';
+
 import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useIntegrationList } from './IntegrationListContextProvider';
@@ -29,6 +31,8 @@ interface InstallIntegrationContextValue {
   resetInstallations: () => void;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
+  isIntegrationDeleted: boolean;
+  setIntegrationDeleted: () => void;
 }
 // Create a context to pass down the props
 export const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -44,6 +48,8 @@ export const InstallIntegrationContext = createContext<InstallIntegrationContext
   resetInstallations: () => { },
   onInstallSuccess: undefined,
   onUpdateSuccess: undefined,
+  isIntegrationDeleted: false,
+  setIntegrationDeleted: () => { },
 });
 
 // Create a custom hook to access the props
@@ -73,10 +79,11 @@ export function InstallIntegrationProvider({
   const apiKey = useApiKey();
   const { projectId } = useProject();
   const { integrations } = useIntegrationList();
+  const { setError, isError } = useErrorState();
+  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
 
   const [installations, setInstallations] = useState<Installation[]>([]);
   const [isLoading, setLoadingState] = useState<boolean>(true);
-  const { setError, isError } = useErrorState();
 
   const installation = installations?.[0] || null; // there should only be one installation for mvp
 
@@ -145,8 +152,11 @@ export function InstallIntegrationProvider({
     resetInstallations,
     onInstallSuccess,
     onUpdateSuccess,
-  }), [integrationObj, consumerRef, consumerName, groupRef,
-    groupName, installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess]);
+    isIntegrationDeleted,
+    setIntegrationDeleted,
+  }), [integrationObj, consumerRef, consumerName, groupRef, groupName,
+    installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess,
+    isIntegrationDeleted, setIntegrationDeleted]);
 
   if (integrationObj !== null) {
     const errorMessage = 'Error retrieving installation information for integration '

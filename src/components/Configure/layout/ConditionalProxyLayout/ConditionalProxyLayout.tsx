@@ -7,6 +7,7 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
+import { SuccessTextBox } from 'src/components/SuccessTextBox';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
@@ -35,6 +36,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
   const {
     integrationObj, installation, groupRef, consumerRef, setInstallation, onInstallSuccess,
+    isIntegrationDeleted,
   } = useInstallIntegrationProps();
   const { selectedConnection } = useConnections();
   const [createInstallLoading, setCreateInstallLoading] = useState(false);
@@ -70,6 +72,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
   if (isLoading) return <LoadingIcon />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
+  if (isIntegrationDeleted) return <SuccessTextBox text="Integration successfully uninstalled." />;
 
   return (
     <div>
