@@ -9,7 +9,6 @@ export * from './InstallationApi';
 export * from './IntegrationApi';
 export * from './OAuthApi';
 export * from './OperationApi';
-export * from './OperationEventApi';
 export * from './OrgApi';
 export * from './ProjectApi';
 export * from './ProviderApi';
