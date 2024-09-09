@@ -31,6 +31,7 @@ interface InstallIntegrationContextValue {
   resetInstallations: () => void;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
+  onUninstallSuccess?: (installationId: string) => void;
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
 }
@@ -48,6 +49,7 @@ export const InstallIntegrationContext = createContext<InstallIntegrationContext
   resetInstallations: () => { },
   onInstallSuccess: undefined,
   onUpdateSuccess: undefined,
+  onUninstallSuccess: undefined,
   isIntegrationDeleted: false,
   setIntegrationDeleted: () => { },
 });
@@ -70,11 +72,13 @@ interface InstallIntegrationProviderProps {
   children: React.ReactNode,
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
+  onUninstallSuccess?: (installationId: string) => void,
 }
 
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
-  children, integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
+  children, integration, consumerRef, consumerName, groupRef, groupName,
+  onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -152,10 +156,12 @@ export function InstallIntegrationProvider({
     resetInstallations,
     onInstallSuccess,
     onUpdateSuccess,
+    onUninstallSuccess,
     isIntegrationDeleted,
     setIntegrationDeleted,
   }), [integrationObj, consumerRef, consumerName, groupRef, groupName,
-    installation, setInstallation, resetInstallations, onInstallSuccess, onUpdateSuccess,
+    installation, setInstallation, resetInstallations,
+    onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
     isIntegrationDeleted, setIntegrationDeleted]);
 
   if (integrationObj !== null) {
