@@ -9,7 +9,9 @@ import { api } from 'services/api';
 export function UninstallContent() {
   const apiKey = useApiKey();
   const { projectId, appName } = useProject();
-  const { integrationId, installation, resetInstallations } = useInstallIntegrationProps();
+  const {
+    integrationId, installation, resetInstallations, setIntegrationDeleted,
+  } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
   const isDisabled = !projectId || !integrationId || !installation?.id || loading;
 
@@ -30,7 +32,9 @@ export function UninstallContent() {
             },
           },
         );
+
         resetInstallations();
+        setIntegrationDeleted();
         console.warn('successfully uninstalled installation: ', installation.id);
       } catch (e) {
         console.error('error uninstalling installation', e);
