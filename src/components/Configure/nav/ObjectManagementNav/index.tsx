@@ -2,11 +2,12 @@ import {
   createContext, useContext, useState,
 } from 'react';
 import {
-  Box, Divider, Tabs, Text,
+  Box, Container, Divider, Tabs, Text,
 } from '@chakra-ui/react';
 
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
+import { AmpersandFooter } from 'src/components/Oauth/OauthCardLayout/AmpersandFooter';
 import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';
@@ -72,23 +73,23 @@ export function ObjectManagementNav({
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
-      <Box
-        p={8}
-        maxWidth="55rem"
-        borderRadius={4}
-        margin="auto"
-        display="flex"
-        gap="6"
-        minHeight="100%"
-        fontSize="md"
-        backgroundColor="#FCFCFC"
-        border="1px solid #EFEFEF"
-        boxShadow="0px 4px 8px rgba(0, 0, 0, 0.05)"
-      >
-        <Box width="20rem">
-          <Text>{getProviderName(provider)} integration</Text>
-          <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
-          {isNavObjectsReady && (
+      <Container maxWidth="55rem">
+        <Box
+          p={8}
+          borderRadius={4}
+          margin="auto"
+          display="flex"
+          gap="6"
+          minHeight="100%"
+          fontSize="md"
+          backgroundColor="#FCFCFC"
+          border="1px solid #EFEFEF"
+          boxShadow="0px 4px 8px rgba(0, 0, 0, 0.05)"
+        >
+          <Box width="20rem">
+            <Text>{getProviderName(provider)} integration</Text>
+            <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
+            {isNavObjectsReady && (
             <Tabs
               index={tabIndex}
               onChange={setTabIndex}
@@ -128,10 +129,12 @@ export function ObjectManagementNav({
 
               )}
             </Tabs>
-          )}
+            )}
+          </Box>
+          {children}
         </Box>
-        {children}
-      </Box>
+        <AmpersandFooter />
+      </Container>
     </SelectedObjectNameContext.Provider>
   );
 }
