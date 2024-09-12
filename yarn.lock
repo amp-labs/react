@@ -6846,7 +6846,7 @@ postcss@8.4.41:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
-postcss@^8.4.33, postcss@^8.4.43:
+postcss@^8.4.33, postcss@^8.4.43, postcss@^8.4.45:
   version "8.4.45"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.45.tgz#538d13d89a16ef71edbf75d895284ae06b79e603"
   integrity sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==
