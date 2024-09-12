@@ -1,0 +1,22 @@
+:root {
+    /* color tokens */
+    --amp-colors-white: #ffffff;
+    --amp-colors-black: #000000;
+
+    --amp-colors-neutral-50: #fafafa;
+    --amp-colors-neutral-100: #f5f5f5;
+    --amp-colors-neutral-200: #e5e5e5;
+    --amp-colors-neutral-300: #d4d4d4;
+    --amp-colors-neutral-400: #a3a3a3;
+    --amp-colors-neutral-500: #737373;
+    --amp-colors-neutral-600: #525252;
+    --amp-colors-neutral-700: #404040;
+    --amp-colors-neutral-800: #262626;
+    --amp-colors-neutral-900: #171717;
+    --amp-colors-neutral-950: #0a0a0a;
+
+    /* semantic colors  */
+    --amp-shadows-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    
+    --amp-colors-border: var(--amp-colors-neutral-200);
+}
