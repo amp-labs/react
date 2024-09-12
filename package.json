@@ -23,7 +23,8 @@
       "import": "./build/amp-react.es.js",
       "require": "./build/amp-react.cjs.js",
       "types": "./build/index.d.ts"
-    }
+    },
+     "./styles": "./build/style.css"
   },
   "files": [
     "build"
@@ -60,6 +61,7 @@
     "@types/lodash.isequal": "^4.5.7",
     "@types/node": "^22.0.0",
     "@types/react": "^18.2.33",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "@vitejs/plugin-react": "^4.3.1",
