@@ -4,7 +4,7 @@ import {
   FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from '../OauthCardLayout';
+import { OauthCardLayout } from '../OauthCardLayout/OauthCardLayout';
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
 const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';
@@ -27,7 +27,7 @@ export function SalesforceSubdomainEntry({
   return (
     <OauthCardLayout>
       <FormControl>
-        <FormLabel marginTop="16" marginBottom="0">
+        <FormLabel>
           <Heading as="h4" size="md">Enter your Salesforce subdomain</Heading>
         </FormLabel>
         <Link href={SALESFORCE_HELP_URL} color="blackAlpha.600" isExternal>
