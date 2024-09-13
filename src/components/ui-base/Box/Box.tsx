@@ -10,6 +10,11 @@ type BoxProps = {
   style?: React.CSSProperties;
 };
 
+/**
+ * default box component with border and border-radius styling renders as a div
+ * @param param0
+ * @returns
+ */
 export function Box({ children, className, style }: BoxProps) {
   if (!isChakraRemoved) {
     return (

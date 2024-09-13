@@ -1,4 +1,4 @@
-import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';

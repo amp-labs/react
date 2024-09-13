@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 import { LoadingIcon } from 'assets/LoadingIcon';
-import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Project } from 'services/api';
 
 import { useApiKey } from './ApiKeyContextProvider';
