@@ -7,7 +7,7 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
-import { SuccessTextBox } from 'src/components/SuccessTextBox';
+import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';

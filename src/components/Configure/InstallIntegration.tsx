@@ -31,6 +31,7 @@ export function InstallIntegration(
 ) {
   const { projectId } = useProject();
   const { errorState } = useErrorState();
+
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
     return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
   }
