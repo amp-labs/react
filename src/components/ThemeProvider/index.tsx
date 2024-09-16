@@ -1,5 +1,5 @@
 import {
-  ChakraProvider, extendTheme, withDefaultColorScheme,
+  ChakraProvider, extendTheme,
 } from '@chakra-ui/react';
 
 import { buttonVariants } from './Button';

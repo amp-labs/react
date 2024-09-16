@@ -1,27 +1,35 @@
 import {
-  Button, FormControl, FormLabel, Heading,
+  Button, Flex, FormControl,
+  FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
-import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
+import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
-type LandingContentProps = {
+type WorkspaceEntryProps = {
   handleSubmit: () => void;
+  setWorkspace: (workspace: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
   providerName?: string;
 };
 
-export function LandingContent({
-  handleSubmit, error, isButtonDisabled, providerName,
-}: LandingContentProps) {
+export function WorkspaceEntry({
+  handleSubmit, setWorkspace, error, isButtonDisabled, providerName,
+}: WorkspaceEntryProps) {
   return (
     <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
-          <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
+          <Heading as="h4" size="md">Enter your {providerName} workspace</Heading>
         </FormLabel>
         <AuthErrorAlert error={error} />
+        <Flex marginTop="1em">
+          <Input
+            placeholder="MyWorkspace"
+            onChange={(event) => setWorkspace(event.currentTarget.value)}
+          />
+        </Flex>
         <br />
         <Button
           variant="primary"

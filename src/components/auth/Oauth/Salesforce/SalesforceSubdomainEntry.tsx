@@ -4,7 +4,7 @@ import {
   FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
+import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';

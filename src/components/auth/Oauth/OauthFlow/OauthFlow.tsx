@@ -1,12 +1,12 @@
+import { Connection, ProviderInfo } from 'services/api';
 import {
   NoWorkspaceOauthClientCredsFlow,
-} from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthClientCredsFlow';
-import { NoWorkspaceOauthFlow } from 'components/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
+} from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthClientCredsFlow';
+import { NoWorkspaceOauthFlow } from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import {
   WorkspaceOauthClientCredsFlow,
-} from 'components/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
-import { WorkspaceOauthFlow } from 'components/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
-import { Connection, ProviderInfo } from 'services/api';
+} from 'src/components/auth/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
+import { WorkspaceOauthFlow } from 'src/components/auth/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
 import { getProviderName } from 'src/utils';
 
 const AUTHORIZATION_CODE = 'authorizationCode';

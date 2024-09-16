@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { ProviderInfo } from '@generated/api/src';
 
-import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
+import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
 

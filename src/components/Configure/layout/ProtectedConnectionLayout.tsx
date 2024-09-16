@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { ApiKeyAuthFlow } from 'components/ApiKeyAuth/ApiKeyAuthFlow/ApiKeyAuthFlow';
-import { BasicAuthFlow } from 'components/BasicAuth/BasicAuthFlow/BasicAuthFlow';
+import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
+import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
+import { NoAuthFlow } from 'components/auth/NoAuth/NoAuthFlow';
+import { OauthFlow } from 'components/auth/Oauth/OauthFlow/OauthFlow';
 import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
-import { NoAuthFlow } from 'components/NoAuth/NoAuthFlow/NoAuthFlow';
-import { OauthFlow } from 'components/Oauth/OauthFlow/OauthFlow';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';

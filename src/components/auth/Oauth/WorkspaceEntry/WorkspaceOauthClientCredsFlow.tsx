@@ -7,8 +7,8 @@ import { Connection, GenerateConnectionRequest } from '@generated/api/src';
 
 import {
   ClientCredentialsContent,
-  ClientCredentialsCreds,
-} from 'components/Oauth/NoWorkspaceEntry/ClientCredentialsContent';
+  WorkspaceClientCredentialsCreds,
+} from 'components/auth/Oauth/WorkspaceEntry/ClientCredentialsContent';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
@@ -30,8 +30,9 @@ interface NoWorkspaceOauthClientCredsFlowProps {
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function NoWorkspaceOauthClientCredsFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, explicitScopesRequired, providerName,
+export function WorkspaceOauthClientCredsFlow({
+  provider, providerName,
+  consumerRef, consumerName, groupRef, groupName, explicitScopesRequired,
   selectedConnection, setSelectedConnection,
 }: NoWorkspaceOauthClientCredsFlowProps) {
   const { projectId } = useProject();
@@ -39,7 +40,7 @@ export function NoWorkspaceOauthClientCredsFlow({
   const [error, setError] = useState<string | null>(null);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async (creds: ClientCredentialsCreds) => {
+  const handleSubmit = async (creds: WorkspaceClientCredentialsCreds) => {
     setError(null);
     const req: GenerateConnectionRequest = {
       groupName,
@@ -47,6 +48,7 @@ export function NoWorkspaceOauthClientCredsFlow({
       consumerName,
       consumerRef,
       provider,
+      providerWorkspaceRef: creds.workspace,
       oauth2ClientCredentials: {
         clientId: creds.clientId,
         clientSecret: creds.clientSecret,
