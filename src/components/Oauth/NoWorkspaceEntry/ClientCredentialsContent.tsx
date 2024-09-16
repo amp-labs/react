@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import { OAuthErrorAlert } from 'components/Oauth/OAuthErrorAlert';
-import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
 export type ClientCredentialsCreds = {
@@ -61,7 +61,7 @@ export function ClientCredentialsContent({
   };
 
   return (
-    <OauthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
@@ -103,6 +103,6 @@ export function ClientCredentialsContent({
           Next
         </Button>
       </FormControl>
-    </OauthCardLayout>
+    </AuthCardLayout>
   );
 }

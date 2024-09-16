@@ -7,7 +7,7 @@ import {
 
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { AmpersandFooter } from 'src/layout/OauthCardLayout/AmpersandFooter';
+import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
 import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../state/ConfigurationStateProvider';

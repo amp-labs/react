@@ -3,7 +3,7 @@ import {
   FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
@@ -19,7 +19,7 @@ export function WorkspaceEntry({
   handleSubmit, setWorkspace, error, isButtonDisabled, providerName,
 }: WorkspaceEntryProps) {
   return (
-    <OauthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">Enter your {providerName} workspace</Heading>
@@ -42,6 +42,6 @@ export function WorkspaceEntry({
           Next
         </Button>
       </FormControl>
-    </OauthCardLayout>
+    </AuthCardLayout>
   );
 }

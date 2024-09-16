@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react';
 import { ProviderInfo } from '@generated/api/src';
 
-import { ApiKeyAuthCardLayout } from 'components/ApiKeyAuth/ApiKeyAuthCardLayout';
 import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
 
 type LandingContentProps = {
@@ -38,7 +38,7 @@ export function LandingContent({
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (
-    <ApiKeyAuthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel my="6">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
@@ -83,6 +83,6 @@ export function LandingContent({
           Next
         </Button>
       </FormControl>
-    </ApiKeyAuthCardLayout>
+    </AuthCardLayout>
   );
 }

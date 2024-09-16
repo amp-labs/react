@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react';
 import { ProviderInfo } from '@generated/api/src';
 
-import { BasicAuthCardLayout } from 'components/BasicAuth/BasicAuthCardLayout';
 import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
 
 type LandingContentProps = {
@@ -46,7 +46,7 @@ export function LandingContent({
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
 
   return (
-    <BasicAuthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
@@ -93,6 +93,6 @@ export function LandingContent({
           Next
         </Button>
       </FormControl>
-    </BasicAuthCardLayout>
+    </AuthCardLayout>
   );
 }
