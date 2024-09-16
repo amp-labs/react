@@ -11,7 +11,7 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 
-import { OAuthErrorAlert } from 'components/Oauth/OAuthErrorAlert';
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
@@ -66,7 +66,7 @@ export function ClientCredentialsContent({
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
-        <OAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
         <br />
 
         <Stack spacing={4}>

@@ -1,9 +1,9 @@
 import { Alert, AlertDescription, AlertIcon } from '@chakra-ui/react';
 
-interface NoAuthErrorAlertProps {
+interface OAuthErrorAlertProps {
   error: string | null;
 }
-export function NoAuthErrorAlert({ error }: NoAuthErrorAlertProps) {
+export function AuthErrorAlert({ error }: OAuthErrorAlertProps) {
   if (error) {
     return (
       <Alert status="error" marginTop="2em">

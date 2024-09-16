@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ProviderInfo } from '@generated/api/src';
 
-import { BasicAuthErrorAlert } from 'components/BasicAuth/BasicAuthErrorAlert';
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
@@ -51,7 +51,7 @@ export function LandingContent({
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
-        <BasicAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
         <br />
 
         <Stack spacing={4}>

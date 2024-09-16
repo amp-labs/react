@@ -4,9 +4,8 @@ import {
   FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
-
-import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
 const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';
 
@@ -35,7 +34,7 @@ export function SalesforceSubdomainEntry({
           What is my Salesforce subdomain?
           <ExternalLinkIcon mx="2px" />
         </Link>
-        <OAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
         <Flex marginTop="1em">
           <Input
             placeholder="MyDomain"
