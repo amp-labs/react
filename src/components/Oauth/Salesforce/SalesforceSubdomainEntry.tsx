@@ -4,7 +4,8 @@ import {
   FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from '../OauthCardLayout/OauthCardLayout';
+import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
 const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';

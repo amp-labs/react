@@ -3,7 +3,8 @@ import {
   FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from '../OauthCardLayout/OauthCardLayout';
+import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
 type WorkspaceEntryProps = {

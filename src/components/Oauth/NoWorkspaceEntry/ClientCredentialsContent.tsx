@@ -11,8 +11,8 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from 'components/Oauth/OauthCardLayout/OauthCardLayout';
 import { OAuthErrorAlert } from 'components/Oauth/OAuthErrorAlert';
+import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
 export type ClientCredentialsCreds = {
