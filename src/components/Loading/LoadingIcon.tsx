@@ -1,12 +1,12 @@
 import {
-  Box, Spinner, Stack, Text,
+  Box, Spinner, Stack,
 } from '@chakra-ui/react';
 
-interface LoadingIconProps {
-  message?: string;
-}
-
-export function LoadingIcon({ message }: LoadingIconProps) {
+/**
+ * @deprecated - removing this component with Chakra
+ * @returns
+ */
+export function LoadingIcon() {
   return (
     <Box
       className="loading-icon"
@@ -29,7 +29,6 @@ export function LoadingIcon({ message }: LoadingIconProps) {
           size="xl"
           margin="20px"
         />
-        {message && <Text fontSize="40px" color="#4299e1">{message}</Text>}
       </Stack>
     </Box>
   );

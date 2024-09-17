@@ -3,9 +3,9 @@ import {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Connection } from 'services/api';
+import { LoadingCentered } from 'src/components/Loading';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import {
@@ -93,7 +93,7 @@ export function ConnectionsProvider({
       ? <ErrorTextBox message="Error retrieving existing connections" />
       : (
         <ConnectionsContext.Provider value={contextValue}>
-          {isLoading ? <LoadingIcon /> : children}
+          {isLoading ? <LoadingCentered /> : children}
         </ConnectionsContext.Provider>
       )
   );

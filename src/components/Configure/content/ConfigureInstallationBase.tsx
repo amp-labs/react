@@ -5,7 +5,7 @@ import {
   Box, Button, Stack,
 } from '@chakra-ui/react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
+import { LoadingCentered } from 'components/Loading';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
@@ -62,7 +62,7 @@ export function ConfigureInstallationBase(
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
   return (
-    isLoading ? <LoadingIcon />
+    isLoading ? <LoadingCentered />
       : (
         <form style={{ width: '100%', maxWidth: '50rem' }} onSubmit={onSave}>
           <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
@@ -88,7 +88,7 @@ export function ConfigureInstallationBase(
             border="1px solid gray.100"
             minHeight={300}
           >
-            {loading && <LoadingIcon />}
+            {loading && <LoadingCentered />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
             {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}
             {!loading && isUninstall && <UninstallContent />}

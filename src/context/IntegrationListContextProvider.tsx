@@ -3,9 +3,9 @@ import {
   useMemo, useState,
 } from 'react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Integration } from 'services/api';
+import { LoadingCentered } from 'src/components/Loading';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
@@ -65,7 +65,7 @@ export function IntegrationListProvider(
       ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
       : (
         <IntegrationListContext.Provider value={contextValue}>
-          {isLoading ? <LoadingIcon /> : children}
+          {isLoading ? <LoadingCentered /> : children}
         </IntegrationListContext.Provider>
       )
   );

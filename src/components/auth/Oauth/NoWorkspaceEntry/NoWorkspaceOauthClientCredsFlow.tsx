@@ -9,10 +9,10 @@ import {
   ClientCredentialsContent,
   ClientCredentialsCreds,
 } from 'components/auth/Oauth/NoWorkspaceEntry/ClientCredentialsContent';
+import { LoadingCentered } from 'components/Loading';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
-import { LoadingIcon } from 'src/assets/LoadingIcon';
 
 interface NoWorkspaceOauthClientCredsFlowProps {
   provider: string;
@@ -75,5 +75,5 @@ export function NoWorkspaceOauthClientCredsFlow({
     );
   }
 
-  return <LoadingIcon />;
+  return <LoadingCentered />;
 }

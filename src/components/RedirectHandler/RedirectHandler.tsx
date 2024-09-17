@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
+import { LoadingCentered } from 'components/Loading';
 
 type RedirectHandlerProps = {
   redirectURL?: string;
@@ -29,7 +29,8 @@ export function RedirectHandler({ redirectURL, children } : RedirectHandlerProps
   if (redirectURL) {
     return (
       <Box display="flex" alignItems="center" justifyContent="center">
-        <LoadingIcon message="Redirecting..." />
+        <LoadingCentered />
+        <p>Redirecting</p>
       </Box>
     );
   }
