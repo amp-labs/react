@@ -21,7 +21,8 @@
   "exports": {
     ".": {
       "import": "./build/amp-react.es.js",
-      "require": "./build/amp-react.cjs.js"
+      "require": "./build/amp-react.cjs.js",
+      "types": "./build/index.d.ts"
     }
   },
   "files": [
