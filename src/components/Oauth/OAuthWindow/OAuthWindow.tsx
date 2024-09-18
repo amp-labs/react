@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { on } from 'events';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
@@ -14,7 +15,8 @@ type OAuthWindowProps = {
   children: React.ReactNode;
   windowTitle: string;
   oauthUrl: string | null;
-  onClose: (err: string | null) => void;
+  error?: string | null;
+  onError?: (err: string | null) => void;
 };
 
 /**
@@ -23,7 +25,7 @@ type OAuthWindowProps = {
  * @returns
  */
 export function OAuthWindow({
-  children, oauthUrl, windowTitle = 'Connect to Provider', onClose,
+  children, oauthUrl, windowTitle = 'Connect to Provider', onError, error,
 }: OAuthWindowProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -31,7 +33,7 @@ export function OAuthWindow({
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const { setSelectedConnection } = useConnections();
 
-  const receiveMessage = useReceiveMessageEventHandler(setConnectionId);
+  const receiveMessage = useReceiveMessageEventHandler(setConnectionId, onError);
   const openOAuthWindow = useOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
   const refreshConnections = useRefreshConnectionHandler(projectId, apiKey, setSelectedConnection);
 
@@ -51,10 +53,10 @@ export function OAuthWindow({
           // console.debug('Connection successful');
         }).catch((err) => {
           console.error('Error refreshing connection: ', err);
-          onClose(err.message ?? 'Unexpected error: not able to refresh connection');
+          onError?.(err.message ?? 'Unexpected error: not able to refresh connection');
         });
     }
-  }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onClose]);
+  }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onError]);
 
   // check if the window is closed
   const interval = oauthWindow && setInterval(() => {
@@ -65,13 +67,13 @@ export function OAuthWindow({
       window.removeEventListener('message', receiveMessage);
       setOauthWindow(null);
 
-      if (!connectionId) {
+      if (!connectionId && !error) {
         // if connectionId is not set, then set OAuth failed error
         console.error('OAuth failed. Please try again.');
-        if (onClose) onClose('OAuth failed. Please try again.');
-      } else if (connectionId && onClose) {
-        // if connectionId is set, then set OAuth success -- no error in onClose
-        onClose(null);
+        onError?.('OAuth failed. Please try again.');
+      } else if (connectionId && onError) {
+        // if connectionId is set, then set OAuth success -- no error
+        onError?.(null);
       }
     }
   }, 500);

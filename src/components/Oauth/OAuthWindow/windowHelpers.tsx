@@ -62,6 +62,7 @@ export function useOpenWindowHandler(
   */
 export function useReceiveMessageEventHandler(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
+  onError?: (err: string | null) => void,
 ) {
   return useCallback((event: MessageEvent) => {
     // Ignore messages from unexpected origins
@@ -83,7 +84,10 @@ export function useReceiveMessageEventHandler(
     // failure case
     if (event.data.eventType === FAILURE_EVENT) {
       console.error('OAuth failed: ', { event });
+      // event.data.message sent by server message
+      // See `server/shared/oauth/connection.go` for the HTML that the server sends back to the UI library.
+      onError?.(event?.data?.message ?? 'OAuth failed. Please try again.');
       // do not close the window if error occurs
     }
-  }, [setConnectionId]);
+  }, [onError, setConnectionId]);
 }

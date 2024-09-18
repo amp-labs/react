@@ -61,7 +61,7 @@ export function WorkspaceOauthFlow({
     }
   };
 
-  const onClose = useCallback((err: string | null) => {
+  const onError = useCallback((err: string | null) => {
     setError(err);
     setOAuthCallbackURL(null);
   }, []);
@@ -90,7 +90,7 @@ export function WorkspaceOauthFlow({
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthCallbackURL}
-      onClose={onClose}
+      onError={onError}
     >
       {workspaceEntryComponent}
     </OAuthWindow>
