@@ -2,9 +2,12 @@ import {
   createContext, useContext, useState,
 } from 'react';
 import {
-  Box, Container, Divider, Tabs, Text,
+  Tabs, Text,
 } from '@chakra-ui/react';
 
+import { Box } from 'components/ui-base/Box/Box';
+import { Container } from 'components/ui-base/Container/Container';
+import { Divider } from 'components/ui-base/Divider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
@@ -47,6 +50,9 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
   return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
 }
 
+const backgroundColor = getComputedStyle(document.documentElement)
+  .getPropertyValue('--amp-colors-background-secondary').trim() || '#FCFCFC';
+
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNav({
   children,
@@ -73,20 +79,16 @@ export function ObjectManagementNav({
 
   return (
     <SelectedObjectNameContext.Provider value={selectedObject?.name}>
-      <Container maxWidth="55rem">
+      <Container style={{ maxWidth: '55rem' }}>
         <Box
-          p={8}
-          borderRadius={4}
-          margin="auto"
-          display="flex"
-          gap="6"
-          minHeight="100%"
-          fontSize="md"
-          backgroundColor="#FCFCFC"
-          border="1px solid #EFEFEF"
-          boxShadow="0px 4px 8px rgba(0, 0, 0, 0.05)"
+          style={{
+            display: 'flex',
+            gap: '4rem',
+            padding: '3rem',
+            backgroundColor,
+          }}
         >
-          <Box width="20rem">
+          <div style={{ width: '20rem' }}>
             <Text>{getProviderName(provider)} integration</Text>
             <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
             {isNavObjectsReady && (
@@ -120,17 +122,16 @@ export function ObjectManagementNav({
               {/* Uninstall tab */}
               {installation && (
                 <>
-                  <Divider marginTop={10} marginBottom={3} />
+                  <Divider style={{ margin: '3rem 0 1rem 0' }} />
                   <UninstallInstallation
                     key="uninstall-installation"
                     text="Uninstall"
                   />
                 </>
-
               )}
             </Tabs>
             )}
-          </Box>
+          </div>
           {children}
         </Box>
         <AmpersandFooter />
