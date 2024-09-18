@@ -1,11 +1,7 @@
 import { useMemo } from 'react';
-import {
-  Box, FormControl, FormErrorMessage, Stack,
-} from '@chakra-ui/react';
+import { FormControl, FormErrorMessage } from '@chakra-ui/react';
 
-import {
-  ErrorBoundary, useErrorState,
-} from 'context/ErrorContextProvider';
+import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 
 import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
@@ -43,29 +39,27 @@ export function RequiredFieldMappings() {
 
   return (
     integrationFieldMappings.length ? (
-      <Box>
+      <>
         <FieldHeader string="Map the following fields (required)" />
-        <Stack>
-          {integrationFieldMappings.map((field: any) => (
-            <FormControl
-              key={field.mapToName}
-              isInvalid={
+        {integrationFieldMappings.map((field: any) => (
+          <FormControl
+            key={field.mapToName}
+            isInvalid={
               isError(
                 ErrorBoundary.MAPPING,
                 field.mapToName,
               )
             }
-            >
-              <FieldMapping
-                allFields={configureState.read?.allFields || []}
-                field={field}
-                onSelectChange={onSelectChange}
-              />
-              <FormErrorMessage> * required</FormErrorMessage>
-            </FormControl>
-          ))}
-        </Stack>
-      </Box>
+          >
+            <FieldMapping
+              allFields={configureState.read?.allFields || []}
+              field={field}
+              onSelectChange={onSelectChange}
+            />
+            <FormErrorMessage> * required</FormErrorMessage>
+          </FormControl>
+        ))}
+      </>
     )
       : null
   );
