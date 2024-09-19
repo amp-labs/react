@@ -4,7 +4,7 @@ import {
 } from 'react';
 
 import { LoadingIcon } from 'assets/LoadingIcon';
-import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import {
   api, Config, Installation, Integration,
 } from 'services/api';

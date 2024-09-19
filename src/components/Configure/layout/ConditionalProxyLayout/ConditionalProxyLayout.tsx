@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { LoadingIcon } from 'assets/LoadingIcon';
-import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';

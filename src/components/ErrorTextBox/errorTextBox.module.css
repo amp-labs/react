@@ -1,0 +1,22 @@
+.errorBoxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 30px;
+  min-height: 300px;
+}
+
+.errorBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 2rem;
+    border-radius: var(--amp-default-border-radius);
+    background-color: var(--amp-colors-error-background);
+    border: 1px solid var(--amp-colors-error-border);
+}
+
+.errorText {
+    color: var(--amp-colors-error-text);
+}

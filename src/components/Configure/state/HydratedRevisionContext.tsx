@@ -2,7 +2,7 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from 'components/ErrorTextBox';
+import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {

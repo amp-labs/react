@@ -1,6 +1,5 @@
-import { Container } from '@chakra-ui/react';
-
-import { Box } from 'src/components/ui-base/Box/Box';
+import { Box } from 'components/ui-base/Box/Box';
+import { Container } from 'components/ui-base/Container/Container';
 
 import { AmpersandFooter } from './AmpersandFooter';
 
