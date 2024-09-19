@@ -1,4 +1,4 @@
-import { SuccessTextBox } from 'components/SuccessTextBox';
+import { SuccessTextBox } from 'components/SuccessTextBox/SuccessTextBox';
 import { getProviderName } from 'src/utils';
 
 type InstalledSuccessBoxProps = {

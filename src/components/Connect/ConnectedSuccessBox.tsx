@@ -1,7 +1,7 @@
 import { useProject } from 'context/ProjectContextProvider';
 import { getProviderName } from 'src/utils';
 
-import { SuccessTextBox } from '../SuccessTextBox';
+import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';
 
 interface ConnectedSuccessBoxProps {
   provider: string;
