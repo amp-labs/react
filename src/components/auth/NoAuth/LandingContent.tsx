@@ -2,7 +2,7 @@ import {
   Button, FormControl, FormLabel, Heading,
 } from '@chakra-ui/react';
 
-import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
+import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 type LandingContentProps = {
