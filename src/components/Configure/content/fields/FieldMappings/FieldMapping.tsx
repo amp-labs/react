@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Select, Stack, Text,
-} from '@chakra-ui/react';
+import { Select, Stack, Text } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
 

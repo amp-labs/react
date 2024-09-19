@@ -1,11 +1,8 @@
-import {
-  FormEventHandler,
-} from 'react';
-import {
-  Box, Button, Stack,
-} from '@chakra-ui/react';
+import { FormEventHandler } from 'react';
+import { Button } from '@chakra-ui/react';
 
 import { LoadingCentered } from 'components/Loading';
+import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
@@ -24,6 +21,13 @@ interface ConfigureInstallationBaseProps {
   onReset: () => void,
   isLoading: boolean,
 }
+
+// fallback during migration away from chakra-ui, when variable is not defined
+const borderColor = getComputedStyle(document.documentElement)
+  .getPropertyValue('--amp-colors-neutral-100').trim() || '#f5f5f5';
+
+const boxShadow = getComputedStyle(document.documentElement)
+  .getPropertyValue('--amp-shadows-sm').trim() || '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
 
 // Installation UI Base
 export function ConfigureInstallationBase(
@@ -65,7 +69,10 @@ export function ConfigureInstallationBase(
     isLoading ? <LoadingCentered />
       : (
         <form style={{ width: '100%', maxWidth: '50rem' }} onSubmit={onSave}>
-          <Stack direction="row" spacing={4} marginBottom="20px" flexDir="row-reverse">
+          <div style={{
+            display: 'flex', flexDirection: 'row-reverse', gap: '1rem', marginBottom: '2rem',
+          }}
+          >
             <Button
               variant="primary"
               type="submit"
@@ -78,15 +85,15 @@ export function ConfigureInstallationBase(
               onClick={onReset}
             >Reset
             </Button>
-          </Stack>
+          </div>
           <Box
-            p={8}
-            borderRadius={4}
-            boxShadow="sm"
-            margin="auto"
-            backgroundColor="white"
-            border="1px solid gray.100"
-            minHeight={300}
+            style={{
+              padding: '2rem',
+              minHeight: '300px',
+              backgroundColor: 'white',
+              borderColor,
+              boxShadow,
+            }}
           >
             {loading && <LoadingCentered />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}

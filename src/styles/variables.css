@@ -26,6 +26,7 @@
     --amp-colors-accent-secondary: var(--amp-colors-neutral-500);
     --amp-colors-background: var(--amp-colors-neutral-50);
     --amp-colors-background-secondary: #FCFCFC;
+    --amp-colors-text-secondary: var(--amp-colors-neutral-500);
     
 
     /* misc */
