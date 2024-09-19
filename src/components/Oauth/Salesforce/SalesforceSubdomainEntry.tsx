@@ -4,7 +4,7 @@ import {
   FormLabel, Heading, Input, Link, Text,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
@@ -26,7 +26,7 @@ export function SalesforceSubdomainEntry({
   handleSubmit, setWorkspace, error, isButtonDisabled,
 }: SubdomainEntryProps) {
   return (
-    <OauthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel>
           <Heading as="h4" size="md">Enter your Salesforce subdomain</Heading>
@@ -54,6 +54,6 @@ export function SalesforceSubdomainEntry({
           Next
         </Button>
       </FormControl>
-    </OauthCardLayout>
+    </AuthCardLayout>
   );
 }

@@ -2,7 +2,7 @@ import {
   Button, FormControl, FormLabel, Heading,
 } from '@chakra-ui/react';
 
-import { OauthCardLayout } from 'src/layout/OauthCardLayout/OauthCardLayout';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
@@ -17,7 +17,7 @@ export function LandingContent({
   handleSubmit, error, isButtonDisabled, providerName,
 }: LandingContentProps) {
   return (
-    <OauthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
@@ -34,6 +34,6 @@ export function LandingContent({
           Next
         </Button>
       </FormControl>
-    </OauthCardLayout>
+    </AuthCardLayout>
   );
 }

@@ -3,11 +3,11 @@ import { Container } from 'components/ui-base/Container/Container';
 
 import { AmpersandFooter } from './AmpersandFooter';
 
-type OauthCardLayoutProps = {
+type AuthCardLayoutProps = {
   children: React.ReactNode;
 };
 
-export function OauthCardLayout({ children }: OauthCardLayoutProps) {
+export function AuthCardLayout({ children }: AuthCardLayoutProps) {
   return (
     <Container>
       <Box>

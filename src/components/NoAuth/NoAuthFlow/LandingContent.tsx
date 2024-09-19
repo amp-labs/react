@@ -2,8 +2,8 @@ import {
   Button, FormControl, FormLabel, Heading,
 } from '@chakra-ui/react';
 
-import { NoAuthCardLayout } from 'components/NoAuth/NoAuthCardLayout';
 import { NoAuthErrorAlert } from 'components/NoAuth/NoAuthErrorAlert';
+import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 type LandingContentProps = {
   handleSubmit: () => void;
@@ -16,7 +16,7 @@ export function LandingContent({
   handleSubmit, error, isButtonDisabled, providerName,
 }: LandingContentProps) {
   return (
-    <NoAuthCardLayout>
+    <AuthCardLayout>
       <FormControl>
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
@@ -33,6 +33,6 @@ export function LandingContent({
           Next
         </Button>
       </FormControl>
-    </NoAuthCardLayout>
+    </AuthCardLayout>
   );
 }
