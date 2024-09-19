@@ -1,4 +1,4 @@
-import { Divider } from '@chakra-ui/react';
+import { Divider } from 'components/ui-base/Divider';
 
 import { OTHER_CONST } from './constant';
 import { NavObjectItem } from './NavObjectItem';
@@ -12,7 +12,7 @@ type OtherTabProps = {
 export function OtherTab({ pending, completed, displayName }: OtherTabProps) {
   return (
     <>
-      <Divider marginY={3} />
+      <Divider style={{ margin: '1rem 0' }} />
       <NavObjectItem
         key="other-write"
         objectName={OTHER_CONST}

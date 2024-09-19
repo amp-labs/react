@@ -1,4 +1,6 @@
-import { Divider, Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
+
+import { Divider } from 'src/components/ui-base/Divider';
 
 interface FieldHeaderProps {
   string: string;
@@ -11,7 +13,7 @@ export function FieldHeader({ string }: FieldHeaderProps) {
         {string}
       </Heading>
       <Flex flex="1" justifyContent="flex-end" alignItems="center">
-        <Divider marginLeft={2} />
+        <Divider style={{ marginLeft: '1rem' }} />
       </Flex>
     </Flex>
   );
