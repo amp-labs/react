@@ -3,11 +3,11 @@ import {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import {
   api, Config, Installation, Integration,
 } from 'services/api';
+import { LoadingCentered } from 'src/components/Loading';
 import { findIntegrationFromList } from 'src/utils';
 
 import { useIsInstallationDeleted } from '../hooks/useIsInstallationDeleted';
@@ -172,7 +172,7 @@ export function InstallIntegrationProvider({
       isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey))
       ? <ErrorTextBox message={errorMessage} /> : (
         <InstallIntegrationContext.Provider value={props}>
-          {isLoading ? <LoadingIcon /> : children}
+          {isLoading ? <LoadingCentered /> : children}
         </InstallIntegrationContext.Provider>
       );
   }

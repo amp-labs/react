@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
+import { LoadingCentered } from 'components/Loading';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
@@ -70,7 +70,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
     integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess]);
 
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
-  if (isLoading) return <LoadingIcon />;
+  if (isLoading) return <LoadingCentered />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
   if (isIntegrationDeleted) return <SuccessTextBox text="Integration successfully uninstalled." />;
 

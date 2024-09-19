@@ -2,9 +2,9 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { LoadingIcon } from 'assets/LoadingIcon';
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Project } from 'services/api';
+import { LoadingCentered } from 'src/components/Loading';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import {
@@ -72,7 +72,7 @@ export function ProjectProvider(
       ? <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />
       : (
         <ProjectContext.Provider value={contextValue}>
-          {isLoading ? <LoadingIcon /> : children}
+          {isLoading ? <LoadingCentered /> : children}
         </ProjectContext.Provider>
       )
   );
