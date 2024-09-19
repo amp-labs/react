@@ -2,7 +2,7 @@ import {
   Button, FormControl, FormLabel, Heading,
 } from '@chakra-ui/react';
 
-import { NoAuthErrorAlert } from 'components/NoAuth/NoAuthErrorAlert';
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 type LandingContentProps = {
@@ -21,7 +21,7 @@ export function LandingContent({
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
-        <NoAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
         <br />
         <Button
           variant="primary"

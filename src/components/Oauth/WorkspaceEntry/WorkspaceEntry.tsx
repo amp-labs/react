@@ -3,9 +3,8 @@ import {
   FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
-
-import { OAuthErrorAlert } from '../OAuthErrorAlert';
 
 type WorkspaceEntryProps = {
   handleSubmit: () => void;
@@ -24,7 +23,7 @@ export function WorkspaceEntry({
         <FormLabel marginTop="16" marginBottom="0">
           <Heading as="h4" size="md">Enter your {providerName} workspace</Heading>
         </FormLabel>
-        <OAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
         <Flex marginTop="1em">
           <Input
             placeholder="MyWorkspace"

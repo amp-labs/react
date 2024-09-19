@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ProviderInfo } from '@generated/api/src';
 
-import { ApiKeyAuthErrorAlert } from 'components/ApiKeyAuth/ApiKeyAuthErrorAlert';
+import { AuthErrorAlert } from 'components/AuthErrorAlert/AuthErrorAlert';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
@@ -43,7 +43,7 @@ export function LandingContent({
         <FormLabel my="6">
           <Heading as="h4" size="md">{`Set up ${providerName} integration`}</Heading>
         </FormLabel>
-        <ApiKeyAuthErrorAlert error={error} />
+        <AuthErrorAlert error={error} />
 
         <Stack spacing={4}>
           {docsURL && (
