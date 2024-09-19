@@ -1,4 +1,6 @@
-import { Box, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
+
+import { Box } from 'src/components/ui-base/Box/Box';
 
 import { AmpersandFooter } from './AmpersandFooter';
 
@@ -9,11 +11,7 @@ type OauthCardLayoutProps = {
 export function OauthCardLayout({ children }: OauthCardLayoutProps) {
   return (
     <Container>
-      <Box
-        maxWidth="600px"
-        borderWidth={1}
-        borderRadius={4}
-      >
+      <Box>
         <div style={{ padding: '3rem 2rem' }}>
           {children}
         </div>
