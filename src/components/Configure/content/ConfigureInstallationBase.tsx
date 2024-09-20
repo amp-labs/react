@@ -1,6 +1,7 @@
 import { FormEventHandler } from 'react';
 import { Button } from '@chakra-ui/react';
 
+import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
@@ -20,6 +21,7 @@ interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
   onReset: () => void,
   isLoading: boolean,
+  errorMsg?: string,
 }
 
 // fallback during migration away from chakra-ui, when variable is not defined
@@ -32,7 +34,7 @@ const boxShadow = getComputedStyle(document.documentElement)
 // Installation UI Base
 export function ConfigureInstallationBase(
   {
-    onSave, onReset, isLoading, isCreateMode = false,
+    onSave, onReset, isLoading, isCreateMode = false, errorMsg,
   }: ConfigureInstallationBaseProps,
 ) {
   const { installation } = useInstallIntegrationProps();
@@ -95,6 +97,7 @@ export function ConfigureInstallationBase(
               boxShadow,
             }}
           >
+            {errorMsg && <FormErrorBox>{errorMsg}</FormErrorBox>}
             {loading && <LoadingCentered />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
             {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}
