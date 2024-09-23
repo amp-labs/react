@@ -3,6 +3,7 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 type UpdateInstallationSharedProps = {
   projectId: string;
@@ -10,6 +11,7 @@ type UpdateInstallationSharedProps = {
   installationId: string;
   apiKey: string;
   selectedObjectName: string;
+  setError: (error: string) => void;
   setInstallation: (installationObj: Installation) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
 };
@@ -18,6 +20,7 @@ type UpdateInstallationAndSetStateProps = UpdateInstallationSharedProps & {
 };
 export function updateInstallationAndSetState({
   updateConfig, projectId, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
+  setError,
 }: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
     projectIdOrName: projectId,
@@ -44,6 +47,6 @@ export function updateInstallationAndSetState({
     setInstallation(installation);
     onUpdateSuccess?.(installation.id, installation.config);
   }).catch((err) => {
-    console.error('ERROR: ', err);
+    handleServerError(err, setError);
   });
 }
