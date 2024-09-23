@@ -21,7 +21,7 @@ interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
   onReset: () => void,
   isLoading: boolean,
-  errorMsg?: string,
+  errorMsg?: string | boolean,
 }
 
 // fallback during migration away from chakra-ui, when variable is not defined
@@ -97,7 +97,11 @@ export function ConfigureInstallationBase(
               boxShadow,
             }}
           >
-            {errorMsg && <FormErrorBox>{errorMsg}</FormErrorBox>}
+            {errorMsg && (
+            <FormErrorBox>
+              {(typeof (errorMsg) === 'string') ? errorMsg : 'Installation Failed.'}
+            </FormErrorBox>
+            )}
             {loading && <LoadingCentered />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
             {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}

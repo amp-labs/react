@@ -10,11 +10,12 @@ export enum ErrorBoundary {
   CONNECTION_LIST = 'connectionListError',
   HYDRATED_REVISION = 'hydratedRevisionError',
   INSTALLATION_LIST = 'installationListError',
+  INSTALLATION_MUTATION = 'installationMutationError',
 }
 
 export type ErrorState = {
   [boundary in ErrorBoundary]: {
-    [key: string]: boolean;
+    [key: string]: boolean | string;
   };
 };
 
@@ -22,7 +23,8 @@ export const ErrorContext = createContext<{
   errorState: ErrorState;
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>;
   resetBoundary:(boundary: ErrorBoundary) => void;
-  setError: (boundary: ErrorBoundary, key: string) => void;
+  setError: (boundary: ErrorBoundary, key: string, keyValue?: boolean | string) => void;
+  getError: (boundary: ErrorBoundary, key: string) => boolean | string;
   isError: (boundary: ErrorBoundary, key: string) => boolean;
   removeError: (boundary: ErrorBoundary, key: string) => void;
   setErrors: (boundary: ErrorBoundary, keys: string[]) => void;
@@ -58,13 +60,14 @@ export function ErrorStateProvider(
   const setError = useCallback((
     boundary: ErrorBoundary,
     key: string,
+    keyValue: boolean | string = true,
   ) => {
     setErrorState((prevState) => {
       const newErrorState = {
         ...prevState,
       };
       newErrorState[boundary] = newErrorState[boundary] || {};
-      newErrorState[boundary][key] = true;
+      newErrorState[boundary][key] = keyValue;
       return newErrorState;
     });
   }, [setErrorState]);
@@ -73,6 +76,11 @@ export function ErrorStateProvider(
     boundary: ErrorBoundary,
     key: string,
   ): boolean => !!errorState[boundary]?.[key], [errorState]);
+
+  const getError = useCallback((
+    boundary: ErrorBoundary,
+    key: string,
+  ): boolean | string => errorState[boundary]?.[key], [errorState]);
 
   const removeError = useCallback((
     boundary: ErrorBoundary,
@@ -117,9 +125,9 @@ export function ErrorStateProvider(
 
   const contextValue = useMemo(
     () => ({
-      errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors,
+      errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors, getError,
     }),
-    [errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors],
+    [errorState, setErrorState, setError, isError, removeError, resetBoundary, setErrors, getError],
   );
 
   return (

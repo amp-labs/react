@@ -2,6 +2,7 @@ import {
   api, Config, CreateInstallationOperationRequest,
   CreateInstallationRequestConfig, Installation,
 } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 export type CreateInstallationSharedProps = {
   projectId: string;
@@ -9,6 +10,7 @@ export type CreateInstallationSharedProps = {
   groupRef: string;
   connectionId: string;
   apiKey: string;
+  setError: (error: string) => void;
   setInstallation: (installationObj: Installation) => void;
   onInstallSuccess?: (installationId: string, config: Config) => void;
 };
@@ -17,9 +19,10 @@ type CreateInstallationAndSetStateProps = CreateInstallationSharedProps & {
   createConfig: CreateInstallationRequestConfig;
 };
 
-export function createInstallationAndSetState(
+export async function createInstallationAndSetState(
   {
-    createConfig, projectId, integrationId, groupRef, connectionId, apiKey, setInstallation, onInstallSuccess,
+    createConfig, projectId, integrationId, groupRef, connectionId, apiKey,
+    setError, setInstallation, onInstallSuccess,
   }: CreateInstallationAndSetStateProps,
 ) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
@@ -32,18 +35,16 @@ export function createInstallationAndSetState(
     },
   };
 
-  return api().installationApi.createInstallation(createInstallationRequest, {
-    headers: {
-      'X-Api-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((installation) => {
-      // update local installation state
-      setInstallation(installation);
-      onInstallSuccess?.(installation.id, installation.config);
-    })
-    .catch((err) => {
-      console.error('ERROR: ', err);
+  try {
+    const installation = await api().installationApi.createInstallation(createInstallationRequest, {
+      headers: {
+        'X-Api-Key': apiKey,
+        'Content-Type': 'application/json',
+      },
     });
+    setInstallation(installation);
+    onInstallSuccess?.(installation.id, installation.config);
+  } catch (error) {
+    handleServerError(error, setError);
+  }
 }

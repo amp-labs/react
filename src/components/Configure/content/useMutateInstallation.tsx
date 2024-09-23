@@ -1,6 +1,8 @@
+import { useCallback } from 'react';
+
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
-import { useErrorState } from 'context/ErrorContextProvider';
+import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 
@@ -21,11 +23,49 @@ export const useMutateInstallation = () => {
   const { selectedConnection } = useConnections();
   const apiKey = useApiKey();
   const { projectId } = useProject();
-  const { resetBoundary, setErrors } = useErrorState();
+  const {
+    resetBoundary, setErrors, setError, getError,
+  } = useErrorState();
   const {
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState,
   } = useObjectsConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+
+  /**
+   * Error handling for installation mutation
+   *
+   * The error state is stored in the ErrorContextProvider, specifically for
+   * ErrorBoundary.InstallationMutation
+   *
+   * The key for the error state is the objectName (i.e. the object being installed)
+   * The value is the error message. This allows for errors to be stored for each object
+   * as user may switch objects in the objectNav
+   */
+  const resetMutateInstallationErrorState = useCallback(() => {
+    resetBoundary(ErrorBoundary.INSTALLATION_MUTATION);
+  }, [resetBoundary]);
+
+  // returns a function to set the error for a specific object
+  const setMutateInstallationError = useCallback((objectName?: string) => {
+    if (objectName) {
+      return (error: string) => {
+        setError(ErrorBoundary.INSTALLATION_MUTATION, objectName, error);
+      };
+    }
+    return (error: string) => {
+      console.error('objectName is required to set installation error: ', error);
+    };
+  }, [setError]);
+
+  const getMutateInstallationError = useCallback(
+    (objectName?: string) => {
+      if (objectName) {
+        return getError(ErrorBoundary.INSTALLATION_MUTATION, objectName);
+      }
+      return '';
+    },
+    [getError],
+  );
 
   return {
     integrationId,
@@ -40,6 +80,9 @@ export const useMutateInstallation = () => {
     projectId,
     resetBoundary,
     setErrors,
+    setMutateInstallationError,
+    getMutateInstallationError,
+    resetMutateInstallationErrorState,
     resetConfigureState,
     objectConfigurationsState,
     resetPendingConfigurationState,

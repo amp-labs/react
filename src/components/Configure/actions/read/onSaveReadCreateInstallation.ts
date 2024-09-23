@@ -98,6 +98,7 @@ export const onSaveReadCreateInstallation = (
   apiKey: string,
   hydratedRevision: HydratedRevision,
   configureState: ConfigureState,
+  setError: (error: string) => void,
   setInstallation: (installationObj: Installation) => void,
   onInstallSuccess?: (installationId: string, config: Config) => void, // success callback function
 ): Promise<void | null> => {
@@ -119,6 +120,7 @@ export const onSaveReadCreateInstallation = (
     groupRef,
     connectionId,
     apiKey,
+    setError,
     setInstallation,
     onInstallSuccess,
   });
