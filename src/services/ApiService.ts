@@ -1,10 +1,8 @@
 /* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import {
-  Configuration, ConnectionApi, ConsumerApi,
-  DestinationApi, GroupApi, InstallationApi, IntegrationApi,
-  OAuthApi, OperationApi, ProjectApi, ProviderApi,
-  ProviderAppApi, RevisionApi, UploadURLApi,
+  Configuration, ConnectionApi, InstallationApi, IntegrationApi,
+  OAuthApi, ProjectApi, ProviderApi, ProviderAppApi, RevisionApi,
 } from '@generated/api/src';
 
 /**
@@ -18,19 +16,11 @@ import {
 export class ApiService {
   public connectionApi: ConnectionApi;
 
-  public consumerApi: ConsumerApi;
-
-  public destinationApi: DestinationApi;
-
-  public groupApi: GroupApi;
-
   public installationApi: InstallationApi;
 
   public integrationApi: IntegrationApi;
 
   public oAuthApi: OAuthApi;
-
-  public operationApi: OperationApi;
 
   public projectApi: ProjectApi;
 
@@ -40,21 +30,14 @@ export class ApiService {
 
   public revisionApi: RevisionApi;
 
-  public uploadURLApi: UploadURLApi;
-
   constructor(config: Configuration) {
     this.connectionApi = new ConnectionApi(config);
-    this.consumerApi = new ConsumerApi(config);
-    this.destinationApi = new DestinationApi(config);
-    this.groupApi = new GroupApi(config);
     this.installationApi = new InstallationApi(config);
     this.integrationApi = new IntegrationApi(config);
     this.oAuthApi = new OAuthApi(config);
-    this.operationApi = new OperationApi(config);
     this.projectApi = new ProjectApi(config);
     this.providerApi = new ProviderApi(config);
     this.providerAppApi = new ProviderAppApi(config);
     this.revisionApi = new RevisionApi(config);
-    this.uploadURLApi = new UploadURLApi(config);
   }
 }
