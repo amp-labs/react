@@ -1,5 +1,4 @@
-import { Tag } from '@chakra-ui/react';
-
+import { Tag } from 'components/ui-base/Tag';
 import { useProject } from 'context/ProjectContextProvider';
 
 import { isIntegrationFieldMapping } from '../../utils';
