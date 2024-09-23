@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { on } from 'events';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
