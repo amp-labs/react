@@ -48,6 +48,7 @@ export function onCreateInstallationProxyOnly({
   connectionId,
   apiKey,
   hydratedRevision,
+  setError,
   setInstallation,
   onInstallSuccess,
 }: CreateInstallationProxyOnlyProps) {
@@ -67,6 +68,7 @@ export function onCreateInstallationProxyOnly({
     groupRef,
     connectionId,
     apiKey,
+    setError,
     setInstallation,
     onInstallSuccess,
   });

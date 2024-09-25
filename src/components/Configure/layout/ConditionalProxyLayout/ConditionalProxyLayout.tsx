@@ -45,6 +45,11 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const provider = hydratedRevision?.content?.provider;
   const isProxyOnly: boolean = getIsProxyOnly(hydratedRevision);
 
+  // basic error handling can be improved - i.e. show ui error
+  const setError = (error: string) => {
+    console.error('Error when creating proxy installation:', error);
+  };
+
   useEffect(() => {
     if (!isLoading && hydratedRevision && isProxyOnly
       && !installation && selectedConnection && apiKey && integrationObj?.id) {
@@ -57,6 +62,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
         consumerRef,
         connectionId: selectedConnection?.id,
         hydratedRevision,
+        setError,
         setInstallation,
         onInstallSuccess,
       }).then(() => {

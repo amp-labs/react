@@ -27,6 +27,7 @@ export function CreateInstallation() {
     integrationId, groupRef, consumerRef, setInstallation, hydratedRevision,
     loading, selectedObjectName, selectedConnection, apiKey, projectId,
     resetBoundary, setErrors,
+    setMutateInstallationError, getMutateInstallationError, resetMutateInstallationErrorState,
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
     onInstallSuccess,
   } = useMutateInstallation();
@@ -34,6 +35,8 @@ export function CreateInstallation() {
 
   // is other selected?
   const isOtherSelected = selectedObjectName === OTHER_CONST;
+
+  const errorMsg = getMutateInstallationError(selectedObjectName);
 
   const resetState = useCallback(
     () => {
@@ -58,6 +61,8 @@ export function CreateInstallation() {
   }, [configureState, objectConfigurationsState, hydratedRevision, loading, resetState]);
 
   const onSaveRead = () => {
+    resetMutateInstallationErrorState();
+
     // check if fields with requirements are met
     const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
     const { errorList } = validateFieldMappings(
@@ -80,6 +85,7 @@ export function CreateInstallation() {
         apiKey,
         hydratedRevision,
         configureState,
+        setMutateInstallationError(selectedObjectName),
         setInstallation,
         onInstallSuccess,
       );
@@ -94,6 +100,8 @@ export function CreateInstallation() {
   };
 
   const onSaveWrite = () => {
+    resetMutateInstallationErrorState();
+
     // check if fields with requirements are met
     if (selectedObjectName && selectedConnection?.id && apiKey && projectId
       && integrationId && groupRef && consumerRef && hydratedRevision) {
@@ -107,6 +115,7 @@ export function CreateInstallation() {
         apiKey,
         hydratedRevision,
         configureState,
+        setMutateInstallationError,
         setInstallation,
         onInstallSuccess,
       );
@@ -131,6 +140,7 @@ export function CreateInstallation() {
 
   return (
     <ConfigureInstallationBase
+      errorMsg={errorMsg}
       isCreateMode
       isLoading={isLoading}
       onSave={onSave}
