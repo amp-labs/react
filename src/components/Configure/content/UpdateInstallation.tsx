@@ -26,13 +26,15 @@ export function UpdateInstallation(
   const {
     setInstallation, hydratedRevision,
     loading, selectedObjectName, apiKey, projectId,
-    resetBoundary, setErrors,
+    resetBoundary, setErrors, setMutateInstallationError, getMutateInstallationError,
     resetConfigureState, resetPendingConfigurationState, configureState, onUpdateSuccess,
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
   // is other selected?
   const isOtherSelected = selectedObjectName === OTHER_CONST;
+
+  const errorMsg = getMutateInstallationError(selectedObjectName);
 
   // when no installation or config exists, render create flow
   const { config } = installation;
@@ -93,6 +95,7 @@ export function UpdateInstallation(
         setInstallation,
         hydratedObject,
         hydratedRevision,
+        setMutateInstallationError(selectedObjectName), // setError
         onUpdateSuccess,
       );
 
@@ -140,6 +143,7 @@ export function UpdateInstallation(
 
   return (
     <ConfigureInstallationBase
+      errorMsg={errorMsg}
       onSave={onSave}
       onReset={resetState}
       isLoading={isLoading}

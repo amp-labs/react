@@ -84,6 +84,7 @@ export const onSaveReadUpdateInstallation = (
   setInstallation: (installationObj: Installation) => void,
   hydratedObject: HydratedIntegrationObject,
   hydratedRevision: HydratedRevision,
+  setError: (error: string) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
 ): Promise<void | null> => {
   // get configuration state
@@ -109,6 +110,7 @@ export const onSaveReadUpdateInstallation = (
     installationId,
     apiKey,
     selectedObjectName,
+    setError,
     setInstallation,
     onUpdateSuccess,
   });
