@@ -115,7 +115,7 @@ export function CreateInstallation() {
         apiKey,
         hydratedRevision,
         configureState,
-        setMutateInstallationError,
+        setMutateInstallationError(selectedObjectName),
         setInstallation,
         onInstallSuccess,
       );

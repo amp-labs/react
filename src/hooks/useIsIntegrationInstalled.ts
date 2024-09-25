@@ -4,6 +4,7 @@ import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useIntegrationList } from 'context/IntegrationListContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api, Installation, Integration } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 interface UseIsIntegrationInstalledResult {
   isLoaded: boolean;
@@ -59,7 +60,8 @@ export const useIsIntegrationInstalled = (
       setIsLoaded(true);
       setIsIntegrationInstalled(installationList.length > 0);
     }).catch((err) => {
-      console.error('Error listing installations: ', err);
+      console.error('Error listing installations.');
+      handleServerError(err);
       setIsLoaded(true);
     });
   }, [groupRef, apiKey, projectId, integrationToCheck]);

@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
@@ -50,7 +51,8 @@ export function NoWorkspaceOauthFlow({
       );
       setOAuthPopupURL(url);
     } catch (err: any) {
-      console.error('Could not fetch OAuth popup URL', { err });
+      console.error('Could not fetch OAuth popup URL.');
+      handleServerError(err);
       setError(err.message ?? 'Unexpected error');
     }
   };

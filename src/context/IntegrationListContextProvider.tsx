@@ -6,6 +6,7 @@ import {
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Integration } from 'services/api';
 import { LoadingCentered } from 'src/components/Loading';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
@@ -50,9 +51,10 @@ export function IntegrationListProvider(
       setLoadingState(false);
       setIntegrations(_integrations || []);
     }).catch((err) => {
+      console.error('Error retrieving integration information.');
+      handleServerError(err);
       setLoadingState(false);
       setError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName);
-      console.error('Error retrieving integration information for : ', err);
     });
   }, [projectIdOrName, apiKey, setError]);
 

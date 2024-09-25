@@ -5,6 +5,7 @@ import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 export function UninstallContent() {
   const apiKey = useApiKey();
@@ -38,7 +39,8 @@ export function UninstallContent() {
         resetInstallations();
         setIntegrationDeleted();
       } catch (e) {
-        console.error('error uninstalling installation', e);
+        console.error('Error uninstalling installation.');
+        handleServerError(e);
       } finally {
         setLoading(false);
       }

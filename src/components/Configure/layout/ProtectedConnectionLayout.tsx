@@ -10,6 +10,7 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, ProviderInfo } from 'services/api';
 import { capitalize } from 'src/utils';
+import { handleServerError } from 'src/utils/handleServerError';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -60,7 +61,8 @@ export function ProtectedConnectionLayout({
     getProviderInfo(apiKey, selectedProvider).then((info) => {
       setProviderInfo(info);
     }).catch((err) => {
-      console.error('Error loading provider info: ', err);
+      console.error('Error loading provider info.');
+      handleServerError(err);
     });
   }, [connections, selectedConnection, setSelectedConnection, apiKey, selectedProvider]);
 

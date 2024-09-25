@@ -5,6 +5,7 @@ import {
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Project } from 'services/api';
 import { LoadingCentered } from 'src/components/Loading';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import {
@@ -57,9 +58,10 @@ export function ProjectProvider(
       setLoadingState(false);
       setProject(_project);
     }).catch((err) => {
+      console.error('Error loading Ampersand project.');
+      handleServerError(err);
       setError(ErrorBoundary.PROJECT, projectIdOrName);
       setLoadingState(false);
-      console.error('Error loading Ampersand project: ', err);
     });
   }, [projectIdOrName, apiKey, setLoadingState, setError]);
 

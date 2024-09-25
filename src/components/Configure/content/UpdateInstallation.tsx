@@ -118,6 +118,7 @@ export function UpdateInstallation(
         apiKey,
         configureState,
         hydratedRevision,
+        setMutateInstallationError(selectedObjectName), // setError
         setInstallation,
         onUpdateSuccess,
       );
