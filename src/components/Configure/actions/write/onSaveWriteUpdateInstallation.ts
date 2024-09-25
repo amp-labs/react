@@ -6,6 +6,7 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { ConfigureState } from '../../types';
 import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
@@ -53,6 +54,7 @@ export const onSaveWriteUpdateInstallation = (
   apiKey: string,
   configureState: ConfigureState,
   hydratedRevision: HydratedRevision,
+  setError: (error: string) => void,
   setInstallation: (installationObj: Installation) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
 ): Promise<void | null> => {
@@ -90,6 +92,6 @@ export const onSaveWriteUpdateInstallation = (
     setInstallation(installation);
     onUpdateSuccess?.(installation.id, installation.config);
   }).catch((err) => {
-    console.error('ERROR: ', err);
+    handleServerError(err, setError);
   });
 };

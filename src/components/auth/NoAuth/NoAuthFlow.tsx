@@ -4,6 +4,7 @@ import { GenerateConnectionRequest } from '@generated/api/src';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api, Connection } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { LandingContent } from './LandingContent';
 
@@ -42,7 +43,8 @@ export function NoAuthFlow({
       }).then((conn) => {
         setSelectedConnection(conn);
       }).catch((err) => {
-        console.error('Error loading provider info: ', err);
+        console.error('Error loading provider info.');
+        handleServerError(err);
       });
     }
   }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef, setSelectedConnection, project]);

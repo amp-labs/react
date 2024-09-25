@@ -10,6 +10,7 @@ import {
 } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, HydratedRevision } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -77,7 +78,8 @@ export function HydratedRevisionProvider({
           removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         })
         .catch((err) => {
-          console.error(`Error loading integration ${errorIntegrationIdentifier}`, err);
+          console.error(`Error loading integration ${errorIntegrationIdentifier}.`);
+          handleServerError(err);
           setLoading(false);
           setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         });

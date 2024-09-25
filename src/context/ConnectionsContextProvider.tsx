@@ -6,6 +6,7 @@ import {
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Connection } from 'services/api';
 import { LoadingCentered } from 'src/components/Loading';
+import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
 import {
@@ -75,9 +76,10 @@ export function ConnectionsProvider({
       setLoadingState(false);
       setConnections(_connections);
     }).catch((err) => {
+      console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}.`);
+      handleServerError(err);
       setLoadingState(false);
       setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}:`, err);
     });
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 

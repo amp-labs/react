@@ -13,6 +13,7 @@ import { LoadingCentered } from 'components/Loading';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
+import { handleServerError } from 'src/utils/handleServerError';
 
 interface NoWorkspaceOauthClientCredsFlowProps {
   provider: string;
@@ -59,7 +60,8 @@ export function NoWorkspaceOauthClientCredsFlow({
     }).then((conn) => {
       setSelectedConnection(conn);
     }).catch((err) => {
-      console.error('Error loading provider info: ', err);
+      console.error('Error loading provider info.');
+      handleServerError(err);
       setError('Error loading provider info');
     });
   };
