@@ -1,10 +1,11 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
-  Button, Flex, FormControl,
-  FormLabel, Heading, Input, Link, Text,
+  Button, FormControl,
+  FormLabel, Heading, Input,
 } from '@chakra-ui/react';
 
-import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
+import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
+import { AccessibleLink } from 'components/ui-base/AccessibleLink';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 const SALESFORCE_HELP_URL = 'https://help.salesforce.com/s/articleView?id=sf.faq_domain_name_what.htm&type=5';
@@ -30,18 +31,18 @@ export function SalesforceSubdomainEntry({
         <FormLabel>
           <Heading as="h4" size="md">Enter your Salesforce subdomain</Heading>
         </FormLabel>
-        <Link href={SALESFORCE_HELP_URL} color="blackAlpha.600" isExternal>
-          What is my Salesforce subdomain?
-          <ExternalLinkIcon mx="2px" />
-        </Link>
+        <AccessibleLink href={SALESFORCE_HELP_URL} newTab>
+          {'What is my Salesforce subdomain? '}
+          <ExternalLinkIcon />
+        </AccessibleLink>
         <AuthErrorAlert error={error} />
-        <Flex marginTop="1em">
+        <div style={{ display: 'flex', marginTop: '1em' }}>
           <Input
             placeholder="MyDomain"
             onChange={(event) => setWorkspace(event.currentTarget.value)}
           />
-          <Text lineHeight="2.2em" marginLeft="0.4em">.my.salesforce.com</Text>
-        </Flex>
+          <p style={{ lineHeight: '2.2em', marginLeft: '0.4em' }}>.my.salesforce.com</p>
+        </div>
         <br />
         <Button
           variant="primary"
