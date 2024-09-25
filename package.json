@@ -1,6 +1,6 @@
 {
   "name": "@amp-labs/react",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "description": "Ampersand React library.",
   "author": {
     "name": "Ampersand Labs",
@@ -24,7 +24,7 @@
       "require": "./build/amp-react.cjs.js",
       "types": "./build/index.d.ts"
     },
-     "./styles": "./build/style.css"
+    "./styles": "./build/style.css"
   },
   "files": [
     "build"
