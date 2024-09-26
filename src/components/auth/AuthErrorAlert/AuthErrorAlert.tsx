@@ -1,16 +1,12 @@
-import { Alert, AlertDescription, AlertIcon } from '@chakra-ui/react';
+import { FormErrorBox } from 'src/components/FormErrorBox';
 
 interface OAuthErrorAlertProps {
   error: string | null;
 }
+
 export function AuthErrorAlert({ error }: OAuthErrorAlertProps) {
   if (error) {
-    return (
-      <Alert status="error" marginTop="2em">
-        <AlertIcon />
-        <AlertDescription>{error}</AlertDescription>
-      </Alert>
-    );
+    return <FormErrorBox style={{ marginTop: '2em' }}>{error}</FormErrorBox>;
   }
 
   return null;
