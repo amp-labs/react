@@ -1,11 +1,11 @@
 import { Connection, ProviderInfo } from 'services/api';
 import {
   NoWorkspaceOauthClientCredsFlow,
-} from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthClientCredsFlow';
-import { NoWorkspaceOauthFlow } from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
+} from 'src/components/auth/Oauth/ClientCredentials/NoWorkspaceOauthClientCredsFlow';
 import {
   WorkspaceOauthClientCredsFlow,
-} from 'src/components/auth/Oauth/WorkspaceEntry/WorkspaceOauthClientCredsFlow';
+} from 'src/components/auth/Oauth/ClientCredentials/WorkspaceOauthClientCredsFlow';
+import { NoWorkspaceOauthFlow } from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import { WorkspaceOauthFlow } from 'src/components/auth/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
 import { getProviderName } from 'src/utils';
 
