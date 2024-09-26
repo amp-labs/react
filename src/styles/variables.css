@@ -29,8 +29,13 @@
     --amp-colors-text-secondary: var(--amp-colors-neutral-500);
     --amp-colors-badge: var(--amp-colors-neutral-200);
     --amp-colors-badge-text: var(--amp-colors-neutral-700);
-    
 
+    --amp-colors-link-base: var(--amp-colors-neutral-500);
+    --amp-colors-link-text: var(--amp-colors-link-base);
+    --amp-colors-link-hover: calc(var(--amp-colors-link-base) + 10%);
+    --amp-colors-link-focus: calc(var(--amp-colors-link-base) + 15%);
+    --amp-colors-link-active: calc(var(--amp-colors-link-base) - 20%);
+    
     /* misc */
     --amp-default-border-radius: 4px;
 }

@@ -1,0 +1,20 @@
+.link {
+    color: var(--amp-colors-link-text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+.link:hover,
+.link:focus {
+    text-decoration: underline;
+    outline: none;
+}
+
+.link:focus {
+    outline: 2px solid var(--amp-colors-link-focus);
+    outline-offset: 2px;
+}
+
+.link:active {
+    color: var(--amp-colors-link-active);
+}
