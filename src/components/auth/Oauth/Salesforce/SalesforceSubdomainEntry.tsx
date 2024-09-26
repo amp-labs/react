@@ -3,7 +3,7 @@ import { FormComponent } from 'components/form';
 import { AccessibleLink } from 'components/ui-base/AccessibleLink';
 import { Button } from 'components/ui-base/Button';
 import { isChakraRemoved } from 'src/components/ui-base/constant';
-import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
+import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { ChakraSalesforceSubdomainEntry } from './ChakraSalesforceSubdomainEntry';
 import { SALESFORCE_HELP_URL, SubdomainEntryProps } from './SubdomainEntryProps';
@@ -20,7 +20,7 @@ export function SalesforceSubdomainEntry({
 
   return (
     <AuthCardLayout>
-      <h1 style={{ fontWeight: 600, lineHeight: 1.2, fontSize: '1.2em' }}>Enter your Salesforce subdomain</h1>
+      <AuthTitle>Enter your Salesforce subdomain</AuthTitle>
       <AccessibleLink href={SALESFORCE_HELP_URL} newTab>
         What is my Salesforce subdomain?
       </AccessibleLink>
@@ -35,7 +35,7 @@ export function SalesforceSubdomainEntry({
         <p style={{ lineHeight: '2.2em', marginLeft: '0.4em' }}>.my.salesforce.com</p>
       </div>
       <Button
-        style={{ marginTop: '1em' }}
+        style={{ marginTop: '1em', width: '100%' }}
         disabled={isButtonDisabled}
         type="submit"
         onClick={handleSubmit}

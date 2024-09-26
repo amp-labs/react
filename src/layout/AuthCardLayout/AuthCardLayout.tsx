@@ -19,3 +19,9 @@ export function AuthCardLayout({ children }: AuthCardLayoutProps) {
     </Container>
   );
 }
+
+export function AuthTitle({ children }: AuthCardLayoutProps) {
+  return (
+    <h1 style={{ fontWeight: 600, lineHeight: 1.2, fontSize: '1.2em' }}>{children}</h1>
+  );
+}
