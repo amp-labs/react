@@ -5,8 +5,8 @@ import { useProject } from 'context/ProjectContextProvider';
 
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
-import { SalesforceSubdomainEntry } from '../Salesforce/SalesforceSubdomainEntry';
 
+import { SalesforceSubdomainEntry } from './Salesforce/SalesforceSubdomainEntry';
 import { WorkspaceEntryContent } from './WorkspaceEntryContent';
 
 const PROVIDER_SALESFORCE = 'salesforce';
