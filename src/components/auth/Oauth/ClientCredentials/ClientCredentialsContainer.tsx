@@ -11,12 +11,9 @@ import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import {
-  WorkspaceClientCredentialsContent,
-  WorkspaceClientCredentialsCreds,
-} from './WorkspaceClientCredentialsContent';
+import { ClientCredentialsContent, ClientCredentialsCredsContent } from './ClientCredentialsContent';
 
-interface WorkspaceOauthClientCredsFlowProps {
+interface OauthClientCredsContainerProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -24,26 +21,27 @@ interface WorkspaceOauthClientCredsFlowProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
+  explicitWorkspaceRequired?: boolean;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
 }
 
 /**
- * @deprecated remove after chakra is removed
- * NoWorkspaceOauthFlow first prompts user with a next button,
+ * OauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function WorkspaceOauthClientCredsFlow({
+export function ClientCredsContainer({
   provider, providerName,
-  consumerRef, consumerName, groupRef, groupName, explicitScopesRequired,
+  consumerRef, consumerName, groupRef, groupName,
+  explicitScopesRequired, explicitWorkspaceRequired,
   selectedConnection, setSelectedConnection,
-}: WorkspaceOauthClientCredsFlowProps) {
+}: OauthClientCredsContainerProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const [error, setError] = useState<string | null>(null);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async (creds: WorkspaceClientCredentialsCreds) => {
+  const handleSubmit = async (creds: ClientCredentialsCredsContent) => {
     setError(null);
     const req: GenerateConnectionRequest = {
       groupName,
@@ -72,11 +70,12 @@ export function WorkspaceOauthClientCredsFlow({
 
   if (selectedConnection === null) {
     return (
-      <WorkspaceClientCredentialsContent
+      <ClientCredentialsContent
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
+        explicitWorkspaceRequired={explicitWorkspaceRequired}
       />
     );
   }

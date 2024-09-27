@@ -52,6 +52,7 @@ export function OauthFlow({
     return (
       <ClientCredentials
         {...sharedProps}
+        explicitWorkspaceRequired={explicitWorkspaceRequired}
         explicitScopesRequired={explicitScopesRequired}
         selectedConnection={selectedConnection}
         setSelectedConnection={setSelectedConnection}

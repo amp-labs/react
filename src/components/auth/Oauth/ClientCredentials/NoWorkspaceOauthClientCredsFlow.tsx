@@ -29,6 +29,7 @@ interface NoWorkspaceOauthClientCredsFlowProps {
 }
 
 /**
+ * @deprecated remove after chakra is removed
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */

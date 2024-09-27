@@ -29,6 +29,11 @@ type LandingContentProps = {
   providerName?: string;
 };
 
+/**
+ * @deprecated remove after removing chakra
+ * @param param0
+ * @returns
+ */
 export function NoWorkspaceClientCredentialsContent({
   handleSubmit, error, explicitScopesRequired, isButtonDisabled, providerName,
 }: LandingContentProps) {
