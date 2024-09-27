@@ -31,6 +31,12 @@ export interface PatchApiKeyRequestApiKey {
      * @memberof PatchApiKeyRequestApiKey
      */
     active?: boolean;
+    /**
+     * The scopes for the API key.
+     * @type {Array<string>}
+     * @memberof PatchApiKeyRequestApiKey
+     */
+    scopes?: Array<string>;
 }
 
 /**
@@ -54,6 +60,7 @@ export function PatchApiKeyRequestApiKeyFromJSONTyped(json: any, ignoreDiscrimin
         
         'label': !exists(json, 'label') ? undefined : json['label'],
         'active': !exists(json, 'active') ? undefined : json['active'],
+        'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
     };
 }
 
@@ -68,6 +75,7 @@ export function PatchApiKeyRequestApiKeyToJSON(value?: PatchApiKeyRequestApiKey 
         
         'label': value.label,
         'active': value.active,
+        'scopes': value.scopes,
     };
 }
 
