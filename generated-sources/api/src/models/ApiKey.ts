@@ -32,6 +32,12 @@ export interface ApiKey {
      */
     label: string;
     /**
+     * The scopes for the API key.
+     * @type {Array<string>}
+     * @memberof ApiKey
+     */
+    scopes: Array<string>;
+    /**
      * The project ID.
      * @type {string}
      * @memberof ApiKey
@@ -52,6 +58,7 @@ export function instanceOfApiKey(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "key" in value;
     isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "scopes" in value;
     isInstance = isInstance && "projectId" in value;
 
     return isInstance;
@@ -69,6 +76,7 @@ export function ApiKeyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ap
         
         'key': json['key'],
         'label': json['label'],
+        'scopes': json['scopes'],
         'projectId': json['projectId'],
         'active': !exists(json, 'active') ? undefined : json['active'],
     };
@@ -85,6 +93,7 @@ export function ApiKeyToJSON(value?: ApiKey | null): any {
         
         'key': value.key,
         'label': value.label,
+        'scopes': value.scopes,
         'projectId': value.projectId,
         'active': value.active,
     };

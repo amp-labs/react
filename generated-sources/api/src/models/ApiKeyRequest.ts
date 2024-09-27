@@ -25,6 +25,12 @@ export interface ApiKeyRequest {
      * @memberof ApiKeyRequest
      */
     label: string;
+    /**
+     * The scopes for the API key.
+     * @type {Array<string>}
+     * @memberof ApiKeyRequest
+     */
+    scopes?: Array<string>;
 }
 
 /**
@@ -48,6 +54,7 @@ export function ApiKeyRequestFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'label': json['label'],
+        'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
     };
 }
 
@@ -61,6 +68,7 @@ export function ApiKeyRequestToJSON(value?: ApiKeyRequest | null): any {
     return {
         
         'label': value.label,
+        'scopes': value.scopes,
     };
 }
 
