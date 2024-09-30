@@ -1,13 +1,10 @@
 import { Connection, ProviderInfo } from 'services/api';
-import {
-  NoWorkspaceOauthClientCredsFlow,
-} from 'src/components/auth/Oauth/ClientCredentials/NoWorkspaceOauthClientCredsFlow';
-import {
-  WorkspaceOauthClientCredsFlow,
-} from 'src/components/auth/Oauth/ClientCredentials/WorkspaceOauthClientCredsFlow';
-import { NoWorkspaceOauthFlow } from 'src/components/auth/Oauth/NoWorkspaceEntry/NoWorkspaceOauthFlow';
-import { WorkspaceOauthFlow } from 'src/components/auth/Oauth/WorkspaceEntry/WorkspaceOauthFlow';
 import { getProviderName } from 'src/utils';
+
+import { NoWorkspaceOauthFlow } from '../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow';
+import { WorkspaceOauthFlow } from '../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow';
+import { NoWorkspaceOauthClientCredsFlow } from '../ClientCredentials/NoWorkspaceOauthClientCredsFlow';
+import { WorkspaceOauthClientCredsFlow } from '../ClientCredentials/WorkspaceOauthClientCredsFlow';
 
 const AUTHORIZATION_CODE = 'authorizationCode';
 const CLIENT_CREDENTIALS = 'clientCredentials';
