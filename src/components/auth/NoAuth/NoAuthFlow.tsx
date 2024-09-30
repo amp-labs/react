@@ -6,7 +6,7 @@ import { useProject } from 'context/ProjectContextProvider';
 import { api, Connection } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { LandingContent } from './LandingContent';
+import { NoAuthContent } from './NoAuthContent';
 
 type NoAuthFlowProps = {
   provider: string;
@@ -54,7 +54,7 @@ export function NoAuthFlow({
   };
 
   if (selectedConnection === null) {
-    return <LandingContent handleSubmit={onNext} error={null} providerName={providerName} />;
+    return <NoAuthContent handleSubmit={onNext} error={null} providerName={providerName} />;
   }
 
   return children;
