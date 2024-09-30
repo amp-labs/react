@@ -6,15 +6,14 @@ import {
 import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
-type WorkspaceEntryProps = {
-  handleSubmit: () => void;
-  setWorkspace: (workspace: string) => void;
-  error: string | null;
-  isButtonDisabled?: boolean;
-  providerName?: string;
-};
+import { WorkspaceEntryProps } from './WorkspaceEntryProps';
 
-export function WorkspaceEntry({
+/**
+ * @deprecated - delete file after removing chakra-ui
+ * @param param0
+ * @returns
+ */
+export function ChakraWorkspaceEntry({
   handleSubmit, setWorkspace, error, isButtonDisabled, providerName,
 }: WorkspaceEntryProps) {
   return (
