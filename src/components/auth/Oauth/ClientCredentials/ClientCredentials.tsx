@@ -2,9 +2,9 @@ import { Connection } from '@generated/api/src';
 
 import { isChakraRemoved } from 'src/components/ui-base/constant';
 
+import { NoWorkspaceOauthClientCredsFlow } from './deprecated/NoWorkspaceOauthClientCredsFlow';
+import { WorkspaceOauthClientCredsFlow } from './deprecated/WorkspaceOauthClientCredsFlow';
 import { ClientCredsContainer } from './ClientCredentialsContainer';
-import { NoWorkspaceOauthClientCredsFlow } from './NoWorkspaceOauthClientCredsFlow';
-import { WorkspaceOauthClientCredsFlow } from './WorkspaceOauthClientCredsFlow';
 
 interface ClientCredsFlowProps {
   provider: string;
