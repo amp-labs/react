@@ -32,7 +32,7 @@ export function ChakraSalesforceSubdomainEntry({
         <AuthErrorAlert error={error} />
         <div style={{ display: 'flex', marginTop: '1em' }}>
           <Input
-            placeholder="MyDomain"
+            placeholder="my-domain"
             onChange={(event) => setWorkspace(event.currentTarget.value)}
           />
           <p style={{ lineHeight: '2.2em', marginLeft: '0.4em' }}>.my.salesforce.com</p>
