@@ -5,17 +5,18 @@
 import { useState } from 'react';
 import { Connection, GenerateConnectionRequest } from '@generated/api/src';
 
-import {
-  ClientCredentialsContent,
-  ClientCredentialsCreds,
-} from 'components/auth/Oauth/NoWorkspaceEntry/ClientCredentialsContent';
 import { LoadingCentered } from 'components/Loading';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-interface NoWorkspaceOauthClientCredsFlowProps {
+import {
+  WorkspaceClientCredentialsContent,
+  WorkspaceClientCredentialsCreds,
+} from './WorkspaceClientCredentialsContent';
+
+interface WorkspaceOauthClientCredsFlowProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -31,16 +32,17 @@ interface NoWorkspaceOauthClientCredsFlowProps {
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function NoWorkspaceOauthClientCredsFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, explicitScopesRequired, providerName,
+export function WorkspaceOauthClientCredsFlow({
+  provider, providerName,
+  consumerRef, consumerName, groupRef, groupName, explicitScopesRequired,
   selectedConnection, setSelectedConnection,
-}: NoWorkspaceOauthClientCredsFlowProps) {
+}: WorkspaceOauthClientCredsFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const [error, setError] = useState<string | null>(null);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async (creds: ClientCredentialsCreds) => {
+  const handleSubmit = async (creds: WorkspaceClientCredentialsCreds) => {
     setError(null);
     const req: GenerateConnectionRequest = {
       groupName,
@@ -48,6 +50,7 @@ export function NoWorkspaceOauthClientCredsFlow({
       consumerName,
       consumerRef,
       provider,
+      providerWorkspaceRef: creds.workspace,
       oauth2ClientCredentials: {
         clientId: creds.clientId,
         clientSecret: creds.clientSecret,
@@ -68,7 +71,7 @@ export function NoWorkspaceOauthClientCredsFlow({
 
   if (selectedConnection === null) {
     return (
-      <ClientCredentialsContent
+      <WorkspaceClientCredentialsContent
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}

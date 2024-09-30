@@ -15,45 +15,40 @@ import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAler
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
-export type WorkspaceClientCredentialsCreds = {
-  workspace: string;
+export type ClientCredentialsCreds = {
   clientId: string;
   clientSecret: string;
   scopes?: string[];
 };
 
 type LandingContentProps = {
-  handleSubmit: (creds: WorkspaceClientCredentialsCreds) => void;
+  handleSubmit: (creds: ClientCredentialsCreds) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
 };
 
-export function ClientCredentialsContent({
-  handleSubmit, error, isButtonDisabled, providerName,
-  explicitScopesRequired,
+export function NoWorkspaceClientCredentialsContent({
+  handleSubmit, error, explicitScopesRequired, isButtonDisabled, providerName,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
   const [clientId, setClientId] = useState('');
-  const [workspace, setWorkspace] = useState('');
   const [scopes, setScopes] = useState('');
 
   const onToggleShowHide = () => setShow(!show);
+
   const handleClientSecretChange = (event: React.FormEvent<HTMLInputElement>) => setClientSecret(event.currentTarget.value);
   const handleClientIdChange = (event: React.FormEvent<HTMLInputElement>) => setClientId(event.currentTarget.value);
-  const handleWorkspaceChange = (event: React.FormEvent<HTMLInputElement>) => setWorkspace(event.currentTarget.value);
   const handleScopesChange = (event: React.FormEvent<HTMLTextAreaElement>) => setScopes(event.currentTarget.value);
 
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
-  const isWorkspaceValid = workspace.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !isClientSecretValid || !isClientIdValid || !isWorkspaceValid;
+  const isSubmitDisabled = isButtonDisabled || !isClientSecretValid || !isClientIdValid;
 
   const onHandleSubmit = () => {
-    const req: WorkspaceClientCredentialsCreds = {
-      workspace,
+    const req: ClientCredentialsCreds = {
       clientId,
       clientSecret,
     };
@@ -75,10 +70,6 @@ export function ClientCredentialsContent({
         <br />
 
         <Stack spacing={4}>
-          <Input
-            placeholder="MyWorkspace"
-            onChange={handleWorkspaceChange}
-          />
           <Input placeholder="Client ID" onChange={handleClientIdChange} />
           <InputGroup size="md">
             <Input
@@ -100,7 +91,6 @@ export function ClientCredentialsContent({
             />
           )}
         </Stack>
-
         <br />
 
         <Button
