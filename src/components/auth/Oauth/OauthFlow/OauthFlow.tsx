@@ -3,8 +3,7 @@ import { getProviderName } from 'src/utils';
 
 import { NoWorkspaceOauthFlow } from '../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import { WorkspaceOauthFlow } from '../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow';
-import { NoWorkspaceOauthClientCredsFlow } from '../ClientCredentials/NoWorkspaceOauthClientCredsFlow';
-import { WorkspaceOauthClientCredsFlow } from '../ClientCredentials/WorkspaceOauthClientCredsFlow';
+import { ClientCredentials } from '../ClientCredentials/ClientCredentials';
 
 const AUTHORIZATION_CODE = 'authorizationCode';
 const CLIENT_CREDENTIALS = 'clientCredentials';
@@ -30,62 +29,32 @@ export function OauthFlow({
   const { grantType, explicitScopesRequired, explicitWorkspaceRequired } = providerInfo.oauth2Opts;
   const providerName = getProviderName(provider, providerInfo);
 
+  const sharedProps = {
+    provider,
+    consumerRef,
+    consumerName,
+    groupRef,
+    groupName,
+    providerName,
+  };
+
   if (grantType === AUTHORIZATION_CODE) {
     // required workspace
     if (explicitWorkspaceRequired) {
-      return (
-        <WorkspaceOauthFlow
-          provider={provider}
-          consumerRef={consumerRef}
-          consumerName={consumerName}
-          groupRef={groupRef}
-          groupName={groupName}
-          providerName={providerName}
-        />
-      );
+      return <WorkspaceOauthFlow {...sharedProps} />;
     }
 
     // no workspace required
-    return (
-      <NoWorkspaceOauthFlow
-        provider={provider}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-        providerName={providerName}
-      />
-    );
+    return <NoWorkspaceOauthFlow {...sharedProps} />;
   }
 
   if (grantType === CLIENT_CREDENTIALS) {
-    if (explicitWorkspaceRequired) {
-      return (
-        <WorkspaceOauthClientCredsFlow
-          provider={provider}
-          consumerRef={consumerRef}
-          consumerName={consumerName}
-          groupRef={groupRef}
-          groupName={groupName}
-          explicitScopesRequired={explicitScopesRequired}
-          setSelectedConnection={setSelectedConnection}
-          selectedConnection={selectedConnection}
-          providerName={providerName}
-        />
-      );
-    }
-
     return (
-      <NoWorkspaceOauthClientCredsFlow
-        provider={provider}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
+      <ClientCredentials
+        {...sharedProps}
         explicitScopesRequired={explicitScopesRequired}
-        setSelectedConnection={setSelectedConnection}
         selectedConnection={selectedConnection}
-        providerName={providerName}
+        setSelectedConnection={setSelectedConnection}
       />
     );
   }
