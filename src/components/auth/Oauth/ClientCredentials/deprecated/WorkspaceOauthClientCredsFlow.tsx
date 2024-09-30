@@ -12,11 +12,11 @@ import { api } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import {
-  ClientCredentialsCreds,
-  NoWorkspaceClientCredentialsContent,
-} from './NoWorkspaceClientCredentialsContent';
+  WorkspaceClientCredentialsContent,
+  WorkspaceClientCredentialsCreds,
+} from './WorkspaceClientCredentialsContent';
 
-interface NoWorkspaceOauthClientCredsFlowProps {
+interface WorkspaceOauthClientCredsFlowProps {
   provider: string;
   consumerRef: string;
   consumerName?: string;
@@ -29,19 +29,21 @@ interface NoWorkspaceOauthClientCredsFlowProps {
 }
 
 /**
+ * @deprecated remove after chakra is removed
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function NoWorkspaceOauthClientCredsFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, explicitScopesRequired, providerName,
+export function WorkspaceOauthClientCredsFlow({
+  provider, providerName,
+  consumerRef, consumerName, groupRef, groupName, explicitScopesRequired,
   selectedConnection, setSelectedConnection,
-}: NoWorkspaceOauthClientCredsFlowProps) {
+}: WorkspaceOauthClientCredsFlowProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const [error, setError] = useState<string | null>(null);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async (creds: ClientCredentialsCreds) => {
+  const handleSubmit = async (creds: WorkspaceClientCredentialsCreds) => {
     setError(null);
     const req: GenerateConnectionRequest = {
       groupName,
@@ -49,6 +51,7 @@ export function NoWorkspaceOauthClientCredsFlow({
       consumerName,
       consumerRef,
       provider,
+      providerWorkspaceRef: creds.workspace,
       oauth2ClientCredentials: {
         clientId: creds.clientId,
         clientSecret: creds.clientSecret,
@@ -69,7 +72,7 @@ export function NoWorkspaceOauthClientCredsFlow({
 
   if (selectedConnection === null) {
     return (
-      <NoWorkspaceClientCredentialsContent
+      <WorkspaceClientCredentialsContent
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
