@@ -11,7 +11,7 @@ import { handleServerError } from 'src/utils/handleServerError';
 import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 
-import { LandingContent } from './LandingContent';
+import { NoWorkspaceEntryContent } from './NoWorkspaceEntryContent';
 
 interface NoWorkspaceOauthFlowProps {
   provider: string;
@@ -68,7 +68,7 @@ export function NoWorkspaceOauthFlow({
       oauthUrl={oAuthPopupURL}
       onError={onError}
     >
-      <LandingContent handleSubmit={handleSubmit} error={error} providerName={providerName} />
+      <NoWorkspaceEntryContent handleSubmit={handleSubmit} error={error} providerName={providerName} />
     </OAuthWindow>
   );
 }

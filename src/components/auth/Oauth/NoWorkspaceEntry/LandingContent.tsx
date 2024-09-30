@@ -5,14 +5,14 @@ import {
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
-type LandingContentProps = {
-  handleSubmit: () => void;
-  error: string | null;
-  isButtonDisabled?: boolean;
-  providerName?: string;
-};
+import { LandingContentProps } from './LandingContentProps';
 
-export function LandingContent({
+/**
+ * @deprecated - delete file after removing chakra-ui
+ * @param param0
+ * @returns
+ */
+export function ChakraLandingContent({
   handleSubmit, error, isButtonDisabled, providerName,
 }: LandingContentProps) {
   return (
