@@ -9,22 +9,20 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
-import { ProviderInfo } from '@generated/api/src';
 
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { AuthCardLayout } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { getProviderName } from 'src/utils';
 
-type LandingContentProps = {
-  provider: string;
-  providerInfo: ProviderInfo;
-  handleSubmit: (value: string) => void;
-  error: string | null;
-  isButtonDisabled?: boolean;
-};
+import { LandingContentProps } from './LandingContentProps';
 
-export function LandingContent({
+/**
+ * @deprecated This component is deprecated and will be removed with chakra-ui
+ * @param param0
+ * @returns
+ */
+export function ChakraLandingContent({
   provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
@@ -77,7 +75,7 @@ export function LandingContent({
           width="100%"
           type="submit"
           onClick={() => {
-            handleSubmit(apiKey);
+            handleSubmit({ apiKey });
           }}
         >
           Next
