@@ -29,5 +29,5 @@
 
 /* Additional styling to support screen readers */
 button[aria-expanded="true"] {
-    background-color: #004080;  /* Can visually indicate button state */
+    background-color: var(--amp-accessibility-color);  /* Can visually indicate button state */
 }

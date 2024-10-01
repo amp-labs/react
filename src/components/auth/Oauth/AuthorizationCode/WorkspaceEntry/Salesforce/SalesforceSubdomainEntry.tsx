@@ -29,7 +29,7 @@ export function SalesforceSubdomainEntry({
         <FormComponent.Input
           id="salesforce-subdomain"
           type="text"
-          placeholder="MyDomain"
+          placeholder="my-domain"
           onChange={(event) => setWorkspace(event.currentTarget.value)}
         />
         <p style={{ lineHeight: '2.2em', marginLeft: '0.4em' }}>.my.salesforce.com</p>
