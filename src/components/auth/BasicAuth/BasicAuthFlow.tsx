@@ -8,11 +8,7 @@ import { handleServerError } from 'src/utils/handleServerError';
 
 import { BasicAuthContent } from './BasicAuthContent';
 import { BasicAuthFlowProps } from './BasicAuthFlowProps';
-
-type BasicCreds = {
-  user: string;
-  pass: string;
-};
+import { BasicCreds } from './LandingContentProps';
 
 export function BasicAuthFlow({
   provider, providerInfo, consumerRef, consumerName, groupRef, groupName,
@@ -49,9 +45,9 @@ export function BasicAuthFlow({
   }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName,
     groupRef, project, creds, setSelectedConnection]);
 
-  const onNext = (form: any) => {
-    const { username, password } = form;
-    setCreds({ user: username, pass: password });
+  const onNext = (form: BasicCreds) => {
+    const { user, pass } = form;
+    setCreds({ user, pass });
     setNextStep(true);
   };
 

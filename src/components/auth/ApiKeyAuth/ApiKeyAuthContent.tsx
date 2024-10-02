@@ -10,34 +10,23 @@ import { getProviderName } from 'src/utils';
 import { ChakraLandingContent } from './ChakraLandingContent';
 import { LandingContentProps } from './LandingContentProps';
 
-function BasicAuthContentForm({
+function ApiKeyAuthContentForm({
   provider, providerInfo, handleSubmit, error, isButtonDisabled,
 }: LandingContentProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const { username, password } = formData;
+  const [apiKey, setApiKey] = useState('');
+  const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setApiKey(event.currentTarget.value);
 
+  const isApiKeyValid = apiKey.length > 0;
+  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
   const providerName = getProviderName(provider, providerInfo);
-  const docsURL = providerInfo.basicOpts?.docsURL;
-  const isUserValid = username.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !isUserValid;
-
-  // This is a workaround for the fact that some providers use Basic Auth
-  // to actually represent API key based auth.
-  // TODO(ENG-1424): Uncomment the following line when we handle this properly.
-  // const isPassValid = password.length > 0;
-  // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-
-  const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.currentTarget;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (
     <AuthCardLayoutTemplate
       providerName={providerName}
-      handleSubmit={() => { handleSubmit({ user: username, pass: password }); }}
+      handleSubmit={() => { handleSubmit({ apiKey }); }}
       error={error}
       isButtonDisabled={isSubmitDisabled}
     >
@@ -49,23 +38,16 @@ function BasicAuthContentForm({
         <DocsHelperText
           url={docsURL}
           providerDisplayName={providerName}
-          credentialName="credentials"
+          credentialName="API key"
         />
         )}
-        <FormComponent.Input
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Username"
-          onChange={(event) => handleChange(event)}
-        />
         <div style={{ display: 'flex', gap: '.5rem' }}>
           <FormComponent.Input
             id="password"
             name="password"
             type={show ? 'text' : 'password'}
             placeholder="Password"
-            onChange={(event) => handleChange(event)}
+            onChange={(event) => handlePasswordChange(event)}
           />
           <Button
             type="button"
@@ -85,12 +67,12 @@ function BasicAuthContentForm({
  * @param param0
  * @returns
  */
-export function BasicAuthContent({ ...props }: LandingContentProps) {
+export function ApiKeyAuthContent({ ...props }: LandingContentProps) {
   if (!isChakraRemoved) {
     return <ChakraLandingContent {...props} />;
   }
 
   return (
-    <BasicAuthContentForm {...props} />
+    <ApiKeyAuthContentForm {...props} />
   );
 }

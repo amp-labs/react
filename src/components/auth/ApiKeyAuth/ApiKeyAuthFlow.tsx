@@ -6,7 +6,8 @@ import { useProject } from 'context/ProjectContextProvider';
 import { api, Connection } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { LandingContent } from './LandingContent';
+import { ApiKeyAuthContent } from './ApiKeyAuthContent';
+import { IFormType } from './LandingContentProps';
 
 type ApiKeyAuthFlowProps = {
   provider: string;
@@ -52,13 +53,13 @@ export function ApiKeyAuthFlow({
   }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName, groupRef,
     project, setSelectedConnection, providerApiKey]);
 
-  const onNext = (value: string) => {
-    setProviderApiKey(value);
+  const onNext = (form: IFormType) => {
+    setProviderApiKey(form.apiKey);
     setNextStep(true);
   };
 
   if (selectedConnection === null) {
-    return <LandingContent provider={provider} providerInfo={providerInfo} handleSubmit={onNext} error={null} />;
+    return <ApiKeyAuthContent provider={provider} providerInfo={providerInfo} handleSubmit={onNext} error={null} />;
   }
 
   return children;
