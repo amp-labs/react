@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { Box } from '@chakra-ui/react';
 
-import { LoadingCentered } from 'components/Loading';
+import { RedirectLoading } from './RedirectLoading';
 
 type RedirectHandlerProps = {
   redirectURL?: string;
@@ -26,14 +25,7 @@ export function RedirectHandler({ redirectURL, children } : RedirectHandlerProps
   }, [redirectURL]);
 
   // show a loading message if a redirect URL is present
-  if (redirectURL) {
-    return (
-      <Box display="flex" alignItems="center" justifyContent="center">
-        <LoadingCentered />
-        <p>Redirecting</p>
-      </Box>
-    );
-  }
+  if (redirectURL) return <RedirectLoading />;
 
   // render children if no redirect URL is present
   return children;
