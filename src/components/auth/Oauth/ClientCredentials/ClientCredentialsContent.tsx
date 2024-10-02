@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import {
-  Textarea,
-} from '@chakra-ui/react';
 
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { FormComponent } from 'src/components/form';
@@ -113,7 +110,7 @@ export function ClientCredentialsContent({
           </Button>
         </div>
         {explicitScopesRequired && (
-        <Textarea
+        <FormComponent.Textarea
           name="scopes"
           placeholder="Scopes separated by new line"
           onChange={(event) => handleChange(event)}
