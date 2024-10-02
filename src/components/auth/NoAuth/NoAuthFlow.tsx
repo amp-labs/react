@@ -20,6 +20,11 @@ type NoAuthFlowProps = {
   setSelectedConnection: (connection: Connection | null) => void;
 };
 
+/**
+ * This flow is only used as for a mock provider. This flow is used for testing only.
+ * @param param0
+ * @returns
+ */
 export function NoAuthFlow({
   provider, consumerRef, consumerName, groupRef, groupName,
   children, selectedConnection, setSelectedConnection, providerName,
