@@ -6,7 +6,7 @@ import { useProject } from 'context/ProjectContextProvider';
 import { api, Connection } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { LandingContent } from './LandingContent';
+import { NoAuthContent } from './NoAuthContent';
 
 type NoAuthFlowProps = {
   provider: string;
@@ -20,6 +20,11 @@ type NoAuthFlowProps = {
   setSelectedConnection: (connection: Connection | null) => void;
 };
 
+/**
+ * This flow is only used as for a mock provider. This flow is used for testing only.
+ * @param param0
+ * @returns
+ */
 export function NoAuthFlow({
   provider, consumerRef, consumerName, groupRef, groupName,
   children, selectedConnection, setSelectedConnection, providerName,
@@ -54,7 +59,7 @@ export function NoAuthFlow({
   };
 
   if (selectedConnection === null) {
-    return <LandingContent handleSubmit={onNext} error={null} providerName={providerName} />;
+    return <NoAuthContent handleSubmit={onNext} error={null} providerName={providerName} />;
   }
 
   return children;
