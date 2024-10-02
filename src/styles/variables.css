@@ -41,6 +41,7 @@
     --amp-colors-link-active: calc(var(--amp-colors-link-base) - 20%);
 
     --amp-colors-button-primary: var(--amp-colors-accent-primary);
+    --amp-colors-button-primary-hover: var(--amp-colors-neutral-600);
     --amp-colors-button-primary-disabled: var(--amp-colors-accent-secondary);
     --amp-colors-button-text: var(--amp-colors-neutral-200);
     

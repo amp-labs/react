@@ -13,6 +13,10 @@
     transition: all .1s ease;
 }
 
+.button:hover {
+    background-color: var(--amp-colors-button-primary-hover);
+}
+
 .buttonError {
     border: 1px solid var(--amp-colors-error-border);
 }
@@ -23,6 +27,7 @@
 }
 
 .button:disabled {
+    color: var(--amp-colors-button-text);
     background-color: var(--amp-colors-button-primary-disabled);
     cursor: not-allowed;
 }
@@ -40,4 +45,19 @@ button[aria-expanded="true"] {
 
 .danger:hover {
     background-color: var(--amp-colors-error-background-hover);
+}
+
+.ghost {
+    background-color: transparent;
+    color: var(--amp-colors-button-primary);
+}
+
+.ghost:hover {
+    background-color: var(--amp-colors-button-primary-hover);
+    color: var(--amp-colors-button-text);
+}
+
+.ghost:hover:disabled {
+    color: var(--amp-colors-button-text);
+    background-color: var(--amp-colors-button-primary-disabled);
 }
