@@ -37,7 +37,7 @@ function BasicAuthContentForm({
   return (
     <AuthCardLayoutTemplate
       providerName={providerName}
-      handleSubmit={() => { handleSubmit({ username, password }); }}
+      handleSubmit={() => { handleSubmit({ user: username, pass: password }); }}
       error={error}
       isButtonDisabled={isSubmitDisabled}
     >
