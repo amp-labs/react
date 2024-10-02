@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Select, Stack, Text } from '@chakra-ui/react';
+import { Select } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
 
@@ -38,9 +38,9 @@ export function FieldMapping(
   ), [allFields]);
 
   return (
-    <Stack key={field.mapToName}>
-      <Text fontWeight="500">{field.mapToDisplayName}</Text>
-      <Text marginBottom="5px" fontSize={14}>{field?.prompt}</Text>
+    <div key={field.mapToName} style={{ display: 'flex', flexDirection: 'column' }}>
+      <h3 style={{ fontWeight: 500 }}>{field.mapToDisplayName}</h3>
+      <p style={{ paddingBottom: '1rem' }}>{field?.prompt}</p>
       <Select
         name={field.mapToName}
         variant="flushed"
@@ -51,6 +51,6 @@ export function FieldMapping(
       >
         {options}
       </Select>
-    </Stack>
+    </div>
   );
 }
