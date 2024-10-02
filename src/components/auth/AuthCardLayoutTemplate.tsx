@@ -4,7 +4,7 @@ import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLay
 import { AuthErrorAlert } from './AuthErrorAlert/AuthErrorAlert';
 
 type AuthCardLayoutTemplateProps = {
-  handleSubmit: (creds: any) => void;
+  handleSubmit: (form: any) => void;
   error: string | null;
   isButtonDisabled?: boolean;
   providerName?: string;

@@ -75,18 +75,21 @@ export function ProtectedConnectionLayout({
 
   if (providerInfo == null) return <strong>Provider not found</strong>;
 
+  const sharedProps = {
+    provider: selectedProvider,
+    consumerRef,
+    consumerName,
+    groupRef,
+    groupName,
+    selectedConnection,
+    setSelectedConnection,
+    providerName,
+    providerInfo,
+  };
+
   if (providerInfo.authType === 'none') {
     return (
-      <NoAuthFlow
-        provider={selectedProvider}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        setSelectedConnection={setSelectedConnection}
-        selectedConnection={selectedConnection}
-        groupRef={groupRef}
-        groupName={groupName}
-        providerName={providerName}
-      >
+      <NoAuthFlow {...sharedProps}>
         {children}
       </NoAuthFlow>
     );
@@ -94,16 +97,7 @@ export function ProtectedConnectionLayout({
 
   if (providerInfo.authType === 'basic') {
     return (
-      <BasicAuthFlow
-        provider={selectedProvider}
-        providerInfo={providerInfo}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        setSelectedConnection={setSelectedConnection}
-        selectedConnection={selectedConnection}
-        groupRef={groupRef}
-        groupName={groupName}
-      >
+      <BasicAuthFlow {...sharedProps}>
         {children}
       </BasicAuthFlow>
     );
@@ -111,31 +105,13 @@ export function ProtectedConnectionLayout({
 
   if (providerInfo.authType === 'apiKey') {
     return (
-      <ApiKeyAuthFlow
-        provider={selectedProvider}
-        providerInfo={providerInfo}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        setSelectedConnection={setSelectedConnection}
-        selectedConnection={selectedConnection}
-        groupRef={groupRef}
-        groupName={groupName}
-      >
+      <ApiKeyAuthFlow {...sharedProps}>
         {children}
       </ApiKeyAuthFlow>
     );
   }
 
   return (
-    <OauthFlow
-      provider={selectedProvider}
-      providerInfo={providerInfo}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-      setSelectedConnection={setSelectedConnection}
-      selectedConnection={selectedConnection}
-    />
+    <OauthFlow {...sharedProps} />
   );
 }

@@ -1,24 +1,13 @@
 import { useEffect, useState } from 'react';
-import { GenerateConnectionRequest, ProviderInfo } from '@generated/api/src';
+import { GenerateConnectionRequest } from '@generated/api/src';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { api, Connection } from 'services/api';
+import { api } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { LandingContent } from './LandingContent';
-
-type BasicAuthFlowProps = {
-  provider: string;
-  providerInfo: ProviderInfo;
-  consumerRef: string;
-  consumerName?: string;
-  groupRef: string;
-  groupName?: string;
-  children: JSX.Element,
-  selectedConnection: Connection | null;
-  setSelectedConnection: (connection: Connection | null) => void;
-};
+import { BasicAuthContent } from './BasicAuthContent';
+import { BasicAuthFlowProps } from './BasicAuthFlowProps';
 
 type BasicCreds = {
   user: string;
@@ -60,14 +49,15 @@ export function BasicAuthFlow({
   }, [apiKey, provider, nextStep, consumerName, consumerRef, groupName,
     groupRef, project, creds, setSelectedConnection]);
 
-  const onNext = (user: string, pass: string) => {
-    setCreds({ user, pass });
+  const onNext = (form: any) => {
+    const { username, password } = form;
+    setCreds({ user: username, pass: password });
     setNextStep(true);
   };
 
   if (selectedConnection === null) {
     return (
-      <LandingContent
+      <BasicAuthContent
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={onNext}
