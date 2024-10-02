@@ -21,6 +21,7 @@
     --amp-colors-border: var(--amp-colors-neutral-200);
 
     --amp-colors-error-background: #FEF2F2;
+    --amp-colors-error-background-hover: #FED7D7;
     --amp-colors-error-border: #FECACA;
     --amp-colors-error-text: #991B1B;
 
