@@ -41,24 +41,26 @@ export function RequiredFieldMappings() {
     integrationFieldMappings.length ? (
       <>
         <FieldHeader string="Map the following fields (required)" />
-        {integrationFieldMappings.map((field: any) => (
-          <FormControl
-            key={field.mapToName}
-            isInvalid={
+        <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
+          {integrationFieldMappings.map((field: any) => (
+            <FormControl
+              key={field.mapToName}
+              isInvalid={
               isError(
                 ErrorBoundary.MAPPING,
                 field.mapToName,
               )
             }
-          >
-            <FieldMapping
-              allFields={configureState.read?.allFields || []}
-              field={field}
-              onSelectChange={onSelectChange}
-            />
-            <FormErrorMessage> * required</FormErrorMessage>
-          </FormControl>
-        ))}
+            >
+              <FieldMapping
+                allFields={configureState.read?.allFields || []}
+                field={field}
+                onSelectChange={onSelectChange}
+              />
+              <FormErrorMessage> * required</FormErrorMessage>
+            </FormControl>
+          ))}
+        </div>
       </>
     )
       : null
