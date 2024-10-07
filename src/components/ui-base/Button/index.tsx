@@ -8,20 +8,25 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   style?: React.CSSProperties;
   children: React.ReactNode;
   type: 'button' | 'submit' | 'reset';
-  variant?: 'danger';
+  variant?: 'danger' | 'ghost';
 }
 
 export function Button({
   className, style, type, children, variant, ...rest
 }: ButtonProps) {
-  const buttonClass = (variant === 'danger') ? classNames(classes.button, classes.danger) : classes.button;
+  // button class is a combination of the base button class and the variant class
+  const buttonClass = classNames(classes.button, {
+    [classes.danger]: variant === 'danger',
+    [classes.ghost]: variant === 'ghost',
+    [className || '']: !!className,
+  });
 
   return (
     <button
       // button type is a required pass through prop
       // eslint-disable-next-line react/button-has-type
       type={type}
-      className={classNames(buttonClass, className)}
+      className={buttonClass}
       style={style}
       {...rest}
     >{children}

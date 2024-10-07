@@ -1,10 +1,12 @@
 import { FormEventHandler } from 'react';
-import { Button } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { Button } from 'src/components/ui-base/Button';
+import { isChakraRemoved } from 'src/components/ui-base/constant';
 
 import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
 import { UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/UninstallInstallation';
@@ -67,6 +69,20 @@ export function ConfigureInstallationBase(
   // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
+  const ButtonBridgeSubmit = isChakraRemoved
+    ? <Button type="submit" disabled={isDisabled}>{isCreateMode ? 'Install' : 'Save'}</Button>
+    : (
+      <ChakraButton type="submit" variant="primary" isDisabled={isDisabled}>
+        {isCreateMode ? 'Install' : 'Save'}
+      </ChakraButton>
+    );
+
+  const ButtonBridgeReset = isChakraRemoved
+    ? <Button type="button" onClick={onReset} disabled={isDisabled} variant="ghost">Reset</Button>
+    : (
+      <ChakraButton isDisabled={isDisabled} onClick={onReset}>Reset</ChakraButton>
+    );
+
   return (
     isLoading ? <LoadingCentered />
       : (
@@ -75,18 +91,8 @@ export function ConfigureInstallationBase(
             display: 'flex', flexDirection: 'row-reverse', gap: '1rem', marginBottom: '2rem',
           }}
           >
-            <Button
-              variant="primary"
-              type="submit"
-              isDisabled={isDisabled}
-            >
-              {isCreateMode ? 'Install' : 'Save'}
-            </Button>
-            <Button
-              isDisabled={isDisabled}
-              onClick={onReset}
-            >Reset
-            </Button>
+            {ButtonBridgeSubmit}
+            {ButtonBridgeReset}
           </div>
           <Box
             style={{

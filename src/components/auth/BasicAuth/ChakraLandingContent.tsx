@@ -84,7 +84,9 @@ export function ChakraLandingContent({
           isDisabled={isSubmitDisabled}
           width="100%"
           type="submit"
-          onClick={() => handleSubmit({ user: username, pass: password })}
+          onClick={() => {
+            handleSubmit({ user: username, pass: password });
+          }}
         >
           Next
         </Button>
