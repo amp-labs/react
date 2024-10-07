@@ -88,10 +88,12 @@
     "@emotion/react": "^x.x.x",
     "@emotion/styled": "^x.x.x",
     "framer-motion": "^x.x.x",
-    "react": "^18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
+    "@radix-ui/react-popover": "^1.1.2",
     "classnames": "^2.5.1",
     "immer": "^10.0.3",
     "lodash.isequal": "^4.5.0"

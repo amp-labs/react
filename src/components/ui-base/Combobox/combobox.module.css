@@ -1,0 +1,46 @@
+/* Container styling for the combobox input */
+.comboboxInput {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Input focus state */
+.comboboxInput:focus {
+  border-color: #007bff;
+}
+
+/* Styling for the dropdown list (Popover.Content) */
+.comboboxContent {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 10;
+}
+
+/* Styling for each list item */
+.comboboxItem {
+  padding: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Hover effect on list item */
+.comboboxItem:hover {
+  background-color: #f0f0f0;
+}
+
+/* Selected item style (optional, can add more logic for selected state in React) */
+.comboboxItem.selected {
+  background-color: #007bff;
+  color: white;
+}
