@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Button, Stack, Text } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
+import { Button } from 'src/components/ui-base/Button';
+import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { handleServerError } from 'src/utils/handleServerError';
 
 export function UninstallContent() {
@@ -52,15 +54,19 @@ export function UninstallContent() {
     ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
     : "You've successfully uninstalled the integration.";
 
-  return (
-    <Stack>
-      <Text paddingBottom={3}>{content}</Text>
-
-      { installation?.id && (
-      <Button onClick={onDelete} variant="warning" isDisabled={isDisabled}>
+  const ButtonBridge = isChakraRemoved
+    ? <Button type="button" onClick={onDelete} disabled={isDisabled} variant="danger">{buttonContent}</Button>
+    : (
+      <ChakraButton onClick={onDelete} variant="warning" isDisabled={isDisabled}>
         {buttonContent}
-      </Button>
-      )}
-    </Stack>
+      </ChakraButton>
+    );
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <p>{content}</p>
+
+      { installation?.id && ButtonBridge }
+    </div>
   );
 }

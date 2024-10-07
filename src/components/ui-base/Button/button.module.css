@@ -31,3 +31,13 @@
 button[aria-expanded="true"] {
     background-color: var(--amp-accessibility-color);  /* Can visually indicate button state */
 }
+
+.danger {
+    color: var(--amp-colors-error-text);
+    background-color: var(--amp-colors-error-background);
+    border-color: var(--amp-colors-error-border);
+}
+
+.danger:hover {
+    background-color: var(--amp-colors-error-background-hover);
+}
