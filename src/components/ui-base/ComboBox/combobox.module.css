@@ -1,0 +1,60 @@
+.comboboxContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 1rem;
+}
+
+.inputContainer {
+  display: flex;
+  background-color: white;
+  border: 1px solid;
+  border-color: var(--amp-colors-border);
+  border-radius: var(--amp-default-border-radius);
+}
+
+.input {
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.toggleButton {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+  border: 1px solid;
+  border-color: var(--amp-colors-border);
+  z-index: 10;
+  border-radius: var(--amp-default-border-radius);
+}
+
+.menuItem {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuItem:hover,
+.highlighted {
+  background-color: var(--amp-colors-menu-hover);
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}

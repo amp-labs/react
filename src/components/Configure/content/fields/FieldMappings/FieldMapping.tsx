@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Select } from '@chakra-ui/react';
+import { Select as ChakraSelect } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
+import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
+import { isChakraRemoved } from 'src/components/ui-base/constant';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
@@ -37,20 +39,44 @@ export function FieldMapping(
     (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,
   ), [allFields]);
 
+  const items = useMemo(() => allFields.map((f) => ({
+    id: f.fieldName,
+    label: f.displayName,
+    value: f.fieldName,
+  })), [allFields]);
+
+  const SelectComponent = isChakraRemoved ? (
+    <ComboBox
+      items={items}
+      selectedValue={fieldValue || null}
+      onSelectedItemChange={(item) => {
+        onSelectChange({
+          target: {
+            name: field.mapToName,
+            value: item?.value,
+          } as unknown as HTMLSelectElement,
+        } as unknown as React.ChangeEvent<HTMLSelectElement>);
+      }}
+      placeholder="Please select one"
+    />
+  ) : (
+    <ChakraSelect
+      name={field.mapToName}
+      variant="flushed"
+      value={fieldValue || undefined}
+      onChange={onSelectChange}
+      placeholder={!fieldValue ? 'Please select one' : undefined} // remove placeholder when value is selected
+      disabled={disabled}
+    >
+      {options}
+    </ChakraSelect>
+  );
+
   return (
     <div key={field.mapToName} style={{ display: 'flex', flexDirection: 'column' }}>
       <h3 style={{ fontWeight: 500 }}>{field.mapToDisplayName}</h3>
       <p style={{ paddingBottom: '1rem' }}>{field?.prompt}</p>
-      <Select
-        name={field.mapToName}
-        variant="flushed"
-        value={fieldValue || undefined}
-        onChange={onSelectChange}
-        placeholder={!fieldValue ? 'Please select one' : undefined} // remove placeholder when value is selected
-        disabled={disabled}
-      >
-        {options}
-      </Select>
+      {SelectComponent}
     </div>
   );
 }
