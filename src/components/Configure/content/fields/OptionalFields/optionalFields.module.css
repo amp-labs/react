@@ -1,0 +1,46 @@
+.checkboxGroupContainer {
+    margin-bottom: 10px;
+    border: 2px solid var(--amp-colors-border);
+    border-radius: var(--amp-default-border-radius);
+}
+.stack {
+    overflow-y: scroll;
+    max-height: 300px;
+}
+  
+.selectAllContainer {
+    background-color: var(--amp-colors-neutral-100);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+}
+  
+.fieldContainer {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--amp-colors-border);
+    display: flex;
+    align-items: center;
+}
+  
+.checkbox {
+    margin-right: 10px;
+    background-color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    border: 1px solid var(--amp-colors-border);
+    cursor: pointer;
+}
+
+.checkbox:hover {
+    background-color: var(--amp-accessibility-color); 
+}
+  
+.checkbox:focus {
+    box-shadow: 0 0 0 2px var(--amp-colors-focus-border);
+}
+  
