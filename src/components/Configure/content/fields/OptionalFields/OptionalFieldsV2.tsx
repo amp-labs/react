@@ -1,15 +1,12 @@
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon, DividerHorizontalIcon } from '@radix-ui/react-icons';
+import {
+  CheckboxField, CheckboxFieldsContainer, CheckboxGroup, SelectAllCheckbox,
+} from 'components/ui-base/Checkbox';
 
 import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
 import { setOptionalField } from './setOptionalField';
-
-import styles from './optionalFields.module.css'; // CSS module for styling
-
-const selectAllID = 'selectAll';
 
 export function OptionalFieldsV2() {
   const {
@@ -47,47 +44,33 @@ export function OptionalFieldsV2() {
     shouldRender && (
       <>
         <FieldHeader string={`${appName} reads the following optional fields`} />
-        <div className={styles.checkboxGroupContainer}>
+        <CheckboxGroup>
           {(readOptionalFields?.length || 0) >= 2 && (
-          <div className={styles.selectAllContainer}>
-            <Checkbox.Root
-              className={styles.checkbox}
-              id={selectAllID}
+            <SelectAllCheckbox
+              id="select-all-fields"
+              isChecked={isAllChecked}
+              label="Select all"
               onCheckedChange={onSelectAllCheckboxChange}
-            >
-              <Checkbox.Indicator id={selectAllID}>
-                {isIndeterminate && <DividerHorizontalIcon />}
-                {isAllChecked === true && <CheckIcon />}
-              </Checkbox.Indicator>
-            </Checkbox.Root>
-            {/* fix eslint issue with custom checkbox label */}
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor={selectAllID}>Select all</label>
-          </div>
+              isIndeterminate={isIndeterminate}
+            />
           )}
-          <div className={styles.stack}>
+          <CheckboxFieldsContainer>
             {readOptionalFields.map((field) => {
               if (!isIntegrationFieldMapping(field)) {
                 return (
-                  <div key={field.fieldName} className={styles.fieldContainer}>
-                    <Checkbox.Root
-                      className={styles.checkbox}
-                      id={field.fieldName}
-                      checked={!!selectedOptionalFields?.[field?.fieldName]}
-                      onCheckedChange={(checked) => onCheckboxChange(checked, field.fieldName)}
-                    >
-                      <Checkbox.Indicator>
-                        <CheckIcon />
-                      </Checkbox.Indicator>
-                    </Checkbox.Root>
-                    <label htmlFor={field.fieldName}>{field.displayName}</label>
-                  </div>
+                  <CheckboxField
+                    key={field.fieldName}
+                    id={field.fieldName}
+                    isChecked={!!selectedOptionalFields?.[field?.fieldName]}
+                    label={field.displayName}
+                    onCheckedChange={(checked) => onCheckboxChange(checked, field.fieldName)}
+                  />
                 );
               }
               return null;
             })}
-          </div>
-        </div>
+          </CheckboxFieldsContainer>
+        </CheckboxGroup>
       </>
     )
   );
