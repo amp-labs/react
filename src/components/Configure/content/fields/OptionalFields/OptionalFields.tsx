@@ -1,12 +1,19 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
+import { isChakraRemoved } from 'src/components/ui-base/constant';
+
 import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { OptionalFieldsV2 } from './OptionalFieldsV2';
 import { setOptionalField } from './setOptionalField';
 
-export function OptionalFields() {
+/**
+ * @deprecated This component is deprecated and will be removed with chakra-ui
+ * @returns
+ */
+export function ChakraOptionalFields() {
   const {
     appName, configureState, setConfigureState, selectedObjectName,
   } = useSelectedConfigureState();
@@ -84,4 +91,11 @@ export function OptionalFields() {
       </>
     )
   );
+}
+
+export function OptionalFields() {
+  if (isChakraRemoved) {
+    return <OptionalFieldsV2 />;
+  }
+  return <ChakraOptionalFields />;
 }

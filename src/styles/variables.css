@@ -58,6 +58,7 @@
     --amp-colors-button-text: var(--amp-colors-neutral-200);
 
     --amp-colors-menu-hover:  var(--amp-colors-gray-100);
+    --amp-colors-focus-border: var(--amp-colors-neutral-800);
         
     /* misc */
     --amp-default-border-radius: 4px;
