@@ -5,8 +5,9 @@ import { Container } from '../ui-base/Container/Container';
 
 interface ConnectedSuccessBoxProps {
   text: string;
+  children?: React.ReactNode;
 }
-export function SuccessTextBox({ text }: ConnectedSuccessBoxProps) {
+export function SuccessTextBox({ text, children }: ConnectedSuccessBoxProps) {
   return (
     <Container>
       <Box style={{
@@ -21,6 +22,7 @@ export function SuccessTextBox({ text }: ConnectedSuccessBoxProps) {
       >
         <SuccessCheckmarkIcon />
         <p>{text}</p>
+        {children}
       </Box>
     </Container>
   );
