@@ -8,6 +8,8 @@ import { useInstallIntegrationProps } from 'context/InstallIntegrationContextPro
 import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
+import { Button } from 'src/components/ui-base/Button';
+import { isChakraRemoved } from 'src/components/ui-base/constant';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
@@ -23,6 +25,7 @@ const getIsProxyOnly = (hydratedRevision: HydratedRevision | null) => {
 
 interface ConditionalProxyLayoutProps {
   children: React.ReactNode;
+  resetComponent: () => void; // resets installation integration component
 }
 
 /**
@@ -30,7 +33,7 @@ interface ConditionalProxyLayoutProps {
  * then it will not render the ConfigureInstallation
  * @returns
  */
-export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps) {
+export function ConditionalProxyLayout({ children, resetComponent }: ConditionalProxyLayoutProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
@@ -78,7 +81,22 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
   if (isLoading) return <LoadingCentered />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
-  if (isIntegrationDeleted) return <SuccessTextBox text="Integration successfully uninstalled." />;
+  if (isIntegrationDeleted) {
+    return (
+      <SuccessTextBox
+        text="Integration successfully uninstalled."
+      >
+        {isChakraRemoved && (
+        <Button
+          type="button"
+          onClick={resetComponent}
+          style={{ width: '100%' }}
+        >Reinstall Integration
+        </Button>
+        )}
+      </SuccessTextBox>
+    );
+  }
 
   return (
     <div>

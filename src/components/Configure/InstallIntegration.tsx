@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
@@ -11,6 +13,15 @@ import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
+
+// creates a random seed to force update the component
+// pass the seed as a key to the component
+function useForceUpdate() {
+  const [seed, setSeed] = useState(1);
+  const reset = () => { setSeed(Math.random()); };
+
+  return { seed, reset };
+}
 
 interface InstallIntegrationProps {
   integration: string, // integration name
@@ -31,6 +42,7 @@ export function InstallIntegration(
 ) {
   const { projectId } = useProject();
   const { errorState } = useErrorState();
+  const { seed, reset } = useForceUpdate();
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
     return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
@@ -39,6 +51,7 @@ export function InstallIntegration(
   return (
     // install integration provider provides all props, integrationObj and installation
     <InstallIntegrationProvider
+      key={seed} // force update when seed changes
       integration={integration}
       consumerRef={consumerRef}
       consumerName={consumerName}
@@ -56,7 +69,7 @@ export function InstallIntegration(
           groupName={groupName}
         >
           <HydratedRevisionProvider projectId={projectId}>
-            <ConditionalProxyLayout>
+            <ConditionalProxyLayout resetComponent={reset}>
               <ConfigurationProvider>
                 <ObjectManagementNav>
                   <InstallationContent />
