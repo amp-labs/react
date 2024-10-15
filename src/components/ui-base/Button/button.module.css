@@ -15,6 +15,7 @@
 
 .button:hover {
     background-color: var(--amp-colors-button-primary-hover);
+    box-shadow: var(--amp-button-hover-shadow);
 }
 
 .buttonError {
@@ -44,17 +45,16 @@ button[aria-expanded="true"] {
 }
 
 .danger:hover {
-    background-color: var(--amp-colors-error-background-hover);
+    background-color: var(--amp-colors-error-background-hover);   
 }
 
 .ghost {
-    background-color: transparent;
-    color: var(--amp-colors-button-primary);
+    background-color: white;
+    color: var(--amp-colors-neutral-900);
 }
 
 .ghost:hover {
-    background-color: var(--amp-colors-button-primary-hover);
-    color: var(--amp-colors-button-text);
+    background-color: var(--amp-button-hover-shadow);
 }
 
 .ghost:hover:disabled {
