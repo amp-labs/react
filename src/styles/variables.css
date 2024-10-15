@@ -54,8 +54,8 @@
 
     --amp-colors-button-primary: var(--amp-colors-accent-primary);
     --amp-colors-button-primary-hover: var(--amp-colors-neutral-600);
-    --amp-colors-button-primary-disabled: var(--amp-colors-accent-secondary);
     --amp-colors-button-text: var(--amp-colors-neutral-200);
+    --amp-button-hover-shadow: var(--amp-shadows-sm);
 
     --amp-colors-menu-hover:  var(--amp-colors-gray-100);
     --amp-colors-focus-border: var(--amp-colors-neutral-800);
