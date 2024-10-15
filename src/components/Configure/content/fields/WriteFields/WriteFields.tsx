@@ -1,11 +1,18 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/react';
 
+import { isChakraRemoved } from 'src/components/ui-base/constant';
+
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
 import { setNonConfigurableWriteField } from './setNonConfigurableWriteField';
+import { WriteFieldsV2 } from './WriteFieldsV2';
 
-export function WriteFields() {
+/**
+ * @deprecated This component is deprecated and will be removed with chakra-ui
+ * @returns
+ */
+function ChakraWriteFields() {
   const {
     appName, selectedObjectName, configureState, setConfigureState,
   } = useSelectedConfigureState();
@@ -81,4 +88,12 @@ export function WriteFields() {
       </>
     )
   );
+}
+
+export function WriteFields() {
+  if (isChakraRemoved) {
+    return <WriteFieldsV2 />;
+  }
+
+  return <ChakraWriteFields />;
 }
