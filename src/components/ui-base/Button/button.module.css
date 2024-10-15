@@ -28,8 +28,7 @@
 }
 
 .button:disabled {
-    color: var(--amp-colors-button-text);
-    background-color: var(--amp-colors-button-primary-disabled);
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
@@ -57,7 +56,3 @@ button[aria-expanded="true"] {
     background-color: var(--amp-button-hover-shadow);
 }
 
-.ghost:hover:disabled {
-    color: var(--amp-colors-button-text);
-    background-color: var(--amp-colors-button-primary-disabled);
-}
