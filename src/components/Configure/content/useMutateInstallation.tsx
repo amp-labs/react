@@ -6,7 +6,7 @@ import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 
-import { useSelectedObjectName } from '../nav/ObjectManagementNav';
+import { useNextIncompleteTabIndex, useSelectedObjectName } from '../nav/ObjectManagementNav/ObjectManagementNavContext';
 import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getConfigureState } from '../state/utils';
@@ -30,7 +30,7 @@ export const useMutateInstallation = () => {
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState,
   } = useObjectsConfigureState();
   const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
-
+  const { onNextIncompleteTab } = useNextIncompleteTabIndex();
   /**
    * Error handling for installation mutation
    *
@@ -89,5 +89,6 @@ export const useMutateInstallation = () => {
     configureState,
     onInstallSuccess,
     onUpdateSuccess,
+    onNextIncompleteTab,
   };
 };
