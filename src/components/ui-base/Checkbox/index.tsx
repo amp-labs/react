@@ -25,7 +25,7 @@ export function CheckboxField({
           <CheckIcon />
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} style={{overflowWrap: "anywhere"}}>{label}</label>
     </div>
   );
 }

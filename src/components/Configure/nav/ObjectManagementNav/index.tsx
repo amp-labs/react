@@ -83,7 +83,7 @@ export function ObjectManagementNav({
         <Box
           style={{
             display: 'flex',
-            gap: '4rem',
+            gap: '1rem',
             padding: '3rem',
             backgroundColor,
           }}

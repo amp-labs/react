@@ -80,7 +80,7 @@ function ChakraWriteFields() {
                 onChange={onCheckboxChange}
                 isChecked={!!selectedWriteFields?.[field.objectName]}
               >
-                {field.displayName}
+                <p style={{ overflowWrap: 'anywhere' }}>{field.displayName}</p>
               </Checkbox>
             </Box>
           ))}

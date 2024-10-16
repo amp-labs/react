@@ -80,7 +80,7 @@ export function ChakraOptionalFields() {
                     isChecked={!!selectedOptionalFields?.[field?.fieldName]}
                     onChange={onCheckboxChange}
                   >
-                    {field.displayName}
+                    <p style={{ overflowWrap: 'anywhere' }}>{field.displayName}</p>
                   </Checkbox>
                 </Box>
               );
