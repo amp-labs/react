@@ -34,6 +34,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
     border: 1px solid var(--amp-colors-border);
     cursor: pointer;
+    flex: none;
 }
 
 .checkbox:hover {

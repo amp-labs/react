@@ -86,7 +86,7 @@ export function ConfigureInstallationBase(
   return (
     isLoading ? <LoadingCentered />
       : (
-        <form style={{ width: '100%', maxWidth: '50rem' }} onSubmit={onSave}>
+        <form style={{ width: '34rem' }} onSubmit={onSave}>
           <div style={{
             display: 'flex', flexDirection: 'row-reverse', gap: '1rem', marginBottom: '2rem',
           }}
