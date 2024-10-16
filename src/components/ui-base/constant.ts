@@ -10,4 +10,6 @@
  * ```
  *
  */
-export const isChakraRemoved = false;
+
+// parent app my turn on or off the chakra-ui components with this flag
+export const isChakraRemoved = process.env.REACT_APP_ENABLE_CSS || false;
