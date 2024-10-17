@@ -30,6 +30,7 @@ export function CreateInstallation() {
     setMutateInstallationError, getMutateInstallationError, resetMutateInstallationErrorState,
     resetConfigureState, objectConfigurationsState, resetPendingConfigurationState, configureState,
     onInstallSuccess,
+    onNextIncompleteTab,
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
@@ -93,6 +94,7 @@ export function CreateInstallation() {
       res.finally(() => {
         setLoadingState(false);
         resetPendingConfigurationState(selectedObjectName);
+        onNextIncompleteTab();
       });
     } else {
       console.error('CreateInstallallation - onSaveReadCreate: missing required props');
@@ -123,6 +125,7 @@ export function CreateInstallation() {
       res.finally(() => {
         setLoadingState(false);
         resetPendingConfigurationState(selectedObjectName);// reset write pending/isModified state
+        onNextIncompleteTab();
       });
     } else {
       console.error('CreateInstallallation - onSaveWriteCreate: missing required props');

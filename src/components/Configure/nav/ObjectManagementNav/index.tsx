@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useState,
+  useCallback, useMemo, useState,
 } from 'react';
 import {
   Tabs, Text,
@@ -19,22 +19,9 @@ import { NavObject } from '../../types';
 import { generateOtherNavObject, generateReadNavObjects } from '../../utils';
 
 import { NavObjectItem } from './NavObjectItem';
+import { NextTabIndexContext, SelectedObjectNameContext } from './ObjectManagementNavContext';
 import { OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
-
-// Create a context for the selected navObject's name
-export const SelectedObjectNameContext = createContext<string | null | undefined>(null);
-
-// Custom hook to access the selected navObject's name
-export function useSelectedObjectName() {
-  const selectedNavObjectName = useContext(SelectedObjectNameContext);
-  if (selectedNavObjectName === null) {
-    throw new Error(
-      'useSelectedNavObjectName must be used within a SelectedNavObjectNameProvider',
-    );
-  }
-  return { selectedObjectName: selectedNavObjectName }; // Return as an object
-}
 
 type ObjectManagementNavProps = {
   children?: React.ReactNode;
@@ -73,54 +60,68 @@ export function ObjectManagementNav({
   const isWriteSupported = !!hydratedRevision?.content?.write;
   const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
 
-  const allNavObjects = [...(readNavObjects || [])];
-  if (otherNavObject && isWriteSupported) { allNavObjects.push(otherNavObject); }
+  const allNavObjects = useMemo(() => {
+    const navObjects = [...(readNavObjects || [])];
+    if (otherNavObject && isWriteSupported) { navObjects.push(otherNavObject); }
+    return navObjects;
+  }, [readNavObjects, otherNavObject, isWriteSupported]);
   const selectedObject = getSelectedObject(allNavObjects, tabIndex);
 
+  /**
+   * Function to navigate to the first uncompleted tab or do nothing if all tabs are completed
+   *  */
+  const onNextIncompleteTab = useCallback(() => {
+    const nextIncompleteNavObj = allNavObjects.find((navObj) => selectedObject !== navObj && !navObj.completed);
+    if (nextIncompleteNavObj) {
+      setTabIndex(allNavObjects.indexOf(nextIncompleteNavObj));
+    }
+  }, [allNavObjects, selectedObject]);
+
   return (
-    <SelectedObjectNameContext.Provider value={selectedObject?.name}>
-      <Container style={{ maxWidth: '55rem' }}>
-        <Box
-          style={{
-            display: 'flex',
-            gap: '1rem',
-            padding: '3rem',
-            backgroundColor,
-          }}
-        >
-          <div style={{ width: '20rem' }}>
-            <Text>{getProviderName(provider)} integration</Text>
-            <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
-            {isNavObjectsReady && (
-            <Tabs
-              index={tabIndex}
-              onChange={setTabIndex}
-              orientation="horizontal"
-            >
-              {/* Read tab */}
-              {readNavObjects.map((object) => (
-                <NavObjectItem
-                  key={object.name}
-                  objectName={object.name}
-                  completed={object.completed}
-                  pending={
+    <NextTabIndexContext.Provider value={onNextIncompleteTab}>
+      <SelectedObjectNameContext.Provider value={selectedObject?.name}>
+        <Container style={{ maxWidth: '55rem' }}>
+          <Box
+            style={{
+              display: 'flex',
+              gap: '1rem',
+              padding: '3rem',
+              backgroundColor,
+            }}
+          >
+            <div style={{ width: '20rem' }}>
+              <Text>{getProviderName(provider)} integration</Text>
+              <Text marginBottom="20px" fontSize="1.125rem" fontWeight="500">{appName}</Text>
+              {isNavObjectsReady && (
+              <Tabs
+                index={tabIndex}
+                onChange={setTabIndex}
+                orientation="horizontal"
+              >
+                {/* Read tab */}
+                {readNavObjects.map((object) => (
+                  <NavObjectItem
+                    key={object.name}
+                    objectName={object.name}
+                    completed={object.completed}
+                    pending={
                     objectConfigurationsState[object.name]?.read?.isOptionalFieldsModified
                     || objectConfigurationsState[object.name]?.read?.isRequiredMapFieldsModified
                   }
-                />
-              ))}
+                  />
+                ))}
 
-              {/* Other tab - write */}
-              { isWriteSupported && otherNavObject && (
+                {/* Other tab - write */}
+                { isWriteSupported && otherNavObject && (
                 <OtherTab
                   completed={otherNavObject.completed}
                   pending={objectConfigurationsState?.other?.write?.isWriteModified}
                   displayName={readNavObjects?.length ? 'other' : 'write'}
                 />
-              ) }
+                ) }
 
-              {/* Uninstall tab */}
-              {installation && (
+                {/* Uninstall tab */}
+                {installation && (
                 <>
                   <Divider style={{ margin: '3rem 0 1rem 0' }} />
                   <UninstallInstallation
@@ -128,14 +129,15 @@ export function ObjectManagementNav({
                     text="Uninstall"
                   />
                 </>
+                )}
+              </Tabs>
               )}
-            </Tabs>
-            )}
-          </div>
-          {children}
-        </Box>
-        <AmpersandFooter />
-      </Container>
-    </SelectedObjectNameContext.Provider>
+            </div>
+            {children}
+          </Box>
+          <AmpersandFooter />
+        </Container>
+      </SelectedObjectNameContext.Provider>
+    </NextTabIndexContext.Provider>
   );
 }

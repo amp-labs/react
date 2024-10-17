@@ -28,6 +28,7 @@ export function UpdateInstallation(
     loading, selectedObjectName, apiKey, projectId,
     resetBoundary, setErrors, setMutateInstallationError, getMutateInstallationError,
     resetConfigureState, resetPendingConfigurationState, configureState, onUpdateSuccess,
+    onNextIncompleteTab,
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
@@ -102,6 +103,7 @@ export function UpdateInstallation(
       res.finally(() => {
         setLoadingState(false);
         resetPendingConfigurationState(selectedObjectName);
+        onNextIncompleteTab();
       });
     } else {
       console.error('UpdateInstallation - onSaveUpdate missing required props');
@@ -126,6 +128,7 @@ export function UpdateInstallation(
       res.finally(() => {
         setLoadingState(false);
         resetPendingConfigurationState(selectedObjectName);
+        onNextIncompleteTab();
       });
     } else {
       console.error('UpdateInstallation - onSaveUpdate missing required props');
