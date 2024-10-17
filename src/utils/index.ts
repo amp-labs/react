@@ -1,5 +1,20 @@
 import { Integration, ProviderInfo } from '../services/api';
 
+/**
+ * Get the value of an environment variable or return a default value safely
+ * solves issue of process.env not being available in some environments
+ * @param varName
+ * @param defaultValue
+ * @returns
+ */
+export function getEnvVariable(varName: string, defaultValue?: string | boolean | undefined) {
+  try {
+    return process.env[varName];
+  } catch (e) {
+    return defaultValue;
+  }
+}
+
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
