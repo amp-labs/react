@@ -23,12 +23,52 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
+interface Mapping {
+    /**
+     * The name of the field to map to.
+     * Example: "source"
+     */
+    mapToName: string;
+    /**
+     * The display name of the field to map to.
+     * Example: "Source"
+     */
+    mapToDisplayName?: string;
+    /**
+     * A prompt to display to the user for this field.
+     * Example: "Which field do you use to track the source of a contact?"
+     */
+    prompt?: string;
+}
+
+export type FieldMappingsType = Map<string, Array<Mapping>>
+
 interface InstallIntegrationProps {
-  integration: string, // integration name
+  /**
+   * The name of the integration from amp.yaml
+   */
+  integration: string,
+  /**
+   *  The ID that your app uses to identify this end user.
+   */
   consumerRef: string,
+  /**
+   *  The display name that your app uses for this end user.
+   */
   consumerName?: string,
+  /**
+   *  The ID that your app uses to identify the user's company, org, or team.
+   */
   groupRef: string,
+  /**
+   *  The display name that your app uses for this company, org or team.
+   */
   groupName?: string,
+  /**
+   * Dynamic field mappings that need to be filled out by a consumer.
+   * @experimental
+   */
+  fieldMapping?: FieldMappingsType,
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
   onUninstallSuccess?: (installationId: string) => void,
@@ -37,7 +77,7 @@ interface InstallIntegrationProps {
 export function InstallIntegration(
   {
     integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
-    onUninstallSuccess,
+    onUninstallSuccess, fieldMapping
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
@@ -60,6 +100,7 @@ export function InstallIntegration(
       onInstallSuccess={onInstallSuccess}
       onUpdateSuccess={onUpdateSuccess}
       onUninstallSuccess={onUninstallSuccess}
+      fieldMapping={fieldMapping}
     >
       <ConnectionsProvider groupRef={groupRef}>
         <ProtectedConnectionLayout
