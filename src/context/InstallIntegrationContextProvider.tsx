@@ -16,6 +16,7 @@ import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useIntegrationList } from './IntegrationListContextProvider';
 import { useProject } from './ProjectContextProvider';
+import { FieldMappingsType } from 'src/components/Configure/InstallIntegration';
 
 // Define the context value type
 interface InstallIntegrationContextValue {
@@ -34,6 +35,7 @@ interface InstallIntegrationContextValue {
   onUninstallSuccess?: (installationId: string) => void;
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
+  fieldMapping?: FieldMappingsType;
 }
 // Create a context to pass down the props
 export const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -73,12 +75,13 @@ interface InstallIntegrationProviderProps {
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
   onUninstallSuccess?: (installationId: string) => void,
+  fieldMapping?: FieldMappingsType
 }
 
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
   children, integration, consumerRef, consumerName, groupRef, groupName,
-  onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
+  onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -159,10 +162,11 @@ export function InstallIntegrationProvider({
     onUninstallSuccess,
     isIntegrationDeleted,
     setIntegrationDeleted,
+    fieldMapping
   }), [integrationObj, consumerRef, consumerName, groupRef, groupName,
     installation, setInstallation, resetInstallations,
     onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
-    isIntegrationDeleted, setIntegrationDeleted]);
+    isIntegrationDeleted, setIntegrationDeleted, fieldMapping]);
 
   if (integrationObj !== null) {
     const errorMessage = 'Error retrieving installation information for integration '
