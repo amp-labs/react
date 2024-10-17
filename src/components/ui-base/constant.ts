@@ -12,4 +12,13 @@
  */
 
 // parent app my turn on or off the chakra-ui components with this flag
-export const isChakraRemoved = process.env.REACT_APP_ENABLE_CSS || false;
+
+function getEnvVariable(varName: string) {
+  try {
+    return process.env[varName];
+  } catch (e) {
+    return undefined; // or a fallback value like false
+  }
+}
+
+export const isChakraRemoved = getEnvVariable('REACT_APP_ENABLE_CSS') || false;
