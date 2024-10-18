@@ -1,19 +1,18 @@
-import { useMemo } from "react";
-import { FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { useMemo } from 'react';
+import { FormControl, FormErrorMessage } from '@chakra-ui/react';
 
-import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
+import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
-import { isIntegrationFieldMapping } from "../../../utils";
-import { useSelectedConfigureState } from "../../useSelectedConfigureState";
-import { FieldHeader } from "../FieldHeader";
+import { isIntegrationFieldMapping } from '../../../utils';
+import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+import { FieldHeader } from '../FieldHeader';
 
-import { FieldMapping } from "./FieldMapping";
-import { setFieldMapping } from "./setFieldMapping";
-import { useInstallIntegrationProps } from "src/context/InstallIntegrationContextProvider";
+import { FieldMapping } from './FieldMapping';
+import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
-  const { selectedObjectName, configureState, setConfigureState } =
-    useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
@@ -36,14 +35,14 @@ export function RequiredFieldMappings() {
   const integrationFieldMappings = useMemo(
     () => {
       const dynamicIntegrationFieldMappings = fieldMapping ? Array.from(fieldMapping.values()).flat() : [];
-      const combinedFieldMappings = dynamicIntegrationFieldMappings.concat(configureState?.read?.requiredMapFields || [])
+      const combinedFieldMappings = dynamicIntegrationFieldMappings.concat(configureState?.read?.requiredMapFields || []);
       return (
         combinedFieldMappings.filter(
-          isIntegrationFieldMapping
+          isIntegrationFieldMapping,
         ) || []
       );
     },
-    [configureState, fieldMapping]
+    [configureState, fieldMapping],
   );
 
   return (

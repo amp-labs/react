@@ -23,7 +23,7 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
-export type FieldMappingsType = Map<string, Array<IntegrationFieldMapping>>
+export type FieldMappingsType = Map<string, Array<IntegrationFieldMapping>>;
 
 interface InstallIntegrationProps {
   /**
@@ -59,7 +59,7 @@ interface InstallIntegrationProps {
 export function InstallIntegration(
   {
     integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
-    onUninstallSuccess, fieldMapping
+    onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();

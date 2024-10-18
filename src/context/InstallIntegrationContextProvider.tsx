@@ -7,6 +7,7 @@ import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import {
   api, Config, Installation, Integration,
 } from 'services/api';
+import { FieldMappingsType } from 'src/components/Configure/InstallIntegration';
 import { LoadingCentered } from 'src/components/Loading';
 import { findIntegrationFromList } from 'src/utils';
 
@@ -16,7 +17,6 @@ import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useIntegrationList } from './IntegrationListContextProvider';
 import { useProject } from './ProjectContextProvider';
-import { FieldMappingsType } from 'src/components/Configure/InstallIntegration';
 
 // Define the context value type
 interface InstallIntegrationContextValue {
@@ -81,7 +81,7 @@ interface InstallIntegrationProviderProps {
 // Wrap your parent component with the context provider
 export function InstallIntegrationProvider({
   children, integration, consumerRef, consumerName, groupRef, groupName,
-  onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping
+  onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping,
 }: InstallIntegrationProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -162,7 +162,7 @@ export function InstallIntegrationProvider({
     onUninstallSuccess,
     isIntegrationDeleted,
     setIntegrationDeleted,
-    fieldMapping
+    fieldMapping,
   }), [integrationObj, consumerRef, consumerName, groupRef, groupName,
     installation, setInstallation, resetInstallations,
     onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
