@@ -5,7 +5,7 @@ import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { Config } from 'services/api';
+import { Config, IntegrationFieldMapping } from 'services/api';
 
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
@@ -23,12 +23,34 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
+export type FieldMappingsType = { [key: string]: Array<IntegrationFieldMapping> };
+
 interface InstallIntegrationProps {
-  integration: string, // integration name
+  /**
+   * The name of the integration from amp.yaml
+   */
+  integration: string,
+  /**
+   *  The ID that your app uses to identify this end user.
+   */
   consumerRef: string,
+  /**
+   *  The display name that your app uses for this end user.
+   */
   consumerName?: string,
+  /**
+   *  The ID that your app uses to identify the user's company, org, or team.
+   */
   groupRef: string,
+  /**
+   *  The display name that your app uses for this company, org or team.
+   */
   groupName?: string,
+  /**
+   * Dynamic field mappings that need to be filled out by a consumer.
+   * @experimental
+   */
+  fieldMapping?: FieldMappingsType,
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
   onUninstallSuccess?: (installationId: string) => void,
@@ -37,7 +59,7 @@ interface InstallIntegrationProps {
 export function InstallIntegration(
   {
     integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
-    onUninstallSuccess,
+    onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
   const { projectId } = useProject();
@@ -60,6 +82,7 @@ export function InstallIntegration(
       onInstallSuccess={onInstallSuccess}
       onUpdateSuccess={onUpdateSuccess}
       onUninstallSuccess={onUninstallSuccess}
+      fieldMapping={fieldMapping}
     >
       <ConnectionsProvider groupRef={groupRef}>
         <ProtectedConnectionLayout
