@@ -43,7 +43,7 @@ export interface CreateIntegrationRequest {
      * @type {CreateIntegrationRequestLatestRevision}
      * @memberof CreateIntegrationRequest
      */
-    latestRevision?: CreateIntegrationRequestLatestRevision;
+    latestRevision: CreateIntegrationRequestLatestRevision;
 }
 
 /**
@@ -53,6 +53,7 @@ export function instanceOfCreateIntegrationRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "provider" in value;
+    isInstance = isInstance && "latestRevision" in value;
 
     return isInstance;
 }
@@ -69,7 +70,7 @@ export function CreateIntegrationRequestFromJSONTyped(json: any, ignoreDiscrimin
         
         'name': json['name'],
         'provider': json['provider'],
-        'latestRevision': !exists(json, 'latestRevision') ? undefined : CreateIntegrationRequestLatestRevisionFromJSON(json['latestRevision']),
+        'latestRevision': CreateIntegrationRequestLatestRevisionFromJSON(json['latestRevision']),
     };
 }
 
