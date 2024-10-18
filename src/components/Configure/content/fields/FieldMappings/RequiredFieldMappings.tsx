@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { FormControl, FormErrorMessage } from '@chakra-ui/react';
+import { IntegrationFieldMapping } from '@generated/api/src';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
@@ -34,15 +35,22 @@ export function RequiredFieldMappings() {
 
   const integrationFieldMappings = useMemo(
     () => {
-      const dynamicIntegrationFieldMappings = fieldMapping ? Array.from(fieldMapping.values()).flat() : [];
-      const combinedFieldMappings = dynamicIntegrationFieldMappings.concat(configureState?.read?.requiredMapFields || []);
+      if (!selectedObjectName || !fieldMapping) return [];
+      const dynamicIntegrationFieldMappings = fieldMapping ? Object.values(fieldMapping[selectedObjectName] || {}).flat() : [];
+      const combinedFieldMappings = (configureState?.read?.requiredMapFields || []).concat(dynamicIntegrationFieldMappings).reduce((acc, item) => {
+        const existingItem = acc.find((i) => i.mapToName === item.mapToName);
+        if (existingItem) {
+          return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
+        }
+        return acc.concat(item);
+      }, new Array<IntegrationFieldMapping>());
       return (
         combinedFieldMappings.filter(
           isIntegrationFieldMapping,
         ) || []
       );
     },
-    [configureState, fieldMapping],
+    [configureState, fieldMapping, selectedObjectName],
   );
 
   return (
@@ -61,7 +69,7 @@ export function RequiredFieldMappings() {
             }
             >
               <FieldMapping
-                allFields={configureState.read?.allFields || []}
+                allFields={configureState?.read?.allFields || []}
                 field={field}
                 onSelectChange={onSelectChange}
               />

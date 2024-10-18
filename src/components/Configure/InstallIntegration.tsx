@@ -23,7 +23,7 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
-export type FieldMappingsType = Map<string, Array<IntegrationFieldMapping>>;
+export type FieldMappingsType = { [key: string]: Array<IntegrationFieldMapping> };
 
 interface InstallIntegrationProps {
   /**
