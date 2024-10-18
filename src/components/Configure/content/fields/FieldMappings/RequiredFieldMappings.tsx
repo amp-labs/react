@@ -1,17 +1,20 @@
-import { useMemo } from 'react';
-import { FormControl, FormErrorMessage } from '@chakra-ui/react';
+import { useMemo } from "react";
+import { FormControl, FormErrorMessage } from "@chakra-ui/react";
 
-import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 
-import { isIntegrationFieldMapping } from '../../../utils';
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
-import { FieldHeader } from '../FieldHeader';
+import { isIntegrationFieldMapping } from "../../../utils";
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
+import { FieldHeader } from "../FieldHeader";
 
-import { FieldMapping } from './FieldMapping';
-import { setFieldMapping } from './setFieldMapping';
+import { FieldMapping } from "./FieldMapping";
+import { setFieldMapping } from "./setFieldMapping";
+import { useInstallIntegrationProps } from "src/context/InstallIntegrationContextProvider";
 
 export function RequiredFieldMappings() {
-  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } =
+    useSelectedConfigureState();
+  const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,11 +33,17 @@ export function RequiredFieldMappings() {
     }
   };
 
-  const integrationFieldMappings = useMemo( // TODO: add dynamic field mappings here. 
-    () => configureState?.read?.requiredMapFields?.filter(
-      isIntegrationFieldMapping,
-    ) || [],
-    [configureState],
+  const integrationFieldMappings = useMemo(
+    () => {
+      const dynamicIntegrationFieldMappings = fieldMapping ? Array.from(fieldMapping.values()).flat() : [];
+      const combinedFieldMappings = dynamicIntegrationFieldMappings.concat(configureState?.read?.requiredMapFields || [])
+      return (
+        combinedFieldMappings.filter(
+          isIntegrationFieldMapping
+        ) || []
+      );
+    },
+    [configureState, fieldMapping]
   );
 
   return (

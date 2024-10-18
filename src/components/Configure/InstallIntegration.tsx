@@ -5,7 +5,7 @@ import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { Config } from 'services/api';
+import { Config, IntegrationFieldMapping } from 'services/api';
 
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
@@ -23,25 +23,7 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
-interface Mapping {
-    /**
-     * The name of the field to map to.
-     * Example: "source"
-     */
-    mapToName: string;
-    /**
-     * The display name of the field to map to.
-     * Example: "Source"
-     */
-    mapToDisplayName?: string;
-    /**
-     * A prompt to display to the user for this field.
-     * Example: "Which field do you use to track the source of a contact?"
-     */
-    prompt?: string;
-}
-
-export type FieldMappingsType = Map<string, Array<Mapping>>
+export type FieldMappingsType = Map<string, Array<IntegrationFieldMapping>>
 
 interface InstallIntegrationProps {
   /**
