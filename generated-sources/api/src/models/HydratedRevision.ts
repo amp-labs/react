@@ -33,7 +33,7 @@ export interface HydratedRevision {
      */
     id: string;
     /**
-     * The spec version string (e.g. "0.1.0").
+     * The spec version string.
      * @type {string}
      * @memberof HydratedRevision
      */

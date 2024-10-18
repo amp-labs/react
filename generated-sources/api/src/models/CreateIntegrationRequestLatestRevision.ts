@@ -13,24 +13,31 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Integration1 } from './Integration1';
+import {
+    Integration1FromJSON,
+    Integration1FromJSONTyped,
+    Integration1ToJSON,
+} from './Integration1';
+
 /**
- * If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of sourceZipUrl or sourceYaml is required.
+ * 
  * @export
  * @interface CreateIntegrationRequestLatestRevision
  */
 export interface CreateIntegrationRequestLatestRevision {
     /**
-     * URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL).
+     * The spec version string.
      * @type {string}
      * @memberof CreateIntegrationRequestLatestRevision
      */
-    sourceZipUrl?: string;
+    specVersion: string;
     /**
-     * A YAML string that defines the integration.
-     * @type {string}
+     * 
+     * @type {Integration1}
      * @memberof CreateIntegrationRequestLatestRevision
      */
-    sourceYaml?: string;
+    content: Integration1;
 }
 
 /**
@@ -38,6 +45,8 @@ export interface CreateIntegrationRequestLatestRevision {
  */
 export function instanceOfCreateIntegrationRequestLatestRevision(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "specVersion" in value;
+    isInstance = isInstance && "content" in value;
 
     return isInstance;
 }
@@ -52,8 +61,8 @@ export function CreateIntegrationRequestLatestRevisionFromJSONTyped(json: any, i
     }
     return {
         
-        'sourceZipUrl': !exists(json, 'sourceZipUrl') ? undefined : json['sourceZipUrl'],
-        'sourceYaml': !exists(json, 'sourceYaml') ? undefined : json['sourceYaml'],
+        'specVersion': json['specVersion'],
+        'content': Integration1FromJSON(json['content']),
     };
 }
 
@@ -66,8 +75,8 @@ export function CreateIntegrationRequestLatestRevisionToJSON(value?: CreateInteg
     }
     return {
         
-        'sourceZipUrl': value.sourceZipUrl,
-        'sourceYaml': value.sourceYaml,
+        'specVersion': value.specVersion,
+        'content': Integration1ToJSON(value.content),
     };
 }
 
