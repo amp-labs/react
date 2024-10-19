@@ -1,0 +1,26 @@
+.tabsRoot {
+    display: flex;
+    width: 100%;
+  }
+  
+  .tabsList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .tabTrigger {
+    all: unset;
+    padding: 10px;
+    cursor: pointer;
+    background-color: var(--amp-colors-tabs-background);
+    border-radius: var(--amp-default-border-radius);
+    margin-bottom: 5px;
+  }
+  
+  .tabTrigger[data-state="active"] {
+    background-color: var(--amp-colors-tabs-background-active); 
+    color: #1a202c;
+  }
+  
+ 

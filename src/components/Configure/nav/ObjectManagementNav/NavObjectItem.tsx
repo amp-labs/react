@@ -6,12 +6,7 @@ import {
 
 import { NavIcon } from 'assets/NavIcon';
 
-interface NavObjectItemProps {
-  objectName: string;
-  completed: boolean;
-  pending?: boolean;
-  displayName?: string; // overrides objectName as the display name when present
-}
+import { NavObjectItemProps } from './NavObjectItemProps';
 
 export const NavObjectItem = forwardRef<HTMLButtonElement, NavObjectItemProps>(
   ({
