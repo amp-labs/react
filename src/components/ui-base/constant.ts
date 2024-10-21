@@ -14,4 +14,4 @@ import { getEnvVariable } from 'src/utils';
  */
 
 // parent app my turn on or off the chakra-ui components with this flag
-export const isChakraRemoved = getEnvVariable('REACT_APP_ENABLE_CSS', false);
+export const isChakraRemoved = getEnvVariable('REACT_APP_ENABLE_CSS', false) === 'true';
