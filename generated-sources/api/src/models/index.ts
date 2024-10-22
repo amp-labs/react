@@ -95,6 +95,7 @@ export * from './Project';
 export * from './ProviderApp';
 export * from './ProviderInfo';
 export * from './Revision';
+export * from './SelectedFieldsAutoConfig';
 export * from './SelectedFieldsAutoOption';
 export * from './SignedUrl';
 export * from './Support';
