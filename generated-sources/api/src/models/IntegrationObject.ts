@@ -37,6 +37,12 @@ import {
     OptionalFieldsAutoOptionFromJSONTyped,
     OptionalFieldsAutoOptionToJSON,
 } from './OptionalFieldsAutoOption';
+import type { SelectedFieldsAutoOption } from './SelectedFieldsAutoOption';
+import {
+    SelectedFieldsAutoOptionFromJSON,
+    SelectedFieldsAutoOptionFromJSONTyped,
+    SelectedFieldsAutoOptionToJSON,
+} from './SelectedFieldsAutoOption';
 
 /**
  * 
@@ -82,6 +88,12 @@ export interface IntegrationObject {
     optionalFieldsAuto?: OptionalFieldsAutoOption;
     /**
      * 
+     * @type {SelectedFieldsAutoOption}
+     * @memberof IntegrationObject
+     */
+    selectedFieldsAuto?: SelectedFieldsAutoOption;
+    /**
+     * 
      * @type {Backfill}
      * @memberof IntegrationObject
      */
@@ -122,6 +134,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
+        'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoOptionFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
         'delivery': !exists(json, 'delivery') ? undefined : DeliveryFromJSON(json['delivery']),
     };
@@ -142,6 +155,7 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
+        'selectedFieldsAuto': SelectedFieldsAutoOptionToJSON(value.selectedFieldsAuto),
         'backfill': BackfillToJSON(value.backfill),
         'delivery': DeliveryToJSON(value.delivery),
     };
