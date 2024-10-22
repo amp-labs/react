@@ -19,6 +19,12 @@ import {
     BackfillConfigFromJSONTyped,
     BackfillConfigToJSON,
 } from './BackfillConfig';
+import type { SelectedFieldsAutoConfig } from './SelectedFieldsAutoConfig';
+import {
+    SelectedFieldsAutoConfigFromJSON,
+    SelectedFieldsAutoConfigFromJSONTyped,
+    SelectedFieldsAutoConfigToJSON,
+} from './SelectedFieldsAutoConfig';
 
 /**
  * 
@@ -58,6 +64,12 @@ export interface BaseReadConfigObject {
     selectedFieldMappings?: { [key: string]: string; };
     /**
      * 
+     * @type {SelectedFieldsAutoConfig}
+     * @memberof BaseReadConfigObject
+     */
+    selectedFieldsAuto?: SelectedFieldsAutoConfig;
+    /**
+     * 
      * @type {BackfillConfig}
      * @memberof BaseReadConfigObject
      */
@@ -88,6 +100,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
+        'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
     };
 }
@@ -106,6 +119,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedFieldMappings': value.selectedFieldMappings,
+        'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
     };
 }
