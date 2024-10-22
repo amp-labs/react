@@ -116,6 +116,7 @@ src/models/Project.ts
 src/models/ProviderApp.ts
 src/models/ProviderInfo.ts
 src/models/Revision.ts
+src/models/SelectedFieldsAutoOption.ts
 src/models/SignedUrl.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
