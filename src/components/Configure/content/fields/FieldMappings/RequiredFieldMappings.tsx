@@ -33,52 +33,47 @@ export function RequiredFieldMappings() {
     }
   };
 
-  const integrationFieldMappings = useMemo(
-    () => {
-      if (!selectedObjectName || !fieldMapping) return [];
-      const dynamicIntegrationFieldMappings = fieldMapping ? Object.values(fieldMapping[selectedObjectName] || {}).flat() : [];
-      const combinedFieldMappings = (configureState?.read?.requiredMapFields || []).concat(dynamicIntegrationFieldMappings).reduce((acc, item) => {
+  const integrationFieldMappings = useMemo(() => {
+    if (!selectedObjectName || !fieldMapping) return [];
+    // Extract dynamic field mappings for the selected object name from the fieldMapping object
+    const dynamicFieldMappings = fieldMapping
+      ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
+      : [];
+    // Combine dynamic field mappings with the required map fields from configureState
+    const combinedFieldMappings = (
+      configureState?.read?.requiredMapFields || []
+    )
+      .concat(dynamicFieldMappings)
+      // Remove duplicates based on mapToName and keep the latest item
+      .reduce((acc, item) => {
         const existingItem = acc.find((i) => i.mapToName === item.mapToName);
         if (existingItem) {
           return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
         }
         return acc.concat(item);
       }, new Array<IntegrationFieldMapping>());
-      return (
-        combinedFieldMappings.filter(
-          isIntegrationFieldMapping,
-        ) || []
-      );
-    },
-    [configureState, fieldMapping, selectedObjectName],
-  );
+    // Filter out any items that are not instances of IntegrationFieldMapping
+    return combinedFieldMappings.filter(isIntegrationFieldMapping) || [];
+  }, [configureState, fieldMapping, selectedObjectName]);
 
-  return (
-    integrationFieldMappings.length ? (
-      <>
-        <FieldHeader string="Map the following fields (required)" />
-        <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
-          {integrationFieldMappings.map((field: any) => (
-            <FormControl
-              key={field.mapToName}
-              isInvalid={
-              isError(
-                ErrorBoundary.MAPPING,
-                field.mapToName,
-              )
-            }
-            >
-              <FieldMapping
-                allFields={configureState?.read?.allFields || []}
-                field={field}
-                onSelectChange={onSelectChange}
-              />
-              <FormErrorMessage> * required</FormErrorMessage>
-            </FormControl>
-          ))}
-        </div>
-      </>
-    )
-      : null
-  );
+  return integrationFieldMappings.length ? (
+    <>
+      <FieldHeader string="Map the following fields (required)" />
+      <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
+        {integrationFieldMappings.map((field: any) => (
+          <FormControl
+            key={field.mapToName}
+            isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
+          >
+            <FieldMapping
+              allFields={configureState?.read?.allFields || []}
+              field={field}
+              onSelectChange={onSelectChange}
+            />
+            <FormErrorMessage> * required</FormErrorMessage>
+          </FormControl>
+        ))}
+      </div>
+    </>
+  ) : null;
 }
