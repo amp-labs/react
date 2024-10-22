@@ -18,7 +18,7 @@
  * @export
  */
 export const SelectedFieldsAutoConfig = {
-    All: 'all'
+    SelectedFieldsAll: 'all'
 } as const;
 export type SelectedFieldsAutoConfig = typeof SelectedFieldsAutoConfig[keyof typeof SelectedFieldsAutoConfig];
 
