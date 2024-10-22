@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 import { FormControl, FormErrorMessage } from '@chakra-ui/react';
+import { IntegrationFieldMapping } from '@generated/api/src';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
+import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
 import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
@@ -12,6 +14,7 @@ import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,39 +33,47 @@ export function RequiredFieldMappings() {
     }
   };
 
-  const integrationFieldMappings = useMemo(
-    () => configureState?.read?.requiredMapFields?.filter(
-      isIntegrationFieldMapping,
-    ) || [],
-    [configureState],
-  );
-
-  return (
-    integrationFieldMappings.length ? (
-      <>
-        <FieldHeader string="Map the following fields (required)" />
-        <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
-          {integrationFieldMappings.map((field: any) => (
-            <FormControl
-              key={field.mapToName}
-              isInvalid={
-              isError(
-                ErrorBoundary.MAPPING,
-                field.mapToName,
-              )
-            }
-            >
-              <FieldMapping
-                allFields={configureState.read?.allFields || []}
-                field={field}
-                onSelectChange={onSelectChange}
-              />
-              <FormErrorMessage> * required</FormErrorMessage>
-            </FormControl>
-          ))}
-        </div>
-      </>
+  const integrationFieldMappings = useMemo(() => {
+    if (!selectedObjectName || !fieldMapping) return [];
+    // Extract dynamic field mappings for the selected object name from the fieldMapping object
+    const dynamicFieldMappings = fieldMapping
+      ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
+      : [];
+    // Combine dynamic field mappings with the required map fields from configureState
+    const combinedFieldMappings = (
+      configureState?.read?.requiredMapFields || []
     )
-      : null
-  );
+      .concat(dynamicFieldMappings)
+      // Remove duplicates based on mapToName and keep the latest item
+      .reduce((acc, item) => {
+        const existingItem = acc.find((i) => i.mapToName === item.mapToName);
+        if (existingItem) {
+          return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
+        }
+        return acc.concat(item);
+      }, new Array<IntegrationFieldMapping>());
+    // Filter out any items that are not instances of IntegrationFieldMapping
+    return combinedFieldMappings.filter(isIntegrationFieldMapping) || [];
+  }, [configureState, fieldMapping, selectedObjectName]);
+
+  return integrationFieldMappings.length ? (
+    <>
+      <FieldHeader string="Map the following fields (required)" />
+      <div style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
+        {integrationFieldMappings.map((field: any) => (
+          <FormControl
+            key={field.mapToName}
+            isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
+          >
+            <FieldMapping
+              allFields={configureState?.read?.allFields || []}
+              field={field}
+              onSelectChange={onSelectChange}
+            />
+            <FormErrorMessage> * required</FormErrorMessage>
+          </FormControl>
+        ))}
+      </div>
+    </>
+  ) : null;
 }
