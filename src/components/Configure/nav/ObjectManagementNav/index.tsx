@@ -40,8 +40,13 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
 const backgroundColor = getComputedStyle(document.documentElement)
   .getPropertyValue('--amp-colors-background-secondary').trim() || '#FCFCFC';
 
+/**
+ * @deprecated remove this component when the chakra migration is done
+ * @param param0
+ * @returns
+ */
 // note: when the object key exists in the config; the user has already completed the object before
-export function ObjectManagementNav({
+export function ChakraObjectManagementNav({
   children,
 }: ObjectManagementNavProps) {
   const { project } = useProject();
@@ -140,4 +145,13 @@ export function ObjectManagementNav({
       </SelectedObjectNameContext.Provider>
     </NextTabIndexContext.Provider>
   );
+}
+
+export function ObjectManagementNav({ ...props }: ObjectManagementNavProps) {
+  // TODO: native tabs still in progress
+  // if (isChakraRemoved) {
+  //   return <ObjectManagementNavV2 {...props} />;
+  // }
+
+  return <ChakraObjectManagementNav {...props} />;
 }
