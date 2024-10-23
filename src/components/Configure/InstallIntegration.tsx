@@ -23,7 +23,7 @@ function useForceUpdate() {
   return { seed, reset };
 }
 
-export type FieldMappingsType = { [key: string]: Array<IntegrationFieldMapping> };
+export type FieldMapping = { [key: string]: Array<IntegrationFieldMapping> };
 
 interface InstallIntegrationProps {
   /**
@@ -50,7 +50,7 @@ interface InstallIntegrationProps {
    * Dynamic field mappings that need to be filled out by a consumer.
    * @experimental
    */
-  fieldMapping?: FieldMappingsType,
+  fieldMapping?: FieldMapping,
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
   onUninstallSuccess?: (installationId: string) => void,

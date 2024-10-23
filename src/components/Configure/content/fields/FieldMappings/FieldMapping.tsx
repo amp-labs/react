@@ -57,7 +57,7 @@ export function FieldMapping(
           } as unknown as HTMLSelectElement,
         } as unknown as React.ChangeEvent<HTMLSelectElement>);
       }}
-      placeholder="Please select one"
+      placeholder={!fieldValue ? 'Please select one' : fieldValue}
     />
   ) : (
     <ChakraSelect

@@ -7,7 +7,7 @@ import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import {
   api, Config, Installation, Integration,
 } from 'services/api';
-import { FieldMappingsType } from 'src/components/Configure/InstallIntegration';
+import { FieldMapping } from 'src/components/Configure/InstallIntegration';
 import { LoadingCentered } from 'src/components/Loading';
 import { findIntegrationFromList } from 'src/utils';
 
@@ -35,7 +35,7 @@ interface InstallIntegrationContextValue {
   onUninstallSuccess?: (installationId: string) => void;
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
-  fieldMapping?: FieldMappingsType;
+  fieldMapping?: FieldMapping;
 }
 // Create a context to pass down the props
 export const InstallIntegrationContext = createContext<InstallIntegrationContextValue>({
@@ -75,7 +75,7 @@ interface InstallIntegrationProviderProps {
   onInstallSuccess?: (installationId: string, config: Config) => void,
   onUpdateSuccess?: (installationId: string, config: Config) => void,
   onUninstallSuccess?: (installationId: string) => void,
-  fieldMapping?: FieldMappingsType
+  fieldMapping?: FieldMapping
 }
 
 // Wrap your parent component with the context provider
