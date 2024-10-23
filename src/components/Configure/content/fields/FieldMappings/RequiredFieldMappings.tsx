@@ -40,20 +40,16 @@ export function RequiredFieldMappings() {
       ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
       : [];
     // Combine dynamic field mappings with the required map fields from configureState
-    const combinedFieldMappings = (
-      configureState?.read?.requiredMapFields || []
-    )
+    const combinedFieldMappings = (configureState?.read?.requiredMapFields || [])
       .concat(dynamicFieldMappings)
       // Remove duplicates based on mapToName and keep the latest item
       .reduce((acc, item) => {
         const existingItem = acc.find((i) => i.mapToName === item.mapToName);
-        if (existingItem) {
-          return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
-        }
+        if (existingItem) return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
         return acc.concat(item);
       }, new Array<IntegrationFieldMapping>());
     // Filter out any items that are not instances of IntegrationFieldMapping
-    return combinedFieldMappings.filter(isIntegrationFieldMapping) || [];
+    return combinedFieldMappings.filter(isIntegrationFieldMapping);
   }, [configureState, fieldMapping, selectedObjectName]);
 
   return integrationFieldMappings.length ? (
