@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCombobox } from 'downshift';
 
 import styles from './combobox.module.css'; // CSS Modules
@@ -38,6 +38,9 @@ export function ComboBox({
   placeholder,
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
+
+  // Update the filtered items when the items prop changes
+  useEffect(() => setFilteredItems(items), [items]);
 
   const onInputValueChange = (_inputValue: string) => {
     setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
