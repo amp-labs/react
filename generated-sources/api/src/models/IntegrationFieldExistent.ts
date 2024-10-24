@@ -25,6 +25,12 @@ export interface IntegrationFieldExistent {
      * @memberof IntegrationFieldExistent
      */
     fieldName: string;
+    /**
+     * The field name to map to in the destination.
+     * @type {string}
+     * @memberof IntegrationFieldExistent
+     */
+    mapToField?: string;
 }
 
 /**
@@ -48,6 +54,7 @@ export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'fieldName': json['fieldName'],
+        'mapToField': !exists(json, 'mapToField') ? undefined : json['mapToField'],
     };
 }
 
@@ -61,6 +68,7 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
     return {
         
         'fieldName': value.fieldName,
+        'mapToField': value.mapToField,
     };
 }
 
