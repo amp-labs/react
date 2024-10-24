@@ -42,7 +42,7 @@ function ChakraWriteFields() {
   return (
     shouldRender && (
       <>
-        <FieldHeader string={`Allow ${appName} to write to these object`} />
+        <FieldHeader string={`Allow ${appName} to write to these objects`} />
         <Stack
           marginBottom={10}
           maxHeight={300}

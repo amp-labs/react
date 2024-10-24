@@ -40,7 +40,7 @@ export function WriteFieldsV2() {
   return (
     shouldRender && (
       <>
-        <FieldHeader string={`Allow ${appName} to write to these object`} />
+        <FieldHeader string={`Allow ${appName} to write to these objects`} />
         <CheckboxGroup>
 
           {(writeObjects?.length || 0) >= 2 && (
