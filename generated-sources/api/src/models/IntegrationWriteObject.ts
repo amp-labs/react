@@ -25,6 +25,12 @@ export interface IntegrationWriteObject {
      * @memberof IntegrationWriteObject
      */
     objectName: string;
+    /**
+     * If true, the write object will inherit the mapping from the read object. If false, the write object will have no mapping.
+     * @type {boolean}
+     * @memberof IntegrationWriteObject
+     */
+    inheritMappingFromRead?: boolean;
 }
 
 /**
@@ -48,6 +54,7 @@ export function IntegrationWriteObjectFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'objectName': json['objectName'],
+        'inheritMappingFromRead': !exists(json, 'inheritMappingFromRead') ? undefined : json['inheritMappingFromRead'],
     };
 }
 
@@ -61,6 +68,7 @@ export function IntegrationWriteObjectToJSON(value?: IntegrationWriteObject | nu
     return {
         
         'objectName': value.objectName,
+        'inheritMappingFromRead': value.inheritMappingFromRead,
     };
 }
 
