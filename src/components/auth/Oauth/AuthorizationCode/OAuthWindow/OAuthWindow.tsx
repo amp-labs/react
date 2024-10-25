@@ -57,25 +57,31 @@ export function OAuthWindow({
     }
   }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onError]);
 
-  // check if the window is closed
-  const interval = oauthWindow && setInterval(() => {
-    if ((oauthWindow?.closed || !oauthWindow) && !!interval) {
-      clearInterval(interval);
+  useEffect(() => {
+    if (!oauthWindow) return;
 
-      // cleanup event listener and window reference
-      window.removeEventListener('message', receiveMessage);
-      setOauthWindow(null);
+    const interval = setInterval(() => {
+      if (oauthWindow.closed) {
+        clearInterval(interval);
+        window.removeEventListener('message', receiveMessage);
+        setOauthWindow(null);
 
-      if (!connectionId && !error) {
-        // if connectionId is not set, then set OAuth failed error
-        console.error('OAuth failed. Please try again.');
-        onError?.('OAuth failed. Please try again.');
-      } else if (connectionId && onError) {
-        // if connectionId is set, then set OAuth success -- no error
-        onError?.(null);
+        if (!connectionId && !error) {
+          console.error('OAuth failed. Please try again.');
+          onError?.('OAuth failed. Please try again.');
+        } else if (connectionId) {
+          onError?.(null);
+        }
       }
-    }
-  }, 500);
+    }, 500);
+
+    // Cleanup interval and listener when component unmounts or oauthWindow changes
+    // eslint-disable-next-line consistent-return
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('message', receiveMessage);
+    };
+  }, [oauthWindow, connectionId, error, receiveMessage, onError]);
 
   return <div>{children}</div>;
 }
