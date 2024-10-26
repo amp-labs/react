@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/react';
 
 import { Box } from 'components/ui-base/Box/Box';
-import { isChakraRemoved } from 'components/ui-base/constant';
+// import { isChakraRemoved } from 'components/ui-base/constant';
 import { Container } from 'components/ui-base/Container/Container';
 import { Divider } from 'components/ui-base/Divider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
@@ -23,7 +23,7 @@ import { NavObjectItem } from './NavObjectItem';
 import { NextTabIndexContext, SelectedObjectNameContext } from './ObjectManagementNavContext';
 import { OtherTab } from './OtherTab';
 import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from './UninstallInstallation';
-import { ObjectManagementNavV2 } from './v2';
+// import { ObjectManagementNavV2 } from './v2';
 
 type ObjectManagementNavProps = {
   children?: React.ReactNode;
