@@ -151,9 +151,9 @@ export function ChakraObjectManagementNav({
 
 export function ObjectManagementNav({ ...props }: ObjectManagementNavProps) {
   // TODO: native tabs still in progress
-  if (isChakraRemoved) {
-    return <ObjectManagementNavV2 {...props} />;
-  }
+  // if (isChakraRemoved) {
+  //   return <ObjectManagementNavV2 {...props} />;
+  // }
 
   return <ChakraObjectManagementNav {...props} />;
 }
