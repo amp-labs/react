@@ -1,6 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs';
 
 import { NavIcon } from 'assets/NavIcon';
+import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 
 import styles from './tabs.module.css';
 
@@ -30,16 +31,36 @@ function NavObjectTab({
   );
 }
 
-export function VerticalTabs() {
+type VerticalTabsProps = {
+  readNavObjects: NavObject[];
+  value: string;
+  onValueChange: (value: string) => void;
+  objectConfigurationsState?: ObjectConfigurationsState;
+};
+
+export function VerticalTabs({
+  value, readNavObjects, onValueChange, objectConfigurationsState,
+}: VerticalTabsProps) {
   return (
-    <Tabs.Root defaultValue="tab1" className={styles.tabsRoot}>
+    <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
       <Tabs.List className={styles.tabsList}>
-        <NavObjectTab objectName="tab1" completed={false} pending={false} displayName="Tab 1" />
-        <NavObjectTab objectName="tab2" completed pending={false} displayName="Tab 2" />
-        <NavObjectTab objectName="tab3" completed={false} pending displayName="Tab 3" />
+        {readNavObjects.map((object) => (
+          <NavObjectTab
+            key={object.name}
+            objectName={object.name}
+            completed={object.completed}
+            pending={objectConfigurationsState?.[object.name]?.read?.isOptionalFieldsModified
+              || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified || false}
+          />
+        ))}
+        {/* Other Tab */}
+        {/* TODO */}
+
+        {/* Uninstall Tab */}
         {/* <Tabs.Trigger value="uninstall" className={styles.tabTrigger} style={{}}>Uninstall</Tabs.Trigger> */}
       </Tabs.List>
 
+      {/* EXAMPLE Content if children does not render content */}
       {/* <Tabs.Content value="tab1" className={styles.tabContent}>
         <p>Content for Tab 1</p>
       </Tabs.Content>

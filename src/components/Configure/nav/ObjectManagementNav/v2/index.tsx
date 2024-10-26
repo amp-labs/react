@@ -5,37 +5,25 @@
  */
 
 import {
-  useCallback, useMemo, useState,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 
 import { Box } from 'components/ui-base/Box/Box';
 import { Container } from 'components/ui-base/Container/Container';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { VerticalTabs } from 'src/components/ui-base/Tabs';
+import { VerticalTabs } from 'src/components/Configure/nav/ObjectManagementNav/v2/Tabs';
 import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
 import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
-import { NavObject } from '../../../types';
 import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
-import { UNINSTALL_INSTALLATION_CONST, UninstallInstallation } from '../UninstallInstallation';
 
-    type ObjectManagementNavProps = {
-      children?: React.ReactNode;
-    };
-
-function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject | undefined {
-  if (navObjects?.[tabIndex]) {
-    // read tabs
-    return navObjects[tabIndex];
-  }
-
-  // uninstall tab
-  return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
-}
+  type ObjectManagementNavProps = {
+    children?: React.ReactNode;
+  };
 
 const backgroundColor = getComputedStyle(document.documentElement)
   .getPropertyValue('--amp-colors-background-secondary').trim() || '#FCFCFC';
@@ -49,8 +37,8 @@ export function ObjectManagementNavV2({
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useObjectsConfigureState();
 
-  // Object Nav Tab Index
-  const [tabIndex, setTabIndex] = useState(0);
+  // Object Nav Tab Value
+  const [tabValue, setTabvalue] = useState('');
 
   const appName = project?.appName || '';
   const config = installation?.config;
@@ -65,17 +53,24 @@ export function ObjectManagementNavV2({
     if (otherNavObject && isWriteSupported) { navObjects.push(otherNavObject); }
     return navObjects;
   }, [readNavObjects, otherNavObject, isWriteSupported]);
-  const selectedObject = getSelectedObject(allNavObjects, tabIndex);
+
+  const selectedObject = allNavObjects.find((navObj) => navObj.name === tabValue);
 
   /**
-       * Function to navigate to the first uncompleted tab or do nothing if all tabs are completed
-       *  */
+   * Function to navigate to the first uncompleted tab or do nothing if all tabs are completed
+   *  */
   const onNextIncompleteTab = useCallback(() => {
     const nextIncompleteNavObj = allNavObjects.find((navObj) => selectedObject !== navObj && !navObj.completed);
     if (nextIncompleteNavObj) {
-      setTabIndex(allNavObjects.indexOf(nextIncompleteNavObj));
+      setTabvalue(nextIncompleteNavObj.name);
     }
-  }, [allNavObjects, selectedObject, setTabIndex]);
+  }, [allNavObjects, selectedObject]);
+
+  useEffect(() => {
+    if (!tabValue && allNavObjects.length > 0) {
+      setTabvalue(allNavObjects[0].name);
+    }
+  }, [allNavObjects, tabValue, onNextIncompleteTab]);
 
   return (
     <NextTabIndexContext.Provider value={onNextIncompleteTab}>
@@ -101,7 +96,12 @@ export function ObjectManagementNavV2({
               </h3>
               {isNavObjectsReady && (
               // dummy mock tabs with styling only
-              <VerticalTabs />
+              <VerticalTabs
+                value={tabValue}
+                readNavObjects={readNavObjects}
+                onValueChange={(value: string) => setTabvalue(value)}
+                objectConfigurationsState={objectConfigurationsState}
+              />
               )}
             </div>
             {children}
