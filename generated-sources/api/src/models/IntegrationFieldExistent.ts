@@ -30,7 +30,7 @@ export interface IntegrationFieldExistent {
      * @type {string}
      * @memberof IntegrationFieldExistent
      */
-    mapToField?: string;
+    mapToName?: string;
 }
 
 /**
@@ -54,7 +54,7 @@ export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'fieldName': json['fieldName'],
-        'mapToField': !exists(json, 'mapToField') ? undefined : json['mapToField'],
+        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
     };
 }
 
@@ -68,7 +68,7 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
     return {
         
         'fieldName': value.fieldName,
-        'mapToField': value.mapToField,
+        'mapToName': value.mapToName,
     };
 }
 
