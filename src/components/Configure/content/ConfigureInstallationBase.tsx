@@ -1,4 +1,4 @@
-import { FormEventHandler, useEffect } from 'react';
+import { FormEventHandler } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { FormErrorBox } from 'components/FormErrorBox';
