@@ -4,6 +4,7 @@ import { Select as ChakraSelect } from '@chakra-ui/react';
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
 import { isChakraRemoved } from 'src/components/ui-base/constant';
+import { LabelTooltip } from 'src/components/ui-base/Tooltip';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
@@ -74,8 +75,15 @@ export function FieldMapping(
 
   return (
     <div key={field.mapToName} style={{ display: 'flex', flexDirection: 'column' }}>
-      <h3 style={{ fontWeight: 500 }}>{field.mapToDisplayName}</h3>
-      <p style={{ paddingBottom: '1rem' }}>{field?.prompt}</p>
+      <div style={{
+        display: 'flex', flexDirection: 'row', gap: '.25rem', marginBottom: '.25rem',
+      }}
+      >
+        <span style={{ fontWeight: 500 }}>{field.mapToDisplayName}</span>
+        <span>
+          {field?.prompt && <LabelTooltip id={`tooltip-id-${field?.prompt}`} tooltipText={field?.prompt} />}
+        </span>
+      </div>
       {SelectComponent}
     </div>
   );
