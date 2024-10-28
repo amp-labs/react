@@ -1,9 +1,3 @@
-/**
- * This page is in progress and is not yet ready for use. @dion
- * Chakra is removed from this page.
- *
- */
-
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
@@ -13,6 +7,7 @@ import { Container } from 'components/ui-base/Container/Container';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { VerticalTabs } from 'src/components/Configure/nav/ObjectManagementNav/v2/Tabs';
+import { NavObject } from 'src/components/Configure/types';
 import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
 import { getProviderName } from 'src/utils';
 
@@ -20,6 +15,17 @@ import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvi
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
 import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
+import { UNINSTALL_INSTALLATION_CONST } from '../UninstallInstallation';
+
+function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
+  if (tabValue === UNINSTALL_INSTALLATION_CONST) {
+    // uninstall tab
+    return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
+  }
+
+  // read or write tabs
+  return navObjects.find((navObj) => navObj.name === tabValue);
+}
 
   type ObjectManagementNavProps = {
     children?: React.ReactNode;
@@ -54,7 +60,7 @@ export function ObjectManagementNavV2({
     return navObjects;
   }, [readNavObjects, otherNavObject, isWriteSupported]);
 
-  const selectedObject = allNavObjects.find((navObj) => navObj.name === tabValue);
+  const selectedObject = getSelectedObject(allNavObjects, tabValue);
 
   /**
    * Function to navigate to the first uncompleted tab or do nothing if all tabs are completed
@@ -96,6 +102,7 @@ export function ObjectManagementNavV2({
                 onValueChange={(value: string) => setTabvalue(value)}
                 objectConfigurationsState={objectConfigurationsState}
                 otherNavObject={otherNavObject}
+                showUninstallButton={!!installation}
               />
               )}
             </div>
