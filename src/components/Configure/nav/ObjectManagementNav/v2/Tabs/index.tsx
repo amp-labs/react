@@ -1,10 +1,13 @@
 import * as Tabs from '@radix-ui/react-tabs';
+import classnames from 'classnames';
 
 import { NavIcon } from 'assets/NavIcon';
+import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
 import { OTHER_CONST } from '../../constant';
+import { UNINSTALL_INSTALLATION_CONST } from '../../UninstallInstallation';
 
 import styles from './tabs.module.css';
 
@@ -57,17 +60,38 @@ function OtherTab({
   );
 }
 
+function UninstallTab() {
+  return (
+    <>
+      <Divider style={{ margin: '3rem 0 1rem 0' }} />
+      <Tabs.Trigger
+        value={UNINSTALL_INSTALLATION_CONST}
+        className={classnames(styles.tabTrigger, styles.danger)}
+      >
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '.5rem', marginRight: '.5rem',
+        }}
+        >
+          {TrashIcon()}
+          <span>Uninstall</span>
+        </div>
+      </Tabs.Trigger>
+    </>
+  );
+}
+
 type VerticalTabsProps = {
   readNavObjects: NavObject[];
   otherNavObject?: NavObject; // write tab
   value: string;
   onValueChange: (value: string) => void;
   objectConfigurationsState?: ObjectConfigurationsState;
+  showUninstallButton?: boolean;
 };
 
 export function VerticalTabs({
   value, readNavObjects, onValueChange, objectConfigurationsState,
-  otherNavObject,
+  otherNavObject, showUninstallButton,
 }: VerticalTabsProps) {
   return (
     <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
@@ -93,7 +117,7 @@ export function VerticalTabs({
         )}
 
         {/* Uninstall Tab */}
-        {/* <Tabs.Trigger value="uninstall" className={styles.tabTrigger} style={{}}>Uninstall</Tabs.Trigger> */}
+        {showUninstallButton && <UninstallTab />}
       </Tabs.List>
 
       {/* EXAMPLE Content if children does not render content */}
