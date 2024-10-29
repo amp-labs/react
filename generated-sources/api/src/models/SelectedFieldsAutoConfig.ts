@@ -14,7 +14,7 @@
 
 
 /**
- * 
+ * If selectedFieldsAuto is set to all, all fields will be read.
  * @export
  */
 export const SelectedFieldsAutoConfig = {
