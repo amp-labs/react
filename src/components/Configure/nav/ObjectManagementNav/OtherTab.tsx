@@ -9,6 +9,11 @@ type OtherTabProps = {
   displayName?: 'other' | 'write',
 };
 
+/**
+ * @deprecated remove this component when the chakra migration is done
+ * @param param0
+ * @returns
+ */
 export function OtherTab({ pending, completed, displayName }: OtherTabProps) {
   return (
     <>

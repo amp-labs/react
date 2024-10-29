@@ -2,6 +2,9 @@ import * as Tabs from '@radix-ui/react-tabs';
 
 import { NavIcon } from 'assets/NavIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
+import { Divider } from 'src/components/ui-base/Divider';
+
+import { OTHER_CONST } from '../../constant';
 
 import styles from './tabs.module.css';
 
@@ -31,8 +34,32 @@ function NavObjectTab({
   );
 }
 
+type OtherTabProps = {
+  completed: boolean;
+  pending: boolean;
+  displayName: string;
+};
+
+function OtherTab({
+  completed, pending, displayName,
+}: OtherTabProps) {
+  return (
+    <>
+      <Divider style={{ margin: '1rem 0' }} />
+      <NavObjectTab
+        key="other-write"
+        objectName={OTHER_CONST}
+        completed={completed}
+        pending={pending}
+        displayName={displayName}
+      />
+    </>
+  );
+}
+
 type VerticalTabsProps = {
   readNavObjects: NavObject[];
+  otherNavObject?: NavObject; // write tab
   value: string;
   onValueChange: (value: string) => void;
   objectConfigurationsState?: ObjectConfigurationsState;
@@ -40,10 +67,12 @@ type VerticalTabsProps = {
 
 export function VerticalTabs({
   value, readNavObjects, onValueChange, objectConfigurationsState,
+  otherNavObject,
 }: VerticalTabsProps) {
   return (
     <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
       <Tabs.List className={styles.tabsList}>
+        {/* Read tabs */}
         {readNavObjects.map((object) => (
           <NavObjectTab
             key={object.name}
@@ -53,8 +82,15 @@ export function VerticalTabs({
               || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified || false}
           />
         ))}
-        {/* Other Tab */}
-        {/* TODO */}
+        {/* Other / Write Tab */}
+        {otherNavObject && (
+          <OtherTab
+            completed={otherNavObject.completed}
+            pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
+             // if read tab exists, display 'other' else 'write' when write tab is the only tab
+            displayName={readNavObjects.length ? 'other' : 'write'}
+          />
+        )}
 
         {/* Uninstall Tab */}
         {/* <Tabs.Trigger value="uninstall" className={styles.tabTrigger} style={{}}>Uninstall</Tabs.Trigger> */}
