@@ -78,25 +78,25 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
   }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey, projectId,
     integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess]);
 
-  if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
-  if (isLoading) return <LoadingCentered />;
-  if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
   if (isIntegrationDeleted) {
     return (
       <SuccessTextBox
         text="Integration successfully uninstalled."
       >
         {isChakraRemoved && (
-        <Button
-          type="button"
-          onClick={resetComponent}
-          style={{ width: '100%' }}
-        >Reinstall Integration
-        </Button>
+          <Button
+            type="button"
+            onClick={resetComponent}
+            style={{ width: '100%' }}
+          >Reinstall Integration
+          </Button>
         )}
       </SuccessTextBox>
     );
   }
+  if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
+  if (isLoading) return <LoadingCentered />;
+  if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
     <div>
