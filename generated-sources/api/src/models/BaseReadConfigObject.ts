@@ -51,7 +51,7 @@ export interface BaseReadConfigObject {
      */
     destination?: string;
     /**
-     * This is a map of field names to booleans indicating whether they should be read.
+     * This is a map of field names to booleans indicating whether they should be read. If a field is already included in `selectedFieldMappings`, it does not need to be included here.
      * @type {{ [key: string]: boolean; }}
      * @memberof BaseReadConfigObject
      */
