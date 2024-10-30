@@ -26,11 +26,11 @@ export interface LogMessage {
      */
     msg: string;
     /**
-     * The operation event ID.
+     * The error message, if there has been an error.
      * @type {string}
      * @memberof LogMessage
      */
-    operationEventId?: string;
+    error?: string;
     /**
      * The operation ID.
      * @type {string}
@@ -60,7 +60,7 @@ export function LogMessageFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'msg': json['msg'],
-        'operationEventId': !exists(json, 'operation_event_id') ? undefined : json['operation_event_id'],
+        'error': !exists(json, 'error') ? undefined : json['error'],
         'operationId': !exists(json, 'operation_id') ? undefined : json['operation_id'],
     };
 }
@@ -75,7 +75,7 @@ export function LogMessageToJSON(value?: LogMessage | null): any {
     return {
         
         'msg': value.msg,
-        'operation_event_id': value.operationEventId,
+        'error': value.error,
         'operation_id': value.operationId,
     };
 }
