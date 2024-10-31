@@ -1,0 +1,33 @@
+.formControl {
+    margin-bottom: 1rem;
+}
+  
+.formLabel {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.formLabelRequired::after {
+    content: ' *';
+    color: var(--amp-colors-error-text);
+}
+
+.formInput {
+    position: relative;
+}
+
+.formInputInvalid input {
+    border-color: var(--amp-colors-error-border);
+}
+
+.formError {
+    color: var(--amp-colors-error-text);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
