@@ -48,7 +48,7 @@
 
 .menuItem:hover,
 .highlighted {
-  background-color: var(--amp-colors-menu-hover);
+  background-color: var(--amp-colors-input-hover);
 }
 
 .selected {

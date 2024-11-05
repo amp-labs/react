@@ -13,7 +13,7 @@ export function RequiredFields() {
   return (
     <>
       <FieldHeader string={`${appName} reads the following ${selectedObjectName} fields`} />
-      <div style={{ display: 'flex', gap: '.5rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '.5rem', marginBottom: '.5rem' }}>
         {configureState?.read?.requiredFields?.length
           ? (configureState.read?.requiredFields.map((field) => {
             if (!isIntegrationFieldMapping(field)) {

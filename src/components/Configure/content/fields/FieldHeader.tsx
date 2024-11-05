@@ -11,7 +11,7 @@ const color = getComputedStyle(document.documentElement)
 export function FieldHeader({ string }: FieldHeaderProps) {
   return (
     <div style={{
-      display: 'flex', position: 'relative', paddingTop: '2rem', paddingBottom: '1rem',
+      display: 'flex', position: 'relative', paddingTop: '1rem', paddingBottom: '.5rem',
     }}
     >
       <h3 style={{ color, fontSize: '1rem', fontWeight: '500' }}>{string}</h3>

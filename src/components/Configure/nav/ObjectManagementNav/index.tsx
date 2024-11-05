@@ -40,7 +40,7 @@ function getSelectedObject(navObjects: NavObject[], tabIndex: number): NavObject
 }
 
 const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background-secondary').trim() || '#FCFCFC';
+  .getPropertyValue('--amp-colors-background').trim() || 'white';
 
 /**
  * @deprecated remove this component when the chakra migration is done

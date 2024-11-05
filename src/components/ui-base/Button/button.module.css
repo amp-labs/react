@@ -34,7 +34,7 @@
 
 /* Additional styling to support screen readers */
 button[aria-expanded="true"] {
-    background-color: var(--amp-accessibility-color);  /* Can visually indicate button state */
+    background-color: var(--amp-colors-input-hover);  /* Can visually indicate button state */
 }
 
 .danger {
