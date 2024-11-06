@@ -36,11 +36,13 @@ export function RequiredFieldMappings() {
   };
 
   const integrationFieldMappings = useMemo(() => {
-    if (!selectedObjectName || !fieldMapping) return [];
-    // Extract dynamic field mappings for the selected object name from the fieldMapping object
+    if (!selectedObjectName) return []; // No object selected, return empty array
+
+    // Extract dynamic field mappings for the selected object name from the fieldMapping object if it exists
     const dynamicFieldMappings = fieldMapping
       ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
       : [];
+
     // Combine dynamic field mappings with the required map fields from configureState
     const combinedFieldMappings = (configureState?.read?.requiredMapFields || [])
       .concat(dynamicFieldMappings)
@@ -50,11 +52,12 @@ export function RequiredFieldMappings() {
         if (existingItem) return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
         return acc.concat(item);
       }, new Array<IntegrationFieldMapping>());
+
     // Filter out any items that are not instances of IntegrationFieldMapping
     return combinedFieldMappings.filter(isIntegrationFieldMapping);
   }, [configureState, fieldMapping, selectedObjectName]);
 
-  return integrationFieldMappings.length ? (
+  return integrationFieldMappings?.length ? (
     <>
       <FieldHeader string="Map the following fields (required)" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
