@@ -36,25 +36,28 @@ export function RequiredFieldMappings() {
   };
 
   const integrationFieldMappings = useMemo(() => {
-    if (!selectedObjectName || !fieldMapping) return [];
-    // Extract dynamic field mappings for the selected object name from the fieldMapping object
-    const dynamicFieldMappings = fieldMapping
+    // 1. Extract required map fields from configureState
+    const requiredFieldMappings = configureState?.read?.requiredMapFields || [];
+
+    // 2. Extract dynamic field mappings for the selected object name from the fieldMapping object if it exists
+    const dynamicFieldMappings = selectedObjectName && fieldMapping
       ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
       : [];
-    // Combine dynamic field mappings with the required map fields from configureState
-    const combinedFieldMappings = (configureState?.read?.requiredMapFields || [])
-      .concat(dynamicFieldMappings)
-      // Remove duplicates based on mapToName and keep the latest item
+
+    // 3. Combine dynamic field mappings with the required map fields from configureState
+    const combinedFieldMappings = requiredFieldMappings.concat(dynamicFieldMappings)
+      // 4. Remove duplicates based on mapToName and keep the latest item
       .reduce((acc, item) => {
         const existingItem = acc.find((i) => i.mapToName === item.mapToName);
         if (existingItem) return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
         return acc.concat(item);
       }, new Array<IntegrationFieldMapping>());
-    // Filter out any items that are not instances of IntegrationFieldMapping
+
+    // 5. Filter out any items that are not instances of IntegrationFieldMapping
     return combinedFieldMappings.filter(isIntegrationFieldMapping);
   }, [configureState, fieldMapping, selectedObjectName]);
 
-  return integrationFieldMappings.length ? (
+  return integrationFieldMappings?.length ? (
     <>
       <FieldHeader string="Map the following fields (required)" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
