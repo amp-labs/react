@@ -63,6 +63,18 @@ export interface IntegrationObject {
      */
     schedule: string;
     /**
+     * An object name to map to in the destination.
+     * @type {string}
+     * @memberof IntegrationObject
+     */
+    mapToName?: string;
+    /**
+     * A display name to map to in the destination.
+     * @type {string}
+     * @memberof IntegrationObject
+     */
+    mapToDisplayName?: string;
+    /**
      * 
      * @type {Array<IntegrationField>}
      * @memberof IntegrationObject
@@ -119,6 +131,8 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         'objectName': json['objectName'],
         'destination': json['destination'],
         'schedule': json['schedule'],
+        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
+        'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(IntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
@@ -139,6 +153,8 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         'objectName': value.objectName,
         'destination': value.destination,
         'schedule': value.schedule,
+        'mapToName': value.mapToName,
+        'mapToDisplayName': value.mapToDisplayName,
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(IntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),

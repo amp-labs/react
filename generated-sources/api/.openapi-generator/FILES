@@ -4,6 +4,7 @@
 README.md
 package.json
 src/apis/APIKeyApi.ts
+src/apis/BillingAccountApi.ts
 src/apis/ConnectionApi.ts
 src/apis/ConsumerApi.ts
 src/apis/DestinationApi.ts
@@ -40,6 +41,7 @@ src/models/BaseWriteConfig.ts
 src/models/BaseWriteConfigObject.ts
 src/models/BasicAuthOpts.ts
 src/models/BatchUpsertIntegrationsRequest.ts
+src/models/BillingAccount.ts
 src/models/Builder.ts
 src/models/BuilderInfo.ts
 src/models/BuilderInfoOrgRole.ts
@@ -50,6 +52,8 @@ src/models/ConfigContent.ts
 src/models/ConfigContentAllOf.ts
 src/models/Connection.ts
 src/models/Consumer.ts
+src/models/CreateBillingAccountSession200Response.ts
+src/models/CreateBillingAccountSessionRequest.ts
 src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
 src/models/CreateDestinationRequestMetadata.ts
