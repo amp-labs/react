@@ -55,7 +55,7 @@
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.23.2",
-    "@chakra-ui/react": "^2.8.1",
+    "@chakra-ui/react": "^3.1.1",
     "@jest/globals": "^29.5.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/lodash.isequal": "^4.5.7",
