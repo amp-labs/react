@@ -37,7 +37,7 @@
 }
 
 .checkbox:hover {
-    background-color: var(--amp-accessibility-color); 
+    background-color: var(--amp-colors-input-hover); 
 }
   
 .checkbox:focus {

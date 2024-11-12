@@ -15,21 +15,8 @@
     --amp-colors-neutral-900: #171717;
     --amp-colors-neutral-950: #0a0a0a;
 
-    /* based of chakra colors */
-    --amp-colors-gray-50: #F7FAFC;
-    --amp-colors-gray-100: #EDF2F7;
-    --amp-colors-gray-200: #E2E8F0;
-    --amp-colors-gray-300: #CBD5E0;
-    --amp-colors-gray-400: #A0AEC0;
-    --amp-colors-gray-500: #718096;
-    --amp-colors-gray-600: #4A5568;
-    --amp-colors-gray-700: #2D3748;
-    --amp-colors-gray-800: #1A202C;
-    --amp-colors-gray-900: #171923;
 
     /* semantic colors  */
-    --amp-shadows-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --amp-shadows-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --amp-colors-border: var(--amp-colors-neutral-200);
 
     --amp-colors-error-background: #FEF2F2;
@@ -37,34 +24,33 @@
     --amp-colors-error-border: #FECACA;
     --amp-colors-error-text: #991B1B;
 
-    --amp-colors-accent-primary: var(--amp-colors-neutral-700);
-    --amp-colors-accent-secondary: var(--amp-colors-neutral-500);
-    --amp-colors-background: var(--amp-colors-neutral-50);
-    --amp-colors-background-secondary: #FCFCFC;
-    --amp-colors-text-secondary: var(--amp-colors-neutral-500);
+    /* accent primary and secondary accent used in loading*/
+    --amp-colors-accent-primary: var(--amp-colors-neutral-700); 
+    --amp-colors-accent-secondary: var(--amp-colors-neutral-500); 
+     
+    /* background boxes */
+    --amp-colors-background: var(--amp-colors-white);
+    --amp-colors-text-secondary: var(--amp-colors-neutral-700);
 
-    --amp-colors-badge: var(--amp-colors-neutral-200);
+    --amp-colors-badge: var(--amp-colors-neutral-100);
     --amp-colors-badge-text: var(--amp-colors-neutral-700);
 
-    --amp-colors-link-base: var(--amp-colors-neutral-500);
-    --amp-colors-link-text: var(--amp-colors-link-base);
-    --amp-colors-link-hover: calc(var(--amp-colors-link-base) + 10%);
-    --amp-colors-link-focus: calc(var(--amp-colors-link-base) + 15%);
-    --amp-colors-link-active: calc(var(--amp-colors-link-base) - 20%);
+    --amp-colors-link-text: var(--amp-colors-neutral-700);
+    --amp-colors-link-focus: var(--amp-colors-neutral-800);
+    --amp-colors-link-active: var(--amp-colors-neutral-600);
 
     --amp-colors-button-primary: var(--amp-colors-accent-primary);
     --amp-colors-button-primary-hover: var(--amp-colors-neutral-600);
     --amp-colors-button-text: var(--amp-colors-neutral-200);
-    --amp-button-hover-shadow: var(--amp-shadows-sm);
 
-    --amp-colors-menu-hover:  var(--amp-colors-gray-100);
+    --amp-colors-input-hover: var(--amp-colors-neutral-100);
     --amp-colors-focus-border: var(--amp-colors-neutral-800);
 
-    --amp-colors-tabs-background: #f1f5f9;
-    --amp-colors-tabs-background-active: #e0e9f5;
-    --amp-colors-tabs-text: #1a202c;
+    --amp-colors-tabs-background: transparent;
+    --amp-colors-tabs-background-active: var(--amp-colors-neutral-100);
+    --amp-colors-tabs-background-hover: var(--amp-colors-neutral-100);
+    --amp-colors-tabs-text: var(--amp-colors-neutral-900);
         
     /* misc */
     --amp-default-border-radius: 4px;
-    --amp-accessibility-color: var(--amp-colors-gray-200);
 }

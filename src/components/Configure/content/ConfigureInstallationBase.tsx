@@ -28,10 +28,10 @@ interface ConfigureInstallationBaseProps {
 
 // fallback during migration away from chakra-ui, when variable is not defined
 const borderColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-neutral-100').trim() || '#f5f5f5';
+  .getPropertyValue('--amp-colors-border').trim() || '#e5e5e5';
 
-const boxShadow = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-shadows-sm').trim() || '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+const backgroundColor = getComputedStyle(document.documentElement)
+  .getPropertyValue('--amp-colors-background').trim() || 'white';
 
 // Installation UI Base
 export function ConfigureInstallationBase(
@@ -88,7 +88,7 @@ export function ConfigureInstallationBase(
       : (
         <form style={{ width: '34rem' }} onSubmit={onSave}>
           <div style={{
-            display: 'flex', flexDirection: 'row-reverse', gap: '1rem', marginBottom: '2rem',
+            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '2rem',
           }}
           >
             {ButtonBridgeSubmit}
@@ -96,11 +96,10 @@ export function ConfigureInstallationBase(
           </div>
           <Box
             style={{
-              padding: '2rem',
+              padding: '1rem 2rem',
               minHeight: '300px',
-              backgroundColor: 'white',
+              backgroundColor,
               borderColor,
-              boxShadow,
             }}
           >
             {errorMsg && (

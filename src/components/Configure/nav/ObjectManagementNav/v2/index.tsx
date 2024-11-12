@@ -32,7 +32,7 @@ function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject
   };
 
 const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background-secondary').trim() || '#FCFCFC';
+  .getPropertyValue('--amp-colors-background').trim() || 'white';
 
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNavV2({
