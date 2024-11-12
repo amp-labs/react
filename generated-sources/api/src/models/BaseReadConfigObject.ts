@@ -39,6 +39,18 @@ export interface BaseReadConfigObject {
      */
     objectName?: string;
     /**
+     * An object name to map to in the destination.
+     * @type {string}
+     * @memberof BaseReadConfigObject
+     */
+    mapToName?: string;
+    /**
+     * A display name to map to in the destination.
+     * @type {string}
+     * @memberof BaseReadConfigObject
+     */
+    mapToDisplayName?: string;
+    /**
      * The schedule for reading the object, in cron syntax.
      * @type {string}
      * @memberof BaseReadConfigObject
@@ -96,6 +108,8 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
     return {
         
         'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
+        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
+        'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
         'schedule': !exists(json, 'schedule') ? undefined : json['schedule'],
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
@@ -115,6 +129,8 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
     return {
         
         'objectName': value.objectName,
+        'mapToName': value.mapToName,
+        'mapToDisplayName': value.mapToDisplayName,
         'schedule': value.schedule,
         'destination': value.destination,
         'selectedFields': value.selectedFields,
