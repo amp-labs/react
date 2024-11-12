@@ -44,7 +44,7 @@ export const fetchOAuthPopupURL = async (
         },
       };
 
-      const url = await api().oAuthApi.oauthConnect(request);
+      const url = await api().oAuthApi.oauthConnect(request, { credentials: 'include' });
       return url;
     }
   }
