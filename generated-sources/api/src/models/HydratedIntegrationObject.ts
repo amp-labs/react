@@ -51,6 +51,18 @@ export interface HydratedIntegrationObject {
      */
     displayName: string;
     /**
+     * An object name to map to in the destination.
+     * @type {string}
+     * @memberof HydratedIntegrationObject
+     */
+    mapToName?: string;
+    /**
+     * A display name to map to in the destination.
+     * @type {string}
+     * @memberof HydratedIntegrationObject
+     */
+    mapToDisplayName?: string;
+    /**
      * 
      * @type {string}
      * @memberof HydratedIntegrationObject
@@ -119,6 +131,8 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         
         'objectName': json['objectName'],
         'displayName': json['displayName'],
+        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
+        'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
         'destination': json['destination'],
         'schedule': json['schedule'],
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
@@ -140,6 +154,8 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         
         'objectName': value.objectName,
         'displayName': value.displayName,
+        'mapToName': value.mapToName,
+        'mapToDisplayName': value.mapToDisplayName,
         'destination': value.destination,
         'schedule': value.schedule,
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(HydratedIntegrationFieldToJSON)),

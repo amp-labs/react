@@ -26,6 +26,12 @@ export interface HydratedIntegrationFieldExistent {
      */
     fieldName: string;
     /**
+     * The field name to map to in the destination.
+     * @type {string}
+     * @memberof HydratedIntegrationFieldExistent
+     */
+    mapToName?: string;
+    /**
      * 
      * @type {string}
      * @memberof HydratedIntegrationFieldExistent
@@ -55,6 +61,7 @@ export function HydratedIntegrationFieldExistentFromJSONTyped(json: any, ignoreD
     return {
         
         'fieldName': json['fieldName'],
+        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
         'displayName': json['displayName'],
     };
 }
@@ -69,6 +76,7 @@ export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrati
     return {
         
         'fieldName': value.fieldName,
+        'mapToName': value.mapToName,
         'displayName': value.displayName,
     };
 }
