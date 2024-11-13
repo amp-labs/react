@@ -31,6 +31,12 @@ export interface IntegrationFieldExistent {
      * @memberof IntegrationFieldExistent
      */
     mapToName?: string;
+    /**
+     * The display name to map to in the destination.
+     * @type {string}
+     * @memberof IntegrationFieldExistent
+     */
+    mapToDisplayName?: string;
 }
 
 /**
@@ -55,6 +61,7 @@ export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscrimin
         
         'fieldName': json['fieldName'],
         'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
+        'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
     };
 }
 
@@ -69,6 +76,7 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
         
         'fieldName': value.fieldName,
         'mapToName': value.mapToName,
+        'mapToDisplayName': value.mapToDisplayName,
     };
 }
 
