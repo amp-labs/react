@@ -5,6 +5,7 @@ import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+// import { FormCalloutBox } from 'src/components/FormCalloutBox';
 import { Button } from 'src/components/ui-base/Button';
 import { isChakraRemoved } from 'src/components/ui-base/constant';
 
@@ -102,6 +103,8 @@ export function ConfigureInstallationBase(
               borderColor,
             }}
           >
+            {/* data comes from hydrated revision */}
+            {/* <FormCalloutBox>People in Clarify is mapped to Contacts in Hubspot</FormCalloutBox> */}
             {errorMsg && (
             <FormErrorBox>
               {(typeof (errorMsg) === 'string') ? errorMsg : 'Installation Failed.'}

@@ -24,6 +24,8 @@
     --amp-colors-error-border: #FECACA;
     --amp-colors-error-text: #991B1B;
 
+    --amp-colors-callout-background: var(--amp-colors-neutral-100);
+
     /* accent primary and secondary accent used in loading*/
     --amp-colors-accent-primary: var(--amp-colors-neutral-700); 
     --amp-colors-accent-secondary: var(--amp-colors-neutral-500); 
