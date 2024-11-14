@@ -67,6 +67,12 @@ export interface OauthConnectRequest {
      * @memberof OauthConnectRequest
      */
     provider: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OauthConnectRequest
+     */
+    enableCSRFProtection?: boolean;
 }
 
 /**
@@ -100,6 +106,7 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
         'providerAppId': !exists(json, 'providerAppId') ? undefined : json['providerAppId'],
         'provider': json['provider'],
+        'enableCSRFProtection': !exists(json, 'enableCSRFProtection') ? undefined : json['enableCSRFProtection'],
     };
 }
 
@@ -120,6 +127,7 @@ export function OauthConnectRequestToJSON(value?: OauthConnectRequest | null): a
         'consumerName': value.consumerName,
         'providerAppId': value.providerAppId,
         'provider': value.provider,
+        'enableCSRFProtection': value.enableCSRFProtection,
     };
 }
 
