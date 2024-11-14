@@ -7,6 +7,7 @@ import {
   HydratedRevision,
   IntegrationFieldMapping,
 } from 'services/api';
+import { capitalize } from 'src/utils';
 
 import { OTHER_CONST } from './nav/ObjectManagementNav/constant';
 import {
@@ -86,6 +87,8 @@ export const generateReadNavObjects = (config: Config | undefined, hydratedRevis
     navObjects.push(
       {
         name: object?.objectName,
+        displayName: object?.mapToDisplayName || object?.displayName // mapToDisplayName is preferred
+         || (object?.objectName && capitalize(object?.objectName)), // fallback to objectName
         // if no config, object is not completed
         // object is completed if the key exists in the config
         completed: config ? !!getReadObject(config, object.objectName) : false,

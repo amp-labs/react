@@ -110,6 +110,7 @@ export function ChakraObjectManagementNav({
                   <NavObjectItem
                     key={object.name}
                     objectName={object.name}
+                    displayName={object.displayName}
                     completed={object.completed}
                     pending={
                     objectConfigurationsState[object.name]?.read?.isOptionalFieldsModified
@@ -123,7 +124,7 @@ export function ChakraObjectManagementNav({
                 <OtherTab
                   completed={otherNavObject.completed}
                   pending={objectConfigurationsState?.other?.write?.isWriteModified}
-                  displayName={readNavObjects?.length ? 'other' : 'write'}
+                  displayName={readNavObjects?.length ? 'Other' : 'Write'}
                 />
                 ) }
 

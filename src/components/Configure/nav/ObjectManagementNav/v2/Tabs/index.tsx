@@ -101,6 +101,7 @@ export function VerticalTabs({
           <NavObjectTab
             key={object.name}
             objectName={object.name}
+            displayName={object.displayName}
             completed={object.completed}
             pending={objectConfigurationsState?.[object.name]?.read?.isOptionalFieldsModified
               || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified || false}
@@ -112,7 +113,7 @@ export function VerticalTabs({
             completed={otherNavObject.completed}
             pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
              // if read tab exists, display 'other' else 'write' when write tab is the only tab
-            displayName={readNavObjects.length ? 'other' : 'write'}
+            displayName={readNavObjects.length ? 'Other' : 'Write'}
           />
         )}
 

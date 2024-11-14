@@ -6,7 +6,7 @@ import { NavObjectItem } from './NavObjectItem';
 type OtherTabProps = {
   pending?: boolean,
   completed: boolean,
-  displayName?: 'other' | 'write',
+  displayName?: 'Other' | 'Write',
 };
 
 /**

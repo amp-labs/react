@@ -59,5 +59,6 @@ export type ObjectConfigurationsState = Record<string, ConfigureState>;
 // standard object name and whether it is completed in the ObjectManagementNav
 export type NavObject = {
   name: string;
+  displayName?: string;
   completed: boolean;
 };
