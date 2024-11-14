@@ -64,7 +64,7 @@ export function OauthFlow({
     return <em>Password flow not supported yet</em>;
   }
 
-  if (grantType === 'PKCE') {
+  if (grantType === 'authorizationCodePKCE') {
     return <em>PKCE flow not supported yet</em>;
   }
 
