@@ -6,6 +6,7 @@ import { WorkspaceOauthFlow } from '../AuthorizationCode/WorkspaceEntry/Workspac
 import { ClientCredentials } from '../ClientCredentials/ClientCredentials';
 
 const AUTHORIZATION_CODE = 'authorizationCode';
+const AUTHORIZATION_CODE_PKCE = 'authorizationCodePKCE';
 const CLIENT_CREDENTIALS = 'clientCredentials';
 
 type OauthFlowProps = {
@@ -38,7 +39,7 @@ export function OauthFlow({
     providerName,
   };
 
-  if (grantType === AUTHORIZATION_CODE) {
+  if (grantType === AUTHORIZATION_CODE || grantType === AUTHORIZATION_CODE_PKCE) {
     // required workspace
     if (explicitWorkspaceRequired) {
       return <WorkspaceOauthFlow {...sharedProps} />;
@@ -62,10 +63,6 @@ export function OauthFlow({
 
   if (grantType === 'password') {
     return <em>Password flow not supported yet</em>;
-  }
-
-  if (grantType === 'authorizationCodePKCE') {
-    return <em>PKCE flow not supported yet</em>;
   }
 
   return <em>Unsupported grant type: {grantType}</em>;
