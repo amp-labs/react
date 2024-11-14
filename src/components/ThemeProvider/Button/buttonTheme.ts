@@ -16,7 +16,7 @@ export const buttonVariants = {
       opacity: 1, // Ensure it is fully visible (no transparency)
     },
   },
-  warning: {
+  danger: {
     bg: 'red.50', // Background color
     outline: '2px solid red.100',
     outlineOffset: '0',
