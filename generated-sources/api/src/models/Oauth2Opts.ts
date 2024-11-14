@@ -88,9 +88,9 @@ export interface Oauth2Opts {
  */
 export const Oauth2OptsGrantTypeEnum = {
     AuthorizationCode: 'authorizationCode',
+    AuthorizationCodePkce: 'authorizationCodePKCE',
     ClientCredentials: 'clientCredentials',
-    Password: 'password',
-    Pkce: 'PKCE'
+    Password: 'password'
 } as const;
 export type Oauth2OptsGrantTypeEnum = typeof Oauth2OptsGrantTypeEnum[keyof typeof Oauth2OptsGrantTypeEnum];
 
