@@ -41,6 +41,7 @@ export const fetchOAuthPopupURL = async (
           consumerName,
           providerAppId: app.id,
           provider,
+          enableCSRFProtection: true,
         },
       };
 
