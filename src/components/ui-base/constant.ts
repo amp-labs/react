@@ -1,5 +1,3 @@
-import { getEnvVariable } from 'src/utils';
-
 /**
  * feature flag to remove chakra-ui
  * components should work with and without chakra-ui, and the imported styles
@@ -14,4 +12,5 @@ import { getEnvVariable } from 'src/utils';
  */
 
 // parent app my turn on or off the chakra-ui components with this flag
-export const isChakraRemoved = getEnvVariable('REACT_APP_ENABLE_CSS', false) === 'true';
+// set to true for removal branch. // TODO remove this flag when chakra-ui is removed
+export const isChakraRemoved = true;
