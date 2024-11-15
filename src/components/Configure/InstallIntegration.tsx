@@ -14,6 +14,8 @@ import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 
+import resetStyles from './resetCss.module.css';
+
 // creates a random seed to force update the component
 // pass the seed as a key to the component
 function useForceUpdate() {
@@ -71,37 +73,39 @@ export function InstallIntegration(
   }
 
   return (
-    // install integration provider provides all props, integrationObj and installation
-    <InstallIntegrationProvider
-      key={seed} // force update when seed changes
-      integration={integration}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
-      onInstallSuccess={onInstallSuccess}
-      onUpdateSuccess={onUpdateSuccess}
-      onUninstallSuccess={onUninstallSuccess}
-      fieldMapping={fieldMapping}
-    >
-      <ConnectionsProvider groupRef={groupRef}>
-        <ProtectedConnectionLayout
-          consumerRef={consumerRef}
-          consumerName={consumerName}
-          groupRef={groupRef}
-          groupName={groupName}
-        >
-          <HydratedRevisionProvider projectId={projectId}>
-            <ConditionalProxyLayout resetComponent={reset}>
-              <ConfigurationProvider>
-                <ObjectManagementNav>
-                  <InstallationContent />
-                </ObjectManagementNav>
-              </ConfigurationProvider>
-            </ConditionalProxyLayout>
-          </HydratedRevisionProvider>
-        </ProtectedConnectionLayout>
-      </ConnectionsProvider>
-    </InstallIntegrationProvider>
+    <div className={resetStyles.resetContainer}>
+      {/* install integration provider provides all props, integrationObj and installation */}
+      <InstallIntegrationProvider
+        key={seed} // force update when seed changes
+        integration={integration}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+        onInstallSuccess={onInstallSuccess}
+        onUpdateSuccess={onUpdateSuccess}
+        onUninstallSuccess={onUninstallSuccess}
+        fieldMapping={fieldMapping}
+      >
+        <ConnectionsProvider groupRef={groupRef}>
+          <ProtectedConnectionLayout
+            consumerRef={consumerRef}
+            consumerName={consumerName}
+            groupRef={groupRef}
+            groupName={groupName}
+          >
+            <HydratedRevisionProvider projectId={projectId}>
+              <ConditionalProxyLayout resetComponent={reset}>
+                <ConfigurationProvider>
+                  <ObjectManagementNav>
+                    <InstallationContent />
+                  </ObjectManagementNav>
+                </ConfigurationProvider>
+              </ConditionalProxyLayout>
+            </HydratedRevisionProvider>
+          </ProtectedConnectionLayout>
+        </ConnectionsProvider>
+      </InstallIntegrationProvider>
+    </div>
   );
 }

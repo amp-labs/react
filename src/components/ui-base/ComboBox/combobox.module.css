@@ -38,6 +38,7 @@
   border-color: var(--amp-colors-border);
   z-index: 10;
   border-radius: var(--amp-default-border-radius);
+  padding: 0;
 }
 
 .menuItem {

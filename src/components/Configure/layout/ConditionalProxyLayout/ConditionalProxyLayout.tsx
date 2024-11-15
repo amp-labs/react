@@ -9,7 +9,6 @@ import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
@@ -83,14 +82,12 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
       <SuccessTextBox
         text="Integration successfully uninstalled."
       >
-        {isChakraRemoved && (
-          <Button
-            type="button"
-            onClick={resetComponent}
-            style={{ width: '100%' }}
-          >Reinstall Integration
-          </Button>
-        )}
+        <Button
+          type="button"
+          onClick={resetComponent}
+          style={{ width: '100%' }}
+        >Reinstall Integration
+        </Button>
       </SuccessTextBox>
     );
   }
