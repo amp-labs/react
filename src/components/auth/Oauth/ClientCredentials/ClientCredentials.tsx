@@ -1,9 +1,5 @@
 import { Connection } from '@generated/api/src';
 
-import { isChakraRemoved } from 'src/components/ui-base/constant';
-
-import { NoWorkspaceOauthClientCredsFlow } from './deprecated/NoWorkspaceOauthClientCredsFlow';
-import { WorkspaceOauthClientCredsFlow } from './deprecated/WorkspaceOauthClientCredsFlow';
 import { ClientCredsContainer } from './ClientCredentialsContainer';
 
 interface ClientCredsFlowProps {
@@ -19,12 +15,5 @@ interface ClientCredsFlowProps {
   setSelectedConnection: (connection: Connection | null) => void;
 }
 export function ClientCredentials({ ...props }: ClientCredsFlowProps) {
-  if (isChakraRemoved) {
-    return <ClientCredsContainer {...props} />;
-  }
-
-  if (props.explicitWorkspaceRequired) {
-    return (<WorkspaceOauthClientCredsFlow {...props} />);
-  }
-  return (<NoWorkspaceOauthClientCredsFlow {...props} />);
+  return <ClientCredsContainer {...props} />;
 }

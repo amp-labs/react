@@ -14,8 +14,8 @@ import { getProviderName } from 'src/utils';
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
 import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
+import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
-import { UNINSTALL_INSTALLATION_CONST } from '../UninstallInstallation';
 
 function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
   if (tabValue === UNINSTALL_INSTALLATION_CONST) {
@@ -81,6 +81,7 @@ export function ObjectManagementNavV2({
   return (
     <NextTabIndexContext.Provider value={onNextIncompleteTab}>
       <SelectedObjectNameContext.Provider value={selectedObject?.name}>
+        {/* Install integration component container */}
         <Container style={{ maxWidth: '55rem' }}>
           <Box
             style={{
@@ -91,8 +92,10 @@ export function ObjectManagementNavV2({
             }}
           >
             <div style={{ width: '20rem' }}>
-              <h1>{getProviderName(provider)} integration</h1>
-              <h3 style={{ marginBottom: '20px', fontSize: '1.125rem', fontWeight: '500' }}>{appName}</h3>
+              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{getProviderName(provider)} integration
+              </h1>
+              <h3 style={{ marginBottom: '20px', fontSize: 'large', fontWeight: '500' }}>{appName}
+              </h3>
 
               {isNavObjectsReady && (
               // dummy mock tabs with styling only
