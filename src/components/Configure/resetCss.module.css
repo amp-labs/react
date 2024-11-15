@@ -1,0 +1,24 @@
+/* Chakra Reset Scoped with CSS Modules */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+
+.resetContainer {
+    /* Box sizing */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;       
+    }
+
+    * {
+      font-family: 'DM Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    }
+  
+    /* Body defaults */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+   
+  }
+  

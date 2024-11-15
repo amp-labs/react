@@ -81,6 +81,7 @@ export function ObjectManagementNavV2({
   return (
     <NextTabIndexContext.Provider value={onNextIncompleteTab}>
       <SelectedObjectNameContext.Provider value={selectedObject?.name}>
+        {/* Install integration component container */}
         <Container style={{ maxWidth: '55rem' }}>
           <Box
             style={{
