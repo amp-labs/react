@@ -8,8 +8,7 @@ import { useInstallIntegrationProps } from 'context/InstallIntegrationContextPro
 import { Button } from 'src/components/ui-base/Button';
 import { isChakraRemoved } from 'src/components/ui-base/constant';
 
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
-import { UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/UninstallInstallation';
+import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getReadObject } from '../utils';
 

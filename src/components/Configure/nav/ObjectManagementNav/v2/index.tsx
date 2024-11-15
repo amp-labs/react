@@ -14,8 +14,8 @@ import { getProviderName } from 'src/utils';
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
 import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
+import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
-import { UNINSTALL_INSTALLATION_CONST } from '../UninstallInstallation';
 
 function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
   if (tabValue === UNINSTALL_INSTALLATION_CONST) {
