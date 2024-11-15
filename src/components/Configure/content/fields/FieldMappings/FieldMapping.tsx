@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Select as ChakraSelect } from '@chakra-ui/react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { LabelTooltip } from 'src/components/ui-base/Tooltip';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
@@ -36,18 +34,15 @@ export function FieldMapping(
     setDisabled(false);
   }, [field, setConfigureState, selectedObjectName, fieldValue, configureState]);
 
-  const options = useMemo(() => allFields?.map(
-    (f) => <option key={f.fieldName} value={f.fieldName}>{f.displayName}</option>,
-  ), [allFields]);
-
   const items = useMemo(() => allFields.map((f) => ({
     id: f.fieldName,
     label: f.displayName,
     value: f.fieldName,
   })), [allFields]);
 
-  const SelectComponent = isChakraRemoved ? (
+  const SelectComponent = (
     <ComboBox
+      disabled={disabled}
       items={items}
       selectedValue={fieldValue || null}
       onSelectedItemChange={(item) => {
@@ -60,17 +55,6 @@ export function FieldMapping(
       }}
       placeholder={!fieldValue ? 'Please select one' : fieldValue}
     />
-  ) : (
-    <ChakraSelect
-      name={field.mapToName}
-      variant="flushed"
-      value={fieldValue || undefined}
-      onChange={onSelectChange}
-      placeholder={!fieldValue ? 'Please select one' : undefined} // remove placeholder when value is selected
-      disabled={disabled}
-    >
-      {options}
-    </ChakraSelect>
   );
 
   return (
