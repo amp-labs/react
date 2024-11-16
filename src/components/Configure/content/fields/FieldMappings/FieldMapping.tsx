@@ -53,7 +53,7 @@ export function FieldMapping(
           } as unknown as HTMLSelectElement,
         } as unknown as React.ChangeEvent<HTMLSelectElement>);
       }}
-      placeholder={!fieldValue ? 'Please select one' : fieldValue}
+      placeholder="Please select one"
     />
   );
 

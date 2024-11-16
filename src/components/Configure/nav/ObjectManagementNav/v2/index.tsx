@@ -92,8 +92,10 @@ export function ObjectManagementNavV2({
             }}
           >
             <div style={{ width: '20rem' }}>
-              <h1>{getProviderName(provider)} integration</h1>
-              <h3 style={{ marginBottom: '20px', fontSize: '1.125rem', fontWeight: '500' }}>{appName}</h3>
+              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{getProviderName(provider)} integration
+              </h1>
+              <h3 style={{ marginBottom: '20px', fontSize: 'large', fontWeight: '500' }}>{appName}
+              </h3>
 
               {isNavObjectsReady && (
               // dummy mock tabs with styling only
