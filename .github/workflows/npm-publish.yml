@@ -6,6 +6,10 @@ on:
       version:
         description: 'Version number for the SDK'
         required: true
+      tag:
+        description: 'Tag for the SDK version'
+        required: true
+        default: 'latest'
 
 jobs:
   publish:
@@ -39,7 +43,7 @@ jobs:
 
     - name: Publish to npm
       id: publish_to_npm
-      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive
+      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --tag ${{ github.event.inputs.tag }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
