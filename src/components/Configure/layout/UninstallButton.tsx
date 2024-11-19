@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { handleServerError } from 'src/utils/handleServerError';
 
 interface UninstallButtonProps {
@@ -66,7 +64,7 @@ export function UninstallButton({
 
   const buttonContent = loading ? 'Uninstalling...' : buttonText;
 
-  const ButtonBridge = isChakraRemoved ? (
+  const ButtonComponent = (
     <Button
       type="button"
       onClick={onDelete}
@@ -76,16 +74,7 @@ export function UninstallButton({
     >
       {buttonContent}
     </Button>
-  ) : (
-    <ChakraButton
-      onClick={onDelete}
-      variant={buttonVariant}
-      isDisabled={isDisabled}
-      style={buttonStyle}
-    >
-      {buttonContent}
-    </ChakraButton>
   );
 
-  return installation?.id ? ButtonBridge : null;
+  return installation?.id ? ButtonComponent : null;
 }

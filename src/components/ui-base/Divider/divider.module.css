@@ -1,3 +1,5 @@
 .divider {
-    border-color: var(--amp-colors-border);
+    border: none;
+    height: 1px;
+    background: var(--amp-colors-border)
 }

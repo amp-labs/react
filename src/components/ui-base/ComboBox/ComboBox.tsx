@@ -16,6 +16,7 @@ interface ComboBoxProps {
   selectedValue: string | null;
   onSelectedItemChange: (item: Option | null) => void;
   placeholder: string;
+  disabled?: boolean;
 }
 
 function getOptionsFilter(inputValue: string) {
@@ -36,6 +37,7 @@ export function ComboBox({
   onSelectedItemChange,
   // label,
   placeholder,
+  disabled,
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
 
@@ -68,11 +70,15 @@ export function ComboBox({
         {/* input  */}
         <div className={styles.inputContainer}>
           <input
+            style={{ border: 'none' }}
+            disabled={disabled}
             placeholder={placeholder}
             className={styles.input}
             {...getInputProps()}
           />
           <button
+            style={{ border: 'none' }}
+            disabled={disabled}
             aria-label="toggle menu"
             className={styles.toggleButton}
             type="button"
