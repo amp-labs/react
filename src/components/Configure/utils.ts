@@ -1,3 +1,5 @@
+import { IntegrationFieldExistent } from '@generated/api/src';
+
 import { ErrorBoundary } from 'context/ErrorContextProvider';
 import {
   Config,
@@ -22,7 +24,7 @@ import {
  */
 export function isIntegrationFieldMapping(field: HydratedIntegrationField):
   field is IntegrationFieldMapping {
-  return (field as IntegrationFieldMapping).mapToName !== undefined;
+  return !(field as IntegrationFieldExistent).fieldName;
 }
 
 // 1. get object
