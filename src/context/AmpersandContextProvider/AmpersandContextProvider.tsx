@@ -7,8 +7,6 @@
 
 import React, { createContext, useContext } from 'react';
 
-import { ThemeProvider } from 'components/ThemeProvider';
-
 import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
 import { IntegrationListProvider } from '../IntegrationListContextProvider';
@@ -46,17 +44,15 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   }
 
   return (
-    <ThemeProvider>
-      <ErrorStateProvider>
-        <ApiKeyProvider value={apiKey}>
-          <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider projectIdOrName={projectIdOrName}>
-              {children}
-            </IntegrationListProvider>
-          </ProjectProvider>
-        </ApiKeyProvider>
-      </ErrorStateProvider>
-    </ThemeProvider>
+    <ErrorStateProvider>
+      <ApiKeyProvider value={apiKey}>
+        <ProjectProvider projectIdOrName={projectIdOrName}>
+          <IntegrationListProvider projectIdOrName={projectIdOrName}>
+            {children}
+          </IntegrationListProvider>
+        </ProjectProvider>
+      </ApiKeyProvider>
+    </ErrorStateProvider>
   );
 }
 

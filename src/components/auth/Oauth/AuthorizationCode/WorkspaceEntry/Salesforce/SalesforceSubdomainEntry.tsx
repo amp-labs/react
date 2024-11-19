@@ -16,7 +16,7 @@ export function SalesforceSubdomainEntry({
         What is my Salesforce subdomain?
       </AccessibleLink>
       <AuthErrorAlert error={error} />
-      <div style={{ display: 'flex', marginTop: '1em' }}>
+      <div style={{ display: 'flex', marginTop: '1em', alignItems: 'center' }}>
         <FormComponent.Input
           id="salesforce-subdomain"
           type="text"
