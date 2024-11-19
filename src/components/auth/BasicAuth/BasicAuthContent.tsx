@@ -4,10 +4,8 @@ import { AuthCardLayoutTemplate } from 'components/auth/AuthCardLayoutTemplate';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { FormComponent } from 'src/components/form';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { getProviderName } from 'src/utils';
 
-import { ChakraLandingContent } from './ChakraLandingContent';
 import { LandingContentProps } from './LandingContentProps';
 
 function BasicAuthContentForm({
@@ -86,10 +84,6 @@ function BasicAuthContentForm({
  * @returns
  */
 export function BasicAuthContent({ ...props }: LandingContentProps) {
-  if (!isChakraRemoved) {
-    return <ChakraLandingContent {...props} />;
-  }
-
   return (
     <BasicAuthContentForm {...props} />
   );
