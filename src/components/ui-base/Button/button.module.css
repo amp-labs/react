@@ -14,7 +14,7 @@
 }
 
 .button:hover {
-    background-color: var(--amp-colors-button-primary-hover);
+    opacity: .8;
     box-shadow: var(--amp-button-hover-shadow);
 }
 
@@ -48,11 +48,6 @@ button[aria-expanded="true"] {
 }
 
 .ghost {
-    background-color: white;
+    background-color: var(--amp-colors-neutral-100);    
     color: var(--amp-colors-neutral-900);
 }
-
-.ghost:hover {
-    background-color: var(--amp-button-hover-shadow);
-}
-

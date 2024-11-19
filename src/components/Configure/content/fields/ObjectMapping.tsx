@@ -32,7 +32,7 @@ export function ReadObjectMapping() {
   if (mapToDisplayName && appName && providerName) {
     return (
       <FormCalloutBox style={{ marginTop: '1rem' }}>
-        <p>
+        <p style={{ margin: '1rem 0' }}>
           <b>{mapToDisplayName}</b> in {appName} is mapped to <b>{objectDisplayName}</b> in {providerName}.
         </p>
       </FormCalloutBox>

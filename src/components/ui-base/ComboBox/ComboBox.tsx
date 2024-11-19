@@ -70,12 +70,14 @@ export function ComboBox({
         {/* input  */}
         <div className={styles.inputContainer}>
           <input
+            style={{ border: 'none' }}
             disabled={disabled}
             placeholder={placeholder}
             className={styles.input}
             {...getInputProps()}
           />
           <button
+            style={{ border: 'none' }}
             disabled={disabled}
             aria-label="toggle menu"
             className={styles.toggleButton}
