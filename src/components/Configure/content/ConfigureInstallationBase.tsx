@@ -1,12 +1,10 @@
 import { FormEventHandler } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 
 import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
@@ -68,19 +66,8 @@ export function ConfigureInstallationBase(
   // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
-  const ButtonBridgeSubmit = isChakraRemoved
-    ? <Button type="submit" disabled={isDisabled}>{isCreateMode ? 'Install' : 'Save'}</Button>
-    : (
-      <ChakraButton type="submit" variant="primary" isDisabled={isDisabled}>
-        {isCreateMode ? 'Install' : 'Save'}
-      </ChakraButton>
-    );
-
-  const ButtonBridgeReset = isChakraRemoved
-    ? <Button type="button" onClick={onReset} disabled={isDisabled} variant="ghost">Reset</Button>
-    : (
-      <ChakraButton isDisabled={isDisabled} onClick={onReset}>Reset</ChakraButton>
-    );
+  const ButtonBridgeSubmit = <Button type="submit" disabled={isDisabled}>{isCreateMode ? 'Install' : 'Save'}</Button>;
+  const ButtonBridgeReset = <Button type="button" onClick={onReset} disabled={isDisabled} variant="ghost">Reset</Button>;
 
   return (
     isLoading ? <LoadingCentered />
