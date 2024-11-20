@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 :root {
+    /* font */
+    --amp-font-family: 'DM Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
     /* COLOR TOKENS */
     --amp-colors-white: #ffffff;
     --amp-colors-black: #111111;

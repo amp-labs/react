@@ -67,7 +67,7 @@ export function ConfigureInstallationBase(
       : (
         <form style={{ width: '34rem' }} onSubmit={onSave}>
           <div style={{
-            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '2rem',
+            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '20px',
           }}
           >
             {ButtonBridgeSubmit}
