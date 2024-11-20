@@ -15,11 +15,11 @@
 }
 
 .inputError {
-    border: 1px solid var(--amp-colors-error-border);
+    border: 1px solid var(--amp-colors-status-critical);
 }
 
 .input:focus:enabled {
-    border: 2px solid var(--amp-colors-accent-primary);
+    border: 2px solid var(--amp-colors-focus-border);
     outline: none;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .error {
-    color: var(--amp-colors-error-border);
+    color: var(--amp-colors-status-critical);
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.25rem; /* 142.857% */

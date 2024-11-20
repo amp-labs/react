@@ -1,56 +1,52 @@
 :root {
-    /* color tokens */
+    /* COLOR TOKENS */
     --amp-colors-white: #ffffff;
-    --amp-colors-black: #000000;
+    --amp-colors-black: #111111;
+    --amp-colors-primary: #000000;
 
-    --amp-colors-neutral-50: #fafafa;
-    --amp-colors-neutral-100: #f5f5f5;
-    --amp-colors-neutral-200: #e5e5e5;
-    --amp-colors-neutral-300: #d4d4d4;
-    --amp-colors-neutral-400: #a3a3a3;
-    --amp-colors-neutral-500: #737373;
-    --amp-colors-neutral-600: #525252;
-    --amp-colors-neutral-700: #404040;
-    --amp-colors-neutral-800: #262626;
-    --amp-colors-neutral-900: #171717;
-    --amp-colors-neutral-950: #0a0a0a;
+    --amp-colors-neutral-25: #FEFEFE;
+    --amp-colors-neutral-50: #FDFCFD;
+    --amp-colors-neutral-100: #FAFAFC;
+    --amp-colors-neutral-200: #F6F5F9;
+    --amp-colors-neutral-300: #F1EFF5;
+    --amp-colors-neutral-400: #EDEAF2;
+    --amp-colors-neutral-500: #E8E5EF;
+    --amp-colors-neutral-600: #918E95;
+    --amp-colors-neutral-700: #646266;
+    --amp-colors-neutral-800: #363638;
+    --amp-colors-neutral-900: #1D1D1D;
+    
+    /* SEMANTIC COLORS */
 
-    /* semantic colors  */
-    --amp-colors-border: var(--amp-colors-neutral-200);
+    /* typography colors */
+    --amp-colors-text-standout: var(--amp-colors-black);
+    --amp-colors-text-regular: var(--amp-colors-neutral-900);
+    --amp-colors-text-muted: var(--amp-colors-neutral-700);
 
-    --amp-colors-error-background: #FEF2F2;
-    --amp-colors-error-background-hover: #FED7D7;
-    --amp-colors-error-border: #FECACA;
-    --amp-colors-error-text: #991B1B;
+    /* bg-surfaces */
+    --amp-colors-bg-primary: var(--amp-colors-white);
+    --amp-colors-bg-secondary: var(--amp-colors-neutral-50);
+    --amp-colors-bg-highlight: var(--amp-colors-neutral-200);
 
-    --amp-colors-callout-background: var(--amp-colors-neutral-100);
+    /* border */
+    --amp-colors-border: var(--amp-colors-neutral-300);
+    --amp-default-border-radius: 6px;
 
-    /* accent primary and secondary accent used in loading*/
-    --amp-colors-accent-primary: var(--amp-colors-neutral-700); 
-    --amp-colors-accent-secondary: var(--amp-colors-neutral-500); 
+    /* status */
+    --amp-colors-status-critical-dark: #702525;
+    --amp-colors-status-critical: #E73D3D;
+    --amp-colors-status-critical-muted: #FFD9D9;
      
-    /* background boxes */
-    --amp-colors-background: var(--amp-colors-white);
-    --amp-colors-text-secondary: var(--amp-colors-neutral-700);
+    /* links */
+    --amp-colors-link-text: var(--amp-colors-text-muted);
+    --amp-colors-link-focus: var(--amp-colors-text-standout);
+    --amp-colors-link-active: var(--amp-colors-text-regular);
 
-    --amp-colors-badge: var(--amp-colors-neutral-100);
-    --amp-colors-badge-text: var(--amp-colors-neutral-700);
+    /* button */
+    --amp-colors-button-primary: var(--amp-colors-primary);
+    --amp-colors-button-text: var(--amp-colors-white);
 
-    --amp-colors-link-text: var(--amp-colors-neutral-700);
-    --amp-colors-link-focus: var(--amp-colors-neutral-800);
-    --amp-colors-link-active: var(--amp-colors-neutral-600);
-
-    --amp-colors-button-primary: var(--amp-colors-accent-primary);
-    --amp-colors-button-text: var(--amp-colors-neutral-200);
-
-    --amp-colors-input-hover: var(--amp-colors-neutral-100);
+    /* input */
+    --amp-colors-input-hover: var(--amp-colors-bg-highlight);
     --amp-colors-focus-border: var(--amp-colors-neutral-800);
-
-    --amp-colors-tabs-background: transparent;
-    --amp-colors-tabs-background-active: var(--amp-colors-neutral-100);
-    --amp-colors-tabs-background-hover: var(--amp-colors-neutral-100);
-    --amp-colors-tabs-text: var(--amp-colors-neutral-900);
-        
-    /* misc */
-    --amp-default-border-radius: 4px;
 }

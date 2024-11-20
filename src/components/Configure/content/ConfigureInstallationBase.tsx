@@ -23,13 +23,6 @@ interface ConfigureInstallationBaseProps {
   errorMsg?: string | boolean,
 }
 
-// fallback during migration away from chakra-ui, when variable is not defined
-const borderColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-border').trim() || '#e5e5e5';
-
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background').trim() || 'white';
-
 // Installation UI Base
 export function ConfigureInstallationBase(
   {
@@ -84,8 +77,8 @@ export function ConfigureInstallationBase(
             style={{
               padding: '1rem 2rem',
               minHeight: '300px',
-              backgroundColor,
-              borderColor,
+              backgroundColor: 'var(--amp-colors-bg-primary)',
+              borderColor: 'var(--amp-colors-border)',
             }}
           >
             {errorMsg && (

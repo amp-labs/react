@@ -1,19 +1,9 @@
 import { Box } from 'src/components/ui-base/Box/Box';
 
-// fallback during migration away from chakra-ui, when variable is not defined
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-error-background').trim() || '#FEF2F2';
-
-const borderColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-error-border').trim() || '#FECACA';
-
-const color = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-error-text').trim() || '#991B1B';
-
 const defaultStyle = {
-  backgroundColor,
-  borderColor,
-  color,
+  backgroundColor: 'var(--amp-colors-status-critical-muted)',
+  borderColor: 'var(--amp-colors-status-critical-muted)',
+  color: 'var(--amp-colors-status-critical-dark)',
   padding: '.5rem 1rem',
 };
 

@@ -6,13 +6,9 @@ type DocsHelperTextProps = {
   credentialName: string;
 };
 
-// fallback during migration away from chakra-ui, when variable is not defined
-const color = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-text-secondary').trim() || '#737373';
-
 export function DocsHelperText({ url, providerDisplayName, credentialName }: DocsHelperTextProps) {
   return (
-    <p style={{ color }}>
+    <p style={{ color: 'var(--amp-colors-text-muted)' }}>
       <AccessibleLink href={url} newTab>
         <span style={{ textDecoration: 'underline' }}>Learn more</span>
       </AccessibleLink> about where to find your {providerDisplayName} {credentialName}.

@@ -7,7 +7,7 @@
     border-color: inherit;
     height: 2.5rem;
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.5rem; /* 150% */
     padding: 0 1rem;
     transition: all .1s ease;
@@ -19,11 +19,11 @@
 }
 
 .buttonError {
-    border: 1px solid var(--amp-colors-error-border);
+    border: 1px solid var(--amp-colors-status-critical);
 }
 
 .button:focus:enabled {
-    border: 2px solid var(--amp-colors-accent-primary);
+    border: 2px solid var(--amp-colors-input-hover);
     outline: none;
 }
 
@@ -32,22 +32,14 @@
     cursor: not-allowed;
 }
 
-/* Additional styling to support screen readers */
-button[aria-expanded="true"] {
-    background-color: var(--amp-colors-input-hover);  /* Can visually indicate button state */
-}
-
 .danger {
-    color: var(--amp-colors-error-text);
-    background-color: var(--amp-colors-error-background);
-    border-color: var(--amp-colors-error-border);
-}
-
-.danger:hover {
-    background-color: var(--amp-colors-error-background-hover);   
+    color: var(--amp-colors-status-critical-dark);
+    background-color: var(--amp-colors-status-critical-muted);
+    border-color: var(--amp-colors-status-critical-muted);
 }
 
 .ghost {
-    background-color: var(--amp-colors-neutral-100);    
-    color: var(--amp-colors-neutral-900);
+    border-color: var(--amp-colors-neutral-200);
+    background-color: var(--amp-colors-neutral-200);    
+    color: var(--amp-colors-black);
 }
