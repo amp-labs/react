@@ -1,12 +1,8 @@
 import { Box } from 'src/components/ui-base/Box/Box';
 
-// fallback during migration away from chakra-ui, when variable is not defined
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-callout-background').trim() || '#f5f5f5';
-
 const defaultStyle = {
-  backgroundColor,
-  border: 'none',
+  backgroundColor: 'var(--amp-colors-bg-highlight)',
+  borderColor: 'var(--amp-colors-bg-highlight)',
   padding: '.5rem 1rem',
 };
 

@@ -31,9 +31,6 @@ function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject
     children?: React.ReactNode;
   };
 
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background').trim() || 'white';
-
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNavV2({
   children,
@@ -88,7 +85,7 @@ export function ObjectManagementNavV2({
               display: 'flex',
               gap: '1rem',
               padding: '3rem',
-              backgroundColor,
+              backgroundColor: 'var(--amp-colors-bg-primary)',
             }}
           >
             <div style={{ width: '20rem' }}>

@@ -10,7 +10,7 @@
 
 .formLabelRequired::after {
     content: ' *';
-    color: var(--amp-colors-error-text);
+    color: var(--amp-colors-status-critical-dark);
 }
 
 .formInput {
@@ -18,11 +18,11 @@
 }
 
 .formInputInvalid input {
-    border-color: var(--amp-colors-error-border);
+    border-color: var(--amp-colors-status-critical);
 }
 
 .formError {
-    color: var(--amp-colors-error-text);
+    color: var(--amp-colors-status-critical-dark);
     font-size: 0.875rem;
     margin-top: 0.5rem;
 }

@@ -57,7 +57,7 @@ export function RequiredFieldMappings() {
 
   return integrationFieldMappings?.length ? (
     <>
-      <FieldHeader string="Map the following fields (required)" />
+      <FieldHeader string="Map the following fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
         {integrationFieldMappings.map((field) => (
           <FormControl

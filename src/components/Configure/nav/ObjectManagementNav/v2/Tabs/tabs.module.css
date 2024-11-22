@@ -19,17 +19,15 @@
 }
 
 .tabTrigger:hover {
-  background-color: var(--amp-colors-tabs-background-hover);
+  background-color: var(--amp-colors-bg-highlight);
 }
 
 .tabTrigger[data-state="active"] {
-  background-color: var(--amp-colors-tabs-background-active); 
+  background-color: var(--amp-colors-bg-highlight); 
 }
 
 .danger {
-  color: var(--amp-colors-error-text);
-  /* background-color: var(--amp-colors-error-background); */
-  border-color: var(--amp-colors-error-border);
+  color: var(--amp-colors-status-critical-dark);
 }
 
 
