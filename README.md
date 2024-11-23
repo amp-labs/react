@@ -62,7 +62,7 @@ In addition to importing components, the stylesheet must also be imported. You m
 ```
 import { AmpersandProvider } from '@amp-labs/react';
 import '@amp-labs/react/styles'; // amp-labs style sheet
-import './App.css'; // your local css override 
+import './App.css'; // optional: your own css override 
 
 const options = {
   project: 'PROJECT', // Your Ampersand project name or ID.
