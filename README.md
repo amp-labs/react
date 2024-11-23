@@ -41,7 +41,7 @@ npm install @amp-labs/react
 @amp-labs/react 2.0+ no longer requires chakra as a dependency. Chakra dependencies (@chakra-ui/react @emotion/react @emotion/styled framer-motion) 
 are no longer required. 
 
-@amp-labs/react now ships with it's own stylesheet which also allows builders to override colors, 
+@amp-labs/react now ships with its own stylesheet which also allows users to override colors, 
 fonts, and other css variables. See [Usage changes](#changes-with-2.0)
 
 
