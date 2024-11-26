@@ -20,11 +20,13 @@
 .input {
   padding: 0.5rem;
   width: 100%;
+  font-size: 1rem;
 }
 
 .toggleButton {
   padding: 0.5rem;
   cursor: pointer;
+  background-color: var(--amp-colors-neutral-200);
 }
 
 .menu {
@@ -38,6 +40,8 @@
   border-color: var(--amp-colors-border);
   z-index: 10;
   border-radius: var(--amp-default-border-radius);
+  padding: 0;
+  font-size: .8rem;
 }
 
 .menuItem {

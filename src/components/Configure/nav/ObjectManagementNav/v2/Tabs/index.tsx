@@ -6,8 +6,7 @@ import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
-import { OTHER_CONST } from '../../constant';
-import { UNINSTALL_INSTALLATION_CONST } from '../../UninstallInstallation';
+import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../../constant';
 
 import styles from './tabs.module.css';
 

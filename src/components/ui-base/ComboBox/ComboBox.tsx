@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import { useCombobox } from 'downshift';
 
 import styles from './combobox.module.css'; // CSS Modules
@@ -16,6 +18,7 @@ interface ComboBoxProps {
   selectedValue: string | null;
   onSelectedItemChange: (item: Option | null) => void;
   placeholder: string;
+  disabled?: boolean;
 }
 
 function getOptionsFilter(inputValue: string) {
@@ -36,12 +39,15 @@ export function ComboBox({
   onSelectedItemChange,
   // label,
   placeholder,
+  disabled,
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
+  const inputRef = useRef<HTMLInputElement | null>(null); // Ref to the input element
 
   // Update the filtered items when the items prop changes
   useEffect(() => setFilteredItems(items), [items]);
 
+  // updates menu items when user types in the input
   const onInputValueChange = (_inputValue: string) => {
     setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
   };
@@ -54,13 +60,33 @@ export function ComboBox({
     getInputProps,
     highlightedIndex,
     getItemProps,
+    setInputValue,
   } = useCombobox<Option>({
     items: filteredItems,
     selectedItem: selectedValue ? items.find((item) => item.value === selectedValue) : null,
     itemToString: (item) => item?.label || '',
     onInputValueChange: ({ inputValue: _inputValue }) => onInputValueChange(_inputValue),
-    onSelectedItemChange: ({ selectedItem: newSelectedItem }) => onSelectedItemChange(newSelectedItem),
+    onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
+      inputRef.current?.blur(); // unselects the input when an option is selected so that handleBlur is called
+      onSelectedItemChange(newSelectedItem);
+    },
   });
+
+  const resetInput = () => {
+    setInputValue('');
+    setFilteredItems(items);
+  };
+
+  // Reset the input to show the full list when opened
+  const handleFocus = () => resetInput();
+
+  const selectedValueLabel = useMemo(
+    () => items.find((item) => item.value === selectedValue)?.label,
+    [items, selectedValue],
+  );
+
+  // reset the input value when the input is blurred
+  const handleBlur = () => setInputValue(selectedValueLabel || '');
 
   return (
     <div>
@@ -68,11 +94,15 @@ export function ComboBox({
         {/* input  */}
         <div className={styles.inputContainer}>
           <input
-            placeholder={placeholder}
+            style={{ border: 'none' }}
+            disabled={disabled}
+            placeholder={selectedValueLabel || placeholder}
             className={styles.input}
-            {...getInputProps()}
+            {...getInputProps({ onFocus: handleFocus, onBlur: handleBlur, ref: inputRef })}
           />
           <button
+            style={{ border: 'none' }}
+            disabled={disabled}
             aria-label="toggle menu"
             className={styles.toggleButton}
             type="button"

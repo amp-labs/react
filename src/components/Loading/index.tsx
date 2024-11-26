@@ -1,7 +1,3 @@
-import { isChakraRemoved } from '../ui-base/constant';
-
-import { LoadingIcon } from './LoadingIcon';
-
 import classes from './style.module.css';
 
 /**
@@ -19,21 +15,17 @@ function Loading() {
  * @returns
  */
 export function LoadingCentered() {
-  if (isChakraRemoved) {
-    return (
-      <div style={{
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        marginTop: '20%',
-        marginBottom: '20%',
-      }}
-      >
-        <Loading />
-      </div>
-    );
-  }
-
-  return <LoadingIcon />;
+  return (
+    <div style={{
+      display: 'flex',
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      marginTop: '20%',
+      marginBottom: '20%',
+    }}
+    >
+      <Loading />
+    </div>
+  );
 }

@@ -13,10 +13,10 @@
     align-items: center;
     padding: 1em 2rem;
     border-radius: var(--amp-default-border-radius);
-    background-color: var(--amp-colors-error-background);
-    border: 1px solid var(--amp-colors-error-border);
+    background-color: var(--amp-colors-status-critical-muted);
+    border: 1px solid var(--amp-colors-status-critical-muted);
 }
 
 .errorText {
-    color: var(--amp-colors-error-text);
+    color: var(--amp-colors-status-critical-dark);
 }

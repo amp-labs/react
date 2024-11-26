@@ -11,11 +11,11 @@
 }
 
 .textareaError {
-    border-color: var(--amp-colors-error-border);
+    border-color: var(--amp-colors-status-critical);
 }
 
 .textarea:focus:enabled {
-    border: 2px solid var(--amp-colors-accent-primary);
+    border: 2px solid var(--amp-colors-input-hover);
     outline: none;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .error {
-    color: var(--amp-colors-error-text);
+    color: var(--amp-colors-status-critical-dark);
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.25rem; /* 142.857% */

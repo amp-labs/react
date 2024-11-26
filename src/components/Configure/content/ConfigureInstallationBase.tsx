@@ -1,15 +1,12 @@
 import { FormEventHandler } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
-import { UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/UninstallInstallation';
+import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getReadObject } from '../utils';
 
@@ -25,13 +22,6 @@ interface ConfigureInstallationBaseProps {
   isLoading: boolean,
   errorMsg?: string | boolean,
 }
-
-// fallback during migration away from chakra-ui, when variable is not defined
-const borderColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-border').trim() || '#e5e5e5';
-
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background').trim() || 'white';
 
 // Installation UI Base
 export function ConfigureInstallationBase(
@@ -69,26 +59,15 @@ export function ConfigureInstallationBase(
   // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
 
-  const ButtonBridgeSubmit = isChakraRemoved
-    ? <Button type="submit" disabled={isDisabled}>{isCreateMode ? 'Install' : 'Save'}</Button>
-    : (
-      <ChakraButton type="submit" variant="primary" isDisabled={isDisabled}>
-        {isCreateMode ? 'Install' : 'Save'}
-      </ChakraButton>
-    );
-
-  const ButtonBridgeReset = isChakraRemoved
-    ? <Button type="button" onClick={onReset} disabled={isDisabled} variant="ghost">Reset</Button>
-    : (
-      <ChakraButton isDisabled={isDisabled} onClick={onReset}>Reset</ChakraButton>
-    );
+  const ButtonBridgeSubmit = <Button type="submit" disabled={isDisabled}>{isCreateMode ? 'Install' : 'Save'}</Button>;
+  const ButtonBridgeReset = <Button type="button" onClick={onReset} disabled={isDisabled} variant="ghost">Reset</Button>;
 
   return (
     isLoading ? <LoadingCentered />
       : (
         <form style={{ width: '34rem' }} onSubmit={onSave}>
           <div style={{
-            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '2rem',
+            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '20px',
           }}
           >
             {ButtonBridgeSubmit}
@@ -98,8 +77,8 @@ export function ConfigureInstallationBase(
             style={{
               padding: '1rem 2rem',
               minHeight: '300px',
-              backgroundColor,
-              borderColor,
+              backgroundColor: 'var(--amp-colors-bg-primary)',
+              borderColor: 'var(--amp-colors-border)',
             }}
           >
             {errorMsg && (

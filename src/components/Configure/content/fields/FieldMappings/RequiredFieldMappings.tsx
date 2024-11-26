@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
-import { FormControl as ChakraFormControl, FormErrorMessage as ChakraFormErrorMessage } from '@chakra-ui/react';
 import { IntegrationFieldMapping } from '@generated/api/src';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
 import { isIntegrationFieldMapping } from '../../../utils';
@@ -59,41 +57,22 @@ export function RequiredFieldMappings() {
 
   return integrationFieldMappings?.length ? (
     <>
-      <FieldHeader string="Map the following fields (required)" />
+      <FieldHeader string="Map the following fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-        {integrationFieldMappings.map((field) => {
-          if (isChakraRemoved) {
-            return (
-              <FormControl
-                id={field.mapToName}
-                key={field.mapToName}
-                isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
-                errorMessage="* required"
-              >
-                <FieldMapping
-                  allFields={configureState?.read?.allFields || []}
-                  field={field}
-                  onSelectChange={onSelectChange}
-                />
-              </FormControl>
-            );
-          }
-
-          // Chakra UI FormControl
-          return (
-            <ChakraFormControl
-              key={field.mapToName}
-              isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
-            >
-              <FieldMapping
-                allFields={configureState?.read?.allFields || []}
-                field={field}
-                onSelectChange={onSelectChange}
-              />
-              <ChakraFormErrorMessage> * required</ChakraFormErrorMessage>
-            </ChakraFormControl>
-          );
-        })}
+        {integrationFieldMappings.map((field) => (
+          <FormControl
+            id={field.mapToName}
+            key={field.mapToName}
+            isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
+            errorMessage="* required"
+          >
+            <FieldMapping
+              allFields={configureState?.read?.allFields || []}
+              field={field}
+              onSelectChange={onSelectChange}
+            />
+          </FormControl>
+        ))}
       </div>
     </>
   ) : null;

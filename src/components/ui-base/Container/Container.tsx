@@ -1,7 +1,3 @@
-import { Container as ChakraContainer } from '@chakra-ui/react';
-
-import { isChakraRemoved } from '../constant';
-
 import classes from './container.module.css';
 
 type ContainerProps = {
@@ -19,23 +15,12 @@ type ContainerProps = {
  */
 
 export function Container({ children, className, style }: ContainerProps) {
-  if (isChakraRemoved) {
-    return (
-      <div
-        className={className ? `${classes.container} ${className}` : classes.container}
-        style={style}
-      >
-        {children}
-      </div>
-    );
-  }
-
   return (
-    <ChakraContainer
-      className={className}
+    <div
+      className={className ? `${classes.container} ${className}` : classes.container}
       style={style}
     >
       {children}
-    </ChakraContainer>
+    </div>
   );
 }

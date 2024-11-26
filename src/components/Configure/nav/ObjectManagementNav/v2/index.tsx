@@ -14,8 +14,8 @@ import { getProviderName } from 'src/utils';
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
 import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
+import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
-import { UNINSTALL_INSTALLATION_CONST } from '../UninstallInstallation';
 
 function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
   if (tabValue === UNINSTALL_INSTALLATION_CONST) {
@@ -30,9 +30,6 @@ function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject
   type ObjectManagementNavProps = {
     children?: React.ReactNode;
   };
-
-const backgroundColor = getComputedStyle(document.documentElement)
-  .getPropertyValue('--amp-colors-background').trim() || 'white';
 
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNavV2({
@@ -81,18 +78,21 @@ export function ObjectManagementNavV2({
   return (
     <NextTabIndexContext.Provider value={onNextIncompleteTab}>
       <SelectedObjectNameContext.Provider value={selectedObject?.name}>
+        {/* Install integration component container */}
         <Container style={{ maxWidth: '55rem' }}>
           <Box
             style={{
               display: 'flex',
               gap: '1rem',
               padding: '3rem',
-              backgroundColor,
+              backgroundColor: 'var(--amp-colors-bg-primary)',
             }}
           >
             <div style={{ width: '20rem' }}>
-              <h1>{getProviderName(provider)} integration</h1>
-              <h3 style={{ marginBottom: '20px', fontSize: '1.125rem', fontWeight: '500' }}>{appName}</h3>
+              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{getProviderName(provider)} integration
+              </h1>
+              <h3 style={{ marginBottom: '20px', fontSize: 'large', fontWeight: '500' }}>{appName}
+              </h3>
 
               {isNavObjectsReady && (
               // dummy mock tabs with styling only
