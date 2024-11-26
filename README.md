@@ -37,6 +37,10 @@ In your repo, use `npm` or `yarn` to install the package [`@amp-labs/react`](htt
 npm install @amp-labs/react
 ```
 
+```sh
+yarn add @amp-labs/react
+```
+
 ### Migrating to @amp-labs/react 2.0+ from 1.x.x
 @amp-labs/react 2.0+ no longer requires chakra as a dependency. Chakra dependencies (@chakra-ui/react @emotion/react @emotion/styled framer-motion) 
 are no longer required. 
@@ -56,8 +60,8 @@ yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-
 Please visit [our documentation](https://docs.withampersand.com/v1.0/docs/embeddable-ui-components) to learn more about how to use this library.
 
 ### Changes with 2.0
-In addition to importing components, the stylesheet must also be imported. You may also override 
-`--amp` css variables by importing your own stylesheet.
+In addition to importing components, the default stylesheet must also be imported. You may also override 
+`--amp` css variables from default [styles](https://github.com/amp-labs/react/blob/main/src/styles/variables.css) by importing your own stylesheet.
 
 ```
 import { AmpersandProvider } from '@amp-labs/react';
