@@ -7,13 +7,17 @@ export function UninstallContent() {
   const { appName } = useProject();
   const { installation } = useInstallIntegrationProps();
 
-  const content = installation?.id
-    ? `Once you uninstall this integration, all your configuration will be lost, and "${appName}" may stop working.`
-    : "You've successfully uninstalled the integration.";
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <p>{content}</p>
+      {installation?.id
+        ? (
+          <p>Once you uninstall this integration, all your configuration will be lost, and
+            {' '}
+            <b>{appName}</b> may stop working.
+          </p>
+        )
+        : <p>You've successfully uninstalled the integration.</p>}
+
       <UninstallButton buttonText="Yes, uninstall" buttonVariant="danger" />
     </div>
   );
