@@ -11,7 +11,7 @@
 
 .inputContainer {
   display: flex;
-  background-color: white;
+  background-color: var(--amp-colors-white);
   border: 1px solid;
   border-color: var(--amp-colors-border);
   border-radius: var(--amp-default-border-radius);
@@ -31,7 +31,7 @@
 
 .menu {
   position: absolute;
-  background-color: white;
+  background-color: var(--amp-colors-white);
   width: 100%;
   max-height: 200px;
   overflow-y: auto;

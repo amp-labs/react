@@ -24,7 +24,7 @@
   
 .checkbox {
     margin-right: 10px;
-    background-color: white;
+    background-color: var(--amp-colors-white);
     width: 25px;
     height: 25px;
     border-radius: 4px;
