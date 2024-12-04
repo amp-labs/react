@@ -40,6 +40,6 @@
 
 .ghost {
     border-color: var(--amp-colors-neutral-200);
-    background-color: var(--amp-colors-neutral-200);    
+    background-color: var(--amp-colors-bg-highlight);    
     color: var(--amp-colors-black);
 }

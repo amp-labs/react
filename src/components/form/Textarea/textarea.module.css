@@ -2,7 +2,8 @@
     border-radius: var(--amp-default-border-radius);
     border: 1px solid;
     border-color: inherit;
-    color: var(--amp-colors-neutral-800);
+    background-color: var(--amp-colors-bg-primary);
+    color: var(--amp-colors-text-regular);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem; /* 150% */
@@ -15,12 +16,12 @@
 }
 
 .textarea:focus:enabled {
-    border: 2px solid var(--amp-colors-input-hover);
+    border: 2px solid var(--amp-colors-focus-border);
     outline: none;
 }
 
 .textarea:disabled {
-    background-color: var(--amp-colors-neutral-300);
+    background-color: var(--amp-colors-bg-highlight);
     border: 1px solid var(--amp-colors-neutral-400);
 }
 

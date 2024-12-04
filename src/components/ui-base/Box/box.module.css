@@ -1,5 +1,5 @@
 .box {
     border-radius: var(--amp-default-border-radius);
-    background-color: var(--amp-colors-white);
+    background-color: var(--amp-colors-bg-primary);
     border: 1px solid var(--amp-colors-border);
 }

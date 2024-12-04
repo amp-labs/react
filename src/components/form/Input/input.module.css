@@ -5,7 +5,7 @@
     height: 2.5rem;
     transition: all .20s ease-in;
 
-    color: var(--amp-colors-neutral-800);
+    color: var(--amp-colors-text-regular);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem; /* 150% */
@@ -24,7 +24,7 @@
 }
 
 .input:disabled {
-    background-color: var(--amp-colors-neutral-300);
+    background-color: var( --amp-colors-bg-highlight);
     border: 1px solid var(--amp-colors-neutral-400);
 }
 
