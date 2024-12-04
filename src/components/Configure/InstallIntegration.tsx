@@ -6,6 +6,7 @@ import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
+import resetStyles from 'src/styles/resetCss.module.css';
 
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
@@ -13,8 +14,6 @@ import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-
-import resetStyles from './resetCss.module.css';
 
 // creates a random seed to force update the component
 // pass the seed as a key to the component
