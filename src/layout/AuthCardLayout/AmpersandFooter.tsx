@@ -6,7 +6,7 @@ export function AmpersandFooter() {
   return (
     <footer
       style={{
-        backgroundColor: '#EFEFEF',
+        backgroundColor: 'light-dark(#EFEFEF, #646266)',
         padding: '1em',
         fontSize: '0.8em',
         color: 'gray',
@@ -17,7 +17,7 @@ export function AmpersandFooter() {
         gap: '0.4em',
       }}
     >
-      <p>Secured by</p>
+      <p style={{ color: 'light-dark(gray, #EFEFEF)' }}>Secured by</p>
       <a
         href="https://www.withampersand.com/"
         target="_blank"
