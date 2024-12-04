@@ -9,7 +9,7 @@
 }
   
 .selectAllContainer {
-    background-color: var(--amp-colors-neutral-200);
+    background-color: var(--amp-colors-bg-highlight);
     padding: 8px 16px;
     display: flex;
     align-items: center;
@@ -24,7 +24,7 @@
   
 .checkbox {
     margin-right: 10px;
-    background-color: var(--amp-colors-white);
+    background-color: var(--amp-colors-bg-primary);
     width: 25px;
     height: 25px;
     border-radius: 4px;
