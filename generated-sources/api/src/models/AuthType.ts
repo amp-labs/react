@@ -21,6 +21,7 @@ export const AuthType = {
     Oauth2: 'oauth2',
     ApiKey: 'apiKey',
     Basic: 'basic',
+    Jwt: 'jwt',
     None: 'none'
 } as const;
 export type AuthType = typeof AuthType[keyof typeof AuthType];
