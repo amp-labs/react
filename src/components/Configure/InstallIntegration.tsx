@@ -8,6 +8,8 @@ import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
 import resetStyles from 'src/styles/resetCss.module.css';
 
+import { LoadingCentered } from '../Loading';
+
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
@@ -63,9 +65,13 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId } = useProject();
+  const { projectId, isLoading: isProjectLoading } = useProject();
   const { errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
+
+  if (isProjectLoading) {
+    return <LoadingCentered />;
+  }
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
     return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
