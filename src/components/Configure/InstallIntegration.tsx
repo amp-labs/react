@@ -6,7 +6,10 @@ import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
+import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import resetStyles from 'src/styles/resetCss.module.css';
+
+import { LoadingCentered } from '../Loading';
 
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
@@ -63,9 +66,14 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId } = useProject();
+  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { isLoading: isIntegrationListLoading } = useIntegrationList();
   const { errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
+
+  if (isProjectLoading || isIntegrationListLoading) {
+    return <LoadingCentered />;
+  }
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
     return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;

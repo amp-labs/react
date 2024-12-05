@@ -9,7 +9,6 @@ interface ConnectedSuccessBoxProps {
 export function ConnectedSuccessBox({ provider }: ConnectedSuccessBoxProps) {
   const { appName } = useProject();
   const text = `You have successfully connected your ${getProviderName(provider)} account to ${appName}.`;
-  return (
-    <SuccessTextBox text={text} />
-  );
+
+  return <SuccessTextBox text={text} />;
 }
