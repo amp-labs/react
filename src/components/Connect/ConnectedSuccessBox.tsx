@@ -6,7 +6,7 @@ import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';
 import { RemoveConnectionButton } from './RemoveConnectionButton';
 
 interface ConnectedSuccessBoxProps {
-  resetComponent: () => void;
+  resetComponent: () => void; // reset the ConnectProvider component
   provider: string;
   onDisconnectSuccess?: (connectionID: string) => void;
 }

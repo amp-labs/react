@@ -41,7 +41,7 @@ export function ConnectProvider({
   onDisconnectSuccess,
   onConnectSuccess,
 }: ConnectProviderProps) {
-  const { seed, reset } = useForceUpdate();
+  const { seed, reset } = useForceUpdate(); // resets the component when the seed changes
 
   const onSuccessFx = onConnectSuccess || onSuccess;
   return (

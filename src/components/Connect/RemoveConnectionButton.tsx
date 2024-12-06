@@ -8,7 +8,7 @@ import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
 interface RemoveConnectionButtonProps {
-  resetComponent: () => void;
+  resetComponent: () => void; // reset the Connect Provider component
   buttonText: string;
   buttonVariant?: string;
   buttonStyle?: React.CSSProperties;
@@ -65,7 +65,7 @@ export function RemoveConnectionButton({
           )
           .then((_connections) => {
             setConnections(_connections);
-            resetComponent();
+            resetComponent(); // reset / refresh the Connect Provider component
           })
           .catch((err) => {
             handleServerError(err);
