@@ -31,6 +31,11 @@ import {
     InputValidationProblemToJSON,
 } from '../models';
 
+export interface DeleteConnectionRequest {
+    projectIdOrName: string;
+    connectionId: string;
+}
+
 export interface GenerateConnectionOperationRequest {
     projectIdOrName: string;
     generateConnectionParams?: GenerateConnectionRequest;
@@ -57,7 +62,23 @@ export interface ListConnectionsRequest {
 export interface ConnectionApiInterface {
     /**
      * 
-     * @summary Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * @summary Delete a connection
+     * @param {string} projectIdOrName 
+     * @param {string} connectionId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ConnectionApiInterface
+     */
+    deleteConnectionRaw(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete a connection
+     */
+    deleteConnection(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * @summary Generate a new connection
      * @param {string} projectIdOrName 
      * @param {GenerateConnectionRequest} [generateConnectionParams] 
      * @param {*} [options] Override http request option.
@@ -67,7 +88,8 @@ export interface ConnectionApiInterface {
     generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
 
@@ -113,7 +135,45 @@ export interface ConnectionApiInterface {
 export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInterface {
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * Delete a connection
+     */
+    async deleteConnectionRaw(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteConnection.');
+        }
+
+        if (requestParameters.connectionId === null || requestParameters.connectionId === undefined) {
+            throw new runtime.RequiredError('connectionId','Required parameter requestParameters.connectionId was null or undefined when calling deleteConnection.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/connections/{connectionId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a connection
+     */
+    async deleteConnection(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteConnectionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -142,7 +202,8 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     async generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.generateConnectionRaw(requestParameters, initOverrides);
