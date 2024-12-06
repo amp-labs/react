@@ -20,6 +20,7 @@ interface ProtectedConnectionLayoutProps {
   groupName?: string,
   onSuccess?: (connectionID: string) => void;
   children: JSX.Element,
+  onDisconnectSuccess?: (connectionID: string) => void,
 }
 
 export const getProviderInfo = async (
@@ -39,7 +40,7 @@ export const getProviderInfo = async (
 };
 
 export function ProtectedConnectionLayout({
-  provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess,
+  provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onDisconnectSuccess,
 }: ProtectedConnectionLayoutProps) {
   const apiKey = useApiKey();
   const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
@@ -85,6 +86,7 @@ export function ProtectedConnectionLayout({
     setSelectedConnection,
     providerName,
     providerInfo,
+    onDisconnectSuccess,
   };
 
   if (providerInfo.authType === 'none') {

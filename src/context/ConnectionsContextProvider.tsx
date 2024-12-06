@@ -1,17 +1,15 @@
 import {
-  createContext,
-  useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Connection } from 'services/api';
 import { LoadingCentered } from 'src/components/Loading';
+import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
-import {
-  ErrorBoundary, useErrorState,
-} from './ErrorContextProvider';
+import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContextProvider';
 import { useProject } from './ProjectContextProvider';
 
@@ -19,14 +17,20 @@ interface ConnectionsContextValue {
   connections: Connection[] | null;
   selectedConnection: Connection | null;
   setConnections: React.Dispatch<React.SetStateAction<Connection[] | null>>;
-  setSelectedConnection: React.Dispatch<React.SetStateAction<Connection | null>>;
+  setSelectedConnection: React.Dispatch<
+  React.SetStateAction<Connection | null>
+  >;
+  isIntegrationDeleted: boolean;
+  setIntegrationDeleted: () => void;
 }
 
 export const ConnectionsContext = createContext<ConnectionsContextValue>({
   connections: null,
   selectedConnection: null,
-  setConnections: () => { },
-  setSelectedConnection: () => { },
+  setConnections: () => {},
+  setSelectedConnection: () => {},
+  isIntegrationDeleted: false,
+  setIntegrationDeleted: () => {},
 });
 
 export const useConnections = (): ConnectionsContextValue => {
@@ -40,13 +44,15 @@ export const useConnections = (): ConnectionsContextValue => {
 };
 
 type ConnectionsProviderProps = {
-  provider?: string,
-  groupRef: string,
+  provider?: string;
+  groupRef: string;
   children?: React.ReactNode;
 };
 
 export function ConnectionsProvider({
-  provider, groupRef, children,
+  provider,
+  groupRef,
+  children,
 }: ConnectionsProviderProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -56,47 +62,70 @@ export function ConnectionsProvider({
   const [isLoading, setLoadingState] = useState<boolean>(true);
   const { setError, isError } = useErrorState();
   const { provider: providerFromProps } = useInstallIntegrationProps();
+  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
 
   if (!projectId) {
-    throw new Error('ConnectionsProvider must be used within AmpersandProvider');
+    throw new Error(
+      'ConnectionsProvider must be used within AmpersandProvider',
+    );
   }
 
   const selectedProvider = provider || providerFromProps;
 
   if (!selectedProvider) {
-    throw new Error('ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider');
+    throw new Error(
+      'ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider',
+    );
   }
 
   useEffect(() => {
-    api().connectionApi.listConnections({ projectIdOrName: projectId, groupRef, provider: selectedProvider }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
-    }).then((_connections) => {
-      setLoadingState(false);
-      setConnections(_connections);
-    }).catch((err) => {
-      console.error(`Error retrieving existing OAuth connections for group ID ${groupRef}.`);
-      handleServerError(err);
-      setLoadingState(false);
-      setError(ErrorBoundary.CONNECTION_LIST, projectId);
-    });
+    api()
+      .connectionApi.listConnections(
+        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+        {
+          headers: {
+            'X-Api-Key': apiKey ?? '',
+          },
+        },
+      )
+      .then((_connections) => {
+        setLoadingState(false);
+        setConnections(_connections);
+      })
+      .catch((err) => {
+        console.error(
+          `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
+        );
+        handleServerError(err);
+        setLoadingState(false);
+        setError(ErrorBoundary.CONNECTION_LIST, projectId);
+      });
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 
-  const contextValue = useMemo(() => ({
-    connections,
-    selectedConnection,
-    setConnections,
-    setSelectedConnection,
-  }), [connections, selectedConnection, setConnections, setSelectedConnection]);
+  const contextValue = useMemo(
+    () => ({
+      connections,
+      selectedConnection,
+      setConnections,
+      setSelectedConnection,
+      isIntegrationDeleted,
+      setIntegrationDeleted,
+    }),
+    [
+      connections,
+      selectedConnection,
+      setConnections,
+      setSelectedConnection,
+      isIntegrationDeleted,
+      setIntegrationDeleted,
+    ],
+  );
 
-  return (
-    isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message="Error retrieving existing connections" />
-      : (
-        <ConnectionsContext.Provider value={contextValue}>
-          {isLoading ? <LoadingCentered /> : children}
-        </ConnectionsContext.Provider>
-      )
+  return isError(ErrorBoundary.CONNECTION_LIST, projectId) ? (
+    <ErrorTextBox message="Error retrieving existing connections" />
+  ) : (
+    <ConnectionsContext.Provider value={contextValue}>
+      {isLoading ? <LoadingCentered /> : children}
+    </ConnectionsContext.Provider>
   );
 }
