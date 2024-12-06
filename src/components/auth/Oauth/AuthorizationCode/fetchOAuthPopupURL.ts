@@ -19,7 +19,8 @@ export const fetchOAuthPopupURL = async (
   }
 
   if (provInfo.authType === 'oauth2') {
-    if (provInfo.oauth2Opts?.grantType === 'authorizationCode' || provInfo.oauth2Opts?.grantType === 'authorizationCodePKCE') {
+    if (provInfo.oauth2Opts?.grantType === 'authorizationCode'
+      || provInfo.oauth2Opts?.grantType === 'authorizationCodePKCE') {
       const providerApps = await api().providerAppApi.listProviderApps({ projectIdOrName: projectId }, {
         headers: { 'X-Api-Key': apiKey ?? '' },
       });
