@@ -101,7 +101,7 @@ export const generateReadNavObjects = (config: Config | undefined, hydratedRevis
   return navObjects;
 };
 
-export const generateOtherNavObject = (
+export const generateWriteNavObject = (
   config: Config | undefined,
 ) => {
   const navObject: NavObject = {
@@ -118,8 +118,8 @@ export function generateAllNavObjects(
 ) {
   const navObjects: NavObject[] = generateReadNavObjects(config, hydratedRevision);
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
-  if (otherNavObject) { navObjects.push(otherNavObject); }
+  const writeNavObject = isWriteSupported ? generateWriteNavObject(config) : undefined;
+  if (writeNavObject) { navObjects.push(writeNavObject); }
   return navObjects;
 }
 

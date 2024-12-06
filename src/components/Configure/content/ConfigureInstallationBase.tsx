@@ -53,7 +53,7 @@ export function ConfigureInstallationBase(
   const isDisabled = loading || isLoading || !configureState || !selectedObjectName
    || !isStateNew;
 
-  // is other selected?
+  // is write selected?
   const isNonConfigurableWrite = selectedObjectName === WRITE_CONST;
 
   // is the form in the uninstall case?

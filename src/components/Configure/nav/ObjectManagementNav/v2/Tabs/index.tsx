@@ -90,7 +90,7 @@ type VerticalTabsProps = {
 
 export function VerticalTabs({
   value, readNavObjects, onValueChange, objectConfigurationsState,
-  writeNavObject: otherNavObject, showUninstallButton,
+  writeNavObject, showUninstallButton,
 }: VerticalTabsProps) {
   return (
     <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
@@ -107,9 +107,9 @@ export function VerticalTabs({
           />
         ))}
         {/* Other / Write Tab */}
-        {otherNavObject && (
+        {writeNavObject && (
           <WriteTab
-            completed={otherNavObject.completed}
+            completed={writeNavObject.completed}
             pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
             displayName="Write"
           />

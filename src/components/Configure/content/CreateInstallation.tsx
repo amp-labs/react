@@ -34,8 +34,7 @@ export function CreateInstallation() {
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
-  // is other selected?
-  const isOtherSelected = selectedObjectName === WRITE_CONST;
+  const isWriteSelected = selectedObjectName === WRITE_CONST;
 
   const errorMsg = getMutateInstallationError(selectedObjectName);
 
@@ -134,7 +133,7 @@ export function CreateInstallation() {
 
   const onSave = (e: FormEvent) => {
     e.preventDefault();
-    if (!isOtherSelected) {
+    if (!isWriteSelected) {
       onSaveRead();
     } else {
       onSaveWrite();
