@@ -13,7 +13,7 @@ import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
-import { generatewriteNavObject, generateReadNavObjects } from '../../../utils';
+import { generateReadNavObjects, generatewriteNavObject } from '../../../utils';
 import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
 
