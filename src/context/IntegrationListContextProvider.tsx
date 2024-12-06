@@ -17,7 +17,7 @@ interface IntegrationListContextValue {
 
 export const IntegrationListContext = createContext<IntegrationListContextValue>({
   integrations: null,
-  isLoading: false,
+  isLoading: true,
 });
 
 export const useIntegrationList = (): IntegrationListContextValue => {

@@ -24,7 +24,7 @@ export const ProjectContext = createContext<ProjectContextValue>({
   appName: '',
   projectId: '',
   projectIdOrName: '',
-  isLoading: false,
+  isLoading: true,
 });
 
 export const useProject = (): ProjectContextValue => {
