@@ -1,11 +1,10 @@
-import { useState } from 'react';
-
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
+import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { InstallationContent } from './content/InstallationContent';
@@ -14,15 +13,6 @@ import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-
-// creates a random seed to force update the component
-// pass the seed as a key to the component
-function useForceUpdate() {
-  const [seed, setSeed] = useState(1);
-  const reset = () => { setSeed(Math.random()); };
-
-  return { seed, reset };
-}
 
 export type FieldMapping = { [key: string]: Array<IntegrationFieldMapping> };
 

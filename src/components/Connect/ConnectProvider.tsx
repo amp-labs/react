@@ -1,6 +1,7 @@
 import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
 import { RedirectHandler } from 'components/RedirectHandler';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
+import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';
@@ -40,10 +41,11 @@ export function ConnectProvider({
   onDisconnectSuccess,
   onConnectSuccess,
 }: ConnectProviderProps) {
-  // eslint-disable-next-line no-param-reassign
-  onSuccess = onConnectSuccess || onSuccess;
+  const { seed, reset } = useForceUpdate();
+
+  const onSuccessFx = onConnectSuccess || onSuccess;
   return (
-    <div className={resetStyles.resetContainer}>
+    <div className={resetStyles.resetContainer} key={seed}>
       <ConnectionsProvider provider={provider} groupRef={groupRef}>
         <ProtectedConnectionLayout
           provider={provider}
@@ -51,11 +53,12 @@ export function ConnectProvider({
           consumerName={consumerName}
           groupRef={groupRef}
           groupName={groupName}
-          onSuccess={onSuccess}
+          onSuccess={onSuccessFx}
           onDisconnectSuccess={onDisconnectSuccess}
         >
           <RedirectHandler redirectURL={redirectUrl}>
             <ConnectedSuccessBox
+              resetComponent={reset}
               provider={provider}
               onDisconnectSuccess={onDisconnectSuccess}
             />

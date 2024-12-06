@@ -8,6 +8,7 @@ import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
 interface RemoveConnectionButtonProps {
+  resetComponent: () => void;
   buttonText: string;
   buttonVariant?: string;
   buttonStyle?: React.CSSProperties;
@@ -19,6 +20,7 @@ export function RemoveConnectionButton({
   buttonVariant = 'secondary',
   buttonStyle = {},
   onDisconnectSuccess,
+  resetComponent,
 }: RemoveConnectionButtonProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
@@ -63,6 +65,7 @@ export function RemoveConnectionButton({
           )
           .then((_connections) => {
             setConnections(_connections);
+            resetComponent();
           })
           .catch((err) => {
             handleServerError(err);

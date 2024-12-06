@@ -15,7 +15,7 @@ function useOnSuccessHandler(onSuccess?: (connectionID: string) => void) {
 
 type ConnectionHandlerPropsProps = {
   onSuccess?: (connectionID: string) => void;
-  // onError?: (error: string) => void; // efnot supported yet
+  // onError?: (error: string) => void; // not supported yet
 };
 
 /**
