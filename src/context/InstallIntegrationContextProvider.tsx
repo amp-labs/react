@@ -7,6 +7,7 @@ import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import {
   api, Config, Installation, Integration,
 } from 'services/api';
+import { ComponentContainer } from 'src/components/Configure/ComponentContainer';
 import { FieldMapping } from 'src/components/Configure/InstallIntegration';
 import { LoadingCentered } from 'src/components/Loading';
 import { findIntegrationFromList } from 'src/utils';
@@ -168,19 +169,36 @@ export function InstallIntegrationProvider({
     onInstallSuccess, onUpdateSuccess, onUninstallSuccess,
     isIntegrationDeleted, setIntegrationDeleted, fieldMapping]);
 
-  if (integrationObj !== null) {
-    const errorMessage = 'Error retrieving installation information for integration '
-     + `"${integrationObj?.name || 'unknown'}"`;
-
+  if (isLoading) {
     return (
-      isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey))
-      ? <ErrorTextBox message={errorMessage} /> : (
-        <InstallIntegrationContext.Provider value={props}>
-          {isLoading ? <LoadingCentered /> : children}
-        </InstallIntegrationContext.Provider>
-      );
+      <ComponentContainer>
+        <LoadingCentered />
+      </ComponentContainer>
+    );
   }
 
-  // if integration not found, return error message
-  return <ErrorTextBox message={`Integration "${integration}" not found`} />;
+  if (integrationObj === null) {
+    // if integration not found, return error message
+    return (
+      <ComponentContainer>
+        <ErrorTextBox message={`Integration "${integration}" not found`} />
+      </ComponentContainer>
+    );
+  }
+
+  if (isError(ErrorBoundary.INSTALLATION_LIST, integrationErrorKey)) {
+    const errorMessage = 'Error retrieving installation information for integration '
+    + `"${integrationObj?.name || 'unknown'}"`;
+    return (
+      <ComponentContainer>
+        <ErrorTextBox message={errorMessage} />
+      </ComponentContainer>
+    );
+  }
+
+  return (
+    <InstallIntegrationContext.Provider value={props}>
+      { children }
+    </InstallIntegrationContext.Provider>
+  );
 }

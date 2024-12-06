@@ -91,6 +91,7 @@ export function ConnectionsProvider({
   }), [connections, selectedConnection, setConnections, setSelectedConnection]);
 
   if (isLoading || isProjectLoading) {
+    // todo refactor this into a component
     return <LoadingCentered />;
   }
 
