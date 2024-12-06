@@ -11,7 +11,7 @@ import {
 } from 'services/api';
 import { capitalize } from 'src/utils';
 
-import { OTHER_CONST } from './nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from './nav/ObjectManagementNav/constant';
 import {
   NavObject,
   SelectMappingFields,
@@ -105,7 +105,7 @@ export const generateOtherNavObject = (
   config: Config | undefined,
 ) => {
   const navObject: NavObject = {
-    name: OTHER_CONST,
+    name: WRITE_CONST,
     completed: config ? !!config?.content?.write : false,
   };
   return navObject;

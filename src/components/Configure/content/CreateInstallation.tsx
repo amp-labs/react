@@ -11,7 +11,7 @@ import {
 
 import { onSaveReadCreateInstallation } from '../actions/read/onSaveReadCreateInstallation';
 import { onSaveWriteCreateInstallation } from '../actions/write/onSaveWriteCreateInstallation';
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -35,7 +35,7 @@ export function CreateInstallation() {
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
   // is other selected?
-  const isOtherSelected = selectedObjectName === OTHER_CONST;
+  const isOtherSelected = selectedObjectName === WRITE_CONST;
 
   const errorMsg = getMutateInstallationError(selectedObjectName);
 

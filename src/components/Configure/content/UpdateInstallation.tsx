@@ -7,7 +7,7 @@ import { Installation, Integration } from 'services/api';
 
 import { onSaveReadUpdateInstallation } from '../actions/read/onSaveReadUpdateInstallation';
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -33,7 +33,7 @@ export function UpdateInstallation(
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
   // is other selected?
-  const isOtherSelected = selectedObjectName === OTHER_CONST;
+  const isOtherSelected = selectedObjectName === WRITE_CONST;
 
   const errorMsg = getMutateInstallationError(selectedObjectName);
 

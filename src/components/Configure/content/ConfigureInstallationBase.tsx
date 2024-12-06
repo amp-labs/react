@@ -6,7 +6,7 @@ import { Box } from 'components/ui-base/Box/Box';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
 
-import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../nav/ObjectManagementNav/constant';
+import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getReadObject } from '../utils';
 
@@ -45,7 +45,7 @@ export function ConfigureInstallationBase(
   const isModified = isReadModified || isWriteModified;
 
   // if the read object is not completed, it is a new state
-  const isSelectedReadObjectComplete = (selectedObjectName !== OTHER_CONST && !isSelectedReadConfigComplete);
+  const isSelectedReadObjectComplete = (selectedObjectName !== WRITE_CONST && !isSelectedReadConfigComplete);
   // is this a new state (modified or creating a new state)
   const isStateNew = isModified || isCreateMode || isSelectedReadObjectComplete;
 
@@ -54,7 +54,7 @@ export function ConfigureInstallationBase(
    || !isStateNew;
 
   // is other selected?
-  const isNonConfigurableWrite = selectedObjectName === OTHER_CONST;
+  const isNonConfigurableWrite = selectedObjectName === WRITE_CONST;
 
   // is the form in the uninstall case?
   const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;

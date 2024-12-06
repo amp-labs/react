@@ -6,7 +6,7 @@ import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
-import { OTHER_CONST, UNINSTALL_INSTALLATION_CONST } from '../../constant';
+import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
 
 import styles from './tabs.module.css';
 
@@ -36,21 +36,21 @@ function NavObjectTab({
   );
 }
 
-type OtherTabProps = {
+type WriteTabProps = {
   completed: boolean;
   pending: boolean;
   displayName: string;
 };
 
-function OtherTab({
+function WriteTab({
   completed, pending, displayName,
-}: OtherTabProps) {
+}: WriteTabProps) {
   return (
     <>
       <Divider style={{ margin: '1rem 0' }} />
       <NavObjectTab
         key="other-write"
-        objectName={OTHER_CONST}
+        objectName={WRITE_CONST}
         completed={completed}
         pending={pending}
         displayName={displayName}
@@ -81,7 +81,7 @@ function UninstallTab() {
 
 type VerticalTabsProps = {
   readNavObjects: NavObject[];
-  otherNavObject?: NavObject; // write tab
+  writeNavObject?: NavObject;
   value: string;
   onValueChange: (value: string) => void;
   objectConfigurationsState?: ObjectConfigurationsState;
@@ -90,7 +90,7 @@ type VerticalTabsProps = {
 
 export function VerticalTabs({
   value, readNavObjects, onValueChange, objectConfigurationsState,
-  otherNavObject, showUninstallButton,
+  writeNavObject: otherNavObject, showUninstallButton,
 }: VerticalTabsProps) {
   return (
     <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
@@ -108,7 +108,7 @@ export function VerticalTabs({
         ))}
         {/* Other / Write Tab */}
         {otherNavObject && (
-          <OtherTab
+          <WriteTab
             completed={otherNavObject.completed}
             pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
             displayName="Write"

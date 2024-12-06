@@ -101,7 +101,7 @@ export function ObjectManagementNavV2({
                 readNavObjects={readNavObjects}
                 onValueChange={(value: string) => setTabvalue(value)}
                 objectConfigurationsState={objectConfigurationsState}
-                otherNavObject={otherNavObject}
+                writeNavObject={otherNavObject}
                 showUninstallButton={!!installation}
               />
               )}

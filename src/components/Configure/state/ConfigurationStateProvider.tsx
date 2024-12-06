@@ -5,7 +5,7 @@ import { Draft, produce } from 'immer';
 
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
 
 import { useHydratedRevision } from './HydratedRevisionContext';
@@ -121,7 +121,7 @@ export function ConfigurationProvider(
     objectName: string,
   ) => {
     // write case
-    if (objectName === OTHER_CONST) {
+    if (objectName === WRITE_CONST) {
       resetWritePendingConfigurationState();
     } else {
       // read case
