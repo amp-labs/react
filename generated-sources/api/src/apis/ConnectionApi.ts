@@ -56,8 +56,8 @@ export interface ListConnectionsRequest {
  */
 export interface ConnectionApiInterface {
     /**
-     * 
-     * @summary Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * @summary Generate a new connection
      * @param {string} projectIdOrName 
      * @param {GenerateConnectionRequest} [generateConnectionParams] 
      * @param {*} [options] Override http request option.
@@ -67,7 +67,8 @@ export interface ConnectionApiInterface {
     generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
 
@@ -113,7 +114,8 @@ export interface ConnectionApiInterface {
 export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInterface {
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -142,7 +144,8 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * Generate a new connection (only valid for providers with auth types which are not OAuth2 Authorization Code)
+     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * Generate a new connection
      */
     async generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
         const response = await this.generateConnectionRaw(requestParameters, initOverrides);
