@@ -13,7 +13,7 @@ import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
-import { generateReadNavObjects, generatewriteNavObject } from '../../../utils';
+import { generateReadNavObjects, generateWriteNavObject } from '../../../utils';
 import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
 
@@ -49,7 +49,7 @@ export function ObjectManagementNavV2({
   const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const writeNavObject = isWriteSupported ? generatewriteNavObject(config) : undefined;
+  const writeNavObject = isWriteSupported ? generateWriteNavObject(config) : undefined;
 
   const allNavObjects = useMemo(() => {
     const navObjects = [...(readNavObjects || [])];
