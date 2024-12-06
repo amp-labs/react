@@ -66,13 +66,21 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { projectId, projectIdOrName, isLoading: isProjectLoading } = useProject();
   const { isLoading: isIntegrationListLoading } = useIntegrationList();
-  const { errorState } = useErrorState();
+  const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
   if (isProjectLoading || isIntegrationListLoading) {
     return <LoadingCentered />;
+  }
+
+  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
+    return <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />;
+  }
+
+  if (isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)) {
+    return <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />;
   }
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
