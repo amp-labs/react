@@ -91,16 +91,21 @@ export function ConnectionsProvider({
   }), [connections, selectedConnection, setConnections, setSelectedConnection]);
 
   if (isLoading || isProjectLoading) {
+    // todo refactor this into a component
     return <LoadingCentered />;
   }
 
+  if (isError(ErrorBoundary.PROJECT, projectId)) {
+    return <ErrorTextBox message={`Error loading project ${projectId}`} />;
+  }
+
+  if (isError(ErrorBoundary.CONNECTION_LIST, projectId)) {
+    return <ErrorTextBox message="Error retrieving existing connections" />;
+  }
+
   return (
-    isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message="Error retrieving existing connections" />
-      : (
-        <ConnectionsContext.Provider value={contextValue}>
-          { children }
-        </ConnectionsContext.Provider>
-      )
+    <ConnectionsContext.Provider value={contextValue}>
+      { children }
+    </ConnectionsContext.Provider>
   );
 }

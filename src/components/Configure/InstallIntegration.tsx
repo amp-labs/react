@@ -17,6 +17,7 @@ import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
+import { ComponentContainer } from './ComponentContainer';
 
 // creates a random seed to force update the component
 // pass the seed as a key to the component
@@ -66,17 +67,42 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { projectId, projectIdOrName, isLoading: isProjectLoading } = useProject();
   const { isLoading: isIntegrationListLoading } = useIntegrationList();
-  const { errorState } = useErrorState();
+  const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
   if (isProjectLoading || isIntegrationListLoading) {
-    return <LoadingCentered />;
+    return (
+      // todo refactor this into a component
+      <ComponentContainer>
+        <LoadingCentered />
+      </ComponentContainer>
+    );
+  }
+
+  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
+    return (
+      <ComponentContainer>
+        <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />
+      </ComponentContainer>
+    );
+  }
+
+  if (isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)) {
+    return (
+      <ComponentContainer>
+        <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />;
+      </ComponentContainer>
+    );
   }
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
-    return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
+    return (
+      <ComponentContainer>
+        <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
+      </ComponentContainer>
+    );
   }
 
   return (
