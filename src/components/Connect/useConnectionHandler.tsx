@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
+import { Connection } from '@generated/api/src';
 
 import { useConnections } from 'context/ConnectionsContextProvider';
 
-function useOnSuccessHandler(onSuccess?: (connectionID: string) => void) {
+function useOnSuccessHandler(onSuccess?: (connection: Connection) => void) {
   const { selectedConnection } = useConnections();
   useEffect(() => {
     // Check if a onSuccess callback is present
     if (onSuccess && selectedConnection) {
       // call callback when connection is selected
-      onSuccess(selectedConnection.id);
+      onSuccess(selectedConnection);
     }
   }, [onSuccess, selectedConnection]);
 }
 
 type ConnectionHandlerPropsProps = {
-  onSuccess?: (connectionID: string) => void;
+  onSuccess?: (connection: Connection) => void;
   // onError?: (error: string) => void; // not supported yet
 };
 

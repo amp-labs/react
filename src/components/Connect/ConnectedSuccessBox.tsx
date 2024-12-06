@@ -1,3 +1,5 @@
+import { Connection } from '@generated/api/src';
+
 import { useProject } from 'context/ProjectContextProvider';
 import { getProviderName } from 'src/utils';
 
@@ -8,7 +10,7 @@ import { RemoveConnectionButton } from './RemoveConnectionButton';
 interface ConnectedSuccessBoxProps {
   resetComponent: () => void; // reset the ConnectProvider component
   provider: string;
-  onDisconnectSuccess?: (connectionID: string) => void;
+  onDisconnectSuccess?: (connection: Connection) => void;
 }
 export function ConnectedSuccessBox({ provider, onDisconnectSuccess, resetComponent }: ConnectedSuccessBoxProps) {
   const { appName } = useProject();
