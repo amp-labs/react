@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
-import { isChakraRemoved } from 'src/components/ui-base/constant';
 import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -80,7 +78,7 @@ export function RemoveConnectionButton({
 
   const buttonContent = loading ? 'Disconnecting...' : buttonText;
 
-  const ButtonBridge = isChakraRemoved ? (
+  const ButtonBridge = (
     <Button
       type="button"
       onClick={onDelete}
@@ -90,15 +88,6 @@ export function RemoveConnectionButton({
     >
       {buttonContent}
     </Button>
-  ) : (
-    <ChakraButton
-      onClick={onDelete}
-      variant={buttonVariant}
-      isDisabled={isDisabled}
-      style={buttonStyle}
-    >
-      {buttonContent}
-    </ChakraButton>
   );
 
   return ButtonBridge;
