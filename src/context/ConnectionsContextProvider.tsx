@@ -55,7 +55,7 @@ export function ConnectionsProvider({
   children,
 }: ConnectionsProviderProps) {
   const apiKey = useApiKey();
-  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { projectId } = useProject();
 
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
@@ -121,17 +121,11 @@ export function ConnectionsProvider({
     ],
   );
 
-  if (isLoading || isProjectLoading) {
-    return <LoadingCentered />;
-  }
-
-  return (
-    isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message="Error retrieving existing connections" />
-      : (
-        <ConnectionsContext.Provider value={contextValue}>
-          { children }
-        </ConnectionsContext.Provider>
-      )
+  return isError(ErrorBoundary.CONNECTION_LIST, projectId) ? (
+    <ErrorTextBox message="Error retrieving existing connections" />
+  ) : (
+    <ConnectionsContext.Provider value={contextValue}>
+      {isLoading ? <LoadingCentered /> : children}
+    </ConnectionsContext.Provider>
   );
 }
