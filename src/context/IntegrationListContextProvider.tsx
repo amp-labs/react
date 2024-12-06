@@ -5,7 +5,6 @@ import {
 
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Integration } from 'services/api';
-import { LoadingCentered } from 'src/components/Loading';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
@@ -13,10 +12,12 @@ import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
+  isLoading: boolean;
 }
 
 export const IntegrationListContext = createContext<IntegrationListContextValue>({
   integrations: null,
+  isLoading: false,
 });
 
 export const useIntegrationList = (): IntegrationListContextValue => {
@@ -59,15 +60,15 @@ export function IntegrationListProvider(
   }, [projectIdOrName, apiKey, setError]);
 
   const contextValue = useMemo(() => ({
-    integrations,
-  }), [integrations]);
+    integrations, isLoading,
+  }), [integrations, isLoading]);
 
   return (
     isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)
       ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
       : (
         <IntegrationListContext.Provider value={contextValue}>
-          {isLoading ? <LoadingCentered /> : children}
+          { children}
         </IntegrationListContext.Provider>
       )
   );

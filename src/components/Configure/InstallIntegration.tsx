@@ -6,6 +6,7 @@ import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
+import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { LoadingCentered } from '../Loading';
@@ -66,10 +67,11 @@ export function InstallIntegration(
   }: InstallIntegrationProps,
 ) {
   const { projectId, isLoading: isProjectLoading } = useProject();
+  const { isLoading: isIntegrationListLoading } = useIntegrationList();
   const { errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
-  if (isProjectLoading) {
+  if (isProjectLoading || isIntegrationListLoading) {
     return <LoadingCentered />;
   }
 
