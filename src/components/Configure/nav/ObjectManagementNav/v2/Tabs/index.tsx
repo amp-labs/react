@@ -111,8 +111,8 @@ export function VerticalTabs({
           <OtherTab
             completed={otherNavObject.completed}
             pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
-             // if read tab exists, display 'other' else 'write' when write tab is the only tab
-            displayName={readNavObjects.length ? 'Other' : 'Write'}
+             // 'other' has been changed to 'write' in all cases. 12/6/24
+            displayName="Write"
           />
         )}
 
