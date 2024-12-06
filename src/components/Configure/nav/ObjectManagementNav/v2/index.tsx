@@ -13,7 +13,7 @@ import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
-import { generateOtherNavObject, generateReadNavObjects } from '../../../utils';
+import { generateReadNavObjects, generateWriteNavObject } from '../../../utils';
 import { UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
 
@@ -49,13 +49,13 @@ export function ObjectManagementNavV2({
   const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
+  const writeNavObject = isWriteSupported ? generateWriteNavObject(config) : undefined;
 
   const allNavObjects = useMemo(() => {
     const navObjects = [...(readNavObjects || [])];
-    if (otherNavObject && isWriteSupported) { navObjects.push(otherNavObject); }
+    if (writeNavObject && isWriteSupported) { navObjects.push(writeNavObject); }
     return navObjects;
-  }, [readNavObjects, otherNavObject, isWriteSupported]);
+  }, [readNavObjects, writeNavObject, isWriteSupported]);
 
   const selectedObject = getSelectedObject(allNavObjects, tabValue);
 
@@ -101,7 +101,7 @@ export function ObjectManagementNavV2({
                 readNavObjects={readNavObjects}
                 onValueChange={(value: string) => setTabvalue(value)}
                 objectConfigurationsState={objectConfigurationsState}
-                otherNavObject={otherNavObject}
+                writeNavObject={writeNavObject}
                 showUninstallButton={!!installation}
               />
               )}

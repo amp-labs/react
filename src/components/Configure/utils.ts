@@ -11,7 +11,7 @@ import {
 } from 'services/api';
 import { capitalize } from 'src/utils';
 
-import { OTHER_CONST } from './nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from './nav/ObjectManagementNav/constant';
 import {
   NavObject,
   SelectMappingFields,
@@ -101,11 +101,11 @@ export const generateReadNavObjects = (config: Config | undefined, hydratedRevis
   return navObjects;
 };
 
-export const generateOtherNavObject = (
+export const generateWriteNavObject = (
   config: Config | undefined,
 ) => {
   const navObject: NavObject = {
-    name: OTHER_CONST,
+    name: WRITE_CONST,
     completed: config ? !!config?.content?.write : false,
   };
   return navObject;
@@ -118,8 +118,8 @@ export function generateAllNavObjects(
 ) {
   const navObjects: NavObject[] = generateReadNavObjects(config, hydratedRevision);
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const otherNavObject = isWriteSupported ? generateOtherNavObject(config) : undefined;
-  if (otherNavObject) { navObjects.push(otherNavObject); }
+  const writeNavObject = isWriteSupported ? generateWriteNavObject(config) : undefined;
+  if (writeNavObject) { navObjects.push(writeNavObject); }
   return navObjects;
 }
 

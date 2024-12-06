@@ -7,7 +7,7 @@ import { Installation, Integration } from 'services/api';
 
 import { onSaveReadUpdateInstallation } from '../actions/read/onSaveReadUpdateInstallation';
 import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
-import { OTHER_CONST } from '../nav/ObjectManagementNav/constant';
+import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { setHydrateConfigState } from '../state/utils';
 import { validateFieldMappings } from '../utils';
 
@@ -32,8 +32,7 @@ export function UpdateInstallation(
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
-  // is other selected?
-  const isOtherSelected = selectedObjectName === OTHER_CONST;
+  const isWriteSelected = selectedObjectName === WRITE_CONST;
 
   const errorMsg = getMutateInstallationError(selectedObjectName);
 
@@ -138,7 +137,7 @@ export function UpdateInstallation(
   const onSave = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!isOtherSelected) {
+    if (!isWriteSelected) {
       onSaveRead();
     } else {
       onSaveWrite();
