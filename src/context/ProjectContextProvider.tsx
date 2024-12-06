@@ -4,7 +4,6 @@ import {
 
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Project } from 'services/api';
-import { LoadingCentered } from 'src/components/Loading';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { useApiKey } from './ApiKeyContextProvider';
@@ -17,6 +16,7 @@ interface ProjectContextValue {
   appName: string;
   projectId: string;
   projectIdOrName: string;
+  isLoading: boolean;
 }
 
 export const ProjectContext = createContext<ProjectContextValue>({
@@ -24,6 +24,7 @@ export const ProjectContext = createContext<ProjectContextValue>({
   appName: '',
   projectId: '',
   projectIdOrName: '',
+  isLoading: true,
 });
 
 export const useProject = (): ProjectContextValue => {
@@ -66,15 +67,19 @@ export function ProjectProvider(
   }, [projectIdOrName, apiKey, setLoadingState, setError]);
 
   const contextValue = useMemo(() => ({
-    projectId: project?.id || '', projectIdOrName, project, appName: project?.appName || '',
-  }), [projectIdOrName, project]);
+    projectId: project?.id || '',
+    projectIdOrName,
+    project,
+    appName: project?.appName || '',
+    isLoading,
+  }), [projectIdOrName, project, isLoading]);
 
   return (
     isError(ErrorBoundary.PROJECT, projectIdOrName)
       ? <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />
       : (
         <ProjectContext.Provider value={contextValue}>
-          {isLoading ? <LoadingCentered /> : children}
+          {children}
         </ProjectContext.Provider>
       )
   );
