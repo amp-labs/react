@@ -8,9 +8,13 @@ export * from '../components/Configure';
 export * from '../components/Connect/ConnectProvider';
 export * from '../hooks/useIsIntegrationInstalled';
 
-// Exported types which are helpful for builders
+/**
+ *  Exported types which are helpful for builders
+ */
+
+// For defining dynamic mappings
 export { FieldMapping } from 'src/components/Configure/content/fields/FieldMappings';
 export type {
-  Connection,
-  Config,
+  Connection, // For ConnectProvider callbacks
+  Config, // For InstallIntegration callbacks
 };
