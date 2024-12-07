@@ -64,14 +64,7 @@ export function ConnectionsProvider({
   const { provider: providerFromProps } = useInstallIntegrationProps();
   const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
 
-  if (!projectId) {
-    throw new Error(
-      'ConnectionsProvider must be used within AmpersandProvider',
-    );
-  }
-
   const selectedProvider = provider || providerFromProps;
-
   if (!selectedProvider) {
     throw new Error(
       'ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider',
@@ -79,27 +72,29 @@ export function ConnectionsProvider({
   }
 
   useEffect(() => {
-    api()
-      .connectionApi.listConnections(
-        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-        {
-          headers: {
-            'X-Api-Key': apiKey ?? '',
+    if (projectId && apiKey) {
+      api()
+        .connectionApi.listConnections(
+          { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+          {
+            headers: {
+              'X-Api-Key': apiKey ?? '',
+            },
           },
-        },
-      )
-      .then((_connections) => {
-        setLoadingState(false);
-        setConnections(_connections);
-      })
-      .catch((err) => {
-        console.error(
-          `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
-        );
-        handleServerError(err);
-        setLoadingState(false);
-        setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      });
+        )
+        .then((_connections) => {
+          setLoadingState(false);
+          setConnections(_connections);
+        })
+        .catch((err) => {
+          console.error(
+            `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
+          );
+          handleServerError(err);
+          setLoadingState(false);
+          setError(ErrorBoundary.CONNECTION_LIST, projectId);
+        });
+    }
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 
   const contextValue = useMemo(
@@ -123,6 +118,12 @@ export function ConnectionsProvider({
 
   if (isLoading || isProjectLoading) {
     return <LoadingCentered />;
+  }
+
+  if (!projectId) {
+    throw new Error(
+      'Project ID not found. ConnectionsProvider must be used within AmpersandProvider',
+    );
   }
 
   return (
