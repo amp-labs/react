@@ -55,7 +55,7 @@ export function ConnectionsProvider({
   children,
 }: ConnectionsProviderProps) {
   const apiKey = useApiKey();
-  const { projectId } = useProject();
+  const { projectId, isLoading: isProjectLoading } = useProject();
 
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
@@ -64,14 +64,7 @@ export function ConnectionsProvider({
   const { provider: providerFromProps } = useInstallIntegrationProps();
   const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
 
-  if (!projectId) {
-    throw new Error(
-      'ConnectionsProvider must be used within AmpersandProvider',
-    );
-  }
-
   const selectedProvider = provider || providerFromProps;
-
   if (!selectedProvider) {
     throw new Error(
       'ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider',
@@ -79,27 +72,29 @@ export function ConnectionsProvider({
   }
 
   useEffect(() => {
-    api()
-      .connectionApi.listConnections(
-        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-        {
-          headers: {
-            'X-Api-Key': apiKey ?? '',
+    if (projectId && apiKey) {
+      api()
+        .connectionApi.listConnections(
+          { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+          {
+            headers: {
+              'X-Api-Key': apiKey ?? '',
+            },
           },
-        },
-      )
-      .then((_connections) => {
-        setLoadingState(false);
-        setConnections(_connections);
-      })
-      .catch((err) => {
-        console.error(
-          `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
-        );
-        handleServerError(err);
-        setLoadingState(false);
-        setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      });
+        )
+        .then((_connections) => {
+          setLoadingState(false);
+          setConnections(_connections);
+        })
+        .catch((err) => {
+          console.error(
+            `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
+          );
+          handleServerError(err);
+          setLoadingState(false);
+          setError(ErrorBoundary.CONNECTION_LIST, projectId);
+        });
+    }
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 
   const contextValue = useMemo(
@@ -121,11 +116,23 @@ export function ConnectionsProvider({
     ],
   );
 
-  return isError(ErrorBoundary.CONNECTION_LIST, projectId) ? (
-    <ErrorTextBox message="Error retrieving existing connections" />
-  ) : (
-    <ConnectionsContext.Provider value={contextValue}>
-      {isLoading ? <LoadingCentered /> : children}
-    </ConnectionsContext.Provider>
+  if (isLoading || isProjectLoading) {
+    return <LoadingCentered />;
+  }
+
+  if (!projectId) {
+    throw new Error(
+      'Project ID not found. ConnectionsProvider must be used within AmpersandProvider',
+    );
+  }
+
+  return (
+    isError(ErrorBoundary.CONNECTION_LIST, projectId)
+      ? <ErrorTextBox message="Error retrieving existing connections" />
+      : (
+        <ConnectionsContext.Provider value={contextValue}>
+          { children }
+        </ConnectionsContext.Provider>
+      )
   );
 }
