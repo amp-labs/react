@@ -1,7 +1,10 @@
+import { useCallback } from 'react';
+
 import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
 import { RedirectHandler } from 'components/RedirectHandler';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
+import { Connection } from 'src/services/api';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';
@@ -20,14 +23,14 @@ interface ConnectProviderProps {
   onSuccess?: (connectionID: string) => void;
   /**
    * Callback function to be executed when a connection is successfully established.
-   * @param connectionID - The ID of the newly established connection.
+   * @param connection - Information about the newly established connection.
    */
-  onConnectSuccess?: (connectionID: string) => void;
+  onConnectSuccess?: (connection: Connection) => void;
   /**
    * Callback function to be executed when a connection is successfully disconnected.
-   * @param connectionID - The ID of the disconnected connection.
+   * @param connection - Information about the disconnected connection.
    */
-  onDisconnectSuccess?: (connectionID: string) => void;
+  onDisconnectSuccess?: (connection: Connection) => void;
 }
 
 export function ConnectProvider({
@@ -43,7 +46,14 @@ export function ConnectProvider({
 }: ConnectProviderProps) {
   const { seed, reset } = useForceUpdate(); // resets the component when the seed changes
 
-  const onSuccessFx = onConnectSuccess || onSuccess;
+  const onSuccessFx = useCallback((connection: Connection) => {
+    if (onSuccess) {
+      onSuccess(connection.id);
+    } else if (onConnectSuccess) {
+      onConnectSuccess(connection);
+    }
+  }, [onSuccess, onConnectSuccess]);
+
   return (
     <div className={resetStyles.resetContainer} key={seed}>
       <ConnectionsProvider provider={provider} groupRef={groupRef}>

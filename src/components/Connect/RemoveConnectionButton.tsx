@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { api } from 'services/api';
+import { api, Connection } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
 import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
@@ -12,7 +12,7 @@ interface RemoveConnectionButtonProps {
   buttonText: string;
   buttonVariant?: string;
   buttonStyle?: React.CSSProperties;
-  onDisconnectSuccess?: (connectionID: string) => void;
+  onDisconnectSuccess?: (connection: Connection) => void;
 }
 
 export function RemoveConnectionButton({
@@ -50,7 +50,8 @@ export function RemoveConnectionButton({
           'successfully deleted connection:',
           selectedConnection?.id,
         );
-        onDisconnectSuccess?.(selectedConnection?.id); // callback
+        // Trigger builder-provided callback if it exists
+        onDisconnectSuccess?.(selectedConnection);
         // Reset connections
         api()
           .connectionApi.listConnections(

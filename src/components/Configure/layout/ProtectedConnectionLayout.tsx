@@ -8,7 +8,7 @@ import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
-import { api, ProviderInfo } from 'services/api';
+import { api, Connection, ProviderInfo } from 'services/api';
 import { capitalize } from 'src/utils';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -18,9 +18,9 @@ interface ProtectedConnectionLayoutProps {
   consumerName?: string,
   groupRef: string,
   groupName?: string,
-  onSuccess?: (connectionID: string) => void;
+  onSuccess?: (connection: Connection) => void;
   children: JSX.Element,
-  onDisconnectSuccess?: (connectionID: string) => void,
+  onDisconnectSuccess?: (connection: Connection) => void,
 }
 
 export const getProviderInfo = async (
