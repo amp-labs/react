@@ -1,6 +1,5 @@
-import { Connection } from '@generated/api/src';
-
 import { useProject } from 'context/ProjectContextProvider';
+import { Connection } from 'src/services/api';
 import { getProviderName } from 'src/utils';
 
 import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';

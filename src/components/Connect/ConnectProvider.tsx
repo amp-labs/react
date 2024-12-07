@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { Connection } from '@generated/api/src';
 
 import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
 import { RedirectHandler } from 'components/RedirectHandler';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
+import { Connection } from 'src/services/api';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';
