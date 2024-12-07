@@ -28,7 +28,7 @@ interface ConnectProviderProps {
   onConnectSuccess?: (connection: Connection) => void;
   /**
    * Callback function to be executed when a connection is successfully disconnected.
-   * @param connection - TInformation about the disconnected connection.
+   * @param connection - Information about the disconnected connection.
    */
   onDisconnectSuccess?: (connection: Connection) => void;
 }
