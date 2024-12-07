@@ -5,21 +5,48 @@
     --amp-font-family: 'DM Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
     /* COLOR TOKENS */
-    --amp-colors-white: #ffffff;
-    --amp-colors-black: #111111;
-    --amp-colors-primary: #000000;
+    color-scheme: light dark;
+    --amp-colors-white: light-dark(#ffffff, #1D1D1D);
+    --amp-colors-black: light-dark(#111111, #FDFCFD);
+    --amp-colors-primary: light-dark(#000000, #FFF);
 
-    --amp-colors-neutral-25: #FEFEFE;
-    --amp-colors-neutral-50: #FDFCFD;
-    --amp-colors-neutral-100: #FAFAFC;
-    --amp-colors-neutral-200: #F6F5F9;
-    --amp-colors-neutral-300: #F1EFF5;
-    --amp-colors-neutral-400: #EDEAF2;
-    --amp-colors-neutral-500: #E8E5EF;
-    --amp-colors-neutral-600: #918E95;
-    --amp-colors-neutral-700: #646266;
-    --amp-colors-neutral-800: #363638;
-    --amp-colors-neutral-900: #1D1D1D;
+    /* Light color pallete */
+    --amp-colors-neutral-25-light: #FEFEFE;
+    --amp-colors-neutral-50-light: #FDFCFD;
+    --amp-colors-neutral-100-light: #FAFAFC;
+    --amp-colors-neutral-200-light: #F6F5F9;
+    --amp-colors-neutral-300-light: #F1EFF5;
+    --amp-colors-neutral-400-light: #EDEAF2;
+    --amp-colors-neutral-500-light: #E8E5EF;
+    --amp-colors-neutral-600-light: #918E95;
+    --amp-colors-neutral-700-light: #646266;
+    --amp-colors-neutral-800-light: #363638;
+    --amp-colors-neutral-900-light: #1D1D1D;
+
+    /* Dark color pallete */
+    --amp-colors-neutral-25-dark: #1D1D1D; /* Background variations */
+    --amp-colors-neutral-50-dark: #292929;
+    --amp-colors-neutral-100-dark: #363636;
+    --amp-colors-neutral-200-dark: #484848;
+    --amp-colors-neutral-300-dark: #606060;
+    --amp-colors-neutral-400-dark: #757575;
+    --amp-colors-neutral-500-dark: #8D8D8D;
+    --amp-colors-neutral-600-dark: #A8A8A8;
+    --amp-colors-neutral-700-dark: #C4C4C4;
+    --amp-colors-neutral-800-dark: #DFDFDF;
+    --amp-colors-neutral-900-dark: #F3F3F3;
+
+    --amp-colors-neutral-25: light-dark(var(--amp-colors-neutral-25-light), var(--amp-colors-neutral-25-dark));
+    --amp-colors-neutral-50: light-dark(var(--amp-colors-neutral-50-light), var(--amp-colors-neutral-50-dark));
+    --amp-colors-neutral-100: light-dark(var(--amp-colors-neutral-100-light), var(--amp-colors-neutral-100-dark));
+    --amp-colors-neutral-200: light-dark(var(--amp-colors-neutral-200-light), var(--amp-colors-neutral-200-dark));
+    --amp-colors-neutral-300: light-dark(var(--amp-colors-neutral-300-light), var(--amp-colors-neutral-300-dark));
+    --amp-colors-neutral-400: light-dark(var(--amp-colors-neutral-400-light), var(--amp-colors-neutral-400-dark));
+    --amp-colors-neutral-500: light-dark(var(--amp-colors-neutral-500-light), var(--amp-colors-neutral-500-dark));
+    --amp-colors-neutral-600: light-dark(var(--amp-colors-neutral-600-light), var(--amp-colors-neutral-600-dark));
+    --amp-colors-neutral-700: light-dark(var(--amp-colors-neutral-700-light), var(--amp-colors-neutral-700-dark));
+    --amp-colors-neutral-800: light-dark(var(--amp-colors-neutral-800-light), var(--amp-colors-neutral-800-dark));
+    --amp-colors-neutral-900: light-dark(var(--amp-colors-neutral-900-light), var(--amp-colors-neutral-900-dark));
     
     /* SEMANTIC COLORS */
 
@@ -38,9 +65,9 @@
     --amp-default-border-radius: 6px;
 
     /* status */
-    --amp-colors-status-critical-dark: #702525;
-    --amp-colors-status-critical: #E73D3D;
-    --amp-colors-status-critical-muted: #FFD9D9;
+    --amp-colors-status-critical-dark: light-dark(#702525, #FFD9D9);
+    --amp-colors-status-critical:#E73D3D;
+    --amp-colors-status-critical-muted: light-dark(#FFD9D9, #702525);
      
     /* links */
     --amp-colors-link-text: var(--amp-colors-text-muted);
