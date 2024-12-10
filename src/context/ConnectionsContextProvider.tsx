@@ -2,9 +2,8 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Connection } from 'services/api';
-import { LoadingCentered } from 'src/components/Loading';
+import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -117,7 +116,15 @@ export function ConnectionsProvider({
   );
 
   if (isLoading || isProjectLoading) {
-    return <LoadingCentered />;
+    return <ComponentContainerLoading />;
+  }
+
+  if (isError(ErrorBoundary.PROJECT, projectId)) {
+    return <ComponentContainerError message={`Error loading project ${projectId}`} />;
+  }
+
+  if (isError(ErrorBoundary.CONNECTION_LIST, projectId)) {
+    return <ComponentContainerError message="Error retrieving existing connections" />;
   }
 
   if (!projectId) {
@@ -127,12 +134,8 @@ export function ConnectionsProvider({
   }
 
   return (
-    isError(ErrorBoundary.CONNECTION_LIST, projectId)
-      ? <ErrorTextBox message="Error retrieving existing connections" />
-      : (
-        <ConnectionsContext.Provider value={contextValue}>
-          { children }
-        </ConnectionsContext.Provider>
-      )
+    <ConnectionsContext.Provider value={contextValue}>
+      { children }
+    </ConnectionsContext.Provider>
   );
 }
