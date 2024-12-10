@@ -2,7 +2,6 @@ import React, {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {
@@ -11,6 +10,8 @@ import {
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, HydratedRevision } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
+
+import { ComponentContainerError } from '../ComponentContainer';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -99,15 +100,17 @@ export function HydratedRevisionProvider({
     loading,
   }), [hydratedRevision, loading]);
 
-  const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
+  if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
+    const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
+    const errorMsg = `Error retrieving integration details for '${intNameOrId
+    }. This is sometimes caused by insufficient permissions with your credentials'`;
 
-  const errorMsg = `Error retrieving integration details for '${intNameOrId
-  }. This is sometimes caused by insufficient permissions with your credentials'`;
+    return <ComponentContainerError message={errorMsg} />;
+  }
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      {isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)
-        ? <ErrorTextBox message={errorMsg} /> : children}
+      { children}
     </HydratedRevisionContext.Provider>
   );
 }
