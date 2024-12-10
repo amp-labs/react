@@ -63,10 +63,11 @@ export function InstallIntegration(
     return <ComponentContainerLoading />;
   }
 
-  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
+  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) { // set in ProjectContextProvider (AmpersandProvider)
     return <ComponentContainerError message={`Error loading project ${projectIdOrName}`} />;
   }
 
+  // set in IntegrationListContextProvider (AmpersandProvider)
   if (isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)) {
     return (
       <ComponentContainerError message="Error retrieving integrations for the project, double check the API key" />
