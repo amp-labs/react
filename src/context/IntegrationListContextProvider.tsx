@@ -3,7 +3,6 @@ import {
   useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Integration } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -39,7 +38,7 @@ export function IntegrationListProvider(
   { projectIdOrName, children }: IntegrationListContextProviderProps,
 ) {
   const apiKey = useApiKey();
-  const { setError, isError } = useErrorState();
+  const { setError } = useErrorState();
   const [integrations, setIntegrations] = useState<Integration[] | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
@@ -64,12 +63,8 @@ export function IntegrationListProvider(
   }), [integrations, isLoading]);
 
   return (
-    isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)
-      ? <ErrorTextBox message="Error retrieving integrations for the project, double check the API key" />
-      : (
-        <IntegrationListContext.Provider value={contextValue}>
-          { children}
-        </IntegrationListContext.Provider>
-      )
+    <IntegrationListContext.Provider value={contextValue}>
+      { children}
+    </IntegrationListContext.Provider>
   );
 }

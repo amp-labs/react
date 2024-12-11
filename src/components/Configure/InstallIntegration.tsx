@@ -1,4 +1,3 @@
-import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
@@ -8,14 +7,13 @@ import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import resetStyles from 'src/styles/resetCss.module.css';
 
-import { LoadingCentered } from '../Loading';
-
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
+import { ComponentContainerError, ComponentContainerLoading } from './ComponentContainer';
 
 export type FieldMapping = { [key: string]: Array<IntegrationFieldMapping> };
 
@@ -56,17 +54,30 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { projectId, projectIdOrName, isLoading: isProjectLoading } = useProject();
   const { isLoading: isIntegrationListLoading } = useIntegrationList();
-  const { errorState } = useErrorState();
+  const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
   if (isProjectLoading || isIntegrationListLoading) {
-    return <LoadingCentered />;
+    return <ComponentContainerLoading />;
+  }
+
+  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) { // set in ProjectContextProvider (AmpersandProvider)
+    return <ComponentContainerError message={`Error loading project ${projectIdOrName}`} />;
+  }
+
+  // set in IntegrationListContextProvider (AmpersandProvider)
+  if (isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)) {
+    return (
+      <ComponentContainerError message="Error retrieving integrations for the project, double check the API key" />
+    );
   }
 
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
-    return <ErrorTextBox message="Something went wrong, couldn't find integration information" />;
+    return (
+      <ComponentContainerError message="Something went wrong, couldn't find integration information" />
+    );
   }
 
   return (
