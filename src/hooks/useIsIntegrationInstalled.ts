@@ -16,13 +16,14 @@ export const useIsIntegrationInstalled = (
   groupRef: string,
 ): UseIsIntegrationInstalledResult => {
   const apiKey = useApiKey();
-  const { projectId } = useProject();
+  const { projectId, isLoading: isProjectLoading } = useProject();
   const { integrations } = useIntegrationList();
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isIntegrationInstalled, setIsIntegrationInstalled] = useState<boolean | null>(null);
 
-  if (!apiKey || !projectId) {
+  const noProjectId = !isProjectLoading && !projectId;
+  if (!apiKey || noProjectId) {
     throw new Error('useIsIntegrationInstalled must be used within AmpersandProvider');
   }
 
@@ -46,7 +47,7 @@ export const useIsIntegrationInstalled = (
   ), [integrations, integration]);
 
   useEffect(() => {
-    if (!integrationToCheck) return;
+    if (!integrationToCheck || isProjectLoading) return;
 
     api().installationApi.listInstallations({
       projectIdOrName: projectId,
@@ -64,7 +65,7 @@ export const useIsIntegrationInstalled = (
       handleServerError(err);
       setIsLoaded(true);
     });
-  }, [groupRef, apiKey, projectId, integrationToCheck]);
+  }, [groupRef, apiKey, projectId, integrationToCheck, isProjectLoading]);
 
   return { isLoaded, isIntegrationInstalled };
 };
