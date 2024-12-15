@@ -4,7 +4,7 @@ import { Box } from '../ui-base/Box/Box';
 import { Container } from '../ui-base/Container/Container';
 
 /**
- * Container (auto aligned cetner) with border to wrap some content. Usually the outer most container for
+ * Container (auto aligned center) with border to wrap some content. Usually the outer most container for
  * Ampersand public components.
  * @param param0
  * @returns
