@@ -23,7 +23,7 @@
 }
 
 .button:focus:enabled {
-    border: 2px solid var(--amp-colors-input-hover);
+    border: 2px solid var(--amp-colors-input-border-focus);
     outline: none;
 }
 

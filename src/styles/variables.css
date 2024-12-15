@@ -31,9 +31,9 @@
     /* bg-surfaces */
     --amp-colors-bg-primary: var(--amp-colors-white);
     --amp-colors-bg-secondary: var(--amp-colors-neutral-50);
-    --amp-colors-bg-highlight: var(--amp-colors-neutral-200);
+    --amp-colors-bg-highlight: var(--amp-colors-neutral-300);
 
-    /* border */
+    /* default border */
     --amp-colors-border: var(--amp-colors-neutral-300);
     --amp-default-border-radius: 6px;
 
@@ -52,6 +52,17 @@
     --amp-colors-button-text: var(--amp-colors-white);
 
     /* input */
-    --amp-colors-input-hover: var(--amp-colors-bg-highlight);
-    --amp-colors-focus-border: var(--amp-colors-neutral-800);
+    --amp-colors-input-border-default: var(--amp-colors-neutral-500);
+    --amp-colors-input-border-disabled: var(--amp-colors-neutral-500);
+    --amp-colors-input-border-focus: var(--amp-colors-neutral-900);
+    --amp-colors-input-border-hover: var(--amp-colors-neutral-500);
+    
+    --amp-colors-input-content-default: var(--amp-colors-black);
+    --amp-colors-input-content-disabled: var(--amp-colors-neutral-600);
+    --amp-colors-input-content-placeholder-text: var(--amp-colors-neutral-600);
+    
+    --amp-colors-input-surface-default: var(--amp-colors-white);
+    --amp-colors-input-surface-disabled: var(--amp-colors-neutral-200);
+    --amp-colors-input-surface-focus: var(--amp-colors-white);
+    --amp-colors-input-surface-hover: var(--amp-colors-neutral-200);
 }

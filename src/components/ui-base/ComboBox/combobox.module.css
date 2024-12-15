@@ -11,9 +11,8 @@
 
 .inputContainer {
   display: flex;
-  background-color: var(--amp-colors-bg-primary);
   border: 1px solid;
-  border-color: var(--amp-colors-border);
+  border-color: var(--amp-colors-input-border-default);
   border-radius: var(--amp-default-border-radius);
 }
 
@@ -21,6 +20,14 @@
   padding: 0.5rem;
   width: 100%;
   font-size: 1rem;
+  background-color: var(--amp-colors-input-surface-default);
+  color: var(--amp-colors-input-content-default);
+  border-top-left-radius: var(--amp-default-border-radius);
+  border-bottom-left-radius: var(--amp-default-border-radius);
+}
+
+.input:focus-visible {
+  outline: 1px solid var(--amp-colors-input-border-focus);
 }
 
 .toggleButton {
@@ -31,13 +38,13 @@
 
 .menu {
   position: absolute;
-  background-color: var(--amp-colors-bg-primary);
+  background-color: var(--amp-colors-input-surface-default);
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
   margin-top: 0.25rem;
   border: 1px solid;
-  border-color: var(--amp-colors-border);
+  border-color: var(--amp-colors-input-border-default);
   z-index: 10;
   border-radius: var(--amp-default-border-radius);
   padding: 0;
@@ -52,7 +59,7 @@
 
 .menuItem:hover,
 .highlighted {
-  background-color: var(--amp-colors-input-hover);
+  background-color: var(--amp-colors-input-surface-hover);
 }
 
 .selected {
