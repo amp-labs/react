@@ -2,7 +2,6 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
 import { api, Project } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -46,7 +45,7 @@ export function ProjectProvider(
   { projectIdOrName, children }: ProjectProviderProps,
 ) {
   const apiKey = useApiKey();
-  const { isError, setError } = useErrorState();
+  const { setError } = useErrorState();
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
@@ -75,12 +74,8 @@ export function ProjectProvider(
   }), [projectIdOrName, project, isLoading]);
 
   return (
-    isError(ErrorBoundary.PROJECT, projectIdOrName)
-      ? <ErrorTextBox message={`Error loading project ${projectIdOrName}`} />
-      : (
-        <ProjectContext.Provider value={contextValue}>
-          {children}
-        </ProjectContext.Provider>
-      )
+    <ProjectContext.Provider value={contextValue}>
+      {children}
+    </ProjectContext.Provider>
   );
 }

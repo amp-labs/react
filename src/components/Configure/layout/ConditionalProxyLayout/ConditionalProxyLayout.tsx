@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { ErrorTextBox } from 'components/ErrorTextBox/ErrorTextBox';
-import { LoadingCentered } from 'components/Loading';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
@@ -11,6 +10,7 @@ import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
+import { ComponentContainerError, ComponentContainerLoading } from '../../ComponentContainer';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
 import { InstalledSuccessBox } from './InstalledSuccessBox';
@@ -91,8 +91,8 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
       </SuccessTextBox>
     );
   }
-  if (!integrationObj) return <ErrorTextBox message={"We can't load the integration"} />;
-  if (isLoading) return <LoadingCentered />;
+  if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
+  if (isLoading) return <ComponentContainerLoading />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
