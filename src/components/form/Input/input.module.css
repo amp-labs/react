@@ -1,11 +1,12 @@
 .input {
     border-radius: var(--amp-default-border-radius);
     border: 1px solid;
-    border-color: inherit;
+    border-color: var(--amp-colors-input-border-default);
     height: 2.5rem;
     transition: all .20s ease-in;
 
-    color: var(--amp-colors-text-regular);
+    color: var(--amp-colors-input-content-default);
+    background-color: var(--amp-colors-input-surface-default);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem; /* 150% */
@@ -14,18 +15,29 @@
     transition: all .1s ease;
 }
 
+.input:hover {
+    border-color: var(--amp-colors-input-border-hover);
+    background-color: var(--amp-colors-input-surface-hover);
+}
+
+.input::placeholder {
+    color: var(--amp-colors-input-content-placeholder-text);
+}
+
 .inputError {
     border: 1px solid var(--amp-colors-status-critical);
 }
 
 .input:focus:enabled {
-    border: 2px solid var(--amp-colors-focus-border);
+    border: 2px solid var(--amp-colors-input-border-focus);
     outline: none;
+    background-color: var(--amp-colors-input-surface-focus);
 }
 
 .input:disabled {
-    background-color: var( --amp-colors-bg-highlight);
-    border: 1px solid var(--amp-colors-neutral-400);
+    background-color: var(--amp-colors-input-surface-disabled);
+    border: 1px solid var(--amp-colors-input-border-disabled);
+    color: var(--amp-colors-input-content-disabled) ;
 }
 
 .error {

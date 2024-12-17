@@ -30,16 +30,17 @@
     border-radius: 4px;
     display: flex;
     justify-content: center;
-    border: 1px solid var(--amp-colors-border);
+    border: 1px solid var(--amp-colors-input-border-default);
     cursor: pointer;
     flex: none;
 }
 
 .checkbox:hover {
-    background-color: var(--amp-colors-input-hover); 
+    background-color: var(--amp-colors-input-surface-hover);
+    border-color: var(--amp-colors-input-border-hover);
 }
   
 .checkbox:focus {
     box-shadow: 0 0 0 2px var(--amp-colors-focus-border);
+    border-color: var(--amp-colors-input-border-focus);
 }
- 
