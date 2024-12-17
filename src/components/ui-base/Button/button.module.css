@@ -15,7 +15,6 @@
 
 .button:hover {
     opacity: .8;
-    box-shadow: var(--amp-button-hover-shadow);
 }
 
 .buttonError {
@@ -33,13 +32,12 @@
 }
 
 .danger {
-    color: var(--amp-colors-status-critical-dark);
-    background-color: var(--amp-colors-status-critical-muted);
-    border-color: var(--amp-colors-status-critical-muted);
+    color: var(--amp-colors-status-critical);
+    background-color: var(--amp-colors-bg-secondary);
 }
 
 .ghost {
     border-color: var(--amp-colors-border);
-    background-color: var(--amp-colors-bg-highlight);    
-    color: var(--amp-colors-black);
+    background-color: var(--amp-colors-bg-secondary);    
+    color: var(--amp-colors-text-regular);
 }
