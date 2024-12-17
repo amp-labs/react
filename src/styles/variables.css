@@ -24,17 +24,17 @@
     /* SEMANTIC COLORS */
 
     /* typography colors */
-    --amp-colors-text-standout: var(--amp-colors-black);
-    --amp-colors-text-regular: var(--amp-colors-neutral-900);
-    --amp-colors-text-muted: var(--amp-colors-neutral-700);
+    --amp-colors-text-standout: light-dark(var(--amp-colors-black), var(--amp-colors-white));
+    --amp-colors-text-regular: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-100));
+    --amp-colors-text-muted: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
 
     /* bg-surfaces */
-    --amp-colors-bg-primary: var(--amp-colors-white);
-    --amp-colors-bg-secondary: var(--amp-colors-neutral-50);
-    --amp-colors-bg-highlight: var(--amp-colors-neutral-300);
+    --amp-colors-bg-primary: light-dark(var(--amp-colors-white), var(--amp-colors-neutral-800));
+    --amp-colors-bg-secondary: light-dark(var(--amp-colors-neutral-50), var(--amp-colors-neutral-900));
+    --amp-colors-bg-highlight: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
 
     /* default border */
-    --amp-colors-border: var(--amp-colors-neutral-300);
+    --amp-colors-border: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
     --amp-default-border-radius: 6px;
 
     /* status */
@@ -43,26 +43,27 @@
     --amp-colors-status-critical-muted: #FFD9D9;
      
     /* links */
-    --amp-colors-link-text: var(--amp-colors-text-muted);
-    --amp-colors-link-focus: var(--amp-colors-text-standout);
-    --amp-colors-link-active: var(--amp-colors-text-regular);
+    --amp-colors-link-text: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
+    --amp-colors-link-focus: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-700));
+    /* optional use brand colors */
+    --amp-colors-link-active: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
 
     /* button */
     --amp-colors-button-primary: var(--amp-colors-primary);
     --amp-colors-button-text: var(--amp-colors-white);
 
     /* input */
-    --amp-colors-input-border-default: var(--amp-colors-neutral-500);
-    --amp-colors-input-border-disabled: var(--amp-colors-neutral-500);
-    --amp-colors-input-border-focus: var(--amp-colors-neutral-900);
-    --amp-colors-input-border-hover: var(--amp-colors-neutral-500);
+    --amp-colors-input-border-default: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-700));
+    --amp-colors-input-border-disabled: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-600));
+    --amp-colors-input-border-focus: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
+    --amp-colors-input-border-hover: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-600));
     
-    --amp-colors-input-content-default: var(--amp-colors-black);
+    --amp-colors-input-content-default: light-dark(var(--amp-colors-black), var(--amp-colors-white));
     --amp-colors-input-content-disabled: var(--amp-colors-neutral-600);
     --amp-colors-input-content-placeholder-text: var(--amp-colors-neutral-600);
     
-    --amp-colors-input-surface-default: var(--amp-colors-white);
-    --amp-colors-input-surface-disabled: var(--amp-colors-neutral-200);
-    --amp-colors-input-surface-focus: var(--amp-colors-white);
-    --amp-colors-input-surface-hover: var(--amp-colors-neutral-200);
+    --amp-colors-input-surface-default: light-dark(var(--amp-colors-white), var(--amp-colors-neutral-900));
+    --amp-colors-input-surface-disabled: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-700));
+    --amp-colors-input-surface-focus: light-dark(var(--amp-colors-white), var(--amp-colors-black));
+    --amp-colors-input-surface-hover: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-800));
 }
