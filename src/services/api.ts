@@ -1,5 +1,6 @@
 /* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
+import { useCallback } from 'react';
 import {
   BackfillConfig,
   Config,
@@ -22,6 +23,8 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '@generated/api/src';
+
+import { useApiKey } from 'src/context/ApiKeyContextProvider';
 
 import { ApiService } from './ApiService';
 import { LIB_VERSION } from './version';
@@ -100,7 +103,38 @@ export const setApi = (api: ApiService) => {
   apiValue = api;
 };
 
+/**
+ * @deprecated
+ */
 export const api = () => apiValue;
+
+/**
+ * hook to access the API service
+ * @returns
+ */
+export function useAPI(): () => Promise<ApiService> {
+  const apiKey = useApiKey();
+
+  const getAPI = useCallback(async () => {
+    if (!apiKey) {
+      // eslint-disable-next-line no-console
+      console.error('Unable to create API service without API key.');
+    }
+
+    const configWithApiKey = new Configuration({
+      basePath: AMP_API_ROOT,
+      headers: {
+        'X-Amp-Client': 'react',
+        'X-Amp-Client-Version': LIB_VERSION,
+        'X-Api-Key': apiKey,
+      },
+    });
+
+    return new ApiService(configWithApiKey);
+  }, [apiKey]);
+
+  return getAPI;
+}
 
 /**
    * Types exported from generated api
