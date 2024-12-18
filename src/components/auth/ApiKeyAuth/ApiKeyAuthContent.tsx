@@ -44,7 +44,7 @@ function ApiKeyAuthContentForm({
             id="password"
             name="password"
             type={show ? 'text' : 'password'}
-            placeholder="Password"
+            placeholder="API Key"
             onChange={(event) => handlePasswordChange(event)}
           />
           <Button
