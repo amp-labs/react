@@ -21,7 +21,9 @@ import {
   generateAllNavObjects,
   getFieldKeyValue, getObjectFromAction,
   getOptionalFieldsFromObject,
-  getRequiredFieldsFromObject, getRequiredMapFieldsFromObject,
+  getOptionalMapFieldsFromObject,
+  getRequiredFieldsFromObject,
+  getRequiredMapFieldsFromObject,
 } from '../utils';
 
 // uses lodash deep equality check to compare two saved fields objects
@@ -45,6 +47,7 @@ const generateConfigurationStateRead = (
   const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
   const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
+  const optionalMapFields = object && getOptionalMapFieldsFromObject(object);
   /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
@@ -61,6 +64,7 @@ const generateConfigurationStateRead = (
     requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
+    optionalMapFields, // from hydrated revision
     // selected state
     selectedOptionalFields: readSelectedFields,
     selectedFieldMappings,
