@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
 
-import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
@@ -30,13 +29,10 @@ export function OptionalFieldMappings() {
     }
   };
 
-  const integrationFieldMappings = useMemo(() => {
-    // 1. Extract optional map fields from configureState
-    const optionalFieldMappings = configureState?.read?.optionalMapFields || [];
-
-    // 2. Filter out any items that are not instances of IntegrationFieldMapping
-    return optionalFieldMappings.filter(isIntegrationFieldMapping);
-  }, [configureState]);
+  const integrationFieldMappings = useMemo(
+    () => configureState?.read?.optionalMapFields || [],
+    [configureState],
+  );
 
   return integrationFieldMappings?.length ? (
     <>

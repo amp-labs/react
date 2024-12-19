@@ -5,7 +5,6 @@ import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
 import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
-import { isIntegrationFieldMapping } from '../../../utils';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
@@ -51,8 +50,7 @@ export function RequiredFieldMappings() {
         return acc.concat(item);
       }, new Array<IntegrationFieldMapping>());
 
-    // 5. Filter out any items that are not instances of IntegrationFieldMapping
-    return combinedFieldMappings.filter(isIntegrationFieldMapping);
+    return combinedFieldMappings;
   }, [configureState, fieldMapping, selectedObjectName]);
 
   return integrationFieldMappings?.length ? (
