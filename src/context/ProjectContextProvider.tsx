@@ -2,10 +2,9 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { api, Project } from 'services/api';
+import { Project, useAPI } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useApiKey } from './ApiKeyContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
@@ -44,26 +43,27 @@ type ProjectProviderProps = {
 export function ProjectProvider(
   { projectIdOrName, children }: ProjectProviderProps,
 ) {
-  const apiKey = useApiKey();
+  const getAPI = useAPI();
   const { setError } = useErrorState();
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
 
   useEffect(() => {
-    api().projectApi.getProject({ projectIdOrName }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
-    }).then((_project) => {
-      setLoadingState(false);
-      setProject(_project);
-    }).catch((err) => {
-      console.error('Error loading Ampersand project.');
-      handleServerError(err);
-      setError(ErrorBoundary.PROJECT, projectIdOrName);
-      setLoadingState(false);
-    });
-  }, [projectIdOrName, apiKey, setLoadingState, setError]);
+    async function fetchData() {
+      const api = await getAPI();
+      api.projectApi.getProject({ projectIdOrName })
+        .then((_project) => {
+          setLoadingState(false);
+          setProject(_project);
+        }).catch((err) => {
+          console.error('Error loading Ampersand project.');
+          handleServerError(err);
+          setError(ErrorBoundary.PROJECT, projectIdOrName);
+          setLoadingState(false);
+        });
+    }
+    fetchData();
+  }, [projectIdOrName, setLoadingState, setError, getAPI]);
 
   const contextValue = useMemo(() => ({
     projectId: project?.id || '',
