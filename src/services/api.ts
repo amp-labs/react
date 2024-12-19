@@ -110,11 +110,15 @@ export const api = () => apiValue;
 
 /**
  * hook to access the API service
+ *
+ *
  * @returns
  */
 export function useAPI(): () => Promise<ApiService> {
   const apiKey = useApiKey();
 
+  /** Even though it doesn't need to be be async right now, we want to be able to support other ways
+   * to authenticating to the API in the future which may require async operations */
   const getAPI = useCallback(async () => {
     if (!apiKey) {
       // eslint-disable-next-line no-console
