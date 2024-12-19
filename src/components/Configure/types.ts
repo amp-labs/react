@@ -34,6 +34,7 @@ export type ConfigureStateRead = {
   requiredFields: HydratedIntegrationField[] | null,
   optionalFields: HydratedIntegrationField[] | null,
   requiredMapFields: IntegrationFieldMapping[] | null,
+  optionalMapFields: IntegrationFieldMapping[] | null,
   selectedOptionalFields: SelectOptionalFields | null,
   selectedFieldMappings: SelectMappingFields | null,
   isOptionalFieldsModified: boolean, // checks if selected optional fields is modified

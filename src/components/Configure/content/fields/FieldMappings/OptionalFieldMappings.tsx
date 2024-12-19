@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
-import { IntegrationFieldMapping } from '@generated/api/src';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
-import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
@@ -11,9 +9,8 @@ import { FieldHeader } from '../FieldHeader';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
-export function RequiredFieldMappings() {
+export function OptionalFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
-  const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -32,37 +29,19 @@ export function RequiredFieldMappings() {
     }
   };
 
-  const integrationFieldMappings = useMemo(() => {
-    // 1. Extract required map fields from configureState
-    const requiredFieldMappings = configureState?.read?.requiredMapFields || [];
-
-    // 2. Extract dynamic field mappings for the selected object name from the fieldMapping object if it exists
-    const dynamicFieldMappings = selectedObjectName && fieldMapping
-      ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
-      : [];
-
-    // 3. Combine dynamic field mappings with the required map fields from configureState
-    const combinedFieldMappings = requiredFieldMappings.concat(dynamicFieldMappings)
-      // 4. Remove duplicates based on mapToName and keep the latest item
-      .reduce((acc, item) => {
-        const existingItem = acc.find((i) => i.mapToName === item.mapToName);
-        if (existingItem) return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
-        return acc.concat(item);
-      }, new Array<IntegrationFieldMapping>());
-
-    return combinedFieldMappings;
-  }, [configureState, fieldMapping, selectedObjectName]);
+  const integrationFieldMappings = useMemo(
+    () => configureState?.read?.optionalMapFields || [],
+    [configureState],
+  );
 
   return integrationFieldMappings?.length ? (
     <>
-      <FieldHeader string="Map the following fields" />
+      <FieldHeader string="Map the following optional fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
         {integrationFieldMappings.map((field) => (
           <FormControl
             id={field.mapToName}
             key={field.mapToName}
-            isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
-            errorMessage="* required"
           >
             <FieldMapping
               allFields={configureState?.read?.allFields || []}
