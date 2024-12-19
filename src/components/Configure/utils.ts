@@ -56,6 +56,15 @@ export function getRequiredMapFieldsFromObject(object: HydratedIntegrationObject
   return requiredMapFields as IntegrationFieldMapping[]; // type hack
 }
 
+// 2c. get optional custom mapping fields
+export function getOptionalMapFieldsFromObject(object: HydratedIntegrationObject)
+  : IntegrationFieldMapping[] | null {
+  const optionalMapFields = object?.optionalFields?.filter(
+    (rf: HydratedIntegrationField) => isIntegrationFieldMapping(rf) && !!rf.mapToName,
+  ) || [];
+  return optionalMapFields as IntegrationFieldMapping[]; // type hack
+}
+
 // 3. get optional fields
 export function getOptionalFieldsFromObject(object: HydratedIntegrationObject)
   : HydratedIntegrationField[] | null {
