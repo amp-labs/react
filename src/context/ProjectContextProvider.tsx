@@ -1,6 +1,7 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo,
 } from 'react';
+import useSWR from 'swr';
 
 import { Project, useAPI } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
@@ -8,6 +9,31 @@ import { handleServerError } from 'src/utils/handleServerError';
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
+
+function useProjectSWR(projectIdOrName: string) {
+  const getAPI = useAPI();
+
+  async function fetchProjectData(): Promise<Project> {
+    const api = await getAPI();
+    const response = api.projectApi.getProject({ projectIdOrName })
+      .then((_project) => _project);
+
+    return response;
+  }
+
+  const { data, error } = useSWR(
+    projectIdOrName ? `/api/projects/${projectIdOrName}` : null,
+    fetchProjectData,
+  );
+
+  if (error) handleServerError(error);
+
+  return {
+    project: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
 
 interface ProjectContextValue {
   project: Project | null;
@@ -43,32 +69,18 @@ type ProjectProviderProps = {
 export function ProjectProvider(
   { projectIdOrName, children }: ProjectProviderProps,
 ) {
-  const getAPI = useAPI();
   const { setError } = useErrorState();
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { project, isLoading, isError } = useProjectSWR(projectIdOrName);
 
+  // set global error state if project fetch fails
   useEffect(() => {
-    async function fetchData() {
-      const api = await getAPI();
-      api.projectApi.getProject({ projectIdOrName })
-        .then((_project) => {
-          setLoadingState(false);
-          setProject(_project);
-        }).catch((err) => {
-          console.error('Error loading Ampersand project.');
-          handleServerError(err);
-          setError(ErrorBoundary.PROJECT, projectIdOrName);
-          setLoadingState(false);
-        });
-    }
-    fetchData();
-  }, [projectIdOrName, setLoadingState, setError, getAPI]);
+    if (isError) setError(ErrorBoundary.PROJECT, projectIdOrName);
+  }, [isError, setError, projectIdOrName]);
 
   const contextValue = useMemo(() => ({
     projectId: project?.id || '',
     projectIdOrName,
-    project,
+    project: project || null,
     appName: project?.appName || '',
     isLoading,
   }), [projectIdOrName, project, isLoading]);
