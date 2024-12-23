@@ -73,6 +73,9 @@ src/models/Delivery.ts
 src/models/Destination.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
+src/models/GenerateConnectionRequestOauth2AuthorizationCode.ts
+src/models/GenerateConnectionRequestOauth2AuthorizationCodeAccessToken.ts
+src/models/GenerateConnectionRequestOauth2AuthorizationCodeRefreshToken.ts
 src/models/GenerateConnectionRequestOauth2ClientCredentials.ts
 src/models/GenerateConnectionRequestOauth2Password.ts
 src/models/Group.ts
