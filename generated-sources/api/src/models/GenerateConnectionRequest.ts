@@ -19,6 +19,12 @@ import {
     GenerateConnectionRequestBasicAuthFromJSONTyped,
     GenerateConnectionRequestBasicAuthToJSON,
 } from './GenerateConnectionRequestBasicAuth';
+import type { GenerateConnectionRequestOauth2AuthorizationCode } from './GenerateConnectionRequestOauth2AuthorizationCode';
+import {
+    GenerateConnectionRequestOauth2AuthorizationCodeFromJSON,
+    GenerateConnectionRequestOauth2AuthorizationCodeFromJSONTyped,
+    GenerateConnectionRequestOauth2AuthorizationCodeToJSON,
+} from './GenerateConnectionRequestOauth2AuthorizationCode';
 import type { GenerateConnectionRequestOauth2ClientCredentials } from './GenerateConnectionRequestOauth2ClientCredentials';
 import {
     GenerateConnectionRequestOauth2ClientCredentialsFromJSON,
@@ -98,6 +104,12 @@ export interface GenerateConnectionRequest {
      * @memberof GenerateConnectionRequest
      */
     oauth2Password?: GenerateConnectionRequestOauth2Password;
+    /**
+     * 
+     * @type {GenerateConnectionRequestOauth2AuthorizationCode}
+     * @memberof GenerateConnectionRequest
+     */
+    oauth2AuthorizationCode?: GenerateConnectionRequestOauth2AuthorizationCode;
 }
 
 /**
@@ -132,6 +144,7 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
         'basicAuth': !exists(json, 'basicAuth') ? undefined : GenerateConnectionRequestBasicAuthFromJSON(json['basicAuth']),
         'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : GenerateConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
         'oauth2Password': !exists(json, 'oauth2Password') ? undefined : GenerateConnectionRequestOauth2PasswordFromJSON(json['oauth2Password']),
+        'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : GenerateConnectionRequestOauth2AuthorizationCodeFromJSON(json['oauth2AuthorizationCode']),
     };
 }
 
@@ -154,6 +167,7 @@ export function GenerateConnectionRequestToJSON(value?: GenerateConnectionReques
         'basicAuth': GenerateConnectionRequestBasicAuthToJSON(value.basicAuth),
         'oauth2ClientCredentials': GenerateConnectionRequestOauth2ClientCredentialsToJSON(value.oauth2ClientCredentials),
         'oauth2Password': GenerateConnectionRequestOauth2PasswordToJSON(value.oauth2Password),
+        'oauth2AuthorizationCode': GenerateConnectionRequestOauth2AuthorizationCodeToJSON(value.oauth2AuthorizationCode),
     };
 }
 
