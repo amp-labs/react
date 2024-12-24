@@ -25,6 +25,12 @@ import {
     GroupFromJSONTyped,
     GroupToJSON,
 } from './Group';
+import type { Oauth2AuthorizationCode } from './Oauth2AuthorizationCode';
+import {
+    Oauth2AuthorizationCodeFromJSON,
+    Oauth2AuthorizationCodeFromJSONTyped,
+    Oauth2AuthorizationCodeToJSON,
+} from './Oauth2AuthorizationCode';
 import type { ProviderApp } from './ProviderApp';
 import {
     ProviderAppFromJSON,
@@ -92,7 +98,51 @@ export interface Connection {
      * @memberof Connection
      */
     updateTime?: Date;
+    /**
+     * The authentication scheme used for this connection.
+     * @type {string}
+     * @memberof Connection
+     */
+    authScheme?: ConnectionAuthSchemeEnum;
+    /**
+     * The status of the connection.
+     * @type {string}
+     * @memberof Connection
+     */
+    status?: ConnectionStatusEnum;
+    /**
+     * 
+     * @type {Oauth2AuthorizationCode}
+     * @memberof Connection
+     */
+    oauth2AuthorizationCode?: Oauth2AuthorizationCode;
 }
+
+
+/**
+ * @export
+ */
+export const ConnectionAuthSchemeEnum = {
+    None: 'none',
+    ApiKey: 'apiKey',
+    Basic: 'basic',
+    Oauth2AuthorizationCode: 'oauth2/authorizationCode',
+    Oauth2AuthorizationCodePkce: 'oauth2/authorizationCodePKCE',
+    Oauth2ClientCredentials: 'oauth2/clientCredentials',
+    Oauth2Password: 'oauth2/password'
+} as const;
+export type ConnectionAuthSchemeEnum = typeof ConnectionAuthSchemeEnum[keyof typeof ConnectionAuthSchemeEnum];
+
+/**
+ * @export
+ */
+export const ConnectionStatusEnum = {
+    Created: 'created',
+    Working: 'working',
+    BadCredentials: 'bad_credentials'
+} as const;
+export type ConnectionStatusEnum = typeof ConnectionStatusEnum[keyof typeof ConnectionStatusEnum];
+
 
 /**
  * Check if a given object implements the Connection interface.
@@ -129,6 +179,9 @@ export function ConnectionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'providerConsumerRef': !exists(json, 'ProviderConsumerRef') ? undefined : json['ProviderConsumerRef'],
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
+        'authScheme': !exists(json, 'authScheme') ? undefined : json['authScheme'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeFromJSON(json['oauth2AuthorizationCode']),
     };
 }
 
@@ -150,6 +203,9 @@ export function ConnectionToJSON(value?: Connection | null): any {
         'ProviderConsumerRef': value.providerConsumerRef,
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
+        'authScheme': value.authScheme,
+        'status': value.status,
+        'oauth2AuthorizationCode': Oauth2AuthorizationCodeToJSON(value.oauth2AuthorizationCode),
     };
 }
 

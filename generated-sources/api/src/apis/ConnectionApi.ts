@@ -44,6 +44,9 @@ export interface GenerateConnectionOperationRequest {
 export interface GetConnectionRequest {
     projectIdOrName: string;
     connectionId: string;
+    includeCreds?: boolean;
+    includeRefreshToken?: boolean;
+    refresh?: GetConnectionRefreshEnum;
 }
 
 export interface ListConnectionsRequest {
@@ -98,6 +101,9 @@ export interface ConnectionApiInterface {
      * @summary Get a connection
      * @param {string} projectIdOrName 
      * @param {string} connectionId 
+     * @param {boolean} [includeCreds] Whether to include the credentials in the response. If true, only access token will be included. default is false.
+     * @param {boolean} [includeRefreshToken] Whether to include the refresh token in credentials in the response along with access token. If true, parameter &#x60;includeCreds&#x60; will be ignored and include both access token and refresh token. If this parameter is true for connections other than &#x60;OAuth2 Authorization Code&#x60;, it will be ignored. default is false.
+     * @param {'force' | 'ifExpired'} [refresh] Whether to force refresh the access token. If &#x60;force&#x60;, the access token will be refreshed regardless of its expiration. If &#x60;ifExpired&#x60;, the access token will be refreshed only if it has expired.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ConnectionApiInterface
@@ -224,6 +230,18 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
 
         const queryParameters: any = {};
 
+        if (requestParameters.includeCreds !== undefined) {
+            queryParameters['includeCreds'] = requestParameters.includeCreds;
+        }
+
+        if (requestParameters.includeRefreshToken !== undefined) {
+            queryParameters['includeRefreshToken'] = requestParameters.includeRefreshToken;
+        }
+
+        if (requestParameters.refresh !== undefined) {
+            queryParameters['refresh'] = requestParameters.refresh;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -295,3 +313,12 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
 }
+
+/**
+ * @export
+ */
+export const GetConnectionRefreshEnum = {
+    Force: 'force',
+    IfExpired: 'ifExpired'
+} as const;
+export type GetConnectionRefreshEnum = typeof GetConnectionRefreshEnum[keyof typeof GetConnectionRefreshEnum];
