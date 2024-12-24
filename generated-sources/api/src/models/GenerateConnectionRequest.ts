@@ -31,6 +31,12 @@ import {
     GenerateConnectionRequestOauth2PasswordFromJSONTyped,
     GenerateConnectionRequestOauth2PasswordToJSON,
 } from './GenerateConnectionRequestOauth2Password';
+import type { Oauth2AuthorizationCode } from './Oauth2AuthorizationCode';
+import {
+    Oauth2AuthorizationCodeFromJSON,
+    Oauth2AuthorizationCodeFromJSONTyped,
+    Oauth2AuthorizationCodeToJSON,
+} from './Oauth2AuthorizationCode';
 
 /**
  * 
@@ -98,6 +104,12 @@ export interface GenerateConnectionRequest {
      * @memberof GenerateConnectionRequest
      */
     oauth2Password?: GenerateConnectionRequestOauth2Password;
+    /**
+     * 
+     * @type {Oauth2AuthorizationCode}
+     * @memberof GenerateConnectionRequest
+     */
+    oauth2AuthorizationCode?: Oauth2AuthorizationCode;
 }
 
 /**
@@ -132,6 +144,7 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
         'basicAuth': !exists(json, 'basicAuth') ? undefined : GenerateConnectionRequestBasicAuthFromJSON(json['basicAuth']),
         'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : GenerateConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
         'oauth2Password': !exists(json, 'oauth2Password') ? undefined : GenerateConnectionRequestOauth2PasswordFromJSON(json['oauth2Password']),
+        'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeFromJSON(json['oauth2AuthorizationCode']),
     };
 }
 
@@ -154,6 +167,7 @@ export function GenerateConnectionRequestToJSON(value?: GenerateConnectionReques
         'basicAuth': GenerateConnectionRequestBasicAuthToJSON(value.basicAuth),
         'oauth2ClientCredentials': GenerateConnectionRequestOauth2ClientCredentialsToJSON(value.oauth2ClientCredentials),
         'oauth2Password': GenerateConnectionRequestOauth2PasswordToJSON(value.oauth2Password),
+        'oauth2AuthorizationCode': Oauth2AuthorizationCodeToJSON(value.oauth2AuthorizationCode),
     };
 }
 

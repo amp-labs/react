@@ -107,6 +107,9 @@ src/models/LogMessage.ts
 src/models/Media.ts
 src/models/MediaTypeDarkMode.ts
 src/models/MediaTypeRegular.ts
+src/models/Oauth2AuthorizationCode.ts
+src/models/Oauth2AuthorizationCodeAccessToken.ts
+src/models/Oauth2AuthorizationCodeRefreshToken.ts
 src/models/Oauth2Opts.ts
 src/models/OauthConnectRequest.ts
 src/models/Operation.ts
