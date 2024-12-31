@@ -17,7 +17,6 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   CreateInstallationRequest,
-  ImportInstallationRequest,
   InputValidationProblem,
   Installation,
   UpdateInstallationRequest,
@@ -27,8 +26,6 @@ import {
     ApiProblemToJSON,
     CreateInstallationRequestFromJSON,
     CreateInstallationRequestToJSON,
-    ImportInstallationRequestFromJSON,
-    ImportInstallationRequestToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
     InstallationFromJSON,
@@ -53,12 +50,6 @@ export interface GetInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
     installationId: string;
-}
-
-export interface ImportInstallationOperationRequest {
-    projectIdOrName: string;
-    integrationId: string;
-    installation: ImportInstallationRequest;
 }
 
 export interface ListInstallationsRequest {
@@ -131,23 +122,6 @@ export interface InstallationApiInterface {
      * Get an installation
      */
     getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
-
-    /**
-     * 
-     * @summary Import an existing installation
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {ImportInstallationRequest} installation 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstallationApiInterface
-     */
-    importInstallationRaw(requestParameters: ImportInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
-
-    /**
-     * Import an existing installation
-     */
-    importInstallation(requestParameters: ImportInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
      * 
@@ -316,51 +290,6 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      */
     async getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
         const response = await this.getInstallationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Import an existing installation
-     */
-    async importInstallationRaw(requestParameters: ImportInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
-        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
-            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling importInstallation.');
-        }
-
-        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
-            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling importInstallation.');
-        }
-
-        if (requestParameters.installation === null || requestParameters.installation === undefined) {
-            throw new runtime.RequiredError('installation','Required parameter requestParameters.installation was null or undefined when calling importInstallation.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations:import`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ImportInstallationRequestToJSON(requestParameters.installation),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => InstallationFromJSON(jsonValue));
-    }
-
-    /**
-     * Import an existing installation
-     */
-    async importInstallation(requestParameters: ImportInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
-        const response = await this.importInstallationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
