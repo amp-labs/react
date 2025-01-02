@@ -24,7 +24,24 @@ export function AmpersandFooter() {
         aria-label="Go to Ampersand"
         rel="noreferrer noopener"
       >
-        <img style={{ height: '.8em' }} src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black_fwzpfw.svg" alt="Ampersand" />
+
+        <picture>
+          <source
+            srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1735853540/ampersand_logo_white.svg"
+            media="(prefers-color-scheme: dark)"
+          />
+          <source
+            srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
+            media="(prefers-color-scheme: light)"
+          />
+          {/* Default */}
+          <img 
+            style={{ height: '.8em' }} 
+            src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg" 
+            alt="Ampersand"
+          />
+        </picture>
+
       </a>
     </footer>
   );
