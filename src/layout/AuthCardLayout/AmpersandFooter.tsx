@@ -27,17 +27,17 @@ export function AmpersandFooter() {
 
         <picture>
           <source
-            srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1735853540/ampersand_logo_white.svg"
-            media="(prefers-color-scheme: dark)"
-          />
-          <source
             srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
             media="(prefers-color-scheme: light)"
           />
+          <source
+            srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1735853540/ampersand_logo_white.svg"
+            media="(prefers-color-scheme: dark)"
+          />
           {/* Default */}
-          <img 
-            style={{ height: '.8em' }} 
-            src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg" 
+          <img
+            style={{ height: '.8em' }}
+            src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
             alt="Ampersand"
           />
         </picture>
