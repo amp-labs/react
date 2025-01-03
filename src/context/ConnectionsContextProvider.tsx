@@ -84,16 +84,24 @@ export function ConnectionsProvider({
         .then((_connections) => {
           setLoadingState(false);
           setConnections(_connections);
+          // If the provider has changed, reset the selected connection if it does
+          // not match the new provider
+          if (selectedConnection && selectedConnection.provider !== selectedProvider) {
+            setSelectedConnection(null);
+          }
         })
         .catch((err) => {
           console.error(
-            `Error retrieving existing OAuth connections for group ID ${groupRef}.`,
+            `Error retrieving existing connections for group ID ${groupRef}.`,
           );
           handleServerError(err);
           setLoadingState(false);
           setError(ErrorBoundary.CONNECTION_LIST, projectId);
         });
     }
+    // Disable the exhaustive-deps rule because this useEffect should not trigger if
+    // selectedConnection is changed because we do not need to refetch the connections list.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
 
   const contextValue = useMemo(
