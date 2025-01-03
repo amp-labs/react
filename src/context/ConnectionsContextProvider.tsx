@@ -84,6 +84,7 @@ export function ConnectionsProvider({
         .then((_connections) => {
           setLoadingState(false);
           setConnections(_connections);
+          if (selectedConnection.provider != 
         })
         .catch((err) => {
           console.error(

@@ -44,7 +44,7 @@ export interface GenerateConnectionRequestOauth2Password {
      */
     clientSecret: string;
     /**
-     * The scopes to use for the connection (optional).
+     * The scopes for the tokens.
      * @type {Array<string>}
      * @memberof GenerateConnectionRequestOauth2Password
      */
