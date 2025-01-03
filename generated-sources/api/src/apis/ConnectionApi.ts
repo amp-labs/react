@@ -44,6 +44,9 @@ export interface GenerateConnectionOperationRequest {
 export interface GetConnectionRequest {
     projectIdOrName: string;
     connectionId: string;
+    includeCreds?: boolean;
+    includeRefreshToken?: boolean;
+    refresh?: GetConnectionRefreshEnum;
 }
 
 export interface ListConnectionsRequest {
@@ -77,7 +80,7 @@ export interface ConnectionApiInterface {
     deleteConnection(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * @summary Generate a new connection
      * @param {string} projectIdOrName 
      * @param {GenerateConnectionRequest} [generateConnectionParams] 
@@ -88,7 +91,7 @@ export interface ConnectionApiInterface {
     generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
@@ -98,6 +101,9 @@ export interface ConnectionApiInterface {
      * @summary Get a connection
      * @param {string} projectIdOrName 
      * @param {string} connectionId 
+     * @param {boolean} [includeCreds] Whether to include the credentials in the response. Only access token will be included. Default is false.
+     * @param {boolean} [includeRefreshToken] Whether to include the refresh token in credentials in the response along with access token. If true, the &#x60;includeCreds&#x60; query parameter will be ignored. Default is false.
+     * @param {'force' | 'ifExpired'} [refresh] Whether to refresh the access token. If value is &#x60;ifExpired&#x60;, the access token will be refreshed only if it has expired. If value is &#x60;force&#x60;, the access token will be refreshed regardless of its expiration.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ConnectionApiInterface
@@ -172,7 +178,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
@@ -202,7 +208,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * This endpoint is only valid for providers with auth types which are not OAuth2 Authorization Code.
+     * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     async generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
@@ -223,6 +229,18 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.includeCreds !== undefined) {
+            queryParameters['includeCreds'] = requestParameters.includeCreds;
+        }
+
+        if (requestParameters.includeRefreshToken !== undefined) {
+            queryParameters['includeRefreshToken'] = requestParameters.includeRefreshToken;
+        }
+
+        if (requestParameters.refresh !== undefined) {
+            queryParameters['refresh'] = requestParameters.refresh;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -295,3 +313,12 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
 }
+
+/**
+ * @export
+ */
+export const GetConnectionRefreshEnum = {
+    Force: 'force',
+    IfExpired: 'ifExpired'
+} as const;
+export type GetConnectionRefreshEnum = typeof GetConnectionRefreshEnum[keyof typeof GetConnectionRefreshEnum];
