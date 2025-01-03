@@ -103,6 +103,7 @@ export function ConnectionsProvider({
     // selectedConnection is changed because we do not need to refetch the connections list.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, apiKey, groupRef, selectedProvider, setError]);
+
   const contextValue = useMemo(
     () => ({
       connections,
