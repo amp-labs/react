@@ -115,7 +115,7 @@ export interface Connection {
      * @type {string}
      * @memberof Connection
      */
-    status?: ConnectionStatusEnum;
+    status: ConnectionStatusEnum;
     /**
      * 
      * @type {Oauth2AuthorizationCodeTokensOnly}
@@ -162,6 +162,7 @@ export function instanceOfConnection(value: object): boolean {
     isInstance = isInstance && "consumer" in value;
     isInstance = isInstance && "createTime" in value;
     isInstance = isInstance && "authScheme" in value;
+    isInstance = isInstance && "status" in value;
 
     return isInstance;
 }
@@ -187,7 +188,7 @@ export function ConnectionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
         'authScheme': json['authScheme'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
+        'status': json['status'],
         'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeTokensOnlyFromJSON(json['oauth2AuthorizationCode']),
     };
 }
