@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
@@ -51,17 +51,16 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
     console.error('Error when creating proxy installation:', error);
   };
 
-  useEffect(() => {
-    if (!isLoading && hydratedRevision && isProxyOnly
-      && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
-      setCreateInstallLoading(true);
+  const onClickInstallProxy = useCallback(() => {
+    setCreateInstallLoading(true);
+    if (hydratedRevision && isProxyOnly && selectedConnection && apiKey && integrationObj?.id) {
       onCreateInstallationProxyOnly({
         apiKey,
         projectId,
-        integrationId: integrationObj?.id,
+        integrationId: integrationObj?.id || 'no integration id',
         groupRef,
         consumerRef,
-        connectionId: selectedConnection?.id,
+        connectionId: selectedConnection?.id || 'no connection id',
         hydratedRevision,
         setError,
         setInstallation,
@@ -72,10 +71,17 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
         setCreateInstallLoading(false);
         console.error('Error when creating proxy installation:', e);
       });
+    } else {
+      // this should never happen as button should be disabled
+      console.error('Error', {
+        hydratedRevision, isProxyOnly, selectedConnection, apiKey, integrationObj,
+      });
+      setCreateInstallLoading(false);
     }
-  }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey,
-    projectId, integrationObj?.id, groupRef, consumerRef, setInstallation,
-    isLoading, onInstallSuccess, isIntegrationDeleted]);
+  }, [hydratedRevision, isProxyOnly, selectedConnection, apiKey,
+    projectId, integrationObj, groupRef, consumerRef, setInstallation, onInstallSuccess]);
+
+  const isClickInstallDisabled = !hydratedRevision || !selectedConnection || !apiKey || !integrationObj || isLoading;
 
   if (isIntegrationDeleted) {
     return (
@@ -93,6 +99,21 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
   }
   if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
   if (isLoading) return <ComponentContainerLoading />;
+  if (isProxyOnly && !installation) {
+    return (
+      <SuccessTextBox
+        text="Connection successfull. "
+      >
+        <Button
+          type="button"
+          onClick={onClickInstallProxy}
+          disabled={isClickInstallDisabled}
+          style={{ width: '100%' }}
+        >Install Integration
+        </Button>
+      </SuccessTextBox>
+    );
+  }
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
