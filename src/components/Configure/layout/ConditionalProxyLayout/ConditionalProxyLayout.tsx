@@ -5,8 +5,6 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
-import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
-import { Button } from 'src/components/ui-base/Button';
 
 import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { ComponentContainerError, ComponentContainerLoading } from '../../ComponentContainer';
@@ -23,7 +21,6 @@ const getIsProxyOnly = (hydratedRevision: HydratedRevision | null) => {
 
 interface ConditionalProxyLayoutProps {
   children: React.ReactNode;
-  resetComponent: () => void; // resets installation integration component
 }
 
 /**
@@ -31,7 +28,7 @@ interface ConditionalProxyLayoutProps {
  * then it will not render the ConfigureInstallation
  * @returns
  */
-export function ConditionalProxyLayout({ children, resetComponent }: ConditionalProxyLayoutProps) {
+export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
@@ -77,20 +74,6 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
     projectId, integrationObj?.id, groupRef, consumerRef, setInstallation,
     isLoading, onInstallSuccess, isIntegrationDeleted]);
 
-  if (isIntegrationDeleted) {
-    return (
-      <SuccessTextBox
-        text="Integration successfully uninstalled."
-      >
-        <Button
-          type="button"
-          onClick={resetComponent}
-          style={{ width: '100%' }}
-        >Reinstall Integration
-        </Button>
-      </SuccessTextBox>
-    );
-  }
   if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
   if (isLoading) return <ComponentContainerLoading />;
   if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;

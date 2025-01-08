@@ -2,12 +2,11 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { api, Connection } from 'services/api';
+import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContextProvider';
 import { useProject } from './ProjectContextProvider';
@@ -53,7 +52,7 @@ export function ConnectionsProvider({
   groupRef,
   children,
 }: ConnectionsProviderProps) {
-  const apiKey = useApiKey();
+  const getAPI = useAPI();
   const { projectId, isLoading: isProjectLoading } = useProject();
 
   const [connections, setConnections] = useState<Connection[] | null>(null);
@@ -71,16 +70,14 @@ export function ConnectionsProvider({
   }
 
   useEffect(() => {
-    if (projectId && apiKey) {
-      api()
-        .connectionApi.listConnections(
-          { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-          {
-            headers: {
-              'X-Api-Key': apiKey ?? '',
-            },
-          },
-        )
+    async function fetchConnections() {
+      const api = await getAPI();
+      if (!projectId) {
+        throw new Error('Project ID not found. ConnectionsProvider must be used within AmpersandProvider');
+      }
+      api.connectionApi.listConnections(
+        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+      )
         .then((_connections) => {
           setLoadingState(false);
           setConnections(_connections);
@@ -99,10 +96,11 @@ export function ConnectionsProvider({
           setError(ErrorBoundary.CONNECTION_LIST, projectId);
         });
     }
-    // Disable the exhaustive-deps rule because this useEffect should not trigger if
-    // selectedConnection is changed because we do not need to refetch the connections list.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, apiKey, groupRef, selectedProvider, setError]);
+
+    if (projectId) {
+      fetchConnections();
+    }
+  }, [projectId, groupRef, selectedProvider, setError, getAPI, selectedConnection]);
 
   const contextValue = useMemo(
     () => ({
