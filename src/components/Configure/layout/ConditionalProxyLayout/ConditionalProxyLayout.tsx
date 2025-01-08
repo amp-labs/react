@@ -53,7 +53,7 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
 
   useEffect(() => {
     if (!isLoading && hydratedRevision && isProxyOnly
-      && !installation && selectedConnection && apiKey && integrationObj?.id) {
+      && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
         apiKey,
@@ -73,8 +73,9 @@ export function ConditionalProxyLayout({ children, resetComponent }: Conditional
         console.error('Error when creating proxy installation:', e);
       });
     }
-  }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey, projectId,
-    integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess]);
+  }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey,
+    projectId, integrationObj?.id, groupRef, consumerRef, setInstallation,
+    isLoading, onInstallSuccess, isIntegrationDeleted]);
 
   if (isIntegrationDeleted) {
     return (
