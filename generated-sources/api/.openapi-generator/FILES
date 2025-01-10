@@ -12,6 +12,7 @@ src/apis/GroupApi.ts
 src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
+src/apis/ObjectsFieldsApi.ts
 src/apis/OperationApi.ts
 src/apis/OrgApi.ts
 src/apis/ProjectApi.ts
@@ -71,6 +72,7 @@ src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
 src/models/Delivery.ts
 src/models/Destination.ts
+src/models/FieldMetadata.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
 src/models/GenerateConnectionRequestOauth2ClientCredentials.ts
@@ -79,6 +81,7 @@ src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
+src/models/HydratedIntegrationFieldExistentAllOf.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedIntegrationProxy.ts
 src/models/HydratedIntegrationRead.ts
@@ -113,6 +116,7 @@ src/models/Oauth2AuthorizationCodeTokensOnlyAccessToken.ts
 src/models/Oauth2AuthorizationCodeTokensOnlyRefreshToken.ts
 src/models/Oauth2Opts.ts
 src/models/OauthConnectRequest.ts
+src/models/ObjectMetadata.ts
 src/models/Operation.ts
 src/models/OperationEvent.ts
 src/models/OptionalFieldsAutoOption.ts
@@ -141,6 +145,7 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
+src/models/ValueOption.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

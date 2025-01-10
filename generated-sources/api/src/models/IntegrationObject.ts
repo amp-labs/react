@@ -63,13 +63,13 @@ export interface IntegrationObject {
      */
     schedule: string;
     /**
-     * An object name to map to in the destination.
+     * An object name to map to.
      * @type {string}
      * @memberof IntegrationObject
      */
     mapToName?: string;
     /**
-     * A display name to map to in the destination.
+     * A display name to map to.
      * @type {string}
      * @memberof IntegrationObject
      */
