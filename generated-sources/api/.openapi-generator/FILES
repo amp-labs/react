@@ -71,6 +71,7 @@ src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
 src/models/Delivery.ts
 src/models/Destination.ts
+src/models/FieldMetadata.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
 src/models/GenerateConnectionRequestOauth2ClientCredentials.ts
@@ -79,6 +80,7 @@ src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
+src/models/HydratedIntegrationFieldExistentAllOf.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedIntegrationProxy.ts
 src/models/HydratedIntegrationRead.ts
@@ -141,6 +143,7 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
+src/models/ValueOption.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json
