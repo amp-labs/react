@@ -23,64 +23,52 @@ import {
 /**
  * 
  * @export
- * @interface HydratedIntegrationFieldExistent
+ * @interface FieldMetadata
  */
-export interface HydratedIntegrationFieldExistent {
+export interface FieldMetadata {
     /**
      * The name of the field from the provider API.
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
     fieldName: string;
     /**
      * The display name of the field from the provider API.
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
     displayName: string;
     /**
      * A normalized field type
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
-    valueType?: HydratedIntegrationFieldExistentValueTypeEnum;
+    valueType?: FieldMetadataValueTypeEnum;
     /**
      * Raw field type from the provider API.
      * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
     providerType?: string;
     /**
      * Whether the field is read-only.
      * @type {boolean}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
     readOnly?: boolean;
     /**
      * If the valueType is singleSelect or multiSelect, this is a list of possible values
      * @type {Array<ValueOption>}
-     * @memberof HydratedIntegrationFieldExistent
+     * @memberof FieldMetadata
      */
     values?: Array<ValueOption>;
-    /**
-     * The field name to map to.
-     * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    mapToName?: string;
-    /**
-     * The display name to map to.
-     * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    mapToDisplayName?: string;
 }
 
 
 /**
  * @export
  */
-export const HydratedIntegrationFieldExistentValueTypeEnum = {
+export const FieldMetadataValueTypeEnum = {
     String: 'string',
     Boolean: 'boolean',
     SingleSelect: 'singleSelect',
@@ -91,13 +79,13 @@ export const HydratedIntegrationFieldExistentValueTypeEnum = {
     Float: 'float',
     Other: 'other'
 } as const;
-export type HydratedIntegrationFieldExistentValueTypeEnum = typeof HydratedIntegrationFieldExistentValueTypeEnum[keyof typeof HydratedIntegrationFieldExistentValueTypeEnum];
+export type FieldMetadataValueTypeEnum = typeof FieldMetadataValueTypeEnum[keyof typeof FieldMetadataValueTypeEnum];
 
 
 /**
- * Check if a given object implements the HydratedIntegrationFieldExistent interface.
+ * Check if a given object implements the FieldMetadata interface.
  */
-export function instanceOfHydratedIntegrationFieldExistent(value: object): boolean {
+export function instanceOfFieldMetadata(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "fieldName" in value;
     isInstance = isInstance && "displayName" in value;
@@ -105,11 +93,11 @@ export function instanceOfHydratedIntegrationFieldExistent(value: object): boole
     return isInstance;
 }
 
-export function HydratedIntegrationFieldExistentFromJSON(json: any): HydratedIntegrationFieldExistent {
-    return HydratedIntegrationFieldExistentFromJSONTyped(json, false);
+export function FieldMetadataFromJSON(json: any): FieldMetadata {
+    return FieldMetadataFromJSONTyped(json, false);
 }
 
-export function HydratedIntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationFieldExistent {
+export function FieldMetadataFromJSONTyped(json: any, ignoreDiscriminator: boolean): FieldMetadata {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -121,12 +109,10 @@ export function HydratedIntegrationFieldExistentFromJSONTyped(json: any, ignoreD
         'providerType': !exists(json, 'providerType') ? undefined : json['providerType'],
         'readOnly': !exists(json, 'readOnly') ? undefined : json['readOnly'],
         'values': !exists(json, 'values') ? undefined : ((json['values'] as Array<any>).map(ValueOptionFromJSON)),
-        'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
-        'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
     };
 }
 
-export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrationFieldExistent | null): any {
+export function FieldMetadataToJSON(value?: FieldMetadata | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -141,8 +127,6 @@ export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrati
         'providerType': value.providerType,
         'readOnly': value.readOnly,
         'values': value.values === undefined ? undefined : ((value.values as Array<any>).map(ValueOptionToJSON)),
-        'mapToName': value.mapToName,
-        'mapToDisplayName': value.mapToDisplayName,
     };
 }
 

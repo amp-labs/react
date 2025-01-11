@@ -51,13 +51,13 @@ export interface HydratedIntegrationObject {
      */
     displayName: string;
     /**
-     * An object name to map to in the destination.
+     * An object name to map to.
      * @type {string}
      * @memberof HydratedIntegrationObject
      */
     mapToName?: string;
     /**
-     * A display name to map to in the destination.
+     * A display name to map to.
      * @type {string}
      * @memberof HydratedIntegrationObject
      */
