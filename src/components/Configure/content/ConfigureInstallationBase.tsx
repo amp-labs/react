@@ -12,6 +12,7 @@ import { getReadObject } from '../utils';
 
 import { ReadFields } from './fields/ReadFields';
 import { WriteFields } from './fields/WriteFields';
+import { WriteFieldsV3 } from './fields/WriteFields/WriteFieldsV3';
 import { UninstallContent } from './UninstallContent';
 import { useSelectedConfigureState } from './useSelectedConfigureState';
 
@@ -88,6 +89,7 @@ export function ConfigureInstallationBase(
             )}
             {loading && <LoadingCentered />}
             {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <ReadFields />}
+            {hydratedRevision && !isUninstall && !isNonConfigurableWrite && <WriteFieldsV3 />}
             {hydratedRevision && !isUninstall && isNonConfigurableWrite && <WriteFields />}
             {!loading && isUninstall && <UninstallContent />}
           </Box>

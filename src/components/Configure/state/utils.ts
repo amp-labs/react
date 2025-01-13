@@ -110,10 +110,12 @@ export function generateConfigurationState(
   const readAction = hydratedRevision?.content?.read;
   const writeAction = hydratedRevision?.content?.write;
 
-  return {
+  const configureState = {
     read: generateConfigurationStateRead(readAction, objectName, config),
     write: generateConfigurationStateWrite(writeAction, config),
   };
+
+  return configureState;
 }
 
 // resets configure state for single object to hydrated revision values
