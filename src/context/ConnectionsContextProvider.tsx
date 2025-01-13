@@ -81,11 +81,6 @@ export function ConnectionsProvider({
         .then((_connections) => {
           setLoadingState(false);
           setConnections(_connections);
-          // If the provider has changed, reset the selected connection if it does
-          // not match the new provider
-          if (selectedConnection && selectedConnection.provider !== selectedProvider) {
-            setSelectedConnection(null);
-          }
         })
         .catch((err) => {
           console.error(
@@ -97,10 +92,35 @@ export function ConnectionsProvider({
         });
     }
 
+    // Fetch connections if connection params change or if the integration was deleted
     if (projectId) {
       fetchConnections();
     }
-  }, [projectId, groupRef, selectedProvider, setError, getAPI, selectedConnection]);
+  }, [projectId, groupRef, selectedProvider, setError, getAPI, isIntegrationDeleted]);
+
+  // connections manager useEffect
+  useEffect(() => {
+    // If the provider has changed, reset the selected connection if it does
+    // not match the new provider
+    if (selectedConnection && selectedConnection.provider !== selectedProvider) {
+      setSelectedConnection(null);
+    }
+
+    // if selectedConnection is not in the connections list, reset it
+    if (selectedConnection && connections) {
+      const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
+      if (!connectionExists) {
+        console.warn('resetting connection');
+        setSelectedConnection(null);
+      }
+    }
+
+    // If there is no selected connection, select the first connection in the list
+    if (!selectedConnection && connections && connections.length > 0) {
+      const [connection] = connections;
+      setSelectedConnection(connection);
+    }
+  }, [connections, selectedConnection, selectedProvider]);
 
   const contextValue = useMemo(
     () => ({

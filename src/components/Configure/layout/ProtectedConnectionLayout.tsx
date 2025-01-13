@@ -50,7 +50,7 @@ export function ProtectedConnectionLayout({
   const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
 
   const { provider: providerFromProps, isIntegrationDeleted } = useInstallIntegrationProps();
-  const { selectedConnection, setSelectedConnection, connections } = useConnections();
+  const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
 
   const selectedProvider = provider || providerFromProps;
@@ -58,18 +58,13 @@ export function ProtectedConnectionLayout({
   const providerName = providerInfo?.displayName ?? capitalize(selectedProvider);
 
   useEffect(() => {
-    if (!selectedConnection && connections && connections.length > 0) {
-      const [connection] = connections;
-      setSelectedConnection(connection);
-    }
-
     getProviderInfo(apiKey, selectedProvider).then((info) => {
       setProviderInfo(info);
     }).catch((err) => {
       console.error('Error loading provider info.');
       handleServerError(err);
     });
-  }, [connections, selectedConnection, setSelectedConnection, apiKey, selectedProvider]);
+  }, [apiKey, selectedProvider]);
 
   if (!provider && !providerFromProps) {
     throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');

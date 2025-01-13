@@ -5,7 +5,6 @@ import { useInstallIntegrationProps } from 'context/InstallIntegrationContextPro
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
-import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
 interface UninstallButtonProps {
@@ -21,7 +20,6 @@ export function UninstallButton({
 }: UninstallButtonProps) {
   const apiKey = useApiKey();
   const { projectId } = useProject();
-  const { setSelectedConnection } = useConnections();
   const {
     integrationId,
     installation,
@@ -54,7 +52,6 @@ export function UninstallButton({
         console.warn('successfully uninstalled installation:', installation.id);
         onUninstallSuccess?.(installation?.id); // callback
         resetInstallations();
-        setSelectedConnection(null); // reset the connection
         setIntegrationDeleted(); // set the ui terminal deleted state
       } catch (e) {
         console.error('Error uninstalling installation.');
