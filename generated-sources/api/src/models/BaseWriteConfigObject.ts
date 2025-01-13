@@ -25,6 +25,12 @@ export interface BaseWriteConfigObject {
      * @memberof BaseWriteConfigObject
      */
     objectName?: string;
+    /**
+     * This is a map of field names to default values. These values will be used when writing to the object.
+     * @type {{ [key: string]: string; }}
+     * @memberof BaseWriteConfigObject
+     */
+    selectedValueDefaults?: { [key: string]: string; };
 }
 
 /**
@@ -47,6 +53,7 @@ export function BaseWriteConfigObjectFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
+        'selectedValueDefaults': !exists(json, 'selectedValueDefaults') ? undefined : json['selectedValueDefaults'],
     };
 }
 
@@ -60,6 +67,7 @@ export function BaseWriteConfigObjectToJSON(value?: BaseWriteConfigObject | null
     return {
         
         'objectName': value.objectName,
+        'selectedValueDefaults': value.selectedValueDefaults,
     };
 }
 

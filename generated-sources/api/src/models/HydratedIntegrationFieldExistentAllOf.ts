@@ -16,56 +16,48 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface IntegrationFieldExistent
+ * @interface HydratedIntegrationFieldExistentAllOf
  */
-export interface IntegrationFieldExistent {
-    /**
-     * 
-     * @type {string}
-     * @memberof IntegrationFieldExistent
-     */
-    fieldName: string;
+export interface HydratedIntegrationFieldExistentAllOf {
     /**
      * The field name to map to.
      * @type {string}
-     * @memberof IntegrationFieldExistent
+     * @memberof HydratedIntegrationFieldExistentAllOf
      */
     mapToName?: string;
     /**
      * The display name to map to.
      * @type {string}
-     * @memberof IntegrationFieldExistent
+     * @memberof HydratedIntegrationFieldExistentAllOf
      */
     mapToDisplayName?: string;
 }
 
 /**
- * Check if a given object implements the IntegrationFieldExistent interface.
+ * Check if a given object implements the HydratedIntegrationFieldExistentAllOf interface.
  */
-export function instanceOfIntegrationFieldExistent(value: object): boolean {
+export function instanceOfHydratedIntegrationFieldExistentAllOf(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "fieldName" in value;
 
     return isInstance;
 }
 
-export function IntegrationFieldExistentFromJSON(json: any): IntegrationFieldExistent {
-    return IntegrationFieldExistentFromJSONTyped(json, false);
+export function HydratedIntegrationFieldExistentAllOfFromJSON(json: any): HydratedIntegrationFieldExistentAllOf {
+    return HydratedIntegrationFieldExistentAllOfFromJSONTyped(json, false);
 }
 
-export function IntegrationFieldExistentFromJSONTyped(json: any, ignoreDiscriminator: boolean): IntegrationFieldExistent {
+export function HydratedIntegrationFieldExistentAllOfFromJSONTyped(json: any, ignoreDiscriminator: boolean): HydratedIntegrationFieldExistentAllOf {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'fieldName': json['fieldName'],
         'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
         'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
     };
 }
 
-export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent | null): any {
+export function HydratedIntegrationFieldExistentAllOfToJSON(value?: HydratedIntegrationFieldExistentAllOf | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -74,7 +66,6 @@ export function IntegrationFieldExistentToJSON(value?: IntegrationFieldExistent 
     }
     return {
         
-        'fieldName': value.fieldName,
         'mapToName': value.mapToName,
         'mapToDisplayName': value.mapToDisplayName,
     };

@@ -57,6 +57,12 @@ export interface BaseReadConfigObject {
      */
     selectedFields?: { [key: string]: boolean; };
     /**
+     * This is a map of field names to their value mappings.
+     * @type {{ [key: string]: { [key: string]: string; }; }}
+     * @memberof BaseReadConfigObject
+     */
+    selectedValueMappings?: { [key: string]: { [key: string]: string; }; };
+    /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}
      * @memberof BaseReadConfigObject
@@ -99,6 +105,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'schedule': !exists(json, 'schedule') ? undefined : json['schedule'],
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
+        'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
@@ -118,6 +125,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'schedule': value.schedule,
         'destination': value.destination,
         'selectedFields': value.selectedFields,
+        'selectedValueMappings': value.selectedValueMappings,
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
