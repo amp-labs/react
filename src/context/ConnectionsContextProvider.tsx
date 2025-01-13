@@ -73,7 +73,7 @@ export function ConnectionsProvider({
     async function fetchConnections() {
       const api = await getAPI();
       if (!projectId) {
-        throw new Error('Project ID not found. ConnectionsProvider must be used within AmpersandProvider');
+        throw new Error('Project ID not found. Component must be used within AmpersandProvider');
       }
       api.connectionApi.listConnections(
         { projectIdOrName: projectId, groupRef, provider: selectedProvider },
