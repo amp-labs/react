@@ -19,9 +19,9 @@ export function WriteFieldsV3() {
   const onCheckboxChange = (checked: boolean) => {
     if (selectedObjectName && configureState) {
       if (checked) {
-        console.log('support write for', selectedObjectName);
+        // console.log('support write for', selectedObjectName);
       } else {
-        console.log('remove write support for', selectedObjectName);
+        // console.log('remove write support for', selectedObjectName);
       }
     }
   };
