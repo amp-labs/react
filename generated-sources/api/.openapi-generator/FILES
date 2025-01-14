@@ -12,6 +12,7 @@ src/apis/GroupApi.ts
 src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
+src/apis/ObjectsFieldsApi.ts
 src/apis/OperationApi.ts
 src/apis/OrgApi.ts
 src/apis/ProjectApi.ts
@@ -81,7 +82,6 @@ src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
 src/models/HydratedIntegrationFieldExistent.ts
-src/models/HydratedIntegrationFieldExistentAllOf.ts
 src/models/HydratedIntegrationObject.ts
 src/models/HydratedIntegrationProxy.ts
 src/models/HydratedIntegrationRead.ts

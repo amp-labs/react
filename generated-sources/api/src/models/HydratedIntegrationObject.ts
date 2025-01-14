@@ -19,6 +19,12 @@ import {
     BackfillFromJSONTyped,
     BackfillToJSON,
 } from './Backfill';
+import type { FieldMetadata } from './FieldMetadata';
+import {
+    FieldMetadataFromJSON,
+    FieldMetadataFromJSONTyped,
+    FieldMetadataToJSON,
+} from './FieldMetadata';
 import type { HydratedIntegrationField } from './HydratedIntegrationField';
 import {
     HydratedIntegrationFieldFromJSON,
@@ -93,11 +99,17 @@ export interface HydratedIntegrationObject {
      */
     optionalFieldsAuto?: OptionalFieldsAutoOption;
     /**
-     * This is a list of all fields on the object for a particular SaaS instance. This is used to populate the UI during configuration.
+     * This is a list of all fields on the object for a particular SaaS instance, including their display names.
      * @type {Array<HydratedIntegrationField>}
      * @memberof HydratedIntegrationObject
      */
     allFields?: Array<HydratedIntegrationField>;
+    /**
+     * This is a map of all fields on the object including their metadata (such as display name and type), the keys of the map are the field names.
+     * @type {{ [key: string]: FieldMetadata; }}
+     * @memberof HydratedIntegrationObject
+     */
+    allFieldsMetadataMap?: { [key: string]: FieldMetadata; };
     /**
      * 
      * @type {Backfill}
@@ -139,6 +151,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
         'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
+        'allFieldsMetadataMap': !exists(json, 'allFieldsMetadataMap') ? undefined : (mapValues(json['allFieldsMetadataMap'], FieldMetadataFromJSON)),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
@@ -162,6 +175,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
         'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
+        'allFieldsMetadataMap': value.allFieldsMetadataMap === undefined ? undefined : (mapValues(value.allFieldsMetadataMap, FieldMetadataToJSON)),
         'backfill': BackfillToJSON(value.backfill),
     };
 }

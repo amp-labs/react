@@ -13,13 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { FieldValue } from './FieldValue';
-import {
-    FieldValueFromJSON,
-    FieldValueFromJSONTyped,
-    FieldValueToJSON,
-} from './FieldValue';
-
 /**
  * 
  * @export
@@ -27,72 +20,30 @@ import {
  */
 export interface HydratedIntegrationFieldExistent {
     /**
-     * The name of the field from the provider API.
+     * 
      * @type {string}
      * @memberof HydratedIntegrationFieldExistent
      */
     fieldName: string;
     /**
-     * The display name of the field from the provider API.
+     * 
      * @type {string}
      * @memberof HydratedIntegrationFieldExistent
      */
     displayName: string;
     /**
-     * A normalized field type
-     * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    valueType?: HydratedIntegrationFieldExistentValueTypeEnum;
-    /**
-     * Raw field type from the provider API.
-     * @type {string}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    providerType?: string;
-    /**
-     * Whether the field is read-only.
-     * @type {boolean}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    readOnly?: boolean;
-    /**
-     * If the valueType is singleSelect or multiSelect, this is a list of possible values
-     * @type {Array<FieldValue>}
-     * @memberof HydratedIntegrationFieldExistent
-     */
-    values?: Array<FieldValue>;
-    /**
-     * The field name to map to.
+     * The field name to map to in the destination.
      * @type {string}
      * @memberof HydratedIntegrationFieldExistent
      */
     mapToName?: string;
     /**
-     * The display name to map to.
+     * The display name to map to in the destination.
      * @type {string}
      * @memberof HydratedIntegrationFieldExistent
      */
     mapToDisplayName?: string;
 }
-
-
-/**
- * @export
- */
-export const HydratedIntegrationFieldExistentValueTypeEnum = {
-    String: 'string',
-    Boolean: 'boolean',
-    SingleSelect: 'singleSelect',
-    MultiSelect: 'multiSelect',
-    Date: 'date',
-    Datetime: 'datetime',
-    Int: 'int',
-    Float: 'float',
-    Other: 'other'
-} as const;
-export type HydratedIntegrationFieldExistentValueTypeEnum = typeof HydratedIntegrationFieldExistentValueTypeEnum[keyof typeof HydratedIntegrationFieldExistentValueTypeEnum];
-
 
 /**
  * Check if a given object implements the HydratedIntegrationFieldExistent interface.
@@ -117,10 +68,6 @@ export function HydratedIntegrationFieldExistentFromJSONTyped(json: any, ignoreD
         
         'fieldName': json['fieldName'],
         'displayName': json['displayName'],
-        'valueType': !exists(json, 'valueType') ? undefined : json['valueType'],
-        'providerType': !exists(json, 'providerType') ? undefined : json['providerType'],
-        'readOnly': !exists(json, 'readOnly') ? undefined : json['readOnly'],
-        'values': !exists(json, 'values') ? undefined : ((json['values'] as Array<any>).map(FieldValueFromJSON)),
         'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
         'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
     };
@@ -137,10 +84,6 @@ export function HydratedIntegrationFieldExistentToJSON(value?: HydratedIntegrati
         
         'fieldName': value.fieldName,
         'displayName': value.displayName,
-        'valueType': value.valueType,
-        'providerType': value.providerType,
-        'readOnly': value.readOnly,
-        'values': value.values === undefined ? undefined : ((value.values as Array<any>).map(FieldValueToJSON)),
         'mapToName': value.mapToName,
         'mapToDisplayName': value.mapToDisplayName,
     };

@@ -59,7 +59,6 @@ export * from './Group';
 export * from './HydratedIntegration';
 export * from './HydratedIntegrationField';
 export * from './HydratedIntegrationFieldExistent';
-export * from './HydratedIntegrationFieldExistentAllOf';
 export * from './HydratedIntegrationObject';
 export * from './HydratedIntegrationProxy';
 export * from './HydratedIntegrationRead';
