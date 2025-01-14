@@ -9,6 +9,7 @@ export * from './GroupApi';
 export * from './InstallationApi';
 export * from './IntegrationApi';
 export * from './OAuthApi';
+export * from './ObjectsFieldsApi';
 export * from './OperationApi';
 export * from './OrgApi';
 export * from './ProjectApi';

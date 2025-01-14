@@ -12,6 +12,7 @@ src/apis/GroupApi.ts
 src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
+src/apis/ObjectsFieldsApi.ts
 src/apis/OperationApi.ts
 src/apis/OrgApi.ts
 src/apis/ProjectApi.ts
