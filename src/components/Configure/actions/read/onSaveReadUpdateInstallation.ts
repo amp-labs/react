@@ -44,7 +44,7 @@ const generateUpdateReadConfigFromConfigureState = (
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
     configureState,
   );
-  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState, objectName);
+  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
 
   // config request object type needs to be fixed
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {

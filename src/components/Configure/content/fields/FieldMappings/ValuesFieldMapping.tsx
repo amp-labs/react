@@ -21,9 +21,13 @@ export function ValuesFieldMapping(
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
-  const selectedValueMappings = configureState?.read?.selectedValueMappings || {};
-
-  const fieldValue = selectedValueMappings?.[fieldName]?.[value.mappedValue];
+  const fieldValue = useMemo(
+    () => {
+      const selectedValueMappings = configureState?.read?.selectedValueMappings || {};
+      return selectedValueMappings?.[fieldName]?.[value.mappedValue];
+    },
+    [configureState?.read?.selectedValueMappings, fieldName, value.mappedValue],
+  );
 
   useEffect(() => {
     setDisabled(false);
@@ -35,7 +39,7 @@ export function ValuesFieldMapping(
     value: f.value,
   })), [allValues]);
 
-  const SelectComponent = (
+  const SelectComponent = useMemo(() => (
     <ComboBox
       disabled={disabled}
       items={items}
@@ -51,7 +55,7 @@ export function ValuesFieldMapping(
       }}
       placeholder="Please select one"
     />
-  );
+  ), [items, fieldValue, value, fieldName, disabled, onSelectChange]);
 
   return (
     <div key={value.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>

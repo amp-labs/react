@@ -12,7 +12,9 @@ import { ValuesFieldMapping } from './ValuesFieldMapping';
 
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
-  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const {
+    selectedObjectName, configureState, setConfigureState,
+  } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -68,7 +70,7 @@ export function ValueMappings() {
                   {field?.mappedValues?.map((value) => (
 
                     <ValuesFieldMapping
-                      key={value.mappedValue}
+                      key={`${value.mappedValue}-${field.fieldName}`}
                       allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
                       value={value}
                       onSelectChange={onSelectChange}

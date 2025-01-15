@@ -20,23 +20,19 @@ function setValueMappingProducer(
     draft.read.selectedValueMappings = {};
   }
 
-  if (!draft.read.selectedValueMappings[selectedObjectName]) {
+  if (!draft.read.selectedValueMappings[fieldName]) {
     // eslint-disable-next-line no-param-reassign
-    draft.read.selectedValueMappings[selectedObjectName] = {};
-  }
-  if (!draft.read.selectedValueMappings[selectedObjectName][fieldName]) {
-    // eslint-disable-next-line no-param-reassign
-    draft.read.selectedValueMappings[selectedObjectName][fieldName] = {};
+    draft.read.selectedValueMappings[fieldName] = {};
   }
 
   // Directly mutate the draft
   // eslint-disable-next-line no-param-reassign
-  draft.read.selectedValueMappings[selectedObjectName][fieldName][sourceValue] = targetValue;
+  draft.read.selectedValueMappings[fieldName][sourceValue] = targetValue;
 
   if (draft?.read && draft.read.selectedValueMappings) {
     const savedFields = draft.read.savedConfig.selectedValueMappings;
     // eslint-disable-next-line no-param-reassign
-    const updatedFields = draft.read.selectedValueMappings[selectedObjectName];
+    const updatedFields = draft.read.selectedValueMappings;
     const isModified = !isFieldObjectEqual(savedFields, updatedFields);
 
     // Update the flag directly in the draft
