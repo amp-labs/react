@@ -9,6 +9,8 @@ import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
 import { api, Connection, ProviderInfo } from 'services/api';
+import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
+import { Button } from 'src/components/ui-base/Button';
 import { capitalize } from 'src/utils';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -21,6 +23,7 @@ interface ProtectedConnectionLayoutProps {
   onSuccess?: (connection: Connection) => void;
   children: JSX.Element,
   onDisconnectSuccess?: (connection: Connection) => void,
+  resetComponent: () => void, // resets installation integration component
 }
 
 export const getProviderInfo = async (
@@ -41,12 +44,13 @@ export const getProviderInfo = async (
 
 export function ProtectedConnectionLayout({
   provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onDisconnectSuccess,
+  resetComponent,
 }: ProtectedConnectionLayoutProps) {
   const apiKey = useApiKey();
   const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
 
-  const { provider: providerFromProps } = useInstallIntegrationProps();
-  const { selectedConnection, setSelectedConnection, connections } = useConnections();
+  const { provider: providerFromProps, isIntegrationDeleted } = useInstallIntegrationProps();
+  const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
 
   const selectedProvider = provider || providerFromProps;
@@ -54,21 +58,32 @@ export function ProtectedConnectionLayout({
   const providerName = providerInfo?.displayName ?? capitalize(selectedProvider);
 
   useEffect(() => {
-    if (!selectedConnection && connections && connections.length > 0) {
-      const [connection] = connections;
-      setSelectedConnection(connection);
-    }
-
     getProviderInfo(apiKey, selectedProvider).then((info) => {
       setProviderInfo(info);
     }).catch((err) => {
       console.error('Error loading provider info.');
       handleServerError(err);
     });
-  }, [connections, selectedConnection, setSelectedConnection, apiKey, selectedProvider]);
+  }, [apiKey, selectedProvider]);
 
   if (!provider && !providerFromProps) {
     throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');
+  }
+
+  // integration (and connection) was deleted, show success message with reinstall button
+  if (isIntegrationDeleted) {
+    return (
+      <SuccessTextBox
+        text="Integration successfully uninstalled."
+      >
+        <Button
+          type="button"
+          onClick={resetComponent}
+          style={{ width: '100%' }}
+        >Reinstall Integration
+        </Button>
+      </SuccessTextBox>
+    );
   }
 
   // a selected connection exists, render children

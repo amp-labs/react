@@ -2,12 +2,11 @@ import {
   createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
-import { api, Connection } from 'services/api';
+import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useInstallIntegrationProps } from './InstallIntegrationContextProvider';
 import { useProject } from './ProjectContextProvider';
@@ -53,7 +52,7 @@ export function ConnectionsProvider({
   groupRef,
   children,
 }: ConnectionsProviderProps) {
-  const apiKey = useApiKey();
+  const getAPI = useAPI();
   const { projectId, isLoading: isProjectLoading } = useProject();
 
   const [connections, setConnections] = useState<Connection[] | null>(null);
@@ -71,24 +70,17 @@ export function ConnectionsProvider({
   }
 
   useEffect(() => {
-    if (projectId && apiKey) {
-      api()
-        .connectionApi.listConnections(
-          { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-          {
-            headers: {
-              'X-Api-Key': apiKey ?? '',
-            },
-          },
-        )
+    async function fetchConnections() {
+      const api = await getAPI();
+      if (!projectId) {
+        throw new Error('Project ID not found. Component must be used within AmpersandProvider');
+      }
+      api.connectionApi.listConnections(
+        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+      )
         .then((_connections) => {
           setLoadingState(false);
           setConnections(_connections);
-          // If the provider has changed, reset the selected connection if it does
-          // not match the new provider
-          if (selectedConnection && selectedConnection.provider !== selectedProvider) {
-            setSelectedConnection(null);
-          }
         })
         .catch((err) => {
           console.error(
@@ -99,10 +91,40 @@ export function ConnectionsProvider({
           setError(ErrorBoundary.CONNECTION_LIST, projectId);
         });
     }
-    // Disable the exhaustive-deps rule because this useEffect should not trigger if
-    // selectedConnection is changed because we do not need to refetch the connections list.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, apiKey, groupRef, selectedProvider, setError]);
+
+    // Fetch connections if connection params change or if the integration was deleted
+    if (projectId) {
+      fetchConnections();
+    }
+  }, [projectId, groupRef, selectedProvider, setError, getAPI, isIntegrationDeleted]);
+
+  // connections manager useEffect
+  useEffect(() => {
+    if (selectedConnection) {
+      // If the provider has changed, reset the selected connection if it does
+      // not match the new provider
+      if (selectedConnection.provider !== selectedProvider) {
+        console.warn('Provider has changed, resetting selected connection');
+        setSelectedConnection(null);
+
+      // if selectedConnection is not in the connections list, reset it
+      } else if (connections?.length) {
+        const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
+        if (!connectionExists) {
+          console.warn('Selected connection not found in connections list, resetting selected connection');
+          setSelectedConnection(null);
+        }
+      }
+    }
+  }, [connections, selectedConnection, selectedProvider]);
+
+  useEffect(() => {
+    // If there is no selected connection, select the first connection in the list
+    if (!selectedConnection && connections && connections.length > 0) {
+      const [connection] = connections;
+      setSelectedConnection(connection);
+    }
+  }, [connections, selectedConnection]);
 
   const contextValue = useMemo(
     () => ({

@@ -101,9 +101,10 @@ export function InstallIntegration(
             consumerName={consumerName}
             groupRef={groupRef}
             groupName={groupName}
+            resetComponent={reset}
           >
             <HydratedRevisionProvider projectId={projectId}>
-              <ConditionalProxyLayout resetComponent={reset}>
+              <ConditionalProxyLayout>
                 <ConfigurationProvider>
                   <ObjectManagementNav>
                     <InstallationContent />

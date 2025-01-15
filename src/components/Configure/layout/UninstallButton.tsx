@@ -52,7 +52,7 @@ export function UninstallButton({
         console.warn('successfully uninstalled installation:', installation.id);
         onUninstallSuccess?.(installation?.id); // callback
         resetInstallations();
-        setIntegrationDeleted();
+        setIntegrationDeleted(); // set the ui terminal deleted state
       } catch (e) {
         console.error('Error uninstalling installation.');
         handleServerError(e);
