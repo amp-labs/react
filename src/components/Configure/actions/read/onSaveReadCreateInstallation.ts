@@ -52,7 +52,7 @@ const generateCreateReadConfigFromConfigureState = (
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
     configureState,
   );
-  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
+  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState, objectName);
 
   const obj = getObjectFromHydratedRevision(hydratedRevision, objectName);
   if (!obj) {
