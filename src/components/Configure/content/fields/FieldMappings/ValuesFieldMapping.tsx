@@ -21,8 +21,8 @@ export function ValuesFieldMapping(
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
-  const selectedRequiredMapFields = configureState?.read?.selectedFieldMappings;
-  const fieldValue = selectedRequiredMapFields?.[value.mappedValue];
+  const selectedValueMappings = configureState?.read?.selectedValueMappings;
+  const fieldValue = selectedValueMappings?.[value.mappedValue];
 
   useEffect(() => {
     setDisabled(false);

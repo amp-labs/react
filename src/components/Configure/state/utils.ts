@@ -205,6 +205,16 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
   return selectedRequiredMapFieldsSubmit;
 };
 
+/**
+ * generates selectedValuesMappings object for Config from configureState
+ * @param configureState
+ * @returns
+ */
+export const generateSelectedValuesMappingsFromConfigureState = (configureState: ConfigureState) => {
+  const { selectedValueMappings } = configureState?.read || {};
+  return selectedValueMappings;
+};
+
 // get configure state of single object
 export function getConfigureState(
   objectName: string,

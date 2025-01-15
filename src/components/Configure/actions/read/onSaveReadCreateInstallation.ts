@@ -7,6 +7,7 @@ import {
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
+  generateSelectedValuesMappingsFromConfigureState,
 } from '../../state/utils';
 import { ConfigureState } from '../../types';
 import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
@@ -51,6 +52,7 @@ const generateCreateReadConfigFromConfigureState = (
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
     configureState,
   );
+  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
 
   const obj = getObjectFromHydratedRevision(hydratedRevision, objectName);
   if (!obj) {
@@ -72,6 +74,7 @@ const generateCreateReadConfigFromConfigureState = (
             destination: obj.destination,
             selectedFields,
             selectedFieldMappings,
+            selectedValueMappings: selectedValuesMappings || {},
             backfill: obj.backfill,
           },
         },

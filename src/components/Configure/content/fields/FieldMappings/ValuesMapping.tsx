@@ -16,7 +16,7 @@ export function ValueMappings() {
   const { isError, removeError } = useErrorState();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name, fieldName } = e.target;
+    const { value, name, fieldName } = e.target as typeof e.target & { fieldName: string };
     if (!value) {
       // if place holder value is chosen, we don't change state
       return;
@@ -69,7 +69,7 @@ export function ValueMappings() {
                   allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
                   value={value}
                   onSelectChange={onSelectChange}
-                  field={field?.fieldName}
+                  fieldName={field?.fieldName}
                 />
               </FormControl>
             ))}
