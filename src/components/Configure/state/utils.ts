@@ -51,6 +51,7 @@ const generateConfigurationStateRead = (
   /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
+  const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
   const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
   const selectedFieldMappings = content?.read?.objects?.
@@ -61,6 +62,7 @@ const generateConfigurationStateRead = (
 
   return {
     allFields, // from hydrated revision
+    allFieldsMetadata, // from hydrated revision
     requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
