@@ -21,12 +21,14 @@ export function ValuesFieldMapping(
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
+  const selectedValueMappingForField = useMemo(
+    () => configureState?.read?.selectedValueMappings?.[fieldName] || {},
+    [configureState?.read?.selectedValueMappings, fieldName],
+  );
+
   const fieldValue = useMemo(
-    () => {
-      const selectedValueMappings = configureState?.read?.selectedValueMappings || {};
-      return selectedValueMappings?.[fieldName]?.[value.mappedValue];
-    },
-    [configureState?.read?.selectedValueMappings, fieldName, value.mappedValue],
+    () => selectedValueMappingForField?.[value.mappedValue],
+    [selectedValueMappingForField, value.mappedValue],
   );
 
   useEffect(() => {
@@ -45,6 +47,11 @@ export function ValuesFieldMapping(
       items={items}
       selectedValue={fieldValue || null}
       onSelectedItemChange={(item) => {
+        if (Object.values(selectedValueMappingForField).some((mapping) => mapping === item!.value)) {
+          console.error(`Each ${fieldName} must be mapped to a unique value`);
+          return;
+        }
+
         onSelectChange({
           target: {
             name: value.mappedValue,
@@ -55,7 +62,7 @@ export function ValuesFieldMapping(
       }}
       placeholder="Please select one"
     />
-  ), [items, fieldValue, value, fieldName, disabled, onSelectChange]);
+  ), [disabled, items, fieldValue, selectedValueMappingForField, onSelectChange, value.mappedValue, fieldName]);
 
   return (
     <div key={value.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
