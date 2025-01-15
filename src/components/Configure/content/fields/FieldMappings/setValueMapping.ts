@@ -1,32 +1,65 @@
-import { Draft, original } from 'immer';
+import { Draft } from 'immer';
+
+import { isFieldObjectEqual } from 'src/components/Configure/state/utils';
 
 import { ConfigureState } from '../../../types';
 
 function setValueMappingProducer(
   draft: Draft<ConfigureState>,
-  selectedObjectName:string,
+  selectedObjectName: string,
   sourceValue: string,
   targetValue: string,
   fieldName: string,
 ) {
-  const draftValueMappings = draft?.read?.selectedValueMappings || {};
-  const draftValueMappingForObject = draftValueMappings[selectedObjectName] || {};
-  draftValueMappingForObject[fieldName] = targetValue;
+  // Ensure structure exists
+  if (!draft.read) {
+    return;
+  }
+  if (!draft.read.selectedValueMappings) {
+    // eslint-disable-next-line no-param-reassign
+    draft.read.selectedValueMappings = {};
+  }
 
-  // eslint-disable-next-line no-console
-  console.log('DEBUG(3), changing value mapping', original(draft), sourceValue, targetValue, fieldName);
+  if (!draft.read.selectedValueMappings[selectedObjectName]) {
+    // eslint-disable-next-line no-param-reassign
+    draft.read.selectedValueMappings[selectedObjectName] = {};
+  }
+  if (!draft.read.selectedValueMappings[selectedObjectName][fieldName]) {
+    // eslint-disable-next-line no-param-reassign
+    draft.read.selectedValueMappings[selectedObjectName][fieldName] = {};
+  }
+
+  // Directly mutate the draft
+  // eslint-disable-next-line no-param-reassign
+  draft.read.selectedValueMappings[selectedObjectName][fieldName][sourceValue] = targetValue;
+
+  if (draft?.read && draft.read.selectedValueMappings) {
+    const savedFields = draft.read.savedConfig.selectedValueMappings;
+    // eslint-disable-next-line no-param-reassign
+    const updatedFields = draft.read.selectedValueMappings[selectedObjectName];
+    const isModified = !isFieldObjectEqual(savedFields, updatedFields);
+
+    // Update the flag directly in the draft
+    // eslint-disable-next-line no-param-reassign
+    draft.read.isValueMappingsModified = isModified;
+  }
 }
 
 export function setValueMapping(
   selectedObjectName: string,
-  setConfigureState: (objectName: string,
-    producer: (draft: Draft<ConfigureState>) => void) => void,
+  setConfigureState: (
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void
+  ) => void,
   sourceValue: string,
   targetValue: string,
   fieldName: string,
 ) {
-  setConfigureState(
+  setConfigureState(selectedObjectName, (draft) => setValueMappingProducer(
+    draft,
     selectedObjectName,
-    (draft) => setValueMappingProducer(draft, selectedObjectName, sourceValue, targetValue, fieldName),
-  );
+    sourceValue,
+    targetValue,
+    fieldName,
+  ));
 }

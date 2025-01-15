@@ -63,16 +63,18 @@ export function ValueMappings() {
               flexDirection: 'column',
             }}
           >
-            {field?.mappedValues?.map((value) => (
-              <FormControl id={value.mappedValue} key={value.mappedValue}>
+            <FormControl id={field.fieldName} key={field.fieldName}>
+              {field?.mappedValues?.map((value) => (
+
                 <ValuesFieldMapping
+                  key={value.mappedValue}
                   allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
                   value={value}
                   onSelectChange={onSelectChange}
                   fieldName={field?.fieldName}
                 />
-              </FormControl>
-            ))}
+              ))}
+            </FormControl>
           </div>
         </>
         )

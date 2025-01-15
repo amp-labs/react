@@ -111,6 +111,7 @@ export function ConfigurationProvider(
         if (readDraft) {
           readDraft.isOptionalFieldsModified = false;
           readDraft.isRequiredMapFieldsModified = false;
+          readDraft.isValueMappingsModified = false;
         }
       }),
     );

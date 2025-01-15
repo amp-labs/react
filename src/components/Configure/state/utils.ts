@@ -54,6 +54,7 @@ const generateConfigurationStateRead = (
   const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
   const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
+  const selectedValueMappings = content?.read?.objects?.[objectName]?.selectedValueMappings || {};
   const selectedFieldMappings = content?.read?.objects?.
     [objectName]?.selectedFieldMappings || {};
 
@@ -70,12 +71,14 @@ const generateConfigurationStateRead = (
     // selected state
     selectedOptionalFields: readSelectedFields,
     selectedFieldMappings,
-    selectedValueMappings: content?.read?.objects?.[objectName]?.selectedValueMappings || {},
+    selectedValueMappings,
     isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
+    isValueMappingsModified: false,
     savedConfig: {
       optionalFields: optionalFieldsSaved, // from config
       requiredMapFields: requiredMapFieldsSaved, // from config
+      selectedValueMappings,
     },
   };
 };
