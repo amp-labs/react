@@ -80,7 +80,7 @@ export function ValueMappings() {
             </>
           );
         }
-        console.error('invalid configuration for mapping values found or the number of values do not match: ', field);
+        console.error('invalid configuration for mapping values found:', field);
         return null;
       })}
     </>
