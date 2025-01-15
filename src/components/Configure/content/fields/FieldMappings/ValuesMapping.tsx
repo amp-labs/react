@@ -43,42 +43,46 @@ export function ValueMappings() {
 
   return valuesMappings?.length ? (
     <>
-      {valuesMappings.map((field) => (
+      {valuesMappings.map((field) => {
         // show the values mapping only for singleSelect and multiSelect type fields
         // show the values mapping only if the field has values array
         // And if they are of the same length as the mappedValues array
-        field.fieldName
-        && ['singleSelect', 'multiSelect'].includes(
-          configureState?.read?.allFieldsMetadata?.[field.fieldName]
-            ?.valueType,
-        ) && configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values
-        && field?.mappedValues?.length === configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values?.length
-        && (
-        <>
-          <FieldHeader string={`Map the values for ${field.fieldName}`} />
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              flexDirection: 'column',
-            }}
-          >
-            <FormControl id={field.fieldName} key={field.fieldName}>
-              {field?.mappedValues?.map((value) => (
+        if (field.fieldName
+          && ['singleSelect', 'multiSelect'].includes(
+            configureState?.read?.allFieldsMetadata?.[field.fieldName]
+              ?.valueType,
+          ) && configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values
+          && field?.mappedValues?.length === configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values?.length
+        ) {
+          return (
+            <>
+              <FieldHeader string={`Map the values for ${field.fieldName}`} />
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  flexDirection: 'column',
+                }}
+              >
+                <FormControl id={field.fieldName} key={field.fieldName}>
+                  {field?.mappedValues?.map((value) => (
 
-                <ValuesFieldMapping
-                  key={value.mappedValue}
-                  allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
-                  value={value}
-                  onSelectChange={onSelectChange}
-                  fieldName={field?.fieldName}
-                />
-              ))}
-            </FormControl>
-          </div>
-        </>
-        )
-      ))}
+                    <ValuesFieldMapping
+                      key={value.mappedValue}
+                      allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
+                      value={value}
+                      onSelectChange={onSelectChange}
+                      fieldName={field?.fieldName}
+                    />
+                  ))}
+                </FormControl>
+              </div>
+            </>
+          );
+        }
+        console.error('invalid configuration for mapping values found or the number of values do not match: ', field);
+        return null;
+      })}
     </>
   ) : null;
 }
