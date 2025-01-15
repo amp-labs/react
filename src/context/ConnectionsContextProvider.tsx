@@ -104,23 +104,27 @@ export function ConnectionsProvider({
       // If the provider has changed, reset the selected connection if it does
       // not match the new provider
       if (selectedConnection.provider !== selectedProvider) {
+        console.warn('Provider has changed, resetting selected connection');
         setSelectedConnection(null);
 
       // if selectedConnection is not in the connections list, reset it
-      } else if (connections) {
+      } else if (connections?.length) {
         const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
         if (!connectionExists) {
+          console.warn('Selected connection not found in connections list, resetting selected connection');
           setSelectedConnection(null);
         }
       }
     }
+  }, [connections, selectedConnection, selectedProvider]);
 
+  useEffect(() => {
     // If there is no selected connection, select the first connection in the list
     if (!selectedConnection && connections && connections.length > 0) {
       const [connection] = connections;
       setSelectedConnection(connection);
     }
-  }, [connections, selectedConnection, selectedProvider]);
+  }, [connections, selectedConnection]);
 
   const contextValue = useMemo(
     () => ({
