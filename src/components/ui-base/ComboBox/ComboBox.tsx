@@ -19,6 +19,7 @@ interface ComboBoxProps {
   onSelectedItemChange: (item: Option | null) => void;
   placeholder: string;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
 function getOptionsFilter(inputValue: string) {
@@ -40,6 +41,7 @@ export function ComboBox({
   // label,
   placeholder,
   disabled,
+  style,
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
   const inputRef = useRef<HTMLInputElement | null>(null); // Ref to the input element
@@ -89,7 +91,7 @@ export function ComboBox({
   const handleBlur = () => setInputValue(selectedValueLabel || '');
 
   return (
-    <div>
+    <div style={{ position: 'relative', ...style }}>
       <div className={styles.comboboxContainer}>
         {/* input  */}
         <div className={styles.inputContainer}>

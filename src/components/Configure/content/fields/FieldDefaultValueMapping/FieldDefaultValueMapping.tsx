@@ -1,6 +1,8 @@
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { FieldDefaultValueTable } from './FieldDefaultValueTable';
+
 export function FieldDefaultValueMapping() {
   const {
     configureState,
@@ -13,7 +15,7 @@ export function FieldDefaultValueMapping() {
       {writeObjects.map((field) => (
         <>
           <FieldHeader string={`Defaults for ${field.displayName} `} />
-          <div>new component</div>
+          <FieldDefaultValueTable objectName={field.objectName} />
         </>
       ))}
     </>
