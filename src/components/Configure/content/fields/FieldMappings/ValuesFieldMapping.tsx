@@ -22,14 +22,15 @@ export function ValuesFieldMapping(
   const [disabled, setDisabled] = useState(true);
 
   const selectedValueMappings = configureState?.read?.selectedValueMappings || {};
-  const fieldValue = selectedValueMappings?.[value.mappedValue];
+
+  const fieldValue = selectedValueMappings?.[fieldName]?.[value.mappedValue];
 
   useEffect(() => {
     setDisabled(false);
   }, [value, setConfigureState, selectedObjectName, fieldValue, configureState]);
 
   const items = useMemo(() => allValues.map((f) => ({
-    id: f.fieldName,
+    id: f.value,
     label: f.displayValue,
     value: f.value,
   })), [allValues]);
