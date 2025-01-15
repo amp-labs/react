@@ -100,18 +100,18 @@ export function ConnectionsProvider({
 
   // connections manager useEffect
   useEffect(() => {
-    // If the provider has changed, reset the selected connection if it does
-    // not match the new provider
-    if (selectedConnection && selectedConnection.provider !== selectedProvider) {
-      setSelectedConnection(null);
-    }
-
-    // if selectedConnection is not in the connections list, reset it
-    if (selectedConnection && connections) {
-      const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
-      if (!connectionExists) {
-        console.warn('resetting connection');
+    if (selectedConnection) {
+      // If the provider has changed, reset the selected connection if it does
+      // not match the new provider
+      if (selectedConnection.provider !== selectedProvider) {
         setSelectedConnection(null);
+
+      // if selectedConnection is not in the connections list, reset it
+      } else if (connections) {
+        const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
+        if (!connectionExists) {
+          setSelectedConnection(null);
+        }
       }
     }
 
