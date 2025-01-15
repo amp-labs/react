@@ -29,6 +29,10 @@ export type SelectMappingFields = {
   [key: string]: string | undefined,
 };
 
+export type SelectValueMappings = {
+  [key: string]: any | undefined,
+};
+
 export type ConfigureStateRead = {
   allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
   allFieldsMetadata: any, // needed for values mapping // TODO: better types.
@@ -38,6 +42,7 @@ export type ConfigureStateRead = {
   optionalMapFields: IntegrationFieldMapping[] | null,
   selectedOptionalFields: SelectOptionalFields | null,
   selectedFieldMappings: SelectMappingFields | null,
+  selectedValueMappings: SelectValueMappings | null,
   isOptionalFieldsModified: boolean, // checks if selected optional fields is modified
   isRequiredMapFieldsModified: boolean, // checks if required map fields is modified
   savedConfig: SavedConfigureState, // check when to know if config is saved / modified

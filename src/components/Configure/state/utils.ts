@@ -70,6 +70,7 @@ const generateConfigurationStateRead = (
     // selected state
     selectedOptionalFields: readSelectedFields,
     selectedFieldMappings,
+    selectedValueMappings: content?.read?.objects?.[objectName]?.selectedValueMappings || {},
     isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
     savedConfig: {
