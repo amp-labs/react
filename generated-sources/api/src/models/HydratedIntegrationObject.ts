@@ -109,7 +109,7 @@ export interface HydratedIntegrationObject {
      * @type {{ [key: string]: FieldMetadata; }}
      * @memberof HydratedIntegrationObject
      */
-    allFieldsMetadataMap?: { [key: string]: FieldMetadata; };
+    allFieldsMetadata?: { [key: string]: FieldMetadata; };
     /**
      * 
      * @type {Backfill}
@@ -151,7 +151,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
         'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
-        'allFieldsMetadataMap': !exists(json, 'allFieldsMetadataMap') ? undefined : (mapValues(json['allFieldsMetadataMap'], FieldMetadataFromJSON)),
+        'allFieldsMetadata': !exists(json, 'allFieldsMetadata') ? undefined : (mapValues(json['allFieldsMetadata'], FieldMetadataFromJSON)),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
@@ -175,7 +175,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
         'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
-        'allFieldsMetadataMap': value.allFieldsMetadataMap === undefined ? undefined : (mapValues(value.allFieldsMetadataMap, FieldMetadataToJSON)),
+        'allFieldsMetadata': value.allFieldsMetadata === undefined ? undefined : (mapValues(value.allFieldsMetadata, FieldMetadataToJSON)),
         'backfill': BackfillToJSON(value.backfill),
     };
 }

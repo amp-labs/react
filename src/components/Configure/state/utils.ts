@@ -51,7 +51,7 @@ const generateConfigurationStateRead = (
   /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
-  const allFieldsMetadata = object?.allFieldsMetadataMap || {};
+  const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
   const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
   const selectedValueMappings = content?.read?.objects?.[objectName]?.selectedValueMappings || {};

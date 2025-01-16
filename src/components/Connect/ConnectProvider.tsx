@@ -58,6 +58,7 @@ export function ConnectProvider({
     <div className={resetStyles.resetContainer} key={seed}>
       <ConnectionsProvider provider={provider} groupRef={groupRef}>
         <ProtectedConnectionLayout
+          resetComponent={reset}
           provider={provider}
           consumerRef={consumerRef}
           consumerName={consumerName}

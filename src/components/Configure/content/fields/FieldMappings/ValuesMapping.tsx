@@ -82,7 +82,7 @@ export function ValueMappings() {
             </>
           );
         }
-        console.error('invalid configuration for mapping values found:', field);
+        console.error('invalid configuration for mapping values found:', field, configureState?.read?.allFieldsMetadata);
         return null;
       })}
     </>
