@@ -1,8 +1,8 @@
 import { FieldMapping } from './FieldMapping';
 import { OptionalFieldMappings } from './OptionalFieldMappings';
 import { RequiredFieldMappings } from './RequiredFieldMappings';
-import { ValuesFieldMapping } from './ValuesFieldMapping';
+import { ValueMappingItem } from './ValueMappingItem';
 
 export {
-  FieldMapping, RequiredFieldMappings, OptionalFieldMappings, ValuesFieldMapping,
+  FieldMapping, RequiredFieldMappings, OptionalFieldMappings, ValueMappingItem,
 };

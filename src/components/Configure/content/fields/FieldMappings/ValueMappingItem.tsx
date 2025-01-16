@@ -4,19 +4,29 @@ import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
-interface ValuesFieldMappingProps {
-  value: any,
-  fieldName: any,
-  onSelectChange: (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => void,
-  allValues: any[],
+interface MappedValue {
+  mappedValue: string;
+  mappedDisplayValue: string;
 }
 
-export function ValuesFieldMapping(
+interface ValueOption {
+  value: string;
+  displayValue: string;
+}
+
+interface ValueMappingItemProps {
+  mappedValue: MappedValue;
+  fieldName: string;
+  onSelectChange: (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => void;
+  allValueOptions: ValueOption[];
+}
+
+export function ValueMappingItem(
   {
-    value, onSelectChange, fieldName, allValues,
-  }: ValuesFieldMappingProps,
+    mappedValue, onSelectChange, fieldName, allValueOptions,
+  }: ValueMappingItemProps,
 ) {
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
@@ -27,19 +37,19 @@ export function ValuesFieldMapping(
   );
 
   const fieldValue = useMemo(
-    () => selectedValueMappingForField?.[value.mappedValue],
-    [selectedValueMappingForField, value.mappedValue],
+    () => selectedValueMappingForField?.[mappedValue.mappedValue],
+    [selectedValueMappingForField, mappedValue.mappedValue],
   );
 
   useEffect(() => {
     setDisabled(false);
-  }, [value, setConfigureState, selectedObjectName, fieldValue, configureState]);
+  }, [mappedValue, setConfigureState, selectedObjectName, fieldValue, configureState]);
 
-  const items = useMemo(() => allValues.map((f) => ({
+  const items = useMemo(() => allValueOptions.map((f) => ({
     id: f.value,
     label: f.displayValue,
     value: f.value,
-  })), [allValues]);
+  })), [allValueOptions]);
 
   const SelectComponent = useMemo(() => (
     <ComboBox
@@ -54,7 +64,7 @@ export function ValuesFieldMapping(
 
         onSelectChange({
           target: {
-            name: value.mappedValue,
+            name: mappedValue.mappedValue,
             value: item?.value,
             fieldName,
           } as unknown as HTMLSelectElement,
@@ -62,15 +72,15 @@ export function ValuesFieldMapping(
       }}
       placeholder="Please select one"
     />
-  ), [disabled, items, fieldValue, selectedValueMappingForField, onSelectChange, value.mappedValue, fieldName]);
+  ), [disabled, items, fieldValue, selectedValueMappingForField, onSelectChange, mappedValue.mappedValue, fieldName]);
 
   return (
-    <div key={value.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
+    <div key={mappedValue.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
       <div style={{
         display: 'flex', flexDirection: 'row', gap: '.25rem', marginBottom: '.25rem',
       }}
       >
-        <span style={{ fontWeight: 500 }}>{value.mappedDisplayValue}</span>
+        <span style={{ fontWeight: 500 }}>{mappedValue.mappedDisplayValue}</span>
       </div>
       {SelectComponent}
     </div>

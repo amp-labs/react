@@ -8,7 +8,7 @@ import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
 import { setValueMapping } from './setValueMapping';
-import { ValuesFieldMapping } from './ValuesFieldMapping';
+import { ValueMappingItem } from './ValueMappingItem';
 
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
@@ -69,12 +69,12 @@ export function ValueMappings() {
                 <FormControl id={field.fieldName} key={field.fieldName}>
                   {field?.mappedValues?.map((value) => (
 
-                    <ValuesFieldMapping
+                    <ValueMappingItem
                       key={`${value.mappedValue}-${field.fieldName}`}
-                      allValues={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
-                      value={value}
+                      allValueOptions={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
+                      mappedValue={value}
                       onSelectChange={onSelectChange}
-                      fieldName={field?.fieldName}
+                      fieldName={field?.fieldName || ''}
                     />
                   ))}
                 </FormControl>
