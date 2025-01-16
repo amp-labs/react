@@ -1,4 +1,6 @@
-import { useCallback, useMemo } from 'react';
+import {
+  useCallback, useEffect, useMemo, useRef,
+} from 'react';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
@@ -7,7 +9,7 @@ import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContex
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
-import { setValueMapping } from './setValueMapping';
+import { setValueMapping, setValueMappingModified } from './setValueMapping';
 import { ValueMappingItem } from './ValueMappingItem';
 
 export function ValueMappings() {
@@ -47,6 +49,41 @@ export function ValueMappings() {
       removeError(ErrorBoundary.MAPPING, name);
     }
   }, [selectedObjectName, setConfigureState, isError, removeError, valuesMappings]);
+
+  const selectedMappings = useMemo(
+    () => configureState?.read?.selectedValueMappings,
+    [configureState?.read?.selectedValueMappings],
+  );
+
+  const isValueMappingsModified = useMemo(
+    () => configureState?.read?.isValueMappingsModified,
+    [configureState?.read?.isValueMappingsModified],
+  );
+
+  const hasSetModified = useRef(false);
+
+  useEffect(() => {
+    if (selectedObjectName && selectedMappings) {
+      // eslint-disable-next-line no-console
+      console.log('selectedMappings(2)', selectedMappings);
+      // assuming the selectedObject only has one field with mappedValues array
+      const valueMappingsForObject = fieldMapping?.[selectedObjectName].find((f) => f.fieldName)!;
+
+      const allValuesMapped = Object.keys(selectedMappings[Object.keys(selectedMappings)[0]] || {}).length
+        === Object.keys(valueMappingsForObject?.mappedValues || []).length;
+
+      if (allValuesMapped) {
+        // Only set modified flag if we haven't set it before and it's currently false
+        if (!isValueMappingsModified && !hasSetModified.current) {
+          setValueMappingModified(selectedObjectName, setConfigureState, true);
+          hasSetModified.current = true;
+        }
+      } else {
+        // Reset the ref if not all values are mapped
+        hasSetModified.current = false;
+      }
+    }
+  }, [selectedMappings, valuesMappings, selectedObjectName, setConfigureState, fieldMapping, isValueMappingsModified]);
 
   return valuesMappings?.length ? (
     <>
