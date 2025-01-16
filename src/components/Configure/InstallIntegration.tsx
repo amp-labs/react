@@ -26,7 +26,7 @@ export type FieldMappingWithMappedValues = IntegrationFieldMapping & {
    */
   fieldName?: string;
   /**
-   * The values to map from the source
+   * The app-specific values to map provider API values to
    */
   mappedValues?: MappedValue[];
 };
