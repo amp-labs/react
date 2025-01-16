@@ -9,7 +9,6 @@ export type MappingFields = {
   idDeleted: boolean
 };
 
-
 function setFieldMappingProducer(
   draft: Draft<ConfigureState>,
   fields: Array<MappingFields>,
@@ -23,8 +22,7 @@ function setFieldMappingProducer(
     } else {
       draftRequiredMapFields[field] = value;
     }
-  })
-
+  });
 
   if (draft?.read) {
     const savedFields = draft.read.savedConfig.requiredMapFields;

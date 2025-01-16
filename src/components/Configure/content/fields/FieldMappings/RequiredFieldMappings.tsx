@@ -11,6 +11,8 @@ import { FieldHeader } from '../FieldHeader';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
+const findDeprecatedKeys = (selectedKeys: string[], allowedKeys: string[]) => selectedKeys.filter((key) => !allowedKeys.includes(key));
+
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { fieldMapping } = useInstallIntegrationProps();
@@ -70,11 +72,9 @@ export function RequiredFieldMappings() {
       idDeleted: true,
     })));
 
-    return null
+    return null;
   }
 
-
-  console.log(integrationFieldMappings)
   return integrationFieldMappings?.length ? (
     <>
       <FieldHeader string="Map the following fields" />
@@ -96,9 +96,4 @@ export function RequiredFieldMappings() {
       </div>
     </>
   ) : null;
-}
-
-
-const findDeprecatedKeys = (selectedKeys: string[], allowedKeys: string[]) => {
-  return selectedKeys.filter((key) => !allowedKeys.includes(key));
 }
