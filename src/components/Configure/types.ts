@@ -1,22 +1,24 @@
 import {
+  BaseWriteConfigObject,
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
 } from 'services/api';
 
-export type SelectedNonConfigurableWriteFields = {
-  [key: string]: boolean,
+export type SelectedWriteObjects = {
+  [objectName: string]: BaseWriteConfigObject,
 };
 
 type SavedWriteConfigureState = {
-  selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields,
+  selectedWriteObjects: SelectedWriteObjects,
 };
 
 // write state slice
+// currently tracks all write objects insteaad of just a single objectname
 export type ConfigureStateWrite = {
   writeObjects: HydratedIntegrationWriteObject[] | null,
-  selectedNonConfigurableWriteFields: SelectedNonConfigurableWriteFields | null,
+  selectedWriteObjects: SelectedWriteObjects | null,
   isWriteModified: boolean,
   savedConfig: SavedWriteConfigureState, // check when to know if config is saved / modified
 };
@@ -58,7 +60,7 @@ type SavedConfigureState = {
 export type ConfigureState = {
   // read state slice
   read: ConfigureStateRead | null,
-  // separating write for possible state slice
+  // separating write for possible state slice in the future
   write: ConfigureStateWrite | null,
 };
 
