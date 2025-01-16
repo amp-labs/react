@@ -51,8 +51,10 @@ const generateConfigurationStateRead = (
   /// //////////////////////////////////////////////////////////////////////
 
   const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
+  const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
   const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
+  const selectedValueMappings = content?.read?.objects?.[objectName]?.selectedValueMappings || {};
   const selectedFieldMappings = content?.read?.objects?.
     [objectName]?.selectedFieldMappings || {};
 
@@ -61,6 +63,7 @@ const generateConfigurationStateRead = (
 
   return {
     allFields, // from hydrated revision
+    allFieldsMetadata, // from hydrated revision
     requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
@@ -68,11 +71,14 @@ const generateConfigurationStateRead = (
     // selected state
     selectedOptionalFields: readSelectedFields,
     selectedFieldMappings,
+    selectedValueMappings,
     isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
+    isValueMappingsModified: false,
     savedConfig: {
       optionalFields: optionalFieldsSaved, // from config
       requiredMapFields: requiredMapFieldsSaved, // from config
+      selectedValueMappings,
     },
   };
 };
@@ -200,6 +206,16 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
   }
 
   return selectedRequiredMapFieldsSubmit;
+};
+
+/**
+ * generates selectedValuesMappings object for Config from configureState
+ * @param configureState
+ * @returns
+ */
+export const generateSelectedValuesMappingsFromConfigureState = (configureState: ConfigureState) => {
+  const { selectedValueMappings } = configureState?.read || {};
+  return selectedValueMappings;
 };
 
 // get configure state of single object

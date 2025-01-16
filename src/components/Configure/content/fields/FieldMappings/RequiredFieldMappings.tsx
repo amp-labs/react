@@ -38,7 +38,9 @@ export function RequiredFieldMappings() {
 
     // 2. Extract dynamic field mappings for the selected object name from the fieldMapping object if it exists
     const dynamicFieldMappings = selectedObjectName && fieldMapping
-      ? Object.values(fieldMapping[selectedObjectName] || {}).flat()
+      ? Object.values(fieldMapping[selectedObjectName] || {})
+        .flat()
+        .filter((mapping) => !mapping.fieldName)
       : [];
 
     // 3. Combine dynamic field mappings with the required map fields from configureState

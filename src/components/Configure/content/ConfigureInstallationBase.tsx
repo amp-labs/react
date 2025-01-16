@@ -40,7 +40,7 @@ export function ConfigureInstallationBase(
 
   // has the form been modified?
   const isReadModified = configureState?.read?.isOptionalFieldsModified
-  || configureState?.read?.isRequiredMapFieldsModified;
+  || configureState?.read?.isRequiredMapFieldsModified || configureState?.read?.isValueMappingsModified;
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
 

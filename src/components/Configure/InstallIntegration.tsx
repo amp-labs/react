@@ -15,7 +15,25 @@ import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
 import { ComponentContainerError, ComponentContainerLoading } from './ComponentContainer';
 
-export type FieldMapping = { [key: string]: Array<IntegrationFieldMapping> };
+export interface MappedValue {
+  mappedValue: string;
+  mappedDisplayValue: string;
+}
+
+export type FieldMappingWithMappedValues = IntegrationFieldMapping & {
+  /**
+   * The name of the field to map from the source
+   */
+  fieldName?: string;
+  /**
+   * The app-specific values to map provider API values to
+   */
+  mappedValues?: MappedValue[];
+};
+
+export type FieldMapping = {
+  [key: string]: Array<FieldMappingWithMappedValues>
+};
 
 interface InstallIntegrationProps {
   /**

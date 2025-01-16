@@ -10,6 +10,7 @@ import {
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
+  generateSelectedValuesMappingsFromConfigureState,
 } from '../../state/utils';
 import { ConfigureState } from '../../types';
 import { updateInstallationAndSetState } from '../mutateAndSetState/updateInstallationAndSetState';
@@ -43,6 +44,7 @@ const generateUpdateReadConfigFromConfigureState = (
   const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
     configureState,
   );
+  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
 
   // config request object type needs to be fixed
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
@@ -56,6 +58,7 @@ const generateUpdateReadConfigFromConfigureState = (
             destination: hydratedObject?.destination || '',
             selectedFields,
             selectedFieldMappings,
+            selectedValueMappings: selectedValuesMappings || { },
             backfill,
           },
         },

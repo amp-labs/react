@@ -1,3 +1,4 @@
+import { ValueMappings } from './FieldMappings/ValuesMapping';
 import { OptionalFieldMappings, RequiredFieldMappings } from './FieldMappings';
 import { ReadObjectMapping } from './ObjectMapping';
 import { OptionalFields } from './OptionalFields';
@@ -9,6 +10,7 @@ export function ReadFields() {
       <ReadObjectMapping />
       <RequiredFields />
       <RequiredFieldMappings />
+      <ValueMappings />
       <OptionalFieldMappings />
       <OptionalFields />
     </>

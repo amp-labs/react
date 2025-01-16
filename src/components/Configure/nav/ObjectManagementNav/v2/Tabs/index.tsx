@@ -103,7 +103,8 @@ export function VerticalTabs({
             displayName={object.displayName}
             completed={object.completed}
             pending={objectConfigurationsState?.[object.name]?.read?.isOptionalFieldsModified
-              || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified || false}
+              || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified
+              || objectConfigurationsState?.[object.name]?.read?.isValueMappingsModified || false}
           />
         ))}
         {/* Other / Write Tab */}
