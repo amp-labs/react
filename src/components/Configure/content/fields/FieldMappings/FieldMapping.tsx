@@ -29,7 +29,11 @@ export function FieldMapping(
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
     if (!!field._default && !fieldValue && selectedObjectName && !!configureState) {
       // set field mapping default value if no value exists
-      setFieldMapping(selectedObjectName, setConfigureState, field.mapToName, field._default);
+      setFieldMapping(selectedObjectName, setConfigureState, [{
+        field: field.mapToName,
+        value: field._default,
+        idDeleted: false,
+      }]);
     }
     setDisabled(false);
   }, [field, setConfigureState, selectedObjectName, fieldValue, configureState]);

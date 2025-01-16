@@ -16,22 +16,6 @@ export function RequiredFieldMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    if (!value) {
-      // if place holder value is chosen, we don't change state
-      return;
-    }
-
-    if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, name, value);
-    }
-
-    if (isError(ErrorBoundary.MAPPING, name)) {
-      removeError(ErrorBoundary.MAPPING, name);
-    }
-  };
-
   const integrationFieldMappings = useMemo(() => {
     // 1. Extract required map fields from configureState
     const requiredFieldMappings = configureState?.read?.requiredMapFields || [];
@@ -53,6 +37,44 @@ export function RequiredFieldMappings() {
     return combinedFieldMappings;
   }, [configureState, fieldMapping, selectedObjectName]);
 
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    if (!value) {
+      // if place holder value is chosen, we don't change state
+      return;
+    }
+
+    if (selectedObjectName) {
+      setFieldMapping(selectedObjectName, setConfigureState, [{
+        field: name,
+        value,
+        idDeleted: false,
+      }]);
+    }
+
+    if (isError(ErrorBoundary.MAPPING, name)) {
+      removeError(ErrorBoundary.MAPPING, name);
+    }
+  };
+
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings || {};
+  const selectedKeys = Object.keys(selectedFieldMappings);
+  const allowedKeys = integrationFieldMappings.map((field) => field.mapToName);
+
+  const deprecatedKeys = findDeprecatedKeys(selectedKeys, allowedKeys);
+
+  if (!!selectedObjectName && deprecatedKeys.length) {
+    setFieldMapping(selectedObjectName, setConfigureState, deprecatedKeys.map((key) => ({
+      field: key,
+      value: '',
+      idDeleted: true,
+    })));
+
+    return null
+  }
+
+
+  console.log(integrationFieldMappings)
   return integrationFieldMappings?.length ? (
     <>
       <FieldHeader string="Map the following fields" />
@@ -74,4 +96,9 @@ export function RequiredFieldMappings() {
       </div>
     </>
   ) : null;
+}
+
+
+const findDeprecatedKeys = (selectedKeys: string[], allowedKeys: string[]) => {
+  return selectedKeys.filter((key) => !allowedKeys.includes(key));
 }

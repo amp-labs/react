@@ -21,7 +21,13 @@ export function OptionalFieldMappings() {
     }
 
     if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, name, value);
+      setFieldMapping(selectedObjectName, setConfigureState, [
+        {
+          field: name,
+          value,
+          idDeleted: false,
+        },
+      ]);
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {
