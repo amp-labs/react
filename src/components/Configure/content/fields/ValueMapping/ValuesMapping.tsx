@@ -7,9 +7,9 @@ import { FormControl } from 'src/components/form/FormControl';
 import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
-import { FieldHeader } from '../FieldHeader';
 
 import { setValueMapping, setValueMappingModified } from './setValueMapping';
+import { ValueHeader } from './ValueHeader';
 import { ValueMappingItem } from './ValueMappingItem';
 
 export function ValueMappings() {
@@ -41,14 +41,14 @@ export function ValueMappings() {
         name,
         value,
         fieldName,
-        valuesMappings.find((f) => f.fieldName === fieldName)!,
+
       );
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {
       removeError(ErrorBoundary.MAPPING, name);
     }
-  }, [selectedObjectName, setConfigureState, isError, removeError, valuesMappings]);
+  }, [selectedObjectName, setConfigureState, isError, removeError]);
 
   const selectedMappings = useMemo(
     () => configureState?.read?.selectedValueMappings,
@@ -64,8 +64,6 @@ export function ValueMappings() {
 
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
-      // eslint-disable-next-line no-console
-      console.log('selectedMappings(2)', selectedMappings);
       // assuming the selectedObject only has one field with mappedValues array
       const valueMappingsForObject = fieldMapping?.[selectedObjectName].find((f) => f.fieldName)!;
 
@@ -117,7 +115,7 @@ export function ValueMappings() {
 
         return (
           <>
-            <FieldHeader string={`Map the values for ${field.fieldName}`} />
+            <ValueHeader string="Map the values for " fieldName={field.fieldName} />
             <div
               style={{
                 display: 'flex',

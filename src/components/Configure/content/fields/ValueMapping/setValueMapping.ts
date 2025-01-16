@@ -1,7 +1,5 @@
 import { Draft } from 'immer';
 
-import { FieldMappingWithMappedValues } from 'src/components/Configure/InstallIntegration';
-
 import { ConfigureState } from '../../../types';
 
 function setValueMappingProducer(
@@ -10,7 +8,6 @@ function setValueMappingProducer(
   sourceValue: string,
   targetValue: string,
   fieldName: string,
-  field: FieldMappingWithMappedValues,
 ) {
   // Ensure structure exists
   if (!draft.read) {
@@ -40,7 +37,6 @@ export function setValueMapping(
   sourceValue: string,
   targetValue: string,
   fieldName: string,
-  field: FieldMappingWithMappedValues,
 ) {
   setConfigureState(selectedObjectName, (draft) => setValueMappingProducer(
     draft,
@@ -48,7 +44,6 @@ export function setValueMapping(
     sourceValue,
     targetValue,
     fieldName,
-    field,
   ));
 }
 
