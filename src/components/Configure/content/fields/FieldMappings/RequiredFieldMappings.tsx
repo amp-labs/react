@@ -18,6 +18,26 @@ export function RequiredFieldMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
   const { isError, removeError } = useErrorState();
 
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    if (!value) {
+      // if place holder value is chosen, we don't change state
+      return;
+    }
+
+    if (selectedObjectName) {
+      setFieldMapping(selectedObjectName, setConfigureState, [{
+        field: name,
+        value,
+        idDeleted: false,
+      }]);
+    }
+
+    if (isError(ErrorBoundary.MAPPING, name)) {
+      removeError(ErrorBoundary.MAPPING, name);
+    }
+  };
+
   const integrationFieldMappings = useMemo(() => {
     // 1. Extract required map fields from configureState
     const requiredFieldMappings = configureState?.read?.requiredMapFields || [];
@@ -38,26 +58,6 @@ export function RequiredFieldMappings() {
 
     return combinedFieldMappings;
   }, [configureState, fieldMapping, selectedObjectName]);
-
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    if (!value) {
-      // if place holder value is chosen, we don't change state
-      return;
-    }
-
-    if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, [{
-        field: name,
-        value,
-        idDeleted: false,
-      }]);
-    }
-
-    if (isError(ErrorBoundary.MAPPING, name)) {
-      removeError(ErrorBoundary.MAPPING, name);
-    }
-  };
 
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings || {};
   const selectedKeys = Object.keys(selectedFieldMappings);
