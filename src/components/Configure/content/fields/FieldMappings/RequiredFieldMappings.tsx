@@ -65,6 +65,7 @@ export function RequiredFieldMappings() {
   const outdatedKeys = findOutdatedKeys(selectedKeys, allowedKeys);
 
   if (!!selectedObjectName && outdatedKeys.length) {
+    // For old field mappings that have now been removed by the builder, unset the values for those keys.
     setFieldMapping(selectedObjectName, setConfigureState, outdatedKeys.map((key) => ({
       field: key,
       value: null,
