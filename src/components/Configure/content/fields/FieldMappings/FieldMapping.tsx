@@ -32,8 +32,7 @@ export function FieldMapping(
       setFieldMapping(selectedObjectName, setConfigureState, [{
         field: field.mapToName,
         value: field._default,
-        idDeleted: false,
-      }]);
+      }]);g
     }
     setDisabled(false);
   }, [field, setConfigureState, selectedObjectName, fieldValue, configureState]);

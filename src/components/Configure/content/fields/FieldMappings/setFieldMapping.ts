@@ -5,8 +5,7 @@ import { ConfigureState } from '../../../types';
 
 export type MappingFields = {
   field: string
-  value: string
-  idDeleted: boolean
+  value: string | null
 };
 
 function setFieldMappingProducer(
@@ -16,8 +15,8 @@ function setFieldMappingProducer(
   const draftRequiredMapFields = draft?.read?.selectedFieldMappings || {};
 
   fields.forEach((mapping) => {
-    const { field, value, idDeleted } = mapping;
-    if (idDeleted) {
+    const { field, value } = mapping;
+    if (value === null) {
       delete draftRequiredMapFields[field];
     } else {
       draftRequiredMapFields[field] = value;

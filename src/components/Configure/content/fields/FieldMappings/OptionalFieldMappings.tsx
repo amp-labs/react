@@ -25,7 +25,6 @@ export function OptionalFieldMappings() {
         {
           field: name,
           value,
-          idDeleted: false,
         },
       ]);
     }

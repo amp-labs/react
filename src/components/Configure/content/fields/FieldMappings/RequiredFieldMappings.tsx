@@ -11,7 +11,7 @@ import { FieldHeader } from '../FieldHeader';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
-const findDeprecatedKeys = (selectedKeys: string[], allowedKeys: string[]) => selectedKeys.filter((key) => !allowedKeys.includes(key));
+const findOutdatedKeys = (selectedKeys: string[], allowedKeys: string[]) => selectedKeys.filter((key) => !allowedKeys.includes(key));
 
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
@@ -29,7 +29,6 @@ export function RequiredFieldMappings() {
       setFieldMapping(selectedObjectName, setConfigureState, [{
         field: name,
         value,
-        idDeleted: false,
       }]);
     }
 
@@ -63,13 +62,12 @@ export function RequiredFieldMappings() {
   const selectedKeys = Object.keys(selectedFieldMappings);
   const allowedKeys = integrationFieldMappings.map((field) => field.mapToName);
 
-  const deprecatedKeys = findDeprecatedKeys(selectedKeys, allowedKeys);
+  const outdatedKeys = findOutdatedKeys(selectedKeys, allowedKeys);
 
-  if (!!selectedObjectName && deprecatedKeys.length) {
-    setFieldMapping(selectedObjectName, setConfigureState, deprecatedKeys.map((key) => ({
+  if (!!selectedObjectName && outdatedKeys.length) {
+    setFieldMapping(selectedObjectName, setConfigureState, outdatedKeys.map((key) => ({
       field: key,
-      value: '',
-      idDeleted: true,
+      value: null,
     })));
 
     return null;
