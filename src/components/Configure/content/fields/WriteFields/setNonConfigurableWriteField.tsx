@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-import { isFieldObjectEqual } from '../../../state/utils';
+import { isWriteObjectsEqual } from '../../../state/utils';
 import { ConfigureState } from '../../../types';
 
 function setNonConfigurableWriteFieldProducer(
@@ -8,29 +8,34 @@ function setNonConfigurableWriteFieldProducer(
   fieldKey: string,
   checked: boolean,
 ) {
-  if (draft?.write?.selectedNonConfigurableWriteFields === null) {
+  if (draft?.write?.selectedWriteObjects === null) {
     // immer syntax to set a value
     // eslint-disable-next-line no-param-reassign
-    draft.write.selectedNonConfigurableWriteFields = {};
+    draft.write.selectedWriteObjects = {};
   }
 
   if (draft?.write) {
-    const draftSelectedWriteFields = draft.write.selectedNonConfigurableWriteFields;
-    draftSelectedWriteFields[fieldKey] = checked;
+    const draftSelectedWriteFields = draft.write.selectedWriteObjects;
+    if (checked) {
+      draftSelectedWriteFields[fieldKey] = { objectName: fieldKey };
+    }
 
     if (!checked) {
       delete draftSelectedWriteFields[fieldKey];
     }
 
     // check is modified
-    if (draft?.write?.savedConfig?.selectedNonConfigurableWriteFields) {
-      const savedFields = draft.write.savedConfig.selectedNonConfigurableWriteFields;
-      const updatedFields = draftSelectedWriteFields;
-      const isModified = !isFieldObjectEqual(savedFields, updatedFields);
+    if (draft?.write?.savedConfig?.selectedWriteObjects) {
+      const savedWriteObjects = draft.write.savedConfig.selectedWriteObjects;
+      const updatedWriteObjects = draftSelectedWriteFields;
+      const isModified = !isWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
       // immer syntax to set a value
       // eslint-disable-next-line no-param-reassign
       draft.write.isWriteModified = isModified;
     }
+
+    // DEBUG: print out the draft
+    // console.debug(JSON.stringify(draft, null, 2));
   }
 }
 

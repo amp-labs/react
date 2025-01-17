@@ -13,7 +13,7 @@ import {
   ConfigureStateRead,
   ConfigureStateWrite,
   ObjectConfigurationsState,
-  SelectedNonConfigurableWriteFields,
+  SelectedWriteObjects,
   SelectMappingFields,
   SelectOptionalFields,
 } from '../types';
@@ -25,6 +25,14 @@ import {
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
 } from '../utils';
+
+// uses lodash deep equality check to compare two saved write objects (typed checked)
+export function isWriteObjectsEqual(
+  prevWriteObjects: SelectedWriteObjects,
+  currentWriteObjects: SelectedWriteObjects,
+): boolean {
+  return isEqual(prevWriteObjects, currentWriteObjects);
+}
 
 // uses lodash deep equality check to compare two saved fields objects
 export function isFieldObjectEqual(
@@ -92,18 +100,13 @@ const generateConfigurationStateWrite = (
   }
 
   const writeObjects = config?.content?.write?.objects;
-  const fields = Object.keys(writeObjects || {});
-
-  const selectedWriteFields: SelectedNonConfigurableWriteFields = {};
-  fields.forEach((field) => { selectedWriteFields[field] = true; });
-  const savedFields = { ...selectedWriteFields };
 
   return {
     writeObjects: writeAction?.objects || [],
-    selectedNonConfigurableWriteFields: selectedWriteFields,
+    selectedWriteObjects: writeObjects || {},
     isWriteModified: false,
     savedConfig: {
-      selectedNonConfigurableWriteFields: savedFields,
+      selectedWriteObjects: writeObjects || {},
     },
   };
 };

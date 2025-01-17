@@ -12,7 +12,7 @@ export function WriteFieldsV2() {
   const {
     appName, selectedObjectName, configureState, setConfigureState,
   } = useSelectedConfigureState();
-  const selectedWriteFields = configureState?.write?.selectedNonConfigurableWriteFields;
+  const selectedWriteFields = configureState?.write?.selectedWriteObjects;
   const writeObjects = configureState?.write?.writeObjects;
 
   const onCheckboxChange = (checked: boolean | 'indeterminate', name: string) => {

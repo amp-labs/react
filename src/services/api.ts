@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import {
   BackfillConfig,
+  BaseWriteConfigObject,
   Config,
   Configuration, Connection,
   CreateInstallationOperationRequest,
@@ -145,6 +146,7 @@ export function useAPI(): () => Promise<ApiService> {
    */
 export type {
   BackfillConfig,
+  BaseWriteConfigObject,
   Config,
   Connection,
   CreateInstallationOperationRequest,
