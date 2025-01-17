@@ -18,13 +18,10 @@ type NewDefaultValueUIProps = {
 };
 
 export function NewDefaultValueUI({ objectName, onAddDefaultValue }: NewDefaultValueUIProps) {
-  const { hydratedRevision, loading } = useHydratedRevision();
-
+  const { readAction, loading } = useHydratedRevision();
   const [selectedField, setSelectedField] = useState<FieldOption | null>(null);
   const [newDefaultValue, setNewDefaultValue] = useState<string>('');
 
-  // todo: move all hydrated revisions to an immutable providers
-  const readAction = hydratedRevision?.content?.read;
   const object = readAction && getObjectFromAction(readAction, objectName);
   const allFields = useMemo(
     () => object?.allFields as HydratedIntegrationFieldExistent[] || [],

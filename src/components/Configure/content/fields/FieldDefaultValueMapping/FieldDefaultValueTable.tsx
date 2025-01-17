@@ -1,5 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
+import { HydratedIntegrationFieldExistent, HydratedIntegrationRead } from 'services/api';
+import { useHydratedRevision } from 'src/components/Configure/state/HydratedRevisionContext';
+import { getObjectFromAction } from 'src/components/Configure/utils';
 import { Input } from 'src/components/form/Input';
 import { Button } from 'src/components/ui-base/Button';
 
@@ -18,9 +21,25 @@ type FieldDefaultValue = {
   defaultValue: string,
 };
 
+/**
+ *
+ * gets field displayName from hydrated revision, object.allFields
+ * fallback to field name if not found
+ *  */
+const getDisplayNameFromField = (
+  field: string,
+  objectName: string,
+  readAction: HydratedIntegrationRead,
+) => {
+  const object = readAction && getObjectFromAction(readAction, objectName);
+  const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
+  return allFields.find((_field) => _field.fieldName === field)?.displayName || field;
+};
+
 export function FieldDefaultValueTable({
   objectName,
 }: FieldDefaultValueRowProps) {
+  const { readAction } = useHydratedRevision();
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const selectedWriteObjects = configureState?.write?.selectedWriteObjects;
   const writeObject = selectedWriteObjects?.[objectName];
@@ -37,7 +56,8 @@ export function FieldDefaultValueTable({
   const defaultValueList: FieldDefaultValue[] = Object.keys(selectedValueDefaultsMap).map((field) => ({
     field,
     defaultValue: selectedValueDefaultsMap[field],
-    fieldDisplayName: field, // update to use field display name
+    // consider memoizing if performance is an issue.
+    fieldDisplayName: readAction ? getDisplayNameFromField(field, objectName, readAction) : field,
   }));
 
   return (
