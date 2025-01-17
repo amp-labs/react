@@ -27,7 +27,7 @@ import {
 } from '../utils';
 
 // uses lodash deep equality check to compare two saved write objects (typed checked)
-export function isWriteObjectsEqual(
+export function areWriteObjectsEqual(
   prevWriteObjects: SelectedWriteObjects,
   currentWriteObjects: SelectedWriteObjects,
 ): boolean {

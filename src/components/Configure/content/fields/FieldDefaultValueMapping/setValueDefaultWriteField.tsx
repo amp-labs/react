@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-import { isWriteObjectsEqual } from '../../../state/utils';
+import { areWriteObjectsEqual } from '../../../state/utils';
 import { ConfigureState } from '../../../types';
 
 function setValueDefaultWriteFieldProducer(
@@ -40,7 +40,7 @@ function setValueDefaultWriteFieldProducer(
     if (draft?.write?.savedConfig?.selectedWriteObjects) {
       const savedWriteObjects = draft.write.savedConfig.selectedWriteObjects;
       const updatedWriteObjects = draftSelectedWriteFields;
-      const isModified = !isWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
+      const isModified = !areWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
       // immer syntax to set a value
       // eslint-disable-next-line no-param-reassign
       draft.write.isWriteModified = isModified;
