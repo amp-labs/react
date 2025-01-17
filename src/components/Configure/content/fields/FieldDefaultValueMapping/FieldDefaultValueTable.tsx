@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Input } from 'src/components/form/Input';
 import { Button } from 'src/components/ui-base/Button';
 
+import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+
 import { NewDefaultValueUI } from './NewDefaultValueUI';
+import { setValueDefaultWriteField } from './setValueDefaultWriteField';
 
 interface FieldDefaultValueRowProps {
   objectName: string,
@@ -18,19 +21,24 @@ type FieldDefaultValue = {
 export function FieldDefaultValueTable({
   objectName,
 }: FieldDefaultValueRowProps) {
-  const [defaultValueList, setDefaultValueList] = useState<FieldDefaultValue[]>([]);
+  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const selectedWriteObjects = configureState?.write?.selectedWriteObjects;
+  const writeObject = selectedWriteObjects?.[objectName];
+  const selectedValueDefaultsMap = useMemo(() => writeObject?.selectedValueDefaults || {}, [writeObject]);
 
-  const onAddDefaultValue = (field: string, fieldDisplayName: string, defaultValue: string) => {
-    if (defaultValueList.some((df) => df.field === field)) {
-      console.error(`Field ${field} already has a default value. Delete to update field default value.`);
-      return;
-    }
-    setDefaultValueList((prev) => [...prev, { field, fieldDisplayName, defaultValue }]);
-  };
+  const onAddDefaultValue = useCallback((field: string, fieldDisplayName: string, defaultValue: string) => {
+    setValueDefaultWriteField(selectedObjectName || '', objectName, field, defaultValue, setConfigureState);
+  }, [objectName, selectedObjectName, setConfigureState]);
 
   const onDeleteDefaultValue = (field: string) => {
-    setDefaultValueList((prev) => prev.filter((df) => df.field !== field));
+    setValueDefaultWriteField(selectedObjectName || '', objectName, field, null, setConfigureState);
   };
+
+  const defaultValueList: FieldDefaultValue[] = Object.keys(selectedValueDefaultsMap).map((field) => ({
+    field,
+    defaultValue: selectedValueDefaultsMap[field],
+    fieldDisplayName: field, // update to use field display name
+  }));
 
   return (
     <>
