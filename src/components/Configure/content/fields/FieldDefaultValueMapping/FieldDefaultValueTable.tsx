@@ -46,12 +46,6 @@ export function FieldDefaultValueTable({
         paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '.5rem',
       }}
       >
-        {defaultValueList.length === 0 && <div>No default values</div>}
-        {defaultValueList?.length > 0 && (
-        <div style={{ height: '1rem' }}>
-          <div>Field Default Values</div>
-        </div>
-        )}
         {defaultValueList.map(({ field, fieldDisplayName, defaultValue: df }) => (
           <div
             key={`${field}-${df}`}
@@ -70,6 +64,13 @@ export function FieldDefaultValueTable({
         ))}
       </div>
       <NewDefaultValueUI objectName={objectName} onAddDefaultValue={onAddDefaultValue} />
+      <div style={{
+        textAlign: 'right',
+        padding: '.25rem 0',
+        color: 'var(--amp-colors-text-muted)',
+      }}
+      >click + to confirm
+      </div>
     </>
   );
 }

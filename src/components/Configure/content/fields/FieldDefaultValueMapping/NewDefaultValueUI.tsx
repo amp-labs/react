@@ -88,7 +88,7 @@ export function NewDefaultValueUI({ objectName, onAddDefaultValue }: NewDefaultV
         value={newDefaultValue}
         onChange={onDefaultValueChange}
         style={{ width: '10rem' }}
-        placeholder="default-value"
+        placeholder="default value"
       />
       <Button type="button" onClick={onAddDefaultValueHelper} variant="ghost">+</Button>
     </div>
