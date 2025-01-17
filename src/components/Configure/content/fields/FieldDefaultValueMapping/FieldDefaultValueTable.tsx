@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { HydratedIntegrationFieldExistent, HydratedIntegrationRead } from 'services/api';
+import { HydratedIntegrationRead } from 'services/api';
 import { useHydratedRevision } from 'src/components/Configure/state/HydratedRevisionContext';
 import { getObjectFromAction } from 'src/components/Configure/utils';
 import { Input } from 'src/components/form/Input';
@@ -32,8 +32,8 @@ const getDisplayNameFromField = (
   readAction: HydratedIntegrationRead,
 ) => {
   const object = readAction && getObjectFromAction(readAction, objectName);
-  const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
-  return allFields.find((_field) => _field.fieldName === field)?.displayName || field;
+  const allFieldsMetadata = object?.allFieldsMetadata;
+  return allFieldsMetadata?.[field]?.displayName || field;
 };
 
 export function FieldDefaultValueTable({
