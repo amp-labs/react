@@ -11,6 +11,8 @@ import { FieldHeader } from '../FieldHeader';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
+const findOutdatedKeys = (selectedKeys: string[], allowedKeys: string[]) => selectedKeys.filter((key) => !allowedKeys.includes(key));
+
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { fieldMapping } = useInstallIntegrationProps();
@@ -24,7 +26,10 @@ export function RequiredFieldMappings() {
     }
 
     if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, name, value);
+      setFieldMapping(selectedObjectName, setConfigureState, [{
+        field: name,
+        value,
+      }]);
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {
@@ -54,6 +59,22 @@ export function RequiredFieldMappings() {
 
     return combinedFieldMappings;
   }, [configureState, fieldMapping, selectedObjectName]);
+
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings || {};
+  const selectedKeys = Object.keys(selectedFieldMappings);
+  const allowedKeys = integrationFieldMappings.map((field) => field.mapToName);
+
+  const outdatedKeys = findOutdatedKeys(selectedKeys, allowedKeys);
+
+  if (!!selectedObjectName && outdatedKeys.length) {
+    // For old field mappings that have now been removed by the builder, unset the values for those keys.
+    setFieldMapping(selectedObjectName, setConfigureState, outdatedKeys.map((key) => ({
+      field: key,
+      value: null,
+    })));
+
+    return null;
+  }
 
   return integrationFieldMappings?.length ? (
     <>

@@ -3,13 +3,26 @@ import { Draft } from 'immer';
 import { isFieldObjectEqual } from '../../../state/utils';
 import { ConfigureState } from '../../../types';
 
+export type MappingFields = {
+  field: string
+  value: string | null
+};
+
 function setFieldMappingProducer(
   draft: Draft<ConfigureState>,
-  fieldKey: string,
-  newValue: string,
+  fields: Array<MappingFields>,
 ) {
   const draftRequiredMapFields = draft?.read?.selectedFieldMappings || {};
-  draftRequiredMapFields[fieldKey] = newValue;
+
+  fields.forEach((mapping) => {
+    const { field, value } = mapping;
+    if (value === null) {
+      delete draftRequiredMapFields[field];
+    } else {
+      draftRequiredMapFields[field] = value;
+    }
+  });
+
   if (draft?.read) {
     const savedFields = draft.read.savedConfig.requiredMapFields;
     const updatedFields = draftRequiredMapFields;
@@ -24,11 +37,10 @@ export function setFieldMapping(
   selectedObjectName: string,
   setConfigureState: (objectName: string,
     producer: (draft: Draft<ConfigureState>) => void) => void,
-  fieldKey: string,
-  newValue: string,
+  fields: Array<MappingFields>,
 ) {
   setConfigureState(
     selectedObjectName,
-    (draft) => setFieldMappingProducer(draft, fieldKey, newValue),
+    (draft) => setFieldMappingProducer(draft, fields),
   );
 }
