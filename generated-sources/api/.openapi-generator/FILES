@@ -145,6 +145,7 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
+src/models/ValueDefaults.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

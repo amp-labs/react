@@ -122,3 +122,4 @@ export * from './UpdateProjectRequest';
 export * from './UpdateProjectRequestProject';
 export * from './UpdateProviderAppRequest';
 export * from './UpdateProviderAppRequestProviderApp';
+export * from './ValueDefaults';
