@@ -8,7 +8,9 @@ import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
-import { api, HydratedIntegrationRead, HydratedRevision } from 'services/api';
+import {
+  api, HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision,
+} from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { ComponentContainerError } from '../ComponentContainer';
@@ -17,12 +19,14 @@ interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
   loading: boolean;
   readAction?: HydratedIntegrationRead;
+  writeObjects: HydratedIntegrationWriteObject[];
 }
 
 export const HydratedRevisionContext = createContext<HydratedRevisionContextValue>({
   hydratedRevision: null,
   loading: false,
   readAction: undefined,
+  writeObjects: [],
 });
 
 export const useHydratedRevision = () => {
@@ -101,6 +105,7 @@ export function HydratedRevisionProvider({
     hydratedRevision,
     loading,
     readAction: hydratedRevision?.content?.read,
+    writeObjects: hydratedRevision?.content?.write?.objects || [],
   }), [hydratedRevision, loading]);
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
