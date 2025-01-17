@@ -8,7 +8,7 @@ import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
-import { api, HydratedRevision } from 'services/api';
+import { api, HydratedIntegrationRead, HydratedRevision } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { ComponentContainerError } from '../ComponentContainer';
@@ -16,11 +16,13 @@ import { ComponentContainerError } from '../ComponentContainer';
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
   loading: boolean;
+  readAction?: HydratedIntegrationRead;
 }
 
 export const HydratedRevisionContext = createContext<HydratedRevisionContextValue>({
   hydratedRevision: null,
   loading: false,
+  readAction: undefined,
 });
 
 export const useHydratedRevision = () => {
@@ -98,6 +100,7 @@ export function HydratedRevisionProvider({
   const contextValue = useMemo(() => ({
     hydratedRevision,
     loading,
+    readAction: hydratedRevision?.content?.read,
   }), [hydratedRevision, loading]);
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
