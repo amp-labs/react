@@ -1,7 +1,5 @@
 import { Draft } from 'immer';
 
-import { isFieldObjectEqual } from 'src/components/Configure/state/utils';
-
 import { ConfigureState } from '../../../types';
 
 function setValueMappingProducer(
@@ -28,17 +26,6 @@ function setValueMappingProducer(
   // Directly mutate the draft
   // eslint-disable-next-line no-param-reassign
   draft.read.selectedValueMappings[fieldName][sourceValue] = targetValue;
-
-  if (draft?.read && draft.read.selectedValueMappings) {
-    const savedFields = draft.read.savedConfig.selectedValueMappings;
-    // eslint-disable-next-line no-param-reassign
-    const updatedFields = draft.read.selectedValueMappings;
-    const isModified = !isFieldObjectEqual(savedFields, updatedFields);
-
-    // Update the flag directly in the draft
-    // eslint-disable-next-line no-param-reassign
-    draft.read.isValueMappingsModified = isModified;
-  }
 }
 
 export function setValueMapping(
@@ -58,4 +45,20 @@ export function setValueMapping(
     targetValue,
     fieldName,
   ));
+}
+
+export function setValueMappingModified(
+  selectedObjectName: string,
+  setConfigureState: (
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void
+  ) => void,
+  isModified: boolean,
+) {
+  setConfigureState(selectedObjectName, (draft) => {
+    if (draft.read) {
+      // eslint-disable-next-line no-param-reassign
+      draft.read.isValueMappingsModified = isModified;
+    }
+  });
 }
