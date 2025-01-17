@@ -53,11 +53,15 @@ export function ValueMappingItem(
 
   const SelectComponent = useMemo(() => (
     <ComboBox
+      key={fieldValue}
       disabled={disabled}
       items={items}
       selectedValue={fieldValue || null}
       onSelectedItemChange={(item) => {
-        if (Object.values(selectedValueMappingForField).some((mapping) => mapping === item!.value)) {
+        if (!item) return;
+
+        if (Object.values(selectedValueMappingForField)
+          .some((mapping) => mapping === item.value && mapping !== fieldValue)) {
           console.error(`Each ${fieldName} must be mapped to a unique value`);
           return;
         }
@@ -65,14 +69,22 @@ export function ValueMappingItem(
         onSelectChange({
           target: {
             name: mappedValue.mappedValue,
-            value: item?.value,
+            value: item.value,
             fieldName,
           } as unknown as HTMLSelectElement,
         } as unknown as React.ChangeEvent<HTMLSelectElement>);
       }}
       placeholder="Please select one"
     />
-  ), [disabled, items, fieldValue, selectedValueMappingForField, onSelectChange, mappedValue.mappedValue, fieldName]);
+  ), [
+    disabled,
+    items,
+    fieldValue,
+    selectedValueMappingForField,
+    onSelectChange,
+    mappedValue.mappedValue,
+    fieldName,
+  ]);
 
   return (
     <div key={mappedValue.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
