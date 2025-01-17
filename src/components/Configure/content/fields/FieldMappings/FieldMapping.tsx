@@ -1,6 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'services/api';
+import { Button } from 'src/components/ui-base/Button';
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
 import { LabelTooltip } from 'src/components/ui-base/Tooltip';
 
@@ -57,8 +60,18 @@ export function FieldMapping(
         } as unknown as React.ChangeEvent<HTMLSelectElement>);
       }}
       placeholder="Please select one"
+      style={{ width: '100%' }}
     />
   );
+
+  const onClear = useCallback(() => {
+    if (selectedObjectName) {
+      setFieldMapping(selectedObjectName, setConfigureState, [{
+        field: field.mapToName,
+        value: null, // clear value; may reset to default
+      }]);
+    }
+  }, [field.mapToName, selectedObjectName, setConfigureState]);
 
   return (
     <div key={field.mapToName} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -71,7 +84,10 @@ export function FieldMapping(
           {field?.prompt && <LabelTooltip id={`tooltip-id-${field?.prompt}`} tooltipText={field?.prompt} />}
         </span>
       </div>
-      {SelectComponent}
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
+        {SelectComponent}
+        <Button type="button" variant="ghost" onClick={onClear}>clear</Button>
+      </div>
     </div>
   );
 }
