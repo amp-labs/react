@@ -64,13 +64,17 @@ export function ValueMappings() {
 
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
-      // assuming the selectedObject only has one field with mappedValues array
-      const valueMappingsForObject = fieldMapping?.[selectedObjectName].find((f) => f.fieldName)!;
+      // Find all fields that have mappedValues
+      const fieldsWithMappings = fieldMapping?.[selectedObjectName]
+        .filter((f) => f.fieldName && f.mappedValues!.length > 0) || [];
 
-      const allValuesMapped = Object.keys(selectedMappings[Object.keys(selectedMappings)[0]] || {}).length
-        === Object.keys(valueMappingsForObject?.mappedValues || []).length;
+      // Check if all values are mapped for all fields
+      const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
+        const mappingsForField = selectedMappings[field.fieldName!] || {};
+        return Object.keys(mappingsForField).length === Object.keys(field.mappedValues!).length;
+      });
 
-      if (allValuesMapped) {
+      if (allFieldsFullyMapped && fieldsWithMappings.length > 0) {
         // Only set modified flag if we haven't set it before and it's currently false
         if (!isValueMappingsModified && !hasSetModified.current) {
           setValueMappingModified(selectedObjectName, setConfigureState, true);
