@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ValueDefaults } from './ValueDefaults';
+import {
+    ValueDefaultsFromJSON,
+    ValueDefaultsFromJSONTyped,
+    ValueDefaultsToJSON,
+} from './ValueDefaults';
+
 /**
  * 
  * @export
@@ -31,6 +38,12 @@ export interface HydratedIntegrationWriteObject {
      * @memberof HydratedIntegrationWriteObject
      */
     displayName: string;
+    /**
+     * 
+     * @type {ValueDefaults}
+     * @memberof HydratedIntegrationWriteObject
+     */
+    valueDefaults?: ValueDefaults;
 }
 
 /**
@@ -56,6 +69,7 @@ export function HydratedIntegrationWriteObjectFromJSONTyped(json: any, ignoreDis
         
         'objectName': json['objectName'],
         'displayName': json['displayName'],
+        'valueDefaults': !exists(json, 'valueDefaults') ? undefined : ValueDefaultsFromJSON(json['valueDefaults']),
     };
 }
 
@@ -70,6 +84,7 @@ export function HydratedIntegrationWriteObjectToJSON(value?: HydratedIntegration
         
         'objectName': value.objectName,
         'displayName': value.displayName,
+        'valueDefaults': ValueDefaultsToJSON(value.valueDefaults),
     };
 }
 

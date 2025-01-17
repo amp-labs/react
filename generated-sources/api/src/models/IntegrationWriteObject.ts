@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ValueDefaults } from './ValueDefaults';
+import {
+    ValueDefaultsFromJSON,
+    ValueDefaultsFromJSONTyped,
+    ValueDefaultsToJSON,
+} from './ValueDefaults';
+
 /**
  * 
  * @export
@@ -31,6 +38,12 @@ export interface IntegrationWriteObject {
      * @memberof IntegrationWriteObject
      */
     inheritMapping?: boolean;
+    /**
+     * 
+     * @type {ValueDefaults}
+     * @memberof IntegrationWriteObject
+     */
+    valueDefaults?: ValueDefaults;
 }
 
 /**
@@ -55,6 +68,7 @@ export function IntegrationWriteObjectFromJSONTyped(json: any, ignoreDiscriminat
         
         'objectName': json['objectName'],
         'inheritMapping': !exists(json, 'inheritMapping') ? undefined : json['inheritMapping'],
+        'valueDefaults': !exists(json, 'valueDefaults') ? undefined : ValueDefaultsFromJSON(json['valueDefaults']),
     };
 }
 
@@ -69,6 +83,7 @@ export function IntegrationWriteObjectToJSON(value?: IntegrationWriteObject | nu
         
         'objectName': value.objectName,
         'inheritMapping': value.inheritMapping,
+        'valueDefaults': ValueDefaultsToJSON(value.valueDefaults),
     };
 }
 

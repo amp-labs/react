@@ -27,7 +27,7 @@ import {
  */
 export interface ObjectMetadata {
     /**
-     * Name of the object
+     * The provider name of the object
      * @type {string}
      * @memberof ObjectMetadata
      */
@@ -38,6 +38,12 @@ export interface ObjectMetadata {
      * @memberof ObjectMetadata
      */
     displayName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ObjectMetadata
+     */
+    mappedObjectName?: string;
     /**
      * Map of field metadata keyed by field name
      * @type {{ [key: string]: FieldMetadata; }}
@@ -69,6 +75,7 @@ export function ObjectMetadataFromJSONTyped(json: any, ignoreDiscriminator: bool
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'mappedObjectName': !exists(json, 'mappedObjectName') ? undefined : json['mappedObjectName'],
         'fields': (mapValues(json['fields'], FieldMetadataFromJSON)),
     };
 }
@@ -84,6 +91,7 @@ export function ObjectMetadataToJSON(value?: ObjectMetadata | null): any {
         
         'name': value.name,
         'displayName': value.displayName,
+        'mappedObjectName': value.mappedObjectName,
         'fields': (mapValues(value.fields, FieldMetadataToJSON)),
     };
 }
