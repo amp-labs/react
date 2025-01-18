@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useRef,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
@@ -11,6 +11,12 @@ import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { setValueMapping, setValueMappingModified } from './setValueMapping';
 import { ValueHeader } from './ValueHeader';
 import { ValueMappingItem } from './ValueMappingItem';
+
+interface ErrorState {
+  [fieldName: string]: {
+    [mappedValue: string]: string;
+  };
+}
 
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
@@ -68,6 +74,8 @@ export function ValueMappings() {
     [selectedObjectName, setConfigureState, isError, removeError],
   );
 
+  const [errors, setErrors] = useState<ErrorState>({});
+
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
@@ -108,7 +116,8 @@ export function ValueMappings() {
     <>
       {valuesMappings.map((field) => {
         if (!field.fieldName) {
-          console.error('fieldName is undefined', field);
+          const errorMsg = 'fieldName is undefined';
+          console.error(errorMsg, field);
           return null;
         }
 
@@ -117,7 +126,8 @@ export function ValueMappings() {
           configureState?.read?.allFieldsMetadata?.[field.fieldName]
             ?.valueType,
         )) {
-          console.error('fieldName is not a singleSelect or multiSelect', field);
+          const errorMsg = 'fieldName is not a singleSelect or multiSelect';
+          console.error(errorMsg, field);
           return null;
         }
 
@@ -127,19 +137,12 @@ export function ValueMappings() {
         }
         // show the values mapping only if the field has values array
         // And if they are of the same length as the mappedValues array
-        if (
-          !(
-            configureState?.read?.allFieldsMetadata?.[field.fieldName]
-              ?.values
-            && Object.keys(field?.mappedValues || []).length
-              === Object.keys(
-                configureState?.read?.allFieldsMetadata?.[field.fieldName]
-                  ?.values || [],
-              ).length
-          )
-        ) {
+        if (!(configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values
+          && Object.keys(field?.mappedValues || []).length
+          === Object.keys(configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values || []).length)) {
+          const errorMsg = 'field values and the values to be mapped are not of the same length';
           console.error(
-            'field values and the values to be mapped are not of the same length',
+            errorMsg,
             field,
             configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values,
           );
@@ -161,18 +164,23 @@ export function ValueMappings() {
             >
               <FormControl id={field.mapToName || field.fieldName} key={field.mapToName || field.fieldName}>
                 {field?.mappedValues?.map((value) => (
-
-                  <ValueMappingItem
-                    key={`${value.mappedValue}-${field.fieldName}`}
-                    allValueOptions={
-                      configureState?.read?.allFieldsMetadata?.[
-                        field.fieldName!
-                      ]?.values || []
-                    }
-                    mappedValue={value}
-                    onSelectChange={onSelectChange}
-                    fieldName={field?.fieldName || ''}
-                  />
+                  <>
+                    <ValueMappingItem
+                      key={`${value.mappedValue}-${field.fieldName}`}
+                      allValueOptions={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
+                      mappedValue={value}
+                      onSelectChange={onSelectChange}
+                      fieldName={field?.fieldName || ''}
+                      hasError={!!errors[field.fieldName!]?.[value.mappedValue]}
+                      setErrors={setErrors}
+                      errors={errors}
+                    />
+                    {errors[field.fieldName!]?.[value.mappedValue as string] && (
+                      <span key={value.mappedValue} style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>
+                        {errors[field.fieldName!][value.mappedValue]}
+                      </span>
+                    )}
+                  </>
                 ))}
               </FormControl>
             </div>

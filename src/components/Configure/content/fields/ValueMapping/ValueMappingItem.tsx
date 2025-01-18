@@ -1,4 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
+import { produce } from 'immer';
 
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
 
@@ -21,11 +24,15 @@ interface ValueMappingItemProps {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void;
   allValueOptions: ValueOption[];
+  hasError?: boolean;
+  setErrors: any;
+  errors: any;
 }
 
 export function ValueMappingItem(
   {
     mappedValue, onSelectChange, fieldName, allValueOptions,
+    hasError, setErrors, errors,
   }: ValueMappingItemProps,
 ) {
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
@@ -51,40 +58,65 @@ export function ValueMappingItem(
     value: f.value,
   })), [allValueOptions]);
 
+  const onValueChange = useCallback(
+    (item: { value: string } | null) => {
+      if (!item) return;
+
+      if (Object.values(selectedValueMappingForField)
+        .some((mapping) => mapping === item.value && mapping !== fieldValue)) {
+        const duplicateKeys = [
+          ...Object.entries(selectedValueMappingForField)
+            .filter(([_, mapping]) => mapping === item.value && mapping !== fieldValue)
+            .map(([key]) => key),
+          mappedValue.mappedValue,
+        ];
+
+        setErrors(produce((draft: any) => {
+          if (!draft[fieldName]) {
+          // eslint-disable-next-line no-param-reassign
+            draft[fieldName] = {};
+          }
+          duplicateKeys.forEach((key) => {
+          // eslint-disable-next-line no-param-reassign
+            draft[fieldName][key] = `Each ${fieldName} must be mapped to a unique value`;
+          });
+        }));
+        return;
+      }
+
+      if (errors[fieldName]) {
+      // Reset error when validation passes
+        setErrors(produce((draft: any) => {
+        // eslint-disable-next-line no-param-reassign
+          draft[fieldName] = {};
+        }));
+      }
+
+      onSelectChange({
+        target: {
+          name: mappedValue.mappedValue,
+          value: item.value,
+          fieldName,
+        } as unknown as HTMLSelectElement,
+      } as unknown as React.ChangeEvent<HTMLSelectElement>);
+    },
+    [onSelectChange, selectedValueMappingForField, fieldValue, fieldName, mappedValue.mappedValue, errors, setErrors],
+  );
+
   const SelectComponent = useMemo(() => (
     <ComboBox
       key={fieldValue}
       disabled={disabled}
       items={items}
       selectedValue={fieldValue || null}
-      onSelectedItemChange={(item) => {
-        if (!item) return;
-
-        if (Object.values(selectedValueMappingForField)
-          .some((mapping) => mapping === item.value && mapping !== fieldValue)) {
-          console.error(`Each ${fieldName} must be mapped to a unique value`);
-          return;
-        }
-
-        onSelectChange({
-          target: {
-            name: mappedValue.mappedValue,
-            value: item.value,
-            fieldName,
-          } as unknown as HTMLSelectElement,
-        } as unknown as React.ChangeEvent<HTMLSelectElement>);
-      }}
+      onSelectedItemChange={onValueChange}
       placeholder="Please select one"
+      style={{
+        border: hasError ? '2px solid red' : undefined,
+        borderRadius: '8px',
+      }}
     />
-  ), [
-    disabled,
-    items,
-    fieldValue,
-    selectedValueMappingForField,
-    onSelectChange,
-    mappedValue.mappedValue,
-    fieldName,
-  ]);
+  ), [fieldValue, disabled, items, onValueChange, hasError]);
 
   return (
     <div key={mappedValue.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
