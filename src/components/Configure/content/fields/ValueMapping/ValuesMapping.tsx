@@ -12,7 +12,6 @@ import { setValueMapping, setValueMappingModified } from './setValueMapping';
 import { ValueHeader } from './ValueHeader';
 import { ValueMappingItem } from './ValueMappingItem';
 
-// FIXME: issue with field mapping fields not displayed when value mapping is set.
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
@@ -28,6 +27,7 @@ export function ValueMappings() {
       ? Object.values(fieldMapping[selectedObjectName] || {})
         .flat()
         .filter((mapping) => mapping.mappedValues)
+        .map((mapping) => ({ ...mapping }))
       : [];
 
     // set the fieldName from the mapped field name if it is
