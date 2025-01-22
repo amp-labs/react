@@ -62,8 +62,11 @@ export function RequiredFieldMappings() {
 
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings || {};
   const selectedKeys = Object.keys(selectedFieldMappings);
-  const allowedKeys = integrationFieldMappings.map((field) => field.mapToName);
 
+  // Get allowed fields (not oudated) from required mappings, optional mappings, and dynamic mappings
+  const optionalFieldMappings = configureState?.read?.optionalMapFields || [];
+  const allMappings = integrationFieldMappings.concat(optionalFieldMappings);
+  const allowedKeys = allMappings.map((field) => field.mapToName);
   const outdatedKeys = findOutdatedKeys(selectedKeys, allowedKeys);
 
   if (!!selectedObjectName && outdatedKeys.length) {
