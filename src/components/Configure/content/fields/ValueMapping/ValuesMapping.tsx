@@ -17,10 +17,10 @@ export function ValueMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
 
-  const selectedFieldMappings = useMemo(
-    () => configureState?.read?.selectedFieldMappings,
-    [configureState?.read?.selectedFieldMappings],
-  );
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
+  const selectedMappings = configureState?.read?.selectedValueMappings;
+  const isValueMappingsModified = configureState?.read?.isValueMappingsModified;
+  const hasSetModified = useRef(false);
 
   const valuesMappings = useMemo(() => {
     const valuesMaps = selectedObjectName && fieldMapping
@@ -67,18 +67,6 @@ export function ValueMappings() {
     },
     [selectedObjectName, setConfigureState, isError, removeError],
   );
-
-  const selectedMappings = useMemo(
-    () => configureState?.read?.selectedValueMappings,
-    [configureState?.read?.selectedValueMappings],
-  );
-
-  const isValueMappingsModified = useMemo(
-    () => configureState?.read?.isValueMappingsModified,
-    [configureState?.read?.isValueMappingsModified],
-  );
-
-  const hasSetModified = useRef(false);
 
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
