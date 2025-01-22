@@ -25,8 +25,8 @@ export function FieldMapping(
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
-  const selectedRequiredMapFields = configureState?.read?.selectedFieldMappings;
-  const fieldValue = selectedRequiredMapFields?.[field.mapToName];
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
+  const fieldValue = selectedFieldMappings?.[field.mapToName];
 
   useEffect(() => {
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
