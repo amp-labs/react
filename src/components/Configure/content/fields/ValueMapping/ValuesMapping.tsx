@@ -12,43 +12,61 @@ import { setValueMapping, setValueMappingModified } from './setValueMapping';
 import { ValueHeader } from './ValueHeader';
 import { ValueMappingItem } from './ValueMappingItem';
 
+// FIXME: issue with field mapping fields not displayed when value mapping is set.
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
-  const {
-    selectedObjectName, configureState, setConfigureState,
-  } = useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
 
-  const valuesMappings = useMemo(() => (
-    selectedObjectName && fieldMapping
+  const selectedFieldMappings = useMemo(
+    () => configureState?.read?.selectedFieldMappings,
+    [configureState?.read?.selectedFieldMappings],
+  );
+
+  const valuesMappings = useMemo(() => {
+    const valuesMaps = selectedObjectName && fieldMapping
       ? Object.values(fieldMapping[selectedObjectName] || {})
         .flat()
-        .filter((mapping) => mapping.fieldName)
-      : []
-  ), [selectedObjectName, fieldMapping]);
+        .filter((mapping) => mapping.mappedValues)
+      : [];
 
-  const onSelectChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name, fieldName } = e.target as typeof e.target & { fieldName: string };
-    if (!value) {
-      // if place holder value is chosen, we don't change state
-      return;
+    // set the fieldName from the mapped field name if it is
+    // set by the user dynamically in FieldMapping
+    for (let i = 0; i < valuesMaps.length; i += 1) {
+      if (selectedFieldMappings?.[valuesMaps[i].mapToName]) {
+        valuesMaps[i].fieldName = selectedFieldMappings[valuesMaps[i].mapToName];
+      }
     }
 
-    if (selectedObjectName) {
-      setValueMapping(
-        selectedObjectName,
-        setConfigureState,
-        name,
-        value,
-        fieldName,
+    return valuesMaps;
+  }, [selectedObjectName, fieldMapping, selectedFieldMappings]);
 
-      );
-    }
+  const onSelectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const { value, name, fieldName } = e.target as typeof e.target & {
+        fieldName: string;
+      };
+      if (!value) {
+        // if place holder value is chosen, we don't change state
+        return;
+      }
 
-    if (isError(ErrorBoundary.MAPPING, name)) {
-      removeError(ErrorBoundary.MAPPING, name);
-    }
-  }, [selectedObjectName, setConfigureState, isError, removeError]);
+      if (selectedObjectName) {
+        setValueMapping(
+          selectedObjectName,
+          setConfigureState,
+          name,
+          value,
+          fieldName,
+        );
+      }
+
+      if (isError(ErrorBoundary.MAPPING, name)) {
+        removeError(ErrorBoundary.MAPPING, name);
+      }
+    },
+    [selectedObjectName, setConfigureState, isError, removeError],
+  );
 
   const selectedMappings = useMemo(
     () => configureState?.read?.selectedValueMappings,
@@ -65,13 +83,17 @@ export function ValueMappings() {
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
-      const fieldsWithMappings = fieldMapping?.[selectedObjectName]
-        .filter((f) => f.fieldName && f.mappedValues!.length > 0) || [];
+      const fieldsWithMappings = fieldMapping?.[selectedObjectName].filter(
+        (f) => f.fieldName && f.mappedValues!.length > 0,
+      ) || [];
 
       // Check if all values are mapped for all fields
       const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
         const mappingsForField = selectedMappings[field.fieldName!] || {};
-        return Object.keys(mappingsForField).length === Object.keys(field.mappedValues!).length;
+        return (
+          Object.keys(mappingsForField).length
+          === Object.keys(field.mappedValues!).length
+        );
       });
 
       if (allFieldsFullyMapped && fieldsWithMappings.length > 0) {
@@ -85,7 +107,14 @@ export function ValueMappings() {
         hasSetModified.current = false;
       }
     }
-  }, [selectedMappings, valuesMappings, selectedObjectName, setConfigureState, fieldMapping, isValueMappingsModified]);
+  }, [
+    selectedMappings,
+    valuesMappings,
+    selectedObjectName,
+    setConfigureState,
+    fieldMapping,
+    isValueMappingsModified,
+  ]);
 
   return valuesMappings?.length ? (
     <>
@@ -104,11 +133,23 @@ export function ValueMappings() {
           return null;
         }
 
+        if (!configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values) {
+          console.error('field has no values array', field);
+          return null;
+        }
         // show the values mapping only if the field has values array
         // And if they are of the same length as the mappedValues array
-        if (!(configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values
-          && Object.keys(field?.mappedValues || []).length
-          === Object.keys(configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values || []).length)) {
+        if (
+          !(
+            configureState?.read?.allFieldsMetadata?.[field.fieldName]
+              ?.values
+            && Object.keys(field?.mappedValues || []).length
+              === Object.keys(
+                configureState?.read?.allFieldsMetadata?.[field.fieldName]
+                  ?.values || [],
+              ).length
+          )
+        ) {
           console.error(
             'field values and the values to be mapped are not of the same length',
             field,
@@ -119,7 +160,10 @@ export function ValueMappings() {
 
         return (
           <>
-            <ValueHeader string="Map the values for " fieldName={field.fieldName} />
+            <ValueHeader
+              string="Map the values for "
+              fieldName={field.mapToName || field.fieldName}
+            />
             <div
               style={{
                 display: 'flex',
@@ -127,12 +171,16 @@ export function ValueMappings() {
                 flexDirection: 'column',
               }}
             >
-              <FormControl id={field.fieldName} key={field.fieldName}>
+              <FormControl id={field.mapToName || field.fieldName} key={field.mapToName || field.fieldName}>
                 {field?.mappedValues?.map((value) => (
 
                   <ValueMappingItem
                     key={`${value.mappedValue}-${field.fieldName}`}
-                    allValueOptions={configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || []}
+                    allValueOptions={
+                      configureState?.read?.allFieldsMetadata?.[
+                        field.fieldName!
+                      ]?.values || []
+                    }
                     mappedValue={value}
                     onSelectChange={onSelectChange}
                     fieldName={field?.fieldName || ''}
