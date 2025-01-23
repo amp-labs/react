@@ -6,6 +6,7 @@
  */
 
 import React, { createContext, useContext } from 'react';
+import { SWRDevTools } from 'swr-devtools';
 
 import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
@@ -44,15 +45,17 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   }
 
   return (
-    <ErrorStateProvider>
-      <ApiKeyProvider value={apiKey}>
-        <ProjectProvider projectIdOrName={projectIdOrName}>
-          <IntegrationListProvider projectIdOrName={projectIdOrName}>
-            {children}
-          </IntegrationListProvider>
-        </ProjectProvider>
-      </ApiKeyProvider>
-    </ErrorStateProvider>
+    <SWRDevTools>
+      <ErrorStateProvider>
+        <ApiKeyProvider value={apiKey}>
+          <ProjectProvider projectIdOrName={projectIdOrName}>
+            <IntegrationListProvider projectIdOrName={projectIdOrName}>
+              {children}
+            </IntegrationListProvider>
+          </ProjectProvider>
+        </ApiKeyProvider>
+      </ErrorStateProvider>
+    </SWRDevTools>
   );
 }
 
