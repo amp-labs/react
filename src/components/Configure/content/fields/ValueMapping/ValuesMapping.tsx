@@ -104,6 +104,8 @@ export function ValueMappings() {
     isValueMappingsModified,
   ]);
 
+  // eslint-disable-next-line no-console
+  console.log('valueMappings', valuesMappings);
   return valuesMappings?.length ? (
     <>
       {valuesMappings.map((field) => {
