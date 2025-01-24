@@ -6,6 +6,7 @@
  */
 
 import React, { createContext, useContext } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ApiKeyProvider } from '../ApiKeyContextProvider';
 import { ErrorStateProvider } from '../ErrorContextProvider';
@@ -29,6 +30,8 @@ interface AmpersandProviderProps {
   children: React.ReactNode
 }
 
+const queryClient = new QueryClient();
+
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const { options: { apiKey, projectId, project }, children } = props;
   const projectIdOrName = project || projectId;
@@ -44,15 +47,17 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
   }
 
   return (
-    <ErrorStateProvider>
-      <ApiKeyProvider value={apiKey}>
-        <ProjectProvider projectIdOrName={projectIdOrName}>
-          <IntegrationListProvider projectIdOrName={projectIdOrName}>
-            {children}
-          </IntegrationListProvider>
-        </ProjectProvider>
-      </ApiKeyProvider>
-    </ErrorStateProvider>
+    <QueryClientProvider client={queryClient}>
+      <ErrorStateProvider>
+        <ApiKeyProvider value={apiKey}>
+          <ProjectProvider projectIdOrName={projectIdOrName}>
+            <IntegrationListProvider projectIdOrName={projectIdOrName}>
+              {children}
+            </IntegrationListProvider>
+          </ProjectProvider>
+        </ApiKeyProvider>
+      </ErrorStateProvider>
+    </QueryClientProvider>
   );
 }
 

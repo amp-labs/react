@@ -1,13 +1,26 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { Project, useAPI } from 'services/api';
-import { handleServerError } from 'src/utils/handleServerError';
 
 import {
   ErrorBoundary, useErrorState,
 } from './ErrorContextProvider';
+
+// use react query hook
+const useProjectQuery = (projectIdOrName: string) => {
+  const getAPI = useAPI();
+
+  return useQuery({
+    queryKey: ['project', projectIdOrName],
+    queryFn: async () => {
+      const api = await getAPI();
+      return api.projectApi.getProject({ projectIdOrName });
+    },
+  });
+};
 
 interface ProjectContextValue {
   project: Project | null;
@@ -43,32 +56,17 @@ type ProjectProviderProps = {
 export function ProjectProvider(
   { projectIdOrName, children }: ProjectProviderProps,
 ) {
-  const getAPI = useAPI();
   const { setError } = useErrorState();
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { data: project, isLoading, isError } = useProjectQuery(projectIdOrName);
 
   useEffect(() => {
-    async function fetchData() {
-      const api = await getAPI();
-      api.projectApi.getProject({ projectIdOrName })
-        .then((_project) => {
-          setLoadingState(false);
-          setProject(_project);
-        }).catch((err) => {
-          console.error('Error loading Ampersand project.');
-          handleServerError(err);
-          setError(ErrorBoundary.PROJECT, projectIdOrName);
-          setLoadingState(false);
-        });
-    }
-    fetchData();
-  }, [projectIdOrName, setLoadingState, setError, getAPI]);
+    if (isError) setError(ErrorBoundary.PROJECT, projectIdOrName);
+  }, [isError, projectIdOrName, setError]);
 
   const contextValue = useMemo(() => ({
     projectId: project?.id || '',
     projectIdOrName,
-    project,
+    project: project || null,
     appName: project?.appName || '',
     isLoading,
   }), [projectIdOrName, project, isLoading]);
