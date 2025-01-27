@@ -58,11 +58,6 @@ export function UpdateInstallation(
     if (!configureState) { resetState(); }
   }, [configureState, resetState]);
 
-  // reset state when installation (i.e. config) is reloaded.
-  useEffect(() => {
-    if (installation) resetState();
-  }, [installation, resetState]);
-
   const hydratedObject = useMemo(() => {
     const hydrated = hydratedRevision?.content?.read?.objects?.find(
       (obj) => obj?.objectName === selectedObjectName,
