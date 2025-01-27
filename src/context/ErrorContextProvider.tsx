@@ -11,11 +11,12 @@ export enum ErrorBoundary {
   HYDRATED_REVISION = 'hydratedRevisionError',
   INSTALLATION_LIST = 'installationListError',
   INSTALLATION_MUTATION = 'installationMutationError',
+  VALUE_MAPPING = 'valueMappingError',
 }
 
 export type ErrorState = {
   [boundary in ErrorBoundary]: {
-    [key: string]: boolean | string;
+    [key: string]: boolean | string | string[];
   };
 };
 
@@ -23,8 +24,8 @@ export const ErrorContext = createContext<{
   errorState: ErrorState;
   setErrorState: React.Dispatch<React.SetStateAction<ErrorState>>;
   resetBoundary:(boundary: ErrorBoundary) => void;
-  setError: (boundary: ErrorBoundary, key: string, keyValue?: boolean | string) => void;
-  getError: (boundary: ErrorBoundary, key: string) => boolean | string;
+  setError: (boundary: ErrorBoundary, key: string, keyValue?: boolean | string | string[]) => void;
+  getError: (boundary: ErrorBoundary, key: string) => boolean | string | string[];
   isError: (boundary: ErrorBoundary, key: string) => boolean;
   removeError: (boundary: ErrorBoundary, key: string) => void;
   setErrors: (boundary: ErrorBoundary, keys: string[]) => void;
@@ -60,7 +61,7 @@ export function ErrorStateProvider(
   const setError = useCallback((
     boundary: ErrorBoundary,
     key: string,
-    keyValue: boolean | string = true,
+    keyValue: boolean | string | string[] = true,
   ) => {
     setErrorState((prevState) => {
       const newErrorState = {
@@ -80,7 +81,7 @@ export function ErrorStateProvider(
   const getError = useCallback((
     boundary: ErrorBoundary,
     key: string,
-  ): boolean | string => errorState[boundary]?.[key], [errorState]);
+  ): boolean | string | string[] => errorState[boundary]?.[key], [errorState]);
 
   const removeError = useCallback((
     boundary: ErrorBoundary,

@@ -1,9 +1,9 @@
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
-import { produce } from 'immer';
 
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
+import { ErrorBoundary, useErrorState } from 'src/context/ErrorContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 
@@ -20,23 +20,24 @@ interface ValueOption {
 interface ValueMappingItemProps {
   mappedValue: MappedValue;
   fieldName: string;
-  onSelectChange: (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => void;
+  onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   allValueOptions: ValueOption[];
   hasError?: boolean;
-  setErrors: any;
-  errors: any;
 }
 
-export function ValueMappingItem(
-  {
-    mappedValue, onSelectChange, fieldName, allValueOptions,
-    hasError, setErrors, errors,
-  }: ValueMappingItemProps,
-) {
+export function ValueMappingItem({
+  mappedValue,
+  onSelectChange,
+  fieldName,
+  allValueOptions,
+  hasError,
+}: ValueMappingItemProps) {
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
+
+  const {
+    getError, setError, resetBoundary,
+  } = useErrorState();
 
   const selectedValueMappingForField = useMemo(
     () => configureState?.read?.selectedValueMappings?.[fieldName] || {},
@@ -50,46 +51,48 @@ export function ValueMappingItem(
 
   useEffect(() => {
     setDisabled(false);
-  }, [mappedValue, setConfigureState, selectedObjectName, fieldValue, configureState]);
+  }, [
+    mappedValue,
+    setConfigureState,
+    selectedObjectName,
+    fieldValue,
+    configureState,
+  ]);
 
-  const items = useMemo(() => allValueOptions.map((f) => ({
-    id: f.value,
-    label: f.displayValue,
-    value: f.value,
-  })), [allValueOptions]);
+  const items = useMemo(
+    () => allValueOptions.map((f) => ({
+      id: f.value,
+      label: f.displayValue,
+      value: f.value,
+    })),
+    [allValueOptions],
+  );
 
   const onValueChange = useCallback(
     (item: { value: string } | null) => {
       if (!item) return;
 
-      if (Object.values(selectedValueMappingForField)
-        .some((mapping) => mapping === item.value && mapping !== fieldValue)) {
+      if (
+        Object.values(selectedValueMappingForField).some(
+          (mapping) => mapping === item.value && mapping !== fieldValue,
+        )
+      ) {
         const duplicateKeys = [
           ...Object.entries(selectedValueMappingForField)
-            .filter(([_, mapping]) => mapping === item.value && mapping !== fieldValue)
+            .filter(
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              ([_, mapping]) => mapping === item.value && mapping !== fieldValue,
+            )
             .map(([key]) => key),
           mappedValue.mappedValue,
         ];
 
-        setErrors(produce((draft: any) => {
-          if (!draft[fieldName]) {
-          // eslint-disable-next-line no-param-reassign
-            draft[fieldName] = {};
-          }
-          duplicateKeys.forEach((key) => {
-          // eslint-disable-next-line no-param-reassign
-            draft[fieldName][key] = `Each ${fieldName} must be mapped to a unique value`;
-          });
-        }));
+        setError(ErrorBoundary.VALUE_MAPPING, fieldName, duplicateKeys);
         return;
       }
 
-      if (errors[fieldName]) {
-      // Reset error when validation passes
-        setErrors(produce((draft: any) => {
-        // eslint-disable-next-line no-param-reassign
-          draft[fieldName] = {};
-        }));
+      if (getError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
+        resetBoundary(ErrorBoundary.VALUE_MAPPING);
       }
 
       onSelectChange({
@@ -100,31 +103,56 @@ export function ValueMappingItem(
         } as unknown as HTMLSelectElement,
       } as unknown as React.ChangeEvent<HTMLSelectElement>);
     },
-    [onSelectChange, selectedValueMappingForField, fieldValue, fieldName, mappedValue.mappedValue, errors, setErrors],
+    [
+      onSelectChange,
+      selectedValueMappingForField,
+      fieldValue,
+      fieldName,
+      mappedValue.mappedValue,
+      resetBoundary,
+      setError,
+      getError,
+    ],
   );
 
-  const SelectComponent = useMemo(() => (
-    <ComboBox
-      key={fieldValue}
-      disabled={disabled}
-      items={items}
-      selectedValue={fieldValue || null}
-      onSelectedItemChange={onValueChange}
-      placeholder="Please select one"
-      style={{
-        border: hasError ? '2px solid red' : undefined,
-        borderRadius: '8px',
-      }}
-    />
-  ), [fieldValue, disabled, items, onValueChange, hasError]);
+  const SelectComponent = useMemo(
+    () => (
+      <ComboBox
+        key={fieldValue}
+        disabled={disabled}
+        items={items}
+        selectedValue={fieldValue || null}
+        onSelectedItemChange={onValueChange}
+        placeholder="Please select one"
+        style={{
+          border: hasError ? '2px solid red' : undefined,
+          borderRadius: '8px',
+        }}
+      />
+    ),
+    [fieldValue, disabled, items, onValueChange, hasError],
+  );
 
   return (
-    <div key={mappedValue.mappedValue} style={{ display: 'flex', flexDirection: 'column', marginBottom: '.25rem' }}>
-      <div style={{
-        display: 'flex', flexDirection: 'row', gap: '.25rem', marginBottom: '.25rem',
+    <div
+      key={mappedValue.mappedValue}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: '.25rem',
       }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '.25rem',
+          marginBottom: '.25rem',
+        }}
       >
-        <span style={{ fontWeight: 500 }}>{mappedValue.mappedDisplayValue}</span>
+        <span style={{ fontWeight: 500 }}>
+          {mappedValue.mappedDisplayValue}
+        </span>
       </div>
       {SelectComponent}
     </div>
