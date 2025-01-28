@@ -3,5 +3,7 @@ import { OptionalFieldMappings } from './OptionalFieldMappings';
 import { RequiredFieldMappings } from './RequiredFieldMappings';
 
 export {
-  FieldMapping, RequiredFieldMappings, OptionalFieldMappings,
+  FieldMapping,
+  RequiredFieldMappings,
+  OptionalFieldMappings,
 };

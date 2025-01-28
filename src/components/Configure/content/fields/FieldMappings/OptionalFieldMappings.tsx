@@ -3,18 +3,18 @@ import { useMemo } from 'react';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
 import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
-import { IntegrationFieldMapping } from 'src/services/api';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { DynamicFieldMappings } from './DynamicFieldMappings';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function OptionalFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
-
+  const allFields = configureState?.read?.allFields || [];
   const { fieldMapping } = useInstallIntegrationProps();
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -38,41 +38,52 @@ export function OptionalFieldMappings() {
     }
   };
 
+  const dynamicFieldMappings = useMemo(() => {
+    if (!selectedObjectName || !fieldMapping) return [];
+
+    return Object.values(fieldMapping[selectedObjectName] || {})
+      .flat()
+      .filter((mapping) => !mapping.fieldName);
+  }, [fieldMapping, selectedObjectName]);
+
   const integrationFieldMappings = useMemo(() => {
     const optionalFieldMappings = configureState?.read?.optionalMapFields || [];
-    // 2. Extract dynamic field mappings for the selected object name from the fieldMapping object if it exists
-    const dynamicFieldMappings = selectedObjectName && fieldMapping
-      ? Object.values(fieldMapping[selectedObjectName] || {})
-        .flat()
-        .filter((mapping) => !mapping.fieldName)
-      : [];
 
-    // 3. Combine dynamic field mappings with the optional map fields from configureState
-    const combinedFieldMappings = optionalFieldMappings
-      .concat(dynamicFieldMappings)
-      // 4. Remove duplicates based on mapToName and keep the latest item
-      .reduce((acc, item) => {
-        const existingItem = acc.find((i) => i.mapToName === item.mapToName);
-        if (existingItem) return acc.map((i) => (i.mapToName === item.mapToName ? item : i));
-        return acc.concat(item);
-      }, new Array<IntegrationFieldMapping>());
+    /**
+     * Incase there's an overlap of field mappings for a field (say pronoun in contacts object)
+     * in static as well as dynamic,
+     * We'd use the fieldMapping configuration from the dynamic fields as that would take precedence.
+     * So we filter out any optionalFieldMappings that exist in dynamicFieldMappings
+     */
+    const combinedFieldMappings = optionalFieldMappings.filter(
+      (optionalField) => !dynamicFieldMappings.some(
+        (dynamicField) => dynamicField.mapToName === optionalField.mapToName,
+      ),
+    );
 
     return combinedFieldMappings;
-  }, [configureState, fieldMapping, selectedObjectName]);
+  }, [configureState, dynamicFieldMappings]);
 
-  return integrationFieldMappings?.length ? (
+  return (integrationFieldMappings.length || dynamicFieldMappings.length) ? (
     <>
       <FieldHeader string="Map the following optional fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-        {integrationFieldMappings.map((field) => (
+        {integrationFieldMappings?.map((field) => (
           <FormControl id={field.mapToName} key={field.mapToName}>
             <FieldMapping
-              allFields={configureState?.read?.allFields || []}
+              allFields={allFields}
               field={field}
               onSelectChange={onSelectChange}
             />
           </FormControl>
         ))}
+        {dynamicFieldMappings?.length && (
+          <DynamicFieldMappings
+            dynamicFieldMappings={dynamicFieldMappings}
+            onSelectChange={onSelectChange}
+            allFields={allFields}
+          />
+        )}
       </div>
     </>
   ) : null;
