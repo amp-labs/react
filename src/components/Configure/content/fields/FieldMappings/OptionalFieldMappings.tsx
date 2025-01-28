@@ -24,8 +24,6 @@ export function OptionalFieldMappings() {
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log('selectedObjectName', selectedObjectName, name, value);
     if (selectedObjectName) {
       setFieldMapping(selectedObjectName, setConfigureState, [
         {
