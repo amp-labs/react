@@ -95,7 +95,7 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
         }
 
         const response = await this.request({
-            path: `/v1/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
