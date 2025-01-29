@@ -72,11 +72,14 @@ export function ValueMappingItem({
     (item: { value: string } | null) => {
       if (!item) return;
 
+      // check if the value is already mapped to another field
       if (
         Object.values(selectedValueMappingForField).some(
           (mapping) => mapping === item.value && mapping !== fieldValue,
         )
       ) {
+        // Find all the fields that have the same value that need to shown as
+        // error'ed out fields
         const duplicateKeys = [
           ...Object.entries(selectedValueMappingForField)
             .filter(
@@ -87,11 +90,14 @@ export function ValueMappingItem({
           mappedValue.mappedValue,
         ];
 
+        // Set error for all the fields that have the same value
         setError(ErrorBoundary.VALUE_MAPPING, fieldName, duplicateKeys);
         return;
       }
 
       if (getError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
+        // if you're here in the code, it means that the value is not already mapped to another field
+        // so we can remove the error for all the fields that have the same value
         resetBoundary(ErrorBoundary.VALUE_MAPPING);
       }
 
