@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { AMP_SERVER, api, Connection } from 'services/api';
 
@@ -64,17 +65,22 @@ export function useReceiveMessageEventHandler(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
   onError?: (err: string | null) => void,
 ) {
+  const queryClient = useQueryClient();
+
   return useCallback((event: MessageEvent) => {
     // Ignore messages from unexpected origins
     if (event.origin !== AMP_SERVER) {
       return;
     }
 
+    console.log('Received message from OAuth window: ', { event });
+
     // success case
     if (event.data.eventType === SUCCESS_EVENT) {
       const connection = event.data.data?.connection; // connection id
       if (connection) {
         setConnectionId(connection);
+        queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
         // do not close the window if connection is successful yet
       } else {
         console.error('Connection ID not found in event data: ', { event });
@@ -89,5 +95,5 @@ export function useReceiveMessageEventHandler(
       onError?.(event?.data?.message ?? 'OAuth failed. Please try again.');
       // do not close the window if error occurs
     }
-  }, [onError, setConnectionId]);
+  }, [onError, queryClient, setConnectionId]);
 }

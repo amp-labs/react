@@ -1,6 +1,7 @@
 import {
-  createContext, useCallback, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
@@ -13,7 +14,6 @@ import { useProject } from './ProjectContextProvider';
 interface ConnectionsContextValue {
   connections: Connection[] | null;
   selectedConnection: Connection | null;
-  setConnections: React.Dispatch<React.SetStateAction<Connection[] | null>>;
   setSelectedConnection: React.Dispatch<
   React.SetStateAction<Connection | null>
   >;
@@ -24,7 +24,6 @@ interface ConnectionsContextValue {
 export const ConnectionsContext = createContext<ConnectionsContextValue>({
   connections: null,
   selectedConnection: null,
-  setConnections: () => {},
   setSelectedConnection: () => {},
   isIntegrationDeleted: false,
   setIntegrationDeleted: () => {},
@@ -40,6 +39,23 @@ export const useConnections = (): ConnectionsContextValue => {
   return context;
 };
 
+const useConnectionsQuery = (projectId: string, groupRef: string, provider?: string) => {
+  const getAPI = useAPI();
+
+  return useQuery({
+    queryKey: ['amp', 'connections', projectId, groupRef, provider],
+    queryFn: async () => {
+      if (!projectId) throw new Error('Project ID not found.');
+
+      const api = await getAPI();
+      return api.connectionApi.listConnections(
+        { projectIdOrName: projectId, groupRef, provider },
+      );
+    },
+    enabled: !!projectId && !!groupRef,
+  });
+};
+
 type ConnectionsProviderProps = {
   provider?: string;
   groupRef: string;
@@ -51,13 +67,18 @@ export function ConnectionsProvider({
   groupRef,
   children,
 }: ConnectionsProviderProps) {
-  const getAPI = useAPI();
+  const { setError, isError } = useErrorState();
   const { projectId, isLoading: isProjectLoading } = useProject();
 
-  const [connections, setConnections] = useState<Connection[] | null>(null);
+  const {
+    data: connections,
+    isLoading,
+    isError: isConnectionsError,
+    error: connectionsErrorData,
+  } = useConnectionsQuery(projectId, groupRef, provider);
+
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
-  const { setError, isError } = useErrorState();
+
   const { provider: providerFromProps, isIntegrationDeleted, setIntegrationDeleted } = useInstallIntegrationProps();
 
   const selectedProvider = provider || providerFromProps;
@@ -67,61 +88,77 @@ export function ConnectionsProvider({
     );
   }
 
-  const fetchConnections = useCallback(async () => {
-    const api = await getAPI();
-    if (!projectId) {
-      throw new Error('Project ID not found. Component must be used within AmpersandProvider');
-    }
-    api.connectionApi.listConnections(
-      { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-    )
-      .then((_connections) => {
-        setLoadingState(false);
-        setConnections(_connections);
-      })
-      .catch((err) => {
-        console.error(
-          `Error retrieving existing connections for group ID ${groupRef}.`,
-        );
-        handleServerError(err);
-        setLoadingState(false);
-        setError(ErrorBoundary.CONNECTION_LIST, projectId);
-      });
-  }, [projectId, groupRef, selectedProvider, setError, getAPI]);
+  useEffect(() => {
+    console.log('ConnectionsProvider mounted', connections);
+    // debugger;
+  }, [connections]);
 
   useEffect(() => {
-    // Fetch connections if connection params change or if the integration was deleted
-    if (projectId) {
-      fetchConnections();
+    if (isConnectionsError) {
+      console.error('Error retrieving existing connections:', connectionsErrorData);
+      handleServerError(connectionsErrorData);
+      setError(ErrorBoundary.CONNECTION_LIST, projectId);
     }
-  }, [isIntegrationDeleted, fetchConnections, projectId]);
+  }, [isConnectionsError, connectionsErrorData, setError, projectId]);
+
+  // const fetchConnections = useCallback(async () => {
+  //   const api = await getAPI();
+  //   if (!projectId) {
+  //     throw new Error('Project ID not found. Component must be used within AmpersandProvider');
+  //   }
+  //   api.connectionApi.listConnections(
+  //     { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+  //   )
+  //     .then((_connections) => {
+  //       setLoadingState(false);
+  //       setConnections(_connections);
+  //     })
+  //     .catch((err) => {
+  //       console.error(
+  //         `Error retrieving existing connections for group ID ${groupRef}.`,
+  //       );
+  //       handleServerError(err);
+  //       setLoadingState(false);
+  //       setError(ErrorBoundary.CONNECTION_LIST, projectId);
+  //     });
+  // }, [projectId, groupRef, selectedProvider, setError, getAPI]);
+
+  // useEffect(() => {
+  //   // Fetch connections if connection params change or if the integration was deleted
+  //   if (projectId) {
+  //     fetchConnections();
+  //   }
+  // }, [isIntegrationDeleted, fetchConnections, projectId]);
 
   // connections manager useEffect
-  useEffect(() => {
-    if (selectedConnection) {
-      // If the provider has changed, reset the selected connection if it does
-      // not match the new provider
-      if (selectedConnection.provider !== selectedProvider) {
-        console.warn('Provider has changed, resetting selected connection');
-        setSelectedConnection(null);
+  // useEffect(() => {
+  //   if (selectedConnection) {
+  //     // If the provider has changed, reset the selected connection if it does
+  //     // not match the new provider
+  //     if (selectedConnection.provider !== selectedProvider) {
+  //       console.warn('Provider has changed, resetting selected connection');
+  //       setSelectedConnection(null);
 
-      // if selectedConnection is not in the connections list, reset it
-      } else if (connections?.length) {
-        const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
-        if (!connectionExists) {
-          console.warn('Selected connection not found in connections list, resetting selected connection');
-          setSelectedConnection(null);
-        }
-      }
-      if (!connections?.length) {
-        // fetchConnections();
-        setSelectedConnection(null);
-      }
-    }
-  }, [connections, fetchConnections, selectedConnection, selectedProvider]);
+  //     // if selectedConnection is not in the connections list, reset it
+  //     } else if (connections?.length) {
+  //       const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
+  //       if (!connectionExists) {
+  //         console.warn('Selected connection not found in connections list, resetting selected connection');
+  //         setSelectedConnection(null);
+  //       }
+  //     }
+
+  //     // If there are no connections, reset the selected connection
+  //     // if (!connections?.length) {
+  //     //   setSelectedConnection(null);
+  //     // }
+  //   }
+  // }, [connections, selectedConnection, selectedProvider]);
 
   useEffect(() => {
     // If there is no selected connection, select the first connection in the list
+    console.log('selectedConnection', selectedConnection, connections);
+
     if (!selectedConnection && connections && connections.length > 0) {
       const [connection] = connections;
       setSelectedConnection(connection);
@@ -130,9 +167,8 @@ export function ConnectionsProvider({
 
   const contextValue = useMemo(
     () => ({
-      connections,
+      connections: connections || null,
       selectedConnection,
-      setConnections,
       setSelectedConnection,
       isIntegrationDeleted,
       setIntegrationDeleted,
@@ -140,7 +176,6 @@ export function ConnectionsProvider({
     [
       connections,
       selectedConnection,
-      setConnections,
       setSelectedConnection,
       isIntegrationDeleted,
       setIntegrationDeleted,

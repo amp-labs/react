@@ -49,7 +49,7 @@ export function OAuthWindow({
       refreshConnections(connectionId)
         .then(() => {
           oauthWindow?.close(); // only close the window if connection is successful
-          // console.debug('Connection successful');
+          console.debug('Connection successful');
         }).catch((err) => {
           console.error('Error refreshing connection: ', err);
           onError?.(err.message ?? 'Unexpected error: not able to refresh connection');
