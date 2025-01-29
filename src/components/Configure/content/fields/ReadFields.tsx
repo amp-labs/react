@@ -13,8 +13,8 @@ export function ReadFields() {
       <ReadObjectMapping />
       <RequiredFields />
       <RequiredFieldMappings />
-      <ValueMappings />
       <OptionalFieldMappings />
+      <ValueMappings />
       <OptionalFields />
     </>
   );

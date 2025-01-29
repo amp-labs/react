@@ -30,11 +30,13 @@ export function ValueMappings() {
         .map((mapping) => ({ ...mapping }))
       : [];
 
-    // set the fieldName from the mapped field name if it is
-    // set by the user dynamically in FieldMapping
-    for (let i = 0; i < valuesMaps.length; i += 1) {
-      if (selectedFieldMappings?.[valuesMaps[i].mapToName]) {
-        valuesMaps[i].fieldName = selectedFieldMappings[valuesMaps[i].mapToName];
+    if (selectedFieldMappings) {
+      // set the fieldName from the mapped field name if it is
+      // set by the user dynamically in FieldMapping
+      for (let i = 0; i < valuesMaps.length; i += 1) {
+        if (selectedFieldMappings?.[valuesMaps[i].mapToName]) {
+          valuesMaps[i].fieldName = selectedFieldMappings[valuesMaps[i].mapToName];
+        }
       }
     }
 
