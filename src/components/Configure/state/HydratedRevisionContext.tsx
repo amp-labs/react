@@ -1,15 +1,15 @@
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import {
-  api, HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision,
+  HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision, useAPI,
 } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
@@ -38,6 +38,37 @@ export const useHydratedRevision = () => {
   return context;
 };
 
+const useHydratedRevisionQuery = (
+  projectIdOrName?: string,
+
+) => {
+  const getAPI = useAPI();
+  const { selectedConnection } = useConnections();
+  const { integrationId, integrationObj } = useInstallIntegrationProps();
+
+  const connectionId = selectedConnection?.id;
+  const revisionId = integrationObj?.latestRevision?.id;
+
+  return useQuery({
+    queryKey: ['amp', 'hydratedRevision', projectIdOrName, integrationId, revisionId],
+    queryFn: async () => {
+      if (!projectIdOrName) throw new Error('projectIdOrName is required');
+      if (!integrationId) throw new Error('integrationId is required');
+      if (!revisionId) throw new Error('revisionId is required');
+      if (!connectionId) throw new Error('connectionId is required');
+
+      const api = await getAPI();
+      return api.revisionApi.getHydratedRevision({
+        projectIdOrName,
+        integrationId,
+        revisionId,
+        connectionId,
+      });
+    },
+    enabled: !!projectIdOrName && !!integrationId && !!revisionId && !!connectionId,
+  });
+};
+
 type HydratedRevisionProviderProps = {
   projectId?: string | null;
   children?: React.ReactNode;
@@ -47,62 +78,27 @@ export function HydratedRevisionProvider({
   projectId,
   children,
 }: HydratedRevisionProviderProps) {
-  const { selectedConnection } = useConnections();
   const { integrationId, integrationObj } = useInstallIntegrationProps();
-
-  const [hydratedRevision, setHydratedRevision] = useState<HydratedRevision | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const { isError, removeError, setError } = useErrorState();
-  const apiKey = useApiKey();
-
-  const connectionId = selectedConnection?.id;
-  const revisionId = integrationObj?.latestRevision?.id;
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;
 
+  const {
+    data: hydratedRevision,
+    isLoading: loading, isError: isHydratedRevisionError,
+    error: hydrateRevisionError,
+  } = useHydratedRevisionQuery(projectId || undefined);
+
   useEffect(() => {
-    // Fetch the hydrated revision data using your API call
-    if (
-      projectId
-      && integrationId
-      && revisionId
-      && connectionId
-      && apiKey
-    ) {
-      setLoading(true);
-      api().revisionApi.getHydratedRevision({
-        projectIdOrName: projectId,
-        integrationId,
-        revisionId,
-        connectionId,
-      }, {
-        headers: {
-          'X-Api-Key': apiKey ?? '',
-        },
-      })
-        .then((data) => {
-          setHydratedRevision(data);
-          removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-        })
-        .catch((err) => {
-          console.error(`Error loading integration ${errorIntegrationIdentifier}.`);
-          handleServerError(err);
-          setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-        }).finally(() => {
-          setLoading(false);
-        });
+    if (isHydratedRevisionError) {
+      setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
+      handleServerError(hydrateRevisionError);
+    } else {
+      removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
     }
-  }, [
-    projectId,
-    integrationId,
-    revisionId,
-    connectionId,
-    apiKey,
-    removeError,
-    setError,
-    errorIntegrationIdentifier]);
+  }, [isHydratedRevisionError, errorIntegrationIdentifier, setError, removeError, hydrateRevisionError]);
 
   const contextValue = useMemo(() => ({
-    hydratedRevision,
+    hydratedRevision: hydratedRevision || null,
     loading,
     readAction: hydratedRevision?.content?.read,
     writeObjects: hydratedRevision?.content?.write?.objects || [],
