@@ -8,19 +8,36 @@ import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
 import { DynamicFieldMappings } from './DynamicFieldMappings';
-import { FieldMapping } from './FieldMapping';
+import { DUPLICATE_FIELD_ERROR_MESSAGE, FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function OptionalFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
-  const { isError, removeError } = useErrorState();
+  const {
+    isError, removeError, setError, getError,
+  } = useErrorState();
   const allFields = configureState?.read?.allFields || [];
   const { fieldMapping } = useInstallIntegrationProps();
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
     if (!value) {
       // if place holder value is chosen, we don't change state
+      return;
+    }
+
+    // TODO(@jatin): Handle this for RequiredFieldMappings as well.
+    if (selectedFieldMappings && selectedObjectName
+          && Object.values(selectedFieldMappings).some((mapping) => mapping === value && mapping !== name)) {
+      console.error('Each field must be mapped to a unique value', selectedFieldMappings);
+      const keysForValue = [
+        name,
+        ...(Object.keys(selectedFieldMappings).filter((key) => selectedFieldMappings[key] === value) || []),
+      ];
+
+      // set the keys for which duplicate values are found
+      setError(ErrorBoundary.MAPPING, selectedObjectName, keysForValue);
       return;
     }
 
@@ -35,6 +52,11 @@ export function OptionalFieldMappings() {
 
     if (isError(ErrorBoundary.MAPPING, name)) {
       removeError(ErrorBoundary.MAPPING, name);
+    }
+
+    // reset duplicate value errors for the selected object
+    if (selectedObjectName && isError(ErrorBoundary.MAPPING, selectedObjectName)) {
+      removeError(ErrorBoundary.MAPPING, selectedObjectName);
     }
   };
 
@@ -66,6 +88,7 @@ export function OptionalFieldMappings() {
 
   const showDynamicFieldMappings = dynamicFieldMappings.length > 0;
   const showIntegrationFieldMappings = integrationFieldMappings.length > 0;
+  const errors = getError(ErrorBoundary.MAPPING, selectedObjectName!);
 
   return (showIntegrationFieldMappings || showDynamicFieldMappings) ? (
     <>
@@ -77,6 +100,8 @@ export function OptionalFieldMappings() {
               allFields={allFields}
               field={field}
               onSelectChange={onSelectChange}
+              hasError={Array.isArray(errors) && errors.includes(field.mapToName)}
+              errorMessage={DUPLICATE_FIELD_ERROR_MESSAGE}
             />
           </FormControl>
         ))}
@@ -85,6 +110,7 @@ export function OptionalFieldMappings() {
             dynamicFieldMappings={dynamicFieldMappings}
             onSelectChange={onSelectChange}
             allFields={allFields}
+            selectedObjectName={selectedObjectName!}
           />
         )}
       </div>

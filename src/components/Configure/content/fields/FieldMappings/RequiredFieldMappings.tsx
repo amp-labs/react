@@ -12,18 +12,10 @@ import { setFieldMapping } from './setFieldMapping';
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
   const { isError, removeError } = useErrorState();
-  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
-
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
     if (!value) {
       // if place holder value is chosen, we don't change state
-      return;
-    }
-
-    if (selectedFieldMappings
-      && Object.values(selectedFieldMappings).some((mapping) => mapping === value && mapping !== name)) {
-      console.error(`Each ${name} must be mapped to a unique value`);
       return;
     }
 
