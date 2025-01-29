@@ -32,7 +32,7 @@ export type SelectMappingFields = {
 };
 
 export type SelectValueMappings = {
-  [fieldName: string]: { [mappedValue: string]: string } | undefined,
+  [fieldName: string]: { [mappedValue: string]: string },
 };
 
 export type ConfigureStateRead = {
