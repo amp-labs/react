@@ -64,7 +64,7 @@ export function useInstallIntegrationProps() {
   return context;
 }
 
-interface InstallIntegrationProviderProps {
+export interface InstallIntegrationProviderProps {
   integration: string, // integration name
   consumerRef: string,
   consumerName?: string,
@@ -86,7 +86,17 @@ export function InstallIntegrationProvider({
   const { projectId } = useProject();
   const { integrations } = useIntegrationList();
   const { setError, isError } = useErrorState();
-  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
+  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted({
+    integration,
+    consumerRef,
+    consumerName,
+    groupRef,
+    groupName,
+    onInstallSuccess,
+    onUpdateSuccess,
+    onUninstallSuccess,
+    fieldMapping,
+  });
 
   const [installations, setInstallations] = useState<Installation[]>([]);
   const [isLoading, setLoadingState] = useState<boolean>(true);

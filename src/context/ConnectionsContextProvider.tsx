@@ -1,10 +1,9 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
-import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
@@ -59,8 +58,7 @@ export function ConnectionsProvider({
   const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
   const [isLoading, setLoadingState] = useState<boolean>(true);
   const { setError, isError } = useErrorState();
-  const { provider: providerFromProps } = useInstallIntegrationProps();
-  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
+  const { provider: providerFromProps, isIntegrationDeleted, setIntegrationDeleted } = useInstallIntegrationProps();
 
   const selectedProvider = provider || providerFromProps;
   if (!selectedProvider) {
@@ -69,34 +67,34 @@ export function ConnectionsProvider({
     );
   }
 
-  useEffect(() => {
-    async function fetchConnections() {
-      const api = await getAPI();
-      if (!projectId) {
-        throw new Error('Project ID not found. Component must be used within AmpersandProvider');
-      }
-      api.connectionApi.listConnections(
-        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-      )
-        .then((_connections) => {
-          setLoadingState(false);
-          setConnections(_connections);
-        })
-        .catch((err) => {
-          console.error(
-            `Error retrieving existing connections for group ID ${groupRef}.`,
-          );
-          handleServerError(err);
-          setLoadingState(false);
-          setError(ErrorBoundary.CONNECTION_LIST, projectId);
-        });
+  const fetchConnections = useCallback(async () => {
+    const api = await getAPI();
+    if (!projectId) {
+      throw new Error('Project ID not found. Component must be used within AmpersandProvider');
     }
+    api.connectionApi.listConnections(
+      { projectIdOrName: projectId, groupRef, provider: selectedProvider },
+    )
+      .then((_connections) => {
+        setLoadingState(false);
+        setConnections(_connections);
+      })
+      .catch((err) => {
+        console.error(
+          `Error retrieving existing connections for group ID ${groupRef}.`,
+        );
+        handleServerError(err);
+        setLoadingState(false);
+        setError(ErrorBoundary.CONNECTION_LIST, projectId);
+      });
+  }, [projectId, groupRef, selectedProvider, setError, getAPI]);
 
+  useEffect(() => {
     // Fetch connections if connection params change or if the integration was deleted
     if (projectId) {
       fetchConnections();
     }
-  }, [projectId, groupRef, selectedProvider, setError, getAPI, isIntegrationDeleted]);
+  }, [isIntegrationDeleted, fetchConnections, projectId]);
 
   // connections manager useEffect
   useEffect(() => {
@@ -115,8 +113,12 @@ export function ConnectionsProvider({
           setSelectedConnection(null);
         }
       }
+      if (!connections?.length) {
+        // fetchConnections();
+        setSelectedConnection(null);
+      }
     }
-  }, [connections, selectedConnection, selectedProvider]);
+  }, [connections, fetchConnections, selectedConnection, selectedProvider]);
 
   useEffect(() => {
     // If there is no selected connection, select the first connection in the list

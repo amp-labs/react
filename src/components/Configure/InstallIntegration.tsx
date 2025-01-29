@@ -35,7 +35,7 @@ export type FieldMapping = {
   [key: string]: Array<FieldMappingWithMappedValues>
 };
 
-interface InstallIntegrationProps {
+export interface InstallIntegrationProps {
   /**
    * The name of the integration from amp.yaml
    */
