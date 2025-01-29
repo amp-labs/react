@@ -20,7 +20,7 @@ interface ConfigureInstallationBaseProps {
   onSave: FormEventHandler,
   onReset: () => void,
   isLoading: boolean,
-  errorMsg?: string | boolean,
+  errorMsg?: string | boolean | string[],
 }
 
 // Installation UI Base
