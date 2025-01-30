@@ -1,10 +1,10 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo,
 } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
-import { useIsInstallationDeleted } from 'src/hooks/useIsInstallationDeleted';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
@@ -13,22 +13,18 @@ import { useProject } from './ProjectContextProvider';
 
 interface ConnectionsContextValue {
   connections: Connection[] | null;
+  isConnectionsLoading: boolean;
   selectedConnection: Connection | null;
-  setConnections: React.Dispatch<React.SetStateAction<Connection[] | null>>;
-  setSelectedConnection: React.Dispatch<
-  React.SetStateAction<Connection | null>
-  >;
-  isIntegrationDeleted: boolean;
-  setIntegrationDeleted: () => void;
+  setConnections: (connections: Connection[]) => void;
+  setSelectedConnection: React.Dispatch<React.SetStateAction<Connection | null>>;
 }
 
 export const ConnectionsContext = createContext<ConnectionsContextValue>({
   connections: null,
+  isConnectionsLoading: true,
   selectedConnection: null,
   setConnections: () => {},
   setSelectedConnection: () => {},
-  isIntegrationDeleted: false,
-  setIntegrationDeleted: () => {},
 });
 
 export const useConnections = (): ConnectionsContextValue => {
@@ -41,111 +37,85 @@ export const useConnections = (): ConnectionsContextValue => {
   return context;
 };
 
+const useConnectionsListQuery = () => {
+  const { projectIdOrName } = useProject();
+  const { groupRef, provider } = useInstallIntegrationProps();
+  const getAPI = useAPI();
+  return useQuery({
+    queryKey: ['amp', 'connections', projectIdOrName, groupRef, provider],
+    queryFn: async () => {
+      if (!projectIdOrName) throw new Error('Project ID not found.');
+      if (!groupRef) throw new Error('Group reference not found.');
+      if (!provider) throw new Error('Provider not found.');
+
+      const api = await getAPI();
+      return api.connectionApi.listConnections({ projectIdOrName, groupRef, provider });
+    },
+    enabled: !!projectIdOrName && !!groupRef && !!provider,
+  });
+};
+
 type ConnectionsProviderProps = {
-  provider?: string;
-  groupRef: string;
+
   children?: React.ReactNode;
 };
 
-export function ConnectionsProvider({
-  provider,
-  groupRef,
-  children,
-}: ConnectionsProviderProps) {
-  const getAPI = useAPI();
+export function ConnectionsProvider({ children }: ConnectionsProviderProps) {
+  const queryClient = useQueryClient();
+  const { setError, isError } = useErrorState();
   const { projectId, isLoading: isProjectLoading } = useProject();
 
-  const [connections, setConnections] = useState<Connection[] | null>(null);
-  const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
-  const { setError, isError } = useErrorState();
-  const { provider: providerFromProps } = useInstallIntegrationProps();
-  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
+  const {
+    data: connections, isLoading: isConnectionsLoading, isError: isConnectionsError, error: connectionError,
+  } = useConnectionsListQuery();
 
-  const selectedProvider = provider || providerFromProps;
-  if (!selectedProvider) {
-    throw new Error(
-      'ConnectionsProvider must be given a provider prop or be used within InstallIntegrationProvider',
-    );
-  }
+  // simplify connections logic to be derived from the first connection
+  const selectedConnection = connections?.[0];
 
-  useEffect(() => {
-    async function fetchConnections() {
-      const api = await getAPI();
-      if (!projectId) {
-        throw new Error('Project ID not found. Component must be used within AmpersandProvider');
+  // legacy setConnections function placeholder
+  // set connections in cache and invalidate queries
+  const setConnections = useCallback((_connections:Connection[]) => {
+    queryClient.setQueryData(['amp', 'connections'], () => _connections);
+    queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
+  }, [queryClient]);
+
+  // legacy setSelectedConnection function
+  // invalidate connection query to refetch
+  const setSelectedConnection = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
+  }, [queryClient]);
+
+  // legacy set global error state for connections
+  useEffect(
+    () => {
+      if (isConnectionsError) {
+        setError(ErrorBoundary.CONNECTION_LIST, projectId, true);
+        handleServerError(connectionError);
+      } else {
+        setError(ErrorBoundary.CONNECTION_LIST, projectId, false);
       }
-      api.connectionApi.listConnections(
-        { projectIdOrName: projectId, groupRef, provider: selectedProvider },
-      )
-        .then((_connections) => {
-          setLoadingState(false);
-          setConnections(_connections);
-        })
-        .catch((err) => {
-          console.error(
-            `Error retrieving existing connections for group ID ${groupRef}.`,
-          );
-          handleServerError(err);
-          setLoadingState(false);
-          setError(ErrorBoundary.CONNECTION_LIST, projectId);
-        });
-    }
-
-    // Fetch connections if connection params change or if the integration was deleted
-    if (projectId) {
-      fetchConnections();
-    }
-  }, [projectId, groupRef, selectedProvider, setError, getAPI, isIntegrationDeleted]);
-
-  // connections manager useEffect
-  useEffect(() => {
-    if (selectedConnection) {
-      // If the provider has changed, reset the selected connection if it does
-      // not match the new provider
-      if (selectedConnection.provider !== selectedProvider) {
-        console.warn('Provider has changed, resetting selected connection');
-        setSelectedConnection(null);
-
-      // if selectedConnection is not in the connections list, reset it
-      } else if (connections?.length) {
-        const connectionExists = connections.some((conn) => conn.id === selectedConnection.id);
-        if (!connectionExists) {
-          console.warn('Selected connection not found in connections list, resetting selected connection');
-          setSelectedConnection(null);
-        }
-      }
-    }
-  }, [connections, selectedConnection, selectedProvider]);
-
-  useEffect(() => {
-    // If there is no selected connection, select the first connection in the list
-    if (!selectedConnection && connections && connections.length > 0) {
-      const [connection] = connections;
-      setSelectedConnection(connection);
-    }
-  }, [connections, selectedConnection]);
+    },
+    [isConnectionsError, setError, projectId, connectionError],
+  );
 
   const contextValue = useMemo(
     () => ({
-      connections,
-      selectedConnection,
+      connections: connections || null,
+      isConnectionsLoading,
+      selectedConnection: selectedConnection || null,
       setConnections,
       setSelectedConnection,
-      isIntegrationDeleted,
-      setIntegrationDeleted,
     }),
     [
       connections,
+      isConnectionsLoading,
       selectedConnection,
       setConnections,
       setSelectedConnection,
-      isIntegrationDeleted,
-      setIntegrationDeleted,
     ],
   );
 
-  if (isLoading || isProjectLoading) {
+  if (isConnectionsLoading || isProjectLoading) {
     return <ComponentContainerLoading />;
   }
 
