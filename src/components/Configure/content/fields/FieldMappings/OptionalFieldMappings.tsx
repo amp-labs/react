@@ -64,7 +64,10 @@ export function OptionalFieldMappings() {
     return combinedFieldMappings;
   }, [configureState, dynamicFieldMappings]);
 
-  return (integrationFieldMappings.length || dynamicFieldMappings.length) ? (
+  const showDynamicFieldMappings = dynamicFieldMappings.length > 0;
+  const showIntegrationFieldMappings = integrationFieldMappings.length > 0;
+
+  return (showIntegrationFieldMappings || showDynamicFieldMappings) ? (
     <>
       <FieldHeader string="Map the following optional fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
@@ -77,7 +80,7 @@ export function OptionalFieldMappings() {
             />
           </FormControl>
         ))}
-        {dynamicFieldMappings?.length && (
+        {showDynamicFieldMappings && (
           <DynamicFieldMappings
             dynamicFieldMappings={dynamicFieldMappings}
             onSelectChange={onSelectChange}
