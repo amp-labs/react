@@ -25,12 +25,7 @@ export function OptionalFieldMappings() {
     }
 
     if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, [
-        {
-          field: name,
-          value,
-        },
-      ]);
+      setFieldMapping(selectedObjectName, setConfigureState, [{ field: name, value }]);
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {

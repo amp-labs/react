@@ -54,13 +54,7 @@ export function ValueMappings() {
       }
 
       if (selectedObjectName) {
-        setValueMapping(
-          selectedObjectName,
-          setConfigureState,
-          name,
-          value,
-          fieldName,
-        );
+        setValueMapping(selectedObjectName, setConfigureState, name, value, fieldName);
       }
 
       if (isError(ErrorBoundary.VALUE_MAPPING, name)) {
@@ -80,10 +74,7 @@ export function ValueMappings() {
       // Check if all values are mapped for all fields
       const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
         const mappingsForField = selectedMappings[field.fieldName!] || {};
-        return (
-          Object.keys(mappingsForField).length
-          === Object.keys(field.mappedValues!).length
-        );
+        return Object.keys(mappingsForField).length === Object.keys(field.mappedValues!).length;
       });
 
       if (allFieldsFullyMapped && fieldsWithMappings.length > 0) {
@@ -115,43 +106,27 @@ export function ValueMappings() {
           return null;
         }
 
+        const allFieldsMetadata = configureState?.read?.allFieldsMetadata;
+        const metadataForField = allFieldsMetadata?.[field.fieldName];
+
         // show the values mapping only for singleSelect and multiSelect type fields
-        if (
-          !['singleSelect', 'multiSelect'].includes(
-            configureState?.read?.allFieldsMetadata?.[field.fieldName]
-              ?.valueType,
-          )
-        ) {
+        if (!['singleSelect', 'multiSelect'].includes(metadataForField?.valueType)) {
           const errorMsg = 'fieldName is not a singleSelect or multiSelect';
           console.error(errorMsg, field);
           return null;
         }
 
-        if (
-          !configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values
-        ) {
+        if (!metadataForField?.values) {
           console.error('field has no values array', field);
           return null;
         }
         // show the values mapping only if the field has values array
         // And if they are of the same length as the mappedValues array
-        if (
-          !(
-            configureState?.read?.allFieldsMetadata?.[field.fieldName]
-              ?.values
-            && Object.keys(field?.mappedValues || []).length
-              === Object.keys(
-                configureState?.read?.allFieldsMetadata?.[field.fieldName]
-                  ?.values || [],
-              ).length
-          )
+        if (!(metadataForField?.values
+          && Object.keys(field?.mappedValues || []).length === Object.keys(metadataForField?.values || []).length)
         ) {
           const errorMsg = 'field values and the values to be mapped are not of the same length';
-          console.error(
-            errorMsg,
-            field,
-            configureState?.read?.allFieldsMetadata?.[field.fieldName]?.values,
-          );
+          console.error(errorMsg, field, metadataForField?.values);
           return null;
         }
 
@@ -161,32 +136,19 @@ export function ValueMappings() {
               string="Map the values for "
               fieldName={field.mapToName || field.fieldName}
             />
-            <div
-              style={{
-                display: 'flex',
-                gap: '1rem',
-                flexDirection: 'column',
-              }}
-            >
+            <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
               <FormControl
                 id={field.mapToName || field.fieldName}
                 key={field.mapToName || field.fieldName}
               >
                 {field?.mappedValues?.map((value) => {
-                  const errors = getError(
-                    ErrorBoundary.VALUE_MAPPING,
-                    field.fieldName!,
-                  );
+                  const errors = getError(ErrorBoundary.VALUE_MAPPING, field.fieldName!);
                   const hasError = Array.isArray(errors) && errors.includes(value.mappedValue);
                   return (
                     <>
                       <ValueMappingItem
                         key={`${value.mappedValue}-${field.fieldName}`}
-                        allValueOptions={
-                          configureState?.read?.allFieldsMetadata?.[
-                            field.fieldName!
-                          ]?.values || []
-                        }
+                        allValueOptions={allFieldsMetadata?.[field.fieldName!]?.values || []}
                         mappedValue={value}
                         onSelectChange={onSelectChange}
                         fieldName={field?.fieldName || ''}
@@ -195,15 +157,9 @@ export function ValueMappings() {
                       {hasError && (
                         <span
                           key={value.mappedValue}
-                          style={{
-                            color: 'red',
-                            fontSize: '14px',
-                            marginTop: '4px',
-                          }}
+                          style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}
                         >
-                          {`Each ${
-                            field.mapToName || field.fieldName
-                          } must be mapped to a unique value`}
+                          {`Each ${field.mapToName || field.fieldName} must be mapped to a unique value`}
                         </span>
                       )}
                     </>
