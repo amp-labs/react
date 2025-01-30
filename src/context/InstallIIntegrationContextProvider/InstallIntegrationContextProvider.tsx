@@ -154,6 +154,7 @@ export function InstallIntegrationProvider({
   // updates cache with new installation object
   const setInstallation = useCallback((installationObj: Installation) => {
     queryClient.setQueryData(['amp', 'installations'], [installationObj]);
+    queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
   }, [queryClient]);
 
   const integrationErrorKey: string = integrationObj?.id || '';
