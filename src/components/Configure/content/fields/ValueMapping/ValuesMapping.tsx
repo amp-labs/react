@@ -73,7 +73,7 @@ export function ValueMappings() {
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
-      const fieldsWithMappings = fieldMapping?.[selectedObjectName].filter(
+      const fieldsWithMappings = fieldMapping?.[selectedObjectName]?.filter(
         (f) => f.fieldName && f.mappedValues!.length > 0,
       ) || [];
 
