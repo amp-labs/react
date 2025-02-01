@@ -25,7 +25,14 @@ import {
     ObjectMetadataToJSON,
 } from '../models';
 
-export interface GetObjectMetadataRequest {
+export interface GetObjectMetadataForConnectionRequest {
+    projectIdOrName: string;
+    provider: string;
+    objectName: string;
+    groupRef?: string;
+}
+
+export interface GetObjectMetadataForInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
     objectName: string;
@@ -40,8 +47,27 @@ export interface GetObjectMetadataRequest {
  */
 export interface ObjectsFieldsApiInterface {
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields
-     * @summary Get object and field data
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. 
+     * @summary Get object metadata for connection
+     * @param {string} projectIdOrName Project ID or name
+     * @param {string} provider The API Provider
+     * @param {string} objectName Object name (mapped or unmapped)
+     * @param {string} [groupRef] The groupRef for the connection
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ObjectsFieldsApiInterface
+     */
+    getObjectMetadataForConnectionRaw(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>>;
+
+    /**
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. 
+     * Get object metadata for connection
+     */
+    getObjectMetadataForConnection(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
+
+    /**
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. 
+     * @summary Get object metadata for installation
      * @param {string} projectIdOrName Project ID or name
      * @param {string} integrationId Integration ID
      * @param {string} objectName Object name (mapped or unmapped)
@@ -50,13 +76,13 @@ export interface ObjectsFieldsApiInterface {
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
      */
-    getObjectMetadataRaw(requestParameters: GetObjectMetadataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>>;
+    getObjectMetadataForInstallationRaw(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>>;
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields
-     * Get object and field data
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. 
+     * Get object metadata for installation
      */
-    getObjectMetadata(requestParameters: GetObjectMetadataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
+    getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
 
 }
 
@@ -66,20 +92,20 @@ export interface ObjectsFieldsApiInterface {
 export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsApiInterface {
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields
-     * Get object and field data
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. 
+     * Get object metadata for connection
      */
-    async getObjectMetadataRaw(requestParameters: GetObjectMetadataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>> {
+    async getObjectMetadataForConnectionRaw(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
-            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getObjectMetadata.');
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getObjectMetadataForConnection.');
         }
 
-        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
-            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling getObjectMetadata.');
+        if (requestParameters.provider === null || requestParameters.provider === undefined) {
+            throw new runtime.RequiredError('provider','Required parameter requestParameters.provider was null or undefined when calling getObjectMetadataForConnection.');
         }
 
         if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
-            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getObjectMetadata.');
+            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getObjectMetadataForConnection.');
         }
 
         const queryParameters: any = {};
@@ -95,7 +121,7 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
         }
 
         const response = await this.request({
-            path: `/v1/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            path: `/projects/{projectIdOrName}/providers/{provider}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -105,11 +131,59 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
     }
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields
-     * Get object and field data
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. 
+     * Get object metadata for connection
      */
-    async getObjectMetadata(requestParameters: GetObjectMetadataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
-        const response = await this.getObjectMetadataRaw(requestParameters, initOverrides);
+    async getObjectMetadataForConnection(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
+        const response = await this.getObjectMetadataForConnectionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. 
+     * Get object metadata for installation
+     */
+    async getObjectMetadataForInstallationRaw(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getObjectMetadataForInstallation.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling getObjectMetadataForInstallation.');
+        }
+
+        if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
+            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getObjectMetadataForInstallation.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.groupRef !== undefined) {
+            queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectMetadataFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. 
+     * Get object metadata for installation
+     */
+    async getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
+        const response = await this.getObjectMetadataForInstallationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

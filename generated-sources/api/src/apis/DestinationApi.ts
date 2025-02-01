@@ -41,12 +41,12 @@ export interface CreateDestinationOperationRequest {
 
 export interface DeleteDestinationRequest {
     projectIdOrName: string;
-    destinationId: string;
+    destination: string;
 }
 
 export interface GetDestinationRequest {
     projectIdOrName: string;
-    destinationName: string;
+    destination: string;
 }
 
 export interface ListDestinationsRequest {
@@ -55,7 +55,7 @@ export interface ListDestinationsRequest {
 
 export interface UpdateDestinationOperationRequest {
     projectIdOrName: string;
-    destinationId: string;
+    destination: string;
     destinationUpdate: UpdateDestinationRequest;
 }
 
@@ -86,7 +86,7 @@ export interface DestinationApiInterface {
      * 
      * @summary Delete a destination
      * @param {string} projectIdOrName 
-     * @param {string} destinationId 
+     * @param {string} destination The destination ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -102,7 +102,7 @@ export interface DestinationApiInterface {
      * 
      * @summary Get a destination
      * @param {string} projectIdOrName 
-     * @param {string} destinationName 
+     * @param {string} destination The destination name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -133,7 +133,7 @@ export interface DestinationApiInterface {
      * 
      * @summary Update a destination
      * @param {string} projectIdOrName 
-     * @param {string} destinationId 
+     * @param {string} destination The destination ID
      * @param {UpdateDestinationRequest} destinationUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -202,8 +202,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteDestination.');
         }
 
-        if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
-            throw new runtime.RequiredError('destinationId','Required parameter requestParameters.destinationId was null or undefined when calling deleteDestination.');
+        if (requestParameters.destination === null || requestParameters.destination === undefined) {
+            throw new runtime.RequiredError('destination','Required parameter requestParameters.destination was null or undefined when calling deleteDestination.');
         }
 
         const queryParameters: any = {};
@@ -215,7 +215,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         }
 
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/destinations/{destinationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            path: `/projects/{projectIdOrName}/destinations/{destination}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destination"}}`, encodeURIComponent(String(requestParameters.destination))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -239,8 +239,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getDestination.');
         }
 
-        if (requestParameters.destinationName === null || requestParameters.destinationName === undefined) {
-            throw new runtime.RequiredError('destinationName','Required parameter requestParameters.destinationName was null or undefined when calling getDestination.');
+        if (requestParameters.destination === null || requestParameters.destination === undefined) {
+            throw new runtime.RequiredError('destination','Required parameter requestParameters.destination was null or undefined when calling getDestination.');
         }
 
         const queryParameters: any = {};
@@ -252,7 +252,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         }
 
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/destinations/{destinationName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationName"}}`, encodeURIComponent(String(requestParameters.destinationName))),
+            path: `/projects/{projectIdOrName}/destinations/{destination}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destination"}}`, encodeURIComponent(String(requestParameters.destination))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -311,8 +311,8 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateDestination.');
         }
 
-        if (requestParameters.destinationId === null || requestParameters.destinationId === undefined) {
-            throw new runtime.RequiredError('destinationId','Required parameter requestParameters.destinationId was null or undefined when calling updateDestination.');
+        if (requestParameters.destination === null || requestParameters.destination === undefined) {
+            throw new runtime.RequiredError('destination','Required parameter requestParameters.destination was null or undefined when calling updateDestination.');
         }
 
         if (requestParameters.destinationUpdate === null || requestParameters.destinationUpdate === undefined) {
@@ -330,7 +330,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         }
 
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/destinations/{destinationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destinationId"}}`, encodeURIComponent(String(requestParameters.destinationId))),
+            path: `/projects/{projectIdOrName}/destinations/{destination}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"destination"}}`, encodeURIComponent(String(requestParameters.destination))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
