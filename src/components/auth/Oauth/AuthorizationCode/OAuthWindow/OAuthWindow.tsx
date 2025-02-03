@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
-import { useConnections } from 'context/ConnectionsContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
-
 import {
   useOpenWindowHandler,
   useReceiveMessageEventHandler,
-  useRefreshConnectionHandler,
 } from './windowHelpers';
 
 type OAuthWindowProps = {
@@ -26,15 +21,11 @@ type OAuthWindowProps = {
 export function OAuthWindow({
   children, oauthUrl, windowTitle = 'Connect to Provider', onError, error,
 }: OAuthWindowProps) {
-  const apiKey = useApiKey();
-  const { projectId } = useProject();
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
-  const { setSelectedConnection } = useConnections();
 
-  const receiveMessage = useReceiveMessageEventHandler(setConnectionId, onError);
+  const receiveMessage = useReceiveMessageEventHandler(setConnectionId, oauthWindow, onError);
   const openOAuthWindow = useOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
-  const refreshConnections = useRefreshConnectionHandler(projectId, apiKey, setSelectedConnection);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
@@ -42,20 +33,6 @@ export function OAuthWindow({
       openOAuthWindow(); // creates new window and adds event listener
     }
   }, [oauthUrl, oauthWindow, openOAuthWindow, receiveMessage, windowTitle]);
-
-  // refresh connections on connectionId change
-  useEffect(() => {
-    if (connectionId) {
-      refreshConnections(connectionId)
-        .then(() => {
-          oauthWindow?.close(); // only close the window if connection is successful
-          // console.debug('Connection successful');
-        }).catch((err) => {
-          console.error('Error refreshing connection: ', err);
-          onError?.(err.message ?? 'Unexpected error: not able to refresh connection');
-        });
-    }
-  }, [connectionId, apiKey, setSelectedConnection, refreshConnections, oauthWindow, onError]);
 
   useEffect(() => {
     if (!oauthWindow) return;
