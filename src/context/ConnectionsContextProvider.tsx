@@ -44,7 +44,7 @@ const useConnectionsListQuery = () => {
   return useQuery({
     queryKey: ['amp', 'connections', projectIdOrName, groupRef, provider],
     queryFn: async () => {
-      if (!projectIdOrName) throw new Error('Project ID not found.');
+      if (!projectIdOrName) throw new Error('Project ID or name not found. Please wrap this component inside of AmpersandProvider');
       if (!groupRef) throw new Error('Group reference not found.');
       if (!provider) throw new Error('Provider not found.');
 
