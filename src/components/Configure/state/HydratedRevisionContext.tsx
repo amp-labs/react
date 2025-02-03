@@ -7,7 +7,7 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import {
   api, HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision,
 } from 'services/api';

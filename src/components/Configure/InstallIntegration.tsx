@@ -1,6 +1,6 @@
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
-import { InstallIntegrationProvider } from 'context/InstallIntegrationContextProvider';
+import { InstallIntegrationProvider } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { Config, IntegrationFieldMapping } from 'services/api';
 import { useIntegrationList } from 'src/context/IntegrationListContextProvider';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { api } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';

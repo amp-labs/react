@@ -7,8 +7,8 @@ import { Connection, useAPI } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
 
+import { useInstallIntegrationProps } from './InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
-import { useInstallIntegrationProps } from './InstallIntegrationContextProvider';
 import { useProject } from './ProjectContextProvider';
 
 interface ConnectionsContextValue {

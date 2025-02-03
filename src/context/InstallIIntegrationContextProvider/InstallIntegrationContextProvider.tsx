@@ -10,12 +10,12 @@ import { ComponentContainerError, ComponentContainerLoading } from 'src/componen
 import { FieldMapping } from 'src/components/Configure/InstallIntegration';
 import { findIntegrationFromList } from 'src/utils';
 
-import { useIsInstallationDeleted } from '../hooks/useIsInstallationDeleted';
+import { useApiKey } from '../ApiKeyContextProvider';
+import { ErrorBoundary, useErrorState } from '../ErrorContextProvider';
+import { useIntegrationList } from '../IntegrationListContextProvider';
+import { useProject } from '../ProjectContextProvider';
 
-import { useApiKey } from './ApiKeyContextProvider';
-import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
-import { useIntegrationList } from './IntegrationListContextProvider';
-import { useProject } from './ProjectContextProvider';
+import { useIsInstallationDeleted } from './useIsInstallationDeleted';
 
 // Define the context value type
 interface InstallIntegrationContextValue {
@@ -86,7 +86,7 @@ export function InstallIntegrationProvider({
   const { projectId } = useProject();
   const { integrations } = useIntegrationList();
   const { setError, isError } = useErrorState();
-  const { isIntegrationDeleted, setIntegrationDeleted } = useIsInstallationDeleted();
+  const { isIntegrationDeleted, setIntegrationDeleted, resetIntegrationDeleted } = useIsInstallationDeleted();
 
   const [installations, setInstallations] = useState<Installation[]>([]);
   const [isLoading, setLoadingState] = useState<boolean>(true);
@@ -97,6 +97,12 @@ export function InstallIntegrationProvider({
     () => findIntegrationFromList(integration, integrations || []),
     [integration, integrations],
   );
+
+  // resets the isIntegrationDeleted state when InstallIntegrationProps change
+  useEffect(() => {
+    resetIntegrationDeleted();
+  }, [integration, consumerRef, consumerName, groupRef, groupName,
+    onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping, resetIntegrationDeleted]);
 
   useEffect(() => {
     if (integrationObj === null && integrations?.length) {

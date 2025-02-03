@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { HydratedRevision } from 'services/api';
 

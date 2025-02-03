@@ -1,4 +1,6 @@
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import {
+  useInstallIntegrationProps,
+} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 
 import { UninstallButton } from '../layout/UninstallButton';
