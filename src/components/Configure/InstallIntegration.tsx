@@ -113,7 +113,7 @@ export function InstallIntegration(
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
       >
-        <ConnectionsProvider groupRef={groupRef}>
+        <ConnectionsProvider>
           <ProtectedConnectionLayout
             consumerRef={consumerRef}
             consumerName={consumerName}

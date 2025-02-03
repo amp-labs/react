@@ -11,9 +11,8 @@ import { useInstallIntegrationProps } from 'context/InstallIntegrationContextPro
 import {
   api, HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision,
 } from 'services/api';
+import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
-
-import { ComponentContainerError } from '../ComponentContainer';
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -69,6 +68,7 @@ export function HydratedRevisionProvider({
       && connectionId
       && apiKey
     ) {
+      setLoading(true);
       api().revisionApi.getHydratedRevision({
         projectIdOrName: projectId,
         integrationId,
@@ -81,14 +81,14 @@ export function HydratedRevisionProvider({
       })
         .then((data) => {
           setHydratedRevision(data);
-          setLoading(false);
           removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
         })
         .catch((err) => {
           console.error(`Error loading integration ${errorIntegrationIdentifier}.`);
           handleServerError(err);
-          setLoading(false);
           setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
+        }).finally(() => {
+          setLoading(false);
         });
     }
   }, [
@@ -107,6 +107,10 @@ export function HydratedRevisionProvider({
     readAction: hydratedRevision?.content?.read,
     writeObjects: hydratedRevision?.content?.write?.objects || [],
   }), [hydratedRevision, loading]);
+
+  if (loading) {
+    return <ComponentContainerLoading />;
+  }
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
