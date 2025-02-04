@@ -122,6 +122,12 @@ export interface Connection {
      * @memberof Connection
      */
     oauth2AuthorizationCode?: Oauth2AuthorizationCodeTokensOnly;
+    /**
+     * The API key used while making the connection.
+     * @type {string}
+     * @memberof Connection
+     */
+    apiKey?: string;
 }
 
 
@@ -190,6 +196,7 @@ export function ConnectionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'authScheme': json['authScheme'],
         'status': json['status'],
         'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeTokensOnlyFromJSON(json['oauth2AuthorizationCode']),
+        'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
     };
 }
 
@@ -215,6 +222,7 @@ export function ConnectionToJSON(value?: Connection | null): any {
         'authScheme': value.authScheme,
         'status': value.status,
         'oauth2AuthorizationCode': Oauth2AuthorizationCodeTokensOnlyToJSON(value.oauth2AuthorizationCode),
+        'apiKey': value.apiKey,
     };
 }
 

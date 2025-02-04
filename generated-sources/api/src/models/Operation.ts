@@ -68,12 +68,6 @@ export interface Operation {
      */
     result?: string;
     /**
-     * The latest operation event ID.
-     * @type {string}
-     * @memberof Operation
-     */
-    latestOperationEventId?: string;
-    /**
      * Metadata associated with the operation.
      * @type {object}
      * @memberof Operation
@@ -121,7 +115,6 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'installationId': json['installationId'],
         'status': json['status'],
         'result': !exists(json, 'result') ? undefined : json['result'],
-        'latestOperationEventId': !exists(json, 'latestOperationEventId') ? undefined : json['latestOperationEventId'],
         'metadata': !exists(json, 'metadata') ? undefined : json['metadata'],
         'createTime': !exists(json, 'createTime') ? undefined : (new Date(json['createTime'])),
     };
@@ -144,7 +137,6 @@ export function OperationToJSON(value?: Operation | null): any {
         'installationId': value.installationId,
         'status': value.status,
         'result': value.result,
-        'latestOperationEventId': value.latestOperationEventId,
         'metadata': value.metadata,
         'createTime': value.createTime === undefined ? undefined : (value.createTime.toISOString()),
     };
