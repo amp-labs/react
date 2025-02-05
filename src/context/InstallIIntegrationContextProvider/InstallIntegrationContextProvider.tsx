@@ -2,10 +2,11 @@ import {
   createContext, useCallback,
   useContext, useEffect, useMemo,
 } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
+import { useListInstallationsQuery } from 'hooks/query/useListInstallationsQuery';
 import {
-  Config, Installation, Integration, useAPI,
+  Config, Installation, Integration,
 } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { FieldMapping } from 'src/components/Configure/InstallIntegration';
@@ -14,7 +15,6 @@ import { handleServerError } from 'src/utils/handleServerError';
 
 import { ErrorBoundary, useErrorState } from '../ErrorContextProvider';
 import { useIntegrationList } from '../IntegrationListContextProvider';
-import { useProject } from '../ProjectContextProvider';
 
 import { useIsInstallationDeleted } from './useIsInstallationDeleted';
 
@@ -64,28 +64,6 @@ export function useInstallIntegrationProps() {
   }
   return context;
 }
-
-const useListInstallationsQuery = (integrationId?: string, groupRef?: string) => {
-  const getAPI = useAPI();
-  const { projectId } = useProject();
-
-  return useQuery({
-    queryKey: ['amp', 'installations', projectId, integrationId, groupRef],
-    queryFn: async () => {
-      if (!projectId) throw new Error('Project ID is required');
-      if (!integrationId) throw new Error('Integration ID is required');
-      if (!groupRef) throw new Error('Group reference is required');
-
-      const api = await getAPI();
-      return api.installationApi.listInstallations({
-        projectIdOrName: projectId,
-        integrationId,
-        groupRef,
-      });
-    },
-    enabled: !!projectId && !!integrationId && !!groupRef,
-  });
-};
 
 interface InstallIntegrationProviderProps {
   integration: string, // integration name
