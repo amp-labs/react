@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
+import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { FormControl } from 'src/components/form/FormControl';
-import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';

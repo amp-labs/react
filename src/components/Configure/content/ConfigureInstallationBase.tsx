@@ -3,7 +3,9 @@ import { FormEventHandler } from 'react';
 import { FormErrorBox } from 'components/FormErrorBox';
 import { LoadingCentered } from 'components/Loading';
 import { Box } from 'components/ui-base/Box/Box';
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import {
+  useInstallIntegrationProps,
+} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
 
 import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../nav/ObjectManagementNav/constant';

@@ -1,5 +1,7 @@
+import {
+  useInstallIntegrationProps,
+} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { FormCalloutBox } from 'src/components/FormCalloutBox';
-import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
 import { useProject } from 'src/context/ProjectContextProvider';
 import { capitalize, getProviderName } from 'src/utils';
 

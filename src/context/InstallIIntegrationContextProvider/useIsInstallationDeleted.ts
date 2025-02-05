@@ -9,5 +9,9 @@ export const useIsInstallationDeleted = () => {
     setIsIntegrationDeleted(true);
   }, [setIsIntegrationDeleted]);
 
-  return { isIntegrationDeleted, setIntegrationDeleted };
+  const resetIntegrationDeleted = useCallback(() => {
+    setIsIntegrationDeleted(false);
+  }, [setIsIntegrationDeleted]);
+
+  return { isIntegrationDeleted, setIntegrationDeleted, resetIntegrationDeleted };
 };

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
-import { useInstallIntegrationProps } from 'src/context/InstallIntegrationContextProvider';
+import {
+  useInstallIntegrationProps,
+} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 

@@ -7,7 +7,9 @@ import { OauthFlow } from 'components/auth/Oauth/OauthFlow/OauthFlow';
 import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
 import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIntegrationContextProvider';
+import {
+  useInstallIntegrationProps,
+} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { api, Connection, ProviderInfo } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
