@@ -72,7 +72,7 @@ export function InstallIntegration(
     onUninstallSuccess, fieldMapping,
   }: InstallIntegrationProps,
 ) {
-  const { projectId, projectIdOrName, isLoading: isProjectLoading } = useProject();
+  const { projectIdOrName, isLoading: isProjectLoading } = useProject();
   const { isLoading: isIntegrationListLoading } = useIntegrationList();
   const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
@@ -121,7 +121,7 @@ export function InstallIntegration(
             groupName={groupName}
             resetComponent={reset}
           >
-            <HydratedRevisionProvider projectId={projectId}>
+            <HydratedRevisionProvider>
               <ConditionalProxyLayout>
                 <ConfigurationProvider>
                   <ObjectManagementNav>

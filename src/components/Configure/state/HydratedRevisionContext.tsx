@@ -3,11 +3,12 @@ import React, {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import { useConnections } from 'context/ConnectionsContextProvider';
+import { useConnectionsListQuery } from 'context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
+import { useProject } from 'context/ProjectContextProvider';
 import {
   HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision, useAPI,
 } from 'services/api';
@@ -38,15 +39,13 @@ export const useHydratedRevision = () => {
   return context;
 };
 
-const useHydratedRevisionQuery = (
-  projectIdOrName?: string,
-
-) => {
+const useHydratedRevisionQuery = () => {
   const getAPI = useAPI();
-  const { selectedConnection } = useConnections();
+  const { data: connectionsData, isLoading: isConnectionsLoading } = useConnectionsListQuery();
+  const { projectIdOrName } = useProject();
   const { integrationId, integrationObj } = useInstallIntegrationProps();
 
-  const connectionId = selectedConnection?.id;
+  const connectionId = connectionsData?.[0]?.id;
   const revisionId = integrationObj?.latestRevision?.id;
 
   return useQuery({
@@ -65,17 +64,15 @@ const useHydratedRevisionQuery = (
         connectionId,
       });
     },
-    enabled: !!projectIdOrName && !!integrationId && !!revisionId && !!connectionId,
+    enabled: !!projectIdOrName && !!integrationId && !!revisionId && !!connectionId && !isConnectionsLoading,
   });
 };
 
 type HydratedRevisionProviderProps = {
-  projectId?: string | null;
   children?: React.ReactNode;
 };
 
 export function HydratedRevisionProvider({
-  projectId,
   children,
 }: HydratedRevisionProviderProps) {
   const { integrationId, integrationObj } = useInstallIntegrationProps();
@@ -86,7 +83,7 @@ export function HydratedRevisionProvider({
     data: hydratedRevision,
     isLoading: loading, isError: isHydratedRevisionError,
     error: hydrateRevisionError,
-  } = useHydratedRevisionQuery(projectId || undefined);
+  } = useHydratedRevisionQuery();
 
   useEffect(() => {
     if (isHydratedRevisionError) {

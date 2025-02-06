@@ -51,7 +51,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <ErrorStateProvider>
         <ApiKeyProvider value={apiKey}>
           <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider projectIdOrName={projectIdOrName}>
+            <IntegrationListProvider>
               {children}
             </IntegrationListProvider>
           </ProjectProvider>
