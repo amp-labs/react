@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import { useConnectionsListQuery } from 'context/ConnectionsContextProvider';
+import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   ErrorBoundary, useErrorState,
 } from 'context/ErrorContextProvider';
@@ -41,11 +41,11 @@ export const useHydratedRevision = () => {
 
 const useHydratedRevisionQuery = () => {
   const getAPI = useAPI();
-  const { data: connectionsData, isLoading: isConnectionsLoading } = useConnectionsListQuery();
+  const { selectedConnection, isConnectionsLoading } = useConnections();
   const { projectIdOrName } = useProject();
   const { integrationId, integrationObj } = useInstallIntegrationProps();
 
-  const connectionId = connectionsData?.[0]?.id;
+  const connectionId = selectedConnection?.id;
   const revisionId = integrationObj?.latestRevision?.id;
 
   return useQuery({
