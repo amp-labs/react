@@ -36,7 +36,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
     integrationObj, installation, groupRef, consumerRef, setInstallation, onInstallSuccess,
     isIntegrationDeleted,
   } = useInstallIntegrationProps();
-  const { selectedConnection } = useConnections();
+  const { selectedConnection, isConnectionsLoading } = useConnections();
   const [createInstallLoading, setCreateInstallLoading] = useState(false);
   const isLoading = hydratedRevisionLoading || createInstallLoading;
 
@@ -49,7 +49,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   };
 
   useEffect(() => {
-    if (!isLoading && hydratedRevision && isProxyOnly
+    if (!isLoading && !isConnectionsLoading && hydratedRevision && isProxyOnly
       && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
@@ -70,9 +70,10 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
         console.error('Error when creating proxy installation:', e);
       });
     }
-  }, [hydratedRevision, isProxyOnly, installation, selectedConnection, apiKey,
-    projectId, integrationObj?.id, groupRef, consumerRef, setInstallation,
-    isLoading, onInstallSuccess, isIntegrationDeleted]);
+  }, [hydratedRevision,
+    isProxyOnly, installation, selectedConnection, apiKey, projectId,
+    integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess,
+    isIntegrationDeleted, isConnectionsLoading]);
 
   if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
   if (isLoading) return <ComponentContainerLoading />;

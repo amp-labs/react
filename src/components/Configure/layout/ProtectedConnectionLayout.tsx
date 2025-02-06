@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
 import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
@@ -54,6 +55,7 @@ export function ProtectedConnectionLayout({
   const { provider: providerFromProps, isIntegrationDeleted } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
+  const queryClient = useQueryClient();
 
   const selectedProvider = provider || providerFromProps;
 
@@ -68,6 +70,11 @@ export function ProtectedConnectionLayout({
     });
   }, [apiKey, selectedProvider]);
 
+  const reinstallIntegration = useCallback(() => {
+    queryClient.clear(); // clears all queries in react-query cache
+    resetComponent();
+  }, [resetComponent, queryClient]);
+
   if (!provider && !providerFromProps) {
     throw new Error('ProtectedConnectionLayout must be given a provider prop or be used within InstallIntegrationProvider');
   }
@@ -80,7 +87,7 @@ export function ProtectedConnectionLayout({
       >
         <Button
           type="button"
-          onClick={resetComponent}
+          onClick={reinstallIntegration}
           style={{ width: '100%' }}
         >Reinstall Integration
         </Button>

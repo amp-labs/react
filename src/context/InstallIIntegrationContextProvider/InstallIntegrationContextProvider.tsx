@@ -95,15 +95,17 @@ export function InstallIntegrationProvider({
     data: installations,
     isLoading,
     isError: isInstallationError, error: installationError,
-  } = useListInstallationsQuery(integrationObj?.id, groupRef);
+  } = useListInstallationsQuery(integration, groupRef);
 
   const installation = installations?.[0] || null; // there should only be one installation for mvp
 
   // resets the isIntegrationDeleted state when InstallIntegrationProps change
   useEffect(() => {
     resetIntegrationDeleted();
-  }, [integration, consumerRef, consumerName, groupRef, groupName,
-    onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping, resetIntegrationDeleted]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [integration, consumerRef, consumerName, groupRef, groupName, fieldMapping,
+    // onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping, resetIntegrationDeleted
+  ]);
 
   useEffect(() => {
     if (integrationObj === null && integrations?.length) {

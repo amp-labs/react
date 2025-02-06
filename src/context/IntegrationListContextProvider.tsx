@@ -1,13 +1,14 @@
 import {
   createContext, useContext, useEffect,
-  useMemo, useState,
+  useMemo,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { api, Integration } from 'services/api';
+import { Integration, useAPI } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useApiKey } from './ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
+import { useProject } from './ProjectContextProvider';
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
@@ -29,37 +30,44 @@ export const useIntegrationList = (): IntegrationListContextValue => {
   return context;
 };
 
+function useListIntegrationsQuery() {
+  const getAPI = useAPI();
+  const { projectIdOrName } = useProject();
+
+  return useQuery({
+    queryKey: ['amp', 'integrations', projectIdOrName],
+    queryFn: async () => {
+      if (!projectIdOrName) throw new Error('Project ID or name is required');
+      const api = await getAPI();
+      return api.integrationApi.listIntegrations({ projectIdOrName });
+    },
+    enabled: !!projectIdOrName,
+  });
+}
+
 type IntegrationListContextProviderProps = {
-  projectIdOrName: string,
   children?: React.ReactNode;
 };
 
 export function IntegrationListProvider(
-  { projectIdOrName, children }: IntegrationListContextProviderProps,
+  { children }: IntegrationListContextProviderProps,
 ) {
-  const apiKey = useApiKey();
-  const { setError } = useErrorState();
-  const [integrations, setIntegrations] = useState<Integration[] | null>(null);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
+  const { projectIdOrName } = useProject();
+  const { setError, removeError } = useErrorState();
+  const { data: integrations, isLoading, isError } = useListIntegrationsQuery();
 
   useEffect(() => {
-    api().integrationApi.listIntegrations({ projectIdOrName }, {
-      headers: {
-        'X-Api-Key': apiKey ?? '',
-      },
-    }).then((_integrations) => {
-      setLoadingState(false);
-      setIntegrations(_integrations || []);
-    }).catch((err) => {
-      console.error('Error retrieving integration information.');
-      handleServerError(err);
-      setLoadingState(false);
+    if (isError) {
+      handleServerError(isError);
       setError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName);
-    });
-  }, [projectIdOrName, apiKey, setError]);
+    } else {
+      removeError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName);
+    }
+  }, [isError, projectIdOrName, removeError, setError]);
 
   const contextValue = useMemo(() => ({
-    integrations, isLoading,
+    integrations: integrations || null,
+    isLoading,
   }), [integrations, isLoading]);
 
   return (

@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
-import { useIntegrationList } from 'context/IntegrationListContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
-import { api, Installation, Integration } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
+import { useListInstallationsQuery } from './query/useListInstallationsQuery';
+
 interface UseIsIntegrationInstalledResult {
+  isLoading: boolean;
   isLoaded: boolean;
   isIntegrationInstalled: boolean | null;
 }
@@ -15,57 +14,14 @@ export const useIsIntegrationInstalled = (
   integration: string,
   groupRef: string,
 ): UseIsIntegrationInstalledResult => {
-  const apiKey = useApiKey();
-  const { projectId, isLoading: isProjectLoading } = useProject();
-  const { integrations } = useIntegrationList();
+  const {
+    data: installations, isLoading: isInstallationLoading, isError, error,
+  } = useListInstallationsQuery(integration, groupRef);
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isIntegrationInstalled, setIsIntegrationInstalled] = useState<boolean | null>(null);
+  const isIntegrationInstalled = (installations?.length || 0) > 0;
+  const isLoaded = !!installations && !isInstallationLoading;
 
-  const noProjectId = !isProjectLoading && !projectId;
-  if (!apiKey || noProjectId) {
-    throw new Error('useIsIntegrationInstalled must be used within AmpersandProvider');
-  }
+  useEffect(() => { if (isError) handleServerError(error); }, [isError, error]);
 
-  if (!integration) {
-    throw new Error('useIsIntegrationInstalled requires an integration name');
-  }
-
-  if (!groupRef) {
-    throw new Error('useIsIntegrationInstalled requires a groupRef');
-  }
-
-  const integrationToCheck = useMemo(() => integrations?.reduce(
-    (
-      acc: Integration,
-      _integration: Integration,
-    ) => (
-      _integration?.name === integration
-        ? _integration
-        : acc),
-    {} as Integration,
-  ), [integrations, integration]);
-
-  useEffect(() => {
-    if (!integrationToCheck || isProjectLoading) return;
-
-    api().installationApi.listInstallations({
-      projectIdOrName: projectId,
-      integrationId: integrationToCheck.id,
-      groupRef,
-    }, {
-      headers: {
-        'x-api-key': apiKey,
-      },
-    }).then((installationList: Installation[]) => {
-      setIsLoaded(true);
-      setIsIntegrationInstalled(installationList.length > 0);
-    }).catch((err) => {
-      console.error('Error listing installations.');
-      handleServerError(err);
-      setIsLoaded(true);
-    });
-  }, [groupRef, apiKey, projectId, integrationToCheck, isProjectLoading]);
-
-  return { isLoaded, isIntegrationInstalled };
+  return { isLoaded, isIntegrationInstalled, isLoading: isInstallationLoading };
 };

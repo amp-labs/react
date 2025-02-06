@@ -37,14 +37,16 @@ export const useConnections = (): ConnectionsContextValue => {
   return context;
 };
 
-const useConnectionsListQuery = () => {
+export const useConnectionsListQuery = () => {
   const { projectIdOrName } = useProject();
   const { groupRef, provider } = useInstallIntegrationProps();
   const getAPI = useAPI();
   return useQuery({
     queryKey: ['amp', 'connections', projectIdOrName, groupRef, provider],
     queryFn: async () => {
-      if (!projectIdOrName) throw new Error('Project ID or name not found. Please wrap this component inside of AmpersandProvider');
+      if (!projectIdOrName) {
+        throw new Error('Project ID or name not found. Please wrap this component inside of AmpersandProvider');
+      }
       if (!groupRef) throw new Error('Group reference not found.');
       if (!provider) throw new Error('Provider not found.');
 
