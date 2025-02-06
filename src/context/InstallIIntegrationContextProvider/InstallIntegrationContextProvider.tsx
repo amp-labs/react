@@ -1,19 +1,20 @@
 import {
   createContext, useCallback,
-  useContext, useEffect, useMemo, useState,
+  useContext, useEffect, useMemo,
 } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
+import { useListInstallationsQuery } from 'hooks/query/useListInstallationsQuery';
 import {
-  api, Config, Installation, Integration,
+  Config, Installation, Integration,
 } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { FieldMapping } from 'src/components/Configure/InstallIntegration';
 import { findIntegrationFromList } from 'src/utils';
+import { handleServerError } from 'src/utils/handleServerError';
 
-import { useApiKey } from '../ApiKeyContextProvider';
 import { ErrorBoundary, useErrorState } from '../ErrorContextProvider';
 import { useIntegrationList } from '../IntegrationListContextProvider';
-import { useProject } from '../ProjectContextProvider';
 
 import { useIsInstallationDeleted } from './useIsInstallationDeleted';
 
@@ -82,21 +83,21 @@ export function InstallIntegrationProvider({
   children, integration, consumerRef, consumerName, groupRef, groupName,
   onInstallSuccess, onUpdateSuccess, onUninstallSuccess, fieldMapping,
 }: InstallIntegrationProviderProps) {
-  const apiKey = useApiKey();
-  const { projectId } = useProject();
   const { integrations } = useIntegrationList();
-  const { setError, isError } = useErrorState();
+  const { setError, isError, removeError } = useErrorState();
   const { isIntegrationDeleted, setIntegrationDeleted, resetIntegrationDeleted } = useIsInstallationDeleted();
-
-  const [installations, setInstallations] = useState<Installation[]>([]);
-  const [isLoading, setLoadingState] = useState<boolean>(true);
-
-  const installation = installations?.[0] || null; // there should only be one installation for mvp
 
   const integrationObj = useMemo(
     () => findIntegrationFromList(integration, integrations || []),
     [integration, integrations],
   );
+  const {
+    data: installations,
+    isLoading,
+    isError: isInstallationError, error: installationError,
+  } = useListInstallationsQuery(integrationObj?.id, groupRef);
+
+  const installation = installations?.[0] || null; // there should only be one installation for mvp
 
   // resets the isIntegrationDeleted state when InstallIntegrationProps change
   useEffect(() => {
@@ -110,46 +111,31 @@ export function InstallIntegrationProvider({
     }
   }, [integration, integrationObj, integrations]);
 
-  // default set the installations array with a single installation object
-  // may need to find and update the installation object in the future
-  const setInstallation = useCallback((installationObj: Installation) => {
-    setInstallations([installationObj]);
-  }, [setInstallations]);
-
-  const resetInstallations = useCallback(
+  useEffect(
     () => {
-      if (integrationObj?.id) {
-      // check if installation exists on selected integration
-        api().installationApi.listInstallations({
-          projectIdOrName: projectId,
-          integrationId:
-          integrationObj.id,
-          groupRef,
-        }, {
-          headers: {
-            'X-Api-Key': apiKey ?? '',
-          },
-        })
-          .then((_installations) => {
-            setLoadingState(false);
-            setInstallations(_installations || []);
-          })
-          .catch((err) => {
-            setError(ErrorBoundary.INSTALLATION_LIST, integrationObj.id);
-            setLoadingState(false);
-            console.error('Error retrieving installation information: ', err);
-          });
+      if (isInstallationError) {
+        setError(ErrorBoundary.INSTALLATION_LIST, integrationObj?.id || '');
+        handleServerError(installationError);
+      } else {
+        removeError(ErrorBoundary.INSTALLATION_LIST, integrationObj?.id || '');
       }
     },
-    [integrationObj, projectId, apiKey, setError, groupRef],
+    [isInstallationError, integrationObj, setError, removeError, installationError],
   );
+  const queryClient = useQueryClient();
+
+  // legacy reset function - remove when migrated all installation endpoints to react-query
+  const resetInstallations = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
+  }, [queryClient]);
+
+  // updates cache with new installation object
+  const setInstallation = useCallback((installationObj: Installation) => {
+    queryClient.setQueryData(['amp', 'installations'], [installationObj]);
+    queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
+  }, [queryClient]);
 
   const integrationErrorKey: string = integrationObj?.id || '';
-
-  // check if integration has been installed in AmpersandProvider
-  useEffect(() => {
-    resetInstallations();
-  }, [resetInstallations]);
 
   const props = useMemo(() => ({
     integrationId: integrationObj?.id || '',
@@ -159,7 +145,7 @@ export function InstallIntegrationProvider({
     consumerName,
     groupRef,
     groupName,
-    installation,
+    installation: installation || undefined,
     setInstallation,
     resetInstallations,
     onInstallSuccess,
