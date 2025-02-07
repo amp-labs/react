@@ -11,7 +11,7 @@ export function UninstallContent() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {installation?.id
         ? (
-          <p>Once you uninstall this integration, it's configuration will be lost.</p>
+          <p>Once you uninstall this integration, its configuration will be lost.</p>
         )
         : <p>You've successfully uninstalled the integration.</p>}
 
