@@ -21,20 +21,16 @@ interface FieldMappingProps {
   field: IntegrationFieldMapping;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   allFields: HydratedIntegrationFieldExistent[];
-  hasError?: boolean;
-  errorMessage?: string;
 }
 
 export function FieldMapping({
   field,
   onSelectChange,
   allFields,
-  hasError,
-  errorMessage,
 }: FieldMappingProps) {
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
-  const { isError, removeError } = useErrorState();
+  const { isError, removeError, getError } = useErrorState();
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const fieldValue = selectedFieldMappings?.[field.mapToName];
 
@@ -103,10 +99,23 @@ export function FieldMapping({
         removeError(ErrorBoundary.MAPPING, selectedObjectName);
       }
     }
-  }, [field.mapToName, selectedObjectName, setConfigureState, isError, removeError]);
+  }, [
+    field.mapToName,
+    selectedObjectName,
+    setConfigureState,
+    isError,
+    removeError,
+  ]);
 
-  // eslint-disable-next-line no-console
-  console.log('FIELD MAPPING ERRORS', hasError, errorMessage);
+  const { hasDuplicationError, errorMessage } = useMemo(() => {
+    const errs = getError(ErrorBoundary.MAPPING, selectedObjectName!);
+    const hasDupErrors = Array.isArray(errs) && errs.length > 0 && errs.includes(field.mapToName);
+    return {
+      hasDuplicationError: hasDupErrors,
+      errorMessage: hasDupErrors ? DUPLICATE_FIELD_ERROR_MESSAGE : '',
+    };
+  }, [selectedObjectName, getError, field.mapToName]);
+
   return (
     <>
       <div
@@ -132,7 +141,7 @@ export function FieldMapping({
           </Button>
         </div>
       </div>
-      {hasError && (
+      {hasDuplicationError && (
         <span key={field.mapToName} style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>
           {errorMessage}
         </span>

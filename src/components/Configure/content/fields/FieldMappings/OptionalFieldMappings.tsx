@@ -7,15 +7,14 @@ import { FormControl } from 'src/components/form/FormControl';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { checkDuplicateFieldError } from './checkDuplicateFieldError';
 import { DynamicFieldMappings } from './DynamicFieldMappings';
-import { DUPLICATE_FIELD_ERROR_MESSAGE, FieldMapping } from './FieldMapping';
+import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function OptionalFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
-  const {
-    isError, removeError, setError, getError,
-  } = useErrorState();
+  const { isError, removeError, setError } = useErrorState();
   const allFields = configureState?.read?.allFields || [];
   const { fieldMapping } = useInstallIntegrationProps();
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
@@ -27,16 +26,15 @@ export function OptionalFieldMappings() {
       return;
     }
 
-    if (selectedFieldMappings && selectedObjectName
-          && Object.values(selectedFieldMappings).some((mapping) => mapping === value && mapping !== name)) {
-      console.error('Each field must be mapped to a unique value in Optional Fields', selectedFieldMappings);
-      const keysForValue = [
-        name,
-        ...(Object.keys(selectedFieldMappings).filter((key) => selectedFieldMappings[key] === value) || []),
-      ];
+    const hasDuplicateError = checkDuplicateFieldError({
+      selectedFieldMappings,
+      selectedObjectName,
+      fieldName: name,
+      fieldValue: value,
+      setError,
+    });
 
-      // set the keys for which duplicate values are found
-      setError(ErrorBoundary.MAPPING, selectedObjectName, keysForValue);
+    if (hasDuplicateError) {
       return;
     }
 
@@ -54,7 +52,10 @@ export function OptionalFieldMappings() {
     }
 
     // reset duplicate value errors for the selected object
-    if (selectedObjectName && isError(ErrorBoundary.MAPPING, selectedObjectName)) {
+    if (
+      selectedObjectName
+      && isError(ErrorBoundary.MAPPING, selectedObjectName)
+    ) {
       removeError(ErrorBoundary.MAPPING, selectedObjectName);
     }
   };
@@ -87,9 +88,7 @@ export function OptionalFieldMappings() {
 
   const showDynamicFieldMappings = dynamicFieldMappings.length > 0;
   const showIntegrationFieldMappings = integrationFieldMappings.length > 0;
-  const errors = getError(ErrorBoundary.MAPPING, selectedObjectName!);
-
-  return (showIntegrationFieldMappings || showDynamicFieldMappings) ? (
+  return showIntegrationFieldMappings || showDynamicFieldMappings ? (
     <>
       <FieldHeader string="Map the following optional fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
@@ -99,8 +98,6 @@ export function OptionalFieldMappings() {
               allFields={allFields}
               field={field}
               onSelectChange={onSelectChange}
-              hasError={Array.isArray(errors) && errors.includes(field.mapToName)}
-              errorMessage={DUPLICATE_FIELD_ERROR_MESSAGE}
             />
           </FormControl>
         ))}
@@ -109,7 +106,6 @@ export function OptionalFieldMappings() {
             dynamicFieldMappings={dynamicFieldMappings}
             onSelectChange={onSelectChange}
             allFields={allFields}
-            selectedObjectName={selectedObjectName!}
           />
         )}
       </div>
