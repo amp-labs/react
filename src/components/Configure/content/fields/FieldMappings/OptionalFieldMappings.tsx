@@ -27,10 +27,9 @@ export function OptionalFieldMappings() {
       return;
     }
 
-    // TODO(@jatin): Handle this for RequiredFieldMappings as well.
     if (selectedFieldMappings && selectedObjectName
           && Object.values(selectedFieldMappings).some((mapping) => mapping === value && mapping !== name)) {
-      console.error('Each field must be mapped to a unique value', selectedFieldMappings);
+      console.error('Each field must be mapped to a unique value in Optional Fields', selectedFieldMappings);
       const keysForValue = [
         name,
         ...(Object.keys(selectedFieldMappings).filter((key) => selectedFieldMappings[key] === value) || []),
