@@ -45,7 +45,7 @@ export function OAuthWindow({
 
         if (!connectionId && !error) {
           console.error('OAuth failed. Please try again.');
-          onError?.('OAuth failed. Please try again.');
+          onError?.('Something went wrong. Please try again.');
         } else if (connectionId) {
           onError?.(null);
         }

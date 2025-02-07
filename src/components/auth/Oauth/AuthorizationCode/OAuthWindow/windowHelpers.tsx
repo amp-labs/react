@@ -73,7 +73,7 @@ export function useReceiveMessageEventHandler(
       console.error('OAuth failed: ', { event });
       // event.data.message sent by server message
       // See `server/shared/oauth/connection.go` for the HTML that the server sends back to the UI library.
-      onError?.(event?.data?.message ?? 'OAuth failed. Please try again.');
+      onError?.(event?.data?.message ?? 'Something went wrong. Please try again.');
       // do not close the window if error occurs
     }
   }, [oauthWindow, onError, queryClient, setConnectionId]);
