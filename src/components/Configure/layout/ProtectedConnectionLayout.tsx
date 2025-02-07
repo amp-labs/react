@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
 import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
 import { NoAuthFlow } from 'components/auth/NoAuth/NoAuthFlow';
 import { OauthFlow } from 'components/auth/Oauth/OauthFlow/OauthFlow';
 import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   useInstallIntegrationProps,
 } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { api, Connection, ProviderInfo } from 'services/api';
+import { Connection, useAPI } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
 import { capitalize } from 'src/utils';
 import { handleServerError } from 'src/utils/handleServerError';
+
+import { ComponentContainerError, ComponentContainerLoading } from '../ComponentContainer';
 
 interface ProtectedConnectionLayoutProps {
   provider?: string,
@@ -29,29 +30,31 @@ interface ProtectedConnectionLayoutProps {
   resetComponent: () => void, // resets installation integration component
 }
 
-export const getProviderInfo = async (
-  apiKey: string,
-  provider: string,
-): Promise<ProviderInfo> => {
-  const provInfo = await api()
-    .providerApi
-    .getProvider({ provider }, {
-      headers: { 'X-Api-Key': apiKey ?? '' },
-    });
-  if (!provInfo) {
-    throw new Error(`Provider ${provider} not found`);
-  }
+const useProviderInfo = (provider?: string) => {
+  const getAPI = useAPI();
+  const { provider: providerFromProps } = useInstallIntegrationProps();
+  const selectedProvider = provider || providerFromProps;
 
-  return provInfo;
+  return useQuery({
+    queryKey: ['amp', 'providerInfo', selectedProvider],
+    queryFn: async () => {
+      if (!selectedProvider) {
+        throw new Error('Provider not found');
+      }
+      const api = await getAPI();
+      return api.providerApi.getProvider({ provider: selectedProvider });
+    },
+    enabled: !!selectedProvider,
+  });
 };
 
 export function ProtectedConnectionLayout({
   provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onDisconnectSuccess,
   resetComponent,
 }: ProtectedConnectionLayoutProps) {
-  const apiKey = useApiKey();
-  const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
-
+  const {
+    data: providerInfo, isLoading: isProviderLoading, isError, error: providerInfoError,
+  } = useProviderInfo(provider);
   const { provider: providerFromProps, isIntegrationDeleted } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
@@ -62,13 +65,11 @@ export function ProtectedConnectionLayout({
   const providerName = providerInfo?.displayName ?? capitalize(selectedProvider);
 
   useEffect(() => {
-    getProviderInfo(apiKey, selectedProvider).then((info) => {
-      setProviderInfo(info);
-    }).catch((err) => {
+    if (isError) {
       console.error('Error loading provider info.');
-      handleServerError(err);
-    });
-  }, [apiKey, selectedProvider]);
+      handleServerError(providerInfoError);
+    }
+  }, [isError, providerInfoError]);
 
   const reinstallIntegration = useCallback(() => {
     queryClient.clear(); // clears all queries in react-query cache
@@ -98,7 +99,9 @@ export function ProtectedConnectionLayout({
   // a selected connection exists, render children
   if (selectedConnection) return children;
 
-  if (providerInfo == null) return <strong>Provider not found</strong>;
+  if (isProviderLoading) return <ComponentContainerLoading />;
+
+  if (providerInfo == null) return <ComponentContainerError message="Provider info was not found." />;
 
   const sharedProps = {
     provider: selectedProvider,
