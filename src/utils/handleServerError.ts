@@ -16,13 +16,20 @@ export const handleServerError = async (error: any, setError?: (error: string) =
     } else {
       console.error(`Error (${status}):`, statusText);
     }
-    const errorBody = await error.response.json(); // If the response body contains error details
 
-    // https://github.com/amp-labs/openapi/blob/3bc3ab75c3071763e1117f697be3e0fcb636972c/problem/problem.yaml#L85
-    // All errors returned by the Ampersand API conform to this format
-    const errorMsg = errorBody?.causes?.join('\n') || '[ERROR] Creating installation failed.';
-    console.error('[Error Message]', errorMsg);
-    if (setError) setError(errorMsg);
+    try {
+      // make clone in case we want to read error response body multiple times
+      const errorResponseClone = error.response.clone();
+      const errorBody = await errorResponseClone.json(); // If the response body contains error details
+
+      // https://github.com/amp-labs/openapi/blob/3bc3ab75c3071763e1117f697be3e0fcb636972c/problem/problem.yaml#L85
+      // All errors returned by the Ampersand API conform to this format
+      const errorMsg = errorBody?.causes?.join('\n') || '[ERROR] Creating installation failed.';
+      console.error('[Error Message]', errorMsg);
+      if (setError) setError(errorMsg);
+    } catch (e) {
+      console.error('Error parsing error response body:', e); // the response body could already be parsed
+    }
   } else {
     console.error('Unexpected error:', error.message);
   }
