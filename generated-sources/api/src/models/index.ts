@@ -95,7 +95,6 @@ export * from './Oauth2Opts';
 export * from './OauthConnectRequest';
 export * from './ObjectMetadata';
 export * from './Operation';
-export * from './OperationEvent';
 export * from './OptionalFieldsAutoOption';
 export * from './Org';
 export * from './PatchApiKeyRequest';
