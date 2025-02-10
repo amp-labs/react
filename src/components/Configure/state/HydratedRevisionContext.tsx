@@ -64,6 +64,7 @@ const useHydratedRevisionQuery = () => {
         connectionId,
       });
     },
+    retry: 3, // retry 3 times before showing error
     enabled: !!projectIdOrName && !!integrationId && !!revisionId && !!connectionId && !isConnectionsLoading,
   });
 };
