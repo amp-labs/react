@@ -86,7 +86,7 @@ export function FieldMapping(
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
         {SelectComponent}
-        <Button type="button" variant="ghost" onClick={onClear}>clear</Button>
+        <Button type="button" variant="ghost" onClick={onClear}>Clear</Button>
       </div>
     </div>
   );
