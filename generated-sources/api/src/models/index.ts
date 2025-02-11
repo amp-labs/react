@@ -106,6 +106,8 @@ export * from './ProviderInfo';
 export * from './Revision';
 export * from './SelectedFieldsAutoConfig';
 export * from './SignedUrl';
+export * from './SubscribeOpts';
+export * from './SubscribeSupport';
 export * from './Support';
 export * from './TokenMetadataFields';
 export * from './UpdateDestinationRequest';
