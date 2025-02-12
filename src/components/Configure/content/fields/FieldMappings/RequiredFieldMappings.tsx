@@ -6,13 +6,14 @@ import { FormControl } from 'src/components/form/FormControl';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { checkDuplicateFieldError } from './checkDuplicateFieldError';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
-  const { isError, removeError } = useErrorState();
-
+  const { isError, removeError, setError } = useErrorState();
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
     if (!value) {
@@ -20,15 +21,35 @@ export function RequiredFieldMappings() {
       return;
     }
 
+    const hasDuplicateError = checkDuplicateFieldError({
+      selectedFieldMappings,
+      selectedObjectName,
+      fieldName: name,
+      fieldValue: value,
+      setError,
+    });
+
+    if (hasDuplicateError) return;
+
     if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, [{
-        field: name,
-        value,
-      }]);
+      setFieldMapping(selectedObjectName, setConfigureState, [
+        {
+          field: name,
+          value,
+        },
+      ]);
     }
 
     if (isError(ErrorBoundary.MAPPING, name)) {
       removeError(ErrorBoundary.MAPPING, name);
+    }
+
+    // reset duplicate value errors for the selected object
+    if (
+      selectedObjectName
+      && isError(ErrorBoundary.MAPPING, selectedObjectName)
+    ) {
+      removeError(ErrorBoundary.MAPPING, selectedObjectName);
     }
   };
 

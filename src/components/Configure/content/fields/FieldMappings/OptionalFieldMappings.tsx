@@ -7,15 +7,17 @@ import { FormControl } from 'src/components/form/FormControl';
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
+import { checkDuplicateFieldError } from './checkDuplicateFieldError';
 import { DynamicFieldMappings } from './DynamicFieldMappings';
 import { FieldMapping } from './FieldMapping';
 import { setFieldMapping } from './setFieldMapping';
 
 export function OptionalFieldMappings() {
   const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
-  const { isError, removeError } = useErrorState();
+  const { isError, removeError, setError } = useErrorState();
   const allFields = configureState?.read?.allFields || [];
   const { fieldMapping } = useInstallIntegrationProps();
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
@@ -23,6 +25,16 @@ export function OptionalFieldMappings() {
       // if place holder value is chosen, we don't change state
       return;
     }
+
+    const hasDuplicateError = checkDuplicateFieldError({
+      selectedFieldMappings,
+      selectedObjectName,
+      fieldName: name,
+      fieldValue: value,
+      setError,
+    });
+
+    if (hasDuplicateError) return;
 
     if (selectedObjectName) {
       setFieldMapping(selectedObjectName, setConfigureState, [
@@ -35,6 +47,14 @@ export function OptionalFieldMappings() {
 
     if (isError(ErrorBoundary.MAPPING, name)) {
       removeError(ErrorBoundary.MAPPING, name);
+    }
+
+    // reset duplicate value errors for the selected object
+    if (
+      selectedObjectName
+      && isError(ErrorBoundary.MAPPING, selectedObjectName)
+    ) {
+      removeError(ErrorBoundary.MAPPING, selectedObjectName);
     }
   };
 
@@ -66,8 +86,7 @@ export function OptionalFieldMappings() {
 
   const showDynamicFieldMappings = dynamicFieldMappings.length > 0;
   const showIntegrationFieldMappings = integrationFieldMappings.length > 0;
-
-  return (showIntegrationFieldMappings || showDynamicFieldMappings) ? (
+  return showIntegrationFieldMappings || showDynamicFieldMappings ? (
     <>
       <FieldHeader string="Map the following optional fields" />
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
