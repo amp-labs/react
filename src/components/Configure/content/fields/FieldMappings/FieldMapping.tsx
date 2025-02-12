@@ -36,12 +36,7 @@ export function FieldMapping({
 
   useEffect(() => {
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    if (
-      !!field._default
-      && !fieldValue
-      && selectedObjectName
-      && !!configureState
-    ) {
+    if (!!field._default && !fieldValue && selectedObjectName && !!configureState) {
       // set field mapping default value if no value exists
       setFieldMapping(selectedObjectName, setConfigureState, [
         {
@@ -107,6 +102,9 @@ export function FieldMapping({
     removeError,
   ]);
 
+  // Errors are tracked per field by storing an array of field names that have errors
+  // under the selectedObjectName key in the error boundary. If a field name exists
+  // in this array, it means that field has a duplicate mapping error.
   const { hasDuplicationError, errorMessage } = useMemo(() => {
     const errs = getError(ErrorBoundary.MAPPING, selectedObjectName!);
     const hasDupErrors = Array.isArray(errs) && errs.length > 0 && errs.includes(field.mapToName);
@@ -141,11 +139,8 @@ export function FieldMapping({
           </Button>
         </div>
       </div>
-      {hasDuplicationError && (
-        <span key={field.mapToName} style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>
-          {errorMessage}
-        </span>
-      )}
+      {hasDuplicationError
+      && (<span key={field.mapToName} style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}> {errorMessage} </span>)}
     </>
   );
 }

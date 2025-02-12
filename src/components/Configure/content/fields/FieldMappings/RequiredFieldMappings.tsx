@@ -29,9 +29,7 @@ export function RequiredFieldMappings() {
       setError,
     });
 
-    if (hasDuplicateError) {
-      return;
-    }
+    if (hasDuplicateError) return;
 
     if (selectedObjectName) {
       setFieldMapping(selectedObjectName, setConfigureState, [

@@ -34,9 +34,7 @@ export function OptionalFieldMappings() {
       setError,
     });
 
-    if (hasDuplicateError) {
-      return;
-    }
+    if (hasDuplicateError) return;
 
     if (selectedObjectName) {
       setFieldMapping(selectedObjectName, setConfigureState, [
