@@ -4,7 +4,8 @@ import { AuthCardLayoutTemplate } from 'components/auth/AuthCardLayoutTemplate';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { FormComponent } from 'src/components/form';
 import { Button } from 'src/components/ui-base/Button';
-import { getProviderName } from 'src/utils';
+import { useProvider } from 'src/hooks/useProvider';
+import { capitalize } from 'src/utils';
 
 import { LandingContentProps } from './LandingContentProps';
 
@@ -15,8 +16,9 @@ function BasicAuthContentForm({
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [formData, setFormData] = useState({ username: '', password: '' });
   const { username, password } = formData;
+  const { providerName } = useProvider(provider);
 
-  const providerName = getProviderName(provider, providerInfo);
+  const providerNameDisplayName = providerName || capitalize(provider);
   const docsURL = providerInfo.basicOpts?.docsURL;
   const isUserValid = username.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isUserValid;
@@ -46,7 +48,7 @@ function BasicAuthContentForm({
         {docsURL && (
         <DocsHelperText
           url={docsURL}
-          providerDisplayName={providerName}
+          providerDisplayName={providerNameDisplayName}
           credentialName="credentials"
         />
         )}

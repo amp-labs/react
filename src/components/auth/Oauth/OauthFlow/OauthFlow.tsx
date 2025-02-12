@@ -1,5 +1,5 @@
 import { Connection, ProviderInfo } from 'services/api';
-import { getProviderName } from 'src/utils';
+import { useProvider } from 'src/hooks/useProvider';
 
 import { NoWorkspaceOauthFlow } from '../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow';
 import { WorkspaceOauthFlow } from '../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow';
@@ -23,12 +23,12 @@ type OauthFlowProps = {
 export function OauthFlow({
   provider, providerInfo, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection,
 }: OauthFlowProps) {
+  const { providerName } = useProvider(provider);
   if (providerInfo.oauth2Opts === undefined) {
     return <em>Provider is missing OAuth2 options</em>;
   }
 
   const { grantType, explicitScopesRequired, explicitWorkspaceRequired } = providerInfo.oauth2Opts;
-  const providerName = getProviderName(provider, providerInfo);
 
   const sharedProps = {
     provider,

@@ -8,8 +8,8 @@ import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextPr
 import { useProject } from 'context/ProjectContextProvider';
 import { VerticalTabs } from 'src/components/Configure/nav/ObjectManagementNav/v2/Tabs';
 import { NavObject } from 'src/components/Configure/types';
+import { useProvider } from 'src/hooks/useProvider';
 import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
-import { getProviderName } from 'src/utils';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
@@ -36,7 +36,8 @@ export function ObjectManagementNavV2({
   children,
 }: ObjectManagementNavProps) {
   const { project } = useProject();
-  const { installation, provider } = useInstallIntegrationProps();
+  const { installation } = useInstallIntegrationProps();
+  const { providerName } = useProvider();
   const { hydratedRevision } = useHydratedRevision();
   const { objectConfigurationsState } = useObjectsConfigureState();
 
@@ -89,7 +90,7 @@ export function ObjectManagementNavV2({
             }}
           >
             <div style={{ width: '20rem' }}>
-              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{getProviderName(provider)} integration
+              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{providerName} integration
               </h1>
               <h3 style={{ marginBottom: '20px', fontSize: 'large', fontWeight: '500' }}>{appName}
               </h3>

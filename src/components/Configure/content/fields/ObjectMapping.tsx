@@ -1,9 +1,7 @@
-import {
-  useInstallIntegrationProps,
-} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { FormCalloutBox } from 'src/components/FormCalloutBox';
 import { useProject } from 'src/context/ProjectContextProvider';
-import { capitalize, getProviderName } from 'src/utils';
+import { useProvider } from 'src/hooks/useProvider';
+import { capitalize } from 'src/utils';
 
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 import { useSelectedConfigureState } from '../useSelectedConfigureState';
@@ -16,10 +14,10 @@ export function ReadObjectMapping() {
   const { project } = useProject();
   const { hydratedRevision } = useHydratedRevision();
   const { selectedObjectName } = useSelectedConfigureState();
-  const { provider } = useInstallIntegrationProps();
+
+  const { providerName } = useProvider();
 
   const appName = project?.appName;
-  const providerName = getProviderName(provider);
 
   const selectedReadObject = hydratedRevision?.content?.read?.objects?.find(
     (obj) => obj.objectName === selectedObjectName,
