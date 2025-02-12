@@ -16,26 +16,26 @@ export function checkDuplicateFieldError({
   fieldValue,
   setError,
 }: DuplicateFieldErrorProps): boolean {
-  if (
-    selectedFieldMappings
-    && selectedObjectName
-    && Object.values(selectedFieldMappings).some(
-      (mapping) => mapping === fieldValue && mapping !== fieldName,
-    )
-  ) {
+  if (!selectedFieldMappings || !selectedObjectName) return false;
+
+  const hasDuplicate = Object.values(selectedFieldMappings).some(
+    (mapping) => mapping === fieldValue && mapping !== fieldName,
+  );
+
+  if (hasDuplicate) {
     console.error(
       'Each field must be mapped to a unique value',
       selectedFieldMappings,
     );
 
-    const keysForValue = [
-      fieldName,
-      ...(Object.keys(selectedFieldMappings).filter(
-        (key) => selectedFieldMappings[key] === fieldValue,
-      ) || []),
-    ];
+    const duplicateFieldValues = Object.keys(selectedFieldMappings).filter(
+      (key) => selectedFieldMappings[key] === fieldValue,
+    );
 
-    // set the keys for which duplicate values are found
+    // All the keys for which the duplicate value is found
+    const keysForValue = [fieldName, ...duplicateFieldValues];
+
+    // set the error boundary keys for which duplicate values are found
     setError(ErrorBoundary.MAPPING, selectedObjectName, keysForValue);
     return true;
   }
