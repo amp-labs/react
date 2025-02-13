@@ -12,11 +12,9 @@ export * from '../hooks/useIsIntegrationInstalled';
 /**
  *  Exported types which are helpful for builders
  */
-
-// For defining dynamic mappings
 export type {
-  FieldMapping,
-  FieldMappingEntry,
+  FieldMapping, // For defining dynamic mappings
+  FieldMappingEntry, // For defining dynamic mappings
   Connection, // For ConnectProvider callbacks
   Config, // For InstallIntegration callbacks
 };

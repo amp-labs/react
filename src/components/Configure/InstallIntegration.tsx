@@ -39,8 +39,8 @@ export type FieldMappingEntry = {
    */
   mappedValues?: MappedValue[];
   /**
- * The name of the field in SaaS provider, if present, then we will not prompt the user to map it.
- */
+   * The name of the field in SaaS provider, if present, then we will not prompt the user to map the field.
+   */
   fieldName?: string;
 };
 
