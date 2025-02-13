@@ -2,7 +2,7 @@ import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import { InstallIntegrationProvider } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { Config, IntegrationFieldMapping } from 'services/api';
+import { Config } from 'services/api';
 import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import resetStyles from 'src/styles/resetCss.module.css';
@@ -20,19 +20,35 @@ export interface MappedValue {
   mappedDisplayValue: string;
 }
 
-export type FieldMappingWithMappedValues = IntegrationFieldMapping & {
+export type FieldMappingEntry = {
   /**
-   * The name of the field to map from the source
+   * The name of the field in your application.
    */
-  fieldName?: string;
+  mapToName: string;
   /**
-   * The app-specific values to map provider API values to
+   * Optional display name of the field to show the user in the mapping UI.
+   */
+  mapToDisplayName?: string;
+  /**
+   * Optional prompt to show the user in the mapping UI.
+   */
+  prompt?: string;
+  /**
+   * If you would like the user to map a set of possible values,
+   * this is the list of possible values of the field in your application.
    */
   mappedValues?: MappedValue[];
+  /**
+ * The name of the field in SaaS provider, if present, then we will not prompt the user to map it.
+ */
+  fieldName?: string;
 };
 
+/**
+ * A map of object names to FieldMappingEntry arrays, with each FieldMappingEntry representing a field.
+ */
 export type FieldMapping = {
-  [key: string]: Array<FieldMappingWithMappedValues>
+  [key: string]: Array<FieldMappingEntry>
 };
 
 interface InstallIntegrationProps {

@@ -1,3 +1,4 @@
+import { FieldMapping, FieldMappingEntry } from 'src/components/Configure/InstallIntegration';
 import { Config, Connection } from 'src/services/api';
 
 /**
@@ -13,8 +14,9 @@ export * from '../hooks/useIsIntegrationInstalled';
  */
 
 // For defining dynamic mappings
-export { FieldMapping } from 'src/components/Configure/content/fields/FieldMappings';
 export type {
+  FieldMapping,
+  FieldMappingEntry,
   Connection, // For ConnectProvider callbacks
   Config, // For InstallIntegration callbacks
 };
