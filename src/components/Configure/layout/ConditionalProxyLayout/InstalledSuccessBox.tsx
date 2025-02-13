@@ -1,5 +1,5 @@
 import { SuccessTextBox } from 'components/SuccessTextBox/SuccessTextBox';
-import { getProviderName } from 'src/utils';
+import { useProvider } from 'src/hooks/useProvider';
 
 import { UninstallButton } from '../UninstallButton';
 
@@ -8,9 +8,8 @@ type InstalledSuccessBoxProps = {
 };
 
 export function InstalledSuccessBox({ provider }: InstalledSuccessBoxProps) {
-  const text = `You have successfully installed your ${getProviderName(
-    provider,
-  )} integration.`;
+  const { providerName } = useProvider(provider);
+  const text = `You have successfully installed your ${providerName} integration.`;
   return (
     <SuccessTextBox text={text}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

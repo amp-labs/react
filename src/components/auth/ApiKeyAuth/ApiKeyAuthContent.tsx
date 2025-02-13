@@ -4,7 +4,8 @@ import { AuthCardLayoutTemplate } from 'components/auth/AuthCardLayoutTemplate';
 import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { FormComponent } from 'src/components/form';
 import { Button } from 'src/components/ui-base/Button';
-import { getProviderName } from 'src/utils';
+import { useProvider } from 'src/hooks/useProvider';
+import { capitalize } from 'src/utils';
 
 import { LandingContentProps } from './LandingContentProps';
 
@@ -15,10 +16,10 @@ function ApiKeyAuthContentForm({
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [apiKey, setApiKey] = useState('');
   const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => setApiKey(event.currentTarget.value);
+  const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
   const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
-  const providerName = getProviderName(provider, providerInfo);
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   return (
@@ -35,7 +36,7 @@ function ApiKeyAuthContentForm({
         {docsURL && (
         <DocsHelperText
           url={docsURL}
-          providerDisplayName={providerName}
+          providerDisplayName={providerName || capitalize(provider)}
           credentialName="API key"
         />
         )}

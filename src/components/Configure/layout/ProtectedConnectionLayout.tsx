@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
 import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
@@ -10,16 +10,16 @@ import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   useInstallIntegrationProps,
 } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { Connection, useAPI } from 'services/api';
+import { Connection } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
-import { capitalize } from 'src/utils';
 import { handleServerError } from 'src/utils/handleServerError';
 
+import { useProvider } from '../../../hooks/useProvider';
 import { ComponentContainerError, ComponentContainerLoading } from '../ComponentContainer';
 
 interface ProtectedConnectionLayoutProps {
-  provider?: string,
+  provider?: string, // passed in from ConnectProvider Component
   consumerRef: string,
   consumerName?: string,
   groupRef: string,
@@ -30,39 +30,18 @@ interface ProtectedConnectionLayoutProps {
   resetComponent: () => void, // resets installation integration component
 }
 
-const useProviderInfo = (provider?: string) => {
-  const getAPI = useAPI();
-  const { provider: providerFromProps } = useInstallIntegrationProps();
-  const selectedProvider = provider || providerFromProps;
-
-  return useQuery({
-    queryKey: ['amp', 'providerInfo', selectedProvider],
-    queryFn: async () => {
-      if (!selectedProvider) {
-        throw new Error('Provider not found');
-      }
-      const api = await getAPI();
-      return api.providerApi.getProvider({ provider: selectedProvider });
-    },
-    enabled: !!selectedProvider,
-  });
-};
-
 export function ProtectedConnectionLayout({
   provider, consumerRef, consumerName, groupRef, groupName, children, onSuccess, onDisconnectSuccess,
   resetComponent,
 }: ProtectedConnectionLayoutProps) {
   const {
     data: providerInfo, isLoading: isProviderLoading, isError, error: providerInfoError,
-  } = useProviderInfo(provider);
+    providerName, selectedProvider,
+  } = useProvider(provider);
   const { provider: providerFromProps, isIntegrationDeleted } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
   const queryClient = useQueryClient();
-
-  const selectedProvider = provider || providerFromProps;
-
-  const providerName = providerInfo?.displayName ?? capitalize(selectedProvider);
 
   useEffect(() => {
     if (isError) {

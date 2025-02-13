@@ -1,6 +1,6 @@
 import { useProject } from 'context/ProjectContextProvider';
+import { useProvider } from 'src/hooks/useProvider';
 import { Connection } from 'src/services/api';
-import { getProviderName } from 'src/utils';
 
 import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';
 
@@ -13,7 +13,8 @@ interface ConnectedSuccessBoxProps {
 }
 export function ConnectedSuccessBox({ provider, onDisconnectSuccess, resetComponent }: ConnectedSuccessBoxProps) {
   const { appName } = useProject();
-  const text = `You have successfully connected your ${getProviderName(provider)} account to ${appName}.`;
+  const { providerName } = useProvider(provider);
+  const text = `You have successfully connected your ${providerName} account to ${appName}.`;
   return (
     <SuccessTextBox text={text}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

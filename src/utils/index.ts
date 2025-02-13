@@ -19,7 +19,9 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getProviderName(provider: string, providerInfo?: ProviderInfo) {
+// use useProvider hook instead when possible to get provider name
+// this util function fetches the provider name from the provider info object
+export function getProviderName(provider: string, providerInfo: ProviderInfo) {
   return providerInfo?.displayName ?? capitalize(provider);
 }
 
