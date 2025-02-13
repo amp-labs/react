@@ -1,9 +1,9 @@
-import { FieldMapping } from './FieldMapping';
+import { FieldMappingRow } from './FieldMappingRow';
 import { OptionalFieldMappings } from './OptionalFieldMappings';
 import { RequiredFieldMappings } from './RequiredFieldMappings';
 
 export {
-  FieldMapping,
+  FieldMappingRow as FieldMapping,
   RequiredFieldMappings,
   OptionalFieldMappings,
 };

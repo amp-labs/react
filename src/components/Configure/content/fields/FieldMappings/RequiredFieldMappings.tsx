@@ -7,7 +7,7 @@ import { useSelectedConfigureState } from '../../useSelectedConfigureState';
 import { FieldHeader } from '../FieldHeader';
 
 import { checkDuplicateFieldError } from './checkDuplicateFieldError';
-import { FieldMapping } from './FieldMapping';
+import { FieldMappingRow } from './FieldMappingRow';
 import { setFieldMapping } from './setFieldMapping';
 
 export function RequiredFieldMappings() {
@@ -69,7 +69,7 @@ export function RequiredFieldMappings() {
             isInvalid={isError(ErrorBoundary.MAPPING, field.mapToName)}
             errorMessage="* required"
           >
-            <FieldMapping
+            <FieldMappingRow
               allFields={configureState?.read?.allFields || []}
               field={field}
               onSelectChange={onSelectChange}

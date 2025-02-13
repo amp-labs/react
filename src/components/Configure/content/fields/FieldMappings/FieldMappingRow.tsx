@@ -17,17 +17,17 @@ import { setFieldMapping } from './setFieldMapping';
 
 export const DUPLICATE_FIELD_ERROR_MESSAGE = 'Each field must be mapped to a unique value';
 
-interface FieldMappingProps {
+interface FieldMappingRowProps {
   field: IntegrationFieldMapping;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   allFields: HydratedIntegrationFieldExistent[];
 }
 
-export function FieldMapping({
+export function FieldMappingRow({
   field,
   onSelectChange,
   allFields,
-}: FieldMappingProps) {
+}: FieldMappingRowProps) {
   const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
   const { isError, removeError, getError } = useErrorState();

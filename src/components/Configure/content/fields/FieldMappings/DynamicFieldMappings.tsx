@@ -1,7 +1,7 @@
 import { FormControl } from 'src/components/form/FormControl';
 import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'src/services/api';
 
-import { FieldMapping } from './FieldMapping';
+import { FieldMappingRow } from './FieldMappingRow';
 
 export function DynamicFieldMappings({
   dynamicFieldMappings,
@@ -16,7 +16,7 @@ export function DynamicFieldMappings({
     <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
       {dynamicFieldMappings.map((field) => (
         <FormControl id={field.mapToName} key={field.mapToName}>
-          <FieldMapping
+          <FieldMappingRow
             allFields={allFields}
             field={field}
             onSelectChange={onSelectChange}
