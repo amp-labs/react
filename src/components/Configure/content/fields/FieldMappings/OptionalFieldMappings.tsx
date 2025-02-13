@@ -9,7 +9,7 @@ import { FieldHeader } from '../FieldHeader';
 
 import { checkDuplicateFieldError } from './checkDuplicateFieldError';
 import { DynamicFieldMappings } from './DynamicFieldMappings';
-import { FieldMapping } from './FieldMapping';
+import { FieldMappingRow } from './FieldMappingRow';
 import { setFieldMapping } from './setFieldMapping';
 
 export function OptionalFieldMappings() {
@@ -92,7 +92,7 @@ export function OptionalFieldMappings() {
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
         {integrationFieldMappings?.map((field) => (
           <FormControl id={field.mapToName} key={field.mapToName}>
-            <FieldMapping
+            <FieldMappingRow
               allFields={allFields}
               field={field}
               onSelectChange={onSelectChange}
