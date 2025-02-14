@@ -2,10 +2,13 @@ import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
+import { Button } from 'src/components/ui-base/Button';
 import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
 import { ErrorBoundary, useErrorState } from 'src/context/ErrorContextProvider';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+
+import { setValueMapping } from './setValueMapping';
 
 interface MappedValue {
   mappedValue: string;
@@ -36,7 +39,7 @@ export function ValueMappingItem({
   const [disabled, setDisabled] = useState(true);
 
   const {
-    getError, setError, resetBoundary,
+    getError, setError, resetBoundary, isError, removeError,
   } = useErrorState();
 
   const selectedValueMappingForField = useMemo(
@@ -139,6 +142,15 @@ export function ValueMappingItem({
     [fieldValue, disabled, items, onValueChange, hasError],
   );
 
+  const onClear = useCallback(() => {
+    if (selectedObjectName) {
+      setValueMapping(selectedObjectName, setConfigureState, mappedValue.mappedValue, '', fieldName);
+
+      if (isError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
+        removeError(ErrorBoundary.VALUE_MAPPING, fieldName);
+      }
+    }
+  }, [selectedObjectName, setConfigureState, mappedValue.mappedValue, fieldName, isError, removeError]);
   return (
     <div
       key={mappedValue.mappedValue}
@@ -159,6 +171,7 @@ export function ValueMappingItem({
         <span style={{ fontWeight: 500 }}>
           {mappedValue.mappedDisplayValue}
         </span>
+        <Button type="button" variant="ghost" onClick={onClear}>Clear</Button>
       </div>
       {SelectComponent}
     </div>
