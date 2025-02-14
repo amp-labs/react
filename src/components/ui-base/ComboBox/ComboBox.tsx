@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect, useMemo, useRef, useState,
 } from 'react';
 import { useCombobox } from 'downshift';
@@ -37,7 +38,7 @@ function getOptionsFilter(inputValue: string) {
 export function ComboBox({
   items,
   selectedValue,
-  onSelectedItemChange,
+  onSelectedItemChange: _onSelectedItemChange,
   // label,
   placeholder,
   disabled,
@@ -50,9 +51,14 @@ export function ComboBox({
   useEffect(() => setFilteredItems(items), [items]);
 
   // updates menu items when user types in the input
-  const onInputValueChange = (_inputValue: string) => {
-    setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
-  };
+  const onInputValueChange = useCallback((_inputValue: string) => {
+    if (_inputValue?.length > 0) {
+      setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
+    } else {
+      // reset the filtered items to the full list when the input is empty
+      setFilteredItems(items);
+    }
+  }, [items]);
 
   const {
     isOpen,
@@ -63,14 +69,18 @@ export function ComboBox({
     highlightedIndex,
     getItemProps,
     setInputValue,
+    selectedItem,
   } = useCombobox<Option>({
     items: filteredItems,
     selectedItem: selectedValue ? items.find((item) => item.value === selectedValue) : null,
     itemToString: (item) => item?.label || '',
     onInputValueChange: ({ inputValue: _inputValue }) => onInputValueChange(_inputValue),
     onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
-      inputRef.current?.blur(); // unselects the input when an option is selected so that handleBlur is called
-      onSelectedItemChange(newSelectedItem);
+      _onSelectedItemChange(newSelectedItem); // Call the parent's onSelectedItemChange
+
+      // unselects the input when an option is selected so that handleBlur is called
+      // handleBlur also updates InputValue
+      inputRef.current?.blur();
     },
   });
 
@@ -88,7 +98,11 @@ export function ComboBox({
   );
 
   // reset the input value when the input is blurred
-  const handleBlur = () => setInputValue(selectedValueLabel || '');
+  const handleBlur = () => {
+    if (selectedValue && selectedValueLabel && selectedValue !== selectedItem?.value) {
+      setInputValue(selectedValueLabel || '');
+    }
+  };
 
   return (
     <div style={{ position: 'relative', ...style }}>
@@ -98,7 +112,7 @@ export function ComboBox({
           <input
             style={{ border: 'none' }}
             disabled={disabled}
-            placeholder={selectedValueLabel || placeholder}
+            placeholder={placeholder}
             className={styles.input}
             {...getInputProps({ onFocus: handleFocus, onBlur: handleBlur, ref: inputRef })}
           />
