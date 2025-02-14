@@ -136,6 +136,7 @@ export function ValueMappingItem({
         style={{
           border: hasError ? '2px solid red' : undefined,
           borderRadius: '8px',
+          width: '100%',
         }}
       />
     ),
@@ -171,9 +172,11 @@ export function ValueMappingItem({
         <span style={{ fontWeight: 500 }}>
           {mappedValue.mappedDisplayValue}
         </span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
+        {SelectComponent}
         <Button type="button" variant="ghost" onClick={onClear}>Clear</Button>
       </div>
-      {SelectComponent}
     </div>
   );
 }
