@@ -19,12 +19,6 @@ import {
     BulkWriteSupportFromJSONTyped,
     BulkWriteSupportToJSON,
 } from './BulkWriteSupport';
-import type { SubscribeSupport } from './SubscribeSupport';
-import {
-    SubscribeSupportFromJSON,
-    SubscribeSupportFromJSONTyped,
-    SubscribeSupportToJSON,
-} from './SubscribeSupport';
 
 /**
  * The supported features for the provider.
@@ -62,12 +56,6 @@ export interface Support {
      * @memberof Support
      */
     write: boolean;
-    /**
-     * 
-     * @type {SubscribeSupport}
-     * @memberof Support
-     */
-    subscribeSupport?: SubscribeSupport;
 }
 
 /**
@@ -99,7 +87,6 @@ export function SupportFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'read': json['read'],
         'subscribe': json['subscribe'],
         'write': json['write'],
-        'subscribeSupport': !exists(json, 'subscribeSupport') ? undefined : SubscribeSupportFromJSON(json['subscribeSupport']),
     };
 }
 
@@ -117,7 +104,6 @@ export function SupportToJSON(value?: Support | null): any {
         'read': value.read,
         'subscribe': value.subscribe,
         'write': value.write,
-        'subscribeSupport': SubscribeSupportToJSON(value.subscribeSupport),
     };
 }
 
