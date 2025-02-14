@@ -24,8 +24,13 @@ function setValueMappingProducer(
   }
 
   // Directly mutate the draft
-  // eslint-disable-next-line no-param-reassign
-  draft.read.selectedValueMappings[fieldName][sourceValue] = targetValue;
+  if (targetValue === '' && draft.read.selectedValueMappings[fieldName][sourceValue]) {
+    // eslint-disable-next-line no-param-reassign
+    delete draft.read.selectedValueMappings[fieldName][sourceValue];
+  } else {
+    // eslint-disable-next-line no-param-reassign
+    draft.read.selectedValueMappings[fieldName][sourceValue] = targetValue;
+  }
 }
 
 export function setValueMapping(
