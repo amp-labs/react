@@ -77,8 +77,10 @@ export function ComboBox({
     onInputValueChange: ({ inputValue: _inputValue }) => onInputValueChange(_inputValue),
     onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
       _onSelectedItemChange(newSelectedItem); // Call the parent's onSelectedItemChange
-      inputRef.current?.blur(); // unselects the input when an option is selected so that handleBlur is called
-      // handle blur updates InputValue
+
+      // unselects the input when an option is selected so that handleBlur is called
+      // handleBlur also updates InputValue
+      inputRef.current?.blur();
     },
   });
 
