@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   InputValidationProblem,
+  ListOperations200Response,
   Log,
   Operation,
 } from '../models';
@@ -25,6 +26,8 @@ import {
     ApiProblemToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
+    ListOperations200ResponseFromJSON,
+    ListOperations200ResponseToJSON,
     LogFromJSON,
     LogToJSON,
     OperationFromJSON,
@@ -45,6 +48,8 @@ export interface ListOperationsRequest {
     projectIdOrName: string;
     integrationId: string;
     installationId: string;
+    pageSize?: number;
+    pageToken?: string;
 }
 
 /**
@@ -92,16 +97,18 @@ export interface OperationApiInterface {
      * @param {string} projectIdOrName 
      * @param {string} integrationId 
      * @param {string} installationId 
+     * @param {number} [pageSize] The number of operations to return.
+     * @param {string} [pageToken] A cursor that can be passed to paginate through multiple pages of operations.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OperationApiInterface
      */
-    listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Operation>>>;
+    listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListOperations200Response>>;
 
     /**
      * List operations
      */
-    listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Operation>>;
+    listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListOperations200Response>;
 
 }
 
@@ -189,7 +196,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
     /**
      * List operations
      */
-    async listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Operation>>> {
+    async listOperationsRaw(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListOperations200Response>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listOperations.');
         }
@@ -204,6 +211,14 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
 
         const queryParameters: any = {};
 
+        if (requestParameters.pageSize !== undefined) {
+            queryParameters['pageSize'] = requestParameters.pageSize;
+        }
+
+        if (requestParameters.pageToken !== undefined) {
+            queryParameters['pageToken'] = requestParameters.pageToken;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -217,13 +232,13 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OperationFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListOperations200ResponseFromJSON(jsonValue));
     }
 
     /**
      * List operations
      */
-    async listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Operation>> {
+    async listOperations(requestParameters: ListOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListOperations200Response> {
         const response = await this.listOperationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
