@@ -43,6 +43,12 @@ import {
     Oauth2OptsFromJSONTyped,
     Oauth2OptsToJSON,
 } from './Oauth2Opts';
+import type { SubscribeOpts } from './SubscribeOpts';
+import {
+    SubscribeOptsFromJSON,
+    SubscribeOptsFromJSONTyped,
+    SubscribeOptsToJSON,
+} from './SubscribeOpts';
 import type { Support } from './Support';
 import {
     SupportFromJSON,
@@ -128,6 +134,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     labels?: { [key: string]: string; };
+    /**
+     * 
+     * @type {SubscribeOpts}
+     * @memberof ProviderInfo
+     */
+    subscribeOpts?: SubscribeOpts;
 }
 
 /**
@@ -166,6 +178,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
         'labels': !exists(json, 'labels') ? undefined : json['labels'],
+        'subscribeOpts': !exists(json, 'subscribeOpts') ? undefined : SubscribeOptsFromJSON(json['subscribeOpts']),
     };
 }
 
@@ -190,6 +203,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
         'media': MediaToJSON(value.media),
         'labels': value.labels,
+        'subscribeOpts': SubscribeOptsToJSON(value.subscribeOpts),
     };
 }
 
