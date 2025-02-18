@@ -12,58 +12,34 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
-import type { ValueDefaultValue } from './ValueDefaultValue';
 import {
-    ValueDefaultValueFromJSON,
-    ValueDefaultValueFromJSONTyped,
-    ValueDefaultValueToJSON,
-} from './ValueDefaultValue';
+    ValueDefaultBoolean,
+    instanceOfValueDefaultBoolean,
+    ValueDefaultBooleanFromJSON,
+    ValueDefaultBooleanFromJSONTyped,
+    ValueDefaultBooleanToJSON,
+} from './ValueDefaultBoolean';
+import {
+    ValueDefaultInteger,
+    instanceOfValueDefaultInteger,
+    ValueDefaultIntegerFromJSON,
+    ValueDefaultIntegerFromJSONTyped,
+    ValueDefaultIntegerToJSON,
+} from './ValueDefaultInteger';
+import {
+    ValueDefaultString,
+    instanceOfValueDefaultString,
+    ValueDefaultStringFromJSON,
+    ValueDefaultStringFromJSONTyped,
+    ValueDefaultStringToJSON,
+} from './ValueDefaultString';
 
 /**
+ * @type ValueDefault
  * 
  * @export
- * @interface ValueDefault
  */
-export interface ValueDefault {
-    /**
-     * 
-     * @type {ValueDefaultValue}
-     * @memberof ValueDefault
-     */
-    value: ValueDefaultValue;
-    /**
-     * Whether the default value should be applied when updating a record.
-     * If set to `always`, the default value will be applied when updating a record.
-     * If set to `never`, the default value will not be applied when updating a record,
-     * only when creating a record.
-     * If unspecified, then `always` is assumed.
-     * @type {string}
-     * @memberof ValueDefault
-     */
-    applyOnUpdate?: ValueDefaultApplyOnUpdateEnum;
-}
-
-
-/**
- * @export
- */
-export const ValueDefaultApplyOnUpdateEnum = {
-    Always: 'always',
-    Never: 'never'
-} as const;
-export type ValueDefaultApplyOnUpdateEnum = typeof ValueDefaultApplyOnUpdateEnum[keyof typeof ValueDefaultApplyOnUpdateEnum];
-
-
-/**
- * Check if a given object implements the ValueDefault interface.
- */
-export function instanceOfValueDefault(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "value" in value;
-
-    return isInstance;
-}
+export type ValueDefault = ValueDefaultBoolean | ValueDefaultInteger | ValueDefaultString;
 
 export function ValueDefaultFromJSON(json: any): ValueDefault {
     return ValueDefaultFromJSONTyped(json, false);
@@ -73,11 +49,7 @@ export function ValueDefaultFromJSONTyped(json: any, ignoreDiscriminator: boolea
     if ((json === undefined) || (json === null)) {
         return json;
     }
-    return {
-        
-        'value': ValueDefaultValueFromJSON(json['value']),
-        'applyOnUpdate': !exists(json, 'applyOnUpdate') ? undefined : json['applyOnUpdate'],
-    };
+    return { ...ValueDefaultBooleanFromJSONTyped(json, true), ...ValueDefaultIntegerFromJSONTyped(json, true), ...ValueDefaultStringFromJSONTyped(json, true) };
 }
 
 export function ValueDefaultToJSON(value?: ValueDefault | null): any {
@@ -87,10 +59,17 @@ export function ValueDefaultToJSON(value?: ValueDefault | null): any {
     if (value === null) {
         return null;
     }
-    return {
-        
-        'value': ValueDefaultValueToJSON(value.value),
-        'applyOnUpdate': value.applyOnUpdate,
-    };
+
+    if (instanceOfValueDefaultBoolean(value)) {
+        return ValueDefaultBooleanToJSON(value as ValueDefaultBoolean);
+    }
+    if (instanceOfValueDefaultInteger(value)) {
+        return ValueDefaultIntegerToJSON(value as ValueDefaultInteger);
+    }
+    if (instanceOfValueDefaultString(value)) {
+        return ValueDefaultStringToJSON(value as ValueDefaultString);
+    }
+
+    return {};
 }
 
