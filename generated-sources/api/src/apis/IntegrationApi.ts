@@ -36,7 +36,7 @@ import {
 
 export interface BatchUpsertIntegrationsOperationRequest {
     projectIdOrName: string;
-    batchUpsertIntegrationsRequest?: BatchUpsertIntegrationsRequest;
+    batchUpsertIntegrationsRequest: BatchUpsertIntegrationsRequest;
 }
 
 export interface CreateIntegrationOperationRequest {
@@ -64,7 +64,7 @@ export interface IntegrationApiInterface {
      * 
      * @summary Batch upsert a group of integrations
      * @param {string} projectIdOrName 
-     * @param {BatchUpsertIntegrationsRequest} [batchUpsertIntegrationsRequest] 
+     * @param {BatchUpsertIntegrationsRequest} batchUpsertIntegrationsRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -136,6 +136,10 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     async batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling batchUpsertIntegrations.');
+        }
+
+        if (requestParameters.batchUpsertIntegrationsRequest === null || requestParameters.batchUpsertIntegrationsRequest === undefined) {
+            throw new runtime.RequiredError('batchUpsertIntegrationsRequest','Required parameter requestParameters.batchUpsertIntegrationsRequest was null or undefined when calling batchUpsertIntegrations.');
         }
 
         const queryParameters: any = {};

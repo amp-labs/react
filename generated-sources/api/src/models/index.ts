@@ -126,5 +126,7 @@ export * from './UpdateProjectRequestProject';
 export * from './UpdateProviderAppRequest';
 export * from './UpdateProviderAppRequestProviderApp';
 export * from './ValueDefault';
-export * from './ValueDefaultValue';
+export * from './ValueDefaultBoolean';
+export * from './ValueDefaultInteger';
+export * from './ValueDefaultString';
 export * from './ValueDefaults';
