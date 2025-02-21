@@ -149,7 +149,9 @@ src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
 src/models/ValueDefault.ts
-src/models/ValueDefaultValue.ts
+src/models/ValueDefaultBoolean.ts
+src/models/ValueDefaultInteger.ts
+src/models/ValueDefaultString.ts
 src/models/ValueDefaults.ts
 src/models/index.ts
 src/runtime.ts

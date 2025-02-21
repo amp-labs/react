@@ -38,7 +38,7 @@ export interface DeleteConnectionRequest {
 
 export interface GenerateConnectionOperationRequest {
     projectIdOrName: string;
-    generateConnectionParams?: GenerateConnectionRequest;
+    generateConnectionParams: GenerateConnectionRequest;
 }
 
 export interface GetConnectionRequest {
@@ -83,7 +83,7 @@ export interface ConnectionApiInterface {
      * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * @summary Generate a new connection
      * @param {string} projectIdOrName 
-     * @param {GenerateConnectionRequest} [generateConnectionParams] 
+     * @param {GenerateConnectionRequest} generateConnectionParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ConnectionApiInterface
@@ -184,6 +184,10 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling generateConnection.');
+        }
+
+        if (requestParameters.generateConnectionParams === null || requestParameters.generateConnectionParams === undefined) {
+            throw new runtime.RequiredError('generateConnectionParams','Required parameter requestParameters.generateConnectionParams was null or undefined when calling generateConnection.');
         }
 
         const queryParameters: any = {};
