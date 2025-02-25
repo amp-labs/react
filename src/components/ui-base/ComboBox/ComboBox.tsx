@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect, useMemo, useRef, useState,
 } from 'react';
+import * as Popover from '@radix-ui/react-popover';
 import { useCombobox } from 'downshift';
 
 import styles from './combobox.module.css'; // CSS Modules
@@ -103,37 +104,52 @@ export function ComboBox({
       setInputValue(selectedValueLabel || '');
     }
   };
+  useEffect(() => {
+    console.log({ isOpen });
+  }, [isOpen]);
 
   return (
-    <div style={{ position: 'relative', ...style }}>
-      <div className={styles.comboboxContainer}>
-        {/* input  */}
-        <div className={styles.inputContainer}>
-          <input
-            style={{ border: 'none' }}
-            disabled={disabled}
-            placeholder={placeholder}
-            className={styles.input}
-            {...getInputProps({ onFocus: handleFocus, onBlur: handleBlur, ref: inputRef })}
-          />
-          <button
-            style={{ border: 'none' }}
-            disabled={disabled}
-            aria-label="toggle menu"
-            className={styles.toggleButton}
-            type="button"
-            {...getToggleButtonProps()}
-          >
-            {isOpen ? <>&#8593;</> : <>&#8595;</>}
-          </button>
+    <Popover.Root open={isOpen}>
+      <div style={{ position: 'relative', ...style }}>
+        <div className={styles.comboboxContainer}>
+          {/* input  */}
+          <Popover.Trigger asChild>
+            <div className={styles.inputContainer}>
+              <input
+                style={{ border: 'none' }}
+                disabled={disabled}
+                placeholder={placeholder}
+                className={styles.input}
+                {...getInputProps({ onFocus: handleFocus, onBlur: handleBlur, ref: inputRef })}
+              />
+              <button
+                style={{ border: 'none' }}
+                disabled={disabled}
+                aria-label="toggle menu"
+                className={styles.toggleButton}
+                type="button"
+                {...getToggleButtonProps()}
+              >
+                {isOpen ? <>&#8593;</> : <>&#8595;</>}
+              </button>
+            </div>
+          </Popover.Trigger>
         </div>
-      </div>
-      {/* menu */}
-      <ul
-        className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden}`}
-        {...getMenuProps()}
-      >
-        {isOpen
+        {/* menu */}
+        <Popover.Portal>
+          <Popover.Content
+            {...getMenuProps()}
+            align="start"
+            side="bottom"
+            sideOffset={4}
+            collisionPadding={8} // Ensures the menu flips when space is limited
+            className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden}`}
+          >
+            {/* <ul
+              className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden}`}
+              {...getMenuProps()}
+            > */}
+            {/* {isOpen
           && filteredItems.map((item, index) => (
             <li
               className={`${styles.menuItem} ${
@@ -145,7 +161,21 @@ export function ComboBox({
               <span>{item.label}</span>
             </li>
           ))}
-      </ul>
-    </div>
+            </ul> */}
+            {filteredItems.map((item, index) => (
+              <div
+                key={item.id}
+                className={`${styles.menuItem} ${
+                  highlightedIndex === index ? styles.highlighted : ''
+                } ${selectedValue === item?.value ? styles.selected : ''}`}
+                {...getItemProps({ item, index })}
+              >
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </Popover.Content>
+        </Popover.Portal>
+      </div>
+    </Popover.Root>
   );
 }
