@@ -55,7 +55,7 @@ export function FieldDefaultValueTable({
 
   const defaultValueList: FieldDefaultValue[] = Object.keys(selectedValueDefaultsMap).map((field) => ({
     field,
-    defaultValue: selectedValueDefaultsMap[field],
+    defaultValue: selectedValueDefaultsMap[field]?.value?.toString(),
     // consider memoizing if performance is an issue.
     fieldDisplayName: readAction ? getDisplayNameFromField(field, objectName, readAction) : field,
   }));
