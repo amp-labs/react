@@ -10,6 +10,7 @@ export function WriteFields() {
   return (
     <>
       <WriteFieldsV2 />
+      {/* TODO(ENG-1970): Bring this back when new valueDefault format is supported */}
       {/* <FieldDefaultValueMapping /> */}
     </>
   );
