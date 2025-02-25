@@ -26,7 +26,7 @@ function setValueDefaultWriteFieldProducer(
       }
 
       // eslint-disable-next-line no-param-reassign
-      draftSelectedWriteFields[objectName].selectedValueDefaults[fieldKey] = defaultValue;
+      draftSelectedWriteFields[objectName].selectedValueDefaults[fieldKey].value = defaultValue;
     }
 
     if (!defaultValue) {
