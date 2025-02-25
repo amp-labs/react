@@ -25,6 +25,12 @@ import {
     IntegrationReadFromJSONTyped,
     IntegrationReadToJSON,
 } from './IntegrationRead';
+import type { IntegrationSubscribe } from './IntegrationSubscribe';
+import {
+    IntegrationSubscribeFromJSON,
+    IntegrationSubscribeFromJSONTyped,
+    IntegrationSubscribeToJSON,
+} from './IntegrationSubscribe';
 import type { IntegrationWrite } from './IntegrationWrite';
 import {
     IntegrationWriteFromJSON,
@@ -74,6 +80,12 @@ export interface Integration1 {
      * @memberof Integration1
      */
     proxy?: IntegrationProxy;
+    /**
+     * 
+     * @type {IntegrationSubscribe}
+     * @memberof Integration1
+     */
+    subscribe?: IntegrationSubscribe;
 }
 
 /**
@@ -103,6 +115,7 @@ export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolea
         'read': !exists(json, 'read') ? undefined : IntegrationReadFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : IntegrationWriteFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : IntegrationProxyFromJSON(json['proxy']),
+        'subscribe': !exists(json, 'subscribe') ? undefined : IntegrationSubscribeFromJSON(json['subscribe']),
     };
 }
 
@@ -121,6 +134,7 @@ export function Integration1ToJSON(value?: Integration1 | null): any {
         'read': IntegrationReadToJSON(value.read),
         'write': IntegrationWriteToJSON(value.write),
         'proxy': IntegrationProxyToJSON(value.proxy),
+        'subscribe': IntegrationSubscribeToJSON(value.subscribe),
     };
 }
 

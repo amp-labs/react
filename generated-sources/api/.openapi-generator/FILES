@@ -31,6 +31,7 @@ src/models/ApiKeyOptsHeader.ts
 src/models/ApiKeyOptsQuery.ts
 src/models/ApiKeyRequest.ts
 src/models/ApiProblem.ts
+src/models/AssociationChangeEvent.ts
 src/models/AuthType.ts
 src/models/Backfill.ts
 src/models/BackfillConfig.ts
@@ -58,6 +59,7 @@ src/models/CreateBillingAccountSessionRequest.ts
 src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
 src/models/CreateDestinationRequestMetadata.ts
+src/models/CreateEvent.ts
 src/models/CreateGroupRequest.ts
 src/models/CreateInstallationRequest.ts
 src/models/CreateInstallationRequestConfig.ts
@@ -70,6 +72,7 @@ src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
 src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
+src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
 src/models/FieldMetadata.ts
@@ -100,6 +103,8 @@ src/models/IntegrationFieldMapping.ts
 src/models/IntegrationObject.ts
 src/models/IntegrationProxy.ts
 src/models/IntegrationRead.ts
+src/models/IntegrationSubscribe.ts
+src/models/IntegrationSubscribeObject.ts
 src/models/IntegrationWrite.ts
 src/models/IntegrationWriteObject.ts
 src/models/Invite.ts
@@ -138,6 +143,7 @@ src/models/TokenMetadataFields.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
 src/models/UpdateDestinationRequestDestinationMetadata.ts
+src/models/UpdateEvent.ts
 src/models/UpdateInstallationConfigContent.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts
@@ -149,7 +155,9 @@ src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
 src/models/ValueDefault.ts
-src/models/ValueDefaultValue.ts
+src/models/ValueDefaultBoolean.ts
+src/models/ValueDefaultInteger.ts
+src/models/ValueDefaultString.ts
 src/models/ValueDefaults.ts
 src/models/index.ts
 src/runtime.ts
