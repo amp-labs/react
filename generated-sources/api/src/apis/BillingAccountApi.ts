@@ -36,7 +36,7 @@ import {
 
 export interface CreateBillingAccountSessionOperationRequest {
     billingAccountId: string;
-    createBillingAccountSessionRequest?: CreateBillingAccountSessionRequest;
+    createBillingAccountSessionRequest: CreateBillingAccountSessionRequest;
 }
 
 export interface GetOrgBillingAccountRequest {
@@ -54,7 +54,7 @@ export interface BillingAccountApiInterface {
      * 
      * @summary Create a portal session for a billing account
      * @param {string} billingAccountId 
-     * @param {CreateBillingAccountSessionRequest} [createBillingAccountSessionRequest] 
+     * @param {CreateBillingAccountSessionRequest} createBillingAccountSessionRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BillingAccountApiInterface
@@ -94,6 +94,10 @@ export class BillingAccountApi extends runtime.BaseAPI implements BillingAccount
     async createBillingAccountSessionRaw(requestParameters: CreateBillingAccountSessionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateBillingAccountSession200Response>> {
         if (requestParameters.billingAccountId === null || requestParameters.billingAccountId === undefined) {
             throw new runtime.RequiredError('billingAccountId','Required parameter requestParameters.billingAccountId was null or undefined when calling createBillingAccountSession.');
+        }
+
+        if (requestParameters.createBillingAccountSessionRequest === null || requestParameters.createBillingAccountSessionRequest === undefined) {
+            throw new runtime.RequiredError('createBillingAccountSessionRequest','Required parameter requestParameters.createBillingAccountSessionRequest was null or undefined when calling createBillingAccountSession.');
         }
 
         const queryParameters: any = {};

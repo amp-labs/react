@@ -18,7 +18,7 @@ interface FieldDefaultValueRowProps {
 type FieldDefaultValue = {
   field: string,
   fieldDisplayName: string,
-  defaultValue: string,
+  defaultValue: string | boolean | number,
 };
 
 /**
@@ -36,6 +36,13 @@ const getDisplayNameFromField = (
   return allFieldsMetadata?.[field]?.displayName || field;
 };
 
+function convertToStringOrNumber(value: string | number | boolean): (string | number) {
+  if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  }
+  return value;
+}
+
 export function FieldDefaultValueTable({
   objectName,
 }: FieldDefaultValueRowProps) {
@@ -45,7 +52,7 @@ export function FieldDefaultValueTable({
   const writeObject = selectedWriteObjects?.[objectName];
   const selectedValueDefaultsMap = useMemo(() => writeObject?.selectedValueDefaults || {}, [writeObject]);
 
-  const onAddDefaultValue = useCallback((field: string, fieldDisplayName: string, defaultValue: string) => {
+  const onAddDefaultValue = useCallback((field: string, fieldDisplayName: string, defaultValue: string | number) => {
     setValueDefaultWriteField(selectedObjectName || '', objectName, field, defaultValue, setConfigureState);
   }, [objectName, selectedObjectName, setConfigureState]);
 
@@ -72,7 +79,7 @@ export function FieldDefaultValueTable({
             style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}
           >
             <Input id={field} type="text" disabled value={fieldDisplayName} style={{ width: '100%' }} />
-            <Input id={`${field}-${df}`} type="text" disabled value={df} style={{ width: '10rem' }} />
+            <Input id={`${field}-${df}`} type="text" disabled value={convertToStringOrNumber(df)} style={{ width: '10rem' }} />
             <Button
               type="button"
               variant="ghost"

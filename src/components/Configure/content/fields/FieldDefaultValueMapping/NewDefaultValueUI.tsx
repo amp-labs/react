@@ -58,7 +58,7 @@ export function NewDefaultValueUI({ objectName, onAddDefaultValue }: NewDefaultV
       setNewDefaultValue('');
     }
   };
-  const SelectComponet = (
+  const SelectComponent = (
     <ComboBox
       style={{ width: '100%' }}
       disabled={isDisabled}
@@ -78,7 +78,7 @@ export function NewDefaultValueUI({ objectName, onAddDefaultValue }: NewDefaultV
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
-      {SelectComponet}
+      {SelectComponent}
       <Input
         id="new-default-value"
         type="text"

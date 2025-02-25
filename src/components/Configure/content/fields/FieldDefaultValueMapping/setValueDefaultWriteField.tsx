@@ -7,7 +7,7 @@ function setValueDefaultWriteFieldProducer(
   draft: Draft<ConfigureState>,
   objectName: string, // object that the field belongs to
   fieldKey: string,
-  defaultValue: string | null,
+  defaultValue: string | boolean | number | null,
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
     // eslint-disable-next-line no-param-reassign
@@ -57,7 +57,7 @@ export function setValueDefaultWriteField(
   // Note: this is the object name of the object that the field belongs to
   objectName: string,
   fieldKey: string,
-  defaultValue: string | null,
+  defaultValue: string | boolean | number | null,
   setConfigureState: (objectName: string,
     producer: (draft: Draft<ConfigureState>) => void) => void,
 ) {
