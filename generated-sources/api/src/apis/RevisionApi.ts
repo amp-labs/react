@@ -34,7 +34,7 @@ import {
 export interface CreateRevisionOperationRequest {
     projectIdOrName: string;
     integrationId: string;
-    revision?: CreateRevisionRequest;
+    revision: CreateRevisionRequest;
 }
 
 export interface GetHydratedRevisionRequest {
@@ -56,7 +56,7 @@ export interface RevisionApiInterface {
      * @summary Create a new revision
      * @param {string} projectIdOrName 
      * @param {string} integrationId 
-     * @param {CreateRevisionRequest} [revision] 
+     * @param {CreateRevisionRequest} revision 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RevisionApiInterface
@@ -104,6 +104,10 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
 
         if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
             throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling createRevision.');
+        }
+
+        if (requestParameters.revision === null || requestParameters.revision === undefined) {
+            throw new runtime.RequiredError('revision','Required parameter requestParameters.revision was null or undefined when calling createRevision.');
         }
 
         const queryParameters: any = {};
