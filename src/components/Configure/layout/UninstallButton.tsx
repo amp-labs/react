@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { api } from 'services/api';
+import { useAPI } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -13,22 +13,43 @@ interface UninstallButtonProps {
   buttonStyle?: React.CSSProperties;
 }
 
+const useDeleteInstallationMutation = () => {
+  const getAPI = useAPI();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ projectIdOrName, integrationId, installationId }: any) => {
+      const api = await getAPI();
+      return api.installationApi.deleteInstallation(
+        { projectIdOrName, integrationId, installationId },
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
+    },
+    onError: (error) => {
+      console.error('Error uninstalling installation.');
+      handleServerError(error);
+    },
+  });
+};
+
 export function UninstallButton({
   buttonText,
   buttonVariant = 'secondary',
   buttonStyle = {},
 }: UninstallButtonProps) {
-  const apiKey = useApiKey();
   const { projectId } = useProject();
   const {
     integrationId,
     installation,
-    resetInstallations,
     setIntegrationDeleted,
     onUninstallSuccess,
   } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
   const isDisabled = !projectId || !integrationId || !installation?.id || loading;
+
+  const deleteInstallationMutation = useDeleteInstallationMutation();
 
   const onDelete = async () => {
     if (!isDisabled) {
@@ -38,27 +59,22 @@ export function UninstallButton({
         integrationId,
         installationId: installation.id,
       });
-      try {
-        await api().installationApi.deleteInstallation(
-          { projectIdOrName: projectId, integrationId, installationId: installation.id },
-          {
-            headers: {
-              'X-Api-Key': apiKey,
-              'Content-Type': 'application/json',
-            },
-          },
-        );
 
-        console.warn('successfully uninstalled installation:', installation.id);
-        onUninstallSuccess?.(installation?.id); // callback
-        resetInstallations();
-        setIntegrationDeleted(); // set the ui terminal deleted state
-      } catch (e) {
-        console.error('Error uninstalling installation.');
-        handleServerError(e);
-      } finally {
-        setLoading(false);
-      }
+      deleteInstallationMutation.mutate(
+        {
+          projectIdOrName: projectId,
+          integrationId,
+          installationId: installation.id,
+        },
+        {
+          onSuccess: () => {
+            console.warn('successfully uninstalled installation:', installation.id);
+            onUninstallSuccess?.(installation?.id); // callback
+            setIntegrationDeleted(); // set the ui terminal deleted state
+          },
+          onSettled: () => setLoading(false),
+        },
+      );
     }
   };
 
