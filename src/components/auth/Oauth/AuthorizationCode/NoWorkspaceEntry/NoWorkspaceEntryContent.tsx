@@ -1,6 +1,6 @@
 import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { Button } from 'components/ui-base/Button';
-import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+import { AuthCardLayout, AuthDescription, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { LandingContentProps } from './LandingContentProps';
 
@@ -10,6 +10,9 @@ export function NoWorkspaceEntryContent({
   return (
     <AuthCardLayout>
       <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
+      <AuthDescription>
+        {`Click Next to sign into the ${providerName} account you'd like to sync.`}
+      </AuthDescription>
       <AuthErrorAlert error={error} />
       <Button
         style={{ marginTop: '1em', width: '100%' }}

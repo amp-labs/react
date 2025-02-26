@@ -25,3 +25,9 @@ export function AuthTitle({ children }: AuthCardLayoutProps) {
     <h1 style={{ fontWeight: 600, lineHeight: 1.2, fontSize: '1.2em' }}>{children}</h1>
   );
 }
+
+export function AuthDescription({ children }: AuthCardLayoutProps) {
+  return (
+    <p style={{ padding: '.5em 0' }}>{children}</p>
+  );
+}
