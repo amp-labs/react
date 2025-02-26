@@ -21,7 +21,7 @@ interface ComboBoxProps {
   placeholder: string;
   disabled?: boolean;
   style?: React.CSSProperties;
-  menuPostion?: 'top' | 'bottom';
+  menuPosition?: 'top' | 'bottom';
 }
 
 function getOptionsFilter(inputValue: string) {
