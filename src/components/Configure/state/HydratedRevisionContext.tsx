@@ -1,7 +1,7 @@
 import React, {
   createContext, useContext, useEffect, useMemo,
 } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {
@@ -40,6 +40,7 @@ export const useHydratedRevision = () => {
 };
 
 const useHydratedRevisionQuery = () => {
+  const queryClient = useQueryClient();
   const getAPI = useAPI();
   const { selectedConnection, isConnectionsLoading } = useConnections();
   const { projectIdOrName } = useProject();
@@ -48,8 +49,15 @@ const useHydratedRevisionQuery = () => {
   const connectionId = selectedConnection?.id;
   const revisionId = integrationObj?.latestRevision?.id;
 
+  useEffect(() => {
+    if (!connectionId) {
+      // clear the query cache if connectionId is not set (includes resetting cached errors)
+      queryClient.invalidateQueries({ queryKey: ['amp', 'hydratedRevision'] });
+    }
+  }, [connectionId, queryClient]);
+
   return useQuery({
-    queryKey: ['amp', 'hydratedRevision', projectIdOrName, integrationId, revisionId],
+    queryKey: ['amp', 'hydratedRevision', projectIdOrName, integrationId, revisionId, connectionId],
     queryFn: async () => {
       if (!projectIdOrName) throw new Error('projectIdOrName is required');
       if (!integrationId) throw new Error('integrationId is required');
