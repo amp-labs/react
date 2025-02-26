@@ -60,7 +60,7 @@
 /* If space is limited, flip the menu above */
 .menuTop {
   bottom: 100%;
-  margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .menuItem {
