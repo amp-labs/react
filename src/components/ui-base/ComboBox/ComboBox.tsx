@@ -21,6 +21,7 @@ interface ComboBoxProps {
   placeholder: string;
   disabled?: boolean;
   style?: React.CSSProperties;
+  menuPosition?: 'top' | 'bottom';
 }
 
 function getOptionsFilter(inputValue: string) {
@@ -43,6 +44,7 @@ export function ComboBox({
   placeholder,
   disabled,
   style,
+  menuPosition = 'bottom',
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
   const inputRef = useRef<HTMLInputElement | null>(null); // Ref to the input element
@@ -130,7 +132,9 @@ export function ComboBox({
       </div>
       {/* menu */}
       <ul
-        className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden}`}
+        className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden} ${
+          menuPosition === 'top' ? styles.menuTop : styles.menuBottom
+        }`}
         {...getMenuProps()}
       >
         {isOpen
