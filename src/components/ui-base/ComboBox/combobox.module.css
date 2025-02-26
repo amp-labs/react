@@ -40,7 +40,7 @@
   position: absolute;
   background-color: var(--amp-colors-input-surface-default);
   width: 100%;
-  max-height: 200px;
+  max-height: 120px;
   overflow-y: auto;
   margin-top: 0.25rem;
   border: 1px solid;
@@ -49,6 +49,18 @@
   border-radius: var(--amp-default-border-radius);
   padding: 0;
   font-size: .8rem;
+}
+
+/* Default (menu appears below input) */
+.menuBottom {
+  top: 100%;
+  margin-top: 4px;
+}
+
+/* If space is limited, flip the menu above */
+.menuTop {
+  bottom: 100%;
+  margin-right: 4px;
 }
 
 .menuItem {

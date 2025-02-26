@@ -86,6 +86,7 @@ export function ObjectManagementNavV2({
               display: 'flex',
               gap: '1rem',
               padding: '3rem',
+              paddingBottom: '6rem',
               backgroundColor: 'var(--amp-colors-bg-primary)',
             }}
           >
