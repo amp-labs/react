@@ -104,11 +104,7 @@ export function ValueMappings() {
       {/* value mappings for each field */}
       {valuesMappings.map((field) => {
         // show the values mapping only if the field has fieldName
-        if (!field.fieldName) {
-          const errorMsg = 'fieldName is undefined';
-          console.error(errorMsg, field);
-          return null;
-        }
+        if (!field.fieldName) return null;
 
         // show the values mapping only for singleSelect and multiSelect type fields
         const fieldNameObject = configureState?.read?.allFieldsMetadata?.[field.fieldName];
@@ -121,10 +117,7 @@ export function ValueMappings() {
 
         // show the values mapping only if the field has values array
         const fieldNameValues = fieldNameObject?.values;
-        if (!fieldNameValues) {
-          console.error('field has no values array', field);
-          return null;
-        }
+        if (!fieldNameValues) return null;
 
         // Show if the values array is of the same length as the mappedValues array
         const fieldNameValuesLength = Object.keys(fieldNameValues).length;
