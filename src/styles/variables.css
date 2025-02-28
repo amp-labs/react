@@ -51,6 +51,7 @@
     /* button */
     --amp-colors-button-primary: var(--amp-colors-primary);
     --amp-colors-button-text: var(--amp-colors-white);
+    --amp-button-font-size: 1rem;
 
     /* input */
     --amp-colors-input-border-default: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-700));
