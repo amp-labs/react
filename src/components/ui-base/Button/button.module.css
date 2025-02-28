@@ -6,7 +6,7 @@
     border: 1px solid;
     border-color: var(--amp-colors-border);
     height: 2.5rem;
-    font-size: 1rem;
+    font-size: var(--amp-button-font-size);
     font-weight: 500;
     line-height: 1.5rem; /* 150% */
     padding: 0 1rem;
