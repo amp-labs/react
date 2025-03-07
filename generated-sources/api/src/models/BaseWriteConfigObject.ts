@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { FieldSetting } from './FieldSetting';
+import {
+    FieldSettingFromJSON,
+    FieldSettingFromJSONTyped,
+    FieldSettingToJSON,
+} from './FieldSetting';
 import type { ValueDefault } from './ValueDefault';
 import {
     ValueDefaultFromJSON,
@@ -36,8 +42,15 @@ export interface BaseWriteConfigObject {
      * This is a map of field names to default values. These values will be used when writing to the object.
      * @type {{ [key: string]: ValueDefault; }}
      * @memberof BaseWriteConfigObject
+     * @deprecated
      */
     selectedValueDefaults?: { [key: string]: ValueDefault; };
+    /**
+     * This is a map of field names to their settings.
+     * @type {{ [key: string]: FieldSetting; }}
+     * @memberof BaseWriteConfigObject
+     */
+    selectedFieldSettings?: { [key: string]: FieldSetting; };
 }
 
 /**
@@ -61,6 +74,7 @@ export function BaseWriteConfigObjectFromJSONTyped(json: any, ignoreDiscriminato
         
         'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
         'selectedValueDefaults': !exists(json, 'selectedValueDefaults') ? undefined : (mapValues(json['selectedValueDefaults'], ValueDefaultFromJSON)),
+        'selectedFieldSettings': !exists(json, 'selectedFieldSettings') ? undefined : (mapValues(json['selectedFieldSettings'], FieldSettingFromJSON)),
     };
 }
 
@@ -75,6 +89,7 @@ export function BaseWriteConfigObjectToJSON(value?: BaseWriteConfigObject | null
         
         'objectName': value.objectName,
         'selectedValueDefaults': value.selectedValueDefaults === undefined ? undefined : (mapValues(value.selectedValueDefaults, ValueDefaultToJSON)),
+        'selectedFieldSettings': value.selectedFieldSettings === undefined ? undefined : (mapValues(value.selectedFieldSettings, FieldSettingToJSON)),
     };
 }
 
