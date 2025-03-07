@@ -132,7 +132,7 @@ export function ValueMappings() {
           <>
             <ValueHeader
               string="Map the values for "
-              fieldName={field.mapToName || field.fieldName}
+              fieldName={field.mapToDisplayName || field.mapToName || field.fieldName}
             />
             <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
               <FormControl
