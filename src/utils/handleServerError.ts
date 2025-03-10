@@ -32,7 +32,9 @@ export const handleServerError = async (error: any, setError?: (error: string) =
         if (errorBody?.remedy) { console.error('[Remedy]', errorBody.remedy); }
       }
 
-      if (setError) setError(errorMsg);
+      if (setError) {
+        setError(errorMsg + (errorBody?.remedy ? `\n\n${errorBody.remedy}` : ''));
+      }
     } catch (e) {
       console.error('Error parsing error response body:', e); // the response body could already be parsed
     }
