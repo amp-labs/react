@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { api, Connection } from 'services/api';
+import { Connection, useAPI } from 'services/api';
 import { Button } from 'src/components/ui-base/Button';
 import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { handleServerError } from 'src/utils/handleServerError';
@@ -15,6 +15,28 @@ interface RemoveConnectionButtonProps {
   onDisconnectSuccess?: (connection: Connection) => void;
 }
 
+const useDeleteConnectionMutation = () => {
+  const getAPI = useAPI();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['deleteConnection'],
+    mutationFn: async ({ projectIdOrName, connectionId }: any) => {
+      const api = await getAPI();
+      return api.connectionApi.deleteConnection(
+        { projectIdOrName, connectionId },
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
+    },
+    onError: (error) => {
+      console.error('Error deleting connection.');
+      handleServerError(error);
+    },
+  });
+};
+
 export function RemoveConnectionButton({
   buttonText,
   buttonVariant = 'secondary',
@@ -22,9 +44,9 @@ export function RemoveConnectionButton({
   onDisconnectSuccess,
   resetComponent,
 }: RemoveConnectionButtonProps) {
-  const apiKey = useApiKey();
   const { projectId } = useProject();
-  const { selectedConnection, setConnections } = useConnections();
+  const { selectedConnection } = useConnections();
+  const deleteConnectionMutation = useDeleteConnectionMutation();
   const [loading, setLoading] = useState<boolean>(false);
   const isDisabled = !projectId || !selectedConnection || !selectedConnection.id || loading;
 
@@ -35,48 +57,22 @@ export function RemoveConnectionButton({
         projectId,
         connectionId: selectedConnection?.id,
       });
-      try {
-        await api().connectionApi.deleteConnection(
-          { projectIdOrName: projectId, connectionId: selectedConnection?.id },
-          {
-            headers: {
-              'X-Api-Key': apiKey,
-              'Content-Type': 'application/json',
-            },
-          },
-        );
 
-        console.warn(
-          'successfully deleted connection:',
-          selectedConnection?.id,
-        );
-        // Trigger builder-provided callback if it exists
-        onDisconnectSuccess?.(selectedConnection);
-        // Reset connections
-        api()
-          .connectionApi.listConnections(
-            {
-              projectIdOrName: projectId,
-            },
-            {
-              headers: {
-                'X-Api-Key': apiKey ?? '',
-              },
-            },
-          )
-          .then((_connections) => {
-            setConnections(_connections);
+      deleteConnectionMutation.mutate(
+        {
+          projectIdOrName: projectId,
+          connectionId: selectedConnection?.id,
+        },
+        {
+          onSuccess: () => {
+            console.warn('successfully deleted connection:', selectedConnection?.id);
+            // Trigger builder-provided callback if it exists
+            onDisconnectSuccess?.(selectedConnection);
             resetComponent(); // reset / refresh the Connect Provider component
-          })
-          .catch((err) => {
-            handleServerError(err);
-          });
-      } catch (e) {
-        console.error('Error deleting connection.');
-        handleServerError(e);
-      } finally {
-        setLoading(false);
-      }
+          },
+          onSettled: () => setLoading(false),
+        },
+      );
     }
   };
 
