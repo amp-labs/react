@@ -23,9 +23,7 @@ const useDeleteConnectionMutation = () => {
     mutationKey: ['deleteConnection'],
     mutationFn: async ({ projectIdOrName, connectionId }: any) => {
       const api = await getAPI();
-      return api.connectionApi.deleteConnection(
-        { projectIdOrName, connectionId },
-      );
+      return api.connectionApi.deleteConnection({ projectIdOrName, connectionId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
