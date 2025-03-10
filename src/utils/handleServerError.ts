@@ -24,8 +24,14 @@ export const handleServerError = async (error: any, setError?: (error: string) =
 
       // https://github.com/amp-labs/openapi/blob/3bc3ab75c3071763e1117f697be3e0fcb636972c/problem/problem.yaml#L85
       // All errors returned by the Ampersand API conform to this format
-      const errorMsg = errorBody?.causes?.join('\n') || '[ERROR] Creating installation failed.';
-      console.error('[Error Message]', errorMsg);
+      const errorMsg = errorBody?.causes?.join('\n') || errorBody?.detail;
+      if (!errorMsg) {
+        console.error('Unexpected error response:', errorBody);
+      } else {
+        console.error('[Error Message]', errorMsg);
+        if (errorBody?.remedy) { console.error('[Remedy]', errorBody.remedy); }
+      }
+
       if (setError) setError(errorMsg);
     } catch (e) {
       console.error('Error parsing error response body:', e); // the response body could already be parsed
