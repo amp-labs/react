@@ -37,9 +37,20 @@ export const useConnections = (): ConnectionsContextValue => {
   return context;
 };
 
-export const useConnectionsListQuery = () => {
+type ConnectionsListQueryProps = {
+  groupRefParam?: string; // must pass in if not in Install Integration (i.e. ConnectProvider)
+  providerParam?: string; // must pass in if not in Install Integration
+};
+
+export const useConnectionsListQuery = ({ groupRefParam, providerParam }: ConnectionsListQueryProps) => {
   const { projectIdOrName } = useProject();
-  const { groupRef, provider } = useInstallIntegrationProps();
+
+  // we may want to decouple this query from InstallIntegrationContextProvider
+  // to allow for more flexibility in the future
+  const { groupRef: installIntegrationGroupRef, provider: installIntegrationProvider } = useInstallIntegrationProps();
+  const groupRef = groupRefParam || installIntegrationGroupRef; // overload to support ConnectProvider
+  const provider = providerParam || installIntegrationProvider; // overload to support ConnectProvider
+
   const getAPI = useAPI();
   return useQuery({
     queryKey: ['amp', 'connections', projectIdOrName, groupRef, provider],
@@ -59,18 +70,19 @@ export const useConnectionsListQuery = () => {
 };
 
 type ConnectionsProviderProps = {
-
+  groupRef?: string; // must pass in if not in Install Integration
+  provider?: string; // must pass in if not in Install Integration
   children?: React.ReactNode;
 };
 
-export function ConnectionsProvider({ children }: ConnectionsProviderProps) {
+export function ConnectionsProvider({ groupRef, provider, children }: ConnectionsProviderProps) {
   const queryClient = useQueryClient();
   const { setError, isError } = useErrorState();
   const { projectId, isLoading: isProjectLoading } = useProject();
 
   const {
     data: connections, isLoading: isConnectionsLoading, isError: isConnectionsError, error: connectionError,
-  } = useConnectionsListQuery();
+  } = useConnectionsListQuery({ groupRefParam: groupRef, providerParam: provider });
 
   // simplify connections logic to be derived from the first connection
   const selectedConnection = connections?.[0];
