@@ -57,12 +57,6 @@ export interface IntegrationSubscribeObject {
      */
     destination: string;
     /**
-     * If true, the subscribe object will inherit the fields from the read object.
-     * @type {boolean}
-     * @memberof IntegrationSubscribeObject
-     */
-    inheritFields?: boolean;
-    /**
      * 
      * @type {CreateEvent}
      * @memberof IntegrationSubscribeObject
@@ -117,7 +111,6 @@ export function IntegrationSubscribeObjectFromJSONTyped(json: any, ignoreDiscrim
         
         'objectName': json['objectName'],
         'destination': json['destination'],
-        'inheritFields': !exists(json, 'inheritFields') ? undefined : json['inheritFields'],
         'createEvent': !exists(json, 'CreateEvent') ? undefined : CreateEventFromJSON(json['CreateEvent']),
         'updateEvent': !exists(json, 'UpdateEvent') ? undefined : UpdateEventFromJSON(json['UpdateEvent']),
         'deleteEvent': !exists(json, 'DeleteEvent') ? undefined : DeleteEventFromJSON(json['DeleteEvent']),
@@ -137,7 +130,6 @@ export function IntegrationSubscribeObjectToJSON(value?: IntegrationSubscribeObj
         
         'objectName': value.objectName,
         'destination': value.destination,
-        'inheritFields': value.inheritFields,
         'CreateEvent': CreateEventToJSON(value.createEvent),
         'UpdateEvent': UpdateEventToJSON(value.updateEvent),
         'DeleteEvent': DeleteEventToJSON(value.deleteEvent),
