@@ -14,4 +14,7 @@ jobs:
     - name: Run linter
       run: yarn lint:dry
     - name: Build project
-      run: yarn build
+      run: |
+        set -e  # Exit immediately if a command exits with a non-zero status
+        yarn build
+      # This ensures that if the build fails, the GitHub Action will also fail

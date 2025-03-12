@@ -32,7 +32,7 @@
   "scripts": {
     "test": "jest",
     "watch": "yarn prepbuild && vite build --watch",
-    "build": "yarn prepbuild && vite build",
+    "build": "yarn prepbuild && tsc && vite build",
     "analyze": "yarn prepbuild && vite build --mode development",
     "prepbuild": "yarn clean && node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" | sed \"s|\\\"|'|g\" > src/services/version.ts",
     "clean": "rm -rf ./build/",
