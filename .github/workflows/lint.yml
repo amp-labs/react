@@ -13,7 +13,6 @@ jobs:
       run: yarn
     - name: Run linter
       run: yarn lint:dry
-      # If linting fails, the workflow will stop here
     - name: Build project
       run: |
         set -e  # Exit immediately if a command exits with a non-zero status

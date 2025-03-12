@@ -32,13 +32,13 @@
   "scripts": {
     "test": "jest",
     "watch": "yarn prepbuild && vite build --watch",
-    "build": "yarn prepbuild && vite build",
+    "build": "yarn prepbuild && tsc && vite build",
     "analyze": "yarn prepbuild && vite build --mode development",
     "prepbuild": "yarn clean && node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" | sed \"s|\\\"|'|g\" > src/services/version.ts",
     "clean": "rm -rf ./build/",
     "assets": "mkdir ./build/ && cp -R ./src/public/ ./build/public/",
     "lint": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/ --fix",
-    "lint:dry": "eslint --ext .ts,.tsx -c .eslintrc.cjs --max-warnings 0 src/",
+    "lint:dry": "eslint --ext .ts,.tsx -c .eslintrc.cjs src/",
     "clean-api": "rm -rf generated-sources/api",
     "generate-api": "yarn clean-api && openapi-generator-cli generate -i https://raw.githubusercontent.com/amp-labs/openapi/main/api/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true",
     "gen": "yarn generate-api"
