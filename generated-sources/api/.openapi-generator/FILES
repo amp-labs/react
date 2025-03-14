@@ -76,6 +76,8 @@ src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
 src/models/FieldMetadata.ts
+src/models/FieldSetting.ts
+src/models/FieldSettingDefault.ts
 src/models/FieldValue.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
