@@ -53,6 +53,8 @@ export * from './DeleteEvent';
 export * from './Delivery';
 export * from './Destination';
 export * from './FieldMetadata';
+export * from './FieldSetting';
+export * from './FieldSettingDefault';
 export * from './FieldValue';
 export * from './GenerateConnectionRequest';
 export * from './GenerateConnectionRequestBasicAuth';
