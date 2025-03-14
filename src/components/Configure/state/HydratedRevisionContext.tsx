@@ -126,7 +126,7 @@ export function HydratedRevisionProvider({
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
     const errorMsg = `Error retrieving integration details for '${intNameOrId
     }. This is sometimes caused by insufficient permissions with your credentials. ' 
-    ${readeableErrorMsg ? `: ${readeableErrorMsg}` : ''}`;
+    ${readableErrorMsg ? `: ${readableErrorMsg}` : ''}`;
 
     return (
       <ComponentContainerError message={errorMsg}>
