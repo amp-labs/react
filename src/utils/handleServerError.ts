@@ -32,11 +32,8 @@ export const handleServerError = async (error: any, setError?: (error: string) =
         if (errorBody?.remedy) { console.error('[Remedy]', errorBody.remedy); }
       }
 
-      const combinedErrorMessage = `[Error Message] ${errorMsg} 
-      ${errorBody?.remedy ? `\n\n[Remedy] ${errorBody.remedy}` : ''}`;
-      if (setError) {
-        setError(combinedErrorMessage);
-      }
+      const combinedErrorMessage = `${errorMsg} ${errorBody?.remedy ? `\n\n[Remedy] ${errorBody.remedy}` : ''}`;
+      if (setError) setError(combinedErrorMessage);
     } catch (e) {
       console.error('Error parsing error response body:', e); // the response body could already be parsed
     }

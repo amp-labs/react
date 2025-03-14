@@ -124,9 +124,8 @@ export function HydratedRevisionProvider({
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
-    const errorMsg = `Error retrieving integration details for '${intNameOrId
-    }. This is sometimes caused by insufficient permissions with your credentials. ' 
-    ${readableErrorMsg ? `: ${readableErrorMsg}` : ''}`;
+    const errorMsg = `${readableErrorMsg ? `: ${readableErrorMsg}`
+      : `Error loading hydrated revision for integration ${intNameOrId}.`}`;
 
     return (
       <ComponentContainerError message={errorMsg}>
@@ -136,7 +135,7 @@ export function HydratedRevisionProvider({
         >
           {connectionError && <InnerErrorTextBox message={connectionError} />}
           <RemoveConnectionButton
-            buttonText="Remove Connection"
+            buttonText="Try again"
             resetComponent={resetComponent}
             buttonVariant="danger"
             onDisconnectError={(error: string) => setConnectionError(error)}
