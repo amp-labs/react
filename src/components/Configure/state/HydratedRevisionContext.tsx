@@ -122,10 +122,12 @@ export function HydratedRevisionProvider({
     return <ComponentContainerLoading />;
   }
 
+  const providerName = integrationObj?.provider || 'provider';
+
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
     const errorMsg = `${readableErrorMsg ? `: ${readableErrorMsg}`
-      : `Error loading hydrated revision for integration ${intNameOrId}.`}`;
+      : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`}`;
 
     return (
       <ComponentContainerError message={errorMsg}>
