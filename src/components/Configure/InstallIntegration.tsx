@@ -137,7 +137,7 @@ export function InstallIntegration(
             groupName={groupName}
             resetComponent={reset}
           >
-            <HydratedRevisionProvider>
+            <HydratedRevisionProvider resetComponent={reset}>
               <ConditionalProxyLayout>
                 <ConfigurationProvider>
                   <ObjectManagementNav>

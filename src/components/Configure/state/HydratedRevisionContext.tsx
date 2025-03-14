@@ -13,6 +13,8 @@ import {
   HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision, useAPI,
 } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
+import { RemoveConnectionButton } from 'src/components/Connect/RemoveConnectionButton';
+import { InnerErrorTextBox } from 'src/components/ErrorTextBox/ErrorTextBox';
 import { handleServerError } from 'src/utils/handleServerError';
 
 interface HydratedRevisionContextValue {
@@ -79,15 +81,17 @@ const useHydratedRevisionQuery = () => {
 
 type HydratedRevisionProviderProps = {
   children?: React.ReactNode;
+  resetComponent: () => void; // optional prop to reset the component on error
 };
 
 export function HydratedRevisionProvider({
-  children,
+  children, resetComponent,
 }: HydratedRevisionProviderProps) {
   const { integrationId, integrationObj } = useInstallIntegrationProps();
   const { isError, removeError, setError } = useErrorState();
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;
   const [readeableErrorMsg, setReadableErrorMsg] = useState<string | null>(null);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
   const {
     data: hydratedRevision,
@@ -102,6 +106,7 @@ export function HydratedRevisionProvider({
     } else {
       removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
       setReadableErrorMsg(null);
+      setConnectionError(null);
     }
   }, [isHydratedRevisionError, errorIntegrationIdentifier,
     setError, removeError, hydrateRevisionError, setReadableErrorMsg]);
@@ -120,10 +125,25 @@ export function HydratedRevisionProvider({
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
     const errorMsg = `Error retrieving integration details for '${intNameOrId
-    }. This is sometimes caused by insufficient permissions with your credentials. ' + 
+    }. This is sometimes caused by insufficient permissions with your credentials. ' 
     ${readeableErrorMsg ? `: ${readeableErrorMsg}` : ''}`;
 
-    return <ComponentContainerError message={errorMsg} />;
+    return (
+      <ComponentContainerError message={errorMsg}>
+        <div style={{
+          display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '1rem',
+        }}
+        >
+          {connectionError && <InnerErrorTextBox message={connectionError} />}
+          <RemoveConnectionButton
+            buttonText="Remove Connection"
+            resetComponent={resetComponent}
+            buttonVariant="danger"
+            onDisconnectError={(error: string) => setConnectionError(error)}
+          />
+        </div>
+      </ComponentContainerError>
+    );
   }
 
   return (

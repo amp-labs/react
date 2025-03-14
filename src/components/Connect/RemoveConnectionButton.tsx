@@ -13,6 +13,7 @@ interface RemoveConnectionButtonProps {
   buttonVariant?: string;
   buttonStyle?: React.CSSProperties;
   onDisconnectSuccess?: (connection: Connection) => void;
+  onDisconnectError?: (errorMsg: string) => void;
 }
 
 const useDeleteConnectionMutation = () => {
@@ -29,8 +30,7 @@ const useDeleteConnectionMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
     },
     onError: (error) => {
-      console.error('Error deleting connection.');
-      handleServerError(error);
+      console.error('Error deleting connection.', { error });
     },
   });
 };
@@ -41,6 +41,7 @@ export function RemoveConnectionButton({
   buttonStyle = {},
   onDisconnectSuccess,
   resetComponent,
+  onDisconnectError,
 }: RemoveConnectionButtonProps) {
   const { projectId } = useProject();
   const { selectedConnection } = useConnections();
@@ -67,6 +68,9 @@ export function RemoveConnectionButton({
             // Trigger builder-provided callback if it exists
             onDisconnectSuccess?.(selectedConnection);
             resetComponent(); // reset / refresh the Connect Provider component
+          },
+          onError: (error) => {
+            handleServerError(error, onDisconnectError);
           },
           onSettled: () => setLoading(false),
         },

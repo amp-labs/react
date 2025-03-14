@@ -32,7 +32,8 @@ export const handleServerError = async (error: any, setError?: (error: string) =
         if (errorBody?.remedy) { console.error('[Remedy]', errorBody.remedy); }
       }
 
-      const combinedErrorMessage = errorMsg + (errorBody?.remedy ? `\n\n${errorBody.remedy}` : '');
+      const combinedErrorMessage = `[Error Message] ${errorMsg} 
+      ${errorBody?.remedy ? `\n\n[Remedy] ${errorBody.remedy}` : ''}`;
       if (setError) {
         setError(combinedErrorMessage);
       }
