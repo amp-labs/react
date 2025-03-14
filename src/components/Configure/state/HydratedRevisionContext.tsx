@@ -1,5 +1,5 @@
 import React, {
-  createContext, useContext, useEffect, useMemo,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -87,6 +87,7 @@ export function HydratedRevisionProvider({
   const { integrationId, integrationObj } = useInstallIntegrationProps();
   const { isError, removeError, setError } = useErrorState();
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;
+  const [readeableErrorMsg, setReadableErrorMsg] = useState<string | null>(null);
 
   const {
     data: hydratedRevision,
@@ -97,11 +98,13 @@ export function HydratedRevisionProvider({
   useEffect(() => {
     if (isHydratedRevisionError) {
       setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-      handleServerError(hydrateRevisionError);
+      handleServerError(hydrateRevisionError, setReadableErrorMsg);
     } else {
       removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
+      setReadableErrorMsg(null);
     }
-  }, [isHydratedRevisionError, errorIntegrationIdentifier, setError, removeError, hydrateRevisionError]);
+  }, [isHydratedRevisionError, errorIntegrationIdentifier,
+    setError, removeError, hydrateRevisionError, setReadableErrorMsg]);
 
   const contextValue = useMemo(() => ({
     hydratedRevision: hydratedRevision || null,
@@ -117,7 +120,8 @@ export function HydratedRevisionProvider({
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
     const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
     const errorMsg = `Error retrieving integration details for '${intNameOrId
-    }. This is sometimes caused by insufficient permissions with your credentials'`;
+    }. This is sometimes caused by insufficient permissions with your credentials. ' + 
+    ${readeableErrorMsg ? `: ${readeableErrorMsg}` : ''}`;
 
     return <ComponentContainerError message={errorMsg} />;
   }

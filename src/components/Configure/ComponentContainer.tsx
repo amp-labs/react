@@ -27,10 +27,17 @@ export function ComponentContainerLoading() {
   );
 }
 
-export function ComponentContainerError({ message }: { message: string; }) {
+/**
+ * Container for error messages. Usually used when a component cannot be rendered due to an error.
+ * @param param0
+ * @returns
+ */
+export function ComponentContainerError({ message, children }: { message: string; children?: React.ReactNode; }) {
   return (
     <ComponentContainer>
-      <ErrorTextBox message={message} />
+      <ErrorTextBox message={message}>
+        {children}
+      </ErrorTextBox>
     </ComponentContainer>
   );
 }
