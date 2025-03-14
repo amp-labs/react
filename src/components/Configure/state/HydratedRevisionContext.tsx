@@ -90,7 +90,7 @@ export function HydratedRevisionProvider({
   const { integrationId, integrationObj } = useInstallIntegrationProps();
   const { isError, removeError, setError } = useErrorState();
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;
-  const [readeableErrorMsg, setReadableErrorMsg] = useState<string | null>(null);
+  const [readableErrorMsg, setReadableErrorMsg] = useState<string | null>(null);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
   const {
