@@ -44,6 +44,7 @@ export interface DeleteProjectRequest {
 
 export interface GetProjectRequest {
     projectIdOrName: string;
+    includeEntitlements?: boolean;
 }
 
 export interface UpdateProjectOperationRequest {
@@ -92,6 +93,7 @@ export interface ProjectApiInterface {
      * 
      * @summary Get a project
      * @param {string} projectIdOrName 
+     * @param {boolean} [includeEntitlements] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -219,6 +221,10 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.includeEntitlements !== undefined) {
+            queryParameters['includeEntitlements'] = requestParameters.includeEntitlements;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

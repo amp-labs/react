@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { FieldSetting } from './FieldSetting';
+import {
+    FieldSettingFromJSON,
+    FieldSettingFromJSONTyped,
+    FieldSettingToJSON,
+} from './FieldSetting';
 import type { ValueDefault } from './ValueDefault';
 import {
     ValueDefaultFromJSON,
@@ -31,13 +37,20 @@ export interface BaseWriteConfigObject {
      * @type {string}
      * @memberof BaseWriteConfigObject
      */
-    objectName?: string;
+    objectName: string;
     /**
      * This is a map of field names to default values. These values will be used when writing to the object.
      * @type {{ [key: string]: ValueDefault; }}
      * @memberof BaseWriteConfigObject
+     * @deprecated
      */
     selectedValueDefaults?: { [key: string]: ValueDefault; };
+    /**
+     * This is a map of field names to their settings.
+     * @type {{ [key: string]: FieldSetting; }}
+     * @memberof BaseWriteConfigObject
+     */
+    selectedFieldSettings?: { [key: string]: FieldSetting; };
 }
 
 /**
@@ -45,6 +58,7 @@ export interface BaseWriteConfigObject {
  */
 export function instanceOfBaseWriteConfigObject(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "objectName" in value;
 
     return isInstance;
 }
@@ -59,8 +73,9 @@ export function BaseWriteConfigObjectFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
+        'objectName': json['objectName'],
         'selectedValueDefaults': !exists(json, 'selectedValueDefaults') ? undefined : (mapValues(json['selectedValueDefaults'], ValueDefaultFromJSON)),
+        'selectedFieldSettings': !exists(json, 'selectedFieldSettings') ? undefined : (mapValues(json['selectedFieldSettings'], FieldSettingFromJSON)),
     };
 }
 
@@ -75,6 +90,7 @@ export function BaseWriteConfigObjectToJSON(value?: BaseWriteConfigObject | null
         
         'objectName': value.objectName,
         'selectedValueDefaults': value.selectedValueDefaults === undefined ? undefined : (mapValues(value.selectedValueDefaults, ValueDefaultToJSON)),
+        'selectedFieldSettings': value.selectedFieldSettings === undefined ? undefined : (mapValues(value.selectedFieldSettings, FieldSettingToJSON)),
     };
 }
 
