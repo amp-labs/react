@@ -6,8 +6,8 @@ import { useCallback, useState } from 'react';
 
 import { useProject } from 'context/ProjectContextProvider';
 
-import { useOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
+import { useOAuthPopupURL } from '../useOAuthPopupURL';
 
 import { NoWorkspaceEntryContent } from './NoWorkspaceEntryContent';
 
