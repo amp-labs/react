@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 
-import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
+import { useOAuthPopupURL } from '../useOAuthPopupURL';
 
 import { SalesforceSubdomainEntry } from './Salesforce/SalesforceSubdomainEntry';
 import { WorkspaceEntryContent } from './WorkspaceEntryContent';
@@ -28,42 +27,27 @@ interface WorkspaceOauthFlowProps {
 export function WorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: WorkspaceOauthFlowProps) {
-  const { projectId } = useProject();
-  const apiKey = useApiKey();
-
   const [workspace, setWorkspace] = useState<string>('');
-  const [oAuthCallbackURL, setOAuthCallbackURL] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
 
+  const {
+    url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
+  } = useOAuthPopupURL(consumerRef, groupRef, provider, workspace, consumerName, groupName);
+
+  const errorMessage = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
-    setError(null);
+    setLocalError(null);
     if (!workspace) {
-      setError('Workspace is required');
+      setLocalError('Workspace is required');
       return;
     }
 
-    try {
-      const url = await fetchOAuthPopupURL(
-        projectId,
-        consumerRef,
-        groupRef,
-        apiKey,
-        provider,
-        workspace,
-        consumerName,
-        groupName,
-      );
-      setOAuthCallbackURL(url);
-    } catch (err: any) {
-      console.error(err);
-      setError(err?.message ?? 'Unexpected error');
-    }
+    refetchOauthConnect();
   };
 
   const onError = useCallback((err: string | null) => {
-    setError(err);
-    setOAuthCallbackURL(null);
+    setLocalError(err);
   }, []);
 
   // custom entry component for Salesforce provider
@@ -72,7 +56,7 @@ export function WorkspaceOauthFlow({
       <SalesforceSubdomainEntry
         handleSubmit={handleSubmit}
         setWorkspace={setWorkspace}
-        error={error}
+        error={errorMessage}
         isButtonDisabled={workspace.length === 0}
       />
     ) : (
@@ -80,8 +64,8 @@ export function WorkspaceOauthFlow({
       <WorkspaceEntryContent
         handleSubmit={handleSubmit}
         setWorkspace={setWorkspace}
-        error={error}
-        isButtonDisabled={workspace.length === 0}
+        error={errorMessage}
+        isButtonDisabled={workspace.length === 0 || isLoading}
         providerName={providerName}
       />
     );
@@ -89,7 +73,7 @@ export function WorkspaceOauthFlow({
   return (
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
-      oauthUrl={oAuthCallbackURL}
+      oauthUrl={oAuthPopupURL || null}
       onError={onError}
     >
       {workspaceEntryComponent}
