@@ -18,7 +18,8 @@ function setValueDefaultWriteFieldProducer(
     const draftSelectedWriteFields = draft.write.selectedWriteObjects;
     if (defaultValue) {
       if (!draftSelectedWriteFields[objectName]) {
-        draftSelectedWriteFields[objectName] = { };
+        // type change requires objectName to be set
+        draftSelectedWriteFields[objectName] = { objectName };
       }
 
       if (!draftSelectedWriteFields[objectName].selectedValueDefaults) {

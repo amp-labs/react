@@ -25,6 +25,18 @@ export interface Oauth2AuthorizationCodeTokensOnlyRefreshToken {
      * @memberof Oauth2AuthorizationCodeTokensOnlyRefreshToken
      */
     token: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Oauth2AuthorizationCodeTokensOnlyRefreshToken
+     */
+    issuedAt?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Oauth2AuthorizationCodeTokensOnlyRefreshToken
+     */
+    expiresAt?: Date;
 }
 
 /**
@@ -48,6 +60,8 @@ export function Oauth2AuthorizationCodeTokensOnlyRefreshTokenFromJSONTyped(json:
     return {
         
         'token': json['token'],
+        'issuedAt': !exists(json, 'issuedAt') ? undefined : (new Date(json['issuedAt'])),
+        'expiresAt': !exists(json, 'expiresAt') ? undefined : (new Date(json['expiresAt'])),
     };
 }
 
@@ -61,6 +75,8 @@ export function Oauth2AuthorizationCodeTokensOnlyRefreshTokenToJSON(value?: Oaut
     return {
         
         'token': value.token,
+        'issuedAt': value.issuedAt === undefined ? undefined : (value.issuedAt.toISOString()),
+        'expiresAt': value.expiresAt === undefined ? undefined : (value.expiresAt.toISOString()),
     };
 }
 

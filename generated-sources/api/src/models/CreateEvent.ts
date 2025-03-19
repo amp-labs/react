@@ -20,12 +20,22 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateEvent {
     /**
-     * If true, the integration will subscribe to create events.
-     * @type {boolean}
+     * If always, the integration will subscribe to create events.
+     * @type {string}
      * @memberof CreateEvent
      */
-    enabled?: boolean;
+    enabled?: CreateEventEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const CreateEventEnabledEnum = {
+    Always: 'always'
+} as const;
+export type CreateEventEnabledEnum = typeof CreateEventEnabledEnum[keyof typeof CreateEventEnabledEnum];
+
 
 /**
  * Check if a given object implements the CreateEvent interface.
