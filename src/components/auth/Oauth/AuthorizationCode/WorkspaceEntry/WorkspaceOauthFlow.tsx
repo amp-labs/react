@@ -27,14 +27,12 @@ interface WorkspaceOauthFlowProps {
 export function WorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: WorkspaceOauthFlowProps) {
-  const { projectId } = useProject();
+  const [workspace, setWorkspace] = useState<string>('');
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const {
     url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
-  } = useOAuthPopupURL(projectId, consumerRef, groupRef, provider, undefined, consumerName, groupName);
-
-  const [workspace, setWorkspace] = useState<string>('');
-  const [localError, setLocalError] = useState<string | null>(null);
+  } = useOAuthPopupURL(consumerRef, groupRef, provider, workspace, consumerName, groupName);
 
   const errorMessage = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched

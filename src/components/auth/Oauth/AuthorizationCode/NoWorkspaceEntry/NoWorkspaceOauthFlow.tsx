@@ -27,13 +27,11 @@ interface NoWorkspaceOauthFlowProps {
 export function NoWorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: NoWorkspaceOauthFlowProps) {
-  const { projectId } = useProject();
-
   const [localError, setError] = useState<string | null>(null);
 
   const {
     url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
-  } = useOAuthPopupURL(projectId, consumerRef, groupRef, provider, undefined, consumerName, groupName);
+  } = useOAuthPopupURL(consumerRef, groupRef, provider, undefined, consumerName, groupName);
 
   const error = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched
