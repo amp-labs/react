@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { OauthConnectRequest, ProviderApp } from '@generated/api/src';
 
+import { useProject } from 'src/context/ProjectContextProvider';
 import { useListProviderAppsQuery, useOauthConnectQuery } from 'src/hooks/query';
 import { useProviderInfoQuery } from 'src/hooks/useProvider';
 import { getProviderName } from 'src/utils';
@@ -9,7 +10,6 @@ import { handleServerError } from 'src/utils/handleServerError';
 import { enableCSRFProtection } from './enableCSRFprotection';
 
 export const useOAuthPopupURL = (
-  projectId: string,
   consumerRef: string,
   groupRef: string,
   provider: string,
@@ -17,6 +17,7 @@ export const useOAuthPopupURL = (
   consumerName?: string,
   groupName?: string,
 ) => {
+  const { projectId } = useProject();
   const { data: provInfo, isLoading: isProvInfoLoading, error: provInfoError } = useProviderInfoQuery(provider);
   const { data: providerApps, isLoading: isProviderAppsLoading, error: providerAppsError } = useListProviderAppsQuery();
 
