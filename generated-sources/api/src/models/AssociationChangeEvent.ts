@@ -20,11 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface AssociationChangeEvent {
     /**
-     * If true, the integration will subscribe to association change events.
-     * @type {boolean}
+     * If always, the integration will subscribe to association change events.
+     * @type {string}
      * @memberof AssociationChangeEvent
      */
-    enabled?: boolean;
+    enabled?: AssociationChangeEventEnabledEnum;
     /**
      * If true, the integration will include full records in the event payload.
      * @type {boolean}
@@ -32,6 +32,16 @@ export interface AssociationChangeEvent {
      */
     includeFullRecords?: boolean;
 }
+
+
+/**
+ * @export
+ */
+export const AssociationChangeEventEnabledEnum = {
+    Always: 'always'
+} as const;
+export type AssociationChangeEventEnabledEnum = typeof AssociationChangeEventEnabledEnum[keyof typeof AssociationChangeEventEnabledEnum];
+
 
 /**
  * Check if a given object implements the AssociationChangeEvent interface.

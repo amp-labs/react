@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProjectEntitlements } from './ProjectEntitlements';
+import {
+    ProjectEntitlementsFromJSON,
+    ProjectEntitlementsFromJSONTyped,
+    ProjectEntitlementsToJSON,
+} from './ProjectEntitlements';
+
 /**
  * 
  * @export
@@ -55,6 +62,12 @@ export interface Project {
      * @memberof Project
      */
     updateTime?: Date;
+    /**
+     * 
+     * @type {ProjectEntitlements}
+     * @memberof Project
+     */
+    entitlements?: ProjectEntitlements;
 }
 
 /**
@@ -86,6 +99,7 @@ export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'orgId': !exists(json, 'orgId') ? undefined : json['orgId'],
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
+        'entitlements': !exists(json, 'entitlements') ? undefined : ProjectEntitlementsFromJSON(json['entitlements']),
     };
 }
 
@@ -104,6 +118,7 @@ export function ProjectToJSON(value?: Project | null): any {
         'orgId': value.orgId,
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
+        'entitlements': ProjectEntitlementsToJSON(value.entitlements),
     };
 }
 

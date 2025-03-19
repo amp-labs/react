@@ -20,11 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UpdateEvent {
     /**
-     * If true, the integration will subscribe to update events.
-     * @type {boolean}
+     * If always, the integration will subscribe to update events.
+     * @type {string}
      * @memberof UpdateEvent
      */
-    enabled?: boolean;
+    enabled?: UpdateEventEnabledEnum;
     /**
      * 
      * @type {Array<string>}
@@ -32,6 +32,16 @@ export interface UpdateEvent {
      */
     requiredWatchFields?: Array<string>;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateEventEnabledEnum = {
+    Always: 'always'
+} as const;
+export type UpdateEventEnabledEnum = typeof UpdateEventEnabledEnum[keyof typeof UpdateEventEnabledEnum];
+
 
 /**
  * Check if a given object implements the UpdateEvent interface.
