@@ -6,7 +6,7 @@ import { useProject } from 'context/ProjectContextProvider';
  */
 export function AmpersandFooter() {
   const { project } = useProject();
-  const isBrandingRemoved = project?.entitlements?.brandingRemoval?.value;
+  const isBrandingRemoved = project?.entitlements?.brandingRemoval?.value === true;
 
   if (isBrandingRemoved) return null;
 
