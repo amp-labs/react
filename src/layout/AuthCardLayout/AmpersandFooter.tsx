@@ -1,8 +1,15 @@
+import { useProject } from 'context/ProjectContextProvider';
 /**
  * Ampersand Logo in footer. Links to Ampersand website.
+ * removes footer if branding removal is enabled
  * @returns
  */
 export function AmpersandFooter() {
+  const { project } = useProject();
+  const isBrandingRemoved = project?.entitlements?.brandingRemoval?.value === true;
+
+  if (isBrandingRemoved) return null;
+
   return (
     <footer
       style={{
