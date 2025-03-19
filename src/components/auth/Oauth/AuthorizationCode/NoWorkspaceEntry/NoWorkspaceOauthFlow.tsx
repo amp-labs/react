@@ -4,11 +4,9 @@
 
 import { useCallback, useState } from 'react';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { handleServerError } from 'src/utils/handleServerError';
 
-import { fetchOAuthPopupURL } from '../fetchOAuthPopupURL';
+import { useOAuthPopupURL } from '../fetchOAuthPopupURL';
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 
 import { NoWorkspaceEntryContent } from './NoWorkspaceEntryContent';
@@ -30,45 +28,36 @@ export function NoWorkspaceOauthFlow({
   provider, consumerRef, consumerName, groupRef, groupName, providerName,
 }: NoWorkspaceOauthFlowProps) {
   const { projectId } = useProject();
-  const apiKey = useApiKey();
 
-  const [oAuthPopupURL, setOAuthPopupURL] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setError] = useState<string | null>(null);
 
+  const {
+    url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
+  } = useOAuthPopupURL(projectId, consumerRef, groupRef, provider, undefined, consumerName, groupName);
+
+  const error = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
-    try {
-      const url = await fetchOAuthPopupURL(
-        projectId,
-        consumerRef,
-        groupRef,
-        apiKey,
-        provider,
-        undefined,
-        consumerName,
-        groupName,
-      );
-      setOAuthPopupURL(url);
-    } catch (err: any) {
-      console.error('Could not fetch OAuth popup URL.');
-      handleServerError(err);
-      setError(err.message ?? 'Unexpected error');
-    }
+    refetchOauthConnect();
   };
 
   const onError = useCallback((err: string | null) => {
     setError(err);
-    setOAuthPopupURL(null);
   }, []);
 
   return (
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
-      oauthUrl={oAuthPopupURL}
+      oauthUrl={oAuthPopupURL || null}
       onError={onError}
     >
-      <NoWorkspaceEntryContent handleSubmit={handleSubmit} error={error} providerName={providerName} />
+      <NoWorkspaceEntryContent
+        handleSubmit={handleSubmit}
+        error={error}
+        providerName={providerName}
+        isButtonDisabled={isLoading}
+      />
     </OAuthWindow>
   );
 }
