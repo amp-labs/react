@@ -20,12 +20,22 @@ import { exists, mapValues } from '../runtime';
  */
 export interface DeleteEvent {
     /**
-     * If true, the integration will subscribe to delete events.
-     * @type {boolean}
+     * If always, the integration will subscribe to delete events.
+     * @type {string}
      * @memberof DeleteEvent
      */
-    enabled?: boolean;
+    enabled?: DeleteEventEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const DeleteEventEnabledEnum = {
+    Always: 'always'
+} as const;
+export type DeleteEventEnabledEnum = typeof DeleteEventEnabledEnum[keyof typeof DeleteEventEnabledEnum];
+
 
 /**
  * Check if a given object implements the DeleteEvent interface.

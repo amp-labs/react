@@ -76,6 +76,8 @@ src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
 src/models/FieldMetadata.ts
+src/models/FieldSetting.ts
+src/models/FieldSettingDefault.ts
 src/models/FieldValue.ts
 src/models/GenerateConnectionRequest.ts
 src/models/GenerateConnectionRequestBasicAuth.ts
@@ -131,6 +133,8 @@ src/models/PatchApiKeyRequest.ts
 src/models/PatchApiKeyRequestApiKey.ts
 src/models/Problem.ts
 src/models/Project.ts
+src/models/ProjectEntitlements.ts
+src/models/ProjectEntitlementsBrandingRemoval.ts
 src/models/ProviderApp.ts
 src/models/ProviderInfo.ts
 src/models/Revision.ts
