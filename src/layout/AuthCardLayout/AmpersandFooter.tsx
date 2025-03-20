@@ -1,12 +1,13 @@
-import { useProject } from 'context/ProjectContextProvider';
+import { useProjectWithEntitlementsQuery } from 'src/hooks/query/useProjectWithEntitlementsQuery';
+
 /**
  * Ampersand Logo in footer. Links to Ampersand website.
  * removes footer if branding removal is enabled
  * @returns
  */
 export function AmpersandFooter() {
-  const { project } = useProject();
-  const isBrandingRemoved = project?.entitlements?.brandingRemoval?.value === true;
+  const { data: projectWithEntitlements } = useProjectWithEntitlementsQuery();
+  const isBrandingRemoved = projectWithEntitlements?.entitlements?.brandingRemoval?.value === true;
 
   if (isBrandingRemoved) return null;
 
