@@ -39,7 +39,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   } = useInstallIntegrationProps();
   const { selectedConnection, isConnectionsLoading } = useConnections();
   const [createInstallLoading, setCreateInstallLoading] = useState(false);
-  const isLoading = hydratedRevisionLoading || createInstallLoading;
+  const isLoading = hydratedRevisionLoading || createInstallLoading || isConnectionsLoading;
 
   const provider = hydratedRevision?.content?.provider;
   const hasNoConfiguration: boolean = getHasConfiguration(hydratedRevision);
@@ -53,6 +53,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
     if (!isLoading && !isConnectionsLoading && hydratedRevision && hasNoConfiguration
       && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
       setCreateInstallLoading(true);
+
       onCreateInstallationProxyOnly({
         apiKey,
         projectId,
