@@ -14,9 +14,10 @@ import { InstalledSuccessBox } from './InstalledSuccessBox';
 
 // explicity check other actions (i.e. read, write) to determine if it's proxy only
 // returns false if it's not proxy only or no hydratedRevision
-const getIsProxyOnly = (hydratedRevision: HydratedRevision | null) => {
+const getHasConfiguration = (hydratedRevision: HydratedRevision | null) => {
   const { read, write, proxy } = hydratedRevision?.content ?? {};
-  return (!read && !write && proxy?.enabled) || false;
+  // todo: check subscribe actions
+  return (!read && !write) || proxy?.enabled || false;
 };
 
 interface ConditionalProxyLayoutProps {
@@ -24,7 +25,7 @@ interface ConditionalProxyLayoutProps {
 }
 
 /**
- * if the hydratedRevision only has proxy actions,
+ * if the hydratedRevision only has proxy actions (or no configuration required),
  * then it will not render the ConfigureInstallation
  * @returns
  */
@@ -41,7 +42,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   const isLoading = hydratedRevisionLoading || createInstallLoading;
 
   const provider = hydratedRevision?.content?.provider;
-  const isProxyOnly: boolean = getIsProxyOnly(hydratedRevision);
+  const hasNoConfiguration: boolean = getHasConfiguration(hydratedRevision);
 
   // basic error handling can be improved - i.e. show ui error
   const setError = (error: string) => {
@@ -49,7 +50,7 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
   };
 
   useEffect(() => {
-    if (!isLoading && !isConnectionsLoading && hydratedRevision && isProxyOnly
+    if (!isLoading && !isConnectionsLoading && hydratedRevision && hasNoConfiguration
       && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
       setCreateInstallLoading(true);
       onCreateInstallationProxyOnly({
@@ -71,13 +72,15 @@ export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps
       });
     }
   }, [hydratedRevision,
-    isProxyOnly, installation, selectedConnection, apiKey, projectId,
+    hasNoConfiguration, installation, selectedConnection, apiKey, projectId,
     integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess,
     isIntegrationDeleted, isConnectionsLoading]);
 
   if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
   if (isLoading) return <ComponentContainerLoading />;
-  if (isProxyOnly && provider && installation) return <InstalledSuccessBox provider={provider} />;
+
+  // if the integration has no configuration required, show the installed success box (proxy, subscibe-only)
+  if (hasNoConfiguration && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
     <div>
