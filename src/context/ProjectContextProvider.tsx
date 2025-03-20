@@ -17,7 +17,7 @@ const useProjectQuery = (projectIdOrName: string) => {
     queryKey: ['project', projectIdOrName],
     queryFn: async () => {
       const api = await getAPI();
-      return api.projectApi.getProject({ projectIdOrName });
+      return api.projectApi.getProject({ projectIdOrName, includeEntitlements: true });
     },
   });
 };
