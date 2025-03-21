@@ -14,7 +14,7 @@ import { InstalledSuccessBox } from './InstalledSuccessBox';
 
 // explicity check actions (i.e. read, write) to determine if configuration is required
 // returns false if configuration is not required
-const getHasConfiguration = (hydratedRevision: HydratedRevision | null) => {
+const getNoConfigurationRequired = (hydratedRevision: HydratedRevision | null) => {
   const { read, write } = hydratedRevision?.content ?? {};
   return (!read && !write);
 };
@@ -41,7 +41,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   const isLoading = hydratedRevisionLoading || createInstallLoading || isConnectionsLoading;
 
   const provider = hydratedRevision?.content?.provider;
-  const hasNoConfiguration: boolean = getHasConfiguration(hydratedRevision);
+  const hasNoConfiguration: boolean = getNoConfigurationRequired(hydratedRevision);
 
   // basic error handling can be improved - i.e. show ui error
   const setError = (error: string) => {
