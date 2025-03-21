@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
@@ -28,6 +28,7 @@ interface ConditionalHasConfigurationLayoutProps {
  * @returns
  */
 export function ConditionalHasConfigurationLayout({ children }: ConditionalHasConfigurationLayoutProps) {
+  const hasFiredMutationRef = useRef(false);
   const { projectId } = useProject();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
   const {
@@ -37,8 +38,10 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
 
   const {
     mutate: createInstallation,
+    isIdle: isCreateInstallationIdle,
     isPending: createInstallLoading,
     error: createInstallError,
+    errorMsg: createInstallErrorMsg,
   } = useCreateInstallationMutation();
 
   const { selectedConnection, isConnectionsLoading } = useConnections();
@@ -66,23 +69,25 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
         createInstallationRequest.installation.config.content.proxy = hydratedRevision?.content?.proxy;
       }
 
-      createInstallation(createInstallationRequest, {
-        onSuccess: (_installation) => {
-          onInstallSuccess?.(_installation?.id, _installation.config);
-        },
-      });
+      if (isCreateInstallationIdle && !hasFiredMutationRef.current) {
+        createInstallation(createInstallationRequest, {
+          onSuccess: (_installation) => {
+            onInstallSuccess?.(_installation?.id, _installation.config);
+          },
+        });
+        hasFiredMutationRef.current = true; // only fire the mutation once
+      }
     }
   }, [hydratedRevision, isConfigurationNotRequired, installation,
     selectedConnection, projectId, integrationObj?.id, groupRef, consumerRef,
     isLoading, onInstallSuccess, isIntegrationDeleted,
-    isConnectionsLoading, provider, createInstallation]);
-
-  if (createInstallError) return <ComponentContainerError message={createInstallError.message} />;
-  if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
-  if (isLoading) return <ComponentContainerLoading />;
+    isConnectionsLoading, provider, createInstallation, isCreateInstallationIdle]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
   if (isConfigurationNotRequired && provider && installation) return <InstalledSuccessBox provider={provider} />;
+  if (createInstallError) return <ComponentContainerError message={createInstallErrorMsg ?? 'Create installation failed'} />;
+  if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
+  if (isLoading) return <ComponentContainerLoading />;
 
   return (
     <div>
