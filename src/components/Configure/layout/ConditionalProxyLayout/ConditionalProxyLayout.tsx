@@ -79,7 +79,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
   if (isLoading) return <ComponentContainerLoading />;
 
-  // if the integration has no configuration required, show the installed success box (proxy, subscibe-only)
+  // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
   if (hasNoConfiguration && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
