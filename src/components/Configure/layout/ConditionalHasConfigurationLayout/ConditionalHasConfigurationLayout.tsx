@@ -51,25 +51,29 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   useEffect(() => {
     if (!isLoading && !isConnectionsLoading && hydratedRevision && isConfigurationNotRequired
       && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
-      setCreateInstallLoading(true);
-
-      onCreateInstallationProxyOnly({
-        apiKey,
-        projectId,
-        integrationId: integrationObj?.id,
-        groupRef,
-        consumerRef,
-        connectionId: selectedConnection?.id,
-        hydratedRevision,
-        setError,
-        setInstallation,
-        onInstallSuccess,
-      }).then(() => {
-        setCreateInstallLoading(false);
-      }).catch((e) => {
-        setCreateInstallLoading(false);
-        console.error('Error when creating proxy installation:', e);
-      });
+      if (hydratedRevision?.content?.proxy?.enabled === true) {
+        setCreateInstallLoading(true);
+        onCreateInstallationProxyOnly({
+          apiKey,
+          projectId,
+          integrationId: integrationObj?.id,
+          groupRef,
+          consumerRef,
+          connectionId: selectedConnection?.id,
+          hydratedRevision,
+          setError,
+          setInstallation,
+          onInstallSuccess,
+        }).then(() => {
+          setCreateInstallLoading(false);
+        }).catch((e) => {
+          setCreateInstallLoading(false);
+          console.error('Error when creating proxy installation:', e);
+        });
+      } else {
+        // not a proxy integration, so we can just create the installation
+        // TOOD: create installation for subscription-only
+      }
     }
   }, [hydratedRevision,
     isConfigurationNotRequired, installation, selectedConnection, apiKey, projectId,
