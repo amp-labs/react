@@ -12,15 +12,14 @@ import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
 import { InstalledSuccessBox } from './InstalledSuccessBox';
 
-// explicity check other actions (i.e. read, write) to determine if it's proxy only
-// returns false if it's not proxy only or no hydratedRevision
+// explicity check actions (i.e. read, write) to determine if configuration is required
+// returns false if configuration is not required
 const getHasConfiguration = (hydratedRevision: HydratedRevision | null) => {
-  const { read, write, proxy } = hydratedRevision?.content ?? {};
-  // todo: check subscribe actions
-  return (!read && !write) || proxy?.enabled || false;
+  const { read, write } = hydratedRevision?.content ?? {};
+  return (!read && !write);
 };
 
-interface ConditionalProxyLayoutProps {
+interface ConditionalHasConfigurationLayoutProps {
   children: React.ReactNode;
 }
 
@@ -29,7 +28,7 @@ interface ConditionalProxyLayoutProps {
  * then it will not render the ConfigureInstallation
  * @returns
  */
-export function ConditionalProxyLayout({ children }: ConditionalProxyLayoutProps) {
+export function ConditionalHasConfigurationLayout({ children }: ConditionalHasConfigurationLayoutProps) {
   const { projectId } = useProject();
   const apiKey = useApiKey();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();

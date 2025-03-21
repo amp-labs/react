@@ -8,7 +8,7 @@ import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import resetStyles from 'src/styles/resetCss.module.css';
 
 import { InstallationContent } from './content/InstallationContent';
-import { ConditionalProxyLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
+import { ConditionalHasConfigurationLayout } from './layout/ConditionalProxyLayout/ConditionalProxyLayout';
 import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
@@ -138,13 +138,13 @@ export function InstallIntegration(
             resetComponent={reset}
           >
             <HydratedRevisionProvider resetComponent={reset}>
-              <ConditionalProxyLayout>
+              <ConditionalHasConfigurationLayout>
                 <ConfigurationProvider>
                   <ObjectManagementNav>
                     <InstallationContent />
                   </ObjectManagementNav>
                 </ConfigurationProvider>
-              </ConditionalProxyLayout>
+              </ConditionalHasConfigurationLayout>
             </HydratedRevisionProvider>
           </ProtectedConnectionLayout>
         </ConnectionsProvider>
