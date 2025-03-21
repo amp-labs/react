@@ -6,6 +6,7 @@ import { useProject } from 'context/ProjectContextProvider';
 import { CreateInstallationOperationRequest, HydratedRevision } from 'services/api';
 import { useCreateInstallationMutation } from 'src/hooks/mutation/useCreateInstallationMutation';
 
+import { getIsProxyEnabled } from '../../actions/proxy/isProxyEnabled';
 import { ComponentContainerError, ComponentContainerLoading } from '../../ComponentContainer';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
@@ -65,7 +66,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
       };
 
       // if the integration has a proxy flag, add to request
-      if (hydratedRevision?.content?.proxy?.enabled === true) {
+      if (getIsProxyEnabled(hydratedRevision) === true) {
         createInstallationRequest.installation.config.content.proxy = hydratedRevision?.content?.proxy;
       }
 
