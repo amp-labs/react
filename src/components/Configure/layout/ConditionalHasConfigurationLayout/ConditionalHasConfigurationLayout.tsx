@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { useApiKey } from 'context/ApiKeyContextProvider';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
-import { HydratedRevision } from 'services/api';
+import { CreateInstallationOperationRequest, HydratedRevision } from 'services/api';
+import { useCreateInstallationMutation } from 'src/hooks/mutation/useCreateInstallationMutation';
 
-import { onCreateInstallationProxyOnly } from '../../actions/proxy/onCreateInstallationProxyOnly';
 import { ComponentContainerError, ComponentContainerLoading } from '../../ComponentContainer';
 import { useHydratedRevision } from '../../state/HydratedRevisionContext';
 
@@ -29,62 +28,66 @@ interface ConditionalHasConfigurationLayoutProps {
  * @returns
  */
 export function ConditionalHasConfigurationLayout({ children }: ConditionalHasConfigurationLayoutProps) {
+  const hasFiredMutationRef = useRef(false);
   const { projectId } = useProject();
-  const apiKey = useApiKey();
   const { hydratedRevision, loading: hydratedRevisionLoading } = useHydratedRevision();
   const {
-    integrationObj, installation, groupRef, consumerRef, setInstallation, onInstallSuccess,
+    integrationObj, installation, groupRef, consumerRef, onInstallSuccess,
     isIntegrationDeleted,
   } = useInstallIntegrationProps();
+
+  const {
+    mutate: createInstallation,
+    isIdle: isCreateInstallationIdle,
+    isPending: createInstallLoading,
+    error: createInstallError,
+    errorMsg: createInstallErrorMsg,
+  } = useCreateInstallationMutation();
+
   const { selectedConnection, isConnectionsLoading } = useConnections();
-  const [createInstallLoading, setCreateInstallLoading] = useState(false);
+
   const isLoading = hydratedRevisionLoading || createInstallLoading || isConnectionsLoading;
 
   const provider = hydratedRevision?.content?.provider;
   const isConfigurationNotRequired: boolean = getNoConfigurationRequired(hydratedRevision);
 
-  // basic error handling can be improved - i.e. show ui error
-  const setError = (error: string) => {
-    console.error('Error when creating proxy installation:', error);
-  };
-
   useEffect(() => {
     if (!isLoading && !isConnectionsLoading && hydratedRevision && isConfigurationNotRequired
-      && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
-      if (hydratedRevision?.content?.proxy?.enabled === true) {
-        setCreateInstallLoading(true);
-        onCreateInstallationProxyOnly({
-          apiKey,
-          projectId,
-          integrationId: integrationObj?.id,
+      && !installation && selectedConnection && integrationObj?.id && !isIntegrationDeleted && provider) {
+      const createInstallationRequest: CreateInstallationOperationRequest = {
+        projectIdOrName: projectId,
+        integrationId: integrationObj?.id,
+        installation: {
           groupRef,
-          consumerRef,
           connectionId: selectedConnection?.id,
-          hydratedRevision,
-          setError,
-          setInstallation,
-          onInstallSuccess,
-        }).then(() => {
-          setCreateInstallLoading(false);
-        }).catch((e) => {
-          setCreateInstallLoading(false);
-          console.error('Error when creating proxy installation:', e);
+          config: { content: { provider } },
+        },
+      };
+
+      // if the integration has a proxy flag, add to request
+      if (hydratedRevision?.content?.proxy?.enabled === true) {
+        createInstallationRequest.installation.config.content.proxy = hydratedRevision?.content?.proxy;
+      }
+
+      if (isCreateInstallationIdle && !hasFiredMutationRef.current) {
+        createInstallation(createInstallationRequest, {
+          onSuccess: (_installation) => {
+            onInstallSuccess?.(_installation?.id, _installation.config);
+          },
         });
-      } else {
-        // not a proxy integration, so we can just create the installation
-        // TOOD: create installation for subscription-only
+        hasFiredMutationRef.current = true; // only fire the mutation once
       }
     }
-  }, [hydratedRevision,
-    isConfigurationNotRequired, installation, selectedConnection, apiKey, projectId,
-    integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess,
-    isIntegrationDeleted, isConnectionsLoading]);
-
-  if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
-  if (isLoading) return <ComponentContainerLoading />;
+  }, [hydratedRevision, isConfigurationNotRequired, installation,
+    selectedConnection, projectId, integrationObj?.id, groupRef, consumerRef,
+    isLoading, onInstallSuccess, isIntegrationDeleted,
+    isConnectionsLoading, provider, createInstallation, isCreateInstallationIdle]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
   if (isConfigurationNotRequired && provider && installation) return <InstalledSuccessBox provider={provider} />;
+  if (createInstallError) return <ComponentContainerError message={createInstallErrorMsg ?? 'Create installation failed'} />;
+  if (!integrationObj) return <ComponentContainerError message={"We can't load the integration"} />;
+  if (isLoading) return <ComponentContainerLoading />;
 
   return (
     <div>
