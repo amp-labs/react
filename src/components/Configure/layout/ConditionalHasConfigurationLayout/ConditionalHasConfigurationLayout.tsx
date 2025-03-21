@@ -41,7 +41,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   const isLoading = hydratedRevisionLoading || createInstallLoading || isConnectionsLoading;
 
   const provider = hydratedRevision?.content?.provider;
-  const hasNoConfiguration: boolean = getNoConfigurationRequired(hydratedRevision);
+  const isConfigurationNotRequired: boolean = getNoConfigurationRequired(hydratedRevision);
 
   // basic error handling can be improved - i.e. show ui error
   const setError = (error: string) => {
@@ -49,7 +49,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   };
 
   useEffect(() => {
-    if (!isLoading && !isConnectionsLoading && hydratedRevision && hasNoConfiguration
+    if (!isLoading && !isConnectionsLoading && hydratedRevision && isConfigurationNotRequired
       && !installation && selectedConnection && apiKey && integrationObj?.id && !isIntegrationDeleted) {
       setCreateInstallLoading(true);
 
@@ -72,7 +72,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
       });
     }
   }, [hydratedRevision,
-    hasNoConfiguration, installation, selectedConnection, apiKey, projectId,
+    isConfigurationNotRequired, installation, selectedConnection, apiKey, projectId,
     integrationObj?.id, groupRef, consumerRef, setInstallation, isLoading, onInstallSuccess,
     isIntegrationDeleted, isConnectionsLoading]);
 
@@ -80,7 +80,7 @@ export function ConditionalHasConfigurationLayout({ children }: ConditionalHasCo
   if (isLoading) return <ComponentContainerLoading />;
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
-  if (hasNoConfiguration && provider && installation) return <InstalledSuccessBox provider={provider} />;
+  if (isConfigurationNotRequired && provider && installation) return <InstalledSuccessBox provider={provider} />;
 
   return (
     <div>
