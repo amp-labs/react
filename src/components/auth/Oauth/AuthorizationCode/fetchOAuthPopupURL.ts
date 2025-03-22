@@ -1,12 +1,14 @@
-import { api, OauthConnectOperationRequest, ProviderApp } from 'services/api';
-import { getEnvVariable, getProviderName } from 'src/utils';
+import {
+  api, OauthConnectOperationRequest, ProviderApp,
+} from 'services/api';
+import { getProviderName } from 'src/utils';
 
-const VITE_ENABLE_CSRF = getEnvVariable('VITE_AMP_ENABLE_CSRF', false);
-const NEXT_ENABLE_CSRF = getEnvVariable('NEXT_AMP_ENABLE_CSRF', false);
-const REACT_APP_ENABLE_CSRF = getEnvVariable('REACT_APP_AMP_ENABLE_CSRF', false);
+import { enableCSRFProtection } from './enableCSRFprotection';
 
-const enableCSRFProtection = !!VITE_ENABLE_CSRF || !!NEXT_ENABLE_CSRF || !!REACT_APP_ENABLE_CSRF;
-
+/**
+ * @deprecated use useOAuthPopupURL instead
+ * @returns
+ */
 export const fetchOAuthPopupURL = async (
   projectId: string,
   consumerRef: string,
