@@ -5,7 +5,7 @@ import { useInstallIntegrationProps } from
   'src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { getProviderName } from 'src/utils';
 
-const useProviderInfoQuery = (provider?: string) => {
+export const useProviderInfoQuery = (provider?: string) => {
   const getAPI = useAPI();
   const { provider: providerFromProps } = useInstallIntegrationProps();
   const selectedProvider = provider || providerFromProps;
