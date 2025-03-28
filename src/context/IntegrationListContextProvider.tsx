@@ -2,9 +2,9 @@ import {
   createContext, useContext, useEffect,
   useMemo,
 } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
-import { Integration, useAPI } from 'services/api';
+import { useListIntegrationsQuery } from 'hooks/query/useIntegrationListQuery';
+import { Integration } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
@@ -29,21 +29,6 @@ export const useIntegrationList = (): IntegrationListContextValue => {
 
   return context;
 };
-
-function useListIntegrationsQuery() {
-  const getAPI = useAPI();
-  const { projectIdOrName } = useProject();
-
-  return useQuery({
-    queryKey: ['amp', 'integrations', projectIdOrName],
-    queryFn: async () => {
-      if (!projectIdOrName) throw new Error('Project ID or name is required');
-      const api = await getAPI();
-      return api.integrationApi.listIntegrations({ projectIdOrName });
-    },
-    enabled: !!projectIdOrName,
-  });
-}
 
 type IntegrationListContextProviderProps = {
   children?: React.ReactNode;
