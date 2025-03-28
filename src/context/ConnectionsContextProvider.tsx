@@ -4,10 +4,12 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useConnectionsListQuery } from 'hooks/query/useConnectionsListQuery';
+import { useIntegrationQuery } from 'hooks/query/useIntegrationQuery';
 import { Connection } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
 
+import { useInstallIntegrationProps } from './InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useProject } from './ProjectContextProvider';
 
@@ -47,10 +49,12 @@ export function ConnectionsProvider({ groupRef, provider, children }: Connection
   const queryClient = useQueryClient();
   const { setError, isError } = useErrorState();
   const { projectId, isLoading: isProjectLoading } = useProject();
+  const { integrationId } = useInstallIntegrationProps();
+  const { provider: integrationProvider } = useIntegrationQuery(integrationId);
 
   const {
     data: connections, isLoading: isConnectionsLoading, isError: isConnectionsError, error: connectionError,
-  } = useConnectionsListQuery({ groupRef, provider });
+  } = useConnectionsListQuery({ groupRef, provider: integrationProvider || provider });
 
   // simplify connections logic to be derived from the first connection
   const selectedConnection = connections?.[0];
