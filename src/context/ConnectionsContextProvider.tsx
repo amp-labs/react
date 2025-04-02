@@ -1,13 +1,13 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo,
 } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { Connection, useAPI } from 'services/api';
+import { useConnectionsListQuery } from 'hooks/query/useConnectionsListQuery';
+import { Connection } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useInstallIntegrationProps } from './InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
 import { useProject } from './ProjectContextProvider';
 
@@ -37,38 +37,6 @@ export const useConnections = (): ConnectionsContextValue => {
   return context;
 };
 
-type ConnectionsListQueryProps = {
-  groupRefParam?: string; // must pass in if not in Install Integration (i.e. ConnectProvider)
-  providerParam?: string; // must pass in if not in Install Integration
-};
-
-export const useConnectionsListQuery = ({ groupRefParam, providerParam }: ConnectionsListQueryProps) => {
-  const { projectIdOrName } = useProject();
-
-  // we may want to decouple this query from InstallIntegrationContextProvider
-  // to allow for more flexibility in the future
-  const { groupRef: installIntegrationGroupRef, provider: installIntegrationProvider } = useInstallIntegrationProps();
-  const groupRef = groupRefParam || installIntegrationGroupRef; // overload to support ConnectProvider
-  const provider = providerParam || installIntegrationProvider; // overload to support ConnectProvider
-
-  const getAPI = useAPI();
-  return useQuery({
-    queryKey: ['amp', 'connections', projectIdOrName, groupRef, provider],
-    queryFn: async () => {
-      if (!projectIdOrName) {
-        throw new Error('Project ID or name not found. Please wrap this component inside of AmpersandProvider');
-      }
-      if (!groupRef) throw new Error('Group reference not found.');
-      if (!provider) throw new Error('Provider not found.');
-
-      const api = await getAPI();
-      return api.connectionApi.listConnections({ projectIdOrName, groupRef, provider });
-    },
-    retry: 3, // retry 3 times before showing error
-    enabled: !!projectIdOrName && !!groupRef && !!provider,
-  });
-};
-
 type ConnectionsProviderProps = {
   groupRef?: string; // must pass in if not in Install Integration
   provider?: string; // must pass in if not in Install Integration
@@ -82,7 +50,7 @@ export function ConnectionsProvider({ groupRef, provider, children }: Connection
 
   const {
     data: connections, isLoading: isConnectionsLoading, isError: isConnectionsError, error: connectionError,
-  } = useConnectionsListQuery({ groupRefParam: groupRef, providerParam: provider });
+  } = useConnectionsListQuery({ groupRef, provider });
 
   // simplify connections logic to be derived from the first connection
   const selectedConnection = connections?.[0];
