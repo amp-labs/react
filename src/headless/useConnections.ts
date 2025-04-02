@@ -27,7 +27,8 @@ export const useConnection = () => {
   return {
     connection, // first connection in connections array
     error,
-    isLoading: isPending || isFetching,
+    isPending,
+    isFetching,
     isError,
     isSuccess,
   };
