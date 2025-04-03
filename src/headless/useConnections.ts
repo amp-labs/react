@@ -8,8 +8,8 @@ import { useInstallationProps } from './InstallationProvider';
  * Loading and error states are also returned.
  */
 export const useConnection = () => {
-  const { groupRef, integrationId } = useInstallationProps();
-  const { provider } = useIntegrationQuery(integrationId);
+  const { groupRef, integrationName } = useInstallationProps();
+  const { provider } = useIntegrationQuery(integrationName);
 
   const query = useConnectionsListQuery({ groupRef, provider });
 

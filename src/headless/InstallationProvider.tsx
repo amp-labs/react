@@ -8,7 +8,7 @@ import {
 
 // Define the context value type
 interface InstallationContextValue {
-  integrationId: string;
+  integrationName: string;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
@@ -16,7 +16,7 @@ interface InstallationContextValue {
 }
 // Create a context to pass down the props
 const InstallationContext = createContext<InstallationContextValue>({
-  integrationId: '',
+  integrationName: '',
   consumerRef: '',
   consumerName: undefined,
   groupRef: '',
@@ -33,7 +33,7 @@ export function useInstallationProps() {
 }
 
 interface InstallationProviderProps {
-  integrationId: string,
+  integrationName: string;
   consumerRef: string,
   consumerName?: string,
   groupRef: string,
@@ -43,15 +43,15 @@ interface InstallationProviderProps {
 
 // Wrap your parent component with the context provider
 export function InstallationProvider({
-  children, integrationId, consumerRef, consumerName, groupRef, groupName,
+  children, integrationName, consumerRef, consumerName, groupRef, groupName,
 }: InstallationProviderProps) {
   const props = useMemo(() => ({
-    integrationId,
+    integrationName,
     consumerRef,
     consumerName,
     groupRef,
     groupName,
-  }), [integrationId, consumerRef, consumerName, groupRef, groupName]);
+  }), [integrationName, consumerRef, consumerName, groupRef, groupName]);
 
   return (
     <InstallationContext.Provider value={props}>
