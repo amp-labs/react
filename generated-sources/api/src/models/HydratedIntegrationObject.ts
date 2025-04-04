@@ -45,6 +45,12 @@ import {
  */
 export interface HydratedIntegrationObject {
     /**
+     * Error message if there was an issue hydrating this object.
+     * @type {string}
+     * @memberof HydratedIntegrationObject
+     */
+    error?: string;
+    /**
      * 
      * @type {string}
      * @memberof HydratedIntegrationObject
@@ -141,6 +147,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
+        'error': !exists(json, 'error') ? undefined : json['error'],
         'objectName': json['objectName'],
         'displayName': json['displayName'],
         'mapToName': !exists(json, 'mapToName') ? undefined : json['mapToName'],
@@ -165,6 +172,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
     }
     return {
         
+        'error': value.error,
         'objectName': value.objectName,
         'displayName': value.displayName,
         'mapToName': value.mapToName,
