@@ -49,12 +49,12 @@ export function ConnectionsProvider({ groupRef, provider, children }: Connection
   const queryClient = useQueryClient();
   const { setError, isError } = useErrorState();
   const { projectId, isLoading: isProjectLoading } = useProject();
-  const { integrationId } = useInstallIntegrationProps();
+  const { integrationId, groupRef: groupRefProp } = useInstallIntegrationProps();
   const { provider: integrationProvider } = useIntegrationQuery(integrationId);
 
   const {
     data: connections, isLoading: isConnectionsLoading, isError: isConnectionsError, error: connectionError,
-  } = useConnectionsListQuery({ groupRef, provider: integrationProvider || provider });
+  } = useConnectionsListQuery({ groupRef: groupRef || groupRefProp, provider: integrationProvider || provider });
 
   // simplify connections logic to be derived from the first connection
   const selectedConnection = connections?.[0];
