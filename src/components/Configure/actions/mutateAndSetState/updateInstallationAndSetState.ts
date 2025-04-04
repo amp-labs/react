@@ -3,8 +3,9 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from 'services/api';
-import { handleServerError } from 'src/utils/handleServerError';
 import { escapeObjectName } from 'src/utils';
+import { handleServerError } from 'src/utils/handleServerError';
+
 type UpdateInstallationSharedProps = {
   projectId: string;
   integrationId: string;
@@ -50,4 +51,3 @@ export function updateInstallationAndSetState({
     handleServerError(err, setError);
   });
 }
-
