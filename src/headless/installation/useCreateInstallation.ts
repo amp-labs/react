@@ -26,12 +26,10 @@ export function useCreateInstallation() {
 
   const createInstallation = (config: ConfigContent) => {
     if (installation) {
-      console.error('Installation already created');
-      return null;
+      throw Error('Installation already created. Try updating instead.');
     }
     if (!integrationObj) {
-      console.error('No integration found');
-      return null;
+      throw Error('No integration found');
     }
     // assemble create installation requests from providers
     const createInstallationRequest: CreateInstallationOperationRequest = {
