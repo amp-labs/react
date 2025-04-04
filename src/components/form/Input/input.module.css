@@ -29,7 +29,7 @@
 }
 
 .input:focus:enabled {
-    border: 2px solid var(--amp-colors-input-border-focus);
+    border: 1px solid var(--amp-colors-input-border-focus);
     outline: none;
     background-color: var(--amp-colors-input-surface-focus);
 }
