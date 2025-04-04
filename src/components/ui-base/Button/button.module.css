@@ -17,12 +17,20 @@
     opacity: .8;
 }
 
+.button:focus {
+    outline: none;
+}
+
+.button:focus-visible {
+    outline: none;
+}
+
 .buttonError {
     border: 1px solid var(--amp-colors-status-critical);
 }
 
 .button:focus:enabled {
-    border: 2px solid var(--amp-colors-input-border-focus);
+    /* border: 1px solid var(--amp-colors-input-border-focus); */
     outline: none;
 }
 
