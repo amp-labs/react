@@ -3,6 +3,7 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from 'services/api';
+import { escapeObjectName } from 'src/utils';
 import { handleServerError } from 'src/utils/handleServerError';
 
 type UpdateInstallationSharedProps = {
@@ -29,7 +30,7 @@ export function updateInstallationAndSetState({
     installationUpdate: {
       // update mask will recurse to the object path and replace the object at the object path
       // this example will replace the object at the object (i.e. accounts)
-      updateMask: [`config.content.read.objects.${selectedObjectName}`],
+      updateMask: [`config.content.read.objects.${escapeObjectName(selectedObjectName)}`],
       installation: {
         config: updateConfig,
       },
