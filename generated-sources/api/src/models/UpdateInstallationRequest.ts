@@ -27,7 +27,7 @@ import {
  */
 export interface UpdateInstallationRequest {
     /**
-     * 
+     * Note: In case the mask is being used to update an object and the object's name contains special characters like a period, a forward slash or a colon, you must escape them using a backslash.
      * @type {Array<string>}
      * @memberof UpdateInstallationRequest
      */
