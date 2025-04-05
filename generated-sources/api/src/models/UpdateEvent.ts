@@ -26,6 +26,12 @@ export interface UpdateEvent {
      */
     enabled?: UpdateEventEnabledEnum;
     /**
+     * If all, the integration will watch all fields for updates.
+     * @type {string}
+     * @memberof UpdateEvent
+     */
+    watchFieldsAuto?: UpdateEventWatchFieldsAutoEnum;
+    /**
      * 
      * @type {Array<string>}
      * @memberof UpdateEvent
@@ -41,6 +47,14 @@ export const UpdateEventEnabledEnum = {
     Always: 'always'
 } as const;
 export type UpdateEventEnabledEnum = typeof UpdateEventEnabledEnum[keyof typeof UpdateEventEnabledEnum];
+
+/**
+ * @export
+ */
+export const UpdateEventWatchFieldsAutoEnum = {
+    All: 'all'
+} as const;
+export type UpdateEventWatchFieldsAutoEnum = typeof UpdateEventWatchFieldsAutoEnum[keyof typeof UpdateEventWatchFieldsAutoEnum];
 
 
 /**
@@ -63,6 +77,7 @@ export function UpdateEventFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
+        'watchFieldsAuto': !exists(json, 'watchFieldsAuto') ? undefined : json['watchFieldsAuto'],
         'requiredWatchFields': !exists(json, 'requiredWatchFields') ? undefined : json['requiredWatchFields'],
     };
 }
@@ -77,6 +92,7 @@ export function UpdateEventToJSON(value?: UpdateEvent | null): any {
     return {
         
         'enabled': value.enabled,
+        'watchFieldsAuto': value.watchFieldsAuto,
         'requiredWatchFields': value.requiredWatchFields,
     };
 }
