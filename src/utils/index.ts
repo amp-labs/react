@@ -51,3 +51,9 @@ export const findIntegrationFromList = (
     (s: Integration) => s.name === integrationName,
   ) ?? null;
 };
+
+/**
+ * Escapes ., /, \ and : in object names.
+ * This is used to escape object names that have special characters for the update mask.
+ */
+export const escapeObjectName = (objectName: string) => objectName.replace(/[.:/\\]/g, '\\$&');
