@@ -6,6 +6,8 @@ import {
   useMemo,
 } from 'react';
 
+import { ConfigProvider } from './ConfigContext';
+
 // Define the context value type
 interface InstallationContextValue {
   integrationNameOrId: string;
@@ -55,7 +57,9 @@ export function InstallationProvider({
 
   return (
     <InstallationContext.Provider value={props}>
-      {children}
+      <ConfigProvider initialConfig={{}}>
+        {children}
+      </ConfigProvider>
     </InstallationContext.Provider>
   );
 }
