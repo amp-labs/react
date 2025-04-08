@@ -27,13 +27,27 @@ export function useConfigHelper(initialConfig: UpdateInstallationConfigContent) 
       object: draft.read?.objects?.[key],
       getSelectedField: (fieldName: string) => !!draft.read?.objects?.[key]?.selectedFields?.[fieldName],
 
+      // sets a single field selected boolean, deletes the field if selected is false
       setSelectedField: ({ fieldName, selected }) => {
         setDraft((prev) => produce(prev, (_draft) => {
-          const obj = _draft.read?.objects?.[key];
-          if (obj) {
-            if (!obj.selectedFields) obj.selectedFields = {};
-            obj.selectedFields[fieldName] = selected;
+          // initialize read if it doesn't exist
+          const read = _draft.read || {};
+          const objects = read.objects || {};
+          const obj = objects[key] || {};
+          // initialize selectedFields if it doesn't exist
+          obj.selectedFields = obj.selectedFields || {};
+          obj.selectedFields[fieldName] = selected;
+          objects[key] = obj;
+          read.objects = objects;
+
+          // if selected is false, remove the field from selectedFields
+          if (obj.selectedFields?.[fieldName] === false) {
+            delete obj.selectedFields[fieldName];
           }
+
+          // eslint-disable-next-line no-param-reassign
+          _draft.read = read;
+          return _draft;
         }));
       },
 
