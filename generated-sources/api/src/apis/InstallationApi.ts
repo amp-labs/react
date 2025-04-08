@@ -75,8 +75,8 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Create a new installation
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
      * @param {CreateInstallationRequest} installation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -92,9 +92,9 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Delete an installation
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {string} installationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The Ampersand installation ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -109,9 +109,9 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Get an installation
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {string} installationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The installation ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -126,9 +126,9 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary List installations
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId 
-     * @param {string} [groupRef] 
+     * @param {string} [groupRef] The ID of the user group that has access to this installation.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -143,9 +143,9 @@ export interface InstallationApiInterface {
     /**
      * 
      * @summary Update an installation
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {string} installationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The Ampersand installation ID.
      * @param {UpdateInstallationRequest} installationUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

@@ -62,8 +62,8 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary Get an operation
-     * @param {string} projectIdOrName 
-     * @param {string} operationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} operationId Operation ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OperationApiInterface
@@ -78,8 +78,8 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary List logs for an operation
-     * @param {string} projectIdOrName 
-     * @param {string} operationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} operationId Operation ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OperationApiInterface
@@ -94,9 +94,9 @@ export interface OperationApiInterface {
     /**
      * 
      * @summary List operations
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {string} installationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The Ampersand installation ID.
      * @param {number} [pageSize] The number of operations to return.
      * @param {string} [pageToken] A cursor that can be passed to paginate through multiple pages of operations.
      * @param {*} [options] Override http request option.

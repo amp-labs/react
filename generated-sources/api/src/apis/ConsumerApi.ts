@@ -43,7 +43,7 @@ export interface ConsumerApiInterface {
     /**
      * 
      * @summary Create a new consumer
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateConsumerRequest} consumer 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

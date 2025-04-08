@@ -69,7 +69,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Create a new destination
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateDestinationRequest} destination 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -85,7 +85,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Delete a destination
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} destination The destination ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -101,8 +101,8 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Get a destination
-     * @param {string} projectIdOrName 
-     * @param {string} destination The destination name
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} destination The destination name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -117,7 +117,7 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary List destinations
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -132,8 +132,8 @@ export interface DestinationApiInterface {
     /**
      * 
      * @summary Update a destination
-     * @param {string} projectIdOrName 
-     * @param {string} destination The destination ID
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} destination The destination ID.
      * @param {UpdateDestinationRequest} destinationUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

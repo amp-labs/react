@@ -49,10 +49,10 @@ export interface ObjectsFieldsApiInterface {
     /**
      * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. 
      * @summary Get object metadata for connection
-     * @param {string} projectIdOrName Project ID or name
+     * @param {string} projectIdOrName The unique identifier or name of the project.
      * @param {string} provider The API Provider
      * @param {string} objectName Object name (mapped or unmapped)
-     * @param {string} [groupRef] The groupRef for the connection
+     * @param {string} [groupRef] The groupRef for the connection.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
@@ -68,8 +68,8 @@ export interface ObjectsFieldsApiInterface {
     /**
      * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. 
      * @summary Get object metadata for installation
-     * @param {string} projectIdOrName Project ID or name
-     * @param {string} integrationId Integration ID
+     * @param {string} projectIdOrName The unique identifier or name of the project.
+     * @param {string} integrationId The integration ID.
      * @param {string} objectName Object name (mapped or unmapped)
      * @param {string} [groupRef] The groupRef for the installation
      * @param {*} [options] Override http request option.

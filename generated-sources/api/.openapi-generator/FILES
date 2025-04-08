@@ -80,9 +80,6 @@ src/models/FieldSetting.ts
 src/models/FieldSettingDefault.ts
 src/models/FieldValue.ts
 src/models/GenerateConnectionRequest.ts
-src/models/GenerateConnectionRequestBasicAuth.ts
-src/models/GenerateConnectionRequestOauth2ClientCredentials.ts
-src/models/GenerateConnectionRequestOauth2Password.ts
 src/models/Group.ts
 src/models/HydratedIntegration.ts
 src/models/HydratedIntegrationField.ts
@@ -93,7 +90,6 @@ src/models/HydratedIntegrationRead.ts
 src/models/HydratedIntegrationWrite.ts
 src/models/HydratedIntegrationWriteObject.ts
 src/models/HydratedRevision.ts
-src/models/ImportConnectionRequest.ts
 src/models/InputValidationIssue.ts
 src/models/InputValidationProblem.ts
 src/models/Installation.ts
@@ -144,6 +140,10 @@ src/models/SubscribeOpts.ts
 src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
+src/models/UpdateConnectionRequest.ts
+src/models/UpdateConnectionRequestBasicAuth.ts
+src/models/UpdateConnectionRequestOauth2ClientCredentials.ts
+src/models/UpdateConnectionRequestOauth2Password.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
 src/models/UpdateDestinationRequestDestinationMetadata.ts

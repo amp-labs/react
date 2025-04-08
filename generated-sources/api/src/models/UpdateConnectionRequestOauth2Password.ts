@@ -16,45 +16,45 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface GenerateConnectionRequestOauth2Password
+ * @interface UpdateConnectionRequestOauth2Password
  */
-export interface GenerateConnectionRequestOauth2Password {
+export interface UpdateConnectionRequestOauth2Password {
     /**
      * The username to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2Password
+     * @memberof UpdateConnectionRequestOauth2Password
      */
     username: string;
     /**
      * The password to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2Password
+     * @memberof UpdateConnectionRequestOauth2Password
      */
     password: string;
     /**
      * The client ID to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2Password
+     * @memberof UpdateConnectionRequestOauth2Password
      */
     clientId: string;
     /**
      * The client secret to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2Password
+     * @memberof UpdateConnectionRequestOauth2Password
      */
     clientSecret: string;
     /**
      * The scopes for the tokens.
      * @type {Array<string>}
-     * @memberof GenerateConnectionRequestOauth2Password
+     * @memberof UpdateConnectionRequestOauth2Password
      */
     scopes?: Array<string>;
 }
 
 /**
- * Check if a given object implements the GenerateConnectionRequestOauth2Password interface.
+ * Check if a given object implements the UpdateConnectionRequestOauth2Password interface.
  */
-export function instanceOfGenerateConnectionRequestOauth2Password(value: object): boolean {
+export function instanceOfUpdateConnectionRequestOauth2Password(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "password" in value;
@@ -64,11 +64,11 @@ export function instanceOfGenerateConnectionRequestOauth2Password(value: object)
     return isInstance;
 }
 
-export function GenerateConnectionRequestOauth2PasswordFromJSON(json: any): GenerateConnectionRequestOauth2Password {
-    return GenerateConnectionRequestOauth2PasswordFromJSONTyped(json, false);
+export function UpdateConnectionRequestOauth2PasswordFromJSON(json: any): UpdateConnectionRequestOauth2Password {
+    return UpdateConnectionRequestOauth2PasswordFromJSONTyped(json, false);
 }
 
-export function GenerateConnectionRequestOauth2PasswordFromJSONTyped(json: any, ignoreDiscriminator: boolean): GenerateConnectionRequestOauth2Password {
+export function UpdateConnectionRequestOauth2PasswordFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateConnectionRequestOauth2Password {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -82,7 +82,7 @@ export function GenerateConnectionRequestOauth2PasswordFromJSONTyped(json: any, 
     };
 }
 
-export function GenerateConnectionRequestOauth2PasswordToJSON(value?: GenerateConnectionRequestOauth2Password | null): any {
+export function UpdateConnectionRequestOauth2PasswordToJSON(value?: UpdateConnectionRequestOauth2Password | null): any {
     if (value === undefined) {
         return undefined;
     }

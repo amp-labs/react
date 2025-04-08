@@ -32,6 +32,11 @@ export interface OauthConnectOperationRequest {
     connectOAuthParams: OauthConnectRequest;
 }
 
+export interface OauthUpdateRequest {
+    projectIdOrName: string;
+    connectionId: string;
+}
+
 /**
  * OAuthApi - interface
  * 
@@ -55,6 +60,23 @@ export interface OAuthApiInterface {
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
+    /**
+     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * @summary Get URL for updating OAuth connection
+     * @param {string} projectIdOrName Ampersand Project ID or name.
+     * @param {string} connectionId ID of connection to update.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OAuthApiInterface
+     */
+    oauthUpdateRaw(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Get URL for updating OAuth connection
+     */
+    oauthUpdate(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
 }
 
 /**
@@ -77,6 +99,10 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
         const response = await this.request({
             path: `/oauth-connect`,
             method: 'POST',
@@ -98,6 +124,50 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
      */
     async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.oauthConnectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Get URL for updating OAuth connection
+     */
+    async oauthUpdateRaw(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling oauthUpdate.');
+        }
+
+        if (requestParameters.connectionId === null || requestParameters.connectionId === undefined) {
+            throw new runtime.RequiredError('connectionId','Required parameter requestParameters.connectionId was null or undefined when calling oauthUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/connections/{connectionId}/oauth-update`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Get URL for updating OAuth connection
+     */
+    async oauthUpdate(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.oauthUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
