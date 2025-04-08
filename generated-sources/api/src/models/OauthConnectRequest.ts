@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface OauthConnectRequest {
     /**
-     * The identifier for the provider workspace
+     * The identifier for the provider workspace (e.g. the Salesforce subdomain).
      * @type {string}
      * @memberof OauthConnectRequest
      */
@@ -56,7 +56,7 @@ export interface OauthConnectRequest {
      */
     consumerName?: string;
     /**
-     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
+     * ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */

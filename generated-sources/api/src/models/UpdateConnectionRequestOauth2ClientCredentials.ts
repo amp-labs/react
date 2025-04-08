@@ -16,33 +16,33 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface GenerateConnectionRequestOauth2ClientCredentials
+ * @interface UpdateConnectionRequestOauth2ClientCredentials
  */
-export interface GenerateConnectionRequestOauth2ClientCredentials {
+export interface UpdateConnectionRequestOauth2ClientCredentials {
     /**
      * The client ID to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2ClientCredentials
+     * @memberof UpdateConnectionRequestOauth2ClientCredentials
      */
     clientId: string;
     /**
      * The client secret to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequestOauth2ClientCredentials
+     * @memberof UpdateConnectionRequestOauth2ClientCredentials
      */
     clientSecret: string;
     /**
      * The scopes for the tokens.
      * @type {Array<string>}
-     * @memberof GenerateConnectionRequestOauth2ClientCredentials
+     * @memberof UpdateConnectionRequestOauth2ClientCredentials
      */
     scopes?: Array<string>;
 }
 
 /**
- * Check if a given object implements the GenerateConnectionRequestOauth2ClientCredentials interface.
+ * Check if a given object implements the UpdateConnectionRequestOauth2ClientCredentials interface.
  */
-export function instanceOfGenerateConnectionRequestOauth2ClientCredentials(value: object): boolean {
+export function instanceOfUpdateConnectionRequestOauth2ClientCredentials(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "clientId" in value;
     isInstance = isInstance && "clientSecret" in value;
@@ -50,11 +50,11 @@ export function instanceOfGenerateConnectionRequestOauth2ClientCredentials(value
     return isInstance;
 }
 
-export function GenerateConnectionRequestOauth2ClientCredentialsFromJSON(json: any): GenerateConnectionRequestOauth2ClientCredentials {
-    return GenerateConnectionRequestOauth2ClientCredentialsFromJSONTyped(json, false);
+export function UpdateConnectionRequestOauth2ClientCredentialsFromJSON(json: any): UpdateConnectionRequestOauth2ClientCredentials {
+    return UpdateConnectionRequestOauth2ClientCredentialsFromJSONTyped(json, false);
 }
 
-export function GenerateConnectionRequestOauth2ClientCredentialsFromJSONTyped(json: any, ignoreDiscriminator: boolean): GenerateConnectionRequestOauth2ClientCredentials {
+export function UpdateConnectionRequestOauth2ClientCredentialsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateConnectionRequestOauth2ClientCredentials {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -66,7 +66,7 @@ export function GenerateConnectionRequestOauth2ClientCredentialsFromJSONTyped(js
     };
 }
 
-export function GenerateConnectionRequestOauth2ClientCredentialsToJSON(value?: GenerateConnectionRequestOauth2ClientCredentials | null): any {
+export function UpdateConnectionRequestOauth2ClientCredentialsToJSON(value?: UpdateConnectionRequestOauth2ClientCredentials | null): any {
     if (value === undefined) {
         return undefined;
     }

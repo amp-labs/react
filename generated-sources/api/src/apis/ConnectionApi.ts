@@ -19,6 +19,7 @@ import type {
   Connection,
   GenerateConnectionRequest,
   InputValidationProblem,
+  UpdateConnectionRequest,
 } from '../models';
 import {
     ApiProblemFromJSON,
@@ -29,6 +30,8 @@ import {
     GenerateConnectionRequestToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
+    UpdateConnectionRequestFromJSON,
+    UpdateConnectionRequestToJSON,
 } from '../models';
 
 export interface DeleteConnectionRequest {
@@ -38,7 +41,7 @@ export interface DeleteConnectionRequest {
 
 export interface GenerateConnectionOperationRequest {
     projectIdOrName: string;
-    generateConnectionParams: GenerateConnectionRequest;
+    generateConnectionParams?: GenerateConnectionRequest;
 }
 
 export interface GetConnectionRequest {
@@ -56,6 +59,12 @@ export interface ListConnectionsRequest {
     consumerRef?: string;
 }
 
+export interface UpdateConnectionOperationRequest {
+    projectIdOrName: string;
+    connectionId: string;
+    updateConnectionRequest: UpdateConnectionRequest;
+}
+
 /**
  * ConnectionApi - interface
  * 
@@ -66,7 +75,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary Delete a connection
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} connectionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -82,8 +91,8 @@ export interface ConnectionApiInterface {
     /**
      * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * @summary Generate a new connection
-     * @param {string} projectIdOrName 
-     * @param {GenerateConnectionRequest} generateConnectionParams 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {GenerateConnectionRequest} [generateConnectionParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ConnectionApiInterface
@@ -99,7 +108,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary Get a connection
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} connectionId 
      * @param {boolean} [includeCreds] Whether to include the credentials in the response. Only access token will be included. Default is false.
      * @param {boolean} [includeRefreshToken] Whether to include the refresh token in credentials in the response along with access token. If true, the &#x60;includeCreds&#x60; query parameter will be ignored. Default is false.
@@ -118,7 +127,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary List connections
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} [provider] The provider name (e.g. \&quot;salesforce\&quot;, \&quot;hubspot\&quot;)
      * @param {string} [groupRef] The ID of the user group that has access to this installation.
      * @param {string} [consumerRef] The consumer reference.
@@ -132,6 +141,24 @@ export interface ConnectionApiInterface {
      * List connections
      */
     listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>>;
+
+    /**
+     * Update an existing connection.
+     * @summary Update a connection.
+     * @param {string} projectIdOrName Project ID or Name.
+     * @param {string} connectionId Connection ID.
+     * @param {UpdateConnectionRequest} updateConnectionRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ConnectionApiInterface
+     */
+    updateConnectionRaw(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
+
+    /**
+     * Update an existing connection.
+     * Update a connection.
+     */
+    updateConnection(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
 
 }
 
@@ -184,10 +211,6 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling generateConnection.');
-        }
-
-        if (requestParameters.generateConnectionParams === null || requestParameters.generateConnectionParams === undefined) {
-            throw new runtime.RequiredError('generateConnectionParams','Required parameter requestParameters.generateConnectionParams was null or undefined when calling generateConnection.');
         }
 
         const queryParameters: any = {};
@@ -313,6 +336,53 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
      */
     async listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>> {
         const response = await this.listConnectionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an existing connection.
+     * Update a connection.
+     */
+    async updateConnectionRaw(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateConnection.');
+        }
+
+        if (requestParameters.connectionId === null || requestParameters.connectionId === undefined) {
+            throw new runtime.RequiredError('connectionId','Required parameter requestParameters.connectionId was null or undefined when calling updateConnection.');
+        }
+
+        if (requestParameters.updateConnectionRequest === null || requestParameters.updateConnectionRequest === undefined) {
+            throw new runtime.RequiredError('updateConnectionRequest','Required parameter requestParameters.updateConnectionRequest was null or undefined when calling updateConnection.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/connections/{connectionId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateConnectionRequestToJSON(requestParameters.updateConnectionRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectionFromJSON(jsonValue));
+    }
+
+    /**
+     * Update an existing connection.
+     * Update a connection.
+     */
+    async updateConnection(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
+        const response = await this.updateConnectionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -39,7 +39,7 @@ export interface ProviderApiInterface {
     /**
      * 
      * @summary Get provider
-     * @param {string} provider 
+     * @param {string} provider The API provider.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProviderApiInterface

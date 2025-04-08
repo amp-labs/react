@@ -41,94 +41,91 @@ import {
 /**
  * 
  * @export
- * @interface GenerateConnectionRequest
+ * @interface UpdateConnectionRequest
  */
-export interface GenerateConnectionRequest {
+export interface UpdateConnectionRequest {
     /**
      * The ID of the provider workspace that this connection belongs to.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     providerWorkspaceRef?: string;
     /**
      * The name of the user group that has access to this installation.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     groupName?: string;
     /**
      * The ID of the user group that has access to this installation.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
-    groupRef: string;
+    groupRef?: string;
     /**
      * The name of the consumer that has access to this installation.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     consumerName?: string;
     /**
      * The consumer reference.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
-    consumerRef: string;
+    consumerRef?: string;
     /**
      * The provider name (e.g. "salesforce", "hubspot")
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
-    provider: string;
+    provider?: string;
     /**
      * The API key to use for the connection.
      * @type {string}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     apiKey?: string;
     /**
      * 
      * @type {UpdateConnectionRequestBasicAuth}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     basicAuth?: UpdateConnectionRequestBasicAuth;
     /**
      * 
      * @type {UpdateConnectionRequestOauth2ClientCredentials}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     oauth2ClientCredentials?: UpdateConnectionRequestOauth2ClientCredentials;
     /**
      * 
      * @type {UpdateConnectionRequestOauth2Password}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     oauth2Password?: UpdateConnectionRequestOauth2Password;
     /**
      * 
      * @type {Oauth2AuthorizationCode}
-     * @memberof GenerateConnectionRequest
+     * @memberof UpdateConnectionRequest
      */
     oauth2AuthorizationCode?: Oauth2AuthorizationCode;
 }
 
 /**
- * Check if a given object implements the GenerateConnectionRequest interface.
+ * Check if a given object implements the UpdateConnectionRequest interface.
  */
-export function instanceOfGenerateConnectionRequest(value: object): boolean {
+export function instanceOfUpdateConnectionRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "groupRef" in value;
-    isInstance = isInstance && "consumerRef" in value;
-    isInstance = isInstance && "provider" in value;
 
     return isInstance;
 }
 
-export function GenerateConnectionRequestFromJSON(json: any): GenerateConnectionRequest {
-    return GenerateConnectionRequestFromJSONTyped(json, false);
+export function UpdateConnectionRequestFromJSON(json: any): UpdateConnectionRequest {
+    return UpdateConnectionRequestFromJSONTyped(json, false);
 }
 
-export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): GenerateConnectionRequest {
+export function UpdateConnectionRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateConnectionRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -136,10 +133,10 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
         
         'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
-        'groupRef': json['groupRef'],
+        'groupRef': !exists(json, 'groupRef') ? undefined : json['groupRef'],
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
-        'consumerRef': json['consumerRef'],
-        'provider': json['provider'],
+        'consumerRef': !exists(json, 'consumerRef') ? undefined : json['consumerRef'],
+        'provider': !exists(json, 'provider') ? undefined : json['provider'],
         'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
         'basicAuth': !exists(json, 'basicAuth') ? undefined : UpdateConnectionRequestBasicAuthFromJSON(json['basicAuth']),
         'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : UpdateConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
@@ -148,7 +145,7 @@ export function GenerateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function GenerateConnectionRequestToJSON(value?: GenerateConnectionRequest | null): any {
+export function UpdateConnectionRequestToJSON(value?: UpdateConnectionRequest | null): any {
     if (value === undefined) {
         return undefined;
     }

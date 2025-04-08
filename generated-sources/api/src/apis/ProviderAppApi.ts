@@ -64,7 +64,7 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary Create a new provider app
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateProviderAppRequest} providerApp 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -79,9 +79,9 @@ export interface ProviderAppApiInterface {
 
     /**
      * 
-     * @summary Delete a provider app
-     * @param {string} projectIdOrName 
-     * @param {string} providerAppId 
+     * @summary Delete a provider app.
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} providerAppId ID of the provider app, returned by the CreateProviderApp call.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProviderAppApiInterface
@@ -89,14 +89,14 @@ export interface ProviderAppApiInterface {
     deleteProviderAppRaw(requestParameters: DeleteProviderAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Delete a provider app
+     * Delete a provider app.
      */
     deleteProviderApp(requestParameters: DeleteProviderAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
      * @summary List provider apps
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName TThe Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProviderAppApiInterface
@@ -111,8 +111,8 @@ export interface ProviderAppApiInterface {
     /**
      * 
      * @summary Update a provider app
-     * @param {string} projectIdOrName 
-     * @param {string} providerAppId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} providerAppId ID of the provider app, returned by the CreateProviderApp call.
      * @param {UpdateProviderAppRequest} providerAppUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -174,7 +174,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
     }
 
     /**
-     * Delete a provider app
+     * Delete a provider app.
      */
     async deleteProviderAppRaw(requestParameters: DeleteProviderAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -204,7 +204,7 @@ export class ProviderAppApi extends runtime.BaseAPI implements ProviderAppApiInt
     }
 
     /**
-     * Delete a provider app
+     * Delete a provider app.
      */
     async deleteProviderApp(requestParameters: DeleteProviderAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteProviderAppRaw(requestParameters, initOverrides);

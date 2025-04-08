@@ -63,7 +63,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary Batch upsert a group of integrations
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {BatchUpsertIntegrationsRequest} batchUpsertIntegrationsRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -78,8 +78,8 @@ export interface IntegrationApiInterface {
 
     /**
      * 
-     * @summary Create a new integration
-     * @param {string} projectIdOrName 
+     * @summary Create a new integration.
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateIntegrationRequest} integration 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -88,15 +88,15 @@ export interface IntegrationApiInterface {
     createIntegrationRaw(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Create a new integration
+     * Create a new integration.
      */
     createIntegration(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
      * @summary Delete an integration
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -111,7 +111,7 @@ export interface IntegrationApiInterface {
     /**
      * 
      * @summary List integrations
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -172,7 +172,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
-     * Create a new integration
+     * Create a new integration.
      */
     async createIntegrationRaw(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -205,7 +205,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
-     * Create a new integration
+     * Create a new integration.
      */
     async createIntegration(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createIntegrationRaw(requestParameters, initOverrides);

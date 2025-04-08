@@ -81,7 +81,7 @@ export interface Connection {
      */
     consumer: Consumer;
     /**
-     * If available, the identifier for the provider workspace (e.g. "salesforce-instance-domain")
+     * If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)
      * @type {string}
      * @memberof Connection
      */
