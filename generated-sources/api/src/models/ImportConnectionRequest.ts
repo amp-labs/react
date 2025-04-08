@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface ImportConnectionRequest {
     /**
-     * ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
+     * ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof ImportConnectionRequest
      */

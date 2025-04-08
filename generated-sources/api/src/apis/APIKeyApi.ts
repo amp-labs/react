@@ -70,7 +70,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Create a new API key
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {ApiKeyRequest} apiKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -86,8 +86,8 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Delete an API key
-     * @param {string} projectIdOrName 
-     * @param {string} apiKey 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} apiKey API key to access Ampersand APIs.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof APIKeyApiInterface
@@ -102,8 +102,8 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Get an API key
-     * @param {string} projectIdOrName 
-     * @param {string} apiKey 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} apiKey API key to access Ampersand APIs.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof APIKeyApiInterface
@@ -118,7 +118,7 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary List API keys
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {boolean} [active] Whether to include only active API keys. If false, all API keys are included.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -134,8 +134,8 @@ export interface APIKeyApiInterface {
     /**
      * 
      * @summary Update an API key
-     * @param {string} projectIdOrName 
-     * @param {string} apiKey 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} apiKey API key to access Ampersand APIs.
      * @param {PatchApiKeyRequest} patchApiKeyRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

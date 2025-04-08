@@ -53,9 +53,9 @@ export interface GetHydratedRevisionRequest {
 export interface RevisionApiInterface {
     /**
      * 
-     * @summary Create a new revision
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
+     * @summary Create a new revision.
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
      * @param {CreateRevisionRequest} revision 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -64,17 +64,17 @@ export interface RevisionApiInterface {
     createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Create a new revision
+     * Create a new revision.
      */
     createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * Hydrate a revision with information from the consumer\'s SaaS instance.
      * @summary Hydrate a revision
-     * @param {string} projectIdOrName 
-     * @param {string} integrationId 
-     * @param {string} revisionId 
-     * @param {string} connectionId 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} revisionId The revision ID.
+     * @param {string} connectionId The connection ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RevisionApiInterface
@@ -95,7 +95,7 @@ export interface RevisionApiInterface {
 export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface {
 
     /**
-     * Create a new revision
+     * Create a new revision.
      */
     async createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -132,7 +132,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     }
 
     /**
-     * Create a new revision
+     * Create a new revision.
      */
     async createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createRevisionRaw(requestParameters, initOverrides);

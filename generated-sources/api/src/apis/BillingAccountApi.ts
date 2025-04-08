@@ -69,7 +69,7 @@ export interface BillingAccountApiInterface {
     /**
      * 
      * @summary Get the billing account for an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BillingAccountApiInterface

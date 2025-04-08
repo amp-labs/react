@@ -104,7 +104,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary Invite a user to an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {CreateOrgInviteRequest} [createOrgInviteRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -120,7 +120,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary Revoke an invite
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {string} inviteId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -136,7 +136,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary Get an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgApiInterface
@@ -151,7 +151,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary Get an invite
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {string} inviteId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -167,7 +167,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary List builders for an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgApiInterface
@@ -182,7 +182,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary List invites for an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgApiInterface
@@ -197,7 +197,7 @@ export interface OrgApiInterface {
     /**
      * 
      * @summary Update an organization
-     * @param {string} orgId 
+     * @param {string} orgId ID of the organization.
      * @param {UpdateOrgRequest} updateOrgRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

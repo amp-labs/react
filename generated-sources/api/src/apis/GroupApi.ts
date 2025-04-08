@@ -43,7 +43,7 @@ export interface GroupApiInterface {
     /**
      * 
      * @summary Create a new group
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateGroupRequest} group 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

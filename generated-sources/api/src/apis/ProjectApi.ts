@@ -77,7 +77,7 @@ export interface ProjectApiInterface {
     /**
      * 
      * @summary Delete a project
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -92,7 +92,7 @@ export interface ProjectApiInterface {
     /**
      * 
      * @summary Get a project
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {boolean} [includeEntitlements] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -107,7 +107,7 @@ export interface ProjectApiInterface {
 
     /**
      * 
-     * @summary List all projects that the API key or user credential has access to
+     * @summary List all projects that the API key or user credential has access to.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -115,14 +115,14 @@ export interface ProjectApiInterface {
     listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
 
     /**
-     * List all projects that the API key or user credential has access to
+     * List all projects that the API key or user credential has access to.
      */
     listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
 
     /**
      * 
      * @summary Update a project
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {UpdateProjectRequest} projectUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -251,7 +251,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to
+     * List all projects that the API key or user credential has access to.
      */
     async listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
         const queryParameters: any = {};
@@ -273,7 +273,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to
+     * List all projects that the API key or user credential has access to.
      */
     async listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
         const response = await this.listProjectsRaw(initOverrides);

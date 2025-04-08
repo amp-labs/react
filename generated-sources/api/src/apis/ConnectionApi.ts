@@ -38,7 +38,7 @@ export interface DeleteConnectionRequest {
 
 export interface GenerateConnectionOperationRequest {
     projectIdOrName: string;
-    generateConnectionParams: GenerateConnectionRequest;
+    generateConnectionParams?: GenerateConnectionRequest;
 }
 
 export interface GetConnectionRequest {
@@ -66,7 +66,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary Delete a connection
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} connectionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -82,8 +82,8 @@ export interface ConnectionApiInterface {
     /**
      * For providers which support OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
      * @summary Generate a new connection
-     * @param {string} projectIdOrName 
-     * @param {GenerateConnectionRequest} generateConnectionParams 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {GenerateConnectionRequest} [generateConnectionParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ConnectionApiInterface
@@ -99,7 +99,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary Get a connection
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} connectionId 
      * @param {boolean} [includeCreds] Whether to include the credentials in the response. Only access token will be included. Default is false.
      * @param {boolean} [includeRefreshToken] Whether to include the refresh token in credentials in the response along with access token. If true, the &#x60;includeCreds&#x60; query parameter will be ignored. Default is false.
@@ -118,7 +118,7 @@ export interface ConnectionApiInterface {
     /**
      * 
      * @summary List connections
-     * @param {string} projectIdOrName 
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} [provider] The provider name (e.g. \&quot;salesforce\&quot;, \&quot;hubspot\&quot;)
      * @param {string} [groupRef] The ID of the user group that has access to this installation.
      * @param {string} [consumerRef] The consumer reference.
@@ -184,10 +184,6 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling generateConnection.');
-        }
-
-        if (requestParameters.generateConnectionParams === null || requestParameters.generateConnectionParams === undefined) {
-            throw new runtime.RequiredError('generateConnectionParams','Required parameter requestParameters.generateConnectionParams was null or undefined when calling generateConnection.');
         }
 
         const queryParameters: any = {};
