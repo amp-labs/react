@@ -6,9 +6,11 @@ import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
-import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
+import { MANAGE_TAB_CONST, UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
 
 import styles from './tabs.module.css';
+
+const SHOW_MANAGE_TABS = false;
 
 type NavObjectItemProps = {
   objectName: string;
@@ -79,6 +81,22 @@ function UninstallTab() {
   );
 }
 
+function ManageTab() {
+  return (
+    <>
+      <Divider style={{ margin: '1rem 0' }} />
+      <Tabs.Trigger value={MANAGE_TAB_CONST} className={styles.tabTrigger}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '.5rem', marginRight: '.5rem',
+        }}
+        >
+          <span>Manage</span>
+        </div>
+      </Tabs.Trigger>
+    </>
+  );
+}
+
 type VerticalTabsProps = {
   readNavObjects: NavObject[];
   writeNavObject?: NavObject;
@@ -117,7 +135,8 @@ export function VerticalTabs({
         )}
 
         {/* Uninstall Tab */}
-        {showUninstallButton && <UninstallTab />}
+        {showUninstallButton && !SHOW_MANAGE_TABS && <UninstallTab />}
+        {SHOW_MANAGE_TABS && <ManageTab />}
       </Tabs.List>
 
       {/* EXAMPLE Content if children does not render content */}

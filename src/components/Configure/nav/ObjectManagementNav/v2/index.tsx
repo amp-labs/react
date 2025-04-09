@@ -14,13 +14,18 @@ import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
 import { generateReadNavObjects, generateWriteNavObject } from '../../../utils';
-import { UNINSTALL_INSTALLATION_CONST } from '../constant';
+import { MANAGE_TAB_CONST, UNINSTALL_INSTALLATION_CONST } from '../constant';
 import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
 
 function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
   if (tabValue === UNINSTALL_INSTALLATION_CONST) {
     // uninstall tab
     return { name: UNINSTALL_INSTALLATION_CONST, completed: false };
+  }
+
+  if (tabValue === MANAGE_TAB_CONST) {
+    // manage tab
+    return { name: MANAGE_TAB_CONST, completed: false };
   }
 
   // read or write tabs
