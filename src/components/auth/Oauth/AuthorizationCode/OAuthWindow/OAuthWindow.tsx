@@ -29,10 +29,12 @@ export function OAuthWindow({
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
-    if (oauthUrl && !oauthWindow) {
+    // if the oauthUrl is not null, the oauthWindow is not open,
+    // the connection not successfully created, and the error is not set, open the OAuth window
+    if (oauthUrl && !oauthWindow && !connectionId && !error) {
       openOAuthWindow(); // creates new window and adds event listener
     }
-  }, [oauthUrl, oauthWindow, openOAuthWindow, receiveMessage, windowTitle]);
+  }, [oauthUrl, oauthWindow, openOAuthWindow, connectionId, error]);
 
   useEffect(() => {
     if (!oauthWindow) return;
@@ -45,7 +47,7 @@ export function OAuthWindow({
 
         if (!connectionId && !error) {
           console.error('OAuth failed. Please try again.');
-          onError?.('Something went wrong. Please try again.');
+          onError?.('Authentication was cancelled. Please try again.');
         } else if (connectionId) {
           onError?.(null);
         }
