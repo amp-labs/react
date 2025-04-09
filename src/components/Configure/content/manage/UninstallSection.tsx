@@ -17,9 +17,7 @@ export function UninstallSection() {
       }}
       >
         {installation?.id ? (
-          <p style={{ color: 'var(--amp-colors-text-muted)' }}>{`By clicking below, you will uninstall your entire
-            ${provider} integration and may lose functionality in
-            ${appName}`}.
+          <p style={{ color: 'var(--amp-colors-text-muted)' }}>By clicking below, you will uninstall your entire {provider} integration and may lose functionality in {appName}.
           </p>
         ) : (
           <p>You've successfully uninstalled the integration.</p>
