@@ -25,8 +25,10 @@ export function AuthenticationSection() {
   return (
     <>
       <FieldHeader string="Authentication" />
-      <AuthenticationRow label={workspaceString} value={connection?.providerWorkspaceRef} />
-      <AuthenticationRow label="Connection Status" value={connection?.status} />
+      <div style={{ paddingBottom: '1rem' }}>
+        <AuthenticationRow label={workspaceString} value={connection?.providerWorkspaceRef} />
+        <AuthenticationRow label="Connection Status" value={connection?.status} />
+      </div>
     </>
   );
 }
