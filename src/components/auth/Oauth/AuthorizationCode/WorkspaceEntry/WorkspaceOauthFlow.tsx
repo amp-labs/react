@@ -75,6 +75,7 @@ export function WorkspaceOauthFlow({
       windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthPopupURL || null}
       onError={onError}
+      error={errorMessage}
     >
       {workspaceEntryComponent}
     </OAuthWindow>
