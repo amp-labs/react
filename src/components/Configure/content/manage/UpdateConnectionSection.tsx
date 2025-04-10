@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { OAuthWindow } from 'src/components/auth/Oauth/AuthorizationCode/OAuthWindow/OAuthWindow';
+import { FormSuccessBox } from 'src/components/FormSuccessBox';
 import { Button } from 'src/components/ui-base/Button';
 import { useConnections } from 'src/context/ConnectionsContextProvider';
-import { useUpdateOauthConnectQuery } from 'src/hooks/query/useUpdateOauthConnectMutation';
+import { useUpdateOauthConnectMutation } from 'src/hooks/mutation/useUpdateOauthConnectMutation';
 import { useProvider } from 'src/hooks/useProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
@@ -44,23 +45,15 @@ export function UpdateConnectionSection() {
   const projectIdOrName = selectedConnection?.projectId;
   const { providerName } = useProvider();
 
-  // consider reusing no workspace oauth flow
   const {
-    data: oAuthPopupURL, error: oAuthConnectError, isFetching, refetch: refetchOauthConnect,
-  } = useUpdateOauthConnectQuery({
-    projectIdOrName: projectIdOrName || '',
-    connectionId: connectionId || '',
-  });
-
-  // note move to query hook
-  useEffect(() => {
-    if (oAuthConnectError) {
-      handleServerError(oAuthConnectError);
-    }
-  }, [oAuthConnectError]);
+    mutateAsync: updateOauthConnect,
+    isPending: isUpdatingOauthConnect,
+    error: updateOauthConnectError,
+  } = useUpdateOauthConnectMutation();
 
   const [localError, setError] = useState<string | null>(null);
   const [successConnect, setSuccessConnect] = useState<boolean>(false);
+  const [url, setUrl] = useState<string | null>(null);
 
   const resetSuccessConnect = () => {
     setSuccessConnect(false);
@@ -68,13 +61,25 @@ export function UpdateConnectionSection() {
 
   const handleSuccessConnect = () => {
     setSuccessConnect(true);
+    setError(null);
+    setUrl(null);
   };
 
-  const error = oAuthConnectError?.message || localError || null;
+  const error = updateOauthConnectError?.message || localError || null;
   const handleSubmit = async () => {
     resetSuccessConnect();
     setError(null);
-    await refetchOauthConnect();
+
+    try {
+      const oauthUrl = await updateOauthConnect({
+        projectIdOrName: projectIdOrName || '',
+        connectionId: connectionId || '',
+      });
+
+      setUrl(oauthUrl);
+    } catch (e) {
+      handleServerError(e, setError);
+    }
   };
 
   const onError = useCallback((err: string | null) => {
@@ -84,9 +89,10 @@ export function UpdateConnectionSection() {
   return (
     <>
       <FieldHeader string="Update Connection" />
+      {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
       <OAuthWindow
         windowTitle={`Connect to ${providerName}`}
-        oauthUrl={oAuthPopupURL || null}
+        oauthUrl={url || null}
         onError={onError}
         error={error}
         isSuccessConnect={successConnect}
@@ -96,7 +102,7 @@ export function UpdateConnectionSection() {
           handleSubmit={handleSubmit}
           error={error}
           providerName={providerName}
-          isButtonDisabled={isFetching || isConnectionsLoading}
+          isButtonDisabled={isUpdatingOauthConnect || isConnectionsLoading || successConnect}
         />
       </OAuthWindow>
     </>
