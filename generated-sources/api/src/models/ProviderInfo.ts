@@ -37,6 +37,12 @@ import {
     MediaFromJSONTyped,
     MediaToJSON,
 } from './Media';
+import type { ModuleInfo } from './ModuleInfo';
+import {
+    ModuleInfoFromJSON,
+    ModuleInfoFromJSONTyped,
+    ModuleInfoToJSON,
+} from './ModuleInfo';
 import type { Oauth2Opts } from './Oauth2Opts';
 import {
     Oauth2OptsFromJSON,
@@ -140,6 +146,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     subscribeOpts?: SubscribeOpts;
+    /**
+     * The registry of provider modules.
+     * @type {{ [key: string]: ModuleInfo; }}
+     * @memberof ProviderInfo
+     */
+    modules?: { [key: string]: ModuleInfo; };
 }
 
 /**
@@ -179,6 +191,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
         'labels': !exists(json, 'labels') ? undefined : json['labels'],
         'subscribeOpts': !exists(json, 'subscribeOpts') ? undefined : SubscribeOptsFromJSON(json['subscribeOpts']),
+        'modules': !exists(json, 'modules') ? undefined : (mapValues(json['modules'], ModuleInfoFromJSON)),
     };
 }
 
@@ -204,6 +217,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'media': MediaToJSON(value.media),
         'labels': value.labels,
         'subscribeOpts': SubscribeOptsToJSON(value.subscribeOpts),
+        'modules': value.modules === undefined ? undefined : (mapValues(value.modules, ModuleInfoToJSON)),
     };
 }
 
