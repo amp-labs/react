@@ -89,6 +89,7 @@ export * from './LogMessage';
 export * from './Media';
 export * from './MediaTypeDarkMode';
 export * from './MediaTypeRegular';
+export * from './ModuleInfo';
 export * from './Oauth2AuthorizationCode';
 export * from './Oauth2AuthorizationCodeAccessToken';
 export * from './Oauth2AuthorizationCodeRefreshToken';

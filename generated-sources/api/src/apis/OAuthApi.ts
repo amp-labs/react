@@ -149,8 +149,8 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
         }
 
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/connections/{connectionId}/oauth-update`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
-            method: 'POST',
+            path: `/projects/{projectIdOrName}/connections/{connectionId}:oauth-update`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
+            method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
