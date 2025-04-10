@@ -9,10 +9,6 @@ import { useConnection } from '../useConnection';
 
 import { useInstallation } from './useInstallation';
 
-/**
- * create installation hook
- * @returns
- */
 export function useCreateInstallation() {
   const { projectIdOrName } = useProject();
   const { groupRef, integrationNameOrId } = useInstallationProps();
