@@ -9,9 +9,9 @@ import { useUpdateOauthConnectMutation } from 'src/hooks/mutation/useUpdateOauth
 import { useProvider } from 'src/hooks/useProvider';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { FieldHeader } from '../fields/FieldHeader';
+import { FieldHeader } from '../../fields/FieldHeader';
 
-function UpdateContent({
+export function UpdateContent({
   handleSubmit, error, isButtonDisabled, providerName,
 }: {
   handleSubmit: () => void;
@@ -38,17 +38,14 @@ function UpdateContent({
   );
 }
 
-export function UpdateConnectionSection() {
+export function UpdateOauthConnect() {
   const { selectedConnection, isConnectionsLoading } = useConnections();
 
   const connectionId = selectedConnection?.id;
   const projectIdOrName = selectedConnection?.projectId;
   const { providerName } = useProvider();
-
   const {
-    mutateAsync: updateOauthConnect,
-    isPending: isUpdatingOauthConnect,
-    error: updateOauthConnectError,
+    mutateAsync: updateOauthConnect, isPending: isUpdatingOauthConnect, error: updateOauthConnectError,
   } = useUpdateOauthConnectMutation();
 
   const [localError, setError] = useState<string | null>(null);
