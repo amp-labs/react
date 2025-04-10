@@ -41,6 +41,10 @@
     --amp-colors-status-critical-dark: #702525;
     --amp-colors-status-critical: #E73D3D;
     --amp-colors-status-critical-muted: #FFD9D9;
+
+    --amp-colors-status-success-dark: #2A704A;
+    --amp-colors-status-success: #49E792;
+    --amp-colors-status-success-muted: #DCFFEC;
      
     /* links */
     --amp-colors-link-text: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
