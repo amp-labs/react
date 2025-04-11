@@ -11,6 +11,8 @@ type OAuthWindowProps = {
   oauthUrl: string | null;
   error?: string | null;
   onError?: (err: string | null) => void;
+  isSuccessConnect?: boolean; // used to check if the connection is successfully created
+  onSuccessConnect?: () => void; // callback to set when connection is successfully created
 };
 
 /**
@@ -19,22 +21,27 @@ type OAuthWindowProps = {
  * @returns
  */
 export function OAuthWindow({
-  children, oauthUrl, windowTitle = 'Connect to Provider', onError, error,
+  children, oauthUrl, windowTitle = 'Connect to Provider', onError, error, onSuccessConnect, isSuccessConnect,
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
 
-  const receiveMessage = useReceiveMessageEventHandler(setConnectionId, oauthWindow, onError);
+  const receiveMessage = useReceiveMessageEventHandler(
+    setConnectionId,
+    oauthWindow,
+    onError,
+    onSuccessConnect,
+  );
   const openOAuthWindow = useOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
     // if the oauthUrl is not null, the oauthWindow is not open,
     // the connection not successfully created, and the error is not set, open the OAuth window
-    if (oauthUrl && !oauthWindow && !connectionId && !error) {
+    if (oauthUrl && !oauthWindow && !connectionId && !error && !isSuccessConnect) {
       openOAuthWindow(); // creates new window and adds event listener
     }
-  }, [oauthUrl, oauthWindow, openOAuthWindow, connectionId, error]);
+  }, [oauthUrl, oauthWindow, openOAuthWindow, connectionId, error, isSuccessConnect]);
 
   useEffect(() => {
     if (!oauthWindow) return;

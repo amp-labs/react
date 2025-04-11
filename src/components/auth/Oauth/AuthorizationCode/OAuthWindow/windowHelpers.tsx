@@ -45,6 +45,7 @@ export function useReceiveMessageEventHandler(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
   oauthWindow: Window | null,
   onError?: (err: string | null) => void,
+  onSuccessConnect?: () => void,
 ) {
   const queryClient = useQueryClient();
 
@@ -60,6 +61,7 @@ export function useReceiveMessageEventHandler(
       if (connection) {
         setConnectionId(connection);
         oauthWindow?.close(); // only close the window if connection is successful
+        onSuccessConnect?.();
 
         // refresh connections
         queryClient.invalidateQueries({ queryKey: ['amp', 'connections'] });
@@ -76,5 +78,5 @@ export function useReceiveMessageEventHandler(
       onError?.(event?.data?.message ?? 'Something went wrong. Please try again.');
       // do not close the window if error occurs
     }
-  }, [oauthWindow, onError, queryClient, setConnectionId]);
+  }, [oauthWindow, onError, queryClient, setConnectionId, onSuccessConnect]);
 }
