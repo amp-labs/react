@@ -21,9 +21,7 @@ export function UpdateContent({
 }) {
   return (
     <div style={{ padding: '1rem 0' }}>
-      <p>
-        {`Set up ${providerName} integration you'd like to sync.`}
-      </p>
+      <p>{`Re-authenticate to ${providerName}`}</p>
       <AuthErrorAlert error={error} />
       <Button
         variant="ghost"
