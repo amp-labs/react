@@ -6,12 +6,7 @@ import { Button } from 'src/components/ui-base/Button';
 import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
-export type ClientCredentialsCredsContent = {
-  workspace?: string;
-  clientId: string;
-  clientSecret: string;
-  scopes?: string[];
-};
+import { ClientCredentialsCredsContent } from './ClientCredentialsCredsContent';
 
 type ClientCredentialsContentProps = {
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
