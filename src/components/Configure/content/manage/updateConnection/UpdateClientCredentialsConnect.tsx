@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { ClientCredentialsContent } from 'src/components/auth/Oauth/ClientCredentials/ClientCredentialsContent';
+import { ClientCredentialsForm } from 'src/components/auth/Oauth/ClientCredentials/ClientCredentialsContent';
 import { ClientCredentialsCredsContent } from 'src/components/auth/Oauth/ClientCredentials/ClientCredentialsCredsContent';
+import { FormErrorBox } from 'src/components/FormErrorBox';
 import { FormSuccessBox } from 'src/components/FormSuccessBox';
 import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { useProject } from 'src/context/ProjectContextProvider';
@@ -58,15 +59,22 @@ export function UpdateClientCredentialsConnect() {
   return (
     <>
       <FieldHeader string="Update Connection" />
-      {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
-      <ClientCredentialsContent
-        handleSubmit={handleSubmit}
-        error={error}
-        isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
-        providerName={providerName}
-        explicitScopesRequired={explicitScopesRequired} // todo: add scopes to update connection
-        explicitWorkspaceRequired={false} // workspace is not updated so do not show
-      />
+      <div style={{
+        padding: '1rem 0', display: 'flex', flexDirection: 'column', gap: '.5rem',
+      }}
+      >
+        <p>{`Re-authenticate to ${providerName}`}</p>
+        {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
+        {error && <FormErrorBox>Error updating connection {error}</FormErrorBox>}
+
+        <ClientCredentialsForm
+          handleSubmit={handleSubmit}
+          isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
+          explicitScopesRequired={explicitScopesRequired}
+          explicitWorkspaceRequired={false}
+          buttonVariant="ghost"
+        />
+      </div>
     </>
   );
 }
