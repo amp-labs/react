@@ -53,6 +53,10 @@ src/models/Config.ts
 src/models/ConfigContent.ts
 src/models/ConfigContentAllOf.ts
 src/models/Connection.ts
+src/models/ConnectionRequest.ts
+src/models/ConnectionRequestBasicAuth.ts
+src/models/ConnectionRequestOauth2ClientCredentials.ts
+src/models/ConnectionRequestOauth2PasswordCredentials.ts
 src/models/Consumer.ts
 src/models/CreateBillingAccountSession200Response.ts
 src/models/CreateBillingAccountSessionRequest.ts
@@ -112,6 +116,7 @@ src/models/LogMessage.ts
 src/models/Media.ts
 src/models/MediaTypeDarkMode.ts
 src/models/MediaTypeRegular.ts
+src/models/ModuleInfo.ts
 src/models/Oauth2AuthorizationCode.ts
 src/models/Oauth2AuthorizationCodeAccessToken.ts
 src/models/Oauth2AuthorizationCodeRefreshToken.ts
@@ -141,9 +146,6 @@ src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
 src/models/UpdateConnectionRequest.ts
-src/models/UpdateConnectionRequestBasicAuth.ts
-src/models/UpdateConnectionRequestOauth2ClientCredentials.ts
-src/models/UpdateConnectionRequestOauth2Password.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
 src/models/UpdateDestinationRequestDestinationMetadata.ts

@@ -16,27 +16,27 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UpdateConnectionRequestBasicAuth
+ * @interface ConnectionRequestBasicAuth
  */
-export interface UpdateConnectionRequestBasicAuth {
+export interface ConnectionRequestBasicAuth {
     /**
      * The username to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestBasicAuth
+     * @memberof ConnectionRequestBasicAuth
      */
     username: string;
     /**
      * The password to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestBasicAuth
+     * @memberof ConnectionRequestBasicAuth
      */
     password: string;
 }
 
 /**
- * Check if a given object implements the UpdateConnectionRequestBasicAuth interface.
+ * Check if a given object implements the ConnectionRequestBasicAuth interface.
  */
-export function instanceOfUpdateConnectionRequestBasicAuth(value: object): boolean {
+export function instanceOfConnectionRequestBasicAuth(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "password" in value;
@@ -44,11 +44,11 @@ export function instanceOfUpdateConnectionRequestBasicAuth(value: object): boole
     return isInstance;
 }
 
-export function UpdateConnectionRequestBasicAuthFromJSON(json: any): UpdateConnectionRequestBasicAuth {
-    return UpdateConnectionRequestBasicAuthFromJSONTyped(json, false);
+export function ConnectionRequestBasicAuthFromJSON(json: any): ConnectionRequestBasicAuth {
+    return ConnectionRequestBasicAuthFromJSONTyped(json, false);
 }
 
-export function UpdateConnectionRequestBasicAuthFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateConnectionRequestBasicAuth {
+export function ConnectionRequestBasicAuthFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConnectionRequestBasicAuth {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -59,7 +59,7 @@ export function UpdateConnectionRequestBasicAuthFromJSONTyped(json: any, ignoreD
     };
 }
 
-export function UpdateConnectionRequestBasicAuthToJSON(value?: UpdateConnectionRequestBasicAuth | null): any {
+export function ConnectionRequestBasicAuthToJSON(value?: ConnectionRequestBasicAuth | null): any {
     if (value === undefined) {
         return undefined;
     }
