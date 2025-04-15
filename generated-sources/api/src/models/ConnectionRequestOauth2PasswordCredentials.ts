@@ -16,45 +16,45 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UpdateConnectionRequestOauth2Password
+ * @interface ConnectionRequestOauth2PasswordCredentials
  */
-export interface UpdateConnectionRequestOauth2Password {
+export interface ConnectionRequestOauth2PasswordCredentials {
     /**
      * The username to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestOauth2Password
+     * @memberof ConnectionRequestOauth2PasswordCredentials
      */
     username: string;
     /**
      * The password to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestOauth2Password
+     * @memberof ConnectionRequestOauth2PasswordCredentials
      */
     password: string;
     /**
      * The client ID to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestOauth2Password
+     * @memberof ConnectionRequestOauth2PasswordCredentials
      */
     clientId: string;
     /**
      * The client secret to use for the connection.
      * @type {string}
-     * @memberof UpdateConnectionRequestOauth2Password
+     * @memberof ConnectionRequestOauth2PasswordCredentials
      */
     clientSecret: string;
     /**
      * The scopes for the tokens.
      * @type {Array<string>}
-     * @memberof UpdateConnectionRequestOauth2Password
+     * @memberof ConnectionRequestOauth2PasswordCredentials
      */
     scopes?: Array<string>;
 }
 
 /**
- * Check if a given object implements the UpdateConnectionRequestOauth2Password interface.
+ * Check if a given object implements the ConnectionRequestOauth2PasswordCredentials interface.
  */
-export function instanceOfUpdateConnectionRequestOauth2Password(value: object): boolean {
+export function instanceOfConnectionRequestOauth2PasswordCredentials(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "password" in value;
@@ -64,11 +64,11 @@ export function instanceOfUpdateConnectionRequestOauth2Password(value: object): 
     return isInstance;
 }
 
-export function UpdateConnectionRequestOauth2PasswordFromJSON(json: any): UpdateConnectionRequestOauth2Password {
-    return UpdateConnectionRequestOauth2PasswordFromJSONTyped(json, false);
+export function ConnectionRequestOauth2PasswordCredentialsFromJSON(json: any): ConnectionRequestOauth2PasswordCredentials {
+    return ConnectionRequestOauth2PasswordCredentialsFromJSONTyped(json, false);
 }
 
-export function UpdateConnectionRequestOauth2PasswordFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateConnectionRequestOauth2Password {
+export function ConnectionRequestOauth2PasswordCredentialsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConnectionRequestOauth2PasswordCredentials {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -82,7 +82,7 @@ export function UpdateConnectionRequestOauth2PasswordFromJSONTyped(json: any, ig
     };
 }
 
-export function UpdateConnectionRequestOauth2PasswordToJSON(value?: UpdateConnectionRequestOauth2Password | null): any {
+export function ConnectionRequestOauth2PasswordCredentialsToJSON(value?: ConnectionRequestOauth2PasswordCredentials | null): any {
     if (value === undefined) {
         return undefined;
     }
