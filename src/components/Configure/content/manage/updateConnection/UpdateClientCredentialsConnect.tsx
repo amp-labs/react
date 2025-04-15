@@ -43,10 +43,13 @@ export function UpdateClientCredentialsConnect() {
         projectIdOrName: projectIdOrName || '',
         connectionId: selectedConnection?.id || '',
         updateConnectionRequest: {
-          oauth2ClientCredentials: {
-            clientId: formData.clientId,
-            clientSecret: formData.clientSecret,
-            scopes: formData.scopes,
+          updateMask: ['oauth2ClientCredentials'],
+          connection: {
+            oauth2ClientCredentials: {
+              clientId: formData.clientId,
+              clientSecret: formData.clientSecret,
+              scopes: formData.scopes,
+            },
           },
         },
       });
@@ -65,7 +68,7 @@ export function UpdateClientCredentialsConnect() {
       >
         <p>{`Re-authenticate to ${providerName}`}</p>
         {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
-        {error && <FormErrorBox>Error updating connection {error}</FormErrorBox>}
+        {error && <FormErrorBox>{`Error updating connection ${error}`}</FormErrorBox>}
 
         <ClientCredentialsForm
           handleSubmit={handleSubmit}
