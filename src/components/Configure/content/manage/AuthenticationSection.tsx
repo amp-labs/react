@@ -1,3 +1,4 @@
+import { useConnections } from 'src/context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from
   'src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useConnectionQuery } from 'src/hooks/query';
@@ -16,7 +17,8 @@ function AuthenticationRow({ label, value }: { label: string; value: string | un
 }
 export function AuthenticationSection() {
   const { installation } = useInstallIntegrationProps();
-  const connectionId = installation?.connection?.id || '';
+  const { selectedConnection } = useConnections();
+  const connectionId = installation?.connection?.id || selectedConnection?.id || '';
   const { data: connection } = useConnectionQuery({ connectionId });
 
   const isSalesforce = connection?.provider === 'salesforce';
