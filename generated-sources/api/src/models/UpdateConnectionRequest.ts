@@ -13,30 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Oauth2AuthorizationCode } from './Oauth2AuthorizationCode';
+import type { ConnectionRequest } from './ConnectionRequest';
 import {
-    Oauth2AuthorizationCodeFromJSON,
-    Oauth2AuthorizationCodeFromJSONTyped,
-    Oauth2AuthorizationCodeToJSON,
-} from './Oauth2AuthorizationCode';
-import type { UpdateConnectionRequestBasicAuth } from './UpdateConnectionRequestBasicAuth';
-import {
-    UpdateConnectionRequestBasicAuthFromJSON,
-    UpdateConnectionRequestBasicAuthFromJSONTyped,
-    UpdateConnectionRequestBasicAuthToJSON,
-} from './UpdateConnectionRequestBasicAuth';
-import type { UpdateConnectionRequestOauth2ClientCredentials } from './UpdateConnectionRequestOauth2ClientCredentials';
-import {
-    UpdateConnectionRequestOauth2ClientCredentialsFromJSON,
-    UpdateConnectionRequestOauth2ClientCredentialsFromJSONTyped,
-    UpdateConnectionRequestOauth2ClientCredentialsToJSON,
-} from './UpdateConnectionRequestOauth2ClientCredentials';
-import type { UpdateConnectionRequestOauth2Password } from './UpdateConnectionRequestOauth2Password';
-import {
-    UpdateConnectionRequestOauth2PasswordFromJSON,
-    UpdateConnectionRequestOauth2PasswordFromJSONTyped,
-    UpdateConnectionRequestOauth2PasswordToJSON,
-} from './UpdateConnectionRequestOauth2Password';
+    ConnectionRequestFromJSON,
+    ConnectionRequestFromJSONTyped,
+    ConnectionRequestToJSON,
+} from './ConnectionRequest';
 
 /**
  * 
@@ -45,71 +27,17 @@ import {
  */
 export interface UpdateConnectionRequest {
     /**
-     * The ID of the provider workspace that this connection belongs to.
-     * @type {string}
+     * The fields to update.
+     * @type {Array<string>}
      * @memberof UpdateConnectionRequest
      */
-    providerWorkspaceRef?: string;
-    /**
-     * The name of the user group that has access to this installation.
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    groupName?: string;
-    /**
-     * The ID of the user group that has access to this installation.
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    groupRef?: string;
-    /**
-     * The name of the consumer that has access to this installation.
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    consumerName?: string;
-    /**
-     * The consumer reference.
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    consumerRef?: string;
-    /**
-     * The provider name (e.g. "salesforce", "hubspot")
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    provider?: string;
-    /**
-     * The API key to use for the connection.
-     * @type {string}
-     * @memberof UpdateConnectionRequest
-     */
-    apiKey?: string;
+    updateMask: Array<string>;
     /**
      * 
-     * @type {UpdateConnectionRequestBasicAuth}
+     * @type {ConnectionRequest}
      * @memberof UpdateConnectionRequest
      */
-    basicAuth?: UpdateConnectionRequestBasicAuth;
-    /**
-     * 
-     * @type {UpdateConnectionRequestOauth2ClientCredentials}
-     * @memberof UpdateConnectionRequest
-     */
-    oauth2ClientCredentials?: UpdateConnectionRequestOauth2ClientCredentials;
-    /**
-     * 
-     * @type {UpdateConnectionRequestOauth2Password}
-     * @memberof UpdateConnectionRequest
-     */
-    oauth2Password?: UpdateConnectionRequestOauth2Password;
-    /**
-     * 
-     * @type {Oauth2AuthorizationCode}
-     * @memberof UpdateConnectionRequest
-     */
-    oauth2AuthorizationCode?: Oauth2AuthorizationCode;
+    connection: ConnectionRequest;
 }
 
 /**
@@ -117,6 +45,8 @@ export interface UpdateConnectionRequest {
  */
 export function instanceOfUpdateConnectionRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "updateMask" in value;
+    isInstance = isInstance && "connection" in value;
 
     return isInstance;
 }
@@ -131,17 +61,8 @@ export function UpdateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
-        'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
-        'groupRef': !exists(json, 'groupRef') ? undefined : json['groupRef'],
-        'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
-        'consumerRef': !exists(json, 'consumerRef') ? undefined : json['consumerRef'],
-        'provider': !exists(json, 'provider') ? undefined : json['provider'],
-        'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
-        'basicAuth': !exists(json, 'basicAuth') ? undefined : UpdateConnectionRequestBasicAuthFromJSON(json['basicAuth']),
-        'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : UpdateConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
-        'oauth2Password': !exists(json, 'oauth2Password') ? undefined : UpdateConnectionRequestOauth2PasswordFromJSON(json['oauth2Password']),
-        'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeFromJSON(json['oauth2AuthorizationCode']),
+        'updateMask': json['updateMask'],
+        'connection': ConnectionRequestFromJSON(json['connection']),
     };
 }
 
@@ -154,17 +75,8 @@ export function UpdateConnectionRequestToJSON(value?: UpdateConnectionRequest | 
     }
     return {
         
-        'providerWorkspaceRef': value.providerWorkspaceRef,
-        'groupName': value.groupName,
-        'groupRef': value.groupRef,
-        'consumerName': value.consumerName,
-        'consumerRef': value.consumerRef,
-        'provider': value.provider,
-        'apiKey': value.apiKey,
-        'basicAuth': UpdateConnectionRequestBasicAuthToJSON(value.basicAuth),
-        'oauth2ClientCredentials': UpdateConnectionRequestOauth2ClientCredentialsToJSON(value.oauth2ClientCredentials),
-        'oauth2Password': UpdateConnectionRequestOauth2PasswordToJSON(value.oauth2Password),
-        'oauth2AuthorizationCode': Oauth2AuthorizationCodeToJSON(value.oauth2AuthorizationCode),
+        'updateMask': value.updateMask,
+        'connection': ConnectionRequestToJSON(value.connection),
     };
 }
 
