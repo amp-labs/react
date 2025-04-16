@@ -2,6 +2,7 @@ import { AuthType, Oauth2OptsGrantTypeEnum } from '@generated/api/src';
 
 import { useProviderInfoQuery } from 'src/hooks/useProvider';
 
+import { UpdateApiKeyConnect } from './updateApiKeyConnect';
 import { UpdateClientCredentialsConnect } from './UpdateClientCredentialsConnect';
 import { UpdateOauthConnect } from './UpdateOauthConnect';
 
@@ -13,7 +14,7 @@ export function UpdateConnectionSection() {
   }
 
   if (providerInfo?.authType === AuthType.ApiKey) {
-    // placeholder api key
+    return <UpdateApiKeyConnect />;
   }
 
   // if oauth2 and supported grant type, oauth update connection
