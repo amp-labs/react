@@ -48,7 +48,7 @@ export function UpdateApiKeyConnect() {
         },
         {
           onError: (e) => {
-            console.error(e);
+            console.error('Update connection error:', e);
             handleServerError(e, setError);
           },
           onSuccess: () => {
@@ -57,7 +57,7 @@ export function UpdateApiKeyConnect() {
         },
       );
     } catch (e) {
-      console.error(e);
+      console.error('Update connection caught error:', e);
       handleServerError(e, setError);
     }
   };
@@ -80,6 +80,7 @@ export function UpdateApiKeyConnect() {
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           buttonVariant="ghost"
+          submitButtonType="button"
         />
       </div>
     </>

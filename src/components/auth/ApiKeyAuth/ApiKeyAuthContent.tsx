@@ -17,10 +17,11 @@ type ApiKeyAuthFormProps = {
   handleSubmit: (form: IFormType) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: 'ghost';
+  submitButtonType?: 'submit' | 'button';
 };
 
 export function ApiKeyAuthForm({
-  provider, providerInfo, handleSubmit, isButtonDisabled, buttonVariant,
+  provider, providerInfo, handleSubmit, isButtonDisabled, buttonVariant, submitButtonType,
 }: ApiKeyAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
@@ -64,7 +65,7 @@ export function ApiKeyAuthForm({
       <Button
         style={{ marginTop: '1em', width: '100%' }}
         disabled={isSubmitDisabled}
-        type="submit"
+        type={submitButtonType || 'submit'}
         onClick={() => handleSubmit({ apiKey })}
         variant={buttonVariant}
       >
