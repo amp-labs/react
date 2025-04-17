@@ -1,7 +1,4 @@
 import { useConnections } from 'src/context/ConnectionsContextProvider';
-import { useInstallIntegrationProps } from
-  'src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useConnectionQuery } from 'src/hooks/query';
 
 import { FieldHeader } from '../fields/FieldHeader';
 
@@ -16,20 +13,16 @@ function AuthenticationRow({ label, value }: { label: string; value: string | un
   );
 }
 export function AuthenticationSection() {
-  const { installation } = useInstallIntegrationProps();
   const { selectedConnection } = useConnections();
-  const connectionId = installation?.connection?.id || selectedConnection?.id || '';
-  const { data: connection } = useConnectionQuery({ connectionId });
-
-  const isSalesforce = connection?.provider === 'salesforce';
+  const isSalesforce = selectedConnection?.provider === 'salesforce';
   const workspaceString = isSalesforce ? 'Subdomain' : 'Workspace';
 
   return (
     <>
       <FieldHeader string="Authentication" />
       <div style={{ paddingBottom: '1rem' }}>
-        <AuthenticationRow label={workspaceString} value={connection?.providerWorkspaceRef} />
-        <AuthenticationRow label="Connection Status" value={connection?.status} />
+        <AuthenticationRow label={workspaceString} value={selectedConnection?.providerWorkspaceRef} />
+        <AuthenticationRow label="Connection Status" value={selectedConnection?.status} />
       </div>
     </>
   );
