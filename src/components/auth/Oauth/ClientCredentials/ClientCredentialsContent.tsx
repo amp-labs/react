@@ -6,26 +6,20 @@ import { Button } from 'src/components/ui-base/Button';
 import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { convertTextareaToArray } from 'src/utils';
 
-export type ClientCredentialsCredsContent = {
-  workspace?: string;
-  clientId: string;
-  clientSecret: string;
-  scopes?: string[];
-};
+import { ClientCredentialsCredsContent } from './ClientCredentialsCredsContent';
 
-type ClientCredentialsContentProps = {
+type ClientCredentialsFormProps = {
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
-  error: string | null;
+  isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   explicitWorkspaceRequired?: boolean;
-  isButtonDisabled?: boolean;
-  providerName?: string;
+  buttonVariant?: 'ghost';
 };
 
-export function ClientCredentialsContent({
-  handleSubmit, error, isButtonDisabled, providerName,
-  explicitScopesRequired, explicitWorkspaceRequired,
-}: ClientCredentialsContentProps) {
+export function ClientCredentialsForm({
+  handleSubmit, isButtonDisabled, explicitScopesRequired, explicitWorkspaceRequired,
+  buttonVariant,
+}: ClientCredentialsFormProps) {
   const [show, setShow] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -72,10 +66,7 @@ export function ClientCredentialsContent({
   };
 
   return (
-    <AuthCardLayout>
-      <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
-      <AuthErrorAlert error={error} />
-      <br />
+    <>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
         {explicitWorkspaceRequired && (
         <FormComponent.Input
@@ -105,6 +96,7 @@ export function ClientCredentialsContent({
             type="button"
             style={{ height: '2.5rem', width: '5rem' }}
             onClick={onToggleShowHide}
+            variant={buttonVariant}
           >
             {show ? 'Hide' : 'Show'}
           </Button>
@@ -119,14 +111,42 @@ export function ClientCredentialsContent({
       </div>
       <br />
       <Button
-        style={{ marginTop: '1em', width: '100%' }}
+        style={{ width: '100%' }}
         disabled={isSubmitDisabled}
-        type="submit"
+        type="button"
         onClick={onHandleSubmit}
+        variant={buttonVariant}
       >
         Next
       </Button>
+    </>
+  );
+}
 
+type ClientCredentialsContentProps = {
+  handleSubmit: (creds: ClientCredentialsCredsContent) => void;
+  error: string | null;
+  explicitScopesRequired?: boolean;
+  explicitWorkspaceRequired?: boolean;
+  isButtonDisabled?: boolean;
+  providerName?: string;
+};
+
+export function ClientCredentialsContent({
+  handleSubmit, error, isButtonDisabled, providerName,
+  explicitScopesRequired, explicitWorkspaceRequired,
+}: ClientCredentialsContentProps) {
+  return (
+    <AuthCardLayout>
+      <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
+      <AuthErrorAlert error={error} />
+      <br />
+      <ClientCredentialsForm
+        handleSubmit={handleSubmit}
+        isButtonDisabled={isButtonDisabled}
+        explicitScopesRequired={explicitScopesRequired}
+        explicitWorkspaceRequired={explicitWorkspaceRequired}
+      />
     </AuthCardLayout>
   );
 }

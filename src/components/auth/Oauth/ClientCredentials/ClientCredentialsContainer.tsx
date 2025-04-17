@@ -10,7 +10,8 @@ import { useProject } from 'context/ProjectContextProvider';
 
 import { useCreateConnectionMutation } from '../../useCreateConnectionMutation';
 
-import { ClientCredentialsContent, ClientCredentialsCredsContent } from './ClientCredentialsContent';
+import { ClientCredentialsContent } from './ClientCredentialsContent';
+import { ClientCredentialsCredsContent } from './ClientCredentialsCredsContent';
 
 interface OauthClientCredsContainerProps {
   provider: string;
