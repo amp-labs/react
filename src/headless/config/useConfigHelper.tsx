@@ -55,11 +55,18 @@ export function useConfigHelper(initialConfig: UpdateInstallationConfigContent) 
 
       setFieldMapping: ({ fieldName, mapToName }) => {
         setDraft((prev) => produce(prev, (_draft) => {
-          const obj = _draft.read?.objects?.[key];
-          if (obj) {
-            if (!obj.selectedFieldMappings) obj.selectedFieldMappings = {};
-            obj.selectedFieldMappings[mapToName] = fieldName;
-          }
+          // initialize read if it doesn't exist
+          const read = _draft.read || {};
+          const objects = read.objects || {};
+          const obj = objects[key] || {};
+
+          // initialize selectedFieldMappings if it doesn't exist
+          obj.selectedFieldMappings = obj.selectedFieldMappings || {};
+          obj.selectedFieldMappings[mapToName] = fieldName;
+
+          // eslint-disable-next-line no-param-reassign
+          _draft.read = read;
+          return _draft;
         }));
       },
     }),
