@@ -113,7 +113,7 @@ export function ClientCredentialsForm({
       <Button
         style={{ width: '100%' }}
         disabled={isSubmitDisabled}
-        type="submit"
+        type="button"
         onClick={onHandleSubmit}
         variant={buttonVariant}
       >
