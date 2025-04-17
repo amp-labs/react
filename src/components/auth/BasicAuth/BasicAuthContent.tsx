@@ -33,9 +33,11 @@ export function BasicAuthForm({
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // This is a workaround for the fact that some providers use Basic Auth
+  // to actually represent API key based auth.
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
-  // const isUserValid = username.length > 0;
-  // const isSubmitDisabled = isButtonDisabled || !isUserValid;
+  // const isPassValid = password.length > 0;
+  // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
   const isSubmitDisabled = isButtonDisabled;
   const docsURL = providerInfo.basicOpts?.docsURL;
 
