@@ -73,11 +73,15 @@ export function ConfigureInstallationBase(
       : (
         <form style={{ width: '34rem' }} onSubmit={onSave}>
           <div style={{
-            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '20px',
+            display: 'flex', flexDirection: 'row-reverse', gap: '.8rem', marginBottom: '20px', height: '3rem',
           }}
           >
-            {ButtonBridgeSubmit}
-            {ButtonBridgeReset}
+            {!isManageTabSelected && (
+              <>
+                {ButtonBridgeSubmit}
+                {ButtonBridgeReset}
+              </>
+            )}
           </div>
           <Box
             style={{
