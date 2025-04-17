@@ -80,7 +80,7 @@ export function BasicAuthForm({
       <Button
         style={{ marginTop: '1em', width: '100%' }}
         disabled={isSubmitDisabled}
-        type="submit"
+        type="button"
         onClick={() => handleSubmit({ user: username, pass: password })}
         variant={buttonVariant}
       >
