@@ -9,6 +9,10 @@ export function UninstallSection() {
   const { provider, installation } = useInstallIntegrationProps();
   const { project } = useProject();
   const appName = project?.appName || '';
+
+  // cannot uninstall if installation is not found
+  if (!installation) return null;
+
   return (
     <>
       <FieldHeader string="Uninstall entire integration" />
@@ -17,7 +21,8 @@ export function UninstallSection() {
       }}
       >
         {installation?.id ? (
-          <p style={{ color: 'var(--amp-colors-text-muted)' }}>By clicking below, you will uninstall your entire {provider} integration and may lose functionality in {appName}.
+          <p style={{ color: 'var(--amp-colors-text-muted)' }}>
+            By clicking below, you will uninstall your entire {provider} integration and may lose functionality in {appName}.
           </p>
         ) : (
           <p>You've successfully uninstalled the integration.</p>
