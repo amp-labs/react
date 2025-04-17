@@ -1,5 +1,5 @@
 import {
-  createContext, ReactNode, useCallback, useContext, useState,
+  useCallback, useState,
 } from 'react';
 import type { BaseReadConfigObject, UpdateInstallationConfigContent } from '@generated/api/src';
 import { produce } from 'immer';
@@ -73,29 +73,4 @@ export function useConfigHelper(initialConfig: UpdateInstallationConfigContent) 
     reset,
     readObject,
   };
-}
-
-const ConfigContext = createContext<ReturnType<typeof useConfigHelper> | null>(null);
-
-export function ConfigProvider({
-  children,
-  initialConfig,
-}: {
-  children: ReactNode;
-  initialConfig: UpdateInstallationConfigContent;
-}) {
-  const config = useConfigHelper(initialConfig);
-  return (
-    <ConfigContext.Provider value={config}>
-      {children}
-    </ConfigContext.Provider>
-  );
-}
-
-export function useConfig() {
-  const context = useContext(ConfigContext);
-  if (!context) {
-    throw new Error('useConfigContext must be used within a ConfigProvider / InstallationProvider');
-  }
-  return context;
 }

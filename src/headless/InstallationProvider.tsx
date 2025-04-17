@@ -6,7 +6,7 @@ import {
   useMemo,
 } from 'react';
 
-import { ConfigProvider } from './ConfigContext';
+import { ConfigProvider } from './config/ConfigContext';
 
 // Define the context value type
 interface InstallationContextValue {
