@@ -6,7 +6,9 @@ import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
-import { MANAGE_TAB_CONST, UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
+import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
+
+import { ManageTab } from './ManageTab';
 
 import styles from './tabs.module.css';
 
@@ -75,22 +77,6 @@ function UninstallTab() {
         >
           {TrashIcon()}
           <span>Uninstall</span>
-        </div>
-      </Tabs.Trigger>
-    </>
-  );
-}
-
-function ManageTab() {
-  return (
-    <>
-      <Divider style={{ margin: '1rem 0' }} />
-      <Tabs.Trigger value={MANAGE_TAB_CONST} className={styles.tabTrigger}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '.5rem', marginRight: '.5rem',
-        }}
-        >
-          <span>Manage</span>
         </div>
       </Tabs.Trigger>
     </>
