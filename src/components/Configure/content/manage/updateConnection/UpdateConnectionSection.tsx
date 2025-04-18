@@ -3,6 +3,7 @@ import { AuthType, Oauth2OptsGrantTypeEnum } from '@generated/api/src';
 import { useProviderInfoQuery } from 'src/hooks/useProvider';
 
 import { UpdateApiKeyConnect } from './updateApiKeyConnect';
+import { UpdateBasicAuthConnect } from './UpdateBasicAuthConnect';
 import { UpdateClientCredentialsConnect } from './UpdateClientCredentialsConnect';
 import { UpdateOauthConnect } from './UpdateOauthConnect';
 
@@ -10,7 +11,7 @@ export function UpdateConnectionSection() {
   const { data: providerInfo } = useProviderInfoQuery();
 
   if (providerInfo?.authType === AuthType.Basic) {
-    // placeholder basic auth
+    return <UpdateBasicAuthConnect />;
   }
 
   if (providerInfo?.authType === AuthType.ApiKey) {
