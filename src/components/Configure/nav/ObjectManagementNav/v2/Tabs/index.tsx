@@ -9,10 +9,9 @@ import { Divider } from 'src/components/ui-base/Divider';
 import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
 
 import { ManageTab } from './ManageTab';
+import { SHOW_MANAGE_TABS } from './showManageTabFF';
 
 import styles from './tabs.module.css';
-
-const SHOW_MANAGE_TABS = false;
 
 type NavObjectItemProps = {
   objectName: string;
