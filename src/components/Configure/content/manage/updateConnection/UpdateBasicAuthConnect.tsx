@@ -78,7 +78,7 @@ export function UpdateBasicAuthConnect() {
       >
         <p>{`Update ${providerName} credentials`}</p>
         {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
-        {error && <FormErrorBox>{`Error updating connection ${error}`}</FormErrorBox>}
+        {error && <FormErrorBox>{`Error updating connection: ${error}`}</FormErrorBox>}
         <BasicAuthForm
           provider={providerInfo?.name}
           providerInfo={providerInfo}
