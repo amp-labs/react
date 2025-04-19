@@ -12,7 +12,7 @@ export function RequiredFields() {
 
   return (
     <>
-      <FieldHeader string={`${appName} reads the following ${selectedObjectName} fields`} />
+      <FieldHeader string={`${appName} reads the following fields`} />
       <div style={{
         display: 'flex', gap: '.5rem', marginBottom: '.5rem', flexWrap: 'wrap',
       }}

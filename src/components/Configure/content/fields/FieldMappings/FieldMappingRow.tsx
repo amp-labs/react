@@ -127,7 +127,7 @@ export function FieldMappingRow({
           marginBottom: '.25rem',
         }}
         >
-          <span style={{ fontWeight: 500 }}>{field.mapToDisplayName}</span>
+          <span style={{ fontWeight: 500 }}>{field.mapToDisplayName ?? field.mapToName}</span>
           <span>
             {field?.prompt && <LabelTooltip id={`tooltip-id-${field?.prompt}`} tooltipText={field?.prompt} />}
           </span>

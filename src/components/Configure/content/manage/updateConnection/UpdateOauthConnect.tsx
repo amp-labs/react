@@ -83,7 +83,7 @@ export function UpdateOauthConnect() {
 
   return (
     <>
-      <FieldHeader string="Update Connection" />
+      <FieldHeader string="Update connection" />
       {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
       <OAuthWindow
         windowTitle={`Connect to ${providerName}`}
