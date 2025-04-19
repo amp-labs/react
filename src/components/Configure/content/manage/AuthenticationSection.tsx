@@ -1,4 +1,5 @@
 import { useConnections } from 'src/context/ConnectionsContextProvider';
+import { useProvider } from 'src/hooks/useProvider';
 
 import { FieldHeader } from '../fields/FieldHeader';
 
@@ -14,15 +15,17 @@ function AuthenticationRow({ label, value }: { label: string; value: string | un
 }
 export function AuthenticationSection() {
   const { selectedConnection } = useConnections();
+  const { providerName } = useProvider();
   const isSalesforce = selectedConnection?.provider === 'salesforce';
-  const workspaceString = isSalesforce ? 'Subdomain' : 'Workspace';
+  const workspaceString = isSalesforce ? 'subdomain' : 'workspace';
+  const workspaceLabel = `${providerName} ${workspaceString}`;
 
   return (
     <>
-      <FieldHeader string="Authentication" />
+      <FieldHeader string="Connection details" />
       <div style={{ paddingBottom: '1rem' }}>
-        <AuthenticationRow label={workspaceString} value={selectedConnection?.providerWorkspaceRef} />
-        <AuthenticationRow label="Connection Status" value={selectedConnection?.status} />
+        <AuthenticationRow label={workspaceLabel} value={selectedConnection?.providerWorkspaceRef} />
+        <AuthenticationRow label="Connection status" value={selectedConnection?.status} />
       </div>
     </>
   );
