@@ -109,7 +109,6 @@ export function ObjectManagementNavV2({
                 onValueChange={(value: string) => setTabvalue(value)}
                 objectConfigurationsState={objectConfigurationsState}
                 writeNavObject={writeNavObject}
-                showUninstallButton={!!installation}
               />
               )}
             </div>
