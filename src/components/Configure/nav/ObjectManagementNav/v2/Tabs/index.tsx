@@ -95,7 +95,7 @@ export function VerticalTabs({
           />
         )}
 
-        {/* Manag Tab */}
+        {/* Manage Tab */}
         <ManageTab />
       </Tabs.List>
 
