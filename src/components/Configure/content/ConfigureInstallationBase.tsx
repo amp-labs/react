@@ -8,14 +8,13 @@ import {
 } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
 
-import { MANAGE_TAB_CONST, UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../nav/ObjectManagementNav/constant';
+import { MANAGE_TAB_CONST, WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';
 import { getReadObject } from '../utils';
 
 import { ReadFields } from './fields/ReadFields';
 import { WriteFields } from './fields/WriteFields';
 import { ManageContent } from './manage/ManageContent';
-import { UninstallContent } from './UninstallContent';
 import { useSelectedConfigureState } from './useSelectedConfigureState';
 
 interface ConfigureInstallationBaseProps {
@@ -59,9 +58,6 @@ export function ConfigureInstallationBase(
   // is write selected?
   const isNonConfigurableWrite = selectedObjectName === WRITE_CONST;
 
-  // is the form in the uninstall case?
-  const isUninstall = selectedObjectName === UNINSTALL_INSTALLATION_CONST;
-
   // is the manage tab selected?
   const isManageTabSelected = selectedObjectName === MANAGE_TAB_CONST;
 
@@ -97,9 +93,8 @@ export function ConfigureInstallationBase(
             </FormErrorBox>
             )}
             {loading && <LoadingCentered />}
-            {hydratedRevision && !isUninstall && !isNonConfigurableWrite && !isManageTabSelected && <ReadFields />}
-            {hydratedRevision && !isUninstall && isNonConfigurableWrite && !isManageTabSelected && <WriteFields />}
-            {!loading && isUninstall && <UninstallContent />}
+            {hydratedRevision && !isNonConfigurableWrite && !isManageTabSelected && <ReadFields />}
+            {hydratedRevision && isNonConfigurableWrite && !isManageTabSelected && <WriteFields />}
             {!loading && isManageTabSelected && <ManageContent />}
           </Box>
         </form>

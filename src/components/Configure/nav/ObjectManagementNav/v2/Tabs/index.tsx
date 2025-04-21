@@ -1,15 +1,12 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import classnames from 'classnames';
 
 import { NavIcon } from 'assets/NavIcon';
-import { TrashIcon } from 'assets/TrashIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';
 
-import { UNINSTALL_INSTALLATION_CONST, WRITE_CONST } from '../../constant';
+import { WRITE_CONST } from '../../constant';
 
 import { ManageTab } from './ManageTab';
-import { SHOW_MANAGE_TABS } from './showManageTabFF';
 
 import styles from './tabs.module.css';
 
@@ -62,38 +59,17 @@ function WriteTab({
   );
 }
 
-function UninstallTab() {
-  return (
-    <>
-      <Divider style={{ margin: '3rem 0 1rem 0' }} />
-      <Tabs.Trigger
-        value={UNINSTALL_INSTALLATION_CONST}
-        className={classnames(styles.tabTrigger, styles.danger)}
-      >
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '.5rem', marginRight: '.5rem',
-        }}
-        >
-          {TrashIcon()}
-          <span>Uninstall</span>
-        </div>
-      </Tabs.Trigger>
-    </>
-  );
-}
-
 type VerticalTabsProps = {
   readNavObjects: NavObject[];
   writeNavObject?: NavObject;
   value: string;
   onValueChange: (value: string) => void;
   objectConfigurationsState?: ObjectConfigurationsState;
-  showUninstallButton?: boolean;
 };
 
 export function VerticalTabs({
   value, readNavObjects, onValueChange, objectConfigurationsState,
-  writeNavObject, showUninstallButton,
+  writeNavObject,
 }: VerticalTabsProps) {
   return (
     <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
@@ -119,9 +95,8 @@ export function VerticalTabs({
           />
         )}
 
-        {/* Uninstall Tab */}
-        {showUninstallButton && !SHOW_MANAGE_TABS && <UninstallTab />}
-        {SHOW_MANAGE_TABS && <ManageTab />}
+        {/* Manage Tab */}
+        <ManageTab />
       </Tabs.List>
 
       {/* EXAMPLE Content if children does not render content */}
