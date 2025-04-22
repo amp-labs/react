@@ -12,9 +12,14 @@ import { handleServerError } from 'src/utils/handleServerError';
 
 import { FieldHeader } from '../../fields/FieldHeader';
 
-export function UpdateApiKeyConnect() {
+/**
+ *
+ * @param provider is provided directly for ConnectProvider component
+ * @returns
+ */
+export function UpdateApiKeyConnect({ provider }: { provider?: string }) {
   const { projectIdOrName } = useProject();
-  const { providerName, data: providerInfo } = useProvider();
+  const { providerName, data: providerInfo } = useProvider(provider);
   const { selectedConnection, isConnectionsLoading } = useConnections();
 
   const {

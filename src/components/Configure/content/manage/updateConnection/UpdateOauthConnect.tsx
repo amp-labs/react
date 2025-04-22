@@ -36,12 +36,17 @@ export function UpdateContent({
   );
 }
 
-export function UpdateOauthConnect() {
+/**
+ *
+ * @param provider is provided directly for ConnectProvider component
+ * @returns
+ */
+export function UpdateOauthConnect({ provider }: { provider?: string }) {
   const { selectedConnection, isConnectionsLoading } = useConnections();
 
   const connectionId = selectedConnection?.id;
   const projectIdOrName = selectedConnection?.projectId;
-  const { providerName } = useProvider();
+  const { providerName } = useProvider(provider);
   const {
     mutateAsync: updateOauthConnect, isPending: isUpdatingOauthConnect, error: updateOauthConnectError,
   } = useUpdateOauthConnectMutation();

@@ -5,8 +5,8 @@ import { Connection } from 'src/services/api';
 import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';
 
 import { SHOW_UPDATE_CONNECTION } from './contant';
+import { ManageConnectionSection } from './ManageConnectionSection';
 import { RemoveConnectionButton } from './RemoveConnectionButton';
-import { ManageConnectionSection } from './UpdateConnectionSection';
 
 interface ConnectedSuccessBoxProps {
   resetComponent: () => void; // reset the ConnectProvider component
@@ -20,10 +20,14 @@ export function ConnectedSuccessBox({ provider, onDisconnectSuccess, resetCompon
   const text = `You have successfully connected your ${providerName} account to ${appName}.`;
   return (
     <SuccessTextBox text={text}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%',
+      }}
+      >
         <ManageConnectionSection
           resetComponent={resetComponent}
           onDisconnectSuccess={onDisconnectSuccess}
+          provider={provider}
         />
         {/* TODO: remove this once the update connection section is implemented */}
         {!SHOW_UPDATE_CONNECTION && (

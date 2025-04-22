@@ -12,9 +12,14 @@ import { handleServerError } from 'src/utils/handleServerError';
 
 import { FieldHeader } from '../../fields/FieldHeader';
 
-export function UpdateBasicAuthConnect() {
+/**
+ *
+ * @param provider is provided directly for ConnectProvider component
+ * @returns
+ */
+export function UpdateBasicAuthConnect({ provider }: { provider?: string }) {
   const { projectIdOrName } = useProject();
-  const { providerName, data: providerInfo } = useProvider();
+  const { providerName, data: providerInfo } = useProvider(provider);
   const { selectedConnection, isConnectionsLoading } = useConnections();
 
   const {
