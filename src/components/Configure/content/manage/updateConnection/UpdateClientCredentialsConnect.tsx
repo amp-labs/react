@@ -12,10 +12,15 @@ import { handleServerError } from 'src/utils/handleServerError';
 
 import { FieldHeader } from '../../fields/FieldHeader';
 
-export function UpdateClientCredentialsConnect() {
+/**
+ *
+ * @param provider is provided directly for ConnectProvider component
+ * @returns
+ */
+export function UpdateClientCredentialsConnect({ provider }: { provider?: string }) {
   const { projectIdOrName } = useProject();
   const { selectedConnection, isConnectionsLoading } = useConnections();
-  const { providerName, data: providerInfo } = useProvider();
+  const { providerName, data: providerInfo } = useProvider(provider);
   const {
     mutateAsync: updateConnection, isPending: isConnectionUpdating, error: updateError,
   } = useUpdateConnectionMutation();
