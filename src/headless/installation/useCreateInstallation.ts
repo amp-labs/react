@@ -1,5 +1,4 @@
 import { ConfigContent, CreateInstallationOperationRequest } from '@generated/api/src';
-
 import { useProject } from 'src/context/ProjectContextProvider';
 import { useCreateInstallationMutation } from 'src/hooks/mutation/useCreateInstallationMutation';
 import { useIntegrationQuery } from 'src/hooks/query/useIntegrationQuery';

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-
 import { useAPI } from 'services/api';
 import { useInstallIntegrationProps } from
   'src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';

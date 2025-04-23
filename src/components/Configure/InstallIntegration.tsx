@@ -5,8 +5,8 @@ import { useProject } from 'context/ProjectContextProvider';
 import { Config } from 'services/api';
 import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
-import resetStyles from 'src/styles/resetCss.module.css';
 
+import { ComponentContainerError, ComponentContainerLoading } from './ComponentContainer';
 import { InstallationContent } from './content/InstallationContent';
 import { ConditionalHasConfigurationLayout } from
   './layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout';
@@ -14,7 +14,8 @@ import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
 import { ObjectManagementNav } from './nav/ObjectManagementNav';
 import { ConfigurationProvider } from './state/ConfigurationStateProvider';
 import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
-import { ComponentContainerError, ComponentContainerLoading } from './ComponentContainer';
+
+import resetStyles from 'src/styles/resetCss.module.css';
 
 export interface MappedValue {
   mappedValue: string;

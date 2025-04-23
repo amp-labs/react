@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { AMP_SERVER } from 'services/api';
 
 const DEFAULT_WIDTH = 600; // px

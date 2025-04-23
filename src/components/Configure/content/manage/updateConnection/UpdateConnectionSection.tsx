@@ -1,5 +1,4 @@
 import { AuthType, Oauth2OptsGrantTypeEnum } from '@generated/api/src';
-
 import { useProviderInfoQuery } from 'src/hooks/useProvider';
 
 import { UpdateApiKeyConnect } from './UpdateApiKeyConnect';

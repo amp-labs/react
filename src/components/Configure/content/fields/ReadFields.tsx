@@ -1,5 +1,5 @@
-import { useClearOldFieldMappings } from './FieldMappings/useClearOldFieldMappings';
 import { OptionalFieldMappings, RequiredFieldMappings } from './FieldMappings';
+import { useClearOldFieldMappings } from './FieldMappings/useClearOldFieldMappings';
 import { ReadObjectMapping } from './ObjectMapping';
 import { OptionalFields } from './OptionalFields';
 import { RequiredFields } from './RequiredFields';

@@ -1,5 +1,4 @@
 import * as Tabs from '@radix-ui/react-tabs';
-
 import { NavIcon } from 'assets/NavIcon';
 import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
 import { Divider } from 'src/components/ui-base/Divider';

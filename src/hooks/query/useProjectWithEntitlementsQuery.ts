@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-
 import { useAPI } from 'services/api';
 import { useProject } from 'src/context/ProjectContextProvider';
 

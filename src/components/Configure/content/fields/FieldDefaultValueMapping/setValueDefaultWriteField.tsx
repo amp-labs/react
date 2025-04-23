@@ -10,7 +10,7 @@ function setValueDefaultWriteFieldProducer(
   defaultValue: string | null,
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
-    // eslint-disable-next-line no-param-reassign
+     
     draft.write.selectedWriteObjects = {};
   }
 
@@ -26,7 +26,7 @@ function setValueDefaultWriteFieldProducer(
         draftSelectedWriteFields[objectName].selectedValueDefaults = {};
       }
 
-      // eslint-disable-next-line no-param-reassign
+       
       draftSelectedWriteFields[objectName].selectedValueDefaults[fieldKey].value = defaultValue;
     }
 
@@ -43,7 +43,7 @@ function setValueDefaultWriteFieldProducer(
       const updatedWriteObjects = draftSelectedWriteFields;
       const isModified = !areWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
       // immer syntax to set a value
-      // eslint-disable-next-line no-param-reassign
+       
       draft.write.isWriteModified = isModified;
     }
 

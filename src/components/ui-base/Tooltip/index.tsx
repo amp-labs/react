@@ -1,5 +1,4 @@
 import { Tooltip } from 'react-tooltip';
-
 import { TooltipIcon } from 'src/assets/TooltipIcon';
 
 interface LabelTooltipProps {

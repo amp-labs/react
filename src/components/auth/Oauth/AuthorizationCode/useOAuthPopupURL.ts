@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { OauthConnectRequest, ProviderApp } from '@generated/api/src';
-
 import { useProject } from 'src/context/ProjectContextProvider';
 import { useListProviderAppsQuery, useOauthConnectQuery } from 'src/hooks/query';
 import { useProviderInfoQuery } from 'src/hooks/useProvider';

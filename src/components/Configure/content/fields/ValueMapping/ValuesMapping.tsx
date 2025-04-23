@@ -1,7 +1,6 @@
 import {
   useCallback, useEffect, useMemo, useRef,
 } from 'react';
-
 import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
 import {
   useInstallIntegrationProps,

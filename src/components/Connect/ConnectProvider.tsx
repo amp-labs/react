@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
-
-import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
-import { RedirectHandler } from 'components/RedirectHandler';
 import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import { Connection } from 'src/services/api';
-import resetStyles from 'src/styles/resetCss.module.css';
+
+import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
+import { RedirectHandler } from 'components/RedirectHandler';
 
 import { ConnectedSuccessBox } from './ConnectedSuccessBox';
+
+import resetStyles from 'src/styles/resetCss.module.css';
 
 interface ConnectProviderProps {
   provider: string;

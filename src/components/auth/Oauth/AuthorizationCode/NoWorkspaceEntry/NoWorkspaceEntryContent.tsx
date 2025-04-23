@@ -1,6 +1,7 @@
+import { AuthCardLayout, AuthDescription, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+
 import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { Button } from 'components/ui-base/Button';
-import { AuthCardLayout, AuthDescription, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { LandingContentProps } from './LandingContentProps';
 

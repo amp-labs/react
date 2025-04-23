@@ -1,7 +1,8 @@
+import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+
 import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { FormComponent } from 'components/form';
 import { Button } from 'components/ui-base/Button';
-import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { WorkspaceEntryProps } from './WorkspaceEntryProps';
 

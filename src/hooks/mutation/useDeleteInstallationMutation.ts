@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { DeleteInstallationRequest } from '@generated/api/src';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { useAPI } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 

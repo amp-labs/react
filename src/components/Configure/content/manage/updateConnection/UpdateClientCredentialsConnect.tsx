@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { ClientCredentialsForm } from 'src/components/auth/Oauth/ClientCredentials/ClientCredentialsContent';
 import { ClientCredentialsCredsContent } from 'src/components/auth/Oauth/ClientCredentials/ClientCredentialsCredsContent';
 import { FormErrorBox } from 'src/components/FormErrorBox';

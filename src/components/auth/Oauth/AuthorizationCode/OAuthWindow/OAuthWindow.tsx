@@ -62,7 +62,7 @@ export function OAuthWindow({
     }, 500);
 
     // Cleanup interval and listener when component unmounts or oauthWindow changes
-    // eslint-disable-next-line consistent-return
+     
     return () => {
       clearInterval(interval);
       window.removeEventListener('message', receiveMessage);

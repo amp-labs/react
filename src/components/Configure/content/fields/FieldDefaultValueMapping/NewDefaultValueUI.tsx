@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { HydratedIntegrationFieldExistent } from '@generated/api/src';
-
 import { useHydratedRevision } from 'src/components/Configure/state/HydratedRevisionContext';
 import { getObjectFromAction } from 'src/components/Configure/utils';
 import { Input } from 'src/components/form/Input';

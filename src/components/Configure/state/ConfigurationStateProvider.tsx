@@ -1,9 +1,8 @@
 import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { Draft, produce } from 'immer';
-
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
+import { Draft, produce } from 'immer';
 
 import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { ConfigureState, ObjectConfigurationsState } from '../types';
@@ -76,7 +75,7 @@ export function ConfigurationProvider(
     // consider moving check modified state here
     setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
       // immer exception when mutating a draft
-      // eslint-disable-next-line no-param-reassign
+       
       draft[objectName] = produce(draft[objectName], producer);
     }));
   }, [setObjectConfigurationsState]);
@@ -88,7 +87,7 @@ export function ConfigurationProvider(
   ) => {
     setObjectConfigurationsState((currentState) => produce(currentState, (draft) => {
     // immer exception when mutating a draft
-    // eslint-disable-next-line no-param-reassign
+     
       draft[objectName] = configureState;
     }));
   }, [setObjectConfigurationsState]);

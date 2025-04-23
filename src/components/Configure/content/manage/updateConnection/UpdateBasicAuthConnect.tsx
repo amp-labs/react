@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { BasicAuthForm } from 'src/components/auth/BasicAuth/BasicAuthContent';
 import { BasicCreds } from 'src/components/auth/BasicAuth/LandingContentProps';
 import { FormErrorBox } from 'src/components/FormErrorBox';

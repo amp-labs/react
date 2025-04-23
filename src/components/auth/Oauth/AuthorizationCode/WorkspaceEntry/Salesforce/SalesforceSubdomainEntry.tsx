@@ -1,8 +1,9 @@
+import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+
 import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
 import { FormComponent } from 'components/form';
 import { AccessibleLink } from 'components/ui-base/AccessibleLink';
 import { Button } from 'components/ui-base/Button';
-import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 
 import { SALESFORCE_HELP_URL, SubdomainEntryProps } from './SubdomainEntryProps';
 

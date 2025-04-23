@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-
 import { useProject } from 'context/ProjectContextProvider';
 import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
 import { useAPI } from 'src/services/api';

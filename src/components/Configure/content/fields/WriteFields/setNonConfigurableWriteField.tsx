@@ -10,7 +10,7 @@ function setNonConfigurableWriteFieldProducer(
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
     // immer syntax to set a value
-    // eslint-disable-next-line no-param-reassign
+     
     draft.write.selectedWriteObjects = {};
   }
 
@@ -30,7 +30,7 @@ function setNonConfigurableWriteFieldProducer(
       const updatedWriteObjects = draftSelectedWriteFields;
       const isModified = !areWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
       // immer syntax to set a value
-      // eslint-disable-next-line no-param-reassign
+       
       draft.write.isWriteModified = isModified;
     }
 

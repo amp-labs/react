@@ -24,7 +24,7 @@ export function Button({
   return (
     <button
       // button type is a required pass through prop
-      // eslint-disable-next-line react/button-has-type
+       
       type={type}
       className={buttonClass}
       style={style}

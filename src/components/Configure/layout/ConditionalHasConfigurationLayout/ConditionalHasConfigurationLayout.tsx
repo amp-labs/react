@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import {
   useInstallIntegrationProps,
 } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
