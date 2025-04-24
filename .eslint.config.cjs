@@ -51,13 +51,8 @@ module.exports = [
       ...pluginReactHooks.configs.recommended.rules,
 
       // Your custom rules
-      'arrow-body-style': 'off',
       'simple-import-sort/imports': 'error',
       'react-refresh/only-export-components': 'warn',
-      'react/function-component-definition': 'off',
-      'react/require-default-props': 'off',
-      'react/prop-types': 'off',
-      'react/jsx-props-no-spreading': 'off',
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'max-len': ['warn', { code: 125 }],
