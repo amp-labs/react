@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { TokenMetadataFieldsOtherFieldsInner } from './TokenMetadataFieldsOtherFieldsInner';
+import {
+    TokenMetadataFieldsOtherFieldsInnerFromJSON,
+    TokenMetadataFieldsOtherFieldsInnerFromJSONTyped,
+    TokenMetadataFieldsOtherFieldsInnerToJSON,
+} from './TokenMetadataFieldsOtherFieldsInner';
+
 /**
  * Fields to be used to extract token metadata from the token response.
  * @export
@@ -37,6 +44,12 @@ export interface TokenMetadataFields {
      * @memberof TokenMetadataFields
      */
     scopesField?: string;
+    /**
+     * Additional fields to extract and transform from the token response
+     * @type {Array<TokenMetadataFieldsOtherFieldsInner>}
+     * @memberof TokenMetadataFields
+     */
+    otherFields?: Array<TokenMetadataFieldsOtherFieldsInner>;
 }
 
 /**
@@ -61,6 +74,7 @@ export function TokenMetadataFieldsFromJSONTyped(json: any, ignoreDiscriminator:
         'workspaceRefField': !exists(json, 'workspaceRefField') ? undefined : json['workspaceRefField'],
         'consumerRefField': !exists(json, 'consumerRefField') ? undefined : json['consumerRefField'],
         'scopesField': !exists(json, 'scopesField') ? undefined : json['scopesField'],
+        'otherFields': !exists(json, 'otherFields') ? undefined : ((json['otherFields'] as Array<any>).map(TokenMetadataFieldsOtherFieldsInnerFromJSON)),
     };
 }
 
@@ -76,6 +90,7 @@ export function TokenMetadataFieldsToJSON(value?: TokenMetadataFields | null): a
         'workspaceRefField': value.workspaceRefField,
         'consumerRefField': value.consumerRefField,
         'scopesField': value.scopesField,
+        'otherFields': value.otherFields === undefined ? undefined : ((value.otherFields as Array<any>).map(TokenMetadataFieldsOtherFieldsInnerToJSON)),
     };
 }
 

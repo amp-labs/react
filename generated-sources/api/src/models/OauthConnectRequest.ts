@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProviderMetadataInfo } from './ProviderMetadataInfo';
+import {
+    ProviderMetadataInfoFromJSON,
+    ProviderMetadataInfoFromJSONTyped,
+    ProviderMetadataInfoToJSON,
+} from './ProviderMetadataInfo';
+
 /**
  * 
  * @export
@@ -25,6 +32,12 @@ export interface OauthConnectRequest {
      * @memberof OauthConnectRequest
      */
     providerWorkspaceRef?: string;
+    /**
+     * 
+     * @type {{ [key: string]: ProviderMetadataInfo; }}
+     * @memberof OauthConnectRequest
+     */
+    providerMetadata?: { [key: string]: ProviderMetadataInfo; };
     /**
      * The Ampersand project ID.
      * @type {string}
@@ -99,6 +112,7 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
+        'providerMetadata': !exists(json, 'providerMetadata') ? undefined : (mapValues(json['providerMetadata'], ProviderMetadataInfoFromJSON)),
         'projectId': json['projectId'],
         'groupRef': json['groupRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
@@ -120,6 +134,7 @@ export function OauthConnectRequestToJSON(value?: OauthConnectRequest | null): a
     return {
         
         'providerWorkspaceRef': value.providerWorkspaceRef,
+        'providerMetadata': value.providerMetadata === undefined ? undefined : (mapValues(value.providerMetadata, ProviderMetadataInfoToJSON)),
         'projectId': value.projectId,
         'groupRef': value.groupRef,
         'groupName': value.groupName,

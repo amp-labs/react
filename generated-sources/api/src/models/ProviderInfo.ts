@@ -49,6 +49,12 @@ import {
     Oauth2OptsFromJSONTyped,
     Oauth2OptsToJSON,
 } from './Oauth2Opts';
+import type { ProviderMetadata1 } from './ProviderMetadata1';
+import {
+    ProviderMetadata1FromJSON,
+    ProviderMetadata1FromJSONTyped,
+    ProviderMetadata1ToJSON,
+} from './ProviderMetadata1';
 import type { SubscribeOpts } from './SubscribeOpts';
 import {
     SubscribeOptsFromJSON,
@@ -152,6 +158,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     modules?: { [key: string]: ModuleInfo; };
+    /**
+     * 
+     * @type {ProviderMetadata1}
+     * @memberof ProviderInfo
+     */
+    metadata?: ProviderMetadata1;
 }
 
 /**
@@ -192,6 +204,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'labels': !exists(json, 'labels') ? undefined : json['labels'],
         'subscribeOpts': !exists(json, 'subscribeOpts') ? undefined : SubscribeOptsFromJSON(json['subscribeOpts']),
         'modules': !exists(json, 'modules') ? undefined : (mapValues(json['modules'], ModuleInfoFromJSON)),
+        'metadata': !exists(json, 'metadata') ? undefined : ProviderMetadata1FromJSON(json['metadata']),
     };
 }
 
@@ -218,6 +231,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'labels': value.labels,
         'subscribeOpts': SubscribeOptsToJSON(value.subscribeOpts),
         'modules': value.modules === undefined ? undefined : (mapValues(value.modules, ModuleInfoToJSON)),
+        'metadata': ProviderMetadata1ToJSON(value.metadata),
     };
 }
 
