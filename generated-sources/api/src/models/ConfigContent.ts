@@ -19,6 +19,18 @@ import {
     BaseProxyConfigFromJSONTyped,
     BaseProxyConfigToJSON,
 } from './BaseProxyConfig';
+import type { ReadConfig } from './ReadConfig';
+import {
+    ReadConfigFromJSON,
+    ReadConfigFromJSONTyped,
+    ReadConfigToJSON,
+} from './ReadConfig';
+import type { WriteConfig } from './WriteConfig';
+import {
+    WriteConfigFromJSON,
+    WriteConfigFromJSONTyped,
+    WriteConfigToJSON,
+} from './WriteConfig';
 
 /**
  * 
@@ -34,16 +46,16 @@ export interface ConfigContent {
     provider: string;
     /**
      * 
-     * @type {any}
+     * @type {ReadConfig}
      * @memberof ConfigContent
      */
-    read?: any | null;
+    read?: ReadConfig;
     /**
      * 
-     * @type {any}
+     * @type {WriteConfig}
      * @memberof ConfigContent
      */
-    write?: any | null;
+    write?: WriteConfig;
     /**
      * 
      * @type {BaseProxyConfig}
@@ -73,8 +85,8 @@ export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'provider': json['provider'],
-        'read': !exists(json, 'read') ? undefined : json['read'],
-        'write': !exists(json, 'write') ? undefined : json['write'],
+        'read': !exists(json, 'read') ? undefined : ReadConfigFromJSON(json['read']),
+        'write': !exists(json, 'write') ? undefined : WriteConfigFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
     };
 }
@@ -89,8 +101,8 @@ export function ConfigContentToJSON(value?: ConfigContent | null): any {
     return {
         
         'provider': value.provider,
-        'read': value.read,
-        'write': value.write,
+        'read': ReadConfigToJSON(value.read),
+        'write': WriteConfigToJSON(value.write),
         'proxy': BaseProxyConfigToJSON(value.proxy),
     };
 }
