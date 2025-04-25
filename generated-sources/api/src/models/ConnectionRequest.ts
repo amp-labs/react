@@ -37,6 +37,12 @@ import {
     Oauth2AuthorizationCodeFromJSONTyped,
     Oauth2AuthorizationCodeToJSON,
 } from './Oauth2AuthorizationCode';
+import type { ProviderMetadataInfo } from './ProviderMetadataInfo';
+import {
+    ProviderMetadataInfoFromJSON,
+    ProviderMetadataInfoFromJSONTyped,
+    ProviderMetadataInfoToJSON,
+} from './ProviderMetadataInfo';
 
 /**
  * 
@@ -50,6 +56,12 @@ export interface ConnectionRequest {
      * @memberof ConnectionRequest
      */
     providerWorkspaceRef?: string;
+    /**
+     * 
+     * @type {{ [key: string]: ProviderMetadataInfo; }}
+     * @memberof ConnectionRequest
+     */
+    providerMetadata?: { [key: string]: ProviderMetadataInfo; };
     /**
      * The name of the user group that has access to this installation.
      * @type {string}
@@ -132,6 +144,7 @@ export function ConnectionRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
+        'providerMetadata': !exists(json, 'providerMetadata') ? undefined : (mapValues(json['providerMetadata'], ProviderMetadataInfoFromJSON)),
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
         'groupRef': !exists(json, 'groupRef') ? undefined : json['groupRef'],
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
@@ -155,6 +168,7 @@ export function ConnectionRequestToJSON(value?: ConnectionRequest | null): any {
     return {
         
         'providerWorkspaceRef': value.providerWorkspaceRef,
+        'providerMetadata': value.providerMetadata === undefined ? undefined : (mapValues(value.providerMetadata, ProviderMetadataInfoToJSON)),
         'groupName': value.groupName,
         'groupRef': value.groupRef,
         'consumerName': value.consumerName,

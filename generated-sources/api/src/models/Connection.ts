@@ -37,6 +37,12 @@ import {
     ProviderAppFromJSONTyped,
     ProviderAppToJSON,
 } from './ProviderApp';
+import type { ProviderMetadataInfo } from './ProviderMetadataInfo';
+import {
+    ProviderMetadataInfoFromJSON,
+    ProviderMetadataInfoFromJSONTyped,
+    ProviderMetadataInfoToJSON,
+} from './ProviderMetadataInfo';
 
 /**
  * 
@@ -128,6 +134,12 @@ export interface Connection {
      * @memberof Connection
      */
     apiKey?: string;
+    /**
+     * 
+     * @type {{ [key: string]: ProviderMetadataInfo; }}
+     * @memberof Connection
+     */
+    providerMetadata?: { [key: string]: ProviderMetadataInfo; };
 }
 
 
@@ -197,6 +209,7 @@ export function ConnectionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'status': json['status'],
         'oauth2AuthorizationCode': !exists(json, 'oauth2AuthorizationCode') ? undefined : Oauth2AuthorizationCodeTokensOnlyFromJSON(json['oauth2AuthorizationCode']),
         'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
+        'providerMetadata': !exists(json, 'providerMetadata') ? undefined : (mapValues(json['providerMetadata'], ProviderMetadataInfoFromJSON)),
     };
 }
 
@@ -223,6 +236,7 @@ export function ConnectionToJSON(value?: Connection | null): any {
         'status': value.status,
         'oauth2AuthorizationCode': Oauth2AuthorizationCodeTokensOnlyToJSON(value.oauth2AuthorizationCode),
         'apiKey': value.apiKey,
+        'providerMetadata': value.providerMetadata === undefined ? undefined : (mapValues(value.providerMetadata, ProviderMetadataInfoToJSON)),
     };
 }
 

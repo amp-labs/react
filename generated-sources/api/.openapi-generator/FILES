@@ -116,6 +116,8 @@ src/models/LogMessage.ts
 src/models/Media.ts
 src/models/MediaTypeDarkMode.ts
 src/models/MediaTypeRegular.ts
+src/models/MetadataItemInput.ts
+src/models/MetadataItemPostAuthentication.ts
 src/models/ModuleInfo.ts
 src/models/Oauth2AuthorizationCode.ts
 src/models/Oauth2AuthorizationCodeAccessToken.ts
@@ -138,6 +140,8 @@ src/models/ProjectEntitlements.ts
 src/models/ProjectEntitlementsBrandingRemoval.ts
 src/models/ProviderApp.ts
 src/models/ProviderInfo.ts
+src/models/ProviderMetadata1.ts
+src/models/ProviderMetadataInfo.ts
 src/models/Revision.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
@@ -145,6 +149,7 @@ src/models/SubscribeOpts.ts
 src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
+src/models/TokenMetadataFieldsOtherFieldsInner.ts
 src/models/UpdateConnectionRequest.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
