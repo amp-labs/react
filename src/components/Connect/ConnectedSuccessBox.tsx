@@ -4,9 +4,7 @@ import { Connection } from 'src/services/api';
 
 import { SuccessTextBox } from '../SuccessTextBox/SuccessTextBox';
 
-import { SHOW_UPDATE_CONNECTION } from './contant';
 import { ManageConnectionSection } from './ManageConnectionSection';
-import { RemoveConnectionButton } from './RemoveConnectionButton';
 
 interface ConnectedSuccessBoxProps {
   resetComponent: () => void; // reset the ConnectProvider component
@@ -29,16 +27,6 @@ export function ConnectedSuccessBox({ provider, onDisconnectSuccess, resetCompon
           onDisconnectSuccess={onDisconnectSuccess}
           provider={provider}
         />
-        {/* TODO: remove this once the update connection section is implemented */}
-        {!SHOW_UPDATE_CONNECTION && (
-        <RemoveConnectionButton
-          resetComponent={resetComponent}
-          onDisconnectSuccess={onDisconnectSuccess}
-          buttonText="Remove connection"
-          buttonVariant="danger"
-          buttonStyle={{ fontSize: '13px' }}
-        />
-        )}
       </div>
     </SuccessTextBox>
   );
