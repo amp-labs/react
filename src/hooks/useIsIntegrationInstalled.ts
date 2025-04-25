@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
+import { Config } from 'src/services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
 import { useListInstallationsQuery } from './query/useListInstallationsQuery';
-import { Config } from 'src/services/api';
 
 interface UseIsIntegrationInstalledResult {
   isLoading: boolean;
@@ -27,5 +27,10 @@ export const useIsIntegrationInstalled = (
 
   useEffect(() => { if (isError) handleServerError(error); }, [isError, error]);
 
-  return { isLoaded, isIntegrationInstalled, isLoading: isInstallationLoading, config};
+  return {
+    isLoaded,
+    isIntegrationInstalled,
+    isLoading: isInstallationLoading,
+    config,
+  };
 };
