@@ -142,6 +142,9 @@ src/models/ProviderApp.ts
 src/models/ProviderInfo.ts
 src/models/ProviderMetadata1.ts
 src/models/ProviderMetadataInfo.ts
+src/models/ReadConfig.ts
+src/models/ReadConfigAllOf.ts
+src/models/ReadConfigObject.ts
 src/models/Revision.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
@@ -170,6 +173,9 @@ src/models/ValueDefaultBoolean.ts
 src/models/ValueDefaultInteger.ts
 src/models/ValueDefaultString.ts
 src/models/ValueDefaults.ts
+src/models/WriteConfig.ts
+src/models/WriteConfigAllOf.ts
+src/models/WriteConfigObject.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

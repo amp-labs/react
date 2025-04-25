@@ -13,6 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ReadConfig } from './ReadConfig';
+import {
+    ReadConfigFromJSON,
+    ReadConfigFromJSONTyped,
+    ReadConfigToJSON,
+} from './ReadConfig';
+import type { WriteConfig } from './WriteConfig';
+import {
+    WriteConfigFromJSON,
+    WriteConfigFromJSONTyped,
+    WriteConfigToJSON,
+} from './WriteConfig';
+
 /**
  * 
  * @export
@@ -21,16 +34,16 @@ import { exists, mapValues } from '../runtime';
 export interface ConfigContentAllOf {
     /**
      * 
-     * @type {any}
+     * @type {ReadConfig}
      * @memberof ConfigContentAllOf
      */
-    read?: any | null;
+    read?: ReadConfig;
     /**
      * 
-     * @type {any}
+     * @type {WriteConfig}
      * @memberof ConfigContentAllOf
      */
-    write?: any | null;
+    write?: WriteConfig;
 }
 
 /**
@@ -52,8 +65,8 @@ export function ConfigContentAllOfFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'read': !exists(json, 'read') ? undefined : json['read'],
-        'write': !exists(json, 'write') ? undefined : json['write'],
+        'read': !exists(json, 'read') ? undefined : ReadConfigFromJSON(json['read']),
+        'write': !exists(json, 'write') ? undefined : WriteConfigFromJSON(json['write']),
     };
 }
 
@@ -66,8 +79,8 @@ export function ConfigContentAllOfToJSON(value?: ConfigContentAllOf | null): any
     }
     return {
         
-        'read': value.read,
-        'write': value.write,
+        'read': ReadConfigToJSON(value.read),
+        'write': WriteConfigToJSON(value.write),
     };
 }
 
