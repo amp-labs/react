@@ -6,7 +6,6 @@ import { Connection } from 'src/services/api';
 import { FieldHeader } from '../Configure/content/fields/FieldHeader';
 import { Button } from '../ui-base/Button';
 
-import { SHOW_UPDATE_CONNECTION } from './contant';
 import { RemoveConnectionButton } from './RemoveConnectionButton';
 
 export function ManageConnectionSection({
@@ -19,10 +18,6 @@ export function ManageConnectionSection({
   provider?: string;
 }) {
   const [showUpdateConnection, setShowUpdateConnection] = useState(false);
-
-  if (!SHOW_UPDATE_CONNECTION) {
-    return null;
-  }
 
   return (
     <>
