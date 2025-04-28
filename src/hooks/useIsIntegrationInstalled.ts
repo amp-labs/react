@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { Config } from 'src/services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 
