@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useConnections } from 'context/ConnectionsContextProvider';
-import { Connection } from 'src/services/api';
+import { useEffect } from "react";
+import { useConnections } from "context/ConnectionsContextProvider";
+import { Connection } from "src/services/api";
 
 function useOnSuccessHandler(onSuccess?: (connection: Connection) => void) {
   const { selectedConnection } = useConnections();
@@ -23,6 +23,8 @@ type ConnectionHandlerPropsProps = {
  * @param onSuccess - callback function to be called when a connection is successful
  * @returns
  */
-export function useConnectionHandler({ onSuccess } : ConnectionHandlerPropsProps) {
+export function useConnectionHandler({
+  onSuccess,
+}: ConnectionHandlerPropsProps) {
   useOnSuccessHandler(onSuccess);
 }

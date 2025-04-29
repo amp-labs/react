@@ -1,10 +1,17 @@
-import classes from './divider.module.css';
+import classes from "./divider.module.css";
 
-export function Divider({ className, style }:
-{ className?: string, style?: React.CSSProperties }) {
+export function Divider({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <hr
-      className={className ? `${classes.divider} ${className}` : classes.divider}
+      className={
+        className ? `${classes.divider} ${className}` : classes.divider
+      }
       style={style}
     />
   );

@@ -1,11 +1,11 @@
-import isEqual from 'lodash.isequal';
+import isEqual from "lodash.isequal";
 import {
   Config,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
   HydratedIntegrationWrite,
   HydratedRevision,
-} from 'services/api';
+} from "services/api";
 
 import {
   ConfigureState,
@@ -15,15 +15,16 @@ import {
   SelectedWriteObjects,
   SelectMappingFields,
   SelectOptionalFields,
-} from '../types';
+} from "../types";
 import {
   generateAllNavObjects,
-  getFieldKeyValue, getObjectFromAction,
+  getFieldKeyValue,
+  getObjectFromAction,
   getOptionalFieldsFromObject,
   getOptionalMapFieldsFromObject,
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
-} from '../utils';
+} from "../utils";
 
 // uses lodash deep equality check to compare two saved write objects (typed checked)
 export function areWriteObjectsEqual(
@@ -57,13 +58,16 @@ const generateConfigurationStateRead = (
   const optionalMapFields = object && getOptionalMapFieldsFromObject(object);
   /// //////////////////////////////////////////////////////////////////////
 
-  const allFields = object?.allFields as HydratedIntegrationFieldExistent[] || [];
+  const allFields =
+    (object?.allFields as HydratedIntegrationFieldExistent[]) || [];
   const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
-  const readSelectedFields = content?.read?.objects?.[objectName]?.selectedFields || {};
-  const selectedValueMappings = content?.read?.objects?.[objectName]?.selectedValueMappings || {};
-  const selectedFieldMappings = content?.read?.objects?.
-    [objectName]?.selectedFieldMappings || {};
+  const readSelectedFields =
+    content?.read?.objects?.[objectName]?.selectedFields || {};
+  const selectedValueMappings =
+    content?.read?.objects?.[objectName]?.selectedValueMappings || {};
+  const selectedFieldMappings =
+    content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
 
   const optionalFieldsSaved = { ...readSelectedFields };
   const requiredMapFieldsSaved = { ...selectedFieldMappings };
@@ -129,7 +133,10 @@ export const setHydrateConfigState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
   selectedObjectName: string,
-  setConfigureState: (objectName: string, configureState: ConfigureState) => void,
+  setConfigureState: (
+    objectName: string,
+    configureState: ConfigureState,
+  ) => void,
 ) => {
   const state = generateConfigurationState(
     hydratedRevision,
@@ -146,7 +153,9 @@ export const setHydrateConfigState = (
 export const resetAllObjectsConfigurationState = (
   hydratedRevision: HydratedRevision,
   config: Config | undefined,
-  setObjectConfiguresState: React.Dispatch<React.SetStateAction<ObjectConfigurationsState>>,
+  setObjectConfiguresState: React.Dispatch<
+    React.SetStateAction<ObjectConfigurationsState>
+  >,
 ) => {
   // read nav objects from hydrated revision
   const navObjects = generateAllNavObjects(config, hydratedRevision);
@@ -169,16 +178,21 @@ export const resetAllObjectsConfigurationState = (
  * @param configureState
  * @returns
  */
-export const generateSelectedFieldsFromConfigureState = (configureState: ConfigureState) => {
+export const generateSelectedFieldsFromConfigureState = (
+  configureState: ConfigureState,
+) => {
   const { requiredFields, selectedOptionalFields } = configureState?.read || {};
   const fields = new Set<string>();
   requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
 
   // convert set to object for config
-  const selectedFields = Array.from(fields).reduce((acc, field) => ({
-    ...acc,
-    [field]: true,
-  }), {});
+  const selectedFields = Array.from(fields).reduce(
+    (acc, field) => ({
+      ...acc,
+      [field]: true,
+    }),
+    {},
+  );
 
   return {
     ...selectedFields,
@@ -191,20 +205,24 @@ export const generateSelectedFieldsFromConfigureState = (configureState: Configu
  * @param configureState
  * @returns
  */
-export const generateSelectedFieldMappingsFromConfigureState = (configureState: ConfigureState) => {
-  const { selectedFieldMappings: selectedRequiredMapFields } = configureState?.read || {};
+export const generateSelectedFieldMappingsFromConfigureState = (
+  configureState: ConfigureState,
+) => {
+  const { selectedFieldMappings: selectedRequiredMapFields } =
+    configureState?.read || {};
   // filter out undefined values of selectedRequiredMapFields
-  const selectedRequiredMapFieldsSubmit : Record<string, string> = {};
+  const selectedRequiredMapFieldsSubmit: Record<string, string> = {};
   if (selectedRequiredMapFields) {
-    Object.keys(selectedRequiredMapFields).forEach(
-      (key) => {
-        if (selectedRequiredMapFields[key] !== undefined) {
-          selectedRequiredMapFieldsSubmit[key] = selectedRequiredMapFields[key] || '';
-        } else {
-          console.warn(`Error undefined when generating selectedRequiredMapFieldsSubmit for key: ${key}`);
-        }
-      },
-    );
+    Object.keys(selectedRequiredMapFields).forEach((key) => {
+      if (selectedRequiredMapFields[key] !== undefined) {
+        selectedRequiredMapFieldsSubmit[key] =
+          selectedRequiredMapFields[key] || "";
+      } else {
+        console.warn(
+          `Error undefined when generating selectedRequiredMapFieldsSubmit for key: ${key}`,
+        );
+      }
+    });
   }
 
   return selectedRequiredMapFieldsSubmit;
@@ -215,7 +233,9 @@ export const generateSelectedFieldMappingsFromConfigureState = (configureState: 
  * @param configureState
  * @returns
  */
-export const generateSelectedValuesMappingsFromConfigureState = (configureState: ConfigureState) => {
+export const generateSelectedValuesMappingsFromConfigureState = (
+  configureState: ConfigureState,
+) => {
   const { selectedValueMappings } = configureState?.read || {};
   return selectedValueMappings;
 };

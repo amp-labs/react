@@ -3,20 +3,20 @@ import {
   CreateInstallationRequestConfig,
   HydratedRevision,
   Installation,
-} from 'services/api';
+} from "services/api";
 
-import { ConfigureState } from '../../types';
-import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
-import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
+import { ConfigureState } from "../../types";
+import { createInstallationAndSetState } from "../mutateAndSetState/createInstallationAndSetState";
+import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 
-import { generateConfigWriteObjects } from './generateConfigWriteObjects';
+import { generateConfigWriteObjects } from "./generateConfigWriteObjects";
 
 /**
-   * gets write objects from hydratedRevision
-   * @param hydratedRevision
-   * @param objectName
-   * @returns
-   */
+ * gets write objects from hydratedRevision
+ * @param hydratedRevision
+ * @param objectName
+ * @returns
+ */
 const getWriteObjectsFromHydratedRevision = (
   hydratedRevision: HydratedRevision,
 ) => {
@@ -25,28 +25,28 @@ const getWriteObjectsFromHydratedRevision = (
 };
 
 /**
-   * given a configureState, objectName, hyrdatedRevision, and consumerRef
-   * generate the config object that is need for update installation request.
-   *
-   * 1. get required fields from configureState
-   * 2. get optional fields from configureState
-   * 3. merge required fields and optional fields into selectedFields
-   * 4. get required custom map fields from configureState
-   * 5. generate create config object
-   * @param configureState
-   * @param objectName
-   * @param hydratedRevision
-   * @param consumerRef
-   * @returns
-   */
+ * given a configureState, objectName, hyrdatedRevision, and consumerRef
+ * generate the config object that is need for update installation request.
+ *
+ * 1. get required fields from configureState
+ * 2. get optional fields from configureState
+ * 3. merge required fields and optional fields into selectedFields
+ * 4. get required custom map fields from configureState
+ * 5. generate create config object
+ * @param configureState
+ * @param objectName
+ * @param hydratedRevision
+ * @param consumerRef
+ * @returns
+ */
 const generateCreateWriteConfigFromConfigureState = (
   configureState: ConfigureState,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
-): (CreateInstallationRequestConfig | null) => {
+): CreateInstallationRequestConfig | null => {
   const writeObjects = getWriteObjectsFromHydratedRevision(hydratedRevision);
   if (!writeObjects) {
-    console.error('Error when getting write objects from hydratedRevision');
+    console.error("Error when getting write objects from hydratedRevision");
     return null;
   }
 
@@ -97,7 +97,7 @@ export const onSaveWriteCreateInstallation = (
     consumerRef,
   );
   if (!createConfig) {
-    console.error('Error when generating createConfig from configureState');
+    console.error("Error when generating createConfig from configureState");
     return Promise.resolve(null);
   }
 

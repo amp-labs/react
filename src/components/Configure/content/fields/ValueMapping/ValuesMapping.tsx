@@ -1,21 +1,18 @@
-import {
-  useCallback, useEffect, useMemo, useRef,
-} from 'react';
-import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
-import {
-  useInstallIntegrationProps,
-} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { FormControl } from 'src/components/form/FormControl';
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { FormControl } from "src/components/form/FormControl";
 
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
-import { setValueMapping, setValueMappingModified } from './setValueMapping';
-import { ValueHeader } from './ValueHeader';
-import { ValueMappingItem } from './ValueMappingItem';
+import { setValueMapping, setValueMappingModified } from "./setValueMapping";
+import { ValueHeader } from "./ValueHeader";
+import { ValueMappingItem } from "./ValueMappingItem";
 
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
-  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } =
+    useSelectedConfigureState();
   const { isError, removeError, getError } = useErrorState();
 
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
@@ -25,12 +22,13 @@ export function ValueMappings() {
 
   const valuesMappings = useMemo(() => {
     // get all the fields that have fieldMappings from the selected object
-    const valuesMaps = selectedObjectName && fieldMapping
-      ? Object.values(fieldMapping[selectedObjectName] || {})
-        .flat()
-        .filter((mapping) => mapping.mappedValues)
-        .map((mapping) => ({ ...mapping }))
-      : [];
+    const valuesMaps =
+      selectedObjectName && fieldMapping
+        ? Object.values(fieldMapping[selectedObjectName] || {})
+            .flat()
+            .filter((mapping) => mapping.mappedValues)
+            .map((mapping) => ({ ...mapping }))
+        : [];
 
     if (selectedFieldMappings) {
       // set the fieldName from the mapped field name if it is
@@ -48,13 +46,21 @@ export function ValueMappings() {
 
   const onSelectChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const { value, name, fieldName } = e.target as typeof e.target & { fieldName: string; };
+      const { value, name, fieldName } = e.target as typeof e.target & {
+        fieldName: string;
+      };
 
       // if place holder value is chosen, we don't change state
       if (!value) return;
 
       if (selectedObjectName) {
-        setValueMapping(selectedObjectName, setConfigureState, name, value, fieldName);
+        setValueMapping(
+          selectedObjectName,
+          setConfigureState,
+          name,
+          value,
+          fieldName,
+        );
       }
 
       if (isError(ErrorBoundary.VALUE_MAPPING, name)) {
@@ -67,14 +73,17 @@ export function ValueMappings() {
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
-      const fieldsWithMappings = fieldMapping?.[selectedObjectName]?.filter(
-        (f) => f.fieldName && f.mappedValues!.length > 0,
-      ) || [];
+      const fieldsWithMappings =
+        fieldMapping?.[selectedObjectName]?.filter(
+          (f) => f.fieldName && f.mappedValues!.length > 0,
+        ) || [];
 
       // Check if all values are mapped for all fields
       const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
         const mappingsForField = selectedMappings[field.fieldName!] || {};
-        const areValuesSameLength = Object.keys(mappingsForField).length === Object.keys(field.mappedValues!).length;
+        const areValuesSameLength =
+          Object.keys(mappingsForField).length ===
+          Object.keys(field.mappedValues!).length;
         return areValuesSameLength;
       });
 
@@ -106,10 +115,11 @@ export function ValueMappings() {
         if (!field.fieldName) return null;
 
         // show the values mapping only for singleSelect and multiSelect type fields
-        const fieldNameObject = configureState?.read?.allFieldsMetadata?.[field.fieldName];
+        const fieldNameObject =
+          configureState?.read?.allFieldsMetadata?.[field.fieldName];
         const fieldNameValueType = fieldNameObject?.valueType;
-        if (!['singleSelect', 'multiSelect'].includes(fieldNameValueType)) {
-          const errorMsg = 'fieldName is not a singleSelect or multiSelect';
+        if (!["singleSelect", "multiSelect"].includes(fieldNameValueType)) {
+          const errorMsg = "fieldName is not a singleSelect or multiSelect";
           console.error(errorMsg, field);
           return null;
         }
@@ -120,9 +130,12 @@ export function ValueMappings() {
 
         // Show if the values array is of the same length as the mappedValues array
         const fieldNameValuesLength = Object.keys(fieldNameValues).length;
-        const mappedValuesLength = Object.keys(field?.mappedValues || []).length;
+        const mappedValuesLength = Object.keys(
+          field?.mappedValues || [],
+        ).length;
         if (fieldNameValuesLength !== mappedValuesLength) {
-          const errorMsg = 'field values and the values to be mapped are not of the same length';
+          const errorMsg =
+            "field values and the values to be mapped are not of the same length";
           console.error(errorMsg, field, fieldNameValues);
           return null;
         }
@@ -131,17 +144,27 @@ export function ValueMappings() {
           <>
             <ValueHeader
               string="Map the values for "
-              fieldName={field.mapToDisplayName || field.mapToName || field.fieldName}
+              fieldName={
+                field.mapToDisplayName || field.mapToName || field.fieldName
+              }
             />
-            <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+            <div
+              style={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+            >
               <FormControl
                 id={field.mapToName || field.fieldName}
                 key={field.mapToName || field.fieldName}
               >
                 {field?.mappedValues?.map((value) => {
-                  const errors = getError(ErrorBoundary.VALUE_MAPPING, field.fieldName!);
-                  const hasError = Array.isArray(errors) && errors.includes(value.mappedValue);
-                  const valueOptions = configureState?.read?.allFieldsMetadata?.[field.fieldName!]?.values || [];
+                  const errors = getError(
+                    ErrorBoundary.VALUE_MAPPING,
+                    field.fieldName!,
+                  );
+                  const hasError =
+                    Array.isArray(errors) && errors.includes(value.mappedValue);
+                  const valueOptions =
+                    configureState?.read?.allFieldsMetadata?.[field.fieldName!]
+                      ?.values || [];
 
                   return (
                     <>
@@ -150,13 +173,17 @@ export function ValueMappings() {
                         allValueOptions={valueOptions}
                         mappedValue={value}
                         onSelectChange={onSelectChange}
-                        fieldName={field?.fieldName || ''}
+                        fieldName={field?.fieldName || ""}
                         hasError={hasError}
                       />
                       {hasError && (
                         <span
                           key={value.mappedValue}
-                          style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}
+                          style={{
+                            color: "red",
+                            fontSize: "14px",
+                            marginTop: "4px",
+                          }}
                         >
                           {`Each ${field.mapToName || field.fieldName} must be mapped to a unique value`}
                         </span>

@@ -1,4 +1,4 @@
-import { Connection, ProviderInfo } from '@generated/api/src';
+import { Connection, ProviderInfo } from "@generated/api/src";
 
 export type BasicAuthFlowProps = {
   provider: string;

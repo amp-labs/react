@@ -1,32 +1,41 @@
-import {
-  FormEvent, useCallback, useEffect, useMemo, useState,
-} from 'react';
-import { ErrorBoundary } from 'context/ErrorContextProvider';
-import { Installation, Integration } from 'services/api';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { ErrorBoundary } from "context/ErrorContextProvider";
+import { Installation, Integration } from "services/api";
 
-import { onSaveReadUpdateInstallation } from '../actions/read/onSaveReadUpdateInstallation';
-import { onSaveWriteUpdateInstallation } from '../actions/write/onSaveWriteUpdateInstallation';
-import { WRITE_CONST } from '../nav/ObjectManagementNav/constant';
-import { setHydrateConfigState } from '../state/utils';
-import { validateFieldMappings } from '../utils';
+import { onSaveReadUpdateInstallation } from "../actions/read/onSaveReadUpdateInstallation";
+import { onSaveWriteUpdateInstallation } from "../actions/write/onSaveWriteUpdateInstallation";
+import { WRITE_CONST } from "../nav/ObjectManagementNav/constant";
+import { setHydrateConfigState } from "../state/utils";
+import { validateFieldMappings } from "../utils";
 
-import { ConfigureInstallationBase } from './ConfigureInstallationBase';
-import { useMutateInstallation } from './useMutateInstallation';
+import { ConfigureInstallationBase } from "./ConfigureInstallationBase";
+import { useMutateInstallation } from "./useMutateInstallation";
 
 interface UpdateInstallationProps {
-  installation: Installation,
-  integrationObj: Integration,
+  installation: Installation;
+  integrationObj: Integration;
 }
 
 //  Update Installation Flow
-export function UpdateInstallation(
-  { installation, integrationObj }: UpdateInstallationProps,
-) {
+export function UpdateInstallation({
+  installation,
+  integrationObj,
+}: UpdateInstallationProps) {
   const {
-    setInstallation, hydratedRevision,
-    loading, selectedObjectName, apiKey, projectId,
-    resetBoundary, setErrors, setMutateInstallationError, getMutateInstallationError,
-    resetConfigureState, resetPendingConfigurationState, configureState, onUpdateSuccess,
+    setInstallation,
+    hydratedRevision,
+    loading,
+    selectedObjectName,
+    apiKey,
+    projectId,
+    resetBoundary,
+    setErrors,
+    setMutateInstallationError,
+    getMutateInstallationError,
+    resetConfigureState,
+    resetPendingConfigurationState,
+    configureState,
+    onUpdateSuccess,
     onNextIncompleteTab,
   } = useMutateInstallation();
 
@@ -42,19 +51,30 @@ export function UpdateInstallation(
   // 2. get the hydrated revision (contains full form)
   // 3. generate the configuration state from the hydrated revision and config
 
-  const resetState = useCallback(
-    () => {
-      resetBoundary(ErrorBoundary.MAPPING);
-      // set configurationState when hydratedRevision is loaded
-      if (hydratedRevision?.content && !loading && selectedObjectName) {
-        setHydrateConfigState(hydratedRevision, config, selectedObjectName, resetConfigureState);
-      }
-    },
-    [resetBoundary, hydratedRevision, loading, selectedObjectName, config, resetConfigureState],
-  );
+  const resetState = useCallback(() => {
+    resetBoundary(ErrorBoundary.MAPPING);
+    // set configurationState when hydratedRevision is loaded
+    if (hydratedRevision?.content && !loading && selectedObjectName) {
+      setHydrateConfigState(
+        hydratedRevision,
+        config,
+        selectedObjectName,
+        resetConfigureState,
+      );
+    }
+  }, [
+    resetBoundary,
+    hydratedRevision,
+    loading,
+    selectedObjectName,
+    config,
+    resetConfigureState,
+  ]);
 
   useEffect(() => {
-    if (!configureState) { resetState(); }
+    if (!configureState) {
+      resetState();
+    }
   }, [configureState, resetState]);
 
   const hydratedObject = useMemo(() => {
@@ -67,7 +87,8 @@ export function UpdateInstallation(
 
   const onSaveRead = () => {
     // check if fields with requirements are met
-    const { requiredMapFields, selectedFieldMappings } = configureState?.read || {};
+    const { requiredMapFields, selectedFieldMappings } =
+      configureState?.read || {};
     const { errorList } = validateFieldMappings(
       requiredMapFields,
       selectedFieldMappings,
@@ -77,7 +98,14 @@ export function UpdateInstallation(
       return;
     }
 
-    if (hydratedRevision && installation && selectedObjectName && apiKey && projectId && hydratedObject) {
+    if (
+      hydratedRevision &&
+      installation &&
+      selectedObjectName &&
+      apiKey &&
+      projectId &&
+      hydratedObject
+    ) {
       setLoadingState(true);
       const res = onSaveReadUpdateInstallation(
         projectId,
@@ -99,12 +127,18 @@ export function UpdateInstallation(
         onNextIncompleteTab();
       });
     } else {
-      console.error('UpdateInstallation - onSaveUpdate missing required props');
+      console.error("UpdateInstallation - onSaveUpdate missing required props");
     }
   };
 
   const onSaveWrite = () => {
-    if (installation && selectedObjectName && apiKey && projectId && hydratedRevision) {
+    if (
+      installation &&
+      selectedObjectName &&
+      apiKey &&
+      projectId &&
+      hydratedRevision
+    ) {
       setLoadingState(true);
       const res = onSaveWriteUpdateInstallation(
         projectId,
@@ -124,7 +158,7 @@ export function UpdateInstallation(
         onNextIncompleteTab();
       });
     } else {
-      console.error('UpdateInstallation - onSaveUpdate missing required props');
+      console.error("UpdateInstallation - onSaveUpdate missing required props");
     }
   };
 

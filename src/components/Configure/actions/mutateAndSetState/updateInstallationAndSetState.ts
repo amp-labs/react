@@ -1,10 +1,12 @@
 import {
-  api, Config, Installation,
+  api,
+  Config,
+  Installation,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from 'services/api';
-import { escapeObjectName } from 'src/utils';
-import { handleServerError } from 'src/utils/handleServerError';
+} from "services/api";
+import { escapeObjectName } from "src/utils";
+import { handleServerError } from "src/utils/handleServerError";
 
 type UpdateInstallationSharedProps = {
   projectId: string;
@@ -20,7 +22,14 @@ type UpdateInstallationAndSetStateProps = UpdateInstallationSharedProps & {
   updateConfig: UpdateInstallationRequestInstallationConfig;
 };
 export function updateInstallationAndSetState({
-  updateConfig, projectId, integrationId, installationId, apiKey, selectedObjectName, setInstallation, onUpdateSuccess,
+  updateConfig,
+  projectId,
+  integrationId,
+  installationId,
+  apiKey,
+  selectedObjectName,
+  setInstallation,
+  onUpdateSuccess,
   setError,
 }: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
@@ -30,7 +39,9 @@ export function updateInstallationAndSetState({
     installationUpdate: {
       // update mask will recurse to the object path and replace the object at the object path
       // this example will replace the object at the object (i.e. accounts)
-      updateMask: [`config.content.read.objects.${escapeObjectName(selectedObjectName)}`],
+      updateMask: [
+        `config.content.read.objects.${escapeObjectName(selectedObjectName)}`,
+      ],
       installation: {
         config: updateConfig,
       },
@@ -38,16 +49,19 @@ export function updateInstallationAndSetState({
   };
 
   // call api.updateInstallation
-  return api().installationApi.updateInstallation(updateInstallationRequest, {
-    headers: {
-      'X-Api-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  }).then((installation) => {
-    // update local installation state
-    setInstallation(installation);
-    onUpdateSuccess?.(installation.id, installation.config);
-  }).catch((err) => {
-    handleServerError(err, setError);
-  });
+  return api()
+    .installationApi.updateInstallation(updateInstallationRequest, {
+      headers: {
+        "X-Api-Key": apiKey,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((installation) => {
+      // update local installation state
+      setInstallation(installation);
+      onUpdateSuccess?.(installation.id, installation.config);
+    })
+    .catch((err) => {
+      handleServerError(err, setError);
+    });
 }

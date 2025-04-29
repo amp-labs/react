@@ -1,12 +1,19 @@
-import { AuthCardLayout, AuthDescription, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+import {
+  AuthCardLayout,
+  AuthDescription,
+  AuthTitle,
+} from "src/layout/AuthCardLayout/AuthCardLayout";
 
-import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
-import { Button } from 'components/ui-base/Button';
+import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
+import { Button } from "components/ui-base/Button";
 
-import { LandingContentProps } from './LandingContentProps';
+import { LandingContentProps } from "./LandingContentProps";
 
 export function NoWorkspaceEntryContent({
-  handleSubmit, error, isButtonDisabled, providerName,
+  handleSubmit,
+  error,
+  isButtonDisabled,
+  providerName,
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
@@ -16,7 +23,7 @@ export function NoWorkspaceEntryContent({
       </AuthDescription>
       <AuthErrorAlert error={error} />
       <Button
-        style={{ marginTop: '1em', width: '100%' }}
+        style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}
         type="submit"
         onClick={handleSubmit}

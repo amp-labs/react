@@ -1,14 +1,14 @@
-import { useCallback } from 'react';
-import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
-import { useForceUpdate } from 'src/hooks/useForceUpdate';
-import { Connection } from 'src/services/api';
+import { useCallback } from "react";
+import { ConnectionsProvider } from "context/ConnectionsContextProvider";
+import { useForceUpdate } from "src/hooks/useForceUpdate";
+import { Connection } from "src/services/api";
 
-import { ProtectedConnectionLayout } from 'components/Configure/layout/ProtectedConnectionLayout';
-import { RedirectHandler } from 'components/RedirectHandler';
+import { ProtectedConnectionLayout } from "components/Configure/layout/ProtectedConnectionLayout";
+import { RedirectHandler } from "components/RedirectHandler";
 
-import { ConnectedSuccessBox } from './ConnectedSuccessBox';
+import { ConnectedSuccessBox } from "./ConnectedSuccessBox";
 
-import resetStyles from 'src/styles/resetCss.module.css';
+import resetStyles from "src/styles/resetCss.module.css";
 
 interface ConnectProviderProps {
   provider: string;
@@ -47,13 +47,16 @@ export function ConnectProvider({
 }: ConnectProviderProps) {
   const { seed, reset } = useForceUpdate(); // resets the component when the seed changes
 
-  const onSuccessFx = useCallback((connection: Connection) => {
-    if (onSuccess) {
-      onSuccess(connection.id);
-    } else if (onConnectSuccess) {
-      onConnectSuccess(connection);
-    }
-  }, [onSuccess, onConnectSuccess]);
+  const onSuccessFx = useCallback(
+    (connection: Connection) => {
+      if (onSuccess) {
+        onSuccess(connection.id);
+      } else if (onConnectSuccess) {
+        onConnectSuccess(connection);
+      }
+    },
+    [onSuccess, onConnectSuccess],
+  );
 
   return (
     <div className={resetStyles.resetContainer} key={seed}>

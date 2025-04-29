@@ -1,4 +1,4 @@
-import { useProjectWithEntitlementsQuery } from 'src/hooks/query/useProjectWithEntitlementsQuery';
+import { useProjectWithEntitlementsQuery } from "src/hooks/query/useProjectWithEntitlementsQuery";
 
 /**
  * Ampersand Logo in footer. Links to Ampersand website.
@@ -7,32 +7,32 @@ import { useProjectWithEntitlementsQuery } from 'src/hooks/query/useProjectWithE
  */
 export function AmpersandFooter() {
   const { data: projectWithEntitlements } = useProjectWithEntitlementsQuery();
-  const isBrandingRemoved = projectWithEntitlements?.entitlements?.brandingRemoval?.value === true;
+  const isBrandingRemoved =
+    projectWithEntitlements?.entitlements?.brandingRemoval?.value === true;
 
   if (isBrandingRemoved) return null;
 
   return (
     <footer
       style={{
-        backgroundColor: 'light-dark(#EFEFEF, #646266)',
-        padding: '1em',
-        fontSize: '0.8em',
-        color: 'gray',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '0 0 4px 4px',
-        gap: '0.4em',
+        backgroundColor: "light-dark(#EFEFEF, #646266)",
+        padding: "1em",
+        fontSize: "0.8em",
+        color: "gray",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "0 0 4px 4px",
+        gap: "0.4em",
       }}
     >
-      <p style={{ color: 'light-dark(gray, #EFEFEF)' }}>Secured by</p>
+      <p style={{ color: "light-dark(gray, #EFEFEF)" }}>Secured by</p>
       <a
         href="https://www.withampersand.com/"
         target="_blank"
         aria-label="Go to Ampersand"
         rel="noreferrer noopener"
       >
-
         <picture>
           <source
             srcSet="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
@@ -44,12 +44,11 @@ export function AmpersandFooter() {
           />
           {/* Default */}
           <img
-            style={{ height: '.8em' }}
+            style={{ height: ".8em" }}
             src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
             alt="Ampersand"
           />
         </picture>
-
       </a>
     </footer>
   );

@@ -1,7 +1,7 @@
-import { InputHTMLAttributes } from 'react';
-import classNames from 'classnames';
+import { InputHTMLAttributes } from "react";
+import classNames from "classnames";
 
-import classes from './input.module.css';
+import classes from "./input.module.css";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -11,10 +11,15 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({
-  id, type, className, isError = false, ...rest
+  id,
+  type,
+  className,
+  isError = false,
+  ...rest
 }: InputProps) {
   const defaultClassName = isError
-    ? classNames(classes.inputError, classes.input) : classes.input;
+    ? classNames(classes.inputError, classes.input)
+    : classes.input;
 
   return (
     <input

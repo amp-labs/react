@@ -1,12 +1,15 @@
-import { ConfigContent, CreateInstallationOperationRequest } from '@generated/api/src';
-import { useProject } from 'src/context/ProjectContextProvider';
-import { useCreateInstallationMutation } from 'src/hooks/mutation/useCreateInstallationMutation';
-import { useIntegrationQuery } from 'src/hooks/query/useIntegrationQuery';
+import {
+  ConfigContent,
+  CreateInstallationOperationRequest,
+} from "@generated/api/src";
+import { useProject } from "src/context/ProjectContextProvider";
+import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
+import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
-import { useInstallationProps } from '../InstallationProvider';
-import { useConnection } from '../useConnection';
+import { useInstallationProps } from "../InstallationProvider";
+import { useConnection } from "../useConnection";
 
-import { useInstallation } from './useInstallation';
+import { useInstallation } from "./useInstallation";
 
 /**
  * create installation hook
@@ -29,10 +32,10 @@ export function useCreateInstallation() {
 
   const createInstallation = (config: ConfigContent) => {
     if (installation) {
-      throw Error('Installation already created. Try updating instead.');
+      throw Error("Installation already created. Try updating instead.");
     }
     if (!integrationObj) {
-      throw Error('No integration found');
+      throw Error("No integration found");
     }
     // assemble create installation requests from providers
     const createInstallationRequest: CreateInstallationOperationRequest = {

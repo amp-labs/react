@@ -11,22 +11,28 @@
   const allFields = manifest.getCustomerFieldsForObject(SELECTED_OBJECT_NAME)
  */
 
-import { useMemo } from 'react';
-import { FieldMetadata, HydratedIntegrationField, HydratedIntegrationObject } from '@generated/api/src';
+import { useMemo } from "react";
+import {
+  FieldMetadata,
+  HydratedIntegrationField,
+  HydratedIntegrationObject,
+} from "@generated/api/src";
 
-import { useHydratedRevisionQuery } from './useHydratedRevisionQuery';
+import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
 
 export interface Manifest {
   getReadObject: (objectName: string) => {
-    object: HydratedIntegrationObject | null,
+    object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
   };
-  getCustomerFieldsForObject: (objectName: string) => HydratedIntegrationField[] | null;
+  getCustomerFieldsForObject: (
+    objectName: string,
+  ) => HydratedIntegrationField[] | null;
   getCustomerFieldsMetadataForObject: (objectName: string) => {
-    allFieldsMetaData:{ [key: string]: FieldMetadata; } | null;
+    allFieldsMetaData: { [key: string]: FieldMetadata } | null;
     getField: (field: string) => FieldMetadata | null;
-  }
+  };
 }
 
 /**
@@ -50,47 +56,64 @@ export function useManifest() {
 
   const content = hydatedRevision?.content;
 
-  const manifest: Manifest = useMemo(() => ({
-    getReadObject: (objectName: string) => {
-      const object = content?.read?.objects?.find((obj) => obj.objectName === objectName);
-      if (!object) {
-        console.error(`Object ${objectName} not found`);
-        return { object: null, getRequiredFields: () => null, getOptionalFields: () => null };
-      }
+  const manifest: Manifest = useMemo(
+    () => ({
+      getReadObject: (objectName: string) => {
+        const object = content?.read?.objects?.find(
+          (obj) => obj.objectName === objectName,
+        );
+        if (!object) {
+          console.error(`Object ${objectName} not found`);
+          return {
+            object: null,
+            getRequiredFields: () => null,
+            getOptionalFields: () => null,
+          };
+        }
 
-      return {
-        object,
-        getRequiredFields: (): HydratedIntegrationField[] => object.requiredFields ?? [],
-        getOptionalFields: (): HydratedIntegrationField[] => object.optionalFields ?? [],
-      };
-    },
-    getCustomerFieldsForObject: (objectName: string): HydratedIntegrationField[] | null => {
-      const object = content?.read?.objects?.find((obj) => obj.objectName === objectName);
-      if (!object) {
-        console.error(`Object ${objectName} not found`);
-        return null;
-      }
-      return object.allFields ?? [];
-    },
-    getCustomerFieldsMetadataForObject: (objectName: string) => {
-      const object = content?.read?.objects?.find((obj) => obj.objectName === objectName);
-      if (!object) {
-        console.error(`Object ${objectName} not found`);
-        return { allFieldsMetaData: null, getField: () => null };
-      }
-      return {
-        allFieldsMetaData: object.allFieldsMetadata ?? {},
-        getField: (field: string): FieldMetadata | null => {
-          const fieldMetadata = object.allFieldsMetadata?.[field];
-          if (!fieldMetadata) {
-            console.error(`Field ${field} not found`);
-            return null;
-          }
-          return fieldMetadata;
-        },
-      };
-    },
-  }), [content?.read?.objects]);
+        return {
+          object,
+          getRequiredFields: (): HydratedIntegrationField[] =>
+            object.requiredFields ?? [],
+          getOptionalFields: (): HydratedIntegrationField[] =>
+            object.optionalFields ?? [],
+        };
+      },
+      getCustomerFieldsForObject: (
+        objectName: string,
+      ): HydratedIntegrationField[] | null => {
+        const object = content?.read?.objects?.find(
+          (obj) => obj.objectName === objectName,
+        );
+        if (!object) {
+          console.error(`Object ${objectName} not found`);
+          return null;
+        }
+        return object.allFields ?? [];
+      },
+      getCustomerFieldsMetadataForObject: (objectName: string) => {
+        const object = content?.read?.objects?.find(
+          (obj) => obj.objectName === objectName,
+        );
+        if (!object) {
+          console.error(`Object ${objectName} not found`);
+          return { allFieldsMetaData: null, getField: () => null };
+        }
+        return {
+          allFieldsMetaData: object.allFieldsMetadata ?? {},
+          getField: (field: string): FieldMetadata | null => {
+            const fieldMetadata = object.allFieldsMetadata?.[field];
+            if (!fieldMetadata) {
+              console.error(`Field ${field} not found`);
+              return null;
+            }
+            return fieldMetadata;
+          },
+        };
+      },
+    }),
+    [content?.read?.objects],
+  );
 
   return {
     data: hydatedRevision,

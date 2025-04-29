@@ -1,3 +1,3 @@
-import { ValueMappings } from './ValuesMapping';
+import { ValueMappings } from "./ValuesMapping";
 
 export { ValueMappings };

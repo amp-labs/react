@@ -1,18 +1,19 @@
-import { useMemo } from 'react';
-import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { FormControl } from 'src/components/form/FormControl';
+import { useMemo } from "react";
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { FormControl } from "src/components/form/FormControl";
 
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
-import { FieldHeader } from '../FieldHeader';
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
+import { FieldHeader } from "../FieldHeader";
 
-import { checkDuplicateFieldError } from './checkDuplicateFieldError';
-import { DynamicFieldMappings } from './DynamicFieldMappings';
-import { FieldMappingRow } from './FieldMappingRow';
-import { setFieldMapping } from './setFieldMapping';
+import { checkDuplicateFieldError } from "./checkDuplicateFieldError";
+import { DynamicFieldMappings } from "./DynamicFieldMappings";
+import { FieldMappingRow } from "./FieldMappingRow";
+import { setFieldMapping } from "./setFieldMapping";
 
 export function OptionalFieldMappings() {
-  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } =
+    useSelectedConfigureState();
   const { isError, removeError, setError } = useErrorState();
   const allFields = configureState?.read?.allFields || [];
   const { fieldMapping } = useInstallIntegrationProps();
@@ -50,8 +51,8 @@ export function OptionalFieldMappings() {
 
     // reset duplicate value errors for the selected object
     if (
-      selectedObjectName
-      && isError(ErrorBoundary.MAPPING, selectedObjectName)
+      selectedObjectName &&
+      isError(ErrorBoundary.MAPPING, selectedObjectName)
     ) {
       removeError(ErrorBoundary.MAPPING, selectedObjectName);
     }
@@ -75,9 +76,10 @@ export function OptionalFieldMappings() {
      * So we filter out any optionalFieldMappings that exist in dynamicFieldMappings
      */
     const combinedFieldMappings = optionalFieldMappings.filter(
-      (optionalField) => !dynamicFieldMappings.some(
-        (dynamicField) => dynamicField.mapToName === optionalField.mapToName,
-      ),
+      (optionalField) =>
+        !dynamicFieldMappings.some(
+          (dynamicField) => dynamicField.mapToName === optionalField.mapToName,
+        ),
     );
 
     return combinedFieldMappings;
@@ -88,7 +90,7 @@ export function OptionalFieldMappings() {
   return showIntegrationFieldMappings || showDynamicFieldMappings ? (
     <>
       <FieldHeader string="Map the following optional fields" />
-      <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+      <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
         {integrationFieldMappings?.map((field) => (
           <FormControl id={field.mapToName} key={field.mapToName}>
             <FieldMappingRow

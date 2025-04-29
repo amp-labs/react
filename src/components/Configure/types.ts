@@ -4,64 +4,64 @@ import {
   HydratedIntegrationFieldExistent,
   HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
-} from 'services/api';
+} from "services/api";
 
 export type SelectedWriteObjects = {
-  [objectName: string]: BaseWriteConfigObject,
+  [objectName: string]: BaseWriteConfigObject;
 };
 
 type SavedWriteConfigureState = {
-  selectedWriteObjects: SelectedWriteObjects,
+  selectedWriteObjects: SelectedWriteObjects;
 };
 
 // write state slice
 // currently tracks all write objects insteaad of just a single objectname
 export type ConfigureStateWrite = {
-  writeObjects: HydratedIntegrationWriteObject[] | null,
-  selectedWriteObjects: SelectedWriteObjects | null,
-  isWriteModified: boolean,
-  savedConfig: SavedWriteConfigureState, // check when to know if config is saved / modified
+  writeObjects: HydratedIntegrationWriteObject[] | null;
+  selectedWriteObjects: SelectedWriteObjects | null;
+  isWriteModified: boolean;
+  savedConfig: SavedWriteConfigureState; // check when to know if config is saved / modified
 };
 
 export type SelectOptionalFields = {
-  [key: string]: boolean,
+  [key: string]: boolean;
 };
 
 export type SelectMappingFields = {
-  [key: string]: string | undefined,
+  [key: string]: string | undefined;
 };
 
 export type SelectValueMappings = {
-  [fieldName: string]: { [mappedValue: string]: string },
+  [fieldName: string]: { [mappedValue: string]: string };
 };
 
 export type ConfigureStateRead = {
-  allFields: HydratedIntegrationFieldExistent[] | null, // needed for custom mapping
-  allFieldsMetadata: any, // needed for values mapping // TODO: better types.
-  requiredFields: HydratedIntegrationField[] | null,
-  optionalFields: HydratedIntegrationField[] | null,
-  requiredMapFields: IntegrationFieldMapping[] | null,
-  optionalMapFields: IntegrationFieldMapping[] | null,
-  selectedOptionalFields: SelectOptionalFields | null,
-  selectedFieldMappings: SelectMappingFields | null,
-  selectedValueMappings: SelectValueMappings | null,
-  isOptionalFieldsModified: boolean, // checks if selected optional fields is modified
-  isRequiredMapFieldsModified: boolean, // checks if required map fields is modified
-  isValueMappingsModified: boolean, // checks if value mappings is modified
-  savedConfig: SavedConfigureState, // check when to know if config is saved / modified
+  allFields: HydratedIntegrationFieldExistent[] | null; // needed for custom mapping
+  allFieldsMetadata: any; // needed for values mapping // TODO: better types.
+  requiredFields: HydratedIntegrationField[] | null;
+  optionalFields: HydratedIntegrationField[] | null;
+  requiredMapFields: IntegrationFieldMapping[] | null;
+  optionalMapFields: IntegrationFieldMapping[] | null;
+  selectedOptionalFields: SelectOptionalFields | null;
+  selectedFieldMappings: SelectMappingFields | null;
+  selectedValueMappings: SelectValueMappings | null;
+  isOptionalFieldsModified: boolean; // checks if selected optional fields is modified
+  isRequiredMapFieldsModified: boolean; // checks if required map fields is modified
+  isValueMappingsModified: boolean; // checks if value mappings is modified
+  savedConfig: SavedConfigureState; // check when to know if config is saved / modified
 };
 
 type SavedConfigureState = {
-  optionalFields: SelectOptionalFields,
-  requiredMapFields: SelectMappingFields,
-  selectedValueMappings: SelectValueMappings,
+  optionalFields: SelectOptionalFields;
+  requiredMapFields: SelectMappingFields;
+  selectedValueMappings: SelectValueMappings;
 };
 
 export type ConfigureState = {
   // read state slice
-  read: ConfigureStateRead | null,
+  read: ConfigureStateRead | null;
   // separating write for possible state slice in the future
-  write: ConfigureStateWrite | null,
+  write: ConfigureStateWrite | null;
 };
 
 // maps to all object keys in hydrated revision

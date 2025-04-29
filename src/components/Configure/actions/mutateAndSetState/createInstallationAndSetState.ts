@@ -1,8 +1,11 @@
 import {
-  api, Config, CreateInstallationOperationRequest,
-  CreateInstallationRequestConfig, Installation,
-} from 'services/api';
-import { handleServerError } from 'src/utils/handleServerError';
+  api,
+  Config,
+  CreateInstallationOperationRequest,
+  CreateInstallationRequestConfig,
+  Installation,
+} from "services/api";
+import { handleServerError } from "src/utils/handleServerError";
 
 export type CreateInstallationSharedProps = {
   projectId: string;
@@ -19,12 +22,17 @@ type CreateInstallationAndSetStateProps = CreateInstallationSharedProps & {
   createConfig: CreateInstallationRequestConfig;
 };
 
-export async function createInstallationAndSetState(
-  {
-    createConfig, projectId, integrationId, groupRef, connectionId, apiKey,
-    setError, setInstallation, onInstallSuccess,
-  }: CreateInstallationAndSetStateProps,
-) {
+export async function createInstallationAndSetState({
+  createConfig,
+  projectId,
+  integrationId,
+  groupRef,
+  connectionId,
+  apiKey,
+  setError,
+  setInstallation,
+  onInstallSuccess,
+}: CreateInstallationAndSetStateProps) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
     projectIdOrName: projectId,
     integrationId,
@@ -36,12 +44,15 @@ export async function createInstallationAndSetState(
   };
 
   try {
-    const installation = await api().installationApi.createInstallation(createInstallationRequest, {
-      headers: {
-        'X-Api-Key': apiKey,
-        'Content-Type': 'application/json',
+    const installation = await api().installationApi.createInstallation(
+      createInstallationRequest,
+      {
+        headers: {
+          "X-Api-Key": apiKey,
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
     setInstallation(installation);
     onInstallSuccess?.(installation.id, installation.config);
   } catch (error) {

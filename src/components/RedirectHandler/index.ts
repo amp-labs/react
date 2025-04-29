@@ -1,1 +1,1 @@
-export { RedirectHandler } from './RedirectHandler';
+export { RedirectHandler } from "./RedirectHandler";

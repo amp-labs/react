@@ -1,11 +1,14 @@
-import { ConfigContent, UpdateInstallationOperationRequest } from '@generated/api/src';
-import { useProject } from 'src/context/ProjectContextProvider';
-import { useUpdateInstallationMutation } from 'src/hooks/mutation/useUpdateInstallationMutation';
-import { useIntegrationQuery } from 'src/hooks/query/useIntegrationQuery';
+import {
+  ConfigContent,
+  UpdateInstallationOperationRequest,
+} from "@generated/api/src";
+import { useProject } from "src/context/ProjectContextProvider";
+import { useUpdateInstallationMutation } from "src/hooks/mutation/useUpdateInstallationMutation";
+import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
-import { useInstallationProps } from '../InstallationProvider';
+import { useInstallationProps } from "../InstallationProvider";
 
-import { useInstallation } from './useInstallation';
+import { useInstallation } from "./useInstallation";
 
 /**
  * update installation hook
@@ -27,10 +30,12 @@ export function useUpdateInstallation() {
 
   const updateInstallation = (config: ConfigContent) => {
     if (!installation) {
-      throw Error('Installation not created yet. Try creating the installation first.');
+      throw Error(
+        "Installation not created yet. Try creating the installation first.",
+      );
     }
     if (!integrationObj) {
-      throw Error('No integration found');
+      throw Error("No integration found");
     }
     // assemble update installation requests from providers
     const updateInstallationRequest: UpdateInstallationOperationRequest = {
@@ -38,7 +43,7 @@ export function useUpdateInstallation() {
       integrationId: integrationObj?.id,
       installationId: installation.id,
       installationUpdate: {
-        updateMask: ['config.content'], // update entire config object
+        updateMask: ["config.content"], // update entire config object
         // example read update  [`config.content.read.objects.${selectedObjectName}`],
         installation: {
           config: {

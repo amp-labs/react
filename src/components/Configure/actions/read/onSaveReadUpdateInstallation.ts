@@ -5,16 +5,16 @@ import {
   HydratedRevision,
   Installation,
   UpdateInstallationRequestInstallationConfig,
-} from 'services/api';
+} from "services/api";
 
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
   generateSelectedValuesMappingsFromConfigureState,
-} from '../../state/utils';
-import { ConfigureState } from '../../types';
-import { updateInstallationAndSetState } from '../mutateAndSetState/updateInstallationAndSetState';
-import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
+} from "../../state/utils";
+import { ConfigureState } from "../../types";
+import { updateInstallationAndSetState } from "../mutateAndSetState/updateInstallationAndSetState";
+import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -40,11 +40,12 @@ const generateUpdateReadConfigFromConfigureState = (
   hydratedRevision: HydratedRevision,
   backfill?: BackfillConfig,
 ): UpdateInstallationRequestInstallationConfig => {
-  const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
-  const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
-    configureState,
-  );
-  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
+  const selectedFields =
+    generateSelectedFieldsFromConfigureState(configureState);
+  const selectedFieldMappings =
+    generateSelectedFieldMappingsFromConfigureState(configureState);
+  const selectedValuesMappings =
+    generateSelectedValuesMappingsFromConfigureState(configureState);
 
   // config request object type needs to be fixed
   const updateConfigObject: UpdateInstallationRequestInstallationConfig = {
@@ -55,10 +56,10 @@ const generateUpdateReadConfigFromConfigureState = (
             objectName,
             // these two fields are copied from previous config, otherwise they will override null
             schedule,
-            destination: hydratedObject?.destination || '',
+            destination: hydratedObject?.destination || "",
             selectedFields,
             selectedFieldMappings,
-            selectedValueMappings: selectedValuesMappings || { },
+            selectedValueMappings: selectedValuesMappings || {},
             backfill,
           },
         },
@@ -94,7 +95,7 @@ export const onSaveReadUpdateInstallation = (
   // transform configuration state to update shape
   const updateConfig = generateUpdateReadConfigFromConfigureState(
     configureState,
-    selectedObjectName || '',
+    selectedObjectName || "",
     hydratedObject,
     hydratedObject.schedule,
     hydratedRevision,
@@ -102,7 +103,7 @@ export const onSaveReadUpdateInstallation = (
   );
 
   if (!updateConfig) {
-    console.error('Error when generating updateConfig from configureState');
+    console.error("Error when generating updateConfig from configureState");
     return Promise.resolve(null);
   }
 

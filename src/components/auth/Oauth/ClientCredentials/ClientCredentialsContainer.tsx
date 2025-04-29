@@ -2,16 +2,19 @@
  * OAuth flow for any providers that do not require the consumer to enter a workspace first.
  */
 
-import { useCallback, useState } from 'react';
-import { Connection, GenerateConnectionOperationRequest } from '@generated/api/src';
-import { useProject } from 'context/ProjectContextProvider';
+import { useCallback, useState } from "react";
+import {
+  Connection,
+  GenerateConnectionOperationRequest,
+} from "@generated/api/src";
+import { useProject } from "context/ProjectContextProvider";
 
-import { LoadingCentered } from 'components/Loading';
+import { LoadingCentered } from "components/Loading";
 
-import { useCreateConnectionMutation } from '../../useCreateConnectionMutation';
+import { useCreateConnectionMutation } from "../../useCreateConnectionMutation";
 
-import { ClientCredentialsContent } from './ClientCredentialsContent';
-import { ClientCredentialsCredsContent } from './ClientCredentialsCredsContent';
+import { ClientCredentialsContent } from "./ClientCredentialsContent";
+import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 interface OauthClientCredsContainerProps {
   provider: string;
@@ -30,9 +33,14 @@ interface OauthClientCredsContainerProps {
  * then launches a popup with the OAuth flow.
  */
 export function ClientCredsContainer({
-  provider, providerName,
-  consumerRef, consumerName, groupRef, groupName,
-  explicitScopesRequired, explicitWorkspaceRequired,
+  provider,
+  providerName,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  explicitScopesRequired,
+  explicitWorkspaceRequired,
   selectedConnection,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useProject();
@@ -40,30 +48,41 @@ export function ClientCredsContainer({
   const [error, setError] = useState<string | null>(null);
 
   //  generate connection from client credentials
-  const handleSubmit = useCallback((creds: ClientCredentialsCredsContent) => {
-    setError(null);
+  const handleSubmit = useCallback(
+    (creds: ClientCredentialsCredsContent) => {
+      setError(null);
 
-    const req: GenerateConnectionOperationRequest = {
-      projectIdOrName,
-      generateConnectionParams: {
-        groupName,
-        groupRef,
-        consumerName,
-        consumerRef,
-        provider,
-        providerWorkspaceRef: creds.workspace,
-        oauth2ClientCredentials: {
-          clientId: creds.clientId,
-          clientSecret: creds.clientSecret,
-          scopes: creds.scopes,
+      const req: GenerateConnectionOperationRequest = {
+        projectIdOrName,
+        generateConnectionParams: {
+          groupName,
+          groupRef,
+          consumerName,
+          consumerRef,
+          provider,
+          providerWorkspaceRef: creds.workspace,
+          oauth2ClientCredentials: {
+            clientId: creds.clientId,
+            clientSecret: creds.clientSecret,
+            scopes: creds.scopes,
+          },
         },
-      },
-    };
+      };
 
-    createConnectionMutation.mutate(req, {
-      onError: () => setError('Error loading provider info'), // set local error state
-    });
-  }, [projectIdOrName, groupName, groupRef, consumerName, consumerRef, provider, createConnectionMutation]);
+      createConnectionMutation.mutate(req, {
+        onError: () => setError("Error loading provider info"), // set local error state
+      });
+    },
+    [
+      projectIdOrName,
+      groupName,
+      groupRef,
+      consumerName,
+      consumerRef,
+      provider,
+      createConnectionMutation,
+    ],
+  );
 
   if (selectedConnection === null) {
     return (

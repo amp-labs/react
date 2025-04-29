@@ -1,6 +1,6 @@
-import { AuthCardLayoutTemplate } from 'components/auth/AuthCardLayoutTemplate';
+import { AuthCardLayoutTemplate } from "components/auth/AuthCardLayoutTemplate";
 
-import { LandingContentProps } from './LandingContentProps';
+import { LandingContentProps } from "./LandingContentProps";
 
 /**
  * This flow is only used as for a mock provider. This flow is used for testing only.

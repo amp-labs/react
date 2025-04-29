@@ -1,4 +1,4 @@
-import classes from './box.module.css';
+import classes from "./box.module.css";
 
 type BoxProps = {
   children: React.ReactNode;
@@ -13,7 +13,10 @@ type BoxProps = {
  */
 export function Box({ children, className, style }: BoxProps) {
   return (
-    <div className={className ? `${classes.box} ${className}` : classes.box} style={style}>
+    <div
+      className={className ? `${classes.box} ${className}` : classes.box}
+      style={style}
+    >
       {children}
     </div>
   );

@@ -1,11 +1,11 @@
-import { Draft } from 'immer';
+import { Draft } from "immer";
 
-import { isFieldObjectEqual } from '../../../state/utils';
-import { ConfigureState } from '../../../types';
+import { isFieldObjectEqual } from "../../../state/utils";
+import { ConfigureState } from "../../../types";
 
 export type MappingFields = {
-  field: string
-  value: string | null
+  field: string;
+  value: string | null;
 };
 
 function setFieldMappingProducer(
@@ -28,19 +28,20 @@ function setFieldMappingProducer(
     const updatedFields = draftRequiredMapFields;
     const isModified = !isFieldObjectEqual(savedFields, updatedFields);
     // immer exception if we try to set a value
-     
+
     draft.read.isRequiredMapFieldsModified = isModified;
   }
 }
 
 export function setFieldMapping(
   selectedObjectName: string,
-  setConfigureState: (objectName: string,
-    producer: (draft: Draft<ConfigureState>) => void) => void,
+  setConfigureState: (
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void,
+  ) => void,
   fields: Array<MappingFields>,
 ) {
-  setConfigureState(
-    selectedObjectName,
-    (draft) => setFieldMappingProducer(draft, fields),
+  setConfigureState(selectedObjectName, (draft) =>
+    setFieldMappingProducer(draft, fields),
   );
 }

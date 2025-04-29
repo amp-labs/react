@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-import {
-  useInstallIntegrationProps,
-} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
+import { useEffect } from "react";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
-import { setFieldMapping } from './setFieldMapping';
+import { setFieldMapping } from "./setFieldMapping";
 
 const findOutdatedKeys = (
   selectedKeys: string[],
@@ -23,18 +21,24 @@ const findOutdatedKeys = (
  *  (i.e. old amp.yaml / dynamic mapping configs keys)
  */
 export function useClearOldFieldMappings() {
-  const { selectedObjectName, configureState, setConfigureState } = useSelectedConfigureState();
+  const { selectedObjectName, configureState, setConfigureState } =
+    useSelectedConfigureState();
   const { fieldMapping } = useInstallIntegrationProps();
 
   // Get field mappings with user selected values
-  const selectedFieldMappings = configureState?.read?.selectedFieldMappings || {};
+  const selectedFieldMappings =
+    configureState?.read?.selectedFieldMappings || {};
   const selectedKeys = Object.keys(selectedFieldMappings); // may include outdated keys from config
 
   // Get allowed fields (not oudated) from required mappings, optional mappings, and dynamic mappings
   const requiredFieldMappings = configureState?.read?.requiredMapFields || [];
   const optionalFieldMappings = configureState?.read?.optionalMapFields || [];
-  const dynamicFieldMappings = selectedObjectName && fieldMapping
-    ? Object.values(fieldMapping[selectedObjectName] || {}).flat().filter((mapping) => !mapping.fieldName) : [];
+  const dynamicFieldMappings =
+    selectedObjectName && fieldMapping
+      ? Object.values(fieldMapping[selectedObjectName] || {})
+          .flat()
+          .filter((mapping) => !mapping.fieldName)
+      : [];
 
   // merge all allowed keys
   const allowedKeys = requiredFieldMappings
@@ -50,10 +54,14 @@ export function useClearOldFieldMappings() {
   useEffect(() => {
     if (!!selectedObjectName && outdatedKeys.length) {
       // For old field mappings that have now been removed by the builder, unset the values for those keys.
-      setFieldMapping(selectedObjectName, setConfigureState, outdatedKeys.map((key) => ({
-        field: key,
-        value: null,
-      })));
+      setFieldMapping(
+        selectedObjectName,
+        setConfigureState,
+        outdatedKeys.map((key) => ({
+          field: key,
+          value: null,
+        })),
+      );
     }
   }, [selectedObjectName, setConfigureState, outdatedKeys]);
 }

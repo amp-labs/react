@@ -1,17 +1,20 @@
-import { useCallback, useState } from 'react';
-import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
-import { OAuthWindow } from 'src/components/auth/Oauth/AuthorizationCode/OAuthWindow/OAuthWindow';
-import { FormSuccessBox } from 'src/components/FormSuccessBox';
-import { Button } from 'src/components/ui-base/Button';
-import { useConnections } from 'src/context/ConnectionsContextProvider';
-import { useUpdateOauthConnectMutation } from 'src/hooks/mutation/useUpdateOauthConnectMutation';
-import { useProvider } from 'src/hooks/useProvider';
-import { handleServerError } from 'src/utils/handleServerError';
+import { useCallback, useState } from "react";
+import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
+import { OAuthWindow } from "src/components/auth/Oauth/AuthorizationCode/OAuthWindow/OAuthWindow";
+import { FormSuccessBox } from "src/components/FormSuccessBox";
+import { Button } from "src/components/ui-base/Button";
+import { useConnections } from "src/context/ConnectionsContextProvider";
+import { useUpdateOauthConnectMutation } from "src/hooks/mutation/useUpdateOauthConnectMutation";
+import { useProvider } from "src/hooks/useProvider";
+import { handleServerError } from "src/utils/handleServerError";
 
-import { FieldHeader } from '../../fields/FieldHeader';
+import { FieldHeader } from "../../fields/FieldHeader";
 
 export function UpdateContent({
-  handleSubmit, error, isButtonDisabled, providerName,
+  handleSubmit,
+  error,
+  isButtonDisabled,
+  providerName,
 }: {
   handleSubmit: () => void;
   error: string | null;
@@ -19,12 +22,12 @@ export function UpdateContent({
   providerName: string | undefined;
 }) {
   return (
-    <div style={{ padding: '1rem 0' }}>
+    <div style={{ padding: "1rem 0" }}>
       <p>{`Re-authenticate to ${providerName}`}</p>
       <AuthErrorAlert error={error} />
       <Button
         variant="ghost"
-        style={{ marginTop: '1em', width: '100%' }}
+        style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}
         type="submit"
         onClick={handleSubmit}
@@ -47,7 +50,9 @@ export function UpdateOauthConnect({ provider }: { provider?: string }) {
   const projectIdOrName = selectedConnection?.projectId;
   const { providerName } = useProvider(provider);
   const {
-    mutateAsync: updateOauthConnect, isPending: isUpdatingOauthConnect, error: updateOauthConnectError,
+    mutateAsync: updateOauthConnect,
+    isPending: isUpdatingOauthConnect,
+    error: updateOauthConnectError,
   } = useUpdateOauthConnectMutation();
 
   const [localError, setError] = useState<string | null>(null);
@@ -71,8 +76,8 @@ export function UpdateOauthConnect({ provider }: { provider?: string }) {
 
     try {
       const oauthUrl = await updateOauthConnect({
-        projectIdOrName: projectIdOrName || '',
-        connectionId: connectionId || '',
+        projectIdOrName: projectIdOrName || "",
+        connectionId: connectionId || "",
       });
 
       setUrl(oauthUrl);
@@ -88,7 +93,9 @@ export function UpdateOauthConnect({ provider }: { provider?: string }) {
   return (
     <>
       <FieldHeader string="Update connection" />
-      {successConnect && <FormSuccessBox>Connection updated successfully</FormSuccessBox>}
+      {successConnect && (
+        <FormSuccessBox>Connection updated successfully</FormSuccessBox>
+      )}
       <OAuthWindow
         windowTitle={`Connect to ${providerName}`}
         oauthUrl={url || null}
@@ -101,7 +108,9 @@ export function UpdateOauthConnect({ provider }: { provider?: string }) {
           handleSubmit={handleSubmit}
           error={error}
           providerName={providerName}
-          isButtonDisabled={isUpdatingOauthConnect || isConnectionsLoading || successConnect}
+          isButtonDisabled={
+            isUpdatingOauthConnect || isConnectionsLoading || successConnect
+          }
         />
       </OAuthWindow>
     </>

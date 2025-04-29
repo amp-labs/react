@@ -1,5 +1,5 @@
-import { ErrorBoundary } from 'context/ErrorContextProvider';
-import { SelectMappingFields } from 'src/components/Configure/types';
+import { ErrorBoundary } from "context/ErrorContextProvider";
+import { SelectMappingFields } from "src/components/Configure/types";
 
 interface DuplicateFieldErrorProps {
   selectedFieldMappings: SelectMappingFields | null | undefined;
@@ -24,7 +24,7 @@ export function checkDuplicateFieldError({
 
   if (hasDuplicate) {
     console.error(
-      'Each field must be mapped to a unique value',
+      "Each field must be mapped to a unique value",
       selectedFieldMappings,
     );
 

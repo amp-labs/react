@@ -1,13 +1,11 @@
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
-import { Button } from 'src/components/ui-base/Button';
-import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
-import { ErrorBoundary, useErrorState } from 'src/context/ErrorContextProvider';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "src/components/ui-base/Button";
+import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
+import { ErrorBoundary, useErrorState } from "src/context/ErrorContextProvider";
 
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
-import { setValueMapping } from './setValueMapping';
+import { setValueMapping } from "./setValueMapping";
 
 interface MappedValue {
   mappedValue: string;
@@ -34,12 +32,12 @@ export function ValueMappingItem({
   allValueOptions,
   hasError,
 }: ValueMappingItemProps) {
-  const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
+  const { configureState, selectedObjectName, setConfigureState } =
+    useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
 
-  const {
-    getError, setError, resetBoundary, isError, removeError,
-  } = useErrorState();
+  const { getError, setError, resetBoundary, isError, removeError } =
+    useErrorState();
 
   const selectedValueMappingForField = useMemo(
     () => configureState?.read?.selectedValueMappings?.[fieldName] || {},
@@ -62,11 +60,12 @@ export function ValueMappingItem({
   ]);
 
   const items = useMemo(
-    () => allValueOptions.map((f) => ({
-      id: f.value,
-      label: f.displayValue,
-      value: f.value,
-    })),
+    () =>
+      allValueOptions.map((f) => ({
+        id: f.value,
+        label: f.displayValue,
+        value: f.value,
+      })),
     [allValueOptions],
   );
 
@@ -86,7 +85,8 @@ export function ValueMappingItem({
           ...Object.entries(selectedValueMappingForField)
             .filter(
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              ([_, mapping]) => mapping === item.value && mapping !== fieldValue,
+              ([_, mapping]) =>
+                mapping === item.value && mapping !== fieldValue,
             )
             .map(([key]) => key),
           mappedValue.mappedValue,
@@ -133,9 +133,9 @@ export function ValueMappingItem({
         onSelectedItemChange={onValueChange}
         placeholder="Please select one"
         style={{
-          border: hasError ? '2px solid red' : undefined,
-          borderRadius: '8px',
-          width: '100%',
+          border: hasError ? "2px solid red" : undefined,
+          borderRadius: "8px",
+          width: "100%",
         }}
       />
     ),
@@ -144,37 +144,52 @@ export function ValueMappingItem({
 
   const onClear = useCallback(() => {
     if (selectedObjectName) {
-      setValueMapping(selectedObjectName, setConfigureState, mappedValue.mappedValue, '', fieldName);
+      setValueMapping(
+        selectedObjectName,
+        setConfigureState,
+        mappedValue.mappedValue,
+        "",
+        fieldName,
+      );
 
       if (isError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
         removeError(ErrorBoundary.VALUE_MAPPING, fieldName);
       }
     }
-  }, [selectedObjectName, setConfigureState, mappedValue.mappedValue, fieldName, isError, removeError]);
+  }, [
+    selectedObjectName,
+    setConfigureState,
+    mappedValue.mappedValue,
+    fieldName,
+    isError,
+    removeError,
+  ]);
   return (
     <div
       key={mappedValue.mappedValue}
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        marginBottom: '.25rem',
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: ".25rem",
       }}
     >
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '.25rem',
-          marginBottom: '.25rem',
+          display: "flex",
+          flexDirection: "row",
+          gap: ".25rem",
+          marginBottom: ".25rem",
         }}
       >
         <span style={{ fontWeight: 500 }}>
           {mappedValue.mappedDisplayValue}
         </span>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
+      <div style={{ display: "flex", flexDirection: "row", gap: ".25rem" }}>
         {SelectComponent}
-        <Button type="button" variant="ghost" onClick={onClear}>Clear</Button>
+        <Button type="button" variant="ghost" onClick={onClear}>
+          Clear
+        </Button>
       </div>
     </div>
   );

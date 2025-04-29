@@ -5,23 +5,21 @@ import {
   Installation,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from 'services/api';
-import { handleServerError } from 'src/utils/handleServerError';
+} from "services/api";
+import { handleServerError } from "src/utils/handleServerError";
 
-import { ConfigureState } from '../../types';
-import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
+import { ConfigureState } from "../../types";
+import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 
-import {
-  generateConfigWriteObjects,
-} from './generateConfigWriteObjects';
+import { generateConfigWriteObjects } from "./generateConfigWriteObjects";
 
 /**
-   * given a configureState generate the config object that is need for
-   * update installation request.
-   *
-   * @param configureState
-   * @returns
-   */
+ * given a configureState generate the config object that is need for
+ * update installation request.
+ *
+ * @param configureState
+ * @returns
+ */
 const generateUpdateWriteConfigFromConfigureState = (
   configureState: ConfigureState,
   hydratedRevision: HydratedRevision,
@@ -60,10 +58,15 @@ export const onSaveWriteUpdateInstallation = (
 ): Promise<void | null> => {
   // get configuration state
   // transform configuration state to update shape
-  const updateConfig = generateUpdateWriteConfigFromConfigureState(configureState, hydratedRevision);
+  const updateConfig = generateUpdateWriteConfigFromConfigureState(
+    configureState,
+    hydratedRevision,
+  );
 
   if (!updateConfig) {
-    console.error('Error when generating write updateConfig from configureState');
+    console.error(
+      "Error when generating write updateConfig from configureState",
+    );
     return Promise.resolve(null);
   }
 
@@ -74,7 +77,7 @@ export const onSaveWriteUpdateInstallation = (
     installationUpdate: {
       // update mask will recurse to the object path and replace the object at the object path
       // this example will replace the object at the object (i.e. accounts)
-      updateMask: ['config.content.write.objects'],
+      updateMask: ["config.content.write.objects"],
       installation: {
         config: updateConfig,
       },
@@ -82,16 +85,19 @@ export const onSaveWriteUpdateInstallation = (
   };
 
   // call api.updateInstallation
-  return api().installationApi.updateInstallation(updateInstallationRequest, {
-    headers: {
-      'X-Api-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  }).then((installation) => {
-    // update local installation state
-    setInstallation(installation);
-    onUpdateSuccess?.(installation.id, installation.config);
-  }).catch((err) => {
-    handleServerError(err, setError);
-  });
+  return api()
+    .installationApi.updateInstallation(updateInstallationRequest, {
+      headers: {
+        "X-Api-Key": apiKey,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((installation) => {
+      // update local installation state
+      setInstallation(installation);
+      onUpdateSuccess?.(installation.id, installation.config);
+    })
+    .catch((err) => {
+      handleServerError(err, setError);
+    });
 };

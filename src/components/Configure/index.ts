@@ -1,1 +1,1 @@
-export { InstallIntegration } from './InstallIntegration';
+export { InstallIntegration } from "./InstallIntegration";

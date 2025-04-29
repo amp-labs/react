@@ -1,10 +1,7 @@
-import {
-  useCallback,
-  useEffect, useMemo, useRef, useState,
-} from 'react';
-import { useCombobox } from 'downshift';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCombobox } from "downshift";
 
-import styles from './combobox.module.css'; // CSS Modules
+import styles from "./combobox.module.css"; // CSS Modules
 
 // Define the type for the option items
 interface Option {
@@ -21,7 +18,7 @@ interface ComboBoxProps {
   placeholder: string;
   disabled?: boolean;
   style?: React.CSSProperties;
-  menuPosition?: 'top' | 'bottom';
+  menuPosition?: "top" | "bottom";
 }
 
 function getOptionsFilter(inputValue: string) {
@@ -29,9 +26,9 @@ function getOptionsFilter(inputValue: string) {
 
   return function optionsFilter(option: Option) {
     return (
-      !inputValue
-      || option.label.toLowerCase().includes(lowerCasedInputValue)
-      || option.value.toLowerCase().includes(lowerCasedInputValue)
+      !inputValue ||
+      option.label.toLowerCase().includes(lowerCasedInputValue) ||
+      option.value.toLowerCase().includes(lowerCasedInputValue)
     );
   };
 }
@@ -44,7 +41,7 @@ export function ComboBox({
   placeholder,
   disabled,
   style,
-  menuPosition = 'bottom',
+  menuPosition = "bottom",
 }: ComboBoxProps) {
   const [filteredItems, setFilteredItems] = useState<Option[]>(items);
   const inputRef = useRef<HTMLInputElement | null>(null); // Ref to the input element
@@ -53,14 +50,17 @@ export function ComboBox({
   useEffect(() => setFilteredItems(items), [items]);
 
   // updates menu items when user types in the input
-  const onInputValueChange = useCallback((_inputValue: string) => {
-    if (_inputValue?.length > 0) {
-      setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
-    } else {
-      // reset the filtered items to the full list when the input is empty
-      setFilteredItems(items);
-    }
-  }, [items]);
+  const onInputValueChange = useCallback(
+    (_inputValue: string) => {
+      if (_inputValue?.length > 0) {
+        setFilteredItems(items.filter(getOptionsFilter(_inputValue)));
+      } else {
+        // reset the filtered items to the full list when the input is empty
+        setFilteredItems(items);
+      }
+    },
+    [items],
+  );
 
   const {
     isOpen,
@@ -74,9 +74,12 @@ export function ComboBox({
     selectedItem,
   } = useCombobox<Option>({
     items: filteredItems,
-    selectedItem: selectedValue ? items.find((item) => item.value === selectedValue) : null,
-    itemToString: (item) => item?.label || '',
-    onInputValueChange: ({ inputValue: _inputValue }) => onInputValueChange(_inputValue),
+    selectedItem: selectedValue
+      ? items.find((item) => item.value === selectedValue)
+      : null,
+    itemToString: (item) => item?.label || "",
+    onInputValueChange: ({ inputValue: _inputValue }) =>
+      onInputValueChange(_inputValue),
     onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
       _onSelectedItemChange(newSelectedItem); // Call the parent's onSelectedItemChange
 
@@ -87,7 +90,7 @@ export function ComboBox({
   });
 
   const resetInput = () => {
-    setInputValue('');
+    setInputValue("");
     setFilteredItems(items);
   };
 
@@ -101,25 +104,33 @@ export function ComboBox({
 
   // reset the input value when the input is blurred
   const handleBlur = () => {
-    if (selectedValue && selectedValueLabel && selectedValue !== selectedItem?.value) {
-      setInputValue(selectedValueLabel || '');
+    if (
+      selectedValue &&
+      selectedValueLabel &&
+      selectedValue !== selectedItem?.value
+    ) {
+      setInputValue(selectedValueLabel || "");
     }
   };
 
   return (
-    <div style={{ position: 'relative', ...style }}>
+    <div style={{ position: "relative", ...style }}>
       <div className={styles.comboboxContainer}>
         {/* input  */}
         <div className={styles.inputContainer}>
           <input
-            style={{ border: 'none' }}
+            style={{ border: "none" }}
             disabled={disabled}
             placeholder={placeholder}
             className={styles.input}
-            {...getInputProps({ onFocus: handleFocus, onBlur: handleBlur, ref: inputRef })}
+            {...getInputProps({
+              onFocus: handleFocus,
+              onBlur: handleBlur,
+              ref: inputRef,
+            })}
           />
           <button
-            style={{ border: 'none' }}
+            style={{ border: "none" }}
             disabled={disabled}
             aria-label="toggle menu"
             className={styles.toggleButton}
@@ -132,17 +143,17 @@ export function ComboBox({
       </div>
       {/* menu */}
       <ul
-        className={`${styles.menu} ${isOpen && items.length ? '' : styles.hidden} ${
-          menuPosition === 'top' ? styles.menuTop : styles.menuBottom
+        className={`${styles.menu} ${isOpen && items.length ? "" : styles.hidden} ${
+          menuPosition === "top" ? styles.menuTop : styles.menuBottom
         }`}
         {...getMenuProps()}
       >
-        {isOpen
-          && filteredItems.map((item, index) => (
+        {isOpen &&
+          filteredItems.map((item, index) => (
             <li
               className={`${styles.menuItem} ${
-                highlightedIndex === index ? styles.highlighted : ''
-              } ${selectedValue === item?.value ? styles.selected : ''}`}
+                highlightedIndex === index ? styles.highlighted : ""
+              } ${selectedValue === item?.value ? styles.selected : ""}`}
               key={item.id}
               {...getItemProps({ item, index })}
             >

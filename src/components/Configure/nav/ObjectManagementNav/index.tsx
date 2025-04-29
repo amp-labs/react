@@ -1,4 +1,4 @@
-import { ObjectManagementNavV2 } from './v2';
+import { ObjectManagementNavV2 } from "./v2";
 
 type ObjectManagementNavProps = {
   children?: React.ReactNode;

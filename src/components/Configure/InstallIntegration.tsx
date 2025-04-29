@@ -1,21 +1,23 @@
-import { ConnectionsProvider } from 'context/ConnectionsContextProvider';
-import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
-import { InstallIntegrationProvider } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
-import { Config } from 'services/api';
-import { useIntegrationList } from 'src/context/IntegrationListContextProvider';
-import { useForceUpdate } from 'src/hooks/useForceUpdate';
+import { ConnectionsProvider } from "context/ConnectionsContextProvider";
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { useProject } from "context/ProjectContextProvider";
+import { Config } from "services/api";
+import { useIntegrationList } from "src/context/IntegrationListContextProvider";
+import { useForceUpdate } from "src/hooks/useForceUpdate";
 
-import { ComponentContainerError, ComponentContainerLoading } from './ComponentContainer';
-import { InstallationContent } from './content/InstallationContent';
-import { ConditionalHasConfigurationLayout } from
-  './layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout';
-import { ProtectedConnectionLayout } from './layout/ProtectedConnectionLayout';
-import { ObjectManagementNav } from './nav/ObjectManagementNav';
-import { ConfigurationProvider } from './state/ConfigurationStateProvider';
-import { HydratedRevisionProvider } from './state/HydratedRevisionContext';
+import {
+  ComponentContainerError,
+  ComponentContainerLoading,
+} from "./ComponentContainer";
+import { InstallationContent } from "./content/InstallationContent";
+import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
+import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
+import { ObjectManagementNav } from "./nav/ObjectManagementNav";
+import { ConfigurationProvider } from "./state/ConfigurationStateProvider";
+import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
 
-import resetStyles from 'src/styles/resetCss.module.css';
+import resetStyles from "src/styles/resetCss.module.css";
 
 export interface MappedValue {
   mappedValue: string;
@@ -50,46 +52,51 @@ export type FieldMappingEntry = {
  * A map of object names to FieldMappingEntry arrays, with each FieldMappingEntry representing a field.
  */
 export type FieldMapping = {
-  [key: string]: Array<FieldMappingEntry>
+  [key: string]: Array<FieldMappingEntry>;
 };
 
 interface InstallIntegrationProps {
   /**
    * The name of the integration from amp.yaml
    */
-  integration: string,
+  integration: string;
   /**
    *  The ID that your app uses to identify this end user.
    */
-  consumerRef: string,
+  consumerRef: string;
   /**
    *  The display name that your app uses for this end user.
    */
-  consumerName?: string,
+  consumerName?: string;
   /**
    *  The ID that your app uses to identify the user's company, org, or team.
    */
-  groupRef: string,
+  groupRef: string;
   /**
    *  The display name that your app uses for this company, org or team.
    */
-  groupName?: string,
+  groupName?: string;
   /**
    * Dynamic field mappings that need to be filled out by a consumer.
    * @experimental
    */
-  fieldMapping?: FieldMapping,
-  onInstallSuccess?: (installationId: string, config: Config) => void,
-  onUpdateSuccess?: (installationId: string, config: Config) => void,
-  onUninstallSuccess?: (installationId: string) => void,
+  fieldMapping?: FieldMapping;
+  onInstallSuccess?: (installationId: string, config: Config) => void;
+  onUpdateSuccess?: (installationId: string, config: Config) => void;
+  onUninstallSuccess?: (installationId: string) => void;
 }
 
-export function InstallIntegration(
-  {
-    integration, consumerRef, consumerName, groupRef, groupName, onInstallSuccess, onUpdateSuccess,
-    onUninstallSuccess, fieldMapping,
-  }: InstallIntegrationProps,
-) {
+export function InstallIntegration({
+  integration,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  onInstallSuccess,
+  onUpdateSuccess,
+  onUninstallSuccess,
+  fieldMapping,
+}: InstallIntegrationProps) {
   const { projectIdOrName, isLoading: isProjectLoading } = useProject();
   const { isLoading: isIntegrationListLoading } = useIntegrationList();
   const { isError, errorState } = useErrorState();
@@ -99,8 +106,13 @@ export function InstallIntegration(
     return <ComponentContainerLoading />;
   }
 
-  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) { // set in ProjectContextProvider (AmpersandProvider)
-    return <ComponentContainerError message={`Error loading project ${projectIdOrName}`} />;
+  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
+    // set in ProjectContextProvider (AmpersandProvider)
+    return (
+      <ComponentContainerError
+        message={`Error loading project ${projectIdOrName}`}
+      />
+    );
   }
 
   // set in IntegrationListContextProvider (AmpersandProvider)

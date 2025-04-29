@@ -1,7 +1,7 @@
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon, DividerHorizontalIcon } from '@radix-ui/react-icons';
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { CheckIcon, DividerHorizontalIcon } from "@radix-ui/react-icons";
 
-import styles from './checkbox.module.css'; // CSS module for styling
+import styles from "./checkbox.module.css"; // CSS module for styling
 
 type CheckboxFieldProps = {
   id: string;
@@ -11,7 +11,10 @@ type CheckboxFieldProps = {
 };
 
 export function CheckboxField({
-  id, isChecked, label, onCheckedChange,
+  id,
+  isChecked,
+  label,
+  onCheckedChange,
 }: CheckboxFieldProps) {
   return (
     <div className={styles.fieldContainer}>
@@ -25,7 +28,9 @@ export function CheckboxField({
           <CheckIcon />
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <label htmlFor={id} style={{ overflowWrap: 'anywhere' }}>{label}</label>
+      <label htmlFor={id} style={{ overflowWrap: "anywhere" }}>
+        {label}
+      </label>
     </div>
   );
 }
@@ -39,7 +44,11 @@ type SelectAllCheckboxProps = {
 };
 
 export function SelectAllCheckbox({
-  id, isChecked, label, onCheckedChange, isIndeterminate,
+  id,
+  isChecked,
+  label,
+  onCheckedChange,
+  isIndeterminate,
 }: SelectAllCheckboxProps) {
   return (
     <div className={styles.selectAllContainer}>
@@ -72,7 +81,11 @@ export function CheckboxGroup({ children }: { children: React.ReactNode }) {
  * @param param0
  * @returns
  */
-export function CheckboxFieldsContainer({ children }: { children: React.ReactNode }) {
+export function CheckboxFieldsContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <div className={styles.stack}>{children}</div>;
 }
 

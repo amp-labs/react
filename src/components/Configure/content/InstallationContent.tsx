@@ -1,11 +1,9 @@
-import {
-  useInstallIntegrationProps,
-} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 
-import { ErrorTextBox } from '../../ErrorTextBox/ErrorTextBox';
+import { ErrorTextBox } from "../../ErrorTextBox/ErrorTextBox";
 
-import { CreateInstallation } from './CreateInstallation';
-import { UpdateInstallation } from './UpdateInstallation';
+import { CreateInstallation } from "./CreateInstallation";
+import { UpdateInstallation } from "./UpdateInstallation";
 
 export function InstallationContent() {
   const { integrationObj, installation } = useInstallIntegrationProps();

@@ -1,4 +1,4 @@
-import { ProviderInfo } from '@generated/api/src';
+import { ProviderInfo } from "@generated/api/src";
 
 export type BasicCreds = {
   user: string;

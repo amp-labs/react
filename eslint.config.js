@@ -8,6 +8,7 @@ const pluginSimpleImportSort = require('eslint-plugin-simple-import-sort');
 const pluginReactRefresh = require('eslint-plugin-react-refresh');
 const pluginTs = require('@typescript-eslint/eslint-plugin');
 const parserTs = require('@typescript-eslint/parser');
+const pluginPrettier = require('eslint-plugin-prettier');
 
 module.exports = [
   js.configs.recommended,
@@ -38,6 +39,7 @@ module.exports = [
       'jsx-a11y': pluginJsxA11y,
       'simple-import-sort': pluginSimpleImportSort,
       'react-refresh': pluginReactRefresh,
+      prettier: pluginPrettier,
     },
     settings: {
       react: {
@@ -45,10 +47,14 @@ module.exports = [
       },
     },
     rules: {
+      'prettier/prettier': 'warn', // <- actually runs Prettier as a rule
       ...pluginTs.configs.recommended.rules,
       ...pluginReact.configs.recommended.rules,
       ...pluginJsxA11y.configs.recommended.rules,
       ...pluginReactHooks.configs.recommended.rules,
+
+
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
 
       // Your custom rules
       'simple-import-sort/imports': 'error',

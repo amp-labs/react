@@ -1,4 +1,4 @@
-import { Integration, ProviderInfo } from '../services/api';
+import { Integration, ProviderInfo } from "../services/api";
 
 /**
  * Get the value of an environment variable or return a default value safely
@@ -7,7 +7,10 @@ import { Integration, ProviderInfo } from '../services/api';
  * @param defaultValue
  * @returns
  */
-export function getEnvVariable(varName: string, defaultValue?: string | boolean | undefined) {
+export function getEnvVariable(
+  varName: string,
+  defaultValue?: string | boolean | undefined,
+) {
   try {
     return process.env[varName];
   } catch {
@@ -30,7 +33,7 @@ export function getProviderName(provider: string, providerInfo: ProviderInfo) {
  */
 export const convertTextareaToArray = (inputValue: string) => {
   // Split the input into an array of strings using newline as the separator
-  const newArray = inputValue.split('\n').filter((str) => str.trim() !== '');
+  const newArray = inputValue.split("\n").filter((str) => str.trim() !== "");
   return newArray;
 };
 
@@ -44,16 +47,17 @@ export const convertTextareaToArray = (inputValue: string) => {
 export const findIntegrationFromList = (
   integrationName: string,
   integrations: Integration[],
-) : Integration | null => {
+): Integration | null => {
   if (integrations?.length === 0 || !integrationName) return null;
 
-  return integrations.find(
-    (s: Integration) => s.name === integrationName,
-  ) ?? null;
+  return (
+    integrations.find((s: Integration) => s.name === integrationName) ?? null
+  );
 };
 
 /**
  * Escapes ., /, \ and : in object names.
  * This is used to escape object names that have special characters for the update mask.
  */
-export const escapeObjectName = (objectName: string) => objectName.replace(/[.:/\\]/g, '\\$&');
+export const escapeObjectName = (objectName: string) =>
+  objectName.replace(/[.:/\\]/g, "\\$&");

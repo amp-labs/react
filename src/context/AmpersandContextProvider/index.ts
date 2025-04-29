@@ -1,1 +1,1 @@
-export * from './AmpersandContextProvider';
+export * from "./AmpersandContextProvider";

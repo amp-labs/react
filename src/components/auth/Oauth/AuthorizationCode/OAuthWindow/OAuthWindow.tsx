@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   useOpenWindowHandler,
   useReceiveMessageEventHandler,
-} from './windowHelpers';
+} from "./windowHelpers";
 
 type OAuthWindowProps = {
   children: React.ReactNode;
@@ -21,7 +21,13 @@ type OAuthWindowProps = {
  * @returns
  */
 export function OAuthWindow({
-  children, oauthUrl, windowTitle = 'Connect to Provider', onError, error, onSuccessConnect, isSuccessConnect,
+  children,
+  oauthUrl,
+  windowTitle = "Connect to Provider",
+  onError,
+  error,
+  onSuccessConnect,
+  isSuccessConnect,
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
@@ -32,16 +38,34 @@ export function OAuthWindow({
     onError,
     onSuccessConnect,
   );
-  const openOAuthWindow = useOpenWindowHandler(windowTitle, setOauthWindow, receiveMessage, oauthUrl);
+  const openOAuthWindow = useOpenWindowHandler(
+    windowTitle,
+    setOauthWindow,
+    receiveMessage,
+    oauthUrl,
+  );
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
     // if the oauthUrl is not null, the oauthWindow is not open,
     // the connection not successfully created, and the error is not set, open the OAuth window
-    if (oauthUrl && !oauthWindow && !connectionId && !error && !isSuccessConnect) {
+    if (
+      oauthUrl &&
+      !oauthWindow &&
+      !connectionId &&
+      !error &&
+      !isSuccessConnect
+    ) {
       openOAuthWindow(); // creates new window and adds event listener
     }
-  }, [oauthUrl, oauthWindow, openOAuthWindow, connectionId, error, isSuccessConnect]);
+  }, [
+    oauthUrl,
+    oauthWindow,
+    openOAuthWindow,
+    connectionId,
+    error,
+    isSuccessConnect,
+  ]);
 
   useEffect(() => {
     if (!oauthWindow) return;
@@ -49,12 +73,12 @@ export function OAuthWindow({
     const interval = setInterval(() => {
       if (oauthWindow.closed) {
         clearInterval(interval);
-        window.removeEventListener('message', receiveMessage);
+        window.removeEventListener("message", receiveMessage);
         setOauthWindow(null);
 
         if (!connectionId && !error) {
-          console.error('OAuth failed. Please try again.');
-          onError?.('Authentication was cancelled. Please try again.');
+          console.error("OAuth failed. Please try again.");
+          onError?.("Authentication was cancelled. Please try again.");
         } else if (connectionId) {
           onError?.(null);
         }
@@ -62,10 +86,10 @@ export function OAuthWindow({
     }, 500);
 
     // Cleanup interval and listener when component unmounts or oauthWindow changes
-     
+
     return () => {
       clearInterval(interval);
-      window.removeEventListener('message', receiveMessage);
+      window.removeEventListener("message", receiveMessage);
     };
   }, [oauthWindow, connectionId, error, receiveMessage, onError]);
 
