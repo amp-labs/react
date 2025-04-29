@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { FormComponent } from 'src/components/form';
 import { Button } from 'src/components/ui-base/Button';

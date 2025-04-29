@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import {
   Configuration, ConnectionApi, InstallationApi, IntegrationApi,

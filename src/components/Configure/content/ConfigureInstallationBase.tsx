@@ -1,12 +1,12 @@
 import { FormEventHandler } from 'react';
-
-import { FormErrorBox } from 'components/FormErrorBox';
-import { LoadingCentered } from 'components/Loading';
-import { Box } from 'components/ui-base/Box/Box';
 import {
   useInstallIntegrationProps,
 } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { Button } from 'src/components/ui-base/Button';
+
+import { FormErrorBox } from 'components/FormErrorBox';
+import { LoadingCentered } from 'components/Loading';
+import { Box } from 'components/ui-base/Box/Box';
 
 import { MANAGE_TAB_CONST, WRITE_CONST } from '../nav/ObjectManagementNav/constant';
 import { useHydratedRevision } from '../state/HydratedRevisionContext';

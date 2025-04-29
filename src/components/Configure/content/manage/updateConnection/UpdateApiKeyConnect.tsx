@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { ApiKeyAuthForm } from 'src/components/auth/ApiKeyAuth/ApiKeyAuthContent';
 import { IFormType } from 'src/components/auth/ApiKeyAuth/LandingContentProps';
 import { FormErrorBox } from 'src/components/FormErrorBox';

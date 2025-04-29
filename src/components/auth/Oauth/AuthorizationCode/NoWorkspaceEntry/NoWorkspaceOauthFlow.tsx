@@ -4,8 +4,6 @@
 
 import { useCallback, useState } from 'react';
 
-import { useProject } from 'context/ProjectContextProvider';
-
 import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
 import { useOAuthPopupURL } from '../useOAuthPopupURL';
 

@@ -1,5 +1,6 @@
-import { Tag } from 'components/ui-base/Tag';
 import { useProject } from 'context/ProjectContextProvider';
+
+import { Tag } from 'components/ui-base/Tag';
 
 import { isIntegrationFieldMapping } from '../../utils';
 import { useSelectedConfigureState } from '../useSelectedConfigureState';
@@ -7,7 +8,7 @@ import { useSelectedConfigureState } from '../useSelectedConfigureState';
 import { FieldHeader } from './FieldHeader';
 
 export function RequiredFields() {
-  const { configureState, selectedObjectName } = useSelectedConfigureState();
+  const { configureState } = useSelectedConfigureState();
   const { appName } = useProject();
 
   return (

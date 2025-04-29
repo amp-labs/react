@@ -1,6 +1,5 @@
 import { OauthConnectRequest } from '@generated/api/src/models';
 import { useQuery } from '@tanstack/react-query';
-
 import { OauthConnectOperationRequest, useAPI } from 'services/api';
 
 export const useOauthConnectQuery = (request: OauthConnectRequest) => {

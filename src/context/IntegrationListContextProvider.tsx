@@ -2,7 +2,6 @@ import {
   createContext, useContext, useEffect,
   useMemo,
 } from 'react';
-
 import { useListIntegrationsQuery } from 'hooks/query/useIntegrationListQuery';
 import { Integration } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';

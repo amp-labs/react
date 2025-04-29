@@ -19,7 +19,7 @@ function setOptionalFieldProducer(
     const updatedFields = draftSelectedOptionalFields;
     const isModified = !isFieldObjectEqual(savedFields, updatedFields);
     // immer exception if we try to set a value
-    // eslint-disable-next-line no-param-reassign
+     
     draft.read.isOptionalFieldsModified = isModified;
   } else {
     console.warn('read.savedConfig.optionalFields is undefined');

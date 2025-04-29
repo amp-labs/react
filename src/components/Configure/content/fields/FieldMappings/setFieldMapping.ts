@@ -28,7 +28,7 @@ function setFieldMappingProducer(
     const updatedFields = draftRequiredMapFields;
     const isModified = !isFieldObjectEqual(savedFields, updatedFields);
     // immer exception if we try to set a value
-    // eslint-disable-next-line no-param-reassign
+     
     draft.read.isRequiredMapFieldsModified = isModified;
   }
 }

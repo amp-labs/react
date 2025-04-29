@@ -4,9 +4,9 @@
 
 import { useCallback, useState } from 'react';
 import { Connection, GenerateConnectionOperationRequest } from '@generated/api/src';
+import { useProject } from 'context/ProjectContextProvider';
 
 import { LoadingCentered } from 'components/Loading';
-import { useProject } from 'context/ProjectContextProvider';
 
 import { useCreateConnectionMutation } from '../../useCreateConnectionMutation';
 

@@ -3,7 +3,6 @@ import {
   useContext, useEffect, useMemo,
 } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { useListInstallationsQuery } from 'hooks/query/useListInstallationsQuery';
 import {
   Config, Installation, Integration,

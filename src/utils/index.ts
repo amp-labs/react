@@ -10,7 +10,7 @@ import { Integration, ProviderInfo } from '../services/api';
 export function getEnvVariable(varName: string, defaultValue?: string | boolean | undefined) {
   try {
     return process.env[varName];
-  } catch (e) {
+  } catch {
     return defaultValue;
   }
 }

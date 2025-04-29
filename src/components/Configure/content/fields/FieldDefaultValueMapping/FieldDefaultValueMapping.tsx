@@ -1,5 +1,4 @@
 import { HydratedIntegrationWriteObject } from '@generated/api/src';
-
 import { useHydratedRevision } from 'src/components/Configure/state/HydratedRevisionContext';
 
 import { useSelectedConfigureState } from '../../useSelectedConfigureState';

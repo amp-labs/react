@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { UpdateConnectionSection } from 'src/components/Configure/content/manage/updateConnection/UpdateConnectionSection';
 import { Connection } from 'src/services/api';
 

@@ -3,7 +3,6 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-
 import { useProject } from 'src/context/ProjectContextProvider';
 import { useIntegrationQuery } from 'src/hooks/query/useIntegrationQuery';
 import { useAPI } from 'src/services/api';

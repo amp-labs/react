@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { ProviderInfo } from '@generated/api/src';
-
-import { DocsHelperText } from 'components/Docs/DocsHelperText';
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { FormComponent } from 'src/components/form';
 import { Button } from 'src/components/ui-base/Button';
 import { useProvider } from 'src/hooks/useProvider';
 import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
 import { capitalize } from 'src/utils';
+
+import { DocsHelperText } from 'components/Docs/DocsHelperText';
 
 import { IFormType, LandingContentProps } from './LandingContentProps';
 

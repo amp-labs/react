@@ -1,5 +1,6 @@
-import { SuccessTextBox } from 'components/SuccessTextBox/SuccessTextBox';
 import { useProvider } from 'src/hooks/useProvider';
+
+import { SuccessTextBox } from 'components/SuccessTextBox/SuccessTextBox';
 
 import { UninstallButton } from '../UninstallButton';
 

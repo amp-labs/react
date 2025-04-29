@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-packages */
 // currently not using a bundler to support alias imports
 import { useCallback } from 'react';
 import {
@@ -24,7 +23,6 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from '@generated/api/src';
-
 import { useApiKey } from 'src/context/ApiKeyContextProvider';
 
 import { ApiService } from './ApiService';
@@ -66,7 +64,7 @@ function getApiEndpoint(): string {
         // default prod url will be used.
         return ENV_SERVER ?? prodEndpoint;
     }
-  } catch (e) {
+  } catch {
     return prodEndpoint;
   }
 }
@@ -122,7 +120,7 @@ export function useAPI(): () => Promise<ApiService> {
    * to authenticating to the API in the future which may require async operations */
   const getAPI = useCallback(async () => {
     if (!apiKey) {
-      // eslint-disable-next-line no-console
+       
       console.error('Unable to create API service without API key.');
     }
 

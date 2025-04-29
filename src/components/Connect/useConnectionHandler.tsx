@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useConnections } from 'context/ConnectionsContextProvider';
 import { Connection } from 'src/services/api';
 

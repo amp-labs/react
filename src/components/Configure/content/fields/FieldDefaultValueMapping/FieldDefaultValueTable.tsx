@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-
 import { HydratedIntegrationRead } from 'services/api';
 import { useHydratedRevision } from 'src/components/Configure/state/HydratedRevisionContext';
 import { getObjectFromAction } from 'src/components/Configure/utils';

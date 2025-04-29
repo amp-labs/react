@@ -1,5 +1,4 @@
 import * as Tabs from '@radix-ui/react-tabs';
-
 import { SettingGearIcon } from 'assets/SettingGearIcon';
 import { Divider } from 'src/components/ui-base/Divider';
 

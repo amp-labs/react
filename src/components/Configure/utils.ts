@@ -1,5 +1,4 @@
 import { IntegrationFieldExistent } from '@generated/api/src';
-
 import { ErrorBoundary } from 'context/ErrorContextProvider';
 import {
   Config,

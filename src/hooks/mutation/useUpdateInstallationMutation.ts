@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { UpdateInstallationOperationRequest, useAPI } from 'services/api';
 import { handleServerError } from 'src/utils/handleServerError';
 

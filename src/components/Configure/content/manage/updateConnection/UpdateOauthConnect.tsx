@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-
 import { AuthErrorAlert } from 'src/components/auth/AuthErrorAlert/AuthErrorAlert';
 import { OAuthWindow } from 'src/components/auth/Oauth/AuthorizationCode/OAuthWindow/OAuthWindow';
 import { FormSuccessBox } from 'src/components/FormSuccessBox';

@@ -1,7 +1,6 @@
 import {
   FormEvent, useCallback, useEffect, useMemo, useState,
 } from 'react';
-
 import { ErrorBoundary } from 'context/ErrorContextProvider';
 import { Installation, Integration } from 'services/api';
 

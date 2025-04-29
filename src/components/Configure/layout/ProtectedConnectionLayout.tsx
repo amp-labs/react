@@ -1,11 +1,5 @@
 import { useCallback, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
-import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
-import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
-import { NoAuthFlow } from 'components/auth/NoAuth/NoAuthFlow';
-import { OauthFlow } from 'components/auth/Oauth/OauthFlow/OauthFlow';
-import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
 import { useConnections } from 'context/ConnectionsContextProvider';
 import {
   useInstallIntegrationProps,
@@ -14,6 +8,12 @@ import { Connection } from 'services/api';
 import { SuccessTextBox } from 'src/components/SuccessTextBox/SuccessTextBox';
 import { Button } from 'src/components/ui-base/Button';
 import { handleServerError } from 'src/utils/handleServerError';
+
+import { ApiKeyAuthFlow } from 'components/auth/ApiKeyAuth/ApiKeyAuthFlow';
+import { BasicAuthFlow } from 'components/auth/BasicAuth/BasicAuthFlow';
+import { NoAuthFlow } from 'components/auth/NoAuth/NoAuthFlow';
+import { OauthFlow } from 'components/auth/Oauth/OauthFlow/OauthFlow';
+import { useConnectionHandler } from 'components/Connect/useConnectionHandler';
 
 import { useProvider } from '../../../hooks/useProvider';
 import { ComponentContainerError, ComponentContainerLoading } from '../ComponentContainer';

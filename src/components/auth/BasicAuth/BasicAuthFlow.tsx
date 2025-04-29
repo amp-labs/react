@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { GenerateConnectionOperationRequest } from '@generated/api/src';
-
 import { useProject } from 'context/ProjectContextProvider';
 
 import { useCreateConnectionMutation } from '../useCreateConnectionMutation';

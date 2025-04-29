@@ -2,15 +2,14 @@ import {
   createContext, useCallback, useContext, useEffect, useMemo,
 } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { useConnectionsListQuery } from 'hooks/query/useConnectionsListQuery';
 import { useIntegrationQuery } from 'hooks/query/useIntegrationQuery';
 import { Connection } from 'services/api';
 import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
 import { handleServerError } from 'src/utils/handleServerError';
 
-import { useInstallIntegrationProps } from './InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { ErrorBoundary, useErrorState } from './ErrorContextProvider';
+import { useInstallIntegrationProps } from './InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from './ProjectContextProvider';
 
 interface ConnectionsContextValue {

@@ -1,15 +1,15 @@
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
-
-import { Box } from 'components/ui-base/Box/Box';
-import { Container } from 'components/ui-base/Container/Container';
 import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
 import { useProject } from 'context/ProjectContextProvider';
 import { VerticalTabs } from 'src/components/Configure/nav/ObjectManagementNav/v2/Tabs';
 import { NavObject } from 'src/components/Configure/types';
 import { useProvider } from 'src/hooks/useProvider';
 import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
+
+import { Box } from 'components/ui-base/Box/Box';
+import { Container } from 'components/ui-base/Container/Container';
 
 import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
 import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
