@@ -1,20 +1,19 @@
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
-} from 'services/api';
-import { Button } from 'src/components/ui-base/Button';
-import { ComboBox } from 'src/components/ui-base/ComboBox/ComboBox';
-import { LabelTooltip } from 'src/components/ui-base/Tooltip';
-import { ErrorBoundary, useErrorState } from 'src/context/ErrorContextProvider';
+} from "services/api";
+import { Button } from "src/components/ui-base/Button";
+import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
+import { LabelTooltip } from "src/components/ui-base/Tooltip";
+import { ErrorBoundary, useErrorState } from "src/context/ErrorContextProvider";
 
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
-import { setFieldMapping } from './setFieldMapping';
+import { setFieldMapping } from "./setFieldMapping";
 
-export const DUPLICATE_FIELD_ERROR_MESSAGE = 'Each field must be mapped to a unique value';
+export const DUPLICATE_FIELD_ERROR_MESSAGE =
+  "Each field must be mapped to a unique value";
 
 interface FieldMappingRowProps {
   field: IntegrationFieldMapping;
@@ -27,7 +26,8 @@ export function FieldMappingRow({
   onSelectChange,
   allFields,
 }: FieldMappingRowProps) {
-  const { configureState, selectedObjectName, setConfigureState } = useSelectedConfigureState();
+  const { configureState, selectedObjectName, setConfigureState } =
+    useSelectedConfigureState();
   const [disabled, setDisabled] = useState(true);
   const { isError, removeError, getError } = useErrorState();
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
@@ -35,7 +35,12 @@ export function FieldMappingRow({
 
   useEffect(() => {
     /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    if (!!field._default && !fieldValue && selectedObjectName && !!configureState) {
+    if (
+      !!field._default &&
+      !fieldValue &&
+      selectedObjectName &&
+      !!configureState
+    ) {
       // set field mapping default value if no value exists
       setFieldMapping(selectedObjectName, setConfigureState, [
         {
@@ -54,11 +59,12 @@ export function FieldMappingRow({
   ]);
 
   const items = useMemo(
-    () => allFields.map((f) => ({
-      id: f.fieldName,
-      label: f.displayName,
-      value: f.fieldName,
-    })),
+    () =>
+      allFields.map((f) => ({
+        id: f.fieldName,
+        label: f.displayName,
+        value: f.fieldName,
+      })),
     [allFields],
   );
 
@@ -76,7 +82,7 @@ export function FieldMappingRow({
         } as unknown as React.ChangeEvent<HTMLSelectElement>);
       }}
       placeholder="Please select one"
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
     />
   );
 
@@ -106,10 +112,11 @@ export function FieldMappingRow({
   // in this array, it means that field has a duplicate mapping error.
   const { hasDuplicationError, errorMessage } = useMemo(() => {
     const errs = getError(ErrorBoundary.MAPPING, selectedObjectName!);
-    const hasDupErrors = Array.isArray(errs) && errs.length > 0 && errs.includes(field.mapToName);
+    const hasDupErrors =
+      Array.isArray(errs) && errs.length > 0 && errs.includes(field.mapToName);
     return {
       hasDuplicationError: hasDupErrors,
-      errorMessage: hasDupErrors ? DUPLICATE_FIELD_ERROR_MESSAGE : '',
+      errorMessage: hasDupErrors ? DUPLICATE_FIELD_ERROR_MESSAGE : "",
     };
   }, [selectedObjectName, getError, field.mapToName]);
 
@@ -117,27 +124,44 @@ export function FieldMappingRow({
     <>
       <div
         key={field.mapToName}
-        style={{ display: 'flex', flexDirection: 'column' }}
+        style={{ display: "flex", flexDirection: "column" }}
       >
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '.25rem',
-          marginBottom: '.25rem',
-        }}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: ".25rem",
+            marginBottom: ".25rem",
+          }}
         >
-          <span style={{ fontWeight: 500 }}>{field.mapToDisplayName ?? field.mapToName}</span>
+          <span style={{ fontWeight: 500 }}>
+            {field.mapToDisplayName ?? field.mapToName}
+          </span>
           <span>
-            {field?.prompt && <LabelTooltip id={`tooltip-id-${field?.prompt}`} tooltipText={field?.prompt} />}
+            {field?.prompt && (
+              <LabelTooltip
+                id={`tooltip-id-${field?.prompt}`}
+                tooltipText={field?.prompt}
+              />
+            )}
           </span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '.25rem' }}>
+        <div style={{ display: "flex", flexDirection: "row", gap: ".25rem" }}>
           {SelectComponent}
-          <Button type="button" variant="ghost" onClick={onClear}>Clear</Button>
+          <Button type="button" variant="ghost" onClick={onClear}>
+            Clear
+          </Button>
         </div>
       </div>
-      {hasDuplicationError
-      && (<span key={field.mapToName} style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}> {errorMessage} </span>)}
+      {hasDuplicationError && (
+        <span
+          key={field.mapToName}
+          style={{ color: "red", fontSize: "14px", marginTop: "4px" }}
+        >
+          {" "}
+          {errorMessage}{" "}
+        </span>
+      )}
     </>
   );
 }

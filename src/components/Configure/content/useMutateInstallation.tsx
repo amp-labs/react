@@ -1,36 +1,45 @@
-import { useCallback } from 'react';
-import { useApiKey } from 'context/ApiKeyContextProvider';
-import { useConnections } from 'context/ConnectionsContextProvider';
-import { ErrorBoundary, useErrorState } from 'context/ErrorContextProvider';
-import {
-  useInstallIntegrationProps,
-} from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
+import { useCallback } from "react";
+import { useApiKey } from "context/ApiKeyContextProvider";
+import { useConnections } from "context/ConnectionsContextProvider";
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { useProject } from "context/ProjectContextProvider";
 
-import { useNextIncompleteTabIndex, useSelectedObjectName } from '../nav/ObjectManagementNav/ObjectManagementNavContext';
-import { useObjectsConfigureState } from '../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../state/HydratedRevisionContext';
-import { getConfigureState } from '../state/utils';
+import {
+  useNextIncompleteTabIndex,
+  useSelectedObjectName,
+} from "../nav/ObjectManagementNav/ObjectManagementNavContext";
+import { useObjectsConfigureState } from "../state/ConfigurationStateProvider";
+import { useHydratedRevision } from "../state/HydratedRevisionContext";
+import { getConfigureState } from "../state/utils";
 
 /**
  * state hook for installation flows (Create/Update)
  * */
 export const useMutateInstallation = () => {
   const {
-    integrationId, groupRef, consumerRef, setInstallation, onInstallSuccess, onUpdateSuccess,
+    integrationId,
+    groupRef,
+    consumerRef,
+    setInstallation,
+    onInstallSuccess,
+    onUpdateSuccess,
   } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
   const { selectedConnection } = useConnections();
   const apiKey = useApiKey();
   const { projectId } = useProject();
+  const { resetBoundary, setErrors, setError, getError } = useErrorState();
   const {
-    resetBoundary, setErrors, setError, getError,
-  } = useErrorState();
-  const {
-    resetConfigureState, objectConfigurationsState, resetPendingConfigurationState,
+    resetConfigureState,
+    objectConfigurationsState,
+    resetPendingConfigurationState,
   } = useObjectsConfigureState();
-  const configureState = getConfigureState(selectedObjectName || '', objectConfigurationsState);
+  const configureState = getConfigureState(
+    selectedObjectName || "",
+    objectConfigurationsState,
+  );
   const { onNextIncompleteTab } = useNextIncompleteTabIndex();
   /**
    * Error handling for installation mutation
@@ -47,23 +56,29 @@ export const useMutateInstallation = () => {
   }, [resetBoundary]);
 
   // returns a function to set the error for a specific object
-  const setMutateInstallationError = useCallback((objectName?: string) => {
-    if (objectName) {
+  const setMutateInstallationError = useCallback(
+    (objectName?: string) => {
+      if (objectName) {
+        return (error: string) => {
+          setError(ErrorBoundary.INSTALLATION_MUTATION, objectName, error);
+        };
+      }
       return (error: string) => {
-        setError(ErrorBoundary.INSTALLATION_MUTATION, objectName, error);
+        console.error(
+          "objectName is required to set installation error: ",
+          error,
+        );
       };
-    }
-    return (error: string) => {
-      console.error('objectName is required to set installation error: ', error);
-    };
-  }, [setError]);
+    },
+    [setError],
+  );
 
   const getMutateInstallationError = useCallback(
     (objectName?: string) => {
       if (objectName) {
         return getError(ErrorBoundary.INSTALLATION_MUTATION, objectName);
       }
-      return '';
+      return "";
     },
     [getError],
   );

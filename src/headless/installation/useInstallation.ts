@@ -1,4 +1,4 @@
-import { useListInstallationsQuery } from 'src/hooks/query';
+import { useListInstallationsQuery } from "src/hooks/query";
 
 export function useInstallation() {
   const installationsQuery = useListInstallationsQuery();

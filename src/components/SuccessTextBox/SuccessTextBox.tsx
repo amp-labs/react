@@ -1,7 +1,7 @@
-import { SuccessCheckmarkIcon } from 'assets/SuccessIcon';
+import { SuccessCheckmarkIcon } from "assets/SuccessIcon";
 
-import { Box } from '../ui-base/Box/Box';
-import { Container } from '../ui-base/Container/Container';
+import { Box } from "../ui-base/Box/Box";
+import { Container } from "../ui-base/Container/Container";
 
 interface ConnectedSuccessBoxProps {
   text: string;
@@ -10,13 +10,14 @@ interface ConnectedSuccessBoxProps {
 export function SuccessTextBox({ text, children }: ConnectedSuccessBoxProps) {
   return (
     <Container>
-      <Box style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '3rem',
-        gap: '3rem',
-      }}
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "3rem",
+          gap: "3rem",
+        }}
       >
         <SuccessCheckmarkIcon />
         <p>{text}</p>

@@ -1,7 +1,7 @@
-import { Draft } from 'immer';
+import { Draft } from "immer";
 
-import { areWriteObjectsEqual } from '../../../state/utils';
-import { ConfigureState } from '../../../types';
+import { areWriteObjectsEqual } from "../../../state/utils";
+import { ConfigureState } from "../../../types";
 
 function setValueDefaultWriteFieldProducer(
   draft: Draft<ConfigureState>,
@@ -10,7 +10,6 @@ function setValueDefaultWriteFieldProducer(
   defaultValue: string | null,
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
-     
     draft.write.selectedWriteObjects = {};
   }
 
@@ -26,14 +25,17 @@ function setValueDefaultWriteFieldProducer(
         draftSelectedWriteFields[objectName].selectedValueDefaults = {};
       }
 
-       
-      draftSelectedWriteFields[objectName].selectedValueDefaults[fieldKey].value = defaultValue;
+      draftSelectedWriteFields[objectName].selectedValueDefaults[
+        fieldKey
+      ].value = defaultValue;
     }
 
     if (!defaultValue) {
       if (draftSelectedWriteFields[objectName]?.selectedValueDefaults) {
         // delete the field key if the default value is null / empty
-        delete draftSelectedWriteFields[objectName].selectedValueDefaults[fieldKey];
+        delete draftSelectedWriteFields[objectName].selectedValueDefaults[
+          fieldKey
+        ];
       }
     }
 
@@ -41,9 +43,12 @@ function setValueDefaultWriteFieldProducer(
     if (draft?.write?.savedConfig?.selectedWriteObjects) {
       const savedWriteObjects = draft.write.savedConfig.selectedWriteObjects;
       const updatedWriteObjects = draftSelectedWriteFields;
-      const isModified = !areWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
+      const isModified = !areWriteObjectsEqual(
+        savedWriteObjects,
+        updatedWriteObjects,
+      );
       // immer syntax to set a value
-       
+
       draft.write.isWriteModified = isModified;
     }
 
@@ -59,13 +64,20 @@ export function setValueDefaultWriteField(
   objectName: string,
   fieldKey: string,
   defaultValue: string | null,
-  setConfigureState: (objectName: string,
-    producer: (draft: Draft<ConfigureState>) => void) => void,
+  setConfigureState: (
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void,
+  ) => void,
 ) {
   setConfigureState(
     selectedObjectName, // "WRITE" object, for write tab
     (draft) => {
-      setValueDefaultWriteFieldProducer(draft, objectName, fieldKey, defaultValue);
+      setValueDefaultWriteFieldProducer(
+        draft,
+        objectName,
+        fieldKey,
+        defaultValue,
+      );
     },
   );
 }

@@ -1,3 +1,3 @@
-import './styles/variables.css';
+import "./styles/variables.css";
 
-export * from './public';
+export * from "./public";

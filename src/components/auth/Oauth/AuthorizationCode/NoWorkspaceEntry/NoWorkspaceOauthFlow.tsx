@@ -2,12 +2,12 @@
  * OAuth flow for any providers that do not require the consumer to enter a workspace first.
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
-import { useOAuthPopupURL } from '../useOAuthPopupURL';
+import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
+import { useOAuthPopupURL } from "../useOAuthPopupURL";
 
-import { NoWorkspaceEntryContent } from './NoWorkspaceEntryContent';
+import { NoWorkspaceEntryContent } from "./NoWorkspaceEntryContent";
 
 interface NoWorkspaceOauthFlowProps {
   provider: string;
@@ -23,13 +23,28 @@ interface NoWorkspaceOauthFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function NoWorkspaceOauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, providerName,
+  provider,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  providerName,
 }: NoWorkspaceOauthFlowProps) {
   const [localError, setError] = useState<string | null>(null);
 
   const {
-    url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
-  } = useOAuthPopupURL(consumerRef, groupRef, provider, undefined, consumerName, groupName);
+    url: oAuthPopupURL,
+    error: oAuthConnectError,
+    isLoading,
+    refetchOauthConnect,
+  } = useOAuthPopupURL(
+    consumerRef,
+    groupRef,
+    provider,
+    undefined,
+    consumerName,
+    groupName,
+  );
 
   const error = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched

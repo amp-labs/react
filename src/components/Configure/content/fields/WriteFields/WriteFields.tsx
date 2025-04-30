@@ -1,6 +1,6 @@
 // import { FieldDefaultValueMapping } from '../FieldDefaultValueMapping/FieldDefaultValueMapping';
 
-import { WriteFieldsV2 } from './WriteFieldsV2';
+import { WriteFieldsV2 } from "./WriteFieldsV2";
 
 /**
  * Bridge component to WriteFieldsV2

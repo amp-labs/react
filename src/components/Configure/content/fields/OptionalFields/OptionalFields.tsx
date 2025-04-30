@@ -1,4 +1,4 @@
-import { OptionalFieldsV2 } from './OptionalFieldsV2';
+import { OptionalFieldsV2 } from "./OptionalFieldsV2";
 
 /**
  * Bridge component to OptionalFieldsV2

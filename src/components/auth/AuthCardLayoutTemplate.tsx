@@ -1,7 +1,10 @@
-import { Button } from 'src/components/ui-base/Button';
-import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+import { Button } from "src/components/ui-base/Button";
+import {
+  AuthCardLayout,
+  AuthTitle,
+} from "src/layout/AuthCardLayout/AuthCardLayout";
 
-import { AuthErrorAlert } from './AuthErrorAlert/AuthErrorAlert';
+import { AuthErrorAlert } from "./AuthErrorAlert/AuthErrorAlert";
 
 type AuthCardLayoutTemplateProps = {
   handleSubmit: (form: any) => void;
@@ -19,10 +22,15 @@ type AuthCardLayoutTemplateProps = {
  * @returns
  */
 export function AuthCardLayoutTemplate({
-  handleSubmit, error, isButtonDisabled, providerName, children, title,
+  handleSubmit,
+  error,
+  isButtonDisabled,
+  providerName,
+  children,
+  title,
 }: AuthCardLayoutTemplateProps) {
   if (!title && !providerName) {
-    throw new Error('Either title or providerName is required');
+    throw new Error("Either title or providerName is required");
   }
 
   return (
@@ -31,7 +39,7 @@ export function AuthCardLayoutTemplate({
       <AuthErrorAlert error={error} />
       {children}
       <Button
-        style={{ marginTop: '1em', width: '100%' }}
+        style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}
         type="submit"
         onClick={handleSubmit}

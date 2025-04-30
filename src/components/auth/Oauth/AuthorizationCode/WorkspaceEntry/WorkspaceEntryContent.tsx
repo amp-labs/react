@@ -1,18 +1,25 @@
-import { AuthCardLayout, AuthTitle } from 'src/layout/AuthCardLayout/AuthCardLayout';
+import {
+  AuthCardLayout,
+  AuthTitle,
+} from "src/layout/AuthCardLayout/AuthCardLayout";
 
-import { AuthErrorAlert } from 'components/auth/AuthErrorAlert/AuthErrorAlert';
-import { FormComponent } from 'components/form';
-import { Button } from 'components/ui-base/Button';
+import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
+import { FormComponent } from "components/form";
+import { Button } from "components/ui-base/Button";
 
-import { WorkspaceEntryProps } from './WorkspaceEntryProps';
+import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
 
 /**
-   *
-   * @param param0
-   * @returns
-   */
+ *
+ * @param param0
+ * @returns
+ */
 export function WorkspaceEntryContent({
-  handleSubmit, setWorkspace, error, isButtonDisabled, providerName,
+  handleSubmit,
+  setWorkspace,
+  error,
+  isButtonDisabled,
+  providerName,
 }: WorkspaceEntryProps) {
   return (
     <AuthCardLayout>
@@ -27,7 +34,7 @@ export function WorkspaceEntryContent({
       />
       <br />
       <Button
-        style={{ marginTop: '1em', width: '100%' }}
+        style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}
         type="submit"
         onClick={handleSubmit}

@@ -1,1 +1,1 @@
-export * from './useIsIntegrationInstalled';
+export * from "./useIsIntegrationInstalled";

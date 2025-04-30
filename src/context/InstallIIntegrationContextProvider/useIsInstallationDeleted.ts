@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
 // custom hook to check if the integration is deleted
 // deleted integration triggers a terminal state in the InstallIntegrationApp
 export const useIsInstallationDeleted = () => {
-  const [isIntegrationDeleted, setIsIntegrationDeleted] = useState<boolean>(false);
+  const [isIntegrationDeleted, setIsIntegrationDeleted] =
+    useState<boolean>(false);
 
   const setIntegrationDeleted = useCallback(() => {
     setIsIntegrationDeleted(true);
@@ -13,5 +14,9 @@ export const useIsInstallationDeleted = () => {
     setIsIntegrationDeleted(false);
   }, [setIsIntegrationDeleted]);
 
-  return { isIntegrationDeleted, setIntegrationDeleted, resetIntegrationDeleted };
+  return {
+    isIntegrationDeleted,
+    setIntegrationDeleted,
+    resetIntegrationDeleted,
+  };
 };

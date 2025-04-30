@@ -1,7 +1,7 @@
-import { ErrorTextBox } from '../ErrorTextBox/ErrorTextBox';
-import { LoadingCentered } from '../Loading';
-import { Box } from '../ui-base/Box/Box';
-import { Container } from '../ui-base/Container/Container';
+import { ErrorTextBox } from "../ErrorTextBox/ErrorTextBox";
+import { LoadingCentered } from "../Loading";
+import { Box } from "../ui-base/Box/Box";
+import { Container } from "../ui-base/Container/Container";
 
 /**
  * Container (auto aligned center) with border to wrap some content. Usually the outer most container for
@@ -9,12 +9,14 @@ import { Container } from '../ui-base/Container/Container';
  * @param param0
  * @returns
  */
-export function ComponentContainer({ children }: { children: React.ReactNode; }) {
+export function ComponentContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <Container style={{ maxWidth: '55rem' }}>
-      <Box>
-        {children}
-      </Box>
+    <Container style={{ maxWidth: "55rem" }}>
+      <Box>{children}</Box>
     </Container>
   );
 }
@@ -32,12 +34,16 @@ export function ComponentContainerLoading() {
  * @param param0
  * @returns
  */
-export function ComponentContainerError({ message, children }: { message: string; children?: React.ReactNode; }) {
+export function ComponentContainerError({
+  message,
+  children,
+}: {
+  message: string;
+  children?: React.ReactNode;
+}) {
   return (
     <ComponentContainer>
-      <ErrorTextBox message={message}>
-        {children}
-      </ErrorTextBox>
+      <ErrorTextBox message={message}>{children}</ErrorTextBox>
     </ComponentContainer>
   );
 }

@@ -1,12 +1,15 @@
-import { useCallback } from 'react';
-import { GenerateConnectionOperationRequest, ProviderInfo } from '@generated/api/src';
-import { useProject } from 'context/ProjectContextProvider';
-import { Connection } from 'services/api';
+import { useCallback } from "react";
+import {
+  GenerateConnectionOperationRequest,
+  ProviderInfo,
+} from "@generated/api/src";
+import { useProject } from "context/ProjectContextProvider";
+import { Connection } from "services/api";
 
-import { useCreateConnectionMutation } from '../useCreateConnectionMutation';
+import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
 
-import { ApiKeyAuthContent } from './ApiKeyAuthContent';
-import { IFormType } from './LandingContentProps';
+import { ApiKeyAuthContent } from "./ApiKeyAuthContent";
+import { IFormType } from "./LandingContentProps";
 
 type ApiKeyAuthFlowProps = {
   provider: string;
@@ -15,36 +18,59 @@ type ApiKeyAuthFlowProps = {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
-  children: JSX.Element,
+  children: JSX.Element;
   selectedConnection: Connection | null;
-
 };
 
 export function ApiKeyAuthFlow({
-  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, children,
+  provider,
+  providerInfo,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  children,
   selectedConnection,
 }: ApiKeyAuthFlowProps) {
   const { projectIdOrName } = useProject();
   const createConnectionMutation = useCreateConnectionMutation();
 
-  const onNext = useCallback((form: IFormType) => {
-    const { apiKey } = form;
-    const req: GenerateConnectionOperationRequest = {
+  const onNext = useCallback(
+    (form: IFormType) => {
+      const { apiKey } = form;
+      const req: GenerateConnectionOperationRequest = {
+        projectIdOrName,
+        generateConnectionParams: {
+          groupName,
+          groupRef,
+          consumerName,
+          consumerRef,
+          provider,
+          apiKey,
+        },
+      };
+      createConnectionMutation.mutate(req);
+    },
+    [
       projectIdOrName,
-      generateConnectionParams: {
-        groupName,
-        groupRef,
-        consumerName,
-        consumerRef,
-        provider,
-        apiKey,
-      },
-    };
-    createConnectionMutation.mutate(req);
-  }, [projectIdOrName, groupName, groupRef, consumerName, consumerRef, provider, createConnectionMutation]);
+      groupName,
+      groupRef,
+      consumerName,
+      consumerRef,
+      provider,
+      createConnectionMutation,
+    ],
+  );
 
   if (selectedConnection === null) {
-    return <ApiKeyAuthContent provider={provider} providerInfo={providerInfo} handleSubmit={onNext} error={null} />;
+    return (
+      <ApiKeyAuthContent
+        provider={provider}
+        providerInfo={providerInfo}
+        handleSubmit={onNext}
+        error={null}
+      />
+    );
   }
 
   return children;

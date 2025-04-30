@@ -1,16 +1,16 @@
+// .vscode/settings.json
 {
   "eslint.format.enable": true,
   "eslint.useFlatConfig": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "editor.rulers": [
-    100
-  ],
+
+  // run ESLint’s fix-all when you hit ⌘S (manual save) …
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit"   // or simply true
   },
+
+  // …and make ESLint the formatter that runs for Shift+Option+F
+  "[javascript]":        { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[typescript]":        { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[javascriptreact]":   { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+  "[typescriptreact]":   { "editor.defaultFormatter": "dbaeumer.vscode-eslint" }
 }

@@ -1,12 +1,12 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { OAuthWindow } from '../OAuthWindow/OAuthWindow';
-import { useOAuthPopupURL } from '../useOAuthPopupURL';
+import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
+import { useOAuthPopupURL } from "../useOAuthPopupURL";
 
-import { SalesforceSubdomainEntry } from './Salesforce/SalesforceSubdomainEntry';
-import { WorkspaceEntryContent } from './WorkspaceEntryContent';
+import { SalesforceSubdomainEntry } from "./Salesforce/SalesforceSubdomainEntry";
+import { WorkspaceEntryContent } from "./WorkspaceEntryContent";
 
-const PROVIDER_SALESFORCE = 'salesforce';
+const PROVIDER_SALESFORCE = "salesforce";
 
 interface WorkspaceOauthFlowProps {
   provider: string;
@@ -23,21 +23,36 @@ interface WorkspaceOauthFlowProps {
  * then launches a popup with the OAuth flow.
  */
 export function WorkspaceOauthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName, providerName,
+  provider,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  providerName,
 }: WorkspaceOauthFlowProps) {
-  const [workspace, setWorkspace] = useState<string>('');
+  const [workspace, setWorkspace] = useState<string>("");
   const [localError, setLocalError] = useState<string | null>(null);
 
   const {
-    url: oAuthPopupURL, error: oAuthConnectError, isLoading, refetchOauthConnect,
-  } = useOAuthPopupURL(consumerRef, groupRef, provider, workspace, consumerName, groupName);
+    url: oAuthPopupURL,
+    error: oAuthConnectError,
+    isLoading,
+    refetchOauthConnect,
+  } = useOAuthPopupURL(
+    consumerRef,
+    groupRef,
+    provider,
+    workspace,
+    consumerName,
+    groupName,
+  );
 
   const errorMessage = oAuthConnectError?.message || localError || null;
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setLocalError(null);
     if (!workspace) {
-      setLocalError('Workspace is required');
+      setLocalError("Workspace is required");
       return;
     }
 
@@ -49,8 +64,8 @@ export function WorkspaceOauthFlow({
   }, []);
 
   // custom entry component for Salesforce provider
-  const workspaceEntryComponent = (provider === PROVIDER_SALESFORCE)
-    ? (
+  const workspaceEntryComponent =
+    provider === PROVIDER_SALESFORCE ? (
       <SalesforceSubdomainEntry
         handleSubmit={handleSubmit}
         setWorkspace={setWorkspace}
@@ -58,7 +73,7 @@ export function WorkspaceOauthFlow({
         isButtonDisabled={workspace.length === 0}
       />
     ) : (
-  // general workspace entry component
+      // general workspace entry component
       <WorkspaceEntryContent
         handleSubmit={handleSubmit}
         setWorkspace={setWorkspace}

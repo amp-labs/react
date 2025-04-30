@@ -5,45 +5,52 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import React, { createContext, useContext } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { createContext, useContext } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { ApiKeyProvider } from '../ApiKeyContextProvider';
-import { ErrorStateProvider } from '../ErrorContextProvider';
-import { IntegrationListProvider } from '../IntegrationListContextProvider';
-import { ProjectProvider } from '../ProjectContextProvider';
+import { ApiKeyProvider } from "../ApiKeyContextProvider";
+import { ErrorStateProvider } from "../ErrorContextProvider";
+import { IntegrationListProvider } from "../IntegrationListContextProvider";
+import { ProjectProvider } from "../ProjectContextProvider";
 
 interface AmpersandProviderProps {
   options: {
-    apiKey: string,
+    apiKey: string;
     /**
      * Use `project` instead of `projectId`.
      * @deprecated
      */
-    projectId?: string,
+    projectId?: string;
     /**
      * `project` is the project ID or name.
      */
-    project?: string,
-    styles?: object,
-  },
-  children: React.ReactNode
+    project?: string;
+    styles?: object;
+  };
+  children: React.ReactNode;
 }
 
 const queryClient = new QueryClient();
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
-  const { options: { apiKey, projectId, project }, children } = props;
+  const {
+    options: { apiKey, projectId, project },
+    children,
+  } = props;
   const projectIdOrName = project || projectId;
   if (projectId && project) {
-    throw new Error('Use AmpersandProvider either with projectId or project but not both.');
+    throw new Error(
+      "Use AmpersandProvider either with projectId or project but not both.",
+    );
   }
   if (!projectIdOrName) {
-    throw new Error('Cannot use AmpersandProvider without a projectId or name.');
+    throw new Error(
+      "Cannot use AmpersandProvider without a projectId or name.",
+    );
   }
 
   if (!apiKey) {
-    throw new Error('Cannot use AmpersandProvider without an apiKey.');
+    throw new Error("Cannot use AmpersandProvider without an apiKey.");
   }
 
   return (
@@ -51,9 +58,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <ErrorStateProvider>
         <ApiKeyProvider value={apiKey}>
           <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider>
-              {children}
-            </IntegrationListProvider>
+            <IntegrationListProvider>{children}</IntegrationListProvider>
           </ProjectProvider>
         </ApiKeyProvider>
       </ErrorStateProvider>

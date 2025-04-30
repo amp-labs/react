@@ -1,13 +1,16 @@
-import * as Tabs from '@radix-ui/react-tabs';
-import { NavIcon } from 'assets/NavIcon';
-import { NavObject, ObjectConfigurationsState } from 'src/components/Configure/types';
-import { Divider } from 'src/components/ui-base/Divider';
+import * as Tabs from "@radix-ui/react-tabs";
+import { NavIcon } from "assets/NavIcon";
+import {
+  NavObject,
+  ObjectConfigurationsState,
+} from "src/components/Configure/types";
+import { Divider } from "src/components/ui-base/Divider";
 
-import { WRITE_CONST } from '../../constant';
+import { WRITE_CONST } from "../../constant";
 
-import { ManageTab } from './ManageTab';
+import { ManageTab } from "./ManageTab";
 
-import styles from './tabs.module.css';
+import styles from "./tabs.module.css";
 
 type NavObjectItemProps = {
   objectName: string;
@@ -17,18 +20,29 @@ type NavObjectItemProps = {
 };
 
 function NavObjectTab({
-  objectName, completed, pending, displayName,
+  objectName,
+  completed,
+  pending,
+  displayName,
 }: NavObjectItemProps) {
   return (
     <Tabs.Trigger value={objectName} className={styles.tabTrigger}>
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: '.5rem', marginRight: '.5rem',
-      }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: ".5rem",
+          marginRight: ".5rem",
+        }}
       >
         {NavIcon(completed, pending)}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <span>{displayName || objectName}</span>
-          {pending && <span style={{ fontSize: '.8rem', fontStyle: 'italic' }}>pending</span>}
+          {pending && (
+            <span style={{ fontSize: ".8rem", fontStyle: "italic" }}>
+              pending
+            </span>
+          )}
         </div>
       </div>
     </Tabs.Trigger>
@@ -41,12 +55,10 @@ type WriteTabProps = {
   displayName: string;
 };
 
-function WriteTab({
-  completed, pending, displayName,
-}: WriteTabProps) {
+function WriteTab({ completed, pending, displayName }: WriteTabProps) {
   return (
     <>
-      <Divider style={{ margin: '1rem 0' }} />
+      <Divider style={{ margin: "1rem 0" }} />
       <NavObjectTab
         key="other-write"
         objectName={WRITE_CONST}
@@ -67,11 +79,18 @@ type VerticalTabsProps = {
 };
 
 export function VerticalTabs({
-  value, readNavObjects, onValueChange, objectConfigurationsState,
+  value,
+  readNavObjects,
+  onValueChange,
+  objectConfigurationsState,
   writeNavObject,
 }: VerticalTabsProps) {
   return (
-    <Tabs.Root value={value} className={styles.tabsRoot} onValueChange={onValueChange}>
+    <Tabs.Root
+      value={value}
+      className={styles.tabsRoot}
+      onValueChange={onValueChange}
+    >
       <Tabs.List className={styles.tabsList}>
         {/* Read tabs */}
         {readNavObjects.map((object) => (
@@ -80,16 +99,24 @@ export function VerticalTabs({
             objectName={object.name}
             displayName={object.displayName}
             completed={object.completed}
-            pending={objectConfigurationsState?.[object.name]?.read?.isOptionalFieldsModified
-              || objectConfigurationsState?.[object.name]?.read?.isRequiredMapFieldsModified
-              || objectConfigurationsState?.[object.name]?.read?.isValueMappingsModified || false}
+            pending={
+              objectConfigurationsState?.[object.name]?.read
+                ?.isOptionalFieldsModified ||
+              objectConfigurationsState?.[object.name]?.read
+                ?.isRequiredMapFieldsModified ||
+              objectConfigurationsState?.[object.name]?.read
+                ?.isValueMappingsModified ||
+              false
+            }
           />
         ))}
         {/* Other / Write Tab */}
         {writeNavObject && (
           <WriteTab
             completed={writeNavObject.completed}
-            pending={objectConfigurationsState?.other?.write?.isWriteModified || false}
+            pending={
+              objectConfigurationsState?.other?.write?.isWriteModified || false
+            }
             displayName="Write"
           />
         )}

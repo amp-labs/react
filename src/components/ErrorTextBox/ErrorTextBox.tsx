@@ -1,13 +1,13 @@
-import { ErrorIcon } from 'assets/ErrorIcon';
+import { ErrorIcon } from "assets/ErrorIcon";
 
-import { Box } from '../ui-base/Box/Box';
-import { Container } from '../ui-base/Container/Container';
+import { Box } from "../ui-base/Box/Box";
+import { Container } from "../ui-base/Container/Container";
 
-import classes from './errorTextBox.module.css';
+import classes from "./errorTextBox.module.css";
 
 interface ErrorTextBoxProps {
-  message: string,
-  children?: React.ReactNode
+  message: string;
+  children?: React.ReactNode;
 }
 
 export function InnerErrorTextBox({ message }: { message: string }) {

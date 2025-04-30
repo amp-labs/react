@@ -1,8 +1,8 @@
 // FormControl.tsx
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import styles from './formControl.module.css';
+import styles from "./formControl.module.css";
 
 type FormControlProps = {
   id: string;
@@ -36,23 +36,27 @@ export function FormControl({
       })}
     >
       {label && (
-      <label
-        htmlFor={id}
-        className={classNames(styles.formLabel, { [styles.formLabelRequired]: isRequired })}
-      >
-        {label}
-      </label>
+        <label
+          htmlFor={id}
+          className={classNames(styles.formLabel, {
+            [styles.formLabelRequired]: isRequired,
+          })}
+        >
+          {label}
+        </label>
       )}
       <div
         id={id}
-        className={classNames(styles.formInput, { [styles.formInputInvalid]: isInvalid })}
+        className={classNames(styles.formInput, {
+          [styles.formInputInvalid]: isInvalid,
+        })}
       >
         {children}
       </div>
       {isInvalid && errorMessage && (
-      <div className={styles.formError} role="alert">
-        {errorMessage}
-      </div>
+        <div className={styles.formError} role="alert">
+          {errorMessage}
+        </div>
       )}
     </div>
   );

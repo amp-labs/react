@@ -1,20 +1,28 @@
 import React, {
-  createContext, useContext, useEffect, useMemo, useState,
-} from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useConnections } from 'context/ConnectionsContextProvider';
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useConnections } from "context/ConnectionsContextProvider";
+import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { useProject } from "context/ProjectContextProvider";
 import {
-  ErrorBoundary, useErrorState,
-} from 'context/ErrorContextProvider';
-import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
+  HydratedIntegrationRead,
+  HydratedIntegrationWriteObject,
+  HydratedRevision,
+  useAPI,
+} from "services/api";
 import {
-  HydratedIntegrationRead, HydratedIntegrationWriteObject, HydratedRevision, useAPI,
-} from 'services/api';
-import { ComponentContainerError, ComponentContainerLoading } from 'src/components/Configure/ComponentContainer';
-import { RemoveConnectionButton } from 'src/components/Connect/RemoveConnectionButton';
-import { InnerErrorTextBox } from 'src/components/ErrorTextBox/ErrorTextBox';
-import { handleServerError } from 'src/utils/handleServerError';
+  ComponentContainerError,
+  ComponentContainerLoading,
+} from "src/components/Configure/ComponentContainer";
+import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
+import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
+import { handleServerError } from "src/utils/handleServerError";
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -23,18 +31,21 @@ interface HydratedRevisionContextValue {
   writeObjects: HydratedIntegrationWriteObject[];
 }
 
-export const HydratedRevisionContext = createContext<HydratedRevisionContextValue>({
-  hydratedRevision: null,
-  loading: false,
-  readAction: undefined,
-  writeObjects: [],
-});
+export const HydratedRevisionContext =
+  createContext<HydratedRevisionContextValue>({
+    hydratedRevision: null,
+    loading: false,
+    readAction: undefined,
+    writeObjects: [],
+  });
 
 export const useHydratedRevision = () => {
   const context = useContext(HydratedRevisionContext);
 
   if (!context) {
-    throw new Error('useHydratedRevision must be used within a HydratedRevisionProvider');
+    throw new Error(
+      "useHydratedRevision must be used within a HydratedRevisionProvider",
+    );
   }
 
   return context;
@@ -53,17 +64,24 @@ const useHydratedRevisionQuery = () => {
   useEffect(() => {
     if (!connectionId) {
       // clear the query cache if connectionId is not set (includes resetting cached errors)
-      queryClient.invalidateQueries({ queryKey: ['amp', 'hydratedRevision'] });
+      queryClient.invalidateQueries({ queryKey: ["amp", "hydratedRevision"] });
     }
   }, [connectionId, queryClient]);
 
   return useQuery({
-    queryKey: ['amp', 'hydratedRevision', projectIdOrName, integrationId, revisionId, connectionId],
+    queryKey: [
+      "amp",
+      "hydratedRevision",
+      projectIdOrName,
+      integrationId,
+      revisionId,
+      connectionId,
+    ],
     queryFn: async () => {
-      if (!projectIdOrName) throw new Error('projectIdOrName is required');
-      if (!integrationId) throw new Error('integrationId is required');
-      if (!revisionId) throw new Error('revisionId is required');
-      if (!connectionId) throw new Error('connectionId is required');
+      if (!projectIdOrName) throw new Error("projectIdOrName is required");
+      if (!integrationId) throw new Error("integrationId is required");
+      if (!revisionId) throw new Error("revisionId is required");
+      if (!connectionId) throw new Error("connectionId is required");
 
       const api = await getAPI();
       return api.revisionApi.getHydratedRevision({
@@ -74,7 +92,12 @@ const useHydratedRevisionQuery = () => {
       });
     },
     retry: 3, // retry 3 times before showing error
-    enabled: !!projectIdOrName && !!integrationId && !!revisionId && !!connectionId && !isConnectionsLoading,
+    enabled:
+      !!projectIdOrName &&
+      !!integrationId &&
+      !!revisionId &&
+      !!connectionId &&
+      !isConnectionsLoading,
   });
 };
 
@@ -84,7 +107,8 @@ type HydratedRevisionProviderProps = {
 };
 
 export function HydratedRevisionProvider({
-  children, resetComponent,
+  children,
+  resetComponent,
 }: HydratedRevisionProviderProps) {
   const { integrationId, integrationObj } = useInstallIntegrationProps();
   const { isError, removeError, setError } = useErrorState();
@@ -94,7 +118,8 @@ export function HydratedRevisionProvider({
 
   const {
     data: hydratedRevision,
-    isLoading: loading, isError: isHydratedRevisionError,
+    isLoading: loading,
+    isError: isHydratedRevisionError,
     error: hydrateRevisionError,
   } = useHydratedRevisionQuery();
 
@@ -107,32 +132,49 @@ export function HydratedRevisionProvider({
       setReadableErrorMsg(null);
       setConnectionError(null);
     }
-  }, [isHydratedRevisionError, errorIntegrationIdentifier,
-    setError, removeError, hydrateRevisionError, setReadableErrorMsg]);
+  }, [
+    isHydratedRevisionError,
+    errorIntegrationIdentifier,
+    setError,
+    removeError,
+    hydrateRevisionError,
+    setReadableErrorMsg,
+  ]);
 
-  const contextValue = useMemo(() => ({
-    hydratedRevision: hydratedRevision || null,
-    loading,
-    readAction: hydratedRevision?.content?.read,
-    writeObjects: hydratedRevision?.content?.write?.objects || [],
-  }), [hydratedRevision, loading]);
+  const contextValue = useMemo(
+    () => ({
+      hydratedRevision: hydratedRevision || null,
+      loading,
+      readAction: hydratedRevision?.content?.read,
+      writeObjects: hydratedRevision?.content?.write?.objects || [],
+    }),
+    [hydratedRevision, loading],
+  );
 
   if (loading) {
     return <ComponentContainerLoading />;
   }
 
-  const providerName = integrationObj?.provider || 'provider';
+  const providerName = integrationObj?.provider || "provider";
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
-    const intNameOrId = integrationObj?.name || integrationId || 'unknown integration';
-    const errorMsg = `${readableErrorMsg ? `: ${readableErrorMsg}`
-      : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`}`;
+    const intNameOrId =
+      integrationObj?.name || integrationId || "unknown integration";
+    const errorMsg = `${
+      readableErrorMsg
+        ? `: ${readableErrorMsg}`
+        : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`
+    }`;
 
     return (
       <ComponentContainerError message={errorMsg}>
-        <div style={{
-          display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '1rem',
-        }}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            paddingTop: "1rem",
+          }}
         >
           {connectionError && <InnerErrorTextBox message={connectionError} />}
           <RemoveConnectionButton
@@ -148,7 +190,7 @@ export function HydratedRevisionProvider({
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
-      { children}
+      {children}
     </HydratedRevisionContext.Provider>
   );
 }

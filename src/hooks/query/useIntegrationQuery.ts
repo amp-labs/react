@@ -1,4 +1,4 @@
-import { useListIntegrationsQuery } from './useIntegrationListQuery';
+import { useListIntegrationsQuery } from "./useIntegrationListQuery";
 
 /**
  * get integration by name or id
@@ -11,8 +11,9 @@ export const useIntegrationQuery = (integrationNameOrId: string) => {
   const integrations = integrationsQuery.data;
 
   const integration = integrations?.find(
-    (_integration) => _integration.name === integrationNameOrId // find by name
-      || _integration.id === integrationNameOrId, // find by id
+    (_integration) =>
+      _integration.name === integrationNameOrId || // find by name
+      _integration.id === integrationNameOrId, // find by id
   );
 
   return {

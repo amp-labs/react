@@ -1,10 +1,10 @@
-import { AuthType, Oauth2OptsGrantTypeEnum } from '@generated/api/src';
-import { useProviderInfoQuery } from 'src/hooks/useProvider';
+import { AuthType, Oauth2OptsGrantTypeEnum } from "@generated/api/src";
+import { useProviderInfoQuery } from "src/hooks/useProvider";
 
-import { UpdateApiKeyConnect } from './UpdateApiKeyConnect';
-import { UpdateBasicAuthConnect } from './UpdateBasicAuthConnect';
-import { UpdateClientCredentialsConnect } from './UpdateClientCredentialsConnect';
-import { UpdateOauthConnect } from './UpdateOauthConnect';
+import { UpdateApiKeyConnect } from "./UpdateApiKeyConnect";
+import { UpdateBasicAuthConnect } from "./UpdateBasicAuthConnect";
+import { UpdateClientCredentialsConnect } from "./UpdateClientCredentialsConnect";
+import { UpdateOauthConnect } from "./UpdateOauthConnect";
 
 /**
  *
@@ -25,8 +25,10 @@ export function UpdateConnectionSection({ provider }: { provider?: string }) {
   // if oauth2 and supported grant type, oauth update connection
   const oAuthGrantType = providerInfo?.oauth2Opts?.grantType;
   if (oAuthGrantType) {
-    if (oAuthGrantType === Oauth2OptsGrantTypeEnum.AuthorizationCode
-       || oAuthGrantType === Oauth2OptsGrantTypeEnum.AuthorizationCodePkce) {
+    if (
+      oAuthGrantType === Oauth2OptsGrantTypeEnum.AuthorizationCode ||
+      oAuthGrantType === Oauth2OptsGrantTypeEnum.AuthorizationCodePkce
+    ) {
       return <UpdateOauthConnect provider={provider} />;
     }
 

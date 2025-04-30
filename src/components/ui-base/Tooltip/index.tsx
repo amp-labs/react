@@ -1,5 +1,5 @@
-import { Tooltip } from 'react-tooltip';
-import { TooltipIcon } from 'src/assets/TooltipIcon';
+import { Tooltip } from "react-tooltip";
+import { TooltipIcon } from "src/assets/TooltipIcon";
 
 interface LabelTooltipProps {
   id: string;
@@ -9,10 +9,15 @@ interface LabelTooltipProps {
 export function LabelTooltip({ id, tooltipText }: LabelTooltipProps) {
   return (
     <>
-      <span data-tooltip-id={id} style={{ maxWidth: '20rem' }}>
+      <span data-tooltip-id={id} style={{ maxWidth: "20rem" }}>
         {TooltipIcon()}
       </span>
-      <Tooltip id={id} place="top" content={tooltipText} style={{ maxWidth: '30rem' }} />
+      <Tooltip
+        id={id}
+        place="top"
+        content={tooltipText}
+        style={{ maxWidth: "30rem" }}
+      />
     </>
   );
 }

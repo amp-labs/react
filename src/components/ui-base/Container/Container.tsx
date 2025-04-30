@@ -1,4 +1,4 @@
-import classes from './container.module.css';
+import classes from "./container.module.css";
 
 type ContainerProps = {
   className?: string;
@@ -17,7 +17,9 @@ type ContainerProps = {
 export function Container({ children, className, style }: ContainerProps) {
   return (
     <div
-      className={className ? `${classes.container} ${className}` : classes.container}
+      className={
+        className ? `${classes.container} ${className}` : classes.container
+      }
       style={style}
     >
       {children}

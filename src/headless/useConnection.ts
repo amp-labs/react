@@ -1,7 +1,7 @@
-import { useConnectionsListQuery } from 'hooks/query/useConnectionsListQuery';
-import { useIntegrationQuery } from 'hooks/query/useIntegrationQuery';
+import { useConnectionsListQuery } from "hooks/query/useConnectionsListQuery";
+import { useIntegrationQuery } from "hooks/query/useIntegrationQuery";
 
-import { useInstallationProps } from './InstallationProvider';
+import { useInstallationProps } from "./InstallationProvider";
 
 /**
  * Connection manager that gives a connection if one is available.

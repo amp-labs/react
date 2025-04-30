@@ -1,4 +1,4 @@
-import { ConfigureState } from '../../types';
+import { ConfigureState } from "../../types";
 
 /**
  * example type
@@ -21,6 +21,6 @@ import { ConfigureState } from '../../types';
  * @param configureState
  * @returns
  */
-export const generateConfigWriteObjects = (
-  configureState: ConfigureState,
-) => ({ ...configureState.write?.selectedWriteObjects });
+export const generateConfigWriteObjects = (configureState: ConfigureState) => ({
+  ...configureState.write?.selectedWriteObjects,
+});

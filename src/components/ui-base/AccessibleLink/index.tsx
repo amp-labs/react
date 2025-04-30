@@ -1,7 +1,7 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import classes from './link.module.css';
+import classes from "./link.module.css";
 
 interface AccessibleLinkProps {
   href: string;
@@ -18,7 +18,12 @@ interface AccessibleLinkProps {
  * @returns
  */
 export function AccessibleLink({
-  href, className, style, label, children, newTab = false,
+  href,
+  className,
+  style,
+  label,
+  children,
+  newTab = false,
 }: AccessibleLinkProps) {
   return (
     <a
@@ -26,8 +31,8 @@ export function AccessibleLink({
       style={style}
       href={href}
       aria-label={label || undefined}
-      target={newTab ? '_blank' : '_self'}
-      rel={newTab ? 'noopener noreferrer' : undefined}
+      target={newTab ? "_blank" : "_self"}
+      rel={newTab ? "noopener noreferrer" : undefined}
     >
       {children}
     </a>

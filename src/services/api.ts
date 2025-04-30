@@ -1,10 +1,11 @@
 // currently not using a bundler to support alias imports
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import {
   BackfillConfig,
   BaseWriteConfigObject,
   Config,
-  Configuration, Connection,
+  Configuration,
+  Connection,
   CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
   HydratedIntegrationField,
@@ -14,7 +15,8 @@ import {
   HydratedIntegrationWrite,
   HydratedIntegrationWriteObject,
   HydratedRevision,
-  Installation, Integration,
+  Installation,
+  Integration,
   IntegrationFieldMapping,
   OauthConnectOperationRequest,
   Project,
@@ -22,42 +24,42 @@ import {
   ProviderInfo,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
-} from '@generated/api/src';
-import { useApiKey } from 'src/context/ApiKeyContextProvider';
+} from "@generated/api/src";
+import { useApiKey } from "src/context/ApiKeyContextProvider";
 
-import { ApiService } from './ApiService';
-import { LIB_VERSION } from './version';
-
-/**
-   * To update the api you need to
-   * 1. git clone `https://github.com/amp-labs/server` into a sibling directory
-   * 2. run `yarn generate-api`
-   *
-   */
+import { ApiService } from "./ApiService";
+import { LIB_VERSION } from "./version";
 
 /**
-   * When we run ```prism mock -d ./openapi/api.yaml```, prism will mock a server
-   * based on the api.yaml swagger (open-api v2) spec
-   *
-   * */
-const VERSION = 'v1';
-const prodEndpoint = 'https://api.withampersand.com';
+ * To update the api you need to
+ * 1. git clone `https://github.com/amp-labs/server` into a sibling directory
+ * 2. run `yarn generate-api`
+ *
+ */
+
+/**
+ * When we run ```prism mock -d ./openapi/api.yaml```, prism will mock a server
+ * based on the api.yaml swagger (open-api v2) spec
+ *
+ * */
+const VERSION = "v1";
+const prodEndpoint = "https://api.withampersand.com";
 
 function getApiEndpoint(): string {
   try {
     const ENV_SERVER = process.env.REACT_APP_AMP_SERVER;
     switch (ENV_SERVER) {
-      case 'local':
-        return 'http://localhost:8080';
-      case 'dev':
-        return 'https://dev-api.withampersand.com';
-      case 'staging':
-        return 'https://staging-api.withampersand.com';
-      case 'prod':
+      case "local":
+        return "http://localhost:8080";
+      case "dev":
+        return "https://dev-api.withampersand.com";
+      case "staging":
+        return "https://staging-api.withampersand.com";
+      case "prod":
         return prodEndpoint;
-      case 'mock':
-        return 'http://127.0.0.1:4010';
-      case '':
+      case "mock":
+        return "http://127.0.0.1:4010";
+      case "":
         return prodEndpoint;
       default:
         // The user may provide an arbitrary URL here if they want to, or else the
@@ -69,7 +71,8 @@ function getApiEndpoint(): string {
   }
 }
 
-const getApiRoot = (server: string, version: string): string => `${server}/${version}`;
+const getApiRoot = (server: string, version: string): string =>
+  `${server}/${version}`;
 
 // REACT_APP_AMP_SERVER=local npm start will use the local server
 function assignRoot(): string {
@@ -80,18 +83,18 @@ export const AMP_SERVER = getApiEndpoint();
 export const AMP_API_ROOT = assignRoot();
 
 /**
-   * we can modify the authentication, baseURL and other configurations to access
-   * our API in the future
-   *
-   * When in dev mode we want to mock the PRISM_MOCK_URL
-   *
-   * */
+ * we can modify the authentication, baseURL and other configurations to access
+ * our API in the future
+ *
+ * When in dev mode we want to mock the PRISM_MOCK_URL
+ *
+ * */
 
 const config = new Configuration({
   basePath: AMP_API_ROOT,
   headers: {
-    'X-Amp-Client': 'react',
-    'X-Amp-Client-Version': LIB_VERSION,
+    "X-Amp-Client": "react",
+    "X-Amp-Client-Version": LIB_VERSION,
   },
 });
 
@@ -120,16 +123,15 @@ export function useAPI(): () => Promise<ApiService> {
    * to authenticating to the API in the future which may require async operations */
   const getAPI = useCallback(async () => {
     if (!apiKey) {
-       
-      console.error('Unable to create API service without API key.');
+      console.error("Unable to create API service without API key.");
     }
 
     const configWithApiKey = new Configuration({
       basePath: AMP_API_ROOT,
       headers: {
-        'X-Amp-Client': 'react',
-        'X-Amp-Client-Version': LIB_VERSION,
-        'X-Api-Key': apiKey,
+        "X-Amp-Client": "react",
+        "X-Amp-Client-Version": LIB_VERSION,
+        "X-Api-Key": apiKey,
       },
     });
 
@@ -140,8 +142,8 @@ export function useAPI(): () => Promise<ApiService> {
 }
 
 /**
-   * Types exported from generated api
-   */
+ * Types exported from generated api
+ */
 export type {
   BackfillConfig,
   BaseWriteConfigObject,

@@ -1,5 +1,5 @@
-import { Input } from './Input';
-import { Textarea } from './Textarea';
+import { Input } from "./Input";
+import { Textarea } from "./Textarea";
 
 export const FormComponent = {
   Input,

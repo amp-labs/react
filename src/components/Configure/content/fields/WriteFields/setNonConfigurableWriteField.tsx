@@ -1,7 +1,7 @@
-import { Draft } from 'immer';
+import { Draft } from "immer";
 
-import { areWriteObjectsEqual } from '../../../state/utils';
-import { ConfigureState } from '../../../types';
+import { areWriteObjectsEqual } from "../../../state/utils";
+import { ConfigureState } from "../../../types";
 
 function setNonConfigurableWriteFieldProducer(
   draft: Draft<ConfigureState>,
@@ -10,7 +10,7 @@ function setNonConfigurableWriteFieldProducer(
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
     // immer syntax to set a value
-     
+
     draft.write.selectedWriteObjects = {};
   }
 
@@ -28,9 +28,12 @@ function setNonConfigurableWriteFieldProducer(
     if (draft?.write?.savedConfig?.selectedWriteObjects) {
       const savedWriteObjects = draft.write.savedConfig.selectedWriteObjects;
       const updatedWriteObjects = draftSelectedWriteFields;
-      const isModified = !areWriteObjectsEqual(savedWriteObjects, updatedWriteObjects);
+      const isModified = !areWriteObjectsEqual(
+        savedWriteObjects,
+        updatedWriteObjects,
+      );
       // immer syntax to set a value
-       
+
       draft.write.isWriteModified = isModified;
     }
 
@@ -41,13 +44,14 @@ function setNonConfigurableWriteFieldProducer(
 
 export function setNonConfigurableWriteField(
   selectedObjectName: string,
-  setConfigureState: (objectName: string,
-    producer: (draft: Draft<ConfigureState>) => void) => void,
+  setConfigureState: (
+    objectName: string,
+    producer: (draft: Draft<ConfigureState>) => void,
+  ) => void,
   fieldKey: string,
   checked: boolean,
 ) {
-  setConfigureState(
-    selectedObjectName,
-    (draft) => { setNonConfigurableWriteFieldProducer(draft, fieldKey, checked); },
-  );
+  setConfigureState(selectedObjectName, (draft) => {
+    setNonConfigurableWriteFieldProducer(draft, fieldKey, checked);
+  });
 }

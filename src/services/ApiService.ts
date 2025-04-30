@@ -1,8 +1,15 @@
 // currently not using a bundler to support alias imports
 import {
-  Configuration, ConnectionApi, InstallationApi, IntegrationApi,
-  OAuthApi, ProjectApi, ProviderApi, ProviderAppApi, RevisionApi,
-} from '@generated/api/src';
+  Configuration,
+  ConnectionApi,
+  InstallationApi,
+  IntegrationApi,
+  OAuthApi,
+  ProjectApi,
+  ProviderApi,
+  ProviderAppApi,
+  RevisionApi,
+} from "@generated/api/src";
 
 /**
  * ApiService is a wrapper around the generated API client, which exposes

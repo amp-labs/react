@@ -1,6 +1,6 @@
-import { Connection } from '@generated/api/src';
+import { Connection } from "@generated/api/src";
 
-import { ClientCredsContainer } from './ClientCredentialsContainer';
+import { ClientCredsContainer } from "./ClientCredentialsContainer";
 
 interface ClientCredsFlowProps {
   provider: string;

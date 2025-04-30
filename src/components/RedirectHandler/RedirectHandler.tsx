@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import { RedirectLoading } from './RedirectLoading';
+import { RedirectLoading } from "./RedirectLoading";
 
 type RedirectHandlerProps = {
   redirectURL?: string;
@@ -15,7 +15,10 @@ type RedirectHandlerProps = {
  * @param children
  * @returns
  */
-export function RedirectHandler({ redirectURL, children } : RedirectHandlerProps) {
+export function RedirectHandler({
+  redirectURL,
+  children,
+}: RedirectHandlerProps) {
   useEffect(() => {
     // Check if a redirect URL is present
     if (redirectURL) {

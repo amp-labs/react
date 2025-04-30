@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
-import { GenerateConnectionOperationRequest } from '@generated/api/src';
-import { useProject } from 'context/ProjectContextProvider';
-import { Connection } from 'services/api';
+import { useCallback } from "react";
+import { GenerateConnectionOperationRequest } from "@generated/api/src";
+import { useProject } from "context/ProjectContextProvider";
+import { Connection } from "services/api";
 
-import { useCreateConnectionMutation } from '../useCreateConnectionMutation';
+import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
 
-import { NoAuthContent } from './NoAuthContent';
+import { NoAuthContent } from "./NoAuthContent";
 
 type NoAuthFlowProps = {
   provider: string;
@@ -14,7 +14,7 @@ type NoAuthFlowProps = {
   groupRef: string;
   groupName?: string;
   providerName?: string;
-  children: JSX.Element,
+  children: JSX.Element;
   selectedConnection: Connection | null;
 };
 
@@ -24,8 +24,14 @@ type NoAuthFlowProps = {
  * @returns
  */
 export function NoAuthFlow({
-  provider, consumerRef, consumerName, groupRef, groupName,
-  children, selectedConnection, providerName,
+  provider,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  children,
+  selectedConnection,
+  providerName,
 }: NoAuthFlowProps) {
   const { projectIdOrName } = useProject();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -42,10 +48,24 @@ export function NoAuthFlow({
       },
     };
     createConnectionMutation.mutate(req);
-  }, [projectIdOrName, groupName, groupRef, consumerName, consumerRef, provider, createConnectionMutation]);
+  }, [
+    projectIdOrName,
+    groupName,
+    groupRef,
+    consumerName,
+    consumerRef,
+    provider,
+    createConnectionMutation,
+  ]);
 
   if (selectedConnection === null) {
-    return <NoAuthContent handleSubmit={onNext} error={null} providerName={providerName} />;
+    return (
+      <NoAuthContent
+        handleSubmit={onNext}
+        error={null}
+        providerName={providerName}
+      />
+    );
   }
 
   return children;

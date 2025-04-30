@@ -1,21 +1,26 @@
 import {
-  CheckboxField, CheckboxFieldsContainer, CheckboxGroup, SelectAllCheckbox,
-} from 'components/ui-base/Checkbox';
+  CheckboxField,
+  CheckboxFieldsContainer,
+  CheckboxGroup,
+  SelectAllCheckbox,
+} from "components/ui-base/Checkbox";
 
-import { isIntegrationFieldMapping } from '../../../utils';
-import { useSelectedConfigureState } from '../../useSelectedConfigureState';
-import { FieldHeader } from '../FieldHeader';
+import { isIntegrationFieldMapping } from "../../../utils";
+import { useSelectedConfigureState } from "../../useSelectedConfigureState";
+import { FieldHeader } from "../FieldHeader";
 
-import { setOptionalField } from './setOptionalField';
+import { setOptionalField } from "./setOptionalField";
 
 export function OptionalFieldsV2() {
-  const {
-    appName, configureState, setConfigureState, selectedObjectName,
-  } = useSelectedConfigureState();
+  const { appName, configureState, setConfigureState, selectedObjectName } =
+    useSelectedConfigureState();
   const selectedOptionalFields = configureState?.read?.selectedOptionalFields;
 
-  const onCheckboxChange = (checked: boolean | 'indeterminate', name: string) => {
-    if (checked === 'indeterminate') {
+  const onCheckboxChange = (
+    checked: boolean | "indeterminate",
+    name: string,
+  ) => {
+    if (checked === "indeterminate") {
       return;
     }
 
@@ -30,20 +35,30 @@ export function OptionalFieldsV2() {
     if (selectedObjectName && readOptionalFields) {
       readOptionalFields.forEach((field) => {
         if (!isIntegrationFieldMapping(field)) {
-          setOptionalField(selectedObjectName, setConfigureState, field.fieldName, checked);
+          setOptionalField(
+            selectedObjectName,
+            setConfigureState,
+            field.fieldName,
+            checked,
+          );
         }
       });
     }
   };
 
   const shouldRender = !!(readOptionalFields && readOptionalFields.length > 0);
-  const isAllChecked = Object.keys(selectedOptionalFields || {}).length === readOptionalFields?.length;
-  const isIndeterminate = !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
+  const isAllChecked =
+    Object.keys(selectedOptionalFields || {}).length ===
+    readOptionalFields?.length;
+  const isIndeterminate =
+    !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
 
   return (
     shouldRender && (
       <>
-        <FieldHeader string={`${appName} reads the following optional fields`} />
+        <FieldHeader
+          string={`${appName} reads the following optional fields`}
+        />
         <CheckboxGroup>
           {(readOptionalFields?.length || 0) >= 2 && (
             <SelectAllCheckbox
@@ -63,7 +78,9 @@ export function OptionalFieldsV2() {
                     id={field.fieldName}
                     isChecked={!!selectedOptionalFields?.[field?.fieldName]}
                     label={field.displayName}
-                    onCheckedChange={(checked) => onCheckboxChange(checked, field.fieldName)}
+                    onCheckedChange={(checked) =>
+                      onCheckboxChange(checked, field.fieldName)
+                    }
                   />
                 );
               }

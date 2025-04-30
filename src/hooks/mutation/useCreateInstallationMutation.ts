@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreateInstallationOperationRequest, useAPI } from 'services/api';
-import { handleServerError } from 'src/utils/handleServerError';
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CreateInstallationOperationRequest, useAPI } from "services/api";
+import { handleServerError } from "src/utils/handleServerError";
 
 export const useCreateInstallationMutation = () => {
   const getAPI = useAPI();
@@ -9,17 +9,17 @@ export const useCreateInstallationMutation = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationKey: ['createInstallation'],
+    mutationKey: ["createInstallation"],
     mutationFn: async (request: CreateInstallationOperationRequest) => {
       const api = await getAPI();
       return api.installationApi.createInstallation(request);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
+      queryClient.invalidateQueries({ queryKey: ["amp", "installations"] });
       setErrorMsg(null);
     },
     onError: (error) => {
-      console.error('Error creating installation');
+      console.error("Error creating installation");
       handleServerError(error, setErrorMsg);
     },
   });

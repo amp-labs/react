@@ -1,17 +1,18 @@
 import {
   Config,
-  CreateInstallationRequestConfig, HydratedRevision,
+  CreateInstallationRequestConfig,
+  HydratedRevision,
   Installation,
-} from 'services/api';
+} from "services/api";
 
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
   generateSelectedValuesMappingsFromConfigureState,
-} from '../../state/utils';
-import { ConfigureState } from '../../types';
-import { createInstallationAndSetState } from '../mutateAndSetState/createInstallationAndSetState';
-import { getIsProxyEnabled } from '../proxy/isProxyEnabled';
+} from "../../state/utils";
+import { ConfigureState } from "../../types";
+import { createInstallationAndSetState } from "../mutateAndSetState/createInstallationAndSetState";
+import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 /**
  * gets matching object from hydratedRevision
  * @param hydratedRevision
@@ -47,16 +48,19 @@ const generateCreateReadConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
-): (CreateInstallationRequestConfig | null) => {
-  const selectedFields = generateSelectedFieldsFromConfigureState(configureState);
-  const selectedFieldMappings = generateSelectedFieldMappingsFromConfigureState(
-    configureState,
-  );
-  const selectedValuesMappings = generateSelectedValuesMappingsFromConfigureState(configureState);
+): CreateInstallationRequestConfig | null => {
+  const selectedFields =
+    generateSelectedFieldsFromConfigureState(configureState);
+  const selectedFieldMappings =
+    generateSelectedFieldMappingsFromConfigureState(configureState);
+  const selectedValuesMappings =
+    generateSelectedValuesMappingsFromConfigureState(configureState);
 
   const obj = getObjectFromHydratedRevision(hydratedRevision, objectName);
   if (!obj) {
-    console.error(`Error when getting object from hydratedRevision for objectName: ${objectName}`);
+    console.error(
+      `Error when getting object from hydratedRevision for objectName: ${objectName}`,
+    );
     return null;
   }
 
@@ -112,7 +116,7 @@ export const onSaveReadCreateInstallation = (
     consumerRef,
   );
   if (!createConfig) {
-    console.error('Error when generating createConfig from configureState');
+    console.error("Error when generating createConfig from configureState");
     return Promise.resolve(null);
   }
 

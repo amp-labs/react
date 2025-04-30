@@ -1,23 +1,27 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { useProject } from "context/ProjectContextProvider";
+import { VerticalTabs } from "src/components/Configure/nav/ObjectManagementNav/v2/Tabs";
+import { NavObject } from "src/components/Configure/types";
+import { useProvider } from "src/hooks/useProvider";
+import { AmpersandFooter } from "src/layout/AuthCardLayout/AmpersandFooter";
+
+import { Box } from "components/ui-base/Box/Box";
+import { Container } from "components/ui-base/Container/Container";
+
+import { useObjectsConfigureState } from "../../../state/ConfigurationStateProvider";
+import { useHydratedRevision } from "../../../state/HydratedRevisionContext";
+import { generateReadNavObjects, generateWriteNavObject } from "../../../utils";
+import { MANAGE_TAB_CONST } from "../constant";
 import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
-import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
-import { VerticalTabs } from 'src/components/Configure/nav/ObjectManagementNav/v2/Tabs';
-import { NavObject } from 'src/components/Configure/types';
-import { useProvider } from 'src/hooks/useProvider';
-import { AmpersandFooter } from 'src/layout/AuthCardLayout/AmpersandFooter';
+  NextTabIndexContext,
+  SelectedObjectNameContext,
+} from "../ObjectManagementNavContext";
 
-import { Box } from 'components/ui-base/Box/Box';
-import { Container } from 'components/ui-base/Container/Container';
-
-import { useObjectsConfigureState } from '../../../state/ConfigurationStateProvider';
-import { useHydratedRevision } from '../../../state/HydratedRevisionContext';
-import { generateReadNavObjects, generateWriteNavObject } from '../../../utils';
-import { MANAGE_TAB_CONST } from '../constant';
-import { NextTabIndexContext, SelectedObjectNameContext } from '../ObjectManagementNavContext';
-
-function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject | undefined {
+function getSelectedObject(
+  navObjects: NavObject[],
+  tabValue: string,
+): NavObject | undefined {
   if (tabValue === MANAGE_TAB_CONST) {
     // manage tab
     return { name: MANAGE_TAB_CONST, completed: false };
@@ -27,14 +31,12 @@ function getSelectedObject(navObjects: NavObject[], tabValue: string): NavObject
   return navObjects.find((navObj) => navObj.name === tabValue);
 }
 
-  type ObjectManagementNavProps = {
-    children?: React.ReactNode;
-  };
+type ObjectManagementNavProps = {
+  children?: React.ReactNode;
+};
 
 // note: when the object key exists in the config; the user has already completed the object before
-export function ObjectManagementNavV2({
-  children,
-}: ObjectManagementNavProps) {
+export function ObjectManagementNavV2({ children }: ObjectManagementNavProps) {
   const { project } = useProject();
   const { installation } = useInstallIntegrationProps();
   const { providerName } = useProvider();
@@ -42,19 +44,24 @@ export function ObjectManagementNavV2({
   const { objectConfigurationsState } = useObjectsConfigureState();
 
   // Object Nav Tab Value
-  const [tabValue, setTabvalue] = useState('');
+  const [tabValue, setTabvalue] = useState("");
 
-  const appName = project?.appName || '';
+  const appName = project?.appName || "";
   const config = installation?.config;
-  const readNavObjects = hydratedRevision && generateReadNavObjects(config, hydratedRevision);
+  const readNavObjects =
+    hydratedRevision && generateReadNavObjects(config, hydratedRevision);
   const isNavObjectsReady = readNavObjects !== null; // null = hydratedRevision/config is not ready
 
   const isWriteSupported = !!hydratedRevision?.content?.write;
-  const writeNavObject = isWriteSupported ? generateWriteNavObject(config) : undefined;
+  const writeNavObject = isWriteSupported
+    ? generateWriteNavObject(config)
+    : undefined;
 
   const allNavObjects = useMemo(() => {
     const navObjects = [...(readNavObjects || [])];
-    if (writeNavObject && isWriteSupported) { navObjects.push(writeNavObject); }
+    if (writeNavObject && isWriteSupported) {
+      navObjects.push(writeNavObject);
+    }
     return navObjects;
   }, [readNavObjects, writeNavObject, isWriteSupported]);
 
@@ -64,7 +71,9 @@ export function ObjectManagementNavV2({
    * Function to navigate to the first uncompleted tab or do nothing if all tabs are completed
    *  */
   const onNextIncompleteTab = useCallback(() => {
-    const nextIncompleteNavObj = allNavObjects.find((navObj) => selectedObject !== navObj && !navObj.completed);
+    const nextIncompleteNavObj = allNavObjects.find(
+      (navObj) => selectedObject !== navObj && !navObj.completed,
+    );
     if (nextIncompleteNavObj) {
       setTabvalue(nextIncompleteNavObj.name);
     }
@@ -80,31 +89,39 @@ export function ObjectManagementNavV2({
     <NextTabIndexContext.Provider value={onNextIncompleteTab}>
       <SelectedObjectNameContext.Provider value={selectedObject?.name}>
         {/* Install integration component container */}
-        <Container style={{ maxWidth: '55rem' }}>
+        <Container style={{ maxWidth: "55rem" }}>
           <Box
             style={{
-              display: 'flex',
-              gap: '1rem',
-              padding: '3rem',
-              paddingBottom: '6rem',
-              backgroundColor: 'var(--amp-colors-bg-primary)',
+              display: "flex",
+              gap: "1rem",
+              padding: "3rem",
+              paddingBottom: "6rem",
+              backgroundColor: "var(--amp-colors-bg-primary)",
             }}
           >
-            <div style={{ width: '20rem' }}>
-              <h1 style={{ fontSize: 'small', fontWeight: '400' }}>{providerName} integration
+            <div style={{ width: "20rem" }}>
+              <h1 style={{ fontSize: "small", fontWeight: "400" }}>
+                {providerName} integration
               </h1>
-              <h3 style={{ marginBottom: '20px', fontSize: 'large', fontWeight: '500' }}>{appName}
+              <h3
+                style={{
+                  marginBottom: "20px",
+                  fontSize: "large",
+                  fontWeight: "500",
+                }}
+              >
+                {appName}
               </h3>
 
               {isNavObjectsReady && (
-              // dummy mock tabs with styling only
-              <VerticalTabs
-                value={tabValue}
-                readNavObjects={readNavObjects}
-                onValueChange={(value: string) => setTabvalue(value)}
-                objectConfigurationsState={objectConfigurationsState}
-                writeNavObject={writeNavObject}
-              />
+                // dummy mock tabs with styling only
+                <VerticalTabs
+                  value={tabValue}
+                  readNavObjects={readNavObjects}
+                  onValueChange={(value: string) => setTabvalue(value)}
+                  objectConfigurationsState={objectConfigurationsState}
+                  writeNavObject={writeNavObject}
+                />
               )}
             </div>
             {children}

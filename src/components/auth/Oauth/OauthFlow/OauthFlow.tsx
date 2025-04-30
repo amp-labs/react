@@ -1,13 +1,13 @@
-import { Connection, ProviderInfo } from 'services/api';
-import { useProvider } from 'src/hooks/useProvider';
+import { Connection, ProviderInfo } from "services/api";
+import { useProvider } from "src/hooks/useProvider";
 
-import { NoWorkspaceOauthFlow } from '../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow';
-import { WorkspaceOauthFlow } from '../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow';
-import { ClientCredentials } from '../ClientCredentials/ClientCredentials';
+import { NoWorkspaceOauthFlow } from "../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow";
+import { WorkspaceOauthFlow } from "../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow";
+import { ClientCredentials } from "../ClientCredentials/ClientCredentials";
 
-const AUTHORIZATION_CODE = 'authorizationCode';
-const AUTHORIZATION_CODE_PKCE = 'authorizationCodePKCE';
-const CLIENT_CREDENTIALS = 'clientCredentials';
+const AUTHORIZATION_CODE = "authorizationCode";
+const AUTHORIZATION_CODE_PKCE = "authorizationCodePKCE";
+const CLIENT_CREDENTIALS = "clientCredentials";
 
 type OauthFlowProps = {
   provider: string;
@@ -21,14 +21,22 @@ type OauthFlowProps = {
 };
 
 export function OauthFlow({
-  provider, providerInfo, consumerRef, consumerName, groupRef, groupName, selectedConnection, setSelectedConnection,
+  provider,
+  providerInfo,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  selectedConnection,
+  setSelectedConnection,
 }: OauthFlowProps) {
   const { providerName } = useProvider(provider);
   if (providerInfo.oauth2Opts === undefined) {
     return <em>Provider is missing OAuth2 options</em>;
   }
 
-  const { grantType, explicitScopesRequired, explicitWorkspaceRequired } = providerInfo.oauth2Opts;
+  const { grantType, explicitScopesRequired, explicitWorkspaceRequired } =
+    providerInfo.oauth2Opts;
 
   const sharedProps = {
     provider,
@@ -39,7 +47,10 @@ export function OauthFlow({
     providerName,
   };
 
-  if (grantType === AUTHORIZATION_CODE || grantType === AUTHORIZATION_CODE_PKCE) {
+  if (
+    grantType === AUTHORIZATION_CODE ||
+    grantType === AUTHORIZATION_CODE_PKCE
+  ) {
     // required workspace
     if (explicitWorkspaceRequired) {
       return <WorkspaceOauthFlow {...sharedProps} />;
@@ -61,7 +72,7 @@ export function OauthFlow({
     );
   }
 
-  if (grantType === 'password') {
+  if (grantType === "password") {
     return <em>Password flow not supported yet</em>;
   }
 

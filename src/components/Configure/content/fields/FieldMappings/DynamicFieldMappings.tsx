@@ -1,7 +1,10 @@
-import { FormControl } from 'src/components/form/FormControl';
-import { HydratedIntegrationFieldExistent, IntegrationFieldMapping } from 'src/services/api';
+import { FormControl } from "src/components/form/FormControl";
+import {
+  HydratedIntegrationFieldExistent,
+  IntegrationFieldMapping,
+} from "src/services/api";
 
-import { FieldMappingRow } from './FieldMappingRow';
+import { FieldMappingRow } from "./FieldMappingRow";
 
 export function DynamicFieldMappings({
   dynamicFieldMappings,
@@ -13,7 +16,7 @@ export function DynamicFieldMappings({
   allFields: HydratedIntegrationFieldExistent[];
 }) {
   return dynamicFieldMappings.length ? (
-    <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+    <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
       {dynamicFieldMappings.map((field) => (
         <FormControl id={field.mapToName} key={field.mapToName}>
           <FieldMappingRow

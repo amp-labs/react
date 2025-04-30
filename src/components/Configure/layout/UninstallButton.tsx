@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useInstallIntegrationProps } from 'context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider';
-import { useProject } from 'context/ProjectContextProvider';
-import { useAPI } from 'services/api';
-import { Button } from 'src/components/ui-base/Button';
-import { handleServerError } from 'src/utils/handleServerError';
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { useProject } from "context/ProjectContextProvider";
+import { useAPI } from "services/api";
+import { Button } from "src/components/ui-base/Button";
+import { handleServerError } from "src/utils/handleServerError";
 
 interface UninstallButtonProps {
   buttonText: string;
@@ -17,17 +17,23 @@ const useDeleteInstallationMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ projectIdOrName, integrationId, installationId }: any) => {
+    mutationFn: async ({
+      projectIdOrName,
+      integrationId,
+      installationId,
+    }: any) => {
       const api = await getAPI();
-      return api.installationApi.deleteInstallation(
-        { projectIdOrName, integrationId, installationId },
-      );
+      return api.installationApi.deleteInstallation({
+        projectIdOrName,
+        integrationId,
+        installationId,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['amp', 'installations'] });
+      queryClient.invalidateQueries({ queryKey: ["amp", "installations"] });
     },
     onError: (error) => {
-      console.error('Error uninstalling installation.');
+      console.error("Error uninstalling installation.");
       handleServerError(error);
     },
   });
@@ -35,7 +41,7 @@ const useDeleteInstallationMutation = () => {
 
 export function UninstallButton({
   buttonText,
-  buttonVariant = 'secondary',
+  buttonVariant = "secondary",
   buttonStyle = {},
 }: UninstallButtonProps) {
   const { projectId } = useProject();
@@ -46,14 +52,15 @@ export function UninstallButton({
     onUninstallSuccess,
   } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
-  const isDisabled = !projectId || !integrationId || !installation?.id || loading;
+  const isDisabled =
+    !projectId || !integrationId || !installation?.id || loading;
 
   const deleteInstallationMutation = useDeleteInstallationMutation();
 
   const onDelete = async () => {
     if (!isDisabled) {
       setLoading(true);
-      console.warn('uninstalling installation', {
+      console.warn("uninstalling installation", {
         projectId,
         integrationId,
         installationId: installation.id,
@@ -67,7 +74,10 @@ export function UninstallButton({
         },
         {
           onSuccess: () => {
-            console.warn('successfully uninstalled installation:', installation.id);
+            console.warn(
+              "successfully uninstalled installation:",
+              installation.id,
+            );
             onUninstallSuccess?.(installation?.id); // callback
             setIntegrationDeleted(); // set the ui terminal deleted state
           },
@@ -77,14 +87,14 @@ export function UninstallButton({
     }
   };
 
-  const buttonContent = loading ? 'Uninstalling...' : buttonText;
+  const buttonContent = loading ? "Uninstalling..." : buttonText;
 
   const ButtonComponent = (
     <Button
       type="button"
       onClick={onDelete}
       disabled={isDisabled}
-      variant={buttonVariant as 'danger' | 'ghost' | undefined}
+      variant={buttonVariant as "danger" | "ghost" | undefined}
       style={buttonStyle}
     >
       {buttonContent}

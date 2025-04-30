@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { Config } from 'src/services/api';
-import { handleServerError } from 'src/utils/handleServerError';
+import { useEffect } from "react";
+import { Config } from "src/services/api";
+import { handleServerError } from "src/utils/handleServerError";
 
-import { useListInstallationsQuery } from './query/useListInstallationsQuery';
+import { useListInstallationsQuery } from "./query/useListInstallationsQuery";
 
 interface UseIsIntegrationInstalledResult {
   isLoading: boolean;
@@ -16,7 +16,10 @@ export const useIsIntegrationInstalled = (
   groupRef: string,
 ): UseIsIntegrationInstalledResult => {
   const {
-    data: installations, isLoading: isInstallationLoading, isError, error,
+    data: installations,
+    isLoading: isInstallationLoading,
+    isError,
+    error,
   } = useListInstallationsQuery(integration, groupRef);
 
   const isIntegrationInstalled = (installations?.length || 0) > 0;
@@ -24,7 +27,9 @@ export const useIsIntegrationInstalled = (
   const firstInstallation = installations?.[0];
   const config = firstInstallation?.config;
 
-  useEffect(() => { if (isError) handleServerError(error); }, [isError, error]);
+  useEffect(() => {
+    if (isError) handleServerError(error);
+  }, [isError, error]);
 
   return {
     isLoaded,
