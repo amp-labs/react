@@ -3,6 +3,9 @@ import { useListInstallationsQuery } from "src/hooks/query";
 import { useInstallationProps } from "../InstallationProvider";
 
 export function useInstallation() {
+  // Extracting integrationNameOrId and groupRef from useInstallationProps.
+  // These are required for the useListInstallationsQuery, especially in headless mode,
+  // where the integration and group context must be explicitly provided.
   const { integrationNameOrId, groupRef } = useInstallationProps();
   const installationsQuery = useListInstallationsQuery(
     integrationNameOrId,
