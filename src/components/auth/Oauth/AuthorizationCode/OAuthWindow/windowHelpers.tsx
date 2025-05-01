@@ -13,13 +13,13 @@ const FAILURE_EVENT = "AUTHORIZATION_FAILED";
  *  side effect: adds a message event listener to the window
  * @param oauthUrl
  * @param windowTitle
- * @param setOauthWindow
+ * @param onSetOauthWindow
  * @param receiveMessage
  * @returns a function to open the oauth window
  */
 export function useOpenWindowHandler(
   windowTitle: string,
-  setOauthWindow: React.Dispatch<React.SetStateAction<Window | null>>,
+  onSetOauthWindow: (window: Window | null) => void,
   receiveMessage: (event: MessageEvent) => void,
   oauthUrl: string | null,
 ) {
@@ -31,10 +31,10 @@ export function useOpenWindowHandler(
 
     // creates a new window
     const newWindow = window.open(oauthUrl, windowTitle, windowDimensions);
-    setOauthWindow(newWindow);
+    onSetOauthWindow(newWindow);
 
     window.addEventListener("message", receiveMessage, false);
-  }, [oauthUrl, windowTitle, setOauthWindow, receiveMessage]);
+  }, [oauthUrl, windowTitle, onSetOauthWindow, receiveMessage]);
 }
 
 /**
@@ -42,7 +42,7 @@ export function useOpenWindowHandler(
  */
 export function useReceiveMessageEventHandler(
   setConnectionId: React.Dispatch<React.SetStateAction<null>>,
-  oauthWindow: Window | null,
+  onCloseOAuthWindow: () => void,
   onError?: (err: string | null) => void,
   onSuccessConnect?: () => void,
 ) {
@@ -60,7 +60,7 @@ export function useReceiveMessageEventHandler(
         const connection = event.data.data?.connection; // connection id
         if (connection) {
           setConnectionId(connection);
-          oauthWindow?.close(); // only close the window if connection is successful
+          onCloseOAuthWindow();
           onSuccessConnect?.();
 
           // refresh connections
@@ -81,6 +81,12 @@ export function useReceiveMessageEventHandler(
         // do not close the window if error occurs
       }
     },
-    [oauthWindow, onError, queryClient, setConnectionId, onSuccessConnect],
+    [
+      onError,
+      queryClient,
+      setConnectionId,
+      onCloseOAuthWindow,
+      onSuccessConnect,
+    ],
   );
 }

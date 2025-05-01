@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   useOpenWindowHandler,
@@ -31,19 +31,38 @@ export function OAuthWindow({
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
+  const isWindowOpen = useRef(false);
+
+  const onSetOauthWindow = useCallback((window: Window | null) => {
+    setOauthWindow(window);
+    isWindowOpen.current = window !== null;
+  }, []);
+
+  const onCloseOAuthWindow = useCallback(() => {
+    if (oauthWindow) {
+      oauthWindow.close();
+    }
+    setOauthWindow(null);
+    isWindowOpen.current = false;
+  }, [oauthWindow]);
 
   const receiveMessage = useReceiveMessageEventHandler(
     setConnectionId,
-    oauthWindow,
+    onCloseOAuthWindow,
     onError,
     onSuccessConnect,
   );
+
   const openOAuthWindow = useOpenWindowHandler(
     windowTitle,
-    setOauthWindow,
+    onSetOauthWindow,
     receiveMessage,
     oauthUrl,
   );
+
+  useEffect(() => {
+    console.log("error", error);
+  }, [error]);
 
   // open the OAuth window on mount and prop change
   useEffect(() => {
@@ -54,7 +73,8 @@ export function OAuthWindow({
       !oauthWindow &&
       !connectionId &&
       !error &&
-      !isSuccessConnect
+      !isSuccessConnect &&
+      !isWindowOpen.current
     ) {
       openOAuthWindow(); // creates new window and adds event listener
     }
@@ -74,7 +94,7 @@ export function OAuthWindow({
       if (oauthWindow.closed) {
         clearInterval(interval);
         window.removeEventListener("message", receiveMessage);
-        setOauthWindow(null);
+        onCloseOAuthWindow();
 
         if (!connectionId && !error) {
           console.error("OAuth failed. Please try again.");
@@ -86,12 +106,18 @@ export function OAuthWindow({
     }, 500);
 
     // Cleanup interval and listener when component unmounts or oauthWindow changes
-
     return () => {
       clearInterval(interval);
       window.removeEventListener("message", receiveMessage);
     };
-  }, [oauthWindow, connectionId, error, receiveMessage, onError]);
+  }, [
+    oauthWindow,
+    connectionId,
+    error,
+    receiveMessage,
+    onError,
+    onCloseOAuthWindow,
+  ]);
 
   return <div>{children}</div>;
 }
