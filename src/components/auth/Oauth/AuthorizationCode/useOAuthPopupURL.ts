@@ -82,7 +82,7 @@ export const useOAuthPopupURL = (
     }
   }, [oauthConnectError]);
 
-  const refetchOauthConnect = async () => {
+  const refetchOauthConnect = async (): Promise<ReturnType<typeof refetchOauthConnectQuery> | null> => {
     if (provInfo?.authType === "oauth2") {
       if (
         provInfo?.oauth2Opts?.grantType === "authorizationCode" ||
