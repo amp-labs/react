@@ -57,11 +57,17 @@ export function NoWorkspaceOauthFlow({
     setError(err);
   }, []);
 
+  const onSuccessConnect = useCallback(() => {
+    setError(null);
+  }, []);
+
   return (
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
       oauthUrl={oAuthPopupURL || null}
       onError={onError}
+      error={error}
+      onSuccessConnect={onSuccessConnect}
     >
       <NoWorkspaceEntryContent
         handleSubmit={handleSubmit}
