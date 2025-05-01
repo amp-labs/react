@@ -55,11 +55,11 @@ export function NoWorkspaceOauthFlow({
 
   const onError = useCallback((err: string | null) => {
     setError(err);
-  }, []);
+  }, [setError]);
 
   const onSuccessConnect = useCallback(() => {
     setError(null);
-  }, []);
+  }, [setError]);
 
   return (
     <OAuthWindow
