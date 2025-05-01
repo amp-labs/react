@@ -71,8 +71,10 @@ export function NoWorkspaceOauthFlow({
   const handleSubmit = async () => {
     setError(null);
     const result = await refetchOauthConnect();
+    // If the OAuth connection URL is successfully fetched, set showURL to true
+    // to display the OAuth popup. Otherwise, handle the error.
     if (result?.data) {
-      setShowURL(true); // show the OAuth popup URL after handleSubmit is called
+      setShowURL(true);
     } else {
       onError(result?.error?.message || "Authentication failed");
     }
