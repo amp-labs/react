@@ -31,6 +31,8 @@ export function NoWorkspaceOauthFlow({
   providerName,
 }: NoWorkspaceOauthFlowProps) {
   const [localError, setError] = useState<string | null>(null);
+  // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
+  const [showURL, setShowURL] = useState<boolean>(false);
 
   const {
     url: oAuthPopupURL,
@@ -47,27 +49,43 @@ export function NoWorkspaceOauthFlow({
   );
 
   const error = oAuthConnectError?.message || localError || null;
-  //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async () => {
-    setError(null);
-    refetchOauthConnect();
-  };
 
-  const onError = useCallback((err: string | null) => {
-    setError(err);
-  }, [setError]);
+  const onError = useCallback(
+    (err: string | null) => {
+      setError(err);
+      setShowURL(false); // do not show the OAuth popup URL after an error occurs
+    },
+    [setError],
+  );
 
   const onSuccessConnect = useCallback(() => {
     setError(null);
+    setShowURL(false); // do not show the OAuth popup URL after the connection is successfully created
   }, [setError]);
+
+  const onWindowClose = useCallback(() => {
+    setShowURL(false); // do not show the OAuth popup URL after the window is closed
+  }, [setShowURL]);
+
+  //  fetch OAuth callback URL from connection so that oath popup can be launched
+  const handleSubmit = async () => {
+    setError(null);
+    const result = await refetchOauthConnect();
+    if (result?.data) {
+      setShowURL(true); // show the OAuth popup URL after handleSubmit is called
+    } else {
+      onError(result?.error?.message || "Authentication failed");
+    }
+  };
 
   return (
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
-      oauthUrl={oAuthPopupURL || null}
+      oauthUrl={(showURL && oAuthPopupURL) || null} // showURL is true when handleSubmit is called
       onError={onError}
       error={error}
       onSuccessConnect={onSuccessConnect}
+      onWindowClose={onWindowClose}
     >
       <NoWorkspaceEntryContent
         handleSubmit={handleSubmit}

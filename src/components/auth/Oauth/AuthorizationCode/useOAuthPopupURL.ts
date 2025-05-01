@@ -82,13 +82,13 @@ export const useOAuthPopupURL = (
     }
   }, [oauthConnectError]);
 
-  const refetchOauthConnect = () => {
+  const refetchOauthConnect = async () => {
     if (provInfo?.authType === "oauth2") {
       if (
         provInfo?.oauth2Opts?.grantType === "authorizationCode" ||
         provInfo?.oauth2Opts?.grantType === "authorizationCodePKCE"
       ) {
-        refetchOauthConnectQuery();
+        return await refetchOauthConnectQuery();
       } else {
         console.error(
           "Provider does not support an OAuth2 web flow grant type.",
@@ -97,6 +97,7 @@ export const useOAuthPopupURL = (
     } else {
       console.error("Provider does not support an OAuth2 web flow.");
     }
+    return null;
   };
 
   return {

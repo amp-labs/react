@@ -13,6 +13,7 @@ type OAuthWindowProps = {
   onError?: (err: string | null) => void;
   isSuccessConnect?: boolean; // used to check if the connection is successfully created
   onSuccessConnect?: () => void; // callback to set when connection is successfully created
+  onWindowClose?: () => void; // callback to set when window is closed
 };
 
 /**
@@ -28,6 +29,7 @@ export function OAuthWindow({
   error,
   onSuccessConnect,
   isSuccessConnect,
+  onWindowClose,
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
@@ -82,6 +84,7 @@ export function OAuthWindow({
         } else if (connectionId) {
           onError?.(null);
         }
+        onWindowClose?.();
       }
     }, 500);
 
@@ -91,7 +94,14 @@ export function OAuthWindow({
       clearInterval(interval);
       window.removeEventListener("message", receiveMessage);
     };
-  }, [oauthWindow, connectionId, error, receiveMessage, onError]);
+  }, [
+    oauthWindow,
+    connectionId,
+    error,
+    receiveMessage,
+    onError,
+    onWindowClose,
+  ]);
 
   return <div>{children}</div>;
 }
