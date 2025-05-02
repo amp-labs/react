@@ -9,6 +9,7 @@ export * from './ApiKeyOptsQuery';
 export * from './ApiKeyRequest';
 export * from './ApiProblem';
 export * from './AssociationChangeEvent';
+export * from './AuthHealthCheck';
 export * from './AuthType';
 export * from './Backfill';
 export * from './BackfillConfig';

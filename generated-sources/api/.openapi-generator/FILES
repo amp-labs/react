@@ -32,6 +32,7 @@ src/models/ApiKeyOptsQuery.ts
 src/models/ApiKeyRequest.ts
 src/models/ApiProblem.ts
 src/models/AssociationChangeEvent.ts
+src/models/AuthHealthCheck.ts
 src/models/AuthType.ts
 src/models/Backfill.ts
 src/models/BackfillConfig.ts

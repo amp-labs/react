@@ -19,6 +19,12 @@ import {
     ApiKeyOptsFromJSONTyped,
     ApiKeyOptsToJSON,
 } from './ApiKeyOpts';
+import type { AuthHealthCheck } from './AuthHealthCheck';
+import {
+    AuthHealthCheckFromJSON,
+    AuthHealthCheckFromJSONTyped,
+    AuthHealthCheckToJSON,
+} from './AuthHealthCheck';
 import type { AuthType } from './AuthType';
 import {
     AuthTypeFromJSON,
@@ -123,6 +129,12 @@ export interface ProviderInfo {
      */
     providerOpts: { [key: string]: string; };
     /**
+     * 
+     * @type {AuthHealthCheck}
+     * @memberof ProviderInfo
+     */
+    authHealthCheck?: AuthHealthCheck;
+    /**
      * The display name of the provider, if omitted, defaults to provider name.
      * @type {string}
      * @memberof ProviderInfo
@@ -198,6 +210,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'basicOpts': !exists(json, 'basicOpts') ? undefined : BasicAuthOptsFromJSON(json['basicOpts']),
         'support': SupportFromJSON(json['support']),
         'providerOpts': json['providerOpts'],
+        'authHealthCheck': !exists(json, 'authHealthCheck') ? undefined : AuthHealthCheckFromJSON(json['authHealthCheck']),
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
@@ -225,6 +238,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'basicOpts': BasicAuthOptsToJSON(value.basicOpts),
         'support': SupportToJSON(value.support),
         'providerOpts': value.providerOpts,
+        'authHealthCheck': AuthHealthCheckToJSON(value.authHealthCheck),
         'displayName': value.displayName,
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
         'media': MediaToJSON(value.media),
