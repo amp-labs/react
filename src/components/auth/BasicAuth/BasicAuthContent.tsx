@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -59,7 +59,7 @@ export function BasicAuthForm({
 
     requiredProviderMetadata.forEach((item) => {
       const value = formData[item.name];
-      if (!value || value.trim() === '') {
+      if (!value || value.trim() === "") {
         hasEmptyFields = true;
       } else {
         metadata[item.name] = value;
@@ -77,8 +77,13 @@ export function BasicAuthForm({
     });
   };
 
-  const isSubmitDisabled = isButtonDisabled || !username || !password ||
-    requiredProviderMetadata.some(item => !formData[item.name] || formData[item.name].trim() === '');
+  const isSubmitDisabled =
+    isButtonDisabled ||
+    !username ||
+    !password ||
+    requiredProviderMetadata.some(
+      (item) => !formData[item.name] || formData[item.name].trim() === "",
+    );
   const docsURL = providerInfo.basicOpts?.docsURL;
 
   return (

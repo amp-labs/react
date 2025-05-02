@@ -1,5 +1,8 @@
 import { useCallback } from "react";
-import { GenerateConnectionOperationRequest, ProviderMetadataInfo } from "@generated/api/src";
+import {
+  GenerateConnectionOperationRequest,
+  ProviderMetadataInfo,
+} from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
@@ -37,13 +40,16 @@ export function BasicAuthFlow({
             password: pass,
           },
           ...(providerMetadata && {
-            providerMetadata: Object.entries(providerMetadata).reduce((acc, [name, value]) => {
-              acc[name] = {
-                value,
-                source: 'input' as const,
-              };
-              return acc;
-            }, {} as Record<string, ProviderMetadataInfo>),
+            providerMetadata: Object.entries(providerMetadata).reduce(
+              (acc, [name, value]) => {
+                acc[name] = {
+                  value,
+                  source: "input" as const,
+                };
+                return acc;
+              },
+              {} as Record<string, ProviderMetadataInfo>,
+            ),
           }),
         },
       };
