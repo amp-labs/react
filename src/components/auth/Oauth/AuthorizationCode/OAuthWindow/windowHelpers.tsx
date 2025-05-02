@@ -60,6 +60,13 @@ export function useReceiveMessageEventHandler(
         const connection = event.data.data?.connection; // connection id
         if (connection) {
           setConnectionId(connection);
+          // manually adds the connection to the query cache
+          queryClient.setQueriesData(
+            {
+              queryKey: ["amp", "connections"],
+            },
+            () => [connection],
+          );
           oauthWindow?.close(); // only close the window if connection is successful
           onSuccessConnect?.();
 
