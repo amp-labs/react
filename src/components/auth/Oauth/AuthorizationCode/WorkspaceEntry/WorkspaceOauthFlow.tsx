@@ -32,6 +32,9 @@ export function WorkspaceOauthFlow({
 }: WorkspaceOauthFlowProps) {
   const [workspace, setWorkspace] = useState<string>("");
   const [localError, setLocalError] = useState<string | null>(null);
+  // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
+  // when this is false, then OAuthWindow component will not pop up a window.
+  const [showURL, setShowURL] = useState<boolean>(false);
 
   const {
     url: oAuthPopupURL,
@@ -48,6 +51,20 @@ export function WorkspaceOauthFlow({
   );
 
   const errorMessage = oAuthConnectError?.message || localError || null;
+  const onError = useCallback((err: string | null) => {
+    setLocalError(err);
+    setShowURL(false);
+  }, []);
+
+  const onSuccessConnect = useCallback(() => {
+    setLocalError(null);
+    setShowURL(false);
+  }, []);
+
+  const onWindowClose = useCallback(() => {
+    setShowURL(false);
+  }, [setShowURL]);
+
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setLocalError(null);
@@ -56,12 +73,13 @@ export function WorkspaceOauthFlow({
       return;
     }
 
-    refetchOauthConnect();
+    const result = await refetchOauthConnect();
+    if (result?.data) {
+      setShowURL(true);
+    } else {
+      onError(result?.error?.message || "Authentication failed");
+    }
   };
-
-  const onError = useCallback((err: string | null) => {
-    setLocalError(err);
-  }, []);
 
   // custom entry component for Salesforce provider
   const workspaceEntryComponent =
@@ -86,9 +104,11 @@ export function WorkspaceOauthFlow({
   return (
     <OAuthWindow
       windowTitle={`Connect to ${providerName}`}
-      oauthUrl={oAuthPopupURL || null}
+      oauthUrl={(showURL && oAuthPopupURL) || null} // showURL is true when handleSubmit is called
       onError={onError}
       error={errorMessage}
+      onSuccessConnect={onSuccessConnect}
+      onWindowClose={onWindowClose}
     >
       {workspaceEntryComponent}
     </OAuthWindow>
