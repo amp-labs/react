@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProviderInfo } from "@generated/api/src";
+import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -20,6 +20,7 @@ type BasicAuthFormProps = {
   handleSubmit: (form: BasicCreds) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
+  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 export function BasicAuthForm({
@@ -28,10 +29,15 @@ export function BasicAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
+  requiredProviderMetadata = [],
 }: BasicAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState<{
+    username: string;
+    password: string;
+    [key: string]: string;
+  }>({ username: "", password: "" });
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
 
@@ -47,7 +53,32 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const isSubmitDisabled = isButtonDisabled;
+  const onHandleSubmit = () => {
+    const metadata: Record<string, string> = {};
+    let hasEmptyFields = false;
+
+    requiredProviderMetadata.forEach((item) => {
+      const value = formData[item.name];
+      if (!value || value.trim() === '') {
+        hasEmptyFields = true;
+      } else {
+        metadata[item.name] = value;
+      }
+    });
+
+    if (hasEmptyFields) {
+      return;
+    }
+
+    handleSubmit({
+      user: username,
+      pass: password,
+      ...(Object.keys(metadata).length > 0 && { providerMetadata: metadata }),
+    });
+  };
+
+  const isSubmitDisabled = isButtonDisabled || !username || !password ||
+    requiredProviderMetadata.some(item => !formData[item.name] || formData[item.name].trim() === '');
   const docsURL = providerInfo.basicOpts?.docsURL;
 
   return (
@@ -90,11 +121,29 @@ export function BasicAuthForm({
           {show ? "Hide" : "Show"}
         </Button>
       </div>
+      {requiredProviderMetadata.map((metadata) => (
+        <div key={metadata.name}>
+          {metadata.docsURL && (
+            <DocsHelperText
+              url={metadata.docsURL}
+              providerDisplayName={providerName || capitalize(provider)}
+              credentialName={metadata.displayName || metadata.name}
+            />
+          )}
+          <FormComponent.Input
+            id={metadata.name}
+            name={metadata.name}
+            type="text"
+            placeholder={metadata.displayName || metadata.name}
+            onChange={(event) => handleChange(event)}
+          />
+        </div>
+      ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}
         type="button"
-        onClick={() => handleSubmit({ user: username, pass: password })}
+        onClick={onHandleSubmit}
         variant={buttonVariant}
       >
         Next
@@ -109,6 +158,7 @@ function BasicAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  requiredProviderMetadata,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -121,6 +171,7 @@ function BasicAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
+        requiredProviderMetadata={requiredProviderMetadata}
       />
     </AuthCardLayout>
   );
