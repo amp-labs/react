@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import {
   useOpenWindowHandler,
@@ -33,6 +34,7 @@ export function OAuthWindow({
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
+  const queryClient = useQueryClient();
 
   const receiveMessage = useReceiveMessageEventHandler(
     setConnectionId,
@@ -84,6 +86,9 @@ export function OAuthWindow({
         } else if (connectionId) {
           onError?.(null);
         }
+
+        // invalidate the connections query to refresh the connection list
+        queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
         onWindowClose?.();
       }
     }, 500);
@@ -101,6 +106,7 @@ export function OAuthWindow({
     receiveMessage,
     onError,
     onWindowClose,
+    queryClient,
   ]);
 
   return <div>{children}</div>;
