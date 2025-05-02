@@ -33,6 +33,7 @@ export function WorkspaceOauthFlow({
   const [workspace, setWorkspace] = useState<string>("");
   const [localError, setLocalError] = useState<string | null>(null);
   // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
+  // when this is false, then OAuthWindow component will not pop up a window.
   const [showURL, setShowURL] = useState<boolean>(false);
 
   const {
