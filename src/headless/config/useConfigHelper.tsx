@@ -5,6 +5,7 @@ import type {
 } from "@generated/api/src";
 import { produce } from "immer";
 
+import { useManifest } from "../manifest/useManifest";
 type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
   getSelectedField: (fieldName: string) => boolean;
@@ -20,6 +21,8 @@ export function useConfigHelper(
     useState<UpdateInstallationConfigContent>(initialConfig);
   const [initial] = useState(initialConfig); // For reset
 
+  const { getReadObject: getReadObjectFromManifest } = useManifest();
+
   const get = useCallback(() => draft, [draft]);
 
   const reset = useCallback(() => {
@@ -27,10 +30,10 @@ export function useConfigHelper(
   }, [initial]);
 
   const readObject = useCallback(
-    (key: string): ReadObjectHandlers => ({
-      object: draft.read?.objects?.[key],
+    (objectName: string): ReadObjectHandlers => ({
+      object: draft.read?.objects?.[objectName],
       getSelectedField: (fieldName: string) =>
-        !!draft.read?.objects?.[key]?.selectedFields?.[fieldName],
+        !!draft.read?.objects?.[objectName]?.selectedFields?.[fieldName],
 
       // sets a single field selected boolean, deletes the field if selected is false
       setSelectedField: ({ fieldName, selected }) => {
@@ -39,11 +42,33 @@ export function useConfigHelper(
             // initialize read if it doesn't exist
             const read = _draft.read || {};
             const objects = read.objects || {};
-            const obj = objects[key] || {};
+            const obj = objects[objectName] || {};
+
+            ///////////////////////////////////////////////////////////////////////
+            // get default schedule, destination, and required fields from manifest
+            // note: prefilling default values from manifest can be removed once taken care of in the backend //////////
+            const selectedObject = getReadObjectFromManifest(objectName);
+            const defaultSchedule = selectedObject?.object?.schedule;
+            const defaultDestination = selectedObject?.object?.destination;
+            // add required fields to defaultSelectedFields
+            const defaultSelectedFields: { [key: string]: boolean } = {};
+            selectedObject?.getRequiredFields()?.forEach((field) => {
+              if ("fieldName" in field) {
+                defaultSelectedFields[field.fieldName] = true;
+              }
+            });
+
+            // initialize required fields for object from manifest if not set
+            obj.objectName = obj.objectName || objectName;
+            obj.schedule = obj.schedule || defaultSchedule;
+            obj.destination = obj.destination || defaultDestination;
+            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
+            // prefill defaults end ///////////////////////////////////////////////
+
             // initialize selectedFields if it doesn't exist
-            obj.selectedFields = obj.selectedFields || {};
+            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
             obj.selectedFields[fieldName] = selected;
-            objects[key] = obj;
+            objects[objectName] = obj;
             read.objects = objects;
 
             // if selected is false, remove the field from selectedFields
@@ -57,7 +82,7 @@ export function useConfigHelper(
       },
 
       getFieldMapping: (mapToName: string) =>
-        draft.read?.objects?.[key]?.selectedFieldMappings?.[mapToName],
+        draft.read?.objects?.[objectName]?.selectedFieldMappings?.[mapToName],
 
       setFieldMapping: ({ fieldName, mapToName }) => {
         setDraft((prev) =>
@@ -65,7 +90,28 @@ export function useConfigHelper(
             // initialize read if it doesn't exist
             const read = _draft.read || {};
             const objects = read.objects || {};
-            const obj = objects[key] || {};
+            const obj = objects[objectName] || {};
+
+            ///////////////////////////////////////////////////////////////////////
+            // get default schedule, destination, and required fields from manifest
+            // note: prefilling default values from manifest can be removed once taken care of in the backend //////////
+            const selectedObject = getReadObjectFromManifest(objectName);
+            const defaultSchedule = selectedObject?.object?.schedule;
+            const defaultDestination = selectedObject?.object?.destination;
+            // add required fields to defaultSelectedFields
+            const defaultSelectedFields: { [key: string]: boolean } = {};
+            selectedObject?.getRequiredFields()?.forEach((field) => {
+              if ("fieldName" in field) {
+                defaultSelectedFields[field.fieldName] = true;
+              }
+            });
+
+            // initialize required fields for object from manifest if not set
+            obj.objectName = obj.objectName || objectName;
+            obj.schedule = obj.schedule || defaultSchedule;
+            obj.destination = obj.destination || defaultDestination;
+            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
+            // prefill defaults end ///////////////////////////////////////////////
 
             // initialize selectedFieldMappings if it doesn't exist
             obj.selectedFieldMappings = obj.selectedFieldMappings || {};
@@ -77,7 +123,7 @@ export function useConfigHelper(
         );
       },
     }),
-    [draft],
+    [draft.read?.objects, getReadObjectFromManifest],
   );
 
   return {
