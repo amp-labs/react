@@ -1,4 +1,4 @@
-import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 
 export type LandingContentProps = {
   provider: string;

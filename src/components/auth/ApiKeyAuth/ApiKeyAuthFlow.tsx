@@ -2,12 +2,12 @@ import { useCallback } from "react";
 import {
   GenerateConnectionOperationRequest,
   ProviderInfo,
-  ProviderMetadataInfo,
 } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 import { Connection } from "services/api";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
+import { toApiProviderMetadata } from "../useProviderMetadata";
 
 import { ApiKeyAuthContent } from "./ApiKeyAuthContent";
 import { IFormType } from "./LandingContentProps";
@@ -39,6 +39,8 @@ export function ApiKeyAuthFlow({
   const onNext = useCallback(
     (form: IFormType) => {
       const { apiKey, providerMetadata } = form;
+      const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
+
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
@@ -48,11 +50,7 @@ export function ApiKeyAuthFlow({
           consumerRef,
           provider,
           apiKey,
-          ...(providerMetadata && {
-            providerMetadata: Object.fromEntries(
-              Object.entries(providerMetadata).map(([name, value]) => [name, { value, source: 'input' as const }])
-            ),
-          }),
+          ...(apiProviderMetadata && { providerMetadata: apiProviderMetadata }),
         },
       };
       createConnectionMutation.mutate(req);

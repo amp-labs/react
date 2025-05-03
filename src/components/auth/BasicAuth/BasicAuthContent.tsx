@@ -12,8 +12,9 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
+import { useProviderMetadata } from "../useProviderMetadata";
+
 import { BasicCreds, LandingContentProps } from "./LandingContentProps";
-import { useProviderMetadata } from '../useProviderMetadata';
 
 type BasicAuthFormProps = {
   provider: string;
@@ -40,10 +41,16 @@ export function BasicAuthForm({
 }: BasicAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState<FormData>({ username: "", password: "" });
+  const [formData, setFormData] = useState<FormData>({
+    username: "",
+    password: "",
+  });
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
-  const { getProviderMetadata, error, setError } = useProviderMetadata(formData, requiredProviderMetadata);
+  const { getProviderMetadata, error } = useProviderMetadata(
+    formData,
+    requiredProviderMetadata,
+  );
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -136,7 +143,7 @@ export function BasicAuthForm({
           />
         </div>
       ))}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

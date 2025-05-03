@@ -3,7 +3,7 @@ import { MetadataItemInput } from "@generated/api/src";
 
 export function useProviderMetadata(
   formData: Record<string, string>,
-  requiredProviderMetadata: MetadataItemInput[]
+  requiredProviderMetadata: MetadataItemInput[],
 ) {
   const [error, setError] = useState<string | null>(null);
 
@@ -25,8 +25,21 @@ export function useProviderMetadata(
       return undefined;
     }
     setError(null);
-    return Object.keys(metadata).length ? { providerMetadata: metadata } : undefined;
+    return Object.keys(metadata).length
+      ? { providerMetadata: metadata }
+      : undefined;
   };
 
   return { getProviderMetadata, error, setError };
+}
+
+export function toApiProviderMetadata(
+  providerMetadata: Record<string, string> | undefined,
+): Record<string, { value: string; source: "input" }> | undefined {
+  if (!providerMetadata) return undefined;
+  const entries = Object.entries(providerMetadata).map(([name, value]) => [
+    name,
+    { value, source: "input" as const },
+  ]);
+  return entries.length ? Object.fromEntries(entries) : undefined;
 }

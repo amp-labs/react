@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -12,8 +12,9 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
+import { useProviderMetadata } from "../useProviderMetadata";
+
 import { IFormType, LandingContentProps } from "./LandingContentProps";
-import { useProviderMetadata } from '../useProviderMetadata';
 
 type ApiKeyAuthFormProps = {
   provider: string;
@@ -42,7 +43,10 @@ export function ApiKeyAuthForm({
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
-  const { getProviderMetadata, error, setError } = useProviderMetadata(formData, requiredProviderMetadata);
+  const { getProviderMetadata, error } = useProviderMetadata(
+    formData,
+    requiredProviderMetadata,
+  );
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -56,9 +60,10 @@ export function ApiKeyAuthForm({
 
   const isApiKeyValid = apiKey.length > 0;
   const isMetadataValid = requiredProviderMetadata.every(
-    (item) => formData[item.name] && formData[item.name].trim().length > 0
+    (item) => formData[item.name] && formData[item.name].trim().length > 0,
   );
-  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid || !isMetadataValid;
+  const isSubmitDisabled =
+    isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
@@ -123,7 +128,7 @@ export function ApiKeyAuthForm({
           />
         </div>
       ))}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

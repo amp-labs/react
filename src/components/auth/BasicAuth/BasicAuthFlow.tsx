@@ -1,11 +1,9 @@
 import { useCallback } from "react";
-import {
-  GenerateConnectionOperationRequest,
-  ProviderMetadataInfo,
-} from "@generated/api/src";
+import { GenerateConnectionOperationRequest } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
+import { toApiProviderMetadata } from "../useProviderMetadata";
 
 import { BasicAuthContent } from "./BasicAuthContent";
 import { BasicAuthFlowProps } from "./BasicAuthFlowProps";
@@ -27,6 +25,8 @@ export function BasicAuthFlow({
   const onNext = useCallback(
     (form: BasicCreds) => {
       const { user, pass, providerMetadata } = form;
+      const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
+
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
@@ -39,11 +39,7 @@ export function BasicAuthFlow({
             username: user,
             password: pass,
           },
-          ...(providerMetadata && {
-            providerMetadata: Object.fromEntries(
-              Object.entries(providerMetadata).map(([name, value]) => [name, { value, source: "input" as const }])
-            ),
-          }),
+          ...(apiProviderMetadata && { providerMetadata: apiProviderMetadata }),
         },
       };
       createConnectionMutation.mutate(req);
