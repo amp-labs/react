@@ -13,6 +13,7 @@ import { capitalize } from "src/utils";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import { BasicCreds, LandingContentProps } from "./LandingContentProps";
+import { useProviderMetadata } from '../useProviderMetadata';
 
 type BasicAuthFormProps = {
   provider: string;
@@ -21,6 +22,12 @@ type BasicAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   requiredProviderMetadata?: MetadataItemInput[];
+};
+
+type FormData = {
+  username: string;
+  password: string;
+  [key: string]: string;
 };
 
 export function BasicAuthForm({
@@ -33,13 +40,10 @@ export function BasicAuthForm({
 }: BasicAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState<{
-    username: string;
-    password: string;
-    [key: string]: string;
-  }>({ username: "", password: "" });
+  const [formData, setFormData] = useState<FormData>({ username: "", password: "" });
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
+  const { getProviderMetadata, error, setError } = useProviderMetadata(formData, requiredProviderMetadata);
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -54,26 +58,14 @@ export function BasicAuthForm({
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
   const onHandleSubmit = () => {
-    const metadata: Record<string, string> = {};
-    let hasEmptyFields = false;
-
-    requiredProviderMetadata.forEach((item) => {
-      const value = formData[item.name];
-      if (!value || value.trim() === "") {
-        hasEmptyFields = true;
-      } else {
-        metadata[item.name] = value;
-      }
-    });
-
-    if (hasEmptyFields) {
+    const providerMetadata = getProviderMetadata();
+    if (requiredProviderMetadata.length > 0 && !providerMetadata) {
       return;
     }
-
     handleSubmit({
       user: username,
       pass: password,
-      ...(Object.keys(metadata).length > 0 && { providerMetadata: metadata }),
+      ...providerMetadata,
     });
   };
 
@@ -144,6 +136,7 @@ export function BasicAuthForm({
           />
         </div>
       ))}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

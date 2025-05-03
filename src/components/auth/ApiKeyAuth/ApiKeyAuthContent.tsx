@@ -13,6 +13,7 @@ import { capitalize } from "src/utils";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import { IFormType, LandingContentProps } from "./LandingContentProps";
+import { useProviderMetadata } from '../useProviderMetadata';
 
 type ApiKeyAuthFormProps = {
   provider: string;
@@ -22,6 +23,11 @@ type ApiKeyAuthFormProps = {
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
   requiredProviderMetadata?: MetadataItemInput[];
+};
+
+type ApiKeyFormData = {
+  apiKey: string;
+  [key: string]: string;
 };
 
 export function ApiKeyAuthForm({
@@ -35,10 +41,8 @@ export function ApiKeyAuthForm({
 }: ApiKeyAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState<{
-    apiKey: string;
-    [key: string]: string;
-  }>({ apiKey: "" });
+  const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
+  const { getProviderMetadata, error, setError } = useProviderMetadata(formData, requiredProviderMetadata);
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -58,17 +62,13 @@ export function ApiKeyAuthForm({
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    const metadata: Record<string, string> = {};
-    requiredProviderMetadata.forEach((item) => {
-      const value = formData[item.name];
-      if (value && value.trim().length > 0) {
-        metadata[item.name] = value;
-      }
-    });
-
+    const providerMetadata = getProviderMetadata();
+    if (requiredProviderMetadata.length > 0 && !providerMetadata) {
+      return;
+    }
     handleSubmit({
       apiKey,
-      ...(Object.keys(metadata).length > 0 && { providerMetadata: metadata }),
+      ...providerMetadata,
     });
   };
 
@@ -123,6 +123,7 @@ export function ApiKeyAuthForm({
           />
         </div>
       ))}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

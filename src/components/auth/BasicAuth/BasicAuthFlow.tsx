@@ -40,15 +40,8 @@ export function BasicAuthFlow({
             password: pass,
           },
           ...(providerMetadata && {
-            providerMetadata: Object.entries(providerMetadata).reduce(
-              (acc, [name, value]) => {
-                acc[name] = {
-                  value,
-                  source: "input" as const,
-                };
-                return acc;
-              },
-              {} as Record<string, ProviderMetadataInfo>,
+            providerMetadata: Object.fromEntries(
+              Object.entries(providerMetadata).map(([name, value]) => [name, { value, source: "input" as const }])
             ),
           }),
         },
