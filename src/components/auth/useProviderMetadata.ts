@@ -9,19 +9,19 @@ export function useProviderMetadata(
 
   const getProviderMetadata = () => {
     const metadata: Record<string, string> = {};
-    let hasEmptyFields = false;
+    const missingFields: string[] = [];
 
     requiredProviderMetadata.forEach((item) => {
       const value = formData[item.name];
       if (!value || value.trim() === "") {
-        hasEmptyFields = true;
+        missingFields.push(item.name);
       } else {
         metadata[item.name] = value;
       }
     });
 
-    if (hasEmptyFields) {
-      setError("Please fill in all required fields.");
+    if (missingFields.length > 0) {
+      setError(`Please fill in the following required fields: ${missingFields.join(", ")}.`);
       return undefined;
     }
     setError(null);
