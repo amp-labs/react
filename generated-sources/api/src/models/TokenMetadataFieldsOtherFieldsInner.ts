@@ -32,11 +32,17 @@ export interface TokenMetadataFieldsOtherFieldsInner {
      */
     displayName: string;
     /**
-     * jq expression that extracts and transforms the value from the token response
+     * The path to the field in the token response (accepts dot notation for nested fields)
      * @type {string}
      * @memberof TokenMetadataFieldsOtherFieldsInner
      */
-    jqValueSelector: string;
+    path: string;
+    /**
+     * A regex expression to capture the value that we need from the path
+     * @type {string}
+     * @memberof TokenMetadataFieldsOtherFieldsInner
+     */
+    capture?: string;
 }
 
 /**
@@ -46,7 +52,7 @@ export function instanceOfTokenMetadataFieldsOtherFieldsInner(value: object): bo
     let isInstance = true;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "displayName" in value;
-    isInstance = isInstance && "jqValueSelector" in value;
+    isInstance = isInstance && "path" in value;
 
     return isInstance;
 }
@@ -63,7 +69,8 @@ export function TokenMetadataFieldsOtherFieldsInnerFromJSONTyped(json: any, igno
         
         'name': json['name'],
         'displayName': json['displayName'],
-        'jqValueSelector': json['jqValueSelector'],
+        'path': json['path'],
+        'capture': !exists(json, 'capture') ? undefined : json['capture'],
     };
 }
 
@@ -78,7 +85,8 @@ export function TokenMetadataFieldsOtherFieldsInnerToJSON(value?: TokenMetadataF
         
         'name': value.name,
         'displayName': value.displayName,
-        'jqValueSelector': value.jqValueSelector,
+        'path': value.path,
+        'capture': value.capture,
     };
 }
 
