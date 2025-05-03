@@ -1,4 +1,4 @@
-import { ProviderInfo } from "@generated/api/src";
+import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
 
 export type LandingContentProps = {
   provider: string;
@@ -6,8 +6,10 @@ export type LandingContentProps = {
   handleSubmit: (form: IFormType) => void;
   error: string | null;
   isButtonDisabled?: boolean;
+  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 export interface IFormType {
   apiKey: string;
+  providerMetadata?: Record<string, string>;
 }

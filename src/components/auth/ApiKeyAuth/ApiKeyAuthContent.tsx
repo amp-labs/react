@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProviderInfo } from "@generated/api/src";
+import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -21,6 +21,7 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
+  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 export function ApiKeyAuthForm({
@@ -30,17 +31,46 @@ export function ApiKeyAuthForm({
   isButtonDisabled,
   buttonVariant,
   submitButtonType,
+  requiredProviderMetadata = [],
 }: ApiKeyAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [apiKey, setApiKey] = useState("");
-  const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) =>
-    setApiKey(event.currentTarget.value);
+  const [formData, setFormData] = useState<{
+    apiKey: string;
+    [key: string]: string;
+  }>({ apiKey: "" });
+
+  const handleChange = (
+    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.currentTarget;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const { apiKey } = formData;
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
+  const isMetadataValid = requiredProviderMetadata.every(
+    (item) => formData[item.name] && formData[item.name].trim().length > 0
+  );
+  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
+
+  const onHandleSubmit = () => {
+    const metadata: Record<string, string> = {};
+    requiredProviderMetadata.forEach((item) => {
+      const value = formData[item.name];
+      if (value && value.trim().length > 0) {
+        metadata[item.name] = value;
+      }
+    });
+
+    handleSubmit({
+      apiKey,
+      ...(Object.keys(metadata).length > 0 && { providerMetadata: metadata }),
+    });
+  };
 
   return (
     <div
@@ -60,11 +90,11 @@ export function ApiKeyAuthForm({
       )}
       <div style={{ display: "flex", gap: ".5rem" }}>
         <FormComponent.Input
-          id="password"
-          name="password"
+          id="apiKey"
+          name="apiKey"
           type={show ? "text" : "password"}
           placeholder="API Key"
-          onChange={(event) => handlePasswordChange(event)}
+          onChange={handleChange}
         />
         <Button
           type="button"
@@ -75,11 +105,29 @@ export function ApiKeyAuthForm({
           {show ? "Hide" : "Show"}
         </Button>
       </div>
+      {requiredProviderMetadata.map((metadata) => (
+        <div key={metadata.name}>
+          {metadata.docsURL && (
+            <DocsHelperText
+              url={metadata.docsURL}
+              providerDisplayName={providerName || capitalize(provider)}
+              credentialName={metadata.displayName || metadata.name}
+            />
+          )}
+          <FormComponent.Input
+            id={metadata.name}
+            name={metadata.name}
+            type="text"
+            placeholder={metadata.displayName || metadata.name}
+            onChange={handleChange}
+          />
+        </div>
+      ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}
         type={submitButtonType || "submit"}
-        onClick={() => handleSubmit({ apiKey })}
+        onClick={onHandleSubmit}
         variant={buttonVariant}
       >
         Next
@@ -94,6 +142,7 @@ function ApiKeyAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  requiredProviderMetadata,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -106,6 +155,7 @@ function ApiKeyAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
+        requiredProviderMetadata={requiredProviderMetadata}
       />
     </AuthCardLayout>
   );
