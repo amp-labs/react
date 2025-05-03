@@ -29,54 +29,60 @@ export function useConfigHelper(
     setDraft(initial);
   }, [initial]);
 
+  // Helper function to initialize object with defaults from manifest
+  const initializeObjectWithDefaults = useCallback(
+    (objectName: string, _draft: UpdateInstallationConfigContent) => {
+      const read = _draft.read || {};
+      const objects = read.objects || {};
+      const obj = objects[objectName] || {};
+
+      // note: prefilling default values from manifest can be removed once taken care of in the backend
+      const selectedObject = getReadObjectFromManifest(objectName);
+      const defaultSchedule = selectedObject?.object?.schedule;
+      const defaultDestination = selectedObject?.object?.destination;
+
+      // Add required fields to defaultSelectedFields
+      const defaultSelectedFields: { [key: string]: boolean } = {};
+      selectedObject?.getRequiredFields()?.forEach((field) => {
+        if ("fieldName" in field) {
+          defaultSelectedFields[field.fieldName] = true;
+        }
+      });
+
+      // Initialize required fields for object from manifest if not set
+      obj.objectName = obj.objectName || objectName;
+      obj.schedule = obj.schedule || defaultSchedule;
+      obj.destination = obj.destination || defaultDestination;
+      obj.selectedFields = obj.selectedFields || defaultSelectedFields;
+
+      objects[objectName] = obj;
+      read.objects = objects;
+      _draft.read = read;
+
+      return { read, objects, obj };
+    },
+    [getReadObjectFromManifest],
+  );
+
   const readObject = useCallback(
     (objectName: string): ReadObjectHandlers => ({
       object: draft.read?.objects?.[objectName],
       getSelectedField: (fieldName: string) =>
         !!draft.read?.objects?.[objectName]?.selectedFields?.[fieldName],
 
-      // sets a single field selected boolean, deletes the field if selected is false
       setSelectedField: ({ fieldName, selected }) => {
         setDraft((prev) =>
           produce(prev, (_draft) => {
-            // initialize read if it doesn't exist
-            const read = _draft.read || {};
-            const objects = read.objects || {};
-            const obj = objects[objectName] || {};
+            const { obj } = initializeObjectWithDefaults(objectName, _draft);
 
-            ///////////////////////////////////////////////////////////////////////
-            // get default schedule, destination, and required fields from manifest
-            // note: prefilling default values from manifest can be removed once taken care of in the backend //////////
-            const selectedObject = getReadObjectFromManifest(objectName);
-            const defaultSchedule = selectedObject?.object?.schedule;
-            const defaultDestination = selectedObject?.object?.destination;
-            // add required fields to defaultSelectedFields
-            const defaultSelectedFields: { [key: string]: boolean } = {};
-            selectedObject?.getRequiredFields()?.forEach((field) => {
-              if ("fieldName" in field) {
-                defaultSelectedFields[field.fieldName] = true;
-              }
-            });
-
-            // initialize required fields for object from manifest if not set
-            obj.objectName = obj.objectName || objectName;
-            obj.schedule = obj.schedule || defaultSchedule;
-            obj.destination = obj.destination || defaultDestination;
-            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
-            // prefill defaults end ///////////////////////////////////////////////
-
-            // initialize selectedFields if it doesn't exist
-            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
+            // Initialize selectedFields if it doesn't exist
+            obj.selectedFields = obj.selectedFields || {};
             obj.selectedFields[fieldName] = selected;
-            objects[objectName] = obj;
-            read.objects = objects;
 
-            // if selected is false, remove the field from selectedFields
-            if (obj.selectedFields?.[fieldName] === false) {
+            // If selected is false, remove the field from selectedFields
+            if (obj.selectedFields[fieldName] === false) {
               delete obj.selectedFields[fieldName];
             }
-            _draft.read = read;
-            return _draft;
           }),
         );
       },
@@ -87,43 +93,16 @@ export function useConfigHelper(
       setFieldMapping: ({ fieldName, mapToName }) => {
         setDraft((prev) =>
           produce(prev, (_draft) => {
-            // initialize read if it doesn't exist
-            const read = _draft.read || {};
-            const objects = read.objects || {};
-            const obj = objects[objectName] || {};
+            const { obj } = initializeObjectWithDefaults(objectName, _draft);
 
-            ///////////////////////////////////////////////////////////////////////
-            // get default schedule, destination, and required fields from manifest
-            // note: prefilling default values from manifest can be removed once taken care of in the backend //////////
-            const selectedObject = getReadObjectFromManifest(objectName);
-            const defaultSchedule = selectedObject?.object?.schedule;
-            const defaultDestination = selectedObject?.object?.destination;
-            // add required fields to defaultSelectedFields
-            const defaultSelectedFields: { [key: string]: boolean } = {};
-            selectedObject?.getRequiredFields()?.forEach((field) => {
-              if ("fieldName" in field) {
-                defaultSelectedFields[field.fieldName] = true;
-              }
-            });
-
-            // initialize required fields for object from manifest if not set
-            obj.objectName = obj.objectName || objectName;
-            obj.schedule = obj.schedule || defaultSchedule;
-            obj.destination = obj.destination || defaultDestination;
-            obj.selectedFields = obj.selectedFields || defaultSelectedFields;
-            // prefill defaults end ///////////////////////////////////////////////
-
-            // initialize selectedFieldMappings if it doesn't exist
+            // Initialize selectedFieldMappings if it doesn't exist
             obj.selectedFieldMappings = obj.selectedFieldMappings || {};
             obj.selectedFieldMappings[mapToName] = fieldName;
-
-            _draft.read = read;
-            return _draft;
           }),
         );
       },
     }),
-    [draft.read?.objects, getReadObjectFromManifest],
+    [draft.read?.objects, initializeObjectWithDefaults],
   );
 
   return {
