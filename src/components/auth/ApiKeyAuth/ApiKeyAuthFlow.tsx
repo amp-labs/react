@@ -40,10 +40,12 @@ export function ApiKeyAuthFlow({
     (form: IFormType) => {
       const { apiKey, providerMetadata } = form;
       const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
+      const providerWorkspaceRef = apiProviderMetadata?.workspace?.value;
 
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
+          providerWorkspaceRef,
           groupName,
           groupRef,
           consumerName,

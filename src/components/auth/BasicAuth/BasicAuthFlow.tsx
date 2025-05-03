@@ -26,10 +26,12 @@ export function BasicAuthFlow({
     (form: BasicCreds) => {
       const { user, pass, providerMetadata } = form;
       const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
+      const providerWorkspaceRef = apiProviderMetadata?.workspace?.value;
 
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
+          providerWorkspaceRef,
           groupName,
           groupRef,
           consumerName,
