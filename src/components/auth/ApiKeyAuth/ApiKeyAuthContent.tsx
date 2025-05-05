@@ -89,8 +89,8 @@ export function ApiKeyAuthForm({
       )}
       <div style={{ display: "flex", gap: ".5rem" }}>
         <FormComponent.Input
-          id="apiKey"
-          name="apiKey"
+          id="password"
+          name="password"
           type={show ? "text" : "password"}
           placeholder="API Key"
           onChange={handleChange}

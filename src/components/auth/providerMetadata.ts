@@ -2,10 +2,6 @@ import { MetadataItemInput, ProviderMetadataInfo } from "@generated/api/src";
 
 export type ProviderMetadata = Record<string, ProviderMetadataInfo>;
 
-/**
- * Gets provider metadata from form data and validates required fields.
- * For providers with no metadata or no input fields, returns an empty metadata object.
- */
 export function getProviderMetadata(
   metadataFields: MetadataItemInput[],
   formData: Record<string, string>,
@@ -34,10 +30,6 @@ export function getProviderMetadata(
   return metadata;
 }
 
-/**
- * Validates if all required provider metadata fields are filled.
- * For providers with no metadata or no input fields, returns true.
- */
 export function isProviderMetadataValid(
   metadataFields: MetadataItemInput[],
   formData: Record<string, string>,
