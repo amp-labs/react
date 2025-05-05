@@ -93,7 +93,6 @@ export function UpdateClientCredentialsConnect({
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           explicitScopesRequired={explicitScopesRequired}
-          explicitWorkspaceRequired={false}
           buttonVariant="ghost"
         />
       </div>
