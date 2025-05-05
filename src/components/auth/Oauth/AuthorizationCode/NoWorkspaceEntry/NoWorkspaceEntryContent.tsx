@@ -28,7 +28,7 @@ export function NoWorkspaceEntryContent({
         type="submit"
         onClick={handleSubmit}
       >
-        Next
+        {isButtonDisabled ? "Loading..." : "Next"}
       </Button>
     </AuthCardLayout>
   );
