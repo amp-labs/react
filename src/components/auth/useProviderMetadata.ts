@@ -24,7 +24,10 @@ export function useProviderMetadata(
     });
 
     if (missingFields.length > 0) {
-      setError(`Please fill in the following required fields: ${missingFields.join(", ")}.`);
+      setError(
+        `Please fill in the following required fields: ${missingFields.join(", ")}.`,
+      );
+
       return undefined;
     }
 
@@ -32,5 +35,12 @@ export function useProviderMetadata(
     return { providerMetadata: metadata };
   }, [formData, requiredProviderMetadata]);
 
-  return { getProviderMetadata, error, setError };
+  const isProviderMetadataValid = useCallback(() => {
+    return requiredProviderMetadata.every((item) => {
+      const value = formData[item.name];
+      return value && value.trim() !== "";
+    });
+  }, [formData, requiredProviderMetadata]);
+
+  return { getProviderMetadata, error, setError, isProviderMetadataValid };
 }

@@ -62,7 +62,8 @@ export function ApiKeyAuthForm({
 
   // Check if metadata is valid by trying to get it
   const metadataResult = getProviderMetadata();
-  const isMetadataValid = requiredProviderMetadata.length === 0 || !!metadataResult;
+  const isMetadataValid =
+    requiredProviderMetadata.length === 0 || !!metadataResult;
 
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;

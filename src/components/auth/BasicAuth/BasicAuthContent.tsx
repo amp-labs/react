@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MetadataItemInput, ProviderInfo, ProviderMetadataInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -69,13 +69,11 @@ export function BasicAuthForm({
 
   // Check if metadata is valid by trying to get it
   const metadataResult = getProviderMetadata();
-  const isMetadataValid = requiredProviderMetadata.length === 0 || !!metadataResult;
+  const isMetadataValid =
+    requiredProviderMetadata.length === 0 || !!metadataResult;
 
   const isSubmitDisabled =
-    isButtonDisabled ||
-    !isUserValid ||
-    !isPassValid ||
-    !isMetadataValid;
+    isButtonDisabled || !isUserValid || !isPassValid || !isMetadataValid;
 
   const onHandleSubmit = () => {
     handleSubmit({
