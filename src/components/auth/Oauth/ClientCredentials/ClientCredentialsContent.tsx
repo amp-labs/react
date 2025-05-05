@@ -66,18 +66,16 @@ export function ClientCredentialsForm({
 
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
-  const isScopesValid = explicitScopesRequired ? scopes.length > 0 : true;
-  const isMetadataValid = isProviderMetadataValid(provider, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
 
   const isSubmitDisabled =
     isButtonDisabled ||
     !isClientSecretValid ||
     !isClientIdValid ||
-    !isScopesValid ||
     !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(provider, formData);
+    const metadata = getProviderMetadata(metadataFields, formData);
 
     const req: ClientCredentialsCredsContent = {
       clientId,
@@ -127,7 +125,6 @@ export function ClientCredentialsForm({
           />
         )}
 
-        {/* Metadata fields */}
         {metadataFields.map((metadata) => (
           <FormComponent.Input
             key={metadata.name}
