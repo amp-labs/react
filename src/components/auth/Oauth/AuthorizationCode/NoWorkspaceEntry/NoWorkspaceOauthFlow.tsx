@@ -3,6 +3,7 @@
  */
 
 import { useCallback, useState } from "react";
+import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
 
 import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
 import { useOAuthPopupURL } from "../useOAuthPopupURL";
@@ -33,6 +34,11 @@ export function NoWorkspaceOauthFlow({
   const [localError, setError] = useState<string | null>(null);
   // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
   const [showURL, setShowURL] = useState<boolean>(false);
+  const { isFetching: isConnectionsFetching, refetch: refetchConnections } =
+    useConnectionsListQuery({
+      groupRef,
+      provider,
+    });
 
   const {
     url: oAuthPopupURL,
@@ -61,16 +67,26 @@ export function NoWorkspaceOauthFlow({
   const onSuccessConnect = useCallback(() => {
     setError(null);
     setShowURL(false); // do not show the OAuth popup URL after the connection is successfully created
-  }, [setError]);
+    refetchConnections();
+  }, [setError, refetchConnections]);
 
   const onWindowClose = useCallback(() => {
     setShowURL(false); // do not show the OAuth popup URL after the window is closed
-  }, [setShowURL]);
+    refetchConnections();
+  }, [setShowURL, refetchConnections]);
 
   //  fetch OAuth callback URL from connection so that oath popup can be launched
   const handleSubmit = async () => {
     setError(null);
+
+    const { data: connections } = await refetchConnections();
+    if (connections && connections.length > 0) {
+      // first refetch connection before attempting to re-auth
+      return;
+    }
+
     const result = await refetchOauthConnect();
+
     // If the OAuth connection URL is successfully fetched, set showURL to true
     // to display the OAuth popup. Otherwise, handle the error.
     if (result?.data) {
@@ -91,9 +107,12 @@ export function NoWorkspaceOauthFlow({
     >
       <NoWorkspaceEntryContent
         handleSubmit={handleSubmit}
-        error={error}
+        error={
+          // hide error message when the connections are being fetched
+          isConnectionsFetching ? "" : error
+        }
         providerName={providerName}
-        isButtonDisabled={isLoading}
+        isButtonDisabled={isLoading || isConnectionsFetching} // disable button when loading or fetching connections
       />
     </OAuthWindow>
   );
