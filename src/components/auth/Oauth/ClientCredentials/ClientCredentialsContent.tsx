@@ -1,24 +1,27 @@
 import { useState } from "react";
-import { MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
+import { useProviderInfoQuery } from "src/hooks/useProvider";
 import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { convertTextareaToArray } from "src/utils";
 
-import { useProviderMetadata } from "../../useProviderMetadata";
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+} from "../../providerMetadata";
 
 import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 type ClientCredentialsFormProps = {
+  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
-  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 type ClientCredentialsFormData = {
@@ -29,11 +32,11 @@ type ClientCredentialsFormData = {
 };
 
 export function ClientCredentialsForm({
+  provider,
   handleSubmit,
   isButtonDisabled,
   explicitScopesRequired,
   buttonVariant,
-  requiredProviderMetadata = [],
 }: ClientCredentialsFormProps) {
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
@@ -42,9 +45,8 @@ export function ClientCredentialsForm({
     scopes: "",
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const { getProviderMetadata, error, isProviderMetadataValid } =
-    useProviderMetadata(formData, requiredProviderMetadata);
+  const { data: providerInfo } = useProviderInfoQuery(provider);
+  const metadataFields = providerInfo?.metadata?.input || [];
 
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
 
@@ -65,7 +67,7 @@ export function ClientCredentialsForm({
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
   const isScopesValid = explicitScopesRequired ? scopes.length > 0 : true;
-  const isMetadataValid = isProviderMetadataValid();
+  const isMetadataValid = isProviderMetadataValid(provider, formData);
 
   const isSubmitDisabled =
     isButtonDisabled ||
@@ -75,19 +77,12 @@ export function ClientCredentialsForm({
     !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadataResult = getProviderMetadata();
-
-    if (requiredProviderMetadata.length > 0 && !isProviderMetadataValid()) {
-      setSubmitError(error || "Please fill in all required fields.");
-      return;
-    }
-
-    setSubmitError(null);
+    const metadata = getProviderMetadata(provider, formData);
 
     const req: ClientCredentialsCredsContent = {
       clientId,
       clientSecret,
-      providerMetadata: metadataResult?.providerMetadata,
+      providerMetadata: metadata,
     };
 
     if (explicitScopesRequired && scopes.length > 0) {
@@ -133,7 +128,7 @@ export function ClientCredentialsForm({
         )}
 
         {/* Metadata fields */}
-        {requiredProviderMetadata.map((metadata) => (
+        {metadataFields.map((metadata) => (
           <FormComponent.Input
             key={metadata.name}
             id={metadata.name}
@@ -160,21 +155,21 @@ export function ClientCredentialsForm({
 }
 
 type ClientCredentialsContentProps = {
+  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
-  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 export function ClientCredentialsContent({
+  provider,
   handleSubmit,
   error,
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
-  requiredProviderMetadata,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -182,10 +177,10 @@ export function ClientCredentialsContent({
       <AuthErrorAlert error={error} />
       <br />
       <ClientCredentialsForm
+        provider={provider}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
         explicitScopesRequired={explicitScopesRequired}
-        requiredProviderMetadata={requiredProviderMetadata}
       />
     </AuthCardLayout>
   );

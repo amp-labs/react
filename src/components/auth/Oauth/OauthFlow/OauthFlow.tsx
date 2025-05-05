@@ -67,7 +67,6 @@ export function OauthFlow({
         explicitScopesRequired={explicitScopesRequired}
         selectedConnection={selectedConnection}
         setSelectedConnection={setSelectedConnection}
-        requiredProviderMetadata={providerInfo.metadata?.input || []}
       />
     );
   }

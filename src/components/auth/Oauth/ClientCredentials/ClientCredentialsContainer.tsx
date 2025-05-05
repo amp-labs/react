@@ -6,7 +6,6 @@ import { useCallback, useState } from "react";
 import {
   Connection,
   GenerateConnectionOperationRequest,
-  MetadataItemInput,
 } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
@@ -25,7 +24,6 @@ interface OauthClientCredsContainerProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
-  requiredProviderMetadata?: MetadataItemInput[];
   selectedConnection: Connection | null;
 }
 
@@ -41,7 +39,6 @@ export function ClientCredsContainer({
   groupRef,
   groupName,
   explicitScopesRequired,
-  requiredProviderMetadata,
   selectedConnection,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useProject();
@@ -91,11 +88,11 @@ export function ClientCredsContainer({
   if (selectedConnection === null) {
     return (
       <ClientCredentialsContent
+        provider={provider}
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
-        requiredProviderMetadata={requiredProviderMetadata}
       />
     );
   }
