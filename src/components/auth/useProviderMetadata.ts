@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MetadataItemInput } from "@generated/api/src";
+import { useCallback, useState } from "react";
+import { MetadataItemInput, ProviderMetadataInfo } from "@generated/api/src";
 
 export function useProviderMetadata(
   formData: Record<string, string>,
@@ -7,16 +7,19 @@ export function useProviderMetadata(
 ) {
   const [error, setError] = useState<string | null>(null);
 
-  const getProviderMetadata = () => {
-    const metadata: Record<string, string> = {};
+  const getProviderMetadata = useCallback(() => {
+    const metadata: Record<string, ProviderMetadataInfo> = {};
     const missingFields: string[] = [];
 
     requiredProviderMetadata.forEach((item) => {
       const value = formData[item.name];
       if (!value || value.trim() === "") {
-        missingFields.push(item.name);
+        missingFields.push(item.displayName || item.name);
       } else {
-        metadata[item.name] = value;
+        metadata[item.name] = {
+          value,
+          source: "input",
+        };
       }
     });
 
@@ -24,22 +27,10 @@ export function useProviderMetadata(
       setError(`Please fill in the following required fields: ${missingFields.join(", ")}.`);
       return undefined;
     }
+
     setError(null);
-    return Object.keys(metadata).length
-      ? { providerMetadata: metadata }
-      : undefined;
-  };
+    return { providerMetadata: metadata };
+  }, [formData, requiredProviderMetadata]);
 
   return { getProviderMetadata, error, setError };
-}
-
-export function toApiProviderMetadata(
-  providerMetadata: Record<string, string> | undefined,
-): Record<string, { value: string; source: "input" }> | undefined {
-  if (!providerMetadata) return undefined;
-  const entries = Object.entries(providerMetadata).map(([name, value]) => [
-    name,
-    { value, source: "input" as const },
-  ]);
-  return entries.length ? Object.fromEntries(entries) : undefined;
 }

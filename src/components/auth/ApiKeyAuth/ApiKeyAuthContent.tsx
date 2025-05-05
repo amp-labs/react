@@ -52,29 +52,32 @@ export function ApiKeyAuthForm({
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.currentTarget;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
   const { apiKey } = formData;
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isMetadataValid = requiredProviderMetadata.every(
-    (item) => formData[item.name] && formData[item.name].trim().length > 0,
-  );
+
+  // Check if metadata is valid by trying to get it
+  const metadataResult = getProviderMetadata();
+  const isMetadataValid = requiredProviderMetadata.length === 0 || !!metadataResult;
+
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    const providerMetadata = getProviderMetadata();
-    if (requiredProviderMetadata.length > 0 && !providerMetadata) {
-      return;
+    // We already have the metadata result from the validation above
+    if (metadataResult?.providerMetadata) {
+      handleSubmit({
+        apiKey,
+        providerMetadata: metadataResult.providerMetadata,
+      });
+    } else {
+      handleSubmit({ apiKey });
     }
-    handleSubmit({
-      apiKey,
-      ...providerMetadata,
-    });
   };
 
   return (
@@ -128,7 +131,7 @@ export function ApiKeyAuthForm({
           />
         </div>
       ))}
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      <AuthErrorAlert error={error} />
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

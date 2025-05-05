@@ -1,4 +1,4 @@
-import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo, ProviderMetadataInfo } from "@generated/api/src";
 
 export type LandingContentProps = {
   provider: string;
@@ -11,5 +11,5 @@ export type LandingContentProps = {
 
 export interface IFormType {
   apiKey: string;
-  providerMetadata?: Record<string, string>;
+  providerMetadata?: Record<string, ProviderMetadataInfo>;
 }
