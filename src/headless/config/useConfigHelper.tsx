@@ -29,7 +29,17 @@ export function useConfigHelper(
     setDraft(initial);
   }, [initial]);
 
-  // Helper function to initialize object with defaults from manifest
+  /**
+   * Initializes an object within the `_draft` configuration with default values from the manifest.
+   * 
+   * @param objectName - The name of the object to initialize.
+   * @param _draft - The draft configuration object to modify. This object is updated in place.
+   * 
+   * Side Effects:
+   * - Modifies the `_draft.read.objects` property by adding or updating the specified object.
+   * - Sets default values for `schedule`, `destination`, and `selectedFields` based on the manifest.
+   * - Ensures required fields are initialized if not already set.
+   */
   const initializeObjectWithDefaults = useCallback(
     (objectName: string, _draft: UpdateInstallationConfigContent) => {
       const read = _draft.read || {};
