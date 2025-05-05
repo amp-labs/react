@@ -43,7 +43,7 @@ export function ApiKeyAuthForm({
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
-  const { getProviderMetadata, error } = useProviderMetadata(
+  const { getProviderMetadata, error, isProviderMetadataValid } = useProviderMetadata(
     formData,
     requiredProviderMetadata,
   );
@@ -59,17 +59,14 @@ export function ApiKeyAuthForm({
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-
-  // Check if metadata is valid by trying to get it
-  const metadataResult = getProviderMetadata();
-  const isMetadataValid =
-    requiredProviderMetadata.length === 0 || !!metadataResult;
+  const isMetadataValid = requiredProviderMetadata.length === 0 || isProviderMetadataValid();
 
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
+    const metadataResult = getProviderMetadata();
     handleSubmit({
       apiKey,
       providerMetadata: metadataResult?.providerMetadata,

@@ -47,7 +47,7 @@ export function BasicAuthForm({
   });
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
-  const { getProviderMetadata, error } = useProviderMetadata(
+  const { getProviderMetadata, error, isProviderMetadataValid } = useProviderMetadata(
     formData,
     requiredProviderMetadata,
   );
@@ -64,18 +64,12 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const isUserValid = username.length > 0;
-  const isPassValid = password.length > 0;
 
-  // Check if metadata is valid by trying to get it
-  const metadataResult = getProviderMetadata();
-  const isMetadataValid =
-    requiredProviderMetadata.length === 0 || !!metadataResult;
-
-  const isSubmitDisabled =
-    isButtonDisabled || !isUserValid || !isPassValid || !isMetadataValid;
+  const isMetadataValid = requiredProviderMetadata.length === 0 || isProviderMetadataValid();
+  const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
 
   const onHandleSubmit = () => {
+    const metadataResult = getProviderMetadata();
     handleSubmit({
       user: username,
       pass: password,
