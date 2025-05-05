@@ -3,7 +3,6 @@ import { GenerateConnectionOperationRequest } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
-import { toApiProviderMetadata } from "../useProviderMetadata";
 
 import { BasicAuthContent } from "./BasicAuthContent";
 import { BasicAuthFlowProps } from "./BasicAuthFlowProps";
@@ -25,13 +24,11 @@ export function BasicAuthFlow({
   const onNext = useCallback(
     (form: BasicCreds) => {
       const { user, pass, providerMetadata } = form;
-      const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
-      const providerWorkspaceRef = apiProviderMetadata?.workspace?.value;
 
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
-          providerWorkspaceRef,
+          providerWorkspaceRef: providerMetadata?.workspace?.value,
           groupName,
           groupRef,
           consumerName,
@@ -41,7 +38,7 @@ export function BasicAuthFlow({
             username: user,
             password: pass,
           },
-          ...(apiProviderMetadata && { providerMetadata: apiProviderMetadata }),
+          ...(providerMetadata && { providerMetadata }),
         },
       };
       createConnectionMutation.mutate(req);

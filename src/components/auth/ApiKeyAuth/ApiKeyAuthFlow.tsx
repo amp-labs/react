@@ -7,7 +7,6 @@ import { useProject } from "context/ProjectContextProvider";
 import { Connection } from "services/api";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
-import { toApiProviderMetadata } from "../useProviderMetadata";
 
 import { ApiKeyAuthContent } from "./ApiKeyAuthContent";
 import { IFormType } from "./LandingContentProps";
@@ -39,20 +38,18 @@ export function ApiKeyAuthFlow({
   const onNext = useCallback(
     (form: IFormType) => {
       const { apiKey, providerMetadata } = form;
-      const apiProviderMetadata = toApiProviderMetadata(providerMetadata);
-      const providerWorkspaceRef = apiProviderMetadata?.workspace?.value;
 
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
-          providerWorkspaceRef,
+          providerWorkspaceRef: providerMetadata?.workspace?.value,
           groupName,
           groupRef,
           consumerName,
           consumerRef,
           provider,
           apiKey,
-          ...(apiProviderMetadata && { providerMetadata: apiProviderMetadata }),
+          ...(providerMetadata && { providerMetadata }),
         },
       };
       createConnectionMutation.mutate(req);
