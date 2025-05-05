@@ -7,6 +7,7 @@ import { useProject } from "context/ProjectContextProvider";
 import { Connection } from "services/api";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
+import { ProviderMetadata } from "../providerMetadata";
 
 import { ApiKeyAuthContent } from "./ApiKeyAuthContent";
 import { IFormType } from "./LandingContentProps";
@@ -72,7 +73,6 @@ export function ApiKeyAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={null}
-        requiredProviderMetadata={providerInfo.metadata?.input || []}
       />
     );
   }

@@ -38,7 +38,7 @@ export function BasicAuthFlow({
             username: user,
             password: pass,
           },
-          ...(providerMetadata && { providerMetadata }),
+          ...(providerMetadata && { providerMetadata: providerMetadata }),
         },
       };
       createConnectionMutation.mutate(req);
@@ -61,7 +61,6 @@ export function BasicAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={null}
-        requiredProviderMetadata={providerInfo.metadata?.input || []}
       />
     );
   }

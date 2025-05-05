@@ -12,7 +12,7 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
-import { useProviderMetadata } from "../useProviderMetadata";
+import { getProviderMetadata, isProviderMetadataValid, getProviderMetadataFields } from "../providerMetadata";
 
 import { IFormType, LandingContentProps } from "./LandingContentProps";
 
@@ -23,7 +23,6 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
-  requiredProviderMetadata?: MetadataItemInput[];
 };
 
 type ApiKeyFormData = {
@@ -38,15 +37,11 @@ export function ApiKeyAuthForm({
   isButtonDisabled,
   buttonVariant,
   submitButtonType,
-  requiredProviderMetadata = [],
 }: ApiKeyAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
-  const { getProviderMetadata, error, isProviderMetadataValid } = useProviderMetadata(
-    formData,
-    requiredProviderMetadata,
-  );
+  const metadataFields = getProviderMetadataFields(provider);
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -59,17 +54,16 @@ export function ApiKeyAuthForm({
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isMetadataValid = requiredProviderMetadata.length === 0 || isProviderMetadataValid();
-
-  const isSubmitDisabled =
-    isButtonDisabled || !isApiKeyValid || !isMetadataValid;
+  const isMetadataValid = isProviderMetadataValid(provider, formData);
+  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    const metadataResult = getProviderMetadata();
+    const metadata = getProviderMetadata(provider, formData);
+
     handleSubmit({
       apiKey,
-      providerMetadata: metadataResult?.providerMetadata,
+      providerMetadata: metadata,
     });
   };
 
@@ -106,7 +100,7 @@ export function ApiKeyAuthForm({
           {show ? "Hide" : "Show"}
         </Button>
       </div>
-      {requiredProviderMetadata.map((metadata) => (
+      {metadataFields.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
             <DocsHelperText
@@ -124,7 +118,6 @@ export function ApiKeyAuthForm({
           />
         </div>
       ))}
-      <AuthErrorAlert error={error} />
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}
@@ -144,7 +137,6 @@ function ApiKeyAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
-  requiredProviderMetadata,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -157,7 +149,6 @@ function ApiKeyAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
-        requiredProviderMetadata={requiredProviderMetadata}
       />
     </AuthCardLayout>
   );

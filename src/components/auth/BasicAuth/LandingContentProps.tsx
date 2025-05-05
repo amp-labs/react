@@ -1,13 +1,13 @@
 import {
-  MetadataItemInput,
   ProviderInfo,
-  ProviderMetadataInfo,
 } from "@generated/api/src";
+
+import { ProviderMetadata } from "../providerMetadata";
 
 export type BasicCreds = {
   user: string;
   pass: string;
-  providerMetadata?: Record<string, ProviderMetadataInfo>;
+  providerMetadata?: ProviderMetadata;
 };
 
 export type LandingContentProps = {
@@ -16,5 +16,4 @@ export type LandingContentProps = {
   handleSubmit: (form: BasicCreds) => void;
   error: string | null;
   isButtonDisabled?: boolean;
-  requiredProviderMetadata?: MetadataItemInput[];
 };
