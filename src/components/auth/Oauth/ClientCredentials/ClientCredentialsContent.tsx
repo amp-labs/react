@@ -41,11 +41,10 @@ export function ClientCredentialsForm({
     clientId: "",
     scopes: "",
   });
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const { getProviderMetadata, error } = useProviderMetadata(
-    formData,
-    requiredProviderMetadata,
-  );
+  const { getProviderMetadata, error, isProviderMetadataValid } =
+    useProviderMetadata(formData, requiredProviderMetadata);
 
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
 
@@ -55,8 +54,10 @@ export function ClientCredentialsForm({
     const { name, value } = event.currentTarget;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value.trim(), // Trim whitespace on input
+      [name]: value.trim(),
     }));
+
+    setSubmitError(null);
   };
 
   const { clientSecret, clientId, scopes } = formData;
@@ -64,11 +65,7 @@ export function ClientCredentialsForm({
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
   const isScopesValid = explicitScopesRequired ? scopes.length > 0 : true;
-
-  // Check if metadata is valid by trying to get it
-  const metadataResult = getProviderMetadata();
-  const isMetadataValid =
-    requiredProviderMetadata.length === 0 || !!metadataResult;
+  const isMetadataValid = isProviderMetadataValid();
 
   const isSubmitDisabled =
     isButtonDisabled ||
@@ -78,16 +75,24 @@ export function ClientCredentialsForm({
     !isMetadataValid;
 
   const onHandleSubmit = () => {
+    const metadataResult = getProviderMetadata();
+
+    if (requiredProviderMetadata.length > 0 && !isProviderMetadataValid()) {
+      setSubmitError(error || "Please fill in all required fields.");
+      return;
+    }
+
+    setSubmitError(null);
+
     const req: ClientCredentialsCredsContent = {
       clientId,
       clientSecret,
+      providerMetadata: metadataResult?.providerMetadata,
     };
 
     if (explicitScopesRequired && scopes.length > 0) {
       req.scopes = convertTextareaToArray(scopes);
     }
-
-    req.providerMetadata = metadataResult?.providerMetadata;
 
     handleSubmit(req);
   };
@@ -139,7 +144,7 @@ export function ClientCredentialsForm({
           />
         ))}
       </div>
-      <AuthErrorAlert error={error} />
+      <AuthErrorAlert error={submitError} />
       <br />
       <Button
         style={{ width: "100%" }}
