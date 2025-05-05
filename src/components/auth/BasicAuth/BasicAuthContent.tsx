@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo, ProviderMetadataInfo } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -56,7 +56,7 @@ export function BasicAuthForm({
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.currentTarget;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
   // This is a workaround for the fact that some providers use Basic Auth
@@ -64,25 +64,27 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const onHandleSubmit = () => {
-    const providerMetadata = getProviderMetadata();
-    if (requiredProviderMetadata.length > 0 && !providerMetadata) {
-      return;
-    }
-    handleSubmit({
-      user: username,
-      pass: password,
-      ...providerMetadata,
-    });
-  };
+  const isUserValid = username.length > 0;
+  const isPassValid = password.length > 0;
+
+  // Check if metadata is valid by trying to get it
+  const metadataResult = getProviderMetadata();
+  const isMetadataValid = requiredProviderMetadata.length === 0 || !!metadataResult;
 
   const isSubmitDisabled =
     isButtonDisabled ||
-    !username ||
-    !password ||
-    requiredProviderMetadata.some(
-      (item) => !formData[item.name] || formData[item.name].trim() === "",
-    );
+    !isUserValid ||
+    !isPassValid ||
+    !isMetadataValid;
+
+  const onHandleSubmit = () => {
+    handleSubmit({
+      user: username,
+      pass: password,
+      providerMetadata: metadataResult?.providerMetadata,
+    });
+  };
+
   const docsURL = providerInfo.basicOpts?.docsURL;
 
   return (
@@ -106,7 +108,7 @@ export function BasicAuthForm({
         name="username"
         type="text"
         placeholder="Username"
-        onChange={(event) => handleChange(event)}
+        onChange={handleChange}
       />
       <div style={{ display: "flex", gap: ".5rem" }}>
         <FormComponent.Input
@@ -114,7 +116,7 @@ export function BasicAuthForm({
           name="password"
           type={show ? "text" : "password"}
           placeholder="Password"
-          onChange={(event) => handleChange(event)}
+          onChange={handleChange}
         />
         <Button
           type="button"
@@ -139,11 +141,11 @@ export function BasicAuthForm({
             name={metadata.name}
             type="text"
             placeholder={metadata.displayName || metadata.name}
-            onChange={(event) => handleChange(event)}
+            onChange={handleChange}
           />
         </div>
       ))}
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      <AuthErrorAlert error={error} />
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}

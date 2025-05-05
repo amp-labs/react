@@ -1,9 +1,9 @@
-import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo, ProviderMetadataInfo } from "@generated/api/src";
 
 export type BasicCreds = {
   user: string;
   pass: string;
-  providerMetadata?: Record<string, string>;
+  providerMetadata?: Record<string, ProviderMetadataInfo>;
 };
 
 export type LandingContentProps = {

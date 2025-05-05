@@ -69,15 +69,10 @@ export function ApiKeyAuthForm({
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    // We already have the metadata result from the validation above
-    if (metadataResult?.providerMetadata) {
-      handleSubmit({
-        apiKey,
-        providerMetadata: metadataResult.providerMetadata,
-      });
-    } else {
-      handleSubmit({ apiKey });
-    }
+    handleSubmit({
+      apiKey,
+      providerMetadata: metadataResult?.providerMetadata,
+    });
   };
 
   return (
