@@ -1,6 +1,4 @@
-import {
-  ProviderInfo,
-} from "@generated/api/src";
+import { ProviderInfo } from "@generated/api/src";
 
 import { ProviderMetadata } from "../providerMetadata";
 

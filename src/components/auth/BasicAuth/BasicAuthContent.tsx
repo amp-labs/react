@@ -12,7 +12,10 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
-import { getProviderMetadata, isProviderMetadataValid, getProviderMetadataFields } from "../providerMetadata";
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+} from "../providerMetadata";
 
 import { BasicCreds, LandingContentProps } from "./LandingContentProps";
 
@@ -43,7 +46,7 @@ export function BasicAuthForm({
     username: "",
     password: "",
   });
-  const metadataFields = getProviderMetadataFields(provider);
+  const metadataFields = providerInfo.metadata?.input || [];
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
 
@@ -59,11 +62,11 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const isMetadataValid = isProviderMetadataValid(provider, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
   const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(provider, formData);
+    const metadata = getProviderMetadata(metadataFields, formData);
 
     handleSubmit({
       user: username,
