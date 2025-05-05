@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import {
   Connection,
   GenerateConnectionOperationRequest,
+  MetadataItemInput,
 } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
@@ -24,7 +25,7 @@ interface OauthClientCredsContainerProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired?: boolean;
+  requiredProviderMetadata?: MetadataItemInput[];
   selectedConnection: Connection | null;
 }
 
@@ -40,7 +41,7 @@ export function ClientCredsContainer({
   groupRef,
   groupName,
   explicitScopesRequired,
-  explicitWorkspaceRequired,
+  requiredProviderMetadata,
   selectedConnection,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useProject();
@@ -60,12 +61,15 @@ export function ClientCredsContainer({
           consumerName,
           consumerRef,
           provider,
-          providerWorkspaceRef: creds.workspace,
+          providerWorkspaceRef: creds.providerMetadata?.workspace?.value,
           oauth2ClientCredentials: {
             clientId: creds.clientId,
             clientSecret: creds.clientSecret,
             scopes: creds.scopes,
           },
+          ...(creds.providerMetadata && {
+            providerMetadata: creds.providerMetadata,
+          }),
         },
       };
 
@@ -91,7 +95,7 @@ export function ClientCredsContainer({
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
-        explicitWorkspaceRequired={explicitWorkspaceRequired}
+        requiredProviderMetadata={requiredProviderMetadata}
       />
     );
   }

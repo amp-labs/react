@@ -1,4 +1,4 @@
-import { Connection } from "@generated/api/src";
+import { Connection, MetadataItemInput } from "@generated/api/src";
 
 import { ClientCredsContainer } from "./ClientCredentialsContainer";
 
@@ -10,10 +10,11 @@ interface ClientCredsFlowProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired: boolean;
+  requiredProviderMetadata?: MetadataItemInput[];
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
 }
+
 export function ClientCredentials({ ...props }: ClientCredsFlowProps) {
   return <ClientCredsContainer {...props} />;
 }
