@@ -1,4 +1,10 @@
 import { useCallback, useState } from "react";
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+  ProviderMetadata,
+} from "src/components/auth/providerMetadata";
+import { useProviderInfoQuery } from "src/hooks/useProvider";
 
 import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
 import { useOAuthPopupURL } from "../useOAuthPopupURL";
@@ -31,10 +37,17 @@ export function WorkspaceOauthFlow({
   providerName,
 }: WorkspaceOauthFlowProps) {
   const [workspace, setWorkspace] = useState<string>("");
+  const [formData, setFormData] = useState<Record<string, string>>({});
   const [localError, setLocalError] = useState<string | null>(null);
   // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
   // when this is false, then OAuthWindow component will not pop up a window.
   const [showURL, setShowURL] = useState<boolean>(false);
+  const [metadata, setMetadata] = useState<ProviderMetadata | undefined>(
+    undefined,
+  );
+
+  const { data: providerInfo } = useProviderInfoQuery(provider);
+  const metadataFields = providerInfo?.metadata?.input || [];
 
   const {
     url: oAuthPopupURL,
@@ -45,9 +58,10 @@ export function WorkspaceOauthFlow({
     consumerRef,
     groupRef,
     provider,
-    workspace,
     consumerName,
     groupName,
+    provider === PROVIDER_SALESFORCE ? workspace : undefined,
+    metadata,
   );
 
   const errorMessage = oAuthConnectError?.message || localError || null;
@@ -65,14 +79,35 @@ export function WorkspaceOauthFlow({
     setShowURL(false);
   }, [setShowURL]);
 
+  const handleFormDataChange = (key: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
   //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const handleSubmit = async () => {
+  const salesforceHandleSubmit = async () => {
     setLocalError(null);
     if (!workspace) {
       setLocalError("Workspace is required");
       return;
     }
 
+    setMetadata({ workspace: { value: workspace, source: "input" } });
+    const result = await refetchOauthConnect();
+    if (result?.data) {
+      setShowURL(true);
+    } else {
+      onError(result?.error?.message || "Authentication failed");
+    }
+  };
+
+  const providerHandleSubmit = async () => {
+    setLocalError(null);
+    if (!isProviderMetadataValid(metadataFields, formData)) {
+      setLocalError("Please fill in all required fields");
+      return;
+    }
+
+    setMetadata(getProviderMetadata(metadataFields, formData));
     const result = await refetchOauthConnect();
     if (result?.data) {
       setShowURL(true);
@@ -85,7 +120,7 @@ export function WorkspaceOauthFlow({
   const workspaceEntryComponent =
     provider === PROVIDER_SALESFORCE ? (
       <SalesforceSubdomainEntry
-        handleSubmit={handleSubmit}
+        handleSubmit={salesforceHandleSubmit}
         setWorkspace={setWorkspace}
         error={errorMessage}
         isButtonDisabled={workspace.length === 0}
@@ -93,11 +128,14 @@ export function WorkspaceOauthFlow({
     ) : (
       // general workspace entry component
       <WorkspaceEntryContent
-        handleSubmit={handleSubmit}
-        setWorkspace={setWorkspace}
+        handleSubmit={providerHandleSubmit}
+        setFormData={handleFormDataChange}
         error={errorMessage}
-        isButtonDisabled={workspace.length === 0 || isLoading}
+        isButtonDisabled={
+          !isProviderMetadataValid(metadataFields, formData) || isLoading
+        }
         providerName={providerName}
+        metadataFields={metadataFields}
       />
     );
 

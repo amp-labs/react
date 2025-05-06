@@ -35,8 +35,7 @@ export function OauthFlow({
     return <em>Provider is missing OAuth2 options</em>;
   }
 
-  const { grantType, explicitScopesRequired, explicitWorkspaceRequired } =
-    providerInfo.oauth2Opts;
+  const { grantType, explicitScopesRequired } = providerInfo.oauth2Opts;
 
   const sharedProps = {
     provider,
@@ -51,8 +50,9 @@ export function OauthFlow({
     grantType === AUTHORIZATION_CODE ||
     grantType === AUTHORIZATION_CODE_PKCE
   ) {
-    // required workspace
-    if (explicitWorkspaceRequired) {
+    // if some metadata is required, we reuse the workspace oauth flow for now.
+    // TODO: Combine WorkspaceOauthFlow and NoWorkspaceOauthFlow into a single flow.
+    if (providerInfo.metadata?.input) {
       return <WorkspaceOauthFlow {...sharedProps} />;
     }
 

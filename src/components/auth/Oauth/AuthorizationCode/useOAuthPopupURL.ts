@@ -9,15 +9,18 @@ import { useProviderInfoQuery } from "src/hooks/useProvider";
 import { getProviderName } from "src/utils";
 import { handleServerError } from "src/utils/handleServerError";
 
+import { ProviderMetadata } from "../../providerMetadata";
+
 import { enableCSRFProtection } from "./enableCSRFprotection";
 
 export const useOAuthPopupURL = (
   consumerRef: string,
   groupRef: string,
   provider: string,
-  workspace?: string,
   consumerName?: string,
   groupName?: string,
+  workspace?: string,
+  providerMetadata?: ProviderMetadata,
 ) => {
   const { projectId } = useProject();
   const {
@@ -35,7 +38,7 @@ export const useOAuthPopupURL = (
   const providerName = provInfo ? getProviderName(provider, provInfo) : null;
 
   const request: OauthConnectRequest = {
-    providerWorkspaceRef: workspace,
+    providerWorkspaceRef: workspace || providerMetadata?.workspace?.value,
     projectId,
     groupRef,
     groupName,
@@ -44,6 +47,7 @@ export const useOAuthPopupURL = (
     providerAppId: app?.id,
     provider,
     enableCSRFProtection,
+    providerMetadata,
   };
 
   const {
