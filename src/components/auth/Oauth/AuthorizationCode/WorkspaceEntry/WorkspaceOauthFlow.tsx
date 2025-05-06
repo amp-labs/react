@@ -60,7 +60,7 @@ export function WorkspaceOauthFlow({
     provider,
     consumerName,
     groupName,
-    provider === PROVIDER_SALESFORCE ? workspace : undefined,
+    provider === PROVIDER_SALESFORCE ? workspace : metadata?.workspace?.value,
     metadata,
   );
 

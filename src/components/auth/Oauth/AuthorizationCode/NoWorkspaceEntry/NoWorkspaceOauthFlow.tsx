@@ -51,7 +51,7 @@ export function NoWorkspaceOauthFlow({
     provider,
     consumerName,
     groupName,
-    "",
+    undefined,
     {},
   );
 

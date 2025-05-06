@@ -31,10 +31,10 @@ export function useConfigHelper(
 
   /**
    * Initializes an object within the `_draft` configuration with default values from the manifest.
-   * 
+   *
    * @param objectName - The name of the object to initialize.
    * @param _draft - The draft configuration object to modify. This object is updated in place.
-   * 
+   *
    * Side Effects:
    * - Modifies the `_draft.read.objects` property by adding or updating the specified object.
    * - Sets default values for `schedule`, `destination`, and `selectedFields` based on the manifest.
