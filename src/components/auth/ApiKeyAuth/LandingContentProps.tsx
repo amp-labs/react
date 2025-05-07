@@ -1,5 +1,7 @@
 import { ProviderInfo } from "@generated/api/src";
 
+import { ProviderMetadata } from "../providerMetadata";
+
 export type LandingContentProps = {
   provider: string;
   providerInfo: ProviderInfo;
@@ -10,4 +12,5 @@ export type LandingContentProps = {
 
 export interface IFormType {
   apiKey: string;
+  providerMetadata?: ProviderMetadata;
 }

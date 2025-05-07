@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProviderInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -12,6 +12,11 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+} from "../providerMetadata";
+
 import { IFormType, LandingContentProps } from "./LandingContentProps";
 
 type ApiKeyAuthFormProps = {
@@ -21,6 +26,11 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
+};
+
+type ApiKeyFormData = {
+  apiKey: string;
+  [key: string]: string;
 };
 
 export function ApiKeyAuthForm({
@@ -33,14 +43,33 @@ export function ApiKeyAuthForm({
 }: ApiKeyAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [apiKey, setApiKey] = useState("");
-  const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) =>
-    setApiKey(event.currentTarget.value);
+  const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
+  const metadataFields = providerInfo.metadata?.input || [];
+
+  const handleChange = (
+    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.currentTarget;
+    setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
+  };
+
+  const { apiKey } = formData;
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isSubmitDisabled = isButtonDisabled || !isApiKeyValid;
+  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isSubmitDisabled =
+    isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
+
+  const onHandleSubmit = () => {
+    const metadata = getProviderMetadata(metadataFields, formData);
+
+    handleSubmit({
+      apiKey,
+      providerMetadata: metadata,
+    });
+  };
 
   return (
     <div
@@ -64,7 +93,7 @@ export function ApiKeyAuthForm({
           name="password"
           type={show ? "text" : "password"}
           placeholder="API Key"
-          onChange={(event) => handlePasswordChange(event)}
+          onChange={handleChange}
         />
         <Button
           type="button"
@@ -75,11 +104,29 @@ export function ApiKeyAuthForm({
           {show ? "Hide" : "Show"}
         </Button>
       </div>
+      {metadataFields.map((metadata: MetadataItemInput) => (
+        <div key={metadata.name}>
+          {metadata.docsURL && (
+            <DocsHelperText
+              url={metadata.docsURL}
+              providerDisplayName={providerName || capitalize(provider)}
+              credentialName={metadata.displayName || metadata.name}
+            />
+          )}
+          <FormComponent.Input
+            id={metadata.name}
+            name={metadata.name}
+            type="text"
+            placeholder={metadata.displayName || metadata.name}
+            onChange={handleChange}
+          />
+        </div>
+      ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isSubmitDisabled}
         type={submitButtonType || "submit"}
-        onClick={() => handleSubmit({ apiKey })}
+        onClick={onHandleSubmit}
         variant={buttonVariant}
       >
         Next

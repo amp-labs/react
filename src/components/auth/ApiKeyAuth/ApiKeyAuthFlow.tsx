@@ -37,16 +37,19 @@ export function ApiKeyAuthFlow({
 
   const onNext = useCallback(
     (form: IFormType) => {
-      const { apiKey } = form;
+      const { apiKey, providerMetadata } = form;
+
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
+          providerWorkspaceRef: providerMetadata?.workspace?.value,
           groupName,
           groupRef,
           consumerName,
           consumerRef,
           provider,
           apiKey,
+          ...(providerMetadata && { providerMetadata }),
         },
       };
       createConnectionMutation.mutate(req);

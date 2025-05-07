@@ -1,8 +1,5 @@
 import { useCallback } from "react";
-import {
-  GenerateConnectionOperationRequest,
-  ProviderMetadataInfo,
-} from "@generated/api/src";
+import { GenerateConnectionOperationRequest } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
@@ -27,9 +24,11 @@ export function BasicAuthFlow({
   const onNext = useCallback(
     (form: BasicCreds) => {
       const { user, pass, providerMetadata } = form;
+
       const req: GenerateConnectionOperationRequest = {
         projectIdOrName,
         generateConnectionParams: {
+          providerWorkspaceRef: providerMetadata?.workspace?.value,
           groupName,
           groupRef,
           consumerName,
@@ -39,18 +38,7 @@ export function BasicAuthFlow({
             username: user,
             password: pass,
           },
-          ...(providerMetadata && {
-            providerMetadata: Object.entries(providerMetadata).reduce(
-              (acc, [name, value]) => {
-                acc[name] = {
-                  value,
-                  source: "input" as const,
-                };
-                return acc;
-              },
-              {} as Record<string, ProviderMetadataInfo>,
-            ),
-          }),
+          ...(providerMetadata && { providerMetadata: providerMetadata }),
         },
       };
       createConnectionMutation.mutate(req);
@@ -73,7 +61,6 @@ export function BasicAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={null}
-        requiredProviderMetadata={providerInfo.metadata?.input || []}
       />
     );
   }

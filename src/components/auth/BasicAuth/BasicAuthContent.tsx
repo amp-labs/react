@@ -12,6 +12,11 @@ import { capitalize } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+} from "../providerMetadata";
+
 import { BasicCreds, LandingContentProps } from "./LandingContentProps";
 
 type BasicAuthFormProps = {
@@ -20,7 +25,12 @@ type BasicAuthFormProps = {
   handleSubmit: (form: BasicCreds) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
-  requiredProviderMetadata?: MetadataItemInput[];
+};
+
+type FormData = {
+  username: string;
+  password: string;
+  [key: string]: string;
 };
 
 export function BasicAuthForm({
@@ -29,15 +39,14 @@ export function BasicAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
-  requiredProviderMetadata = [],
 }: BasicAuthFormProps) {
   const [show, setShow] = useState(false);
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
-  const [formData, setFormData] = useState<{
-    username: string;
-    password: string;
-    [key: string]: string;
-  }>({ username: "", password: "" });
+  const [formData, setFormData] = useState<FormData>({
+    username: "",
+    password: "",
+  });
+  const metadataFields = providerInfo.metadata?.input || [];
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
 
@@ -45,7 +54,7 @@ export function BasicAuthForm({
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.currentTarget;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
   // This is a workaround for the fact that some providers use Basic Auth
@@ -53,37 +62,19 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
+  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
+
   const onHandleSubmit = () => {
-    const metadata: Record<string, string> = {};
-    let hasEmptyFields = false;
-
-    requiredProviderMetadata.forEach((item) => {
-      const value = formData[item.name];
-      if (!value || value.trim() === "") {
-        hasEmptyFields = true;
-      } else {
-        metadata[item.name] = value;
-      }
-    });
-
-    if (hasEmptyFields) {
-      return;
-    }
+    const metadata = getProviderMetadata(metadataFields, formData);
 
     handleSubmit({
       user: username,
       pass: password,
-      ...(Object.keys(metadata).length > 0 && { providerMetadata: metadata }),
+      providerMetadata: metadata,
     });
   };
 
-  const isSubmitDisabled =
-    isButtonDisabled ||
-    !username ||
-    !password ||
-    requiredProviderMetadata.some(
-      (item) => !formData[item.name] || formData[item.name].trim() === "",
-    );
   const docsURL = providerInfo.basicOpts?.docsURL;
 
   return (
@@ -107,7 +98,7 @@ export function BasicAuthForm({
         name="username"
         type="text"
         placeholder="Username"
-        onChange={(event) => handleChange(event)}
+        onChange={handleChange}
       />
       <div style={{ display: "flex", gap: ".5rem" }}>
         <FormComponent.Input
@@ -115,7 +106,7 @@ export function BasicAuthForm({
           name="password"
           type={show ? "text" : "password"}
           placeholder="Password"
-          onChange={(event) => handleChange(event)}
+          onChange={handleChange}
         />
         <Button
           type="button"
@@ -126,7 +117,7 @@ export function BasicAuthForm({
           {show ? "Hide" : "Show"}
         </Button>
       </div>
-      {requiredProviderMetadata.map((metadata) => (
+      {metadataFields.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
             <DocsHelperText
@@ -140,7 +131,7 @@ export function BasicAuthForm({
             name={metadata.name}
             type="text"
             placeholder={metadata.displayName || metadata.name}
-            onChange={(event) => handleChange(event)}
+            onChange={handleChange}
           />
         </div>
       ))}
@@ -163,7 +154,6 @@ function BasicAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
-  requiredProviderMetadata,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -176,7 +166,6 @@ function BasicAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
-        requiredProviderMetadata={requiredProviderMetadata}
       />
     </AuthCardLayout>
   );
