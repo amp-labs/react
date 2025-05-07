@@ -1,17 +1,56 @@
 import { useCallback, useState } from "react";
 import type {
   BaseReadConfigObject,
+  BaseWriteConfigObject,
+  FieldSetting,
+  FieldSettingDefault,
+  FieldSettingWriteOnCreateEnum,
+  FieldSettingWriteOnUpdateEnum,
   UpdateInstallationConfigContent,
 } from "@generated/api/src";
 import { produce } from "immer";
 
 import { useManifest } from "../manifest/useManifest";
+
 type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
   getSelectedField: (fieldName: string) => boolean;
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;
   getFieldMapping: (fieldName: string) => string | undefined;
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
+};
+
+type WriteObjectHandlers = {
+  object: BaseWriteConfigObject | undefined;
+  setEnableWrite: () => void;
+  setDisableWrite: () => void;
+  getWriteObject: () => BaseWriteConfigObject | undefined;
+  // advanced write features
+  // https://docs.withampersand.com/write-actions#advanced-use-cases
+  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;
+  setSelectedFieldSettings: (params: {
+    fieldName: string;
+    settings: FieldSetting;
+  }) => void;
+  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
+  setDefaultValues: (params: {
+    fieldName: string;
+    value: FieldSettingDefault;
+  }) => void;
+  getWriteOnCreateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnCreateEnum | undefined;
+  setWriteOnCreateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnCreateEnum;
+  }) => void;
+  getWriteOnUpdateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnUpdateEnum | undefined;
+  setWriteOnUpdateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnUpdateEnum;
+  }) => void;
 };
 
 export function useConfigHelper(
@@ -115,11 +154,123 @@ export function useConfigHelper(
     [draft.read?.objects, initializeObjectWithDefaults],
   );
 
+  const writeObject = useCallback(
+    (objectName: string): WriteObjectHandlers => {
+      const object = draft.write?.objects?.[objectName];
+
+      const initializeWriteObject = (
+        _draft: UpdateInstallationConfigContent,
+      ) => {
+        // initialize write if it doesn't exist
+        const write = _draft.write || {};
+        // initialize object if it doesn't exist
+        const objects = write.objects || {};
+        const obj = objects[objectName] || {
+          objectName: objectName, // required field
+        };
+
+        objects[objectName] = obj;
+        write.objects = objects;
+        _draft.write = write;
+
+        return { write, objects, obj };
+      };
+
+      // Helper function to get field setting value
+      const getFieldSetting = <T extends keyof FieldSetting>(
+        fieldName: string,
+        settingKey: T,
+      ): FieldSetting[T] | undefined => {
+        return object?.selectedFieldSettings?.[fieldName]?.[settingKey];
+      };
+
+      // Helper function to set field setting value
+      const setFieldSetting = <T extends keyof FieldSetting>(
+        fieldName: string,
+        settingKey: T,
+        value: FieldSetting[T],
+      ) => {
+        setDraft((prev) =>
+          produce(prev, (_draft) => {
+            const { obj } = initializeWriteObject(_draft);
+
+            obj.selectedFieldSettings = {
+              ...obj.selectedFieldSettings,
+              [fieldName]: {
+                ...obj.selectedFieldSettings?.[fieldName],
+                [settingKey]: value,
+              },
+            };
+          }),
+        );
+      };
+
+      return {
+        object: object,
+        setEnableWrite: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+              obj.objectName = objectName;
+            }),
+          );
+        },
+        setDisableWrite: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { objects } = initializeWriteObject(_draft);
+              delete objects.objectName;
+            }),
+          );
+        },
+        getWriteObject: () => {
+          return draft.write?.objects?.[objectName];
+        },
+        getSelectedFieldSettings: (fieldName: string) =>
+          object?.selectedFieldSettings?.[fieldName],
+        setSelectedFieldSettings: ({ fieldName, settings }) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+
+              // initialize selectedFieldSettings if it doesn't exist
+              const selectedFieldSettings = obj.selectedFieldSettings || {};
+
+              obj.selectedFieldSettings = {
+                ...selectedFieldSettings,
+                [fieldName]: settings,
+              };
+
+              // if settings is undefined, remove the field from selectedFieldSettings
+              if (settings === undefined) {
+                delete obj.selectedFieldSettings[fieldName];
+              }
+            }),
+          );
+        },
+        getDefaultValues: (fieldName: string) =>
+          getFieldSetting(fieldName, "_default"),
+        setDefaultValues: ({ fieldName, value }) =>
+          setFieldSetting(fieldName, "_default", value),
+        getWriteOnCreateSetting: (fieldName: string) =>
+          getFieldSetting(fieldName, "writeOnCreate"),
+        setWriteOnCreateSetting: ({ fieldName, value }) =>
+          setFieldSetting(fieldName, "writeOnCreate", value),
+        getWriteOnUpdateSetting: (fieldName: string) =>
+          getFieldSetting(fieldName, "writeOnUpdate"),
+        setWriteOnUpdateSetting: ({ fieldName, value }) =>
+          setFieldSetting(fieldName, "writeOnUpdate", value),
+      };
+    },
+    [draft.write?.objects],
+  );
+
   return {
     draft,
     get,
     setDraft,
     reset,
     readObject,
+    writeObject,
   };
 }
