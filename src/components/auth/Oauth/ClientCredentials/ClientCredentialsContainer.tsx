@@ -24,7 +24,6 @@ interface OauthClientCredsContainerProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired?: boolean;
   selectedConnection: Connection | null;
 }
 
@@ -40,7 +39,6 @@ export function ClientCredsContainer({
   groupRef,
   groupName,
   explicitScopesRequired,
-  explicitWorkspaceRequired,
   selectedConnection,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useProject();
@@ -60,12 +58,15 @@ export function ClientCredsContainer({
           consumerName,
           consumerRef,
           provider,
-          providerWorkspaceRef: creds.workspace,
+          providerWorkspaceRef: creds.providerMetadata?.workspace?.value,
           oauth2ClientCredentials: {
             clientId: creds.clientId,
             clientSecret: creds.clientSecret,
             scopes: creds.scopes,
           },
+          ...(creds.providerMetadata && {
+            providerMetadata: creds.providerMetadata,
+          }),
         },
       };
 
@@ -87,11 +88,11 @@ export function ClientCredsContainer({
   if (selectedConnection === null) {
     return (
       <ClientCredentialsContent
+        provider={provider}
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
-        explicitWorkspaceRequired={explicitWorkspaceRequired}
       />
     );
   }

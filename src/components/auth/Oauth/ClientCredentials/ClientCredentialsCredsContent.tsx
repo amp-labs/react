@@ -1,6 +1,8 @@
+import { ProviderMetadataInfo } from "@generated/api/src";
+
 export type ClientCredentialsCredsContent = {
-  workspace?: string;
   clientId: string;
   clientSecret: string;
   scopes?: string[];
+  providerMetadata?: Record<string, ProviderMetadataInfo>;
 };

@@ -10,10 +10,10 @@ interface ClientCredsFlowProps {
   groupName?: string;
   providerName?: string;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired: boolean;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
 }
+
 export function ClientCredentials({ ...props }: ClientCredsFlowProps) {
   return <ClientCredsContainer {...props} />;
 }

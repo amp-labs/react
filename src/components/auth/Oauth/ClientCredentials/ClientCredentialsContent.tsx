@@ -2,37 +2,51 @@ import { useState } from "react";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
+import { useProviderInfoQuery } from "src/hooks/useProvider";
 import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { convertTextareaToArray } from "src/utils";
 
+import {
+  getProviderMetadata,
+  isProviderMetadataValid,
+} from "../../providerMetadata";
+
 import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 type ClientCredentialsFormProps = {
+  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired?: boolean;
   buttonVariant?: "ghost";
 };
 
+type ClientCredentialsFormData = {
+  clientSecret: string;
+  clientId: string;
+  scopes: string;
+  [key: string]: string; // Allow dynamic metadata fields
+};
+
 export function ClientCredentialsForm({
+  provider,
   handleSubmit,
   isButtonDisabled,
   explicitScopesRequired,
-  explicitWorkspaceRequired,
   buttonVariant,
 }: ClientCredentialsFormProps) {
   const [show, setShow] = useState(false);
-
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
     clientId: "",
-    workspace: "",
     scopes: "",
   });
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { data: providerInfo } = useProviderInfoQuery(provider);
+  const metadataFields = providerInfo?.metadata?.input || [];
 
   const onToggleShowHide = () => setShow((prevShow) => !prevShow);
 
@@ -42,32 +56,32 @@ export function ClientCredentialsForm({
     const { name, value } = event.currentTarget;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value.trim(),
     }));
+
+    setSubmitError(null);
   };
 
-  const { clientSecret, clientId, workspace, scopes } = formData;
+  const { clientSecret, clientId, scopes } = formData;
 
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
-  const isWorkspaceValid = explicitWorkspaceRequired
-    ? workspace.length > 0
-    : true;
+  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+
   const isSubmitDisabled =
     isButtonDisabled ||
     !isClientSecretValid ||
     !isClientIdValid ||
-    !isWorkspaceValid;
+    !isMetadataValid;
 
   const onHandleSubmit = () => {
+    const metadata = getProviderMetadata(metadataFields, formData);
+
     const req: ClientCredentialsCredsContent = {
       clientId,
       clientSecret,
+      providerMetadata: metadata,
     };
-
-    if (explicitWorkspaceRequired) {
-      req.workspace = workspace;
-    }
 
     if (explicitScopesRequired && scopes.length > 0) {
       req.scopes = convertTextareaToArray(scopes);
@@ -79,21 +93,12 @@ export function ClientCredentialsForm({
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-        {explicitWorkspaceRequired && (
-          <FormComponent.Input
-            id="workspace"
-            name="workspace"
-            type="text"
-            placeholder="MyWorkspace"
-            onChange={(event) => handleChange(event)}
-          />
-        )}
         <FormComponent.Input
           id="clientId"
           name="clientId"
           type="text"
           placeholder="Client ID"
-          onChange={(event) => handleChange(event)}
+          onChange={handleChange}
         />
         <div style={{ display: "flex", gap: ".5rem" }}>
           <FormComponent.Input
@@ -101,7 +106,7 @@ export function ClientCredentialsForm({
             name="clientSecret"
             type={show ? "text" : "password"}
             placeholder="Client Secret"
-            onChange={(event) => handleChange(event)}
+            onChange={handleChange}
           />
           <Button
             type="button"
@@ -116,10 +121,22 @@ export function ClientCredentialsForm({
           <FormComponent.Textarea
             name="scopes"
             placeholder="Scopes separated by new line"
-            onChange={(event) => handleChange(event)}
+            onChange={handleChange}
           />
         )}
+
+        {metadataFields.map((metadata) => (
+          <FormComponent.Input
+            key={metadata.name}
+            id={metadata.name}
+            name={metadata.name}
+            type="text"
+            placeholder={metadata.displayName || metadata.name}
+            onChange={handleChange}
+          />
+        ))}
       </div>
+      <AuthErrorAlert error={submitError} />
       <br />
       <Button
         style={{ width: "100%" }}
@@ -135,21 +152,21 @@ export function ClientCredentialsForm({
 }
 
 type ClientCredentialsContentProps = {
+  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
-  explicitWorkspaceRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
 };
 
 export function ClientCredentialsContent({
+  provider,
   handleSubmit,
   error,
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
-  explicitWorkspaceRequired,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -157,10 +174,10 @@ export function ClientCredentialsContent({
       <AuthErrorAlert error={error} />
       <br />
       <ClientCredentialsForm
+        provider={provider}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
         explicitScopesRequired={explicitScopesRequired}
-        explicitWorkspaceRequired={explicitWorkspaceRequired}
       />
     </AuthCardLayout>
   );

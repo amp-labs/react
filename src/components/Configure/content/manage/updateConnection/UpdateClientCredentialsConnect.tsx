@@ -90,10 +90,10 @@ export function UpdateClientCredentialsConnect({
         )}
 
         <ClientCredentialsForm
+          provider={providerName || ""}
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           explicitScopesRequired={explicitScopesRequired}
-          explicitWorkspaceRequired={false}
           buttonVariant="ghost"
         />
       </div>
