@@ -4,7 +4,7 @@ export type ProviderMetadata = Record<string, ProviderMetadataInfo>;
 
 /**
  * Get the required metadata for the provider from the form data.
- * @param metadataFields - The metadata required by the provider.
+ * @param metadataFields - The metadata required by the provider. Is defined in the provider info.
  * @param formData - The form data to get the metadata from.
  * @returns Metadata that can be sent over the API.
  */
@@ -39,7 +39,7 @@ export function getProviderMetadata(
 /**
  * Check if the required metadata for the provider has been filled in.
  * This will be more useful when we have required/optional metadata later on.
- * @param metadataFields - The metadata required by the provider.
+ * @param metadataFields - The metadata required by the provider. Is defined in the provider info.
  * @param formData - The form data to check the metadata against.
  * @returns True if all required metadata has been filled in, false otherwise.
  */
