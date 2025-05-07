@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => ({
       }) as PluginOption),
   ],
   build: {
+    sourcemap: true,
     outDir: "./build",
     lib: {
       entry: "./src/index.ts",
