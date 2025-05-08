@@ -219,7 +219,7 @@ export function useConfigHelper(
           setDraft((prev) =>
             produce(prev, (_draft) => {
               const { objects } = initializeWriteObject(_draft);
-              delete objects.objectName;
+              delete objects[objectName];
             }),
           );
         },
