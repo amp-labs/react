@@ -1,5 +1,5 @@
 export type LandingContentProps = {
-  handleSubmit: () => void;
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void;
   error: string | null;
   isButtonDisabled?: boolean;
   providerName?: string;

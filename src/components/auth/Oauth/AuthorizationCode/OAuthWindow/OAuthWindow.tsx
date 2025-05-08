@@ -60,6 +60,7 @@ export function OAuthWindow({
       !error &&
       !isSuccessConnect
     ) {
+      onError?.(null); // clear the error
       openOAuthWindow(); // creates new window and adds event listener
     }
   }, [
@@ -69,27 +70,35 @@ export function OAuthWindow({
     connectionId,
     error,
     isSuccessConnect,
+    onError,
   ]);
 
   useEffect(() => {
     if (!oauthWindow) return;
 
     const interval = setInterval(() => {
-      if (oauthWindow.closed) {
-        clearInterval(interval);
-        window.removeEventListener("message", receiveMessage);
-        setOauthWindow(null);
-
-        if (!connectionId && !error) {
-          console.error("OAuth failed. Please try again.");
-          onError?.("Authentication was cancelled. Please try again.");
-        } else if (connectionId) {
-          onError?.(null);
-        }
-
-        // invalidate the connections query to refresh the connection list
+      if (!oauthWindow || oauthWindow.closed) {
         queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
-        onWindowClose?.();
+
+        // Add a small delay before processing window closure
+        setTimeout(() => {
+          clearInterval(interval);
+          window.removeEventListener("message", receiveMessage);
+          setOauthWindow(null);
+
+          if (!connectionId && !error) {
+            console.error(
+              "Window closed and no connection was found. Please try again.",
+            );
+            onError?.("Window closed prematurely. Please wait and try again.");
+          } else if (connectionId) {
+            onError?.(null);
+          }
+
+          // invalidate the connections query to refresh the connection list
+          queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
+          onWindowClose?.();
+        }, 1000); // 1 second delay to allow for message reception
       }
     }, 500);
 

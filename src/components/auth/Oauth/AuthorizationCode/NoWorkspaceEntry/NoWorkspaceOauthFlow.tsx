@@ -60,8 +60,9 @@ export function NoWorkspaceOauthFlow({
     (err: string | null) => {
       setError(err);
       setShowURL(false); // do not show the OAuth popup URL after an error occurs
+      refetchConnections();
     },
-    [setError],
+    [setError, refetchConnections],
   );
 
   const onSuccessConnect = useCallback(() => {

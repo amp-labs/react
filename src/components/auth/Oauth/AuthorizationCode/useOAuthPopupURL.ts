@@ -54,12 +54,13 @@ export const useOAuthPopupURL = (
   } = useOauthConnectQuery(request);
 
   useEffect(() => {
-    if (provInfo && provider && !app) {
+    if (provInfo && provider && providerApps && !app) {
       console.error(
-        `You must first set up a ${providerName} Provider App using the Ampersand Console.`,
+        `You must first set up a ${providerName} Provider App using the Ampersand Console. `,
+        { provInfo, provider, providerApps, app },
       );
     }
-  }, [app, providerName, provInfo, provider]);
+  }, [app, providerName, provInfo, provider, providerApps]);
 
   useEffect(() => {
     if (provInfoError) {
