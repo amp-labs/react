@@ -1,3 +1,4 @@
+import { MetadataItemInput } from "@generated/api/src";
 import {
   AuthCardLayout,
   AuthTitle,
@@ -16,22 +17,29 @@ import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
  */
 export function WorkspaceEntryContent({
   handleSubmit,
-  setWorkspace,
+  setFormData,
   error,
   isButtonDisabled,
   providerName,
+  metadataFields,
 }: WorkspaceEntryProps) {
   return (
     <AuthCardLayout>
       <AuthTitle>Enter your {providerName} workspace</AuthTitle>
       <AuthErrorAlert error={error} />
       <br />
-      <FormComponent.Input
-        id="workspace"
-        type="text"
-        placeholder="MyWorkspace"
-        onChange={(event) => setWorkspace(event.currentTarget.value)}
-      />
+      {metadataFields.map((metadata: MetadataItemInput) => (
+        <FormComponent.Input
+          key={metadata.name}
+          id={metadata.name}
+          name={metadata.name}
+          type="text"
+          placeholder={metadata.displayName || metadata.name}
+          onChange={(event) =>
+            setFormData(metadata.name, event.currentTarget.value)
+          }
+        />
+      ))}
       <br />
       <Button
         style={{ marginTop: "1em", width: "100%" }}

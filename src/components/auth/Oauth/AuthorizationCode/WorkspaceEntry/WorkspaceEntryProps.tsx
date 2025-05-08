@@ -1,7 +1,10 @@
+import { MetadataItemInput } from "@generated/api/src";
+
 export type WorkspaceEntryProps = {
   handleSubmit: () => void;
-  setWorkspace: (workspace: string) => void;
+  setFormData: (metadata: string, value: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
   providerName?: string;
+  metadataFields: MetadataItemInput[];
 };

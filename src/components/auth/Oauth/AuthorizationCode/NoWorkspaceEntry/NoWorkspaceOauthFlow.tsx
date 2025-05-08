@@ -49,9 +49,10 @@ export function NoWorkspaceOauthFlow({
     consumerRef,
     groupRef,
     provider,
-    undefined,
     consumerName,
     groupName,
+    undefined,
+    {},
   );
 
   const error = oAuthConnectError?.message || localError || null;
