@@ -123,7 +123,7 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src", "eslint.config.jss", "vite.config.ts"],
+  "include": ["src", "eslint.config.js", "vite.config.ts"],
   "exclude": [
     "build",
     "test/**/*.test.ts",
