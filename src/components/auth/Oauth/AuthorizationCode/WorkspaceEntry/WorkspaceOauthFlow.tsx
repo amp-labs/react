@@ -42,9 +42,7 @@ export function WorkspaceOauthFlow({
   // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
   // when this is false, then OAuthWindow component will not pop up a window.
   const [showURL, setShowURL] = useState<boolean>(false);
-  const [metadata, setMetadata] = useState<ProviderMetadata | undefined>(
-    undefined,
-  );
+  const [metadata, setMetadata] = useState<ProviderMetadata>({});
 
   const { data: providerInfo } = useProviderInfoQuery(provider);
   const metadataFields = providerInfo?.metadata?.input || [];
@@ -79,25 +77,15 @@ export function WorkspaceOauthFlow({
     setShowURL(false);
   }, [setShowURL]);
 
-  const handleFormDataChange = (key: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+  const setSalesforceWorkspace = (workspace: string) => {
+    setWorkspace(workspace);
+    setFormData((prev) => ({ ...prev, "workspace": workspace }));
+    setMetadata((prev) => ({ ...prev, "workspace": { value: workspace, source: "input" } }));
   };
 
-  //  fetch OAuth callback URL from connection so that oath popup can be launched
-  const salesforceHandleSubmit = async () => {
-    setLocalError(null);
-    if (!workspace) {
-      setLocalError("Workspace is required");
-      return;
-    }
-
-    setMetadata({ workspace: { value: workspace, source: "input" } });
-    const result = await refetchOauthConnect();
-    if (result?.data) {
-      setShowURL(true);
-    } else {
-      onError(result?.error?.message || "Authentication failed");
-    }
+  const handleFormDataChange = (key: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+    setMetadata((prev) => ({ ...prev, [key]: { value, source: "input" } }));
   };
 
   const providerHandleSubmit = async () => {
@@ -107,7 +95,6 @@ export function WorkspaceOauthFlow({
       return;
     }
 
-    setMetadata(getProviderMetadata(metadataFields, formData));
     const result = await refetchOauthConnect();
     if (result?.data) {
       setShowURL(true);
@@ -120,8 +107,8 @@ export function WorkspaceOauthFlow({
   const workspaceEntryComponent =
     provider === PROVIDER_SALESFORCE ? (
       <SalesforceSubdomainEntry
-        handleSubmit={salesforceHandleSubmit}
-        setWorkspace={setWorkspace}
+        handleSubmit={providerHandleSubmit}
+        setWorkspace={setSalesforceWorkspace}
         error={errorMessage}
         isButtonDisabled={workspace.length === 0}
       />
