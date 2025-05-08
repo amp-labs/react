@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -35,6 +35,7 @@ export function OAuthWindow({
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
   const queryClient = useQueryClient();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // ① keeps the ID across render
 
   const receiveMessage = useReceiveMessageEventHandler(
     setConnectionId,
@@ -60,6 +61,7 @@ export function OAuthWindow({
       !error &&
       !isSuccessConnect
     ) {
+      onError?.(null); // clear the error
       openOAuthWindow(); // creates new window and adds event listener
     }
   }, [
@@ -69,45 +71,57 @@ export function OAuthWindow({
     connectionId,
     error,
     isSuccessConnect,
+    onError,
+  ]);
+
+  const handleWindowClose = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
+    setOauthWindow(null);
+
+    if (!connectionId && !error) {
+      console.error(
+        "Window closed and no connection was found. Please try again.",
+      );
+      onError?.("Window closed prematurely. Please wait and try again.");
+    } else if (connectionId) {
+      onError?.(null);
+    }
+
+    onWindowClose?.();
+
+    // Add a small delay before removing the event listener
+    setTimeout(() => {
+      window.removeEventListener("message", receiveMessage);
+    }, 1000);
+  }, [
+    connectionId,
+    error,
+    onError,
+    onWindowClose,
+    receiveMessage,
+    queryClient,
   ]);
 
   useEffect(() => {
     if (!oauthWindow) return;
 
-    const interval = setInterval(() => {
-      if (oauthWindow.closed) {
-        clearInterval(interval);
-        window.removeEventListener("message", receiveMessage);
-        setOauthWindow(null);
-
-        if (!connectionId && !error) {
-          console.error("OAuth failed. Please try again.");
-          onError?.("Authentication was cancelled. Please try again.");
-        } else if (connectionId) {
-          onError?.(null);
-        }
-
-        // invalidate the connections query to refresh the connection list
-        queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
-        onWindowClose?.();
+    intervalRef.current = setInterval(() => {
+      if (!oauthWindow || oauthWindow.closed) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        handleWindowClose();
       }
     }, 500);
 
     // Cleanup interval and listener when component unmounts or oauthWindow changes
-
     return () => {
-      clearInterval(interval);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
       window.removeEventListener("message", receiveMessage);
     };
-  }, [
-    oauthWindow,
-    connectionId,
-    error,
-    receiveMessage,
-    onError,
-    onWindowClose,
-    queryClient,
-  ]);
+  }, [handleWindowClose, oauthWindow, receiveMessage]);
 
   return <div>{children}</div>;
 }
