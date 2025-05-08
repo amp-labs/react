@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import {
-  getProviderMetadata,
   isProviderMetadataValid,
   ProviderMetadata,
 } from "src/components/auth/providerMetadata";
@@ -79,8 +78,11 @@ export function WorkspaceOauthFlow({
 
   const setSalesforceWorkspace = (workspace: string) => {
     setWorkspace(workspace);
-    setFormData((prev) => ({ ...prev, "workspace": workspace }));
-    setMetadata((prev) => ({ ...prev, "workspace": { value: workspace, source: "input" } }));
+    setFormData((prev) => ({ ...prev, workspace: workspace }));
+    setMetadata((prev) => ({
+      ...prev,
+      workspace: { value: workspace, source: "input" },
+    }));
   };
 
   const handleFormDataChange = (key: string, value: string) => {
