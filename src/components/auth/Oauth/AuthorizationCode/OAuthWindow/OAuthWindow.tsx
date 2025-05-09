@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 import {
   useOpenWindowHandler,
@@ -14,7 +13,6 @@ type OAuthWindowProps = {
   onError?: (err: string | null) => void;
   isSuccessConnect?: boolean; // used to check if the connection is successfully created
   onSuccessConnect?: () => void; // callback to set when connection is successfully created
-  onWindowClose?: () => void; // callback to set when window is closed
 };
 
 /**
@@ -30,12 +28,9 @@ export function OAuthWindow({
   error,
   onSuccessConnect,
   isSuccessConnect,
-  onWindowClose,
 }: OAuthWindowProps) {
   const [connectionId, setConnectionId] = useState(null);
   const [oauthWindow, setOauthWindow] = useState<Window | null>(null);
-  const queryClient = useQueryClient();
-  const intervalRef = useRef<NodeJS.Timeout | null>(null); // ① keeps the ID across render
 
   const receiveMessage = useReceiveMessageEventHandler(
     setConnectionId,
@@ -54,14 +49,21 @@ export function OAuthWindow({
   useEffect(() => {
     // if the oauthUrl is not null, the oauthWindow is not open,
     // the connection not successfully created, and the error is not set, open the OAuth window
+    console.log("oauth window props", {
+      oauthUrl,
+      oauthWindow,
+      connectionId,
+      error,
+      isSuccessConnect,
+    });
+
     if (
       oauthUrl &&
-      !oauthWindow &&
+      (!oauthWindow || oauthWindow.window == null) &&
       !connectionId &&
       !error &&
       !isSuccessConnect
     ) {
-      onError?.(null); // clear the error
       openOAuthWindow(); // creates new window and adds event listener
     }
   }, [
@@ -71,57 +73,14 @@ export function OAuthWindow({
     connectionId,
     error,
     isSuccessConnect,
-    onError,
-  ]);
-
-  const handleWindowClose = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
-    setOauthWindow(null);
-
-    if (!connectionId && !error) {
-      console.error(
-        "Window closed and no connection was found. Please try again.",
-      );
-      onError?.("Window closed prematurely. Please wait and try again.");
-    } else if (connectionId) {
-      onError?.(null);
-    }
-
-    onWindowClose?.();
-
-    // Add a small delay before removing the event listener
-    setTimeout(() => {
-      window.removeEventListener("message", receiveMessage);
-    }, 1000);
-  }, [
-    connectionId,
-    error,
-    onError,
-    onWindowClose,
-    receiveMessage,
-    queryClient,
   ]);
 
   useEffect(() => {
-    if (!oauthWindow) return;
-
-    intervalRef.current = setInterval(() => {
-      if (!oauthWindow || oauthWindow.closed) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-        intervalRef.current = null;
-        handleWindowClose();
-      }
-    }, 500);
-
     // Cleanup interval and listener when component unmounts or oauthWindow changes
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
       window.removeEventListener("message", receiveMessage);
     };
-  }, [handleWindowClose, oauthWindow, receiveMessage]);
+  }, [receiveMessage]);
 
   return <div>{children}</div>;
 }

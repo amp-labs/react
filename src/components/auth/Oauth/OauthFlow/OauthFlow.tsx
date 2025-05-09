@@ -2,6 +2,7 @@ import { Connection, ProviderInfo } from "services/api";
 import { useProvider } from "src/hooks/useProvider";
 
 import { NoWorkspaceOauthFlow } from "../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow";
+import { NoWorkspaceOauthFlow2 } from "../AuthorizationCode/NoWorkspaceEntry/NoWorkspaceOauthFlow2";
 import { WorkspaceOauthFlow } from "../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow";
 import { ClientCredentials } from "../ClientCredentials/ClientCredentials";
 
@@ -57,7 +58,8 @@ export function OauthFlow({
     }
 
     // no workspace required
-    return <NoWorkspaceOauthFlow {...sharedProps} />;
+    // return <NoWorkspaceOauthFlow {...sharedProps} />;
+    return <NoWorkspaceOauthFlow2 {...sharedProps} />;
   }
 
   if (grantType === CLIENT_CREDENTIALS) {

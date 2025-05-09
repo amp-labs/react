@@ -5,8 +5,8 @@ import { AMP_SERVER } from "services/api";
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
 
-const SUCCESS_EVENT = "AUTHORIZATION_SUCCEEDED";
-const FAILURE_EVENT = "AUTHORIZATION_FAILED";
+export const SUCCESS_EVENT = "AUTHORIZATION_SUCCEEDED";
+export const FAILURE_EVENT = "AUTHORIZATION_FAILED";
 
 /**
  * opens a new window with the OAuth URL
@@ -32,6 +32,7 @@ export function useOpenWindowHandler(
     // creates a new window
     const newWindow = window.open(oauthUrl, windowTitle, windowDimensions);
     setOauthWindow(newWindow);
+    console.log("add receive message event listener");
 
     window.addEventListener("message", receiveMessage, false);
   }, [oauthUrl, windowTitle, setOauthWindow, receiveMessage]);
@@ -50,6 +51,7 @@ export function useReceiveMessageEventHandler(
 
   return useCallback(
     (event: MessageEvent) => {
+      console.log("receive message event", { event });
       // Ignore messages from unexpected origins
       if (event.origin !== AMP_SERVER) {
         return;
@@ -58,6 +60,7 @@ export function useReceiveMessageEventHandler(
       // success case
       if (event.data.eventType === SUCCESS_EVENT) {
         const connection = event.data.data?.connection; // connection id
+        console.log("success connection", { connection });
         if (connection) {
           setConnectionId(connection);
           // manually adds the connection to the query cache
@@ -79,6 +82,7 @@ export function useReceiveMessageEventHandler(
 
       // failure case
       if (event.data.eventType === FAILURE_EVENT) {
+        console.log("failure event", { event });
         console.error("OAuth failed: ", { event });
         // event.data.message sent by server message
         // See `server/shared/oauth/connection.go` for the HTML that the server sends back to the UI library.

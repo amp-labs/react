@@ -5,7 +5,8 @@
 import { useCallback, useState } from "react";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
 
-import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
+// import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
+import { OAuthPopup } from "../OAuthPopup/OAuthPopup";
 import { useOAuthPopupURL } from "../useOAuthPopupURL";
 
 import { NoWorkspaceEntryContent } from "./NoWorkspaceEntryContent";
@@ -23,7 +24,7 @@ interface NoWorkspaceOauthFlowProps {
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */
-export function NoWorkspaceOauthFlow({
+export function NoWorkspaceOauthFlow2({
   provider,
   consumerRef,
   consumerName,
@@ -93,23 +94,23 @@ export function NoWorkspaceOauthFlow({
     }
   };
 
-  return (
-    <OAuthWindow
-      windowTitle={`Connect to ${providerName}`}
-      oauthUrl={(showURL && oAuthPopupURL) || null} // showURL is true when handleSubmit is called
-      onError={onError}
-      error={error}
-      onSuccessConnect={onSuccessConnect}
-    >
+  if (!oAuthPopupURL && !showURL) {
+    return (
       <NoWorkspaceEntryContent
         handleSubmit={handleSubmit}
-        error={
-          // hide error message when the connections are being fetched
-          isConnectionsFetching ? "" : error
-        }
+        error={error}
         providerName={providerName}
-        isButtonDisabled={isLoading || isConnectionsFetching} // disable button when loading or fetching connections
+        isButtonDisabled={isLoading || isConnectionsFetching}
       />
-    </OAuthWindow>
+    );
+  }
+
+  return (
+    <OAuthPopup
+      url={oAuthPopupURL || ""}
+      onSuccessConnect={onSuccessConnect}
+      onError={onError}
+      onClose={() => setShowURL(false)}
+    />
   );
 }
