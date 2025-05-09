@@ -82,7 +82,7 @@ export function OAuthWindow({
       console.error(
         "Window closed and no connection was found. Please try again.",
       );
-      onError?.("Window closed prematurely. Please wait and try again.");
+      // onError?.("Window closed prematurely. Please wait and try again.");
     } else if (connectionId) {
       onError?.(null);
     }
@@ -90,23 +90,16 @@ export function OAuthWindow({
     onWindowClose?.();
 
     // Add a small delay before removing the event listener
-    setTimeout(() => {
-      window.removeEventListener("message", receiveMessage);
-    }, 1000);
-  }, [
-    connectionId,
-    error,
-    onError,
-    onWindowClose,
-    receiveMessage,
-    queryClient,
-  ]);
+    // setTimeout(() => {
+    //   window.removeEventListener("message", receiveMessage);
+    // }, 2000);
+  }, [connectionId, error, onError, onWindowClose, queryClient]);
 
   useEffect(() => {
     if (!oauthWindow) return;
 
     intervalRef.current = setInterval(() => {
-      if (!oauthWindow || oauthWindow.closed) {
+      if (oauthWindow?.closed) {
         if (intervalRef.current) clearInterval(intervalRef.current);
         intervalRef.current = null;
         handleWindowClose();
