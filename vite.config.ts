@@ -16,11 +16,15 @@ export default defineConfig(({ mode }) => ({
       context: path.resolve(__dirname, "./src/context"),
       hooks: path.resolve(__dirname, "./src/hooks"),
       services: path.resolve(__dirname, "./src/services"),
+      headless: path.resolve(__dirname, "./src/headless"),
     },
   },
   plugins: [
     react(),
-    dts({ rollupTypes: true }),
+    dts({
+      rollupTypes: true,
+      include: ['src/**/*.ts', 'src/**/*.tsx', 'generated-sources/**/*.ts'],
+    }),
     // visualizer plugin only in development mode
     mode === "development" &&
       (visualizer({
