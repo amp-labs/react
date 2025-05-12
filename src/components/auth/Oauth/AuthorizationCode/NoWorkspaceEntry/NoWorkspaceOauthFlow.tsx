@@ -20,6 +20,7 @@ interface NoWorkspaceOauthFlowProps {
 }
 
 /**
+ * @deprecated Use OauthFlow2 instead.
  * NoWorkspaceOauthFlow first prompts user with a next button,
  * then launches a popup with the OAuth flow.
  */

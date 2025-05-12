@@ -23,6 +23,7 @@ interface WorkspaceOauthFlowProps {
 }
 
 /**
+ * @deprecated
  * Chooses workspace/subdomain entry component based on provider.
  * WorkspaceEntry is generic for any provider that requires a workspace to be entered first,
  * then launches a popup with the OAuth flow.
