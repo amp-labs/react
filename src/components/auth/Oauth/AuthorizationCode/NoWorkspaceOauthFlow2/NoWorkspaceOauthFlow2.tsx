@@ -62,7 +62,7 @@ export function NoWorkspaceOauthFlow2({
 
   const [error, setError] = useState<string | null>(null);
 
-  /** 2. One‑time message listener (mount‑level) */
+  /** One‑time message listener (mount‑level) */
   useEffect(() => {
     const onMessage = (ev: MessageEvent<AuthEvent>) => {
       // Accept only events from *your* popup origin
@@ -123,7 +123,7 @@ export function NoWorkspaceOauthFlow2({
       setError(
         error instanceof Error
           ? error.message
-          : String(error) || "An error occurred. Please try again."
+          : String(error) || "An error occurred. Please try again.",
       );
     }
   };
