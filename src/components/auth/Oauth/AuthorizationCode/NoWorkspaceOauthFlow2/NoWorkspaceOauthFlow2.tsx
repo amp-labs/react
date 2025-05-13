@@ -96,7 +96,7 @@ export function NoWorkspaceOauthFlow2({
         return;
       }
     } catch {
-      console.debug("no connections found");
+      console.debug("error with fetching connections");
     }
 
     try {
