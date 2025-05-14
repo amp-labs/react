@@ -89,7 +89,7 @@ export function OauthFlow2({
 
       if (ev.data?.eventType === "AUTHORIZATION_SUCCEEDED") {
         setError(null);
-        console.info("New connection:", ev.data.data.connection);
+        console.debug("New connection:", ev.data.data.connection);
         // Refresh cached list so UI shows the new connection
         queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
       } else if (ev.data?.eventType === "AUTHORIZATION_FAILED") {
