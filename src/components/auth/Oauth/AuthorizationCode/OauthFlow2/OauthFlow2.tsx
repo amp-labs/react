@@ -94,9 +94,9 @@ export function OauthFlow2({
         queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
       } else if (ev.data?.eventType === "AUTHORIZATION_FAILED") {
         console.error("OAuth failed:", ev.data.data.error);
+        queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
         setError(ev.data.data.error || "An error occurred. Please try again.");
       }
-
       popupRef.current?.close();
     };
 
@@ -104,6 +104,7 @@ export function OauthFlow2({
     return () => window.removeEventListener("message", onMessage);
   }, [queryClient]);
 
+  // Salesforce specific (separate case that can be refactored)
   const setSalesforceWorkspace = (workspace: string) => {
     setWorkspace(workspace);
     setFormData((prev) => ({ ...prev, workspace: workspace }));
