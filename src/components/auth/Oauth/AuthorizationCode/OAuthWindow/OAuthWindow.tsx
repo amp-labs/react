@@ -18,6 +18,7 @@ type OAuthWindowProps = {
 };
 
 /**
+ * @deprecated Use OauthFlow2 instead.
  * v2 OAuth window to manage OAuth flow
  * @param param0
  * @returns

@@ -1,8 +1,7 @@
 import { Connection, ProviderInfo } from "services/api";
 import { useProvider } from "src/hooks/useProvider";
 
-import { NoWorkspaceOauthFlow2 } from "../AuthorizationCode/NoWorkspaceOauthFlow2/NoWorkspaceOauthFlow2";
-import { WorkspaceOauthFlow } from "../AuthorizationCode/WorkspaceEntry/WorkspaceOauthFlow";
+import { OauthFlow2 } from "../AuthorizationCode/OauthFlow2/OauthFlow2";
 import { ClientCredentials } from "../ClientCredentials/ClientCredentials";
 
 const AUTHORIZATION_CODE = "authorizationCode";
@@ -51,13 +50,8 @@ export function OauthFlow({
     grantType === AUTHORIZATION_CODE_PKCE
   ) {
     // if some metadata is required, we reuse the workspace oauth flow for now.
-    // TODO: Combine WorkspaceOauthFlow and NoWorkspaceOauthFlow into a single flow.
-    if (providerInfo.metadata?.input) {
-      return <WorkspaceOauthFlow {...sharedProps} />;
-    }
-
-    // no workspace required
-    return <NoWorkspaceOauthFlow2 {...sharedProps} />;
+    // Combine WorkspaceOauthFlow and NoWorkspaceOauthFlow into a single flow.
+    return <OauthFlow2 {...sharedProps} />;
   }
 
   if (grantType === CLIENT_CREDENTIALS) {

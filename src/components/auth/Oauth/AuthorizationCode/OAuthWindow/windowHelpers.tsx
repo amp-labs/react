@@ -9,6 +9,7 @@ const SUCCESS_EVENT = "AUTHORIZATION_SUCCEEDED";
 const FAILURE_EVENT = "AUTHORIZATION_FAILED";
 
 /**
+ * @deprecated Use OauthFlow2 instead.
  * opens a new window with the OAuth URL
  *  side effect: adds a message event listener to the window
  * @param oauthUrl
@@ -38,6 +39,7 @@ export function useOpenWindowHandler(
 }
 
 /**
+ * @deprecated Use OauthFlow2 instead.
  * returns a function to handle the message event
  */
 export function useReceiveMessageEventHandler(
