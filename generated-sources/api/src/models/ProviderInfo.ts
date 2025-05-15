@@ -100,6 +100,12 @@ export interface ProviderInfo {
     baseURL: string;
     /**
      * 
+     * @type {any}
+     * @memberof ProviderInfo
+     */
+    defaultModule: any | null;
+    /**
+     * 
      * @type {Oauth2Opts}
      * @memberof ProviderInfo
      */
@@ -186,6 +192,7 @@ export function instanceOfProviderInfo(value: object): boolean {
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "authType" in value;
     isInstance = isInstance && "baseURL" in value;
+    isInstance = isInstance && "defaultModule" in value;
     isInstance = isInstance && "support" in value;
     isInstance = isInstance && "providerOpts" in value;
 
@@ -205,6 +212,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'name': json['name'],
         'authType': AuthTypeFromJSON(json['authType']),
         'baseURL': json['baseURL'],
+        'defaultModule': json['defaultModule'],
         'oauth2Opts': !exists(json, 'oauth2Opts') ? undefined : Oauth2OptsFromJSON(json['oauth2Opts']),
         'apiKeyOpts': !exists(json, 'apiKeyOpts') ? undefined : ApiKeyOptsFromJSON(json['apiKeyOpts']),
         'basicOpts': !exists(json, 'basicOpts') ? undefined : BasicAuthOptsFromJSON(json['basicOpts']),
@@ -233,6 +241,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'name': value.name,
         'authType': AuthTypeToJSON(value.authType),
         'baseURL': value.baseURL,
+        'defaultModule': value.defaultModule,
         'oauth2Opts': Oauth2OptsToJSON(value.oauth2Opts),
         'apiKeyOpts': ApiKeyOptsToJSON(value.apiKeyOpts),
         'basicOpts': BasicAuthOptsToJSON(value.basicOpts),

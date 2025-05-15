@@ -19,6 +19,12 @@ import {
     ReadConfigFromJSONTyped,
     ReadConfigToJSON,
 } from './ReadConfig';
+import type { SubscribeConfig } from './SubscribeConfig';
+import {
+    SubscribeConfigFromJSON,
+    SubscribeConfigFromJSONTyped,
+    SubscribeConfigToJSON,
+} from './SubscribeConfig';
 import type { WriteConfig } from './WriteConfig';
 import {
     WriteConfigFromJSON,
@@ -44,6 +50,12 @@ export interface ConfigContentAllOf {
      * @memberof ConfigContentAllOf
      */
     write?: WriteConfig;
+    /**
+     * 
+     * @type {SubscribeConfig}
+     * @memberof ConfigContentAllOf
+     */
+    subscribe?: SubscribeConfig;
 }
 
 /**
@@ -67,6 +79,7 @@ export function ConfigContentAllOfFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'read': !exists(json, 'read') ? undefined : ReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : WriteConfigFromJSON(json['write']),
+        'subscribe': !exists(json, 'subscribe') ? undefined : SubscribeConfigFromJSON(json['subscribe']),
     };
 }
 
@@ -81,6 +94,7 @@ export function ConfigContentAllOfToJSON(value?: ConfigContentAllOf | null): any
         
         'read': ReadConfigToJSON(value.read),
         'write': WriteConfigToJSON(value.write),
+        'subscribe': SubscribeConfigToJSON(value.subscribe),
     };
 }
 
