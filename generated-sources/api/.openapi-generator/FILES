@@ -40,6 +40,8 @@ src/models/BaseConfigContent.ts
 src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
 src/models/BaseReadConfigObject.ts
+src/models/BaseSubscribeConfig.ts
+src/models/BaseSubscribeConfigObject.ts
 src/models/BaseWriteConfig.ts
 src/models/BaseWriteConfigObject.ts
 src/models/BasicAuthOpts.ts
@@ -53,6 +55,9 @@ src/models/BulkWriteSupport.ts
 src/models/Config.ts
 src/models/ConfigContent.ts
 src/models/ConfigContentAllOf.ts
+src/models/ConfigCreateEvent.ts
+src/models/ConfigDeleteEvent.ts
+src/models/ConfigUpdateEvent.ts
 src/models/Connection.ts
 src/models/ConnectionRequest.ts
 src/models/ConnectionRequestBasicAuth.ts
@@ -149,6 +154,9 @@ src/models/ReadConfigObject.ts
 src/models/Revision.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
+src/models/SubscribeConfig.ts
+src/models/SubscribeConfigAllOf.ts
+src/models/SubscribeConfigObject.ts
 src/models/SubscribeOpts.ts
 src/models/SubscribeSupport.ts
 src/models/Support.ts
