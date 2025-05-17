@@ -25,6 +25,12 @@ import {
     ReadConfigFromJSONTyped,
     ReadConfigToJSON,
 } from './ReadConfig';
+import type { SubscribeConfig } from './SubscribeConfig';
+import {
+    SubscribeConfigFromJSON,
+    SubscribeConfigFromJSONTyped,
+    SubscribeConfigToJSON,
+} from './SubscribeConfig';
 import type { WriteConfig } from './WriteConfig';
 import {
     WriteConfigFromJSON,
@@ -62,6 +68,12 @@ export interface ConfigContent {
      * @memberof ConfigContent
      */
     proxy?: BaseProxyConfig;
+    /**
+     * 
+     * @type {SubscribeConfig}
+     * @memberof ConfigContent
+     */
+    subscribe?: SubscribeConfig;
 }
 
 /**
@@ -88,6 +100,7 @@ export function ConfigContentFromJSONTyped(json: any, ignoreDiscriminator: boole
         'read': !exists(json, 'read') ? undefined : ReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : WriteConfigFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
+        'subscribe': !exists(json, 'subscribe') ? undefined : SubscribeConfigFromJSON(json['subscribe']),
     };
 }
 
@@ -104,6 +117,7 @@ export function ConfigContentToJSON(value?: ConfigContent | null): any {
         'read': ReadConfigToJSON(value.read),
         'write': WriteConfigToJSON(value.write),
         'proxy': BaseProxyConfigToJSON(value.proxy),
+        'subscribe': SubscribeConfigToJSON(value.subscribe),
     };
 }
 
