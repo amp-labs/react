@@ -180,9 +180,8 @@ export function HydratedRevisionProvider({
         >
           <UpdateConnectionSection provider={providerName} />
           <p>
-            If the authentication is not working, you attempt to delete and
-            create a new connection, but reauthentication should be attempted
-            above first.
+            If authentication is failing, please try reauthenticating using the
+            section above before deleting and recreating the connection.
           </p>
           {connectionError && <InnerErrorTextBox message={connectionError} />}
           <RemoveConnectionButton
