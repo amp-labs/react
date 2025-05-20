@@ -20,6 +20,7 @@ import {
   ComponentContainerError,
   ComponentContainerLoading,
 } from "src/components/Configure/ComponentContainer";
+import { UpdateConnectionSection } from "src/components/Configure/content/manage/updateConnection/UpdateConnectionSection";
 import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
 import { handleServerError } from "src/utils/handleServerError";
@@ -174,11 +175,18 @@ export function HydratedRevisionProvider({
             flexDirection: "column",
             gap: "1rem",
             paddingTop: "1rem",
+            width: "100%",
           }}
         >
+          <UpdateConnectionSection provider={providerName} />
+          <p>
+            If the authentication is not working, you attempt to delete and
+            create a new connection, but reauthentication should be attempted
+            above first.
+          </p>
           {connectionError && <InnerErrorTextBox message={connectionError} />}
           <RemoveConnectionButton
-            buttonText="Try again"
+            buttonText="Delete Connection"
             resetComponent={resetComponent}
             buttonVariant="danger"
             onDisconnectError={(error: string) => setConnectionError(error)}
