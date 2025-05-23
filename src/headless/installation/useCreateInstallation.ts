@@ -1,6 +1,7 @@
 import {
   ConfigContent,
   CreateInstallationOperationRequest,
+  Installation,
 } from "@generated/api/src";
 import { useProject } from "src/context/ProjectContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
@@ -30,7 +31,17 @@ export function useCreateInstallation() {
     errorMsg,
   } = useCreateInstallationMutation();
 
-  const createInstallation = (config: ConfigContent) => {
+  const createInstallation = ({
+    config,
+    onSuccess,
+    onError,
+    onSettled,
+  }: {
+    config: ConfigContent;
+    onSuccess?: (data: Installation) => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  }) => {
     if (installation) {
       throw Error("Installation already created. Try updating instead.");
     }
@@ -48,7 +59,17 @@ export function useCreateInstallation() {
       },
     };
 
-    return createInstallationMutation(createInstallationRequest);
+    return createInstallationMutation(createInstallationRequest, {
+      onSuccess: (data) => {
+        onSuccess?.(data);
+      },
+      onError: (error) => {
+        onError?.(error);
+      },
+      onSettled: () => {
+        onSettled?.();
+      },
+    });
   };
 
   return {
