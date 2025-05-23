@@ -1,5 +1,6 @@
 import {
   ConfigContent,
+  Installation,
   UpdateInstallationOperationRequest,
 } from "@generated/api/src";
 import { useProject } from "src/context/ProjectContextProvider";
@@ -12,7 +13,12 @@ import { useInstallation } from "./useInstallation";
 
 /**
  * update installation hook
- * @returns
+ * @returns {Object} An object containing:
+ *   - `updateInstallation` (function): A function to update the installation.
+ *   - `isIdle` (boolean): Whether the mutation is idle.
+ *   - `isPending` (boolean): Whether the mutation is pending.
+ *   - `error` (Error | null): The error object, if any.
+ *   - `errorMsg` (string | null): The error message, if any.
  */
 export function useUpdateInstallation() {
   const { projectIdOrName } = useProject();
@@ -28,7 +34,17 @@ export function useUpdateInstallation() {
     errorMsg,
   } = useUpdateInstallationMutation();
 
-  const updateInstallation = (config: ConfigContent) => {
+  const updateInstallation = ({
+    config,
+    onSuccess,
+    onError,
+    onSettled,
+  }: {
+    config: ConfigContent;
+    onSuccess?: (data: Installation) => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  }) => {
     if (!installation) {
       throw Error(
         "Installation not created yet. Try creating the installation first.",
@@ -53,7 +69,17 @@ export function useUpdateInstallation() {
       },
     };
 
-    return updateInstallationMutation(updateInstallationRequest);
+    return updateInstallationMutation(updateInstallationRequest, {
+      onSuccess: (data) => {
+        onSuccess?.(data);
+      },
+      onError: (error) => {
+        onError?.(error);
+      },
+      onSettled: () => {
+        onSettled?.();
+      },
+    });
   };
 
   return {

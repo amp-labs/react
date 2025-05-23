@@ -2,6 +2,17 @@ import { useListInstallationsQuery } from "src/hooks/query";
 
 import { useInstallationProps } from "../InstallationProvider";
 
+/**
+ * useInstallation hook
+ * @returns {Object} An object containing:
+ *   - `installation` (Installation | undefined): The installation object.
+ *   - `isPending` (boolean): Whether the query is pending.
+ *   - `isFetching` (boolean): Whether the query is fetching.
+ *   - `isError` (boolean): Whether the query is in an error state.
+ *   - `isSuccess` (boolean): Whether the query is in a success state.
+ *   - `error` (Error | null): The error object, if any.
+ *   - `errorMsg` (string | null): The error message, if any.
+ */
 export function useInstallation() {
   // Extracting integrationNameOrId and groupRef from useInstallationProps.
   // These are required for the useListInstallationsQuery, especially in headless mode,
