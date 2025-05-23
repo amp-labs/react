@@ -19,6 +19,8 @@ import type {
   CreateInstallationRequest,
   InputValidationProblem,
   Installation,
+  PauseReadsRequest,
+  UnpauseReadsRequest,
   UpdateInstallationRequest,
 } from '../models';
 import {
@@ -30,6 +32,10 @@ import {
     InputValidationProblemToJSON,
     InstallationFromJSON,
     InstallationToJSON,
+    PauseReadsRequestFromJSON,
+    PauseReadsRequestToJSON,
+    UnpauseReadsRequestFromJSON,
+    UnpauseReadsRequestToJSON,
     UpdateInstallationRequestFromJSON,
     UpdateInstallationRequestToJSON,
 } from '../models';
@@ -56,6 +62,20 @@ export interface ListInstallationsRequest {
     projectIdOrName: string;
     integrationId: string;
     groupRef?: string;
+}
+
+export interface PauseReadsOperationRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    installationId: string;
+    pauseReadsRequest?: PauseReadsRequest;
+}
+
+export interface UnpauseReadsOperationRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    installationId: string;
+    unpauseReadsRequest?: UnpauseReadsRequest;
 }
 
 export interface UpdateInstallationOperationRequest {
@@ -139,6 +159,44 @@ export interface InstallationApiInterface {
      * List installations
      */
     listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
+
+    /**
+     * Pauses all reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.
+     * @summary Pause reads for an installation
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The Ampersand installation ID.
+     * @param {PauseReadsRequest} [pauseReadsRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    pauseReadsRaw(requestParameters: PauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Pauses all reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.
+     * Pause reads for an installation
+     */
+    pauseReads(requestParameters: PauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Unpauses all reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.
+     * @summary Unpause reads for an installation
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} installationId The Ampersand installation ID.
+     * @param {UnpauseReadsRequest} [unpauseReadsRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    unpauseReadsRaw(requestParameters: UnpauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Unpauses all reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.
+     * Unpause reads for an installation
+     */
+    unpauseReads(requestParameters: UnpauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -333,6 +391,98 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     async listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
         const response = await this.listInstallationsRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Pauses all reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.
+     * Pause reads for an installation
+     */
+    async pauseReadsRaw(requestParameters: PauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling pauseReads.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling pauseReads.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling pauseReads.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}:pause`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PauseReadsRequestToJSON(requestParameters.pauseReadsRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Pauses all reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.
+     * Pause reads for an installation
+     */
+    async pauseReads(requestParameters: PauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.pauseReadsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Unpauses all reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.
+     * Unpause reads for an installation
+     */
+    async unpauseReadsRaw(requestParameters: UnpauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling unpauseReads.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling unpauseReads.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling unpauseReads.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}:unpause`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UnpauseReadsRequestToJSON(requestParameters.unpauseReadsRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Unpauses all reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.
+     * Unpause reads for an installation
+     */
+    async unpauseReads(requestParameters: UnpauseReadsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.unpauseReadsRaw(requestParameters, initOverrides);
     }
 
     /**
