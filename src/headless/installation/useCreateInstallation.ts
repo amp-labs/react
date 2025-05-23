@@ -14,7 +14,12 @@ import { useInstallation } from "./useInstallation";
 
 /**
  * create installation hook
- * @returns
+ * @returns {Object} An object containing:
+ *   - `createInstallation` (function): A function to create the installation.
+ *   - `isIdle` (boolean): Whether the mutation is idle.
+ *   - `isPending` (boolean): Whether the mutation is pending.
+ *   - `error` (Error | null): The error object, if any.
+ *   - `errorMsg` (string | null): The error message, if any.
  */
 export function useCreateInstallation() {
   const { projectIdOrName } = useProject();
