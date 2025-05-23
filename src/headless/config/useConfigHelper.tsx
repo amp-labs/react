@@ -10,6 +10,7 @@ import type {
 } from "@generated/api/src";
 import { produce } from "immer";
 
+import { useInstallation } from "../installation/useInstallation";
 import { useManifest } from "../manifest/useManifest";
 
 type ReadObjectHandlers = {
@@ -61,6 +62,7 @@ export function useConfigHelper(
   const [initial] = useState(initialConfig); // For reset
 
   const { getReadObject: getReadObjectFromManifest } = useManifest();
+  const { installation } = useInstallation();
 
   const get = useCallback(() => draft, [draft]);
 
@@ -265,9 +267,19 @@ export function useConfigHelper(
     [draft.write?.objects],
   );
 
+  const syncInstallationConfig = useCallback(() => {
+    // set the draft config to the installation config
+    setDraft((prev) =>
+      produce(prev, (draft) => {
+        Object.assign(draft, installation?.config?.content);
+      }),
+    );
+  }, [installation?.config?.content]);
+
   return {
     draft,
     get,
+    syncInstallationConfig,
     setDraft,
     reset,
     readObject,
