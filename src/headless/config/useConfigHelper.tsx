@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type {
   BaseReadConfigObject,
   BaseWriteConfigObject,
@@ -61,7 +61,8 @@ export function useConfigHelper(
     useState<UpdateInstallationConfigContent>(initialConfig);
   const [initial] = useState(initialConfig); // For reset
 
-  const { getReadObject: getReadObjectFromManifest } = useManifest();
+  const { getReadObject: getReadObjectFromManifest, data: manifest } =
+    useManifest();
   const { installation } = useInstallation();
 
   const get = useCallback(() => draft, [draft]);
@@ -83,6 +84,8 @@ export function useConfigHelper(
    */
   const initializeObjectWithDefaults = useCallback(
     (objectName: string, _draft: UpdateInstallationConfigContent) => {
+      // initialize provider if not set
+      _draft.provider = _draft.provider || manifest?.content?.provider || "";
       const read = _draft.read || {};
       const objects = read.objects || {};
       const obj = objects[objectName] || {};
@@ -112,7 +115,7 @@ export function useConfigHelper(
 
       return { read, objects, obj };
     },
-    [getReadObjectFromManifest],
+    [getReadObjectFromManifest, manifest?.content?.provider],
   );
 
   const readObject = useCallback(
@@ -267,19 +270,30 @@ export function useConfigHelper(
     [draft.write?.objects],
   );
 
+  // add loading state
+  const [isSyncing, setIsSyncing] = useState(false);
   const syncInstallationConfig = useCallback(() => {
     // set the draft config to the installation config
+    setIsSyncing(true);
     setDraft((prev) =>
       produce(prev, (draft) => {
         Object.assign(draft, installation?.config?.content);
       }),
     );
+    setIsSyncing(false);
   }, [installation?.config?.content]);
+
+  useEffect(() => {
+    console.debug("Installation found", { installation });
+    // sync the installation config to the local config
+    syncInstallationConfig();
+  }, [installation, syncInstallationConfig]);
 
   return {
     draft,
     get,
     syncInstallationConfig,
+    isSyncing,
     setDraft,
     reset,
     readObject,
