@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useProject } from "src/context/ProjectContextProvider";
 import { useDeleteInstallationMutation } from "src/hooks/mutation/useDeleteInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
@@ -20,7 +21,7 @@ export function useDeleteInstallation() {
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { installation } = useInstallation();
-
+  const queryClient = useQueryClient();
   const {
     mutate: deleteInstallationMutation,
     isIdle,
@@ -59,6 +60,13 @@ export function useDeleteInstallation() {
         },
         onSettled: () => {
           onSettled?.();
+          // invalidate installations and connections queries
+          queryClient.invalidateQueries({
+            queryKey: ["amp", "installations"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["amp", "connections"],
+          });
         },
       },
     );

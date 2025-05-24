@@ -3,6 +3,7 @@ import {
   Installation,
   UpdateInstallationOperationRequest,
 } from "@generated/api/src";
+import { useQueryClient } from "@tanstack/react-query";
 import { useProject } from "src/context/ProjectContextProvider";
 import { useUpdateInstallationMutation } from "src/hooks/mutation/useUpdateInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
@@ -25,7 +26,7 @@ export function useUpdateInstallation() {
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { installation } = useInstallation();
-
+  const queryClient = useQueryClient();
   const {
     mutate: updateInstallationMutation,
     isIdle,
@@ -53,14 +54,24 @@ export function useUpdateInstallation() {
     if (!integrationObj) {
       throw Error("No integration found");
     }
+
+    // add write objects to update mask
+    const updateMask = ["config.content.write.objects"];
+    if (config?.read?.objects) {
+      const objectNames = Object.keys(config.read.objects);
+      // add all read objects to update maask
+      updateMask.push(
+        ...objectNames.map((name) => `config.content.read.objects.${name}`),
+      );
+    }
+
     // assemble update installation requests from providers
     const updateInstallationRequest: UpdateInstallationOperationRequest = {
       projectIdOrName,
       integrationId: integrationObj?.id,
       installationId: installation.id,
       installationUpdate: {
-        updateMask: ["config.content"], // update entire config object
-        // example read update  [`config.content.read.objects.${selectedObjectName}`],
+        updateMask,
         installation: {
           config: {
             content: config,
@@ -78,6 +89,9 @@ export function useUpdateInstallation() {
       },
       onSettled: () => {
         onSettled?.();
+        queryClient.invalidateQueries({
+          queryKey: ["amp", "installations"],
+        });
       },
     });
   };

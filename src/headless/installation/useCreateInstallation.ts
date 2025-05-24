@@ -3,6 +3,7 @@ import {
   CreateInstallationOperationRequest,
   Installation,
 } from "@generated/api/src";
+import { useQueryClient } from "@tanstack/react-query";
 import { useProject } from "src/context/ProjectContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
@@ -27,7 +28,7 @@ export function useCreateInstallation() {
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { connection } = useConnection();
   const { installation } = useInstallation();
-
+  const queryClient = useQueryClient();
   const {
     mutate: createInstallationMutation,
     isIdle,
@@ -60,7 +61,11 @@ export function useCreateInstallation() {
       installation: {
         groupRef,
         connectionId: connection?.id,
-        config: { content: config },
+        config: {
+          content: {
+            ...config,
+          },
+        },
       },
     };
 
@@ -73,6 +78,9 @@ export function useCreateInstallation() {
       },
       onSettled: () => {
         onSettled?.();
+        queryClient.invalidateQueries({
+          queryKey: ["amp", "installations"],
+        });
       },
     });
   };
