@@ -140,6 +140,7 @@ src/models/Org.ts
 src/models/PaginationInfo.ts
 src/models/PatchApiKeyRequest.ts
 src/models/PatchApiKeyRequestApiKey.ts
+src/models/PauseReadsRequest.ts
 src/models/Problem.ts
 src/models/Project.ts
 src/models/ProjectEntitlements.ts
@@ -162,6 +163,7 @@ src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
 src/models/TokenMetadataFieldsOtherFieldsInner.ts
+src/models/UnpauseReadsRequest.ts
 src/models/UpdateConnectionRequest.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts

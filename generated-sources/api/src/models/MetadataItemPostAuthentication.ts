@@ -25,6 +25,12 @@ export interface MetadataItemPostAuthentication {
      * @memberof MetadataItemPostAuthentication
      */
     name: string;
+    /**
+     * Does this metadata item only apply to a specific module?
+     * @type {{ [key: string]: object; }}
+     * @memberof MetadataItemPostAuthentication
+     */
+    moduleDependencies?: { [key: string]: object; };
 }
 
 /**
@@ -48,6 +54,7 @@ export function MetadataItemPostAuthenticationFromJSONTyped(json: any, ignoreDis
     return {
         
         'name': json['name'],
+        'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
     };
 }
 
@@ -61,6 +68,7 @@ export function MetadataItemPostAuthenticationToJSON(value?: MetadataItemPostAut
     return {
         
         'name': value.name,
+        'moduleDependencies': value.moduleDependencies,
     };
 }
 

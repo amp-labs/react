@@ -37,6 +37,12 @@ export interface MetadataItemInput {
      * @memberof MetadataItemInput
      */
     docsURL?: string;
+    /**
+     * Does this metadata item only apply to a specific module?
+     * @type {{ [key: string]: object; }}
+     * @memberof MetadataItemInput
+     */
+    moduleDependencies?: { [key: string]: object; };
 }
 
 /**
@@ -62,6 +68,7 @@ export function MetadataItemInputFromJSONTyped(json: any, ignoreDiscriminator: b
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
+        'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
     };
 }
 
@@ -77,6 +84,7 @@ export function MetadataItemInputToJSON(value?: MetadataItemInput | null): any {
         'name': value.name,
         'displayName': value.displayName,
         'docsURL': value.docsURL,
+        'moduleDependencies': value.moduleDependencies,
     };
 }
 
