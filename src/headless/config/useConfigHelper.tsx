@@ -59,17 +59,12 @@ export function useConfigHelper(
 ) {
   const [draft, setDraft] =
     useState<UpdateInstallationConfigContent>(initialConfig);
-  const [initial] = useState(initialConfig); // For reset
 
   const { getReadObject: getReadObjectFromManifest, data: manifest } =
     useManifest();
   const { installation } = useInstallation();
 
   const get = useCallback(() => draft, [draft]);
-
-  const reset = useCallback(() => {
-    setDraft(initial);
-  }, [initial]);
 
   /**
    * Initializes an object within the `_draft` configuration with default values from the manifest.
@@ -270,32 +265,26 @@ export function useConfigHelper(
     [draft.write?.objects],
   );
 
-  // add loading state
-  const [isSyncing, setIsSyncing] = useState(false);
-  const syncInstallationConfig = useCallback(() => {
+  const reset = useCallback(() => {
     // set the draft config to the installation config
-    setIsSyncing(true);
     setDraft((prev) =>
       produce(prev, (draft) => {
         Object.assign(draft, installation?.config?.content);
       }),
     );
-    setIsSyncing(false);
   }, [installation?.config?.content]);
 
   useEffect(() => {
     console.debug("Installation found", { installation });
     // sync the installation config to the local config
-    syncInstallationConfig();
-  }, [installation, syncInstallationConfig]);
+    reset();
+  }, [installation, reset]);
 
   return {
     draft,
     get,
-    syncInstallationConfig,
-    isSyncing,
-    setDraft,
     reset,
+    setDraft,
     readObject,
     writeObject,
   };
