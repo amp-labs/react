@@ -56,10 +56,19 @@ export function useUpdateInstallation() {
     }
 
     // add write objects to update mask
-    const updateMask = ["config.content.write.objects"];
+    const updateMask = [];
+    // add write objects to update mask
+    if (
+      config?.write?.objects &&
+      Object.keys(config.write.objects).length > 0
+    ) {
+      updateMask.push("config.content.write.objects");
+    }
+
+    // add read objects to update mask
     if (config?.read?.objects) {
       const objectNames = Object.keys(config.read.objects);
-      // add all read objects to update maask
+      // add all read objects to update mask
       updateMask.push(
         ...objectNames.map((name) => `config.content.read.objects.${name}`),
       );
