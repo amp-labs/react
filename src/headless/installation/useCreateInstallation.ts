@@ -1,5 +1,4 @@
 import {
-  ConfigContent,
   CreateInstallationOperationRequest,
   Installation,
 } from "@generated/api/src";
@@ -8,6 +7,8 @@ import { useProject } from "src/context/ProjectContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
+import type { InstallationConfigContent } from "../config/types";
+import { toCreateConfigContent } from "../config/types";
 import { useInstallationProps } from "../InstallationProvider";
 import { useConnection } from "../useConnection";
 
@@ -43,7 +44,7 @@ export function useCreateInstallation() {
     onError,
     onSettled,
   }: {
-    config: ConfigContent;
+    config: InstallationConfigContent;
     onSuccess?: (data: Installation) => void;
     onError?: (error: Error) => void;
     onSettled?: () => void;
@@ -62,9 +63,7 @@ export function useCreateInstallation() {
         groupRef,
         connectionId: connection?.id,
         config: {
-          content: {
-            ...config,
-          },
+          content: toCreateConfigContent(config),
         },
       },
     };

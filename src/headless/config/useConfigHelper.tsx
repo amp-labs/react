@@ -6,12 +6,13 @@ import type {
   FieldSettingDefault,
   FieldSettingWriteOnCreateEnum,
   FieldSettingWriteOnUpdateEnum,
-  UpdateInstallationConfigContent,
 } from "@generated/api/src";
 import { produce } from "immer";
 
 import { useInstallation } from "../installation/useInstallation";
 import { useManifest } from "../manifest/useManifest";
+
+import type { InstallationConfigContent } from "./types";
 
 type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
@@ -54,11 +55,8 @@ type WriteObjectHandlers = {
   }) => void;
 };
 
-export function useConfigHelper(
-  initialConfig: UpdateInstallationConfigContent,
-) {
-  const [draft, setDraft] =
-    useState<UpdateInstallationConfigContent>(initialConfig);
+export function useConfigHelper(initialConfig: InstallationConfigContent) {
+  const [draft, setDraft] = useState<InstallationConfigContent>(initialConfig);
 
   const { getReadObject: getReadObjectFromManifest, data: manifest } =
     useManifest();
@@ -78,10 +76,10 @@ export function useConfigHelper(
    * - Ensures required fields are initialized if not already set.
    */
   const initializeObjectWithDefaults = useCallback(
-    (objectName: string, _draft: UpdateInstallationConfigContent) => {
+    (objectName: string, _draft: InstallationConfigContent) => {
       // initialize provider if not set
       _draft.provider = _draft.provider || manifest?.content?.provider || "";
-      const read = _draft.read || {};
+      const read = _draft.read || { objects: {} };
       const objects = read.objects || {};
       const obj = objects[objectName] || {};
 
@@ -100,8 +98,8 @@ export function useConfigHelper(
 
       // Initialize required fields for object from manifest if not set
       obj.objectName = obj.objectName || objectName;
-      obj.schedule = obj.schedule || defaultSchedule;
-      obj.destination = obj.destination || defaultDestination;
+      obj.schedule = obj.schedule || defaultSchedule || "";
+      obj.destination = obj.destination || defaultDestination || "";
       obj.selectedFields = obj.selectedFields || defaultSelectedFields;
 
       objects[objectName] = obj;
@@ -158,9 +156,7 @@ export function useConfigHelper(
     (objectName: string): WriteObjectHandlers => {
       const object = draft.write?.objects?.[objectName];
 
-      const initializeWriteObject = (
-        _draft: UpdateInstallationConfigContent,
-      ) => {
+      const initializeWriteObject = (_draft: InstallationConfigContent) => {
         // initialize write if it doesn't exist
         const write = _draft.write || {};
         // initialize object if it doesn't exist
