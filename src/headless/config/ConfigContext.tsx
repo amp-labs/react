@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
-import type { UpdateInstallationConfigContent } from "@generated/api/src";
 
+import type { InstallationConfigContent } from "./types";
 import { useConfigHelper } from "./useConfigHelper";
 
 const ConfigContext = createContext<ReturnType<typeof useConfigHelper> | null>(
@@ -12,7 +12,7 @@ export function ConfigProvider({
   initialConfig,
 }: {
   children: ReactNode;
-  initialConfig: UpdateInstallationConfigContent;
+  initialConfig: InstallationConfigContent;
 }) {
   const config = useConfigHelper(initialConfig);
   return (

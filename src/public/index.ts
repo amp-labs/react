@@ -11,12 +11,8 @@ export * from "../context/AmpersandContextProvider";
 export * from "../components/Configure";
 export * from "../components/Connect/ConnectProvider";
 export * from "../hooks/useIsIntegrationInstalled";
-// export * from "../headless";
 
-/**
- * Generated API types and models
- */
-export * from "@generated/api/src";
+// Headless exported in index.ts
 
 /**
  *  Exported types which are helpful for builders

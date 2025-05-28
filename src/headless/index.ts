@@ -19,3 +19,6 @@ export { useHydratedRevisionQuery } from "./manifest/useHydratedRevisionQuery";
 
 // Config Hooks
 export { useConfig } from "./config/ConfigContext";
+
+// Config Bridge Types
+export type { InstallationConfigContent } from "./config/types";

@@ -1,5 +1,4 @@
 import {
-  ConfigContent,
   Installation,
   UpdateInstallationOperationRequest,
 } from "@generated/api/src";
@@ -8,6 +7,8 @@ import { useProject } from "src/context/ProjectContextProvider";
 import { useUpdateInstallationMutation } from "src/hooks/mutation/useUpdateInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
+import type { InstallationConfigContent } from "../config/types";
+import { toUpdateConfigContent } from "../config/types";
 import { useInstallationProps } from "../InstallationProvider";
 
 import { useInstallation } from "./useInstallation";
@@ -41,7 +42,7 @@ export function useUpdateInstallation() {
     onError,
     onSettled,
   }: {
-    config: ConfigContent;
+    config: InstallationConfigContent;
     onSuccess?: (data: Installation) => void;
     onError?: (error: Error) => void;
     onSettled?: () => void;
@@ -83,7 +84,7 @@ export function useUpdateInstallation() {
         updateMask,
         installation: {
           config: {
-            content: config,
+            content: toUpdateConfigContent(config),
           },
         },
       },
