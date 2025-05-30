@@ -1,6 +1,7 @@
 // Installation Provider
 export {
   InstallationProvider,
+  type InstallationProviderOptions,
   useInstallationProps,
 } from "./InstallationProvider";
 

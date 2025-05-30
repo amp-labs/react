@@ -32,23 +32,23 @@ export function useInstallationProps() {
   return context;
 }
 
-interface InstallationProviderProps {
+export interface InstallationProviderOptions {
   integration: string; // integration name or id
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+}
+
+interface InstallationProviderProps {
+  options: InstallationProviderOptions;
   children: React.ReactNode;
 }
 
 // Wrap your parent component with the context provider
 export function InstallationProvider({
   children,
-  integration,
-  consumerRef,
-  consumerName,
-  groupRef,
-  groupName,
+  options: { integration, consumerRef, consumerName, groupRef, groupName },
 }: InstallationProviderProps) {
   const props = useMemo(
     () => ({
