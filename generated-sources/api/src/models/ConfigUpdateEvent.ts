@@ -44,7 +44,8 @@ export interface ConfigUpdateEvent {
  * @export
  */
 export const ConfigUpdateEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type ConfigUpdateEventEnabledEnum = typeof ConfigUpdateEventEnabledEnum[keyof typeof ConfigUpdateEventEnabledEnum];
 

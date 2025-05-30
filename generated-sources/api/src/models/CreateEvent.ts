@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateEvent {
     /**
-     * If always, the integration will subscribe to create events.
+     * If always, the integration will subscribe to create events by default.
      * @type {string}
      * @memberof CreateEvent
      */
