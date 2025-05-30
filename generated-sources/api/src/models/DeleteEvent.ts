@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface DeleteEvent {
     /**
-     * If always, the integration will subscribe to delete events.
+     * If always, the integration will subscribe to delete events by default.
      * @type {string}
      * @memberof DeleteEvent
      */
@@ -32,7 +32,8 @@ export interface DeleteEvent {
  * @export
  */
 export const DeleteEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type DeleteEventEnabledEnum = typeof DeleteEventEnabledEnum[keyof typeof DeleteEventEnabledEnum];
 

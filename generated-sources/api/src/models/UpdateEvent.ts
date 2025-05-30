@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UpdateEvent {
     /**
-     * If always, the integration will subscribe to update events.
+     * If always, the integration will subscribe to update events by default.
      * @type {string}
      * @memberof UpdateEvent
      */
@@ -44,7 +44,8 @@ export interface UpdateEvent {
  * @export
  */
 export const UpdateEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type UpdateEventEnabledEnum = typeof UpdateEventEnabledEnum[keyof typeof UpdateEventEnabledEnum];
 

@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateEvent {
     /**
-     * If always, the integration will subscribe to create events.
+     * If always, the integration will subscribe to create events by default.
      * @type {string}
      * @memberof CreateEvent
      */
@@ -32,7 +32,8 @@ export interface CreateEvent {
  * @export
  */
 export const CreateEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type CreateEventEnabledEnum = typeof CreateEventEnabledEnum[keyof typeof CreateEventEnabledEnum];
 
