@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface DeleteEvent {
     /**
-     * If always, the integration will subscribe to delete events.
+     * If always, the integration will subscribe to delete events by default.
      * @type {string}
      * @memberof DeleteEvent
      */

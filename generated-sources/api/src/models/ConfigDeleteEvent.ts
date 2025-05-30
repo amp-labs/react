@@ -32,7 +32,8 @@ export interface ConfigDeleteEvent {
  * @export
  */
 export const ConfigDeleteEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type ConfigDeleteEventEnabledEnum = typeof ConfigDeleteEventEnabledEnum[keyof typeof ConfigDeleteEventEnabledEnum];
 
