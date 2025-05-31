@@ -14,7 +14,7 @@ import { useManifest } from "../manifest/useManifest";
 
 import type { InstallationConfigContent } from "./types";
 
-type ReadObjectHandlers = {
+export type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
   getSelectedField: (fieldName: string) => boolean;
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;
@@ -22,7 +22,7 @@ type ReadObjectHandlers = {
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
 };
 
-type WriteObjectHandlers = {
+export type WriteObjectHandlers = {
   object: BaseWriteConfigObject | undefined;
   setEnableWrite: () => void;
   setDisableWrite: () => void;
