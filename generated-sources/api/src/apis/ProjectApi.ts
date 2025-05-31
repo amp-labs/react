@@ -38,10 +38,6 @@ export interface CreateProjectOperationRequest {
     project: CreateProjectRequest;
 }
 
-export interface DeleteProjectRequest {
-    projectIdOrName: string;
-}
-
 export interface GetProjectRequest {
     projectIdOrName: string;
     includeEntitlements?: boolean;
@@ -73,21 +69,6 @@ export interface ProjectApiInterface {
      * Create a new project
      */
     createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
-
-    /**
-     * 
-     * @summary Delete a project
-     * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProjectApiInterface
-     */
-    deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Delete a project
-     */
-    deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -177,39 +158,6 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
         const response = await this.createProjectRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Delete a project
-     */
-    async deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
-            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteProject.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/projects/{projectIdOrName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete a project
-     */
-    async deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteProjectRaw(requestParameters, initOverrides);
     }
 
     /**
