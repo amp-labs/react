@@ -1,8 +1,5 @@
 // Installation Provider
-export {
-  InstallationProvider,
-  useInstallationProps,
-} from "./InstallationProvider";
+export { InstallationProvider } from "./InstallationProvider";
 
 // Connection
 export { useConnection } from "./useConnection";
@@ -15,7 +12,7 @@ export { useDeleteInstallation } from "./installation/useDeleteInstallation";
 
 // Manifest Hooks
 export { useManifest } from "./manifest/useManifest";
-export { useHydratedRevisionQuery } from "./manifest/useHydratedRevisionQuery";
+// export { useHydratedRevisionQuery } from "./manifest/useHydratedRevisionQuery";
 
 // Config Hooks
 export { useConfig } from "./config/ConfigContext";
