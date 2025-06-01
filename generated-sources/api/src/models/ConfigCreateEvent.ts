@@ -32,7 +32,8 @@ export interface ConfigCreateEvent {
  * @export
  */
 export const ConfigCreateEventEnabledEnum = {
-    Always: 'always'
+    Always: 'always',
+    Never: 'never'
 } as const;
 export type ConfigCreateEventEnabledEnum = typeof ConfigCreateEventEnabledEnum[keyof typeof ConfigCreateEventEnabledEnum];
 
