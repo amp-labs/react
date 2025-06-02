@@ -27,7 +27,7 @@ export interface Manifest {
     getOptionalFields: () => HydratedIntegrationField[] | null;
   };
   getCustomerFieldsForObject: (objectName: string) => {
-    allFields: { [key: string]: FieldMetadata } | null;
+    allFields: { [key: string]: FieldMetadata };
     getField: (field: string) => FieldMetadata | null;
   };
 }
