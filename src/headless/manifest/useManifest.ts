@@ -26,11 +26,8 @@ export interface Manifest {
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
   };
-  getCustomerFieldsForObject: (
-    objectName: string,
-  ) => HydratedIntegrationField[] | null;
-  getCustomerFieldsMetadataForObject: (objectName: string) => {
-    allFieldsMetaData: { [key: string]: FieldMetadata } | null;
+  getCustomerFieldsForObject: (objectName: string) => {
+    allFields: { [key: string]: FieldMetadata };
     getField: (field: string) => FieldMetadata | null;
   };
 }
@@ -40,7 +37,7 @@ export interface Manifest {
  * @returns Manifest object
  *
  * if object is not found, returns null for the object, getRequiredFields, getOptionalFields,
- *  getCustomerFieldsForObject, getCustomerFieldsMetadataForObject
+ *  getCustomerFieldsForObject.
  *
  */
 export function useManifest() {
@@ -79,28 +76,16 @@ export function useManifest() {
             object.optionalFields ?? [],
         };
       },
-      getCustomerFieldsForObject: (
-        objectName: string,
-      ): HydratedIntegrationField[] | null => {
+      getCustomerFieldsForObject: (objectName: string) => {
         const object = content?.read?.objects?.find(
           (obj) => obj.objectName === objectName,
         );
         if (!object) {
           console.error(`Object ${objectName} not found`);
-          return null;
-        }
-        return object.allFields ?? [];
-      },
-      getCustomerFieldsMetadataForObject: (objectName: string) => {
-        const object = content?.read?.objects?.find(
-          (obj) => obj.objectName === objectName,
-        );
-        if (!object) {
-          console.error(`Object ${objectName} not found`);
-          return { allFieldsMetaData: null, getField: () => null };
+          return { allFields: {}, getField: () => null };
         }
         return {
-          allFieldsMetaData: object.allFieldsMetadata ?? {},
+          allFields: object.allFieldsMetadata ?? {},
           getField: (field: string): FieldMetadata | null => {
             const fieldMetadata = object.allFieldsMetadata?.[field];
             if (!fieldMetadata) {
