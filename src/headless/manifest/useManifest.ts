@@ -82,7 +82,7 @@ export function useManifest() {
         );
         if (!object) {
           console.error(`Object ${objectName} not found`);
-          return { allFields: {}, getField: () => null };
+          return { allFields: null, getField: () => null };
         }
         return {
           allFields: object.allFieldsMetadata ?? {},
