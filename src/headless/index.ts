@@ -22,3 +22,6 @@ export { useConfig } from "./config/ConfigContext";
 
 // Config Bridge Types
 export type { InstallationConfigContent } from "./config/types";
+
+// Export all necessary types
+export * from './types';

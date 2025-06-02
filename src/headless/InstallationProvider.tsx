@@ -5,13 +5,14 @@ import { createContext, useContext, useMemo } from "react";
 import { ConfigProvider } from "./config/ConfigContext";
 
 // Define the context value type
-interface InstallationContextValue {
+export interface InstallationContextValue {
   integrationNameOrId: string;
   consumerRef: string;
   consumerName?: string;
   groupRef: string;
   groupName?: string;
 }
+
 // Create a context to pass down the props
 const InstallationContext = createContext<InstallationContextValue>({
   integrationNameOrId: "",
