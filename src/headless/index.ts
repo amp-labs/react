@@ -12,7 +12,6 @@ export { useDeleteInstallation } from "./installation/useDeleteInstallation";
 
 // Manifest Hooks
 export { useManifest } from "./manifest/useManifest";
-// export { useHydratedRevisionQuery } from "./manifest/useHydratedRevisionQuery";
 
 // Config Hooks
 export { useConfig } from "./config/ConfigContext";
