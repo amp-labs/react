@@ -105,17 +105,18 @@ export interface HydratedIntegrationObject {
      */
     optionalFieldsAuto?: OptionalFieldsAutoOption;
     /**
-     * This is a list of all fields on the object for a particular SaaS instance, including their display names.
-     * @type {Array<HydratedIntegrationField>}
-     * @memberof HydratedIntegrationObject
-     */
-    allFields?: Array<HydratedIntegrationField>;
-    /**
      * This is a map of all fields on the object including their metadata (such as display name and type), the keys of the map are the field names.
      * @type {{ [key: string]: FieldMetadata; }}
      * @memberof HydratedIntegrationObject
      */
     allFieldsMetadata?: { [key: string]: FieldMetadata; };
+    /**
+     * This is a list of all fields on the object for a particular SaaS instance, including their display names. Prefer using allFieldsMetadata instead.
+     * @type {Array<HydratedIntegrationField>}
+     * @memberof HydratedIntegrationObject
+     * @deprecated
+     */
+    allFields?: Array<HydratedIntegrationField>;
     /**
      * 
      * @type {Backfill}
@@ -157,8 +158,8 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFields': !exists(json, 'optionalFields') ? undefined : ((json['optionalFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
-        'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'allFieldsMetadata': !exists(json, 'allFieldsMetadata') ? undefined : (mapValues(json['allFieldsMetadata'], FieldMetadataFromJSON)),
+        'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
     };
 }
@@ -182,8 +183,8 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFields': value.optionalFields === undefined ? undefined : ((value.optionalFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
-        'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'allFieldsMetadata': value.allFieldsMetadata === undefined ? undefined : (mapValues(value.allFieldsMetadata, FieldMetadataToJSON)),
+        'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'backfill': BackfillToJSON(value.backfill),
     };
 }
