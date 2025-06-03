@@ -20,4 +20,4 @@ export { useConfig } from "./config/ConfigContext";
 export type { InstallationConfigContent } from "./config/types";
 
 // Export all necessary types
-export * from './types';
+export * from "./types";

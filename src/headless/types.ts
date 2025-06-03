@@ -13,13 +13,16 @@ import type {
   FieldMetadata,
   FieldSetting,
   FieldSettingDefault,
-  FieldSettingWriteOnCreateEnum,
-  FieldSettingWriteOnUpdateEnum,
   HydratedIntegrationField,
   HydratedIntegrationObject,
   HydratedRevision,
   Installation,
   UpdateInstallationConfigContent,
+} from "@generated/api/src";
+// enum types
+import {
+  FieldSettingWriteOnCreateEnum,
+  FieldSettingWriteOnUpdateEnum,
 } from "@generated/api/src";
 
 // Re-export types from their original source files
@@ -40,11 +43,12 @@ export type {
   FieldMetadata,
   FieldSetting,
   FieldSettingDefault,
-  FieldSettingWriteOnCreateEnum,
-  FieldSettingWriteOnUpdateEnum,
   HydratedIntegrationField,
   HydratedIntegrationObject,
   HydratedRevision,
   Installation,
   UpdateInstallationConfigContent,
 };
+
+// enum that are not exported as types
+export { FieldSettingWriteOnCreateEnum, FieldSettingWriteOnUpdateEnum };
