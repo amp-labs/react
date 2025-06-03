@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import type {
   BaseReadConfigObject,
   BaseWriteConfigObject,
-  // FieldSetting,
-  // FieldSettingDefault,
-  // FieldSettingWriteOnCreateEnum,
-  // FieldSettingWriteOnUpdateEnum,
+  FieldSetting as GeneratedFieldSetting,
+  FieldSettingDefault,
+  FieldSettingWriteOnCreateEnum,
+  FieldSettingWriteOnUpdateEnum,
 } from "@generated/api/src";
 import { produce } from "immer";
 
@@ -13,6 +13,29 @@ import { useInstallation } from "../installation/useInstallation";
 import { useManifest } from "../manifest/useManifest";
 
 import type { InstallationConfigContent } from "./types";
+
+// Bridge type that uses 'default' instead of '_default'
+// This is because the generated type uses '_default' and we want to use 'default'
+// to be consistent with reference documentation for the field setting
+export type FieldSetting = Omit<GeneratedFieldSetting, "_default"> & {
+  default?: FieldSettingDefault;
+};
+
+// Helper function to convert between bridge type and generated type
+const toGeneratedFieldSetting = (
+  setting: FieldSetting,
+): GeneratedFieldSetting => ({
+  ...setting,
+  _default: setting.default,
+});
+
+// Helper function to convert from generated type to bridge type
+const fromGeneratedFieldSetting = (
+  setting: GeneratedFieldSetting,
+): FieldSetting => ({
+  ...setting,
+  default: setting._default,
+});
 
 export type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
@@ -27,33 +50,33 @@ export type WriteObjectHandlers = {
   setEnableWrite: () => void;
   setDisableWrite: () => void;
   getWriteObject: () => BaseWriteConfigObject | undefined;
-  // TODO: FIX _default type
-  // advanced write features
+  // advanced write features - see note above about using bridge types
+  // _default is used in the generated type, but we use default in the bridge type
   // https://docs.withampersand.com/write-actions#advanced-use-cases
-  // getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;
-  // setSelectedFieldSettings: (params: {
-  //   fieldName: string;
-  //   settings: FieldSetting;
-  // }) => void;
-  // getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
-  // setDefaultValues: (params: {
-  //   fieldName: string;
-  //   value: FieldSettingDefault;
-  // }) => void;
-  // getWriteOnCreateSetting: (
-  //   fieldName: string,
-  // ) => FieldSettingWriteOnCreateEnum | undefined;
-  // setWriteOnCreateSetting: (params: {
-  //   fieldName: string;
-  //   value: FieldSettingWriteOnCreateEnum;
-  // }) => void;
-  // getWriteOnUpdateSetting: (
-  //   fieldName: string,
-  // ) => FieldSettingWriteOnUpdateEnum | undefined;
-  // setWriteOnUpdateSetting: (params: {
-  //   fieldName: string;
-  //   value: FieldSettingWriteOnUpdateEnum;
-  // }) => void;
+  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;
+  setSelectedFieldSettings: (params: {
+    fieldName: string;
+    settings: FieldSetting;
+  }) => void;
+  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
+  setDefaultValues: (params: {
+    fieldName: string;
+    value: FieldSettingDefault;
+  }) => void;
+  getWriteOnCreateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnCreateEnum | undefined;
+  setWriteOnCreateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnCreateEnum;
+  }) => void;
+  getWriteOnUpdateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnUpdateEnum | undefined;
+  setWriteOnUpdateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnUpdateEnum;
+  }) => void;
 };
 
 export function useConfigHelper(initialConfig: InstallationConfigContent) {
@@ -173,35 +196,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
         return { write, objects, obj };
       };
 
-      // Helper function to get field setting value
-      // const getFieldSetting = <T extends keyof FieldSetting>(
-      //   fieldName: string,
-      //   settingKey: T,
-      // ): FieldSetting[T] | undefined => {
-      //   return object?.selectedFieldSettings?.[fieldName]?.[settingKey];
-      // };
-
-      // // Helper function to set field setting value
-      // const setFieldSetting = <T extends keyof FieldSetting>(
-      //   fieldName: string,
-      //   settingKey: T,
-      //   value: FieldSetting[T],
-      // ) => {
-      //   setDraft((prev) =>
-      //     produce(prev, (_draft) => {
-      //       const { obj } = initializeWriteObject(_draft);
-
-      //       obj.selectedFieldSettings = {
-      //         ...obj.selectedFieldSettings,
-      //         [fieldName]: {
-      //           ...obj.selectedFieldSettings?.[fieldName],
-      //           [settingKey]: value,
-      //         },
-      //       };
-      //     }),
-      //   );
-      // };
-
       return {
         object: object,
         setEnableWrite: () => {
@@ -223,43 +217,104 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
         getWriteObject: () => {
           return draft.write?.objects?.[objectName];
         },
-        // getSelectedFieldSettings: (fieldName: string) =>
-        //   object?.selectedFieldSettings?.[fieldName],
-        // setSelectedFieldSettings: ({ fieldName, settings }) => {
-        //   setDraft((prev) =>
-        //     produce(prev, (_draft) => {
-        //       const { obj } = initializeWriteObject(_draft);
+        getSelectedFieldSettings: (fieldName: string) => {
+          const setting = object?.selectedFieldSettings?.[fieldName];
+          return setting ? fromGeneratedFieldSetting(setting) : undefined;
+        },
+        setSelectedFieldSettings: ({ fieldName, settings }) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+              obj.selectedFieldSettings = {
+                ...obj.selectedFieldSettings,
+                [fieldName]: toGeneratedFieldSetting(settings),
+              };
 
-        //       // initialize selectedFieldSettings if it doesn't exist
-        //       const selectedFieldSettings = obj.selectedFieldSettings || {};
+              // if the settings are undefined, remove the field from selectedFieldSettings
+              if (settings == undefined) {
+                delete obj.selectedFieldSettings[fieldName];
+              }
+            }),
+          );
+        },
+        getDefaultValues: (fieldName: string) => {
+          const setting = object?.selectedFieldSettings?.[fieldName];
+          if (!setting) return undefined;
+          const bridgeSetting = fromGeneratedFieldSetting(setting);
+          return bridgeSetting.default;
+        },
+        setDefaultValues: ({ fieldName, value }) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+              const currentSetting = obj.selectedFieldSettings?.[fieldName];
+              const bridgeSetting = currentSetting
+                ? fromGeneratedFieldSetting(currentSetting)
+                : {};
 
-        //       obj.selectedFieldSettings = {
-        //         ...selectedFieldSettings,
-        //         [fieldName]: settings,
-        //       };
+              obj.selectedFieldSettings = {
+                ...obj.selectedFieldSettings,
+                [fieldName]: toGeneratedFieldSetting({
+                  ...bridgeSetting,
+                  default: value,
+                }),
+              };
+            }),
+          );
+        },
+        getWriteOnCreateSetting: (fieldName: string) => {
+          const setting = object?.selectedFieldSettings?.[fieldName];
+          if (!setting) return undefined;
+          const bridgeSetting = fromGeneratedFieldSetting(setting);
+          return bridgeSetting.writeOnCreate;
+        },
+        setWriteOnCreateSetting: ({ fieldName, value }) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+              const currentSetting = obj.selectedFieldSettings?.[fieldName];
+              const bridgeSetting = currentSetting
+                ? fromGeneratedFieldSetting(currentSetting)
+                : {};
 
-        //       // if settings is undefined, remove the field from selectedFieldSettings
-        //       if (settings === undefined) {
-        //         delete obj.selectedFieldSettings[fieldName];
-        //       }
-        //     }),
-        //   );
-        // },
-        // getDefaultValues: (fieldName: string) =>
-        //   getFieldSetting(fieldName, "_default"),
-        // setDefaultValues: ({ fieldName, value }) =>
-        //   setFieldSetting(fieldName, "_default", value),
-        // getWriteOnCreateSetting: (fieldName: string) =>
-        //   getFieldSetting(fieldName, "writeOnCreate"),
-        // setWriteOnCreateSetting: ({ fieldName, value }) =>
-        //   setFieldSetting(fieldName, "writeOnCreate", value),
-        // getWriteOnUpdateSetting: (fieldName: string) =>
-        //   getFieldSetting(fieldName, "writeOnUpdate"),
-        // setWriteOnUpdateSetting: ({ fieldName, value }) =>
-        //   setFieldSetting(fieldName, "writeOnUpdate", value),
+              obj.selectedFieldSettings = {
+                ...obj.selectedFieldSettings,
+                [fieldName]: toGeneratedFieldSetting({
+                  ...bridgeSetting,
+                  writeOnCreate: value,
+                }),
+              };
+            }),
+          );
+        },
+        getWriteOnUpdateSetting: (fieldName: string) => {
+          const setting = object?.selectedFieldSettings?.[fieldName];
+          if (!setting) return undefined;
+          const bridgeSetting = fromGeneratedFieldSetting(setting);
+          return bridgeSetting.writeOnUpdate;
+        },
+        setWriteOnUpdateSetting: ({ fieldName, value }) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeWriteObject(_draft);
+              const currentSetting = obj.selectedFieldSettings?.[fieldName];
+              const bridgeSetting = currentSetting
+                ? fromGeneratedFieldSetting(currentSetting)
+                : {};
+
+              obj.selectedFieldSettings = {
+                ...obj.selectedFieldSettings,
+                [fieldName]: toGeneratedFieldSetting({
+                  ...bridgeSetting,
+                  writeOnUpdate: value,
+                }),
+              };
+            }),
+          );
+        },
       };
     },
-    [draft.write?.objects],
+    [draft],
   );
 
   const reset = useCallback(() => {
