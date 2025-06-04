@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { PasswordEyeIcon } from "src/assets/PasswordEyeIcon";
+import { PasswordEyeSlashIcon } from "src/assets/PasswordEyeSlashIcon";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -110,11 +112,19 @@ export function ClientCredentialsForm({
           />
           <Button
             type="button"
-            style={{ height: "2.5rem", width: "5rem" }}
+            style={{
+              height: "2.5rem",
+              width: "2.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onClick={onToggleShowHide}
-            variant={buttonVariant}
+            variant="ghost"
           >
-            {show ? "Hide" : "Show"}
+            <span style={{ height: "1.5rem", width: "1.5rem" }}>
+              {show ? <PasswordEyeSlashIcon /> : <PasswordEyeIcon />}
+            </span>
           </Button>
         </div>
         {explicitScopesRequired && (
