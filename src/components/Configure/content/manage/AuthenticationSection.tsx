@@ -1,5 +1,6 @@
 import { useConnections } from "src/context/ConnectionsContextProvider";
 import { useProvider } from "src/hooks/useProvider";
+import { capitalize } from "src/utils";
 
 import { FieldHeader } from "../fields/FieldHeader";
 
@@ -34,7 +35,10 @@ export function AuthenticationSection() {
           label={workspaceLabel}
           value={selectedConnection?.providerWorkspaceRef}
         />
-        <AuthenticationRow label="Status" value={selectedConnection?.status} />
+        <AuthenticationRow
+          label="Status"
+          value={capitalize(selectedConnection?.status || "")}
+        />
       </div>
     </>
   );

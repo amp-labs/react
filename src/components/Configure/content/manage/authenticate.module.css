@@ -11,5 +11,6 @@
 
 .value {
     color: var(--amp-colors-text-regular);
+    text-align: right;
 }
 
