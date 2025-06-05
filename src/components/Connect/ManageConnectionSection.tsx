@@ -5,7 +5,7 @@ import { Connection } from "src/services/api";
 import { FieldHeader } from "../Configure/content/fields/FieldHeader";
 import { Button } from "../ui-base/Button";
 
-import { RemoveConnectionButton } from "./RemoveConnectionButton";
+import { RemoveConnectionSection } from "./RemoveConnectionSection";
 
 export function ManageConnectionSection({
   resetComponent,
@@ -49,14 +49,9 @@ export function ManageConnectionSection({
       {showUpdateConnection === true && (
         <>
           <UpdateConnectionSection provider={provider} />
-          <FieldHeader string="Remove connection" />
-          <p>Click to disconnect your connection from the provider.</p>
-          <RemoveConnectionButton
+          <RemoveConnectionSection
             resetComponent={resetComponent}
             onDisconnectSuccess={onDisconnectSuccess}
-            buttonText="Remove connection"
-            buttonVariant="danger"
-            buttonStyle={{ fontSize: "13px" }}
           />
         </>
       )}
