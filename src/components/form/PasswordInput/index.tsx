@@ -40,6 +40,7 @@ export function PasswordInput({
       />
       <Button
         type="button"
+        aria-label={show ? "Hide password" : "Show password"}
         style={{
           height: "2.5rem",
           width: "2.5rem",
