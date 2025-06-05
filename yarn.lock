@@ -1973,17 +1973,17 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@tanstack/query-core@5.80.5":
-  version "5.80.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.80.5.tgz#b4fc78101cbd0d2eddb1424e2fa0712e8b13cf2b"
-  integrity sha512-kFWXdQOUcjL/Ugk3GrI9eMuG3DsKBGaLIgyOLekR2UOrRrJgkLgPUNzZ10i8FCkfi4SgLABhOtQhx1HjoB9EZQ==
+"@tanstack/query-core@5.80.6":
+  version "5.80.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.80.6.tgz#d2e54fa9eabebc953c675b74b17d6cd45a2a4cb4"
+  integrity sha512-nl7YxT/TAU+VTf+e2zTkObGTyY8YZBMnbgeA1ee66lIVqzKlYursAII6z5t0e6rXgwUMJSV4dshBTNacNpZHbQ==
 
 "@tanstack/react-query@^5.64.2":
-  version "5.80.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.80.5.tgz#73f2136e60c6daaaadb8fd3f429f76d7a0660883"
-  integrity sha512-C0d+pvIahk6fJK5bXxyf36r9Ft6R9O0mwl781CjBrYGRJc76XRJcKhkVpxIo68cjMy3i47gd4O1EGooAke/OCQ==
+  version "5.80.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.80.6.tgz#9c77f05f3236b95693caaea155e5eaa4459f0197"
+  integrity sha512-izX+5CnkpON3NQGcEm3/d7LfFQNo9ZpFtX2QsINgCYK9LT2VCIdi8D3bMaMSNhrAJCznRoAkFic76uvLroALBw==
   dependencies:
-    "@tanstack/query-core" "5.80.5"
+    "@tanstack/query-core" "5.80.6"
 
 "@tootallnate/quickjs-emscripten@^0.23.0":
   version "0.23.0"
