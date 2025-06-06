@@ -72,6 +72,8 @@ export function OptionalFieldsV2() {
           string={`${appName} reads the following optional fields`}
         />
         <CheckboxPagination
+          // set key so component is re-rendered when optional fields are updated
+          key={`${selectedObjectName}-${readOptionalFields?.length}`}
           items={checkboxItems}
           onItemChange={onCheckboxChange}
           onSelectAllChange={onSelectAllCheckboxChange}
