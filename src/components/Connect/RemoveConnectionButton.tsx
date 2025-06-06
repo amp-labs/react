@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useProject } from "context/ProjectContextProvider";
-import { Connection, useAPI } from "services/api";
+import { Connection } from "services/api";
 import { Button } from "src/components/ui-base/Button";
 import { useConnections } from "src/context/ConnectionsContextProvider";
+import { useDeleteConnectionMutation } from "src/hooks/mutation/useDeleteConnectionMutation";
 import { handleServerError } from "src/utils/handleServerError";
 
 interface RemoveConnectionButtonProps {
@@ -15,28 +14,6 @@ interface RemoveConnectionButtonProps {
   onDisconnectError?: (errorMsg: string) => void;
 }
 
-const useDeleteConnectionMutation = () => {
-  const getAPI = useAPI();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: ["deleteConnection"],
-    mutationFn: async ({ projectIdOrName, connectionId }: any) => {
-      const api = await getAPI();
-      return api.connectionApi.deleteConnection({
-        projectIdOrName,
-        connectionId,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["amp", "connections"] });
-    },
-    onError: (error) => {
-      console.error("Error deleting connection.", { error });
-    },
-  });
-};
-
 export function RemoveConnectionButton({
   buttonText,
   buttonVariant = "secondary",
@@ -47,20 +24,23 @@ export function RemoveConnectionButton({
 }: RemoveConnectionButtonProps) {
   const { projectId } = useProject();
   const { selectedConnection } = useConnections();
-  const deleteConnectionMutation = useDeleteConnectionMutation();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { mutate: deleteConnection, isPending: isDeletePending } =
+    useDeleteConnectionMutation();
+
   const isDisabled =
-    !projectId || !selectedConnection || !selectedConnection.id || loading;
+    !projectId ||
+    !selectedConnection ||
+    !selectedConnection.id ||
+    isDeletePending;
 
   const onDelete = async () => {
     if (!isDisabled) {
-      setLoading(true);
       console.warn("deleting connection", {
         projectId,
         connectionId: selectedConnection?.id,
       });
 
-      deleteConnectionMutation.mutate(
+      deleteConnection(
         {
           projectIdOrName: projectId,
           connectionId: selectedConnection?.id,
@@ -78,13 +58,12 @@ export function RemoveConnectionButton({
           onError: (error) => {
             handleServerError(error, onDisconnectError);
           },
-          onSettled: () => setLoading(false),
         },
       );
     }
   };
 
-  const buttonContent = loading ? "Disconnecting..." : buttonText;
+  const buttonContent = isDeletePending ? "Pending..." : buttonText;
 
   const ButtonBridge = (
     <Button
