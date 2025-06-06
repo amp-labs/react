@@ -38,7 +38,6 @@ export function ClientCredentialsForm({
   explicitScopesRequired,
   buttonVariant,
 }: ClientCredentialsFormProps) {
-  const [show, setShow] = useState(false);
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
     clientId: "",
@@ -47,8 +46,6 @@ export function ClientCredentialsForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { data: providerInfo } = useProviderInfoQuery(provider);
   const metadataFields = providerInfo?.metadata?.input || [];
-
-  const onToggleShowHide = () => setShow((prevShow) => !prevShow);
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -100,23 +97,12 @@ export function ClientCredentialsForm({
           placeholder="Client ID"
           onChange={handleChange}
         />
-        <div style={{ display: "flex", gap: ".5rem" }}>
-          <FormComponent.Input
-            id="clientSecret"
-            name="clientSecret"
-            type={show ? "text" : "password"}
-            placeholder="Client Secret"
-            onChange={handleChange}
-          />
-          <Button
-            type="button"
-            style={{ height: "2.5rem", width: "5rem" }}
-            onClick={onToggleShowHide}
-            variant={buttonVariant}
-          >
-            {show ? "Hide" : "Show"}
-          </Button>
-        </div>
+        <FormComponent.PasswordInput
+          id="clientSecret"
+          name="clientSecret"
+          placeholder="Client Secret"
+          onChange={handleChange}
+        />
         {explicitScopesRequired && (
           <FormComponent.Textarea
             name="scopes"

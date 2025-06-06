@@ -40,8 +40,6 @@ export function BasicAuthForm({
   isButtonDisabled,
   buttonVariant,
 }: BasicAuthFormProps) {
-  const [show, setShow] = useState(false);
-  const onToggleShowHide = () => setShow((prevShow) => !prevShow);
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
@@ -100,23 +98,12 @@ export function BasicAuthForm({
         placeholder="Username"
         onChange={handleChange}
       />
-      <div style={{ display: "flex", gap: ".5rem" }}>
-        <FormComponent.Input
-          id="password"
-          name="password"
-          type={show ? "text" : "password"}
-          placeholder="Password"
-          onChange={handleChange}
-        />
-        <Button
-          type="button"
-          style={{ height: "2.5rem", width: "5rem" }}
-          onClick={onToggleShowHide}
-          variant={buttonVariant}
-        >
-          {show ? "Hide" : "Show"}
-        </Button>
-      </div>
+      <FormComponent.PasswordInput
+        id="password"
+        name="password"
+        placeholder="Password"
+        onChange={handleChange}
+      />
       {metadataFields.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
