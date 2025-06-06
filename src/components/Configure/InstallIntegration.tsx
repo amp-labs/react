@@ -142,6 +142,7 @@ export function InstallIntegration({
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
+        resetComponent={reset}
       >
         <ConnectionsProvider>
           <ProtectedConnectionLayout

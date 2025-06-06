@@ -39,6 +39,7 @@ interface InstallIntegrationContextValue {
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
   fieldMapping?: FieldMapping;
+  resetComponent: () => void;
 }
 // Create a context to pass down the props
 export const InstallIntegrationContext =
@@ -58,6 +59,7 @@ export const InstallIntegrationContext =
     onUninstallSuccess: undefined,
     isIntegrationDeleted: false,
     setIntegrationDeleted: () => {},
+    resetComponent: () => {},
   });
 
 // Create a custom hook to access the props
@@ -82,6 +84,7 @@ interface InstallIntegrationProviderProps {
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
   fieldMapping?: FieldMapping;
+  resetComponent: () => void;
 }
 
 // Wrap your parent component with the context provider
@@ -96,6 +99,7 @@ export function InstallIntegrationProvider({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  resetComponent,
 }: InstallIntegrationProviderProps) {
   const { integrations } = useIntegrationList();
   const { setError, isError, removeError } = useErrorState();
@@ -190,6 +194,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
+      resetComponent,
     }),
     [
       integrationObj,
@@ -206,6 +211,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
+      resetComponent,
     ],
   );
 

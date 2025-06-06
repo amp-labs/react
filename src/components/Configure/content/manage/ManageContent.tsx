@@ -1,3 +1,7 @@
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+
+import { RemoveConnectionSection } from "components/Connect/RemoveConnectionSection";
+
 import { AuthenticationSection } from "./AuthenticationSection";
 import { UninstallSection } from "./UninstallSection";
 import { UpdateConnectionSection } from "./updateConnection/UpdateConnectionSection";
@@ -7,11 +11,18 @@ import { UpdateConnectionSection } from "./updateConnection/UpdateConnectionSect
  * @returns
  */
 export function ManageContent() {
+  const { installation, resetComponent } = useInstallIntegrationProps();
+
   return (
     <>
       <AuthenticationSection />
       <UpdateConnectionSection />
-      <UninstallSection />
+      {/* Uninstall section is only shown if the integration is installed */}
+      {installation && <UninstallSection />}
+      {/* Remove connection section is only shown if the integration is not installed */}
+      {!installation && (
+        <RemoveConnectionSection resetComponent={resetComponent} />
+      )}
     </>
   );
 }

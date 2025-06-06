@@ -14,7 +14,7 @@ export function RemoveConnectionSection({
   onDisconnectSuccess,
 }: RemoveConnectionSectionProps) {
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <FieldHeader string="Remove connection" />
       <p>Click to disconnect your connection from the provider.</p>
       <RemoveConnectionButton
@@ -22,8 +22,8 @@ export function RemoveConnectionSection({
         onDisconnectSuccess={onDisconnectSuccess}
         buttonText="Remove connection"
         buttonVariant="danger"
-        buttonStyle={{ fontSize: "13px" }}
+        buttonStyle={{ fontSize: "13px", width: "100%" }}
       />
-    </>
+    </div>
   );
 }
