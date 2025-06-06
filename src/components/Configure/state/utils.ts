@@ -24,6 +24,7 @@ import {
   getOptionalMapFieldsFromObject,
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
+  isIntegrationFieldMapping,
 } from "../utils";
 
 // uses lodash deep equality check to compare two saved write objects (typed checked)
@@ -69,7 +70,23 @@ const generateConfigurationStateRead = (
   const selectedFieldMappings =
     content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
 
-  const optionalFieldsSaved = { ...readSelectedFields };
+  // Filter optionalFieldsSaved to only include optional fields
+  const optionalFieldsSaved = Object.entries(readSelectedFields).reduce(
+    (acc, [fieldName, value]) => {
+      const isOptionalField = optionalFields?.some(
+        (field): field is HydratedIntegrationFieldExistent =>
+          !isIntegrationFieldMapping(field) &&
+          "fieldName" in field &&
+          field.fieldName === fieldName,
+      );
+      if (isOptionalField) {
+        acc[fieldName] = value;
+      }
+      return acc;
+    },
+    {} as SelectOptionalFields,
+  );
+
   const requiredMapFieldsSaved = { ...selectedFieldMappings };
 
   return {
@@ -80,7 +97,7 @@ const generateConfigurationStateRead = (
     requiredMapFields, // from hydrated revision
     optionalMapFields, // from hydrated revision
     // selected state
-    selectedOptionalFields: readSelectedFields,
+    selectedOptionalFields: optionalFieldsSaved,
     selectedFieldMappings,
     selectedValueMappings,
     isOptionalFieldsModified: false,

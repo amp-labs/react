@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { HydratedIntegrationFieldExistent } from "services/api";
 
 import {
@@ -38,28 +39,31 @@ export function OptionalFieldsV2() {
     }
   };
 
+  const checkboxItems = useMemo<CheckboxItem[]>(
+    () =>
+      // optional fields should all be pre-defined
+      readOptionalFields
+        ?.filter(
+          (field): field is HydratedIntegrationFieldExistent =>
+            !isIntegrationFieldMapping(field) &&
+            "fieldName" in field &&
+            "displayName" in field,
+        )
+        .map((field) => ({
+          id: field.fieldName,
+          label: field.displayName,
+          isChecked: !!selectedOptionalFields?.[field.fieldName],
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) || [],
+    [readOptionalFields, selectedOptionalFields],
+  );
+
   const shouldRender = !!(readOptionalFields && readOptionalFields.length > 0);
-  const isAllChecked =
-    Object.keys(selectedOptionalFields || {}).length ===
-    readOptionalFields?.length;
+  const isAllChecked = checkboxItems.every(
+    (item) => selectedOptionalFields?.[item.id] === true,
+  );
   const isIndeterminate =
     !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
-
-  const checkboxItems: CheckboxItem[] =
-    // optional fields should all be pre-defined
-    readOptionalFields
-      ?.filter(
-        (field): field is HydratedIntegrationFieldExistent =>
-          !isIntegrationFieldMapping(field) &&
-          "fieldName" in field &&
-          "displayName" in field,
-      )
-      .map((field) => ({
-        id: field.fieldName,
-        label: field.displayName,
-        isChecked: !!selectedOptionalFields?.[field.fieldName],
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label)) || [];
 
   return (
     shouldRender && (
