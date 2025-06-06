@@ -9,6 +9,8 @@ import {
   SelectAllCheckbox,
 } from "./index";
 
+import styles from "./checkboxPagination.module.css";
+
 export interface CheckboxItem {
   id: string;
   label: string;
@@ -45,13 +47,7 @@ export function CheckboxPagination({
   return (
     <CheckboxGroup>
       {totalPages > 1 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: ".25rem .5rem",
-          }}
-        >
+        <div className={styles.paginationContainer}>
           <Button
             type="button"
             onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
@@ -60,12 +56,7 @@ export function CheckboxPagination({
           >
             &lt;
           </Button>
-          <span
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
+          <span className={styles.pageInfo}>
             {currentPage} of {totalPages}
           </span>
           <Button
