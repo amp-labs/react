@@ -40,7 +40,8 @@
     "lint": "eslint --ext .ts,.tsx -c eslint.config.js src/ --fix",
     "lint:dry": "eslint --ext .ts,.tsx -c eslint.config.js src/",
     "clean-api": "rm -rf generated-sources/api",
-    "generate-api": "yarn clean-api && openapi-generator-cli generate -i https://raw.githubusercontent.com/amp-labs/openapi/main/api/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true",
+    "generate-api": "yarn clean-api && openapi-generator-cli generate -i https://raw.githubusercontent.com/amp-labs/openapi/main/api/api.yaml -g typescript-fetch -o generated-sources/api --additional-properties=npmName=amp-labs-generated-rest-sdk,supportsES6=true,withInterfaces=true && yarn generate-api:post-process",
+    "generate-api:post-process": "ts-node scripts/fix-default-field-setting.ts",
     "gen": "yarn generate-api"
   },
   "repository": {
@@ -79,6 +80,7 @@
     "prettier": "^3.5.3",
     "react-test-renderer": "^19.0.0",
     "rollup-plugin-visualizer": "^5.12.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite": "^5.3.3",
     "vite-plugin-dts": "^4.1.0"
