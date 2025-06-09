@@ -1,9 +1,7 @@
 import {
-  CheckboxField,
-  CheckboxFieldsContainer,
-  CheckboxGroup,
-  SelectAllCheckbox,
-} from "components/ui-base/Checkbox";
+  type CheckboxItem,
+  CheckboxPagination,
+} from "components/ui-base/Checkbox/CheckboxPagination";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 import { FieldHeader } from "../FieldHeader";
@@ -16,25 +14,18 @@ export function WriteFieldsV2() {
   const selectedWriteFields = configureState?.write?.selectedWriteObjects;
   const writeObjects = configureState?.write?.writeObjects;
 
-  const onCheckboxChange = (
-    checked: boolean | "indeterminate",
-    name: string,
-  ) => {
-    if (checked === "indeterminate") {
-      return;
-    }
-
+  const onItemChange = (id: string, checked: boolean) => {
     if (selectedObjectName && configureState) {
       setNonConfigurableWriteField(
         selectedObjectName,
         setConfigureState,
-        name,
+        id,
         checked,
       );
     }
   };
 
-  const onSelectAllCheckboxChange = (checked: boolean) => {
+  const onSelectAllChange = (checked: boolean) => {
     if (selectedObjectName && configureState) {
       configureState?.write?.writeObjects?.forEach((field) => {
         setNonConfigurableWriteField(
@@ -54,34 +45,25 @@ export function WriteFieldsV2() {
   const isIndeterminate =
     !isAllChecked && Object.keys(selectedWriteFields || {}).length > 0;
 
+  const checkboxItems: CheckboxItem[] =
+    writeObjects?.map((field) => ({
+      id: field.objectName,
+      label: field.displayName,
+      isChecked: !!selectedWriteFields?.[field.objectName],
+    })) || [];
+
   return (
     shouldRender && (
       <>
         <FieldHeader string={`Allow ${appName} to write to these objects`} />
-        <CheckboxGroup>
-          {(writeObjects?.length || 0) >= 2 && (
-            <SelectAllCheckbox
-              id="select-all-fields"
-              onCheckedChange={onSelectAllCheckboxChange}
-              isIndeterminate={isIndeterminate}
-              isChecked={isAllChecked}
-              label="Select all"
-            />
-          )}
-          <CheckboxFieldsContainer>
-            {writeObjects.map((field) => (
-              <CheckboxField
-                key={field.objectName}
-                id={field.objectName}
-                onCheckedChange={(checked) =>
-                  onCheckboxChange(checked, field.objectName)
-                }
-                isChecked={!!selectedWriteFields?.[field.objectName]}
-                label={field.displayName}
-              />
-            ))}
-          </CheckboxFieldsContainer>
-        </CheckboxGroup>
+        <CheckboxPagination
+          items={checkboxItems}
+          onItemChange={onItemChange}
+          onSelectAllChange={onSelectAllChange}
+          isAllChecked={isAllChecked}
+          isIndeterminate={isIndeterminate}
+          showSelectAll={writeObjects.length >= 2}
+        />
       </>
     )
   );
