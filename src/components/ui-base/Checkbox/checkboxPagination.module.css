@@ -1,0 +1,11 @@
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+}
+
+.pageInfo {
+  display: flex;
+  align-items: center;
+  color: var(--amp-colors-text-muted);
+} 

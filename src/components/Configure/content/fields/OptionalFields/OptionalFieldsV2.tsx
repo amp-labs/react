@@ -1,9 +1,10 @@
+import { useMemo } from "react";
+import { HydratedIntegrationFieldExistent } from "services/api";
+
 import {
-  CheckboxField,
-  CheckboxFieldsContainer,
-  CheckboxGroup,
-  SelectAllCheckbox,
-} from "components/ui-base/Checkbox";
+  CheckboxItem,
+  CheckboxPagination,
+} from "components/ui-base/Checkbox/CheckboxPagination";
 
 import { isIntegrationFieldMapping } from "../../../utils";
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
@@ -15,21 +16,13 @@ export function OptionalFieldsV2() {
   const { appName, configureState, setConfigureState, selectedObjectName } =
     useSelectedConfigureState();
   const selectedOptionalFields = configureState?.read?.selectedOptionalFields;
+  const readOptionalFields = configureState?.read?.optionalFields;
 
-  const onCheckboxChange = (
-    checked: boolean | "indeterminate",
-    name: string,
-  ) => {
-    if (checked === "indeterminate") {
-      return;
-    }
-
+  const onCheckboxChange = (id: string, checked: boolean) => {
     if (selectedObjectName && configureState) {
-      setOptionalField(selectedObjectName, setConfigureState, name, checked);
+      setOptionalField(selectedObjectName, setConfigureState, id, checked);
     }
   };
-
-  const readOptionalFields = configureState?.read?.optionalFields;
 
   const onSelectAllCheckboxChange = (checked: boolean) => {
     if (selectedObjectName && readOptionalFields) {
@@ -46,10 +39,29 @@ export function OptionalFieldsV2() {
     }
   };
 
+  const checkboxItems = useMemo<CheckboxItem[]>(
+    () =>
+      // optional fields should all be pre-defined
+      readOptionalFields
+        ?.filter(
+          (field): field is HydratedIntegrationFieldExistent =>
+            !isIntegrationFieldMapping(field) &&
+            "fieldName" in field &&
+            "displayName" in field,
+        )
+        .map((field) => ({
+          id: field.fieldName,
+          label: field.displayName,
+          isChecked: !!selectedOptionalFields?.[field.fieldName],
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) || [],
+    [readOptionalFields, selectedOptionalFields],
+  );
+
   const shouldRender = !!(readOptionalFields && readOptionalFields.length > 0);
-  const isAllChecked =
-    Object.keys(selectedOptionalFields || {}).length ===
-    readOptionalFields?.length;
+  const isAllChecked = checkboxItems.every(
+    (item) => selectedOptionalFields?.[item.id] === true,
+  );
   const isIndeterminate =
     !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
 
@@ -59,35 +71,16 @@ export function OptionalFieldsV2() {
         <FieldHeader
           string={`${appName} reads the following optional fields`}
         />
-        <CheckboxGroup>
-          {(readOptionalFields?.length || 0) >= 2 && (
-            <SelectAllCheckbox
-              id="select-all-fields"
-              isChecked={isAllChecked}
-              label="Select all"
-              onCheckedChange={onSelectAllCheckboxChange}
-              isIndeterminate={isIndeterminate}
-            />
-          )}
-          <CheckboxFieldsContainer>
-            {readOptionalFields.map((field) => {
-              if (!isIntegrationFieldMapping(field)) {
-                return (
-                  <CheckboxField
-                    key={field.fieldName}
-                    id={field.fieldName}
-                    isChecked={!!selectedOptionalFields?.[field?.fieldName]}
-                    label={field.displayName}
-                    onCheckedChange={(checked) =>
-                      onCheckboxChange(checked, field.fieldName)
-                    }
-                  />
-                );
-              }
-              return null;
-            })}
-          </CheckboxFieldsContainer>
-        </CheckboxGroup>
+        <CheckboxPagination
+          // set key so component is re-rendered when optional fields are updated
+          key={`${selectedObjectName}-${readOptionalFields?.length}`}
+          items={checkboxItems}
+          onItemChange={onCheckboxChange}
+          onSelectAllChange={onSelectAllCheckboxChange}
+          isAllChecked={isAllChecked}
+          isIndeterminate={isIndeterminate}
+          showSelectAll={checkboxItems.length >= 2}
+        />
       </>
     )
   );
