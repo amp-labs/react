@@ -7,4 +7,5 @@
 .pageInfo {
   display: flex;
   align-items: center;
+  color: var(--amp-colors-text-muted);
 } 
