@@ -56,6 +56,7 @@ export function SelectAllCheckbox({
         className={styles.checkbox}
         id={id}
         onCheckedChange={onCheckedChange}
+        checked={isIndeterminate ? "indeterminate" : isChecked}
       >
         <Checkbox.Indicator>
           {isIndeterminate && <DividerHorizontalIcon />}
