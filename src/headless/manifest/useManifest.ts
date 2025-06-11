@@ -16,6 +16,7 @@ import {
   FieldMetadata,
   HydratedIntegrationField,
   HydratedIntegrationObject,
+  HydratedIntegrationWriteObject,
 } from "@generated/api/src";
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
@@ -25,6 +26,9 @@ export interface Manifest {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
+  };
+  getWriteObject: (objectName: string) => {
+    object: HydratedIntegrationWriteObject | null;
   };
   getCustomerFieldsForObject: (objectName: string) => {
     allFields: { [key: string]: FieldMetadata } | null;
@@ -76,6 +80,16 @@ export function useManifest() {
             object.optionalFields ?? [],
         };
       },
+      getWriteObject: (objectName: string) => {
+        const object = content?.write?.objects?.find(
+          (obj) => obj.objectName === objectName,
+        );
+        if (!object) {
+          console.error(`Object ${objectName} not found`);
+          return { object: null };
+        }
+        return { object };
+      },
       getCustomerFieldsForObject: (objectName: string) => {
         const object = content?.read?.objects?.find(
           (obj) => obj.objectName === objectName,
@@ -97,7 +111,7 @@ export function useManifest() {
         };
       },
     }),
-    [content?.read?.objects],
+    [content?.read?.objects, content?.write?.objects],
   );
 
   return {
