@@ -9,6 +9,7 @@ import { handleServerError } from "src/utils/handleServerError";
 
 import { ApiKeyAuthFlow } from "components/auth/ApiKeyAuth/ApiKeyAuthFlow";
 import { BasicAuthFlow } from "components/auth/BasicAuth/BasicAuthFlow";
+import { CustomAuthFlow } from "components/auth/CustomAuth/CustomAuthFlow";
 import { NoAuthFlow } from "components/auth/NoAuth/NoAuthFlow";
 import { OauthFlow } from "components/auth/Oauth/OauthFlow/OauthFlow";
 import { useConnectionHandler } from "components/Connect/useConnectionHandler";
@@ -18,6 +19,8 @@ import {
   ComponentContainerError,
   ComponentContainerLoading,
 } from "../ComponentContainer";
+
+import { SHOW_CUSTOM_AUTH_TEST_DATA, testProviderInfo } from "./testdata";
 
 interface ProtectedConnectionLayoutProps {
   provider?: string; // passed in from ConnectProvider Component
@@ -43,7 +46,7 @@ export function ProtectedConnectionLayout({
   resetComponent,
 }: ProtectedConnectionLayoutProps) {
   const {
-    data: providerInfo,
+    data: providerInfoData,
     isLoading: isProviderLoading,
     isError,
     error: providerInfoError,
@@ -55,6 +58,10 @@ export function ProtectedConnectionLayout({
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
   const queryClient = useQueryClient();
+
+  const providerInfo = SHOW_CUSTOM_AUTH_TEST_DATA
+    ? testProviderInfo
+    : providerInfoData; // TODO: delete when custom auth is implemented
 
   useEffect(() => {
     if (isError) {
@@ -120,6 +127,10 @@ export function ProtectedConnectionLayout({
 
   if (providerInfo.authType === "apiKey") {
     return <ApiKeyAuthFlow {...sharedProps}>{children}</ApiKeyAuthFlow>;
+  }
+
+  if (providerInfo.authType === "custom") {
+    return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
   }
 
   return <OauthFlow {...sharedProps} />;
