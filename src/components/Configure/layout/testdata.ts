@@ -34,20 +34,20 @@ export const testProviderInfo: ProviderInfo = {
         docsURL: "https://example.com/docs/api-key",
       },
       {
-        name: "secretKey",
-        displayName: "Secret Key",
-        prompt: "Enter your Secret Key",
-        docsURL: "https://example.com/docs/secret-key",
+        name: "apiPassword",
+        displayName: "API Password",
+        prompt: "Enter your API Password",
+        docsURL: "https://example.com/docs/api-password",
       },
     ],
     headers: [
       {
-        name: "X-API-Key",
+        name: "X-Api-Key",
         valueTemplate: "{apiKey}",
       },
       {
-        name: "X-Secret-Key",
-        valueTemplate: "{secretKey}",
+        name: "X-Api-Password",
+        valueTemplate: "{apiPassword}",
       },
     ],
     queryParams: [
@@ -56,8 +56,8 @@ export const testProviderInfo: ProviderInfo = {
         valueTemplate: "{apiKey}",
       },
       {
-        name: "secret",
-        valueTemplate: "{secretKey}",
+        name: "api_password",
+        valueTemplate: "{apiPassword}",
       },
     ],
   },
