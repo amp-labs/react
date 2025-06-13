@@ -99,6 +99,12 @@ export interface ConnectionRequest {
      */
     apiKey?: string;
     /**
+     * Values used for custom auth input variables.
+     * @type {{ [key: string]: string; }}
+     * @memberof ConnectionRequest
+     */
+    customAuth?: { [key: string]: string; };
+    /**
      * 
      * @type {ConnectionRequestBasicAuth}
      * @memberof ConnectionRequest
@@ -151,6 +157,7 @@ export function ConnectionRequestFromJSONTyped(json: any, ignoreDiscriminator: b
         'consumerRef': !exists(json, 'consumerRef') ? undefined : json['consumerRef'],
         'provider': !exists(json, 'provider') ? undefined : json['provider'],
         'apiKey': !exists(json, 'apiKey') ? undefined : json['apiKey'],
+        'customAuth': !exists(json, 'customAuth') ? undefined : json['customAuth'],
         'basicAuth': !exists(json, 'basicAuth') ? undefined : ConnectionRequestBasicAuthFromJSON(json['basicAuth']),
         'oauth2ClientCredentials': !exists(json, 'oauth2ClientCredentials') ? undefined : ConnectionRequestOauth2ClientCredentialsFromJSON(json['oauth2ClientCredentials']),
         'oauth2PasswordCredentials': !exists(json, 'oauth2PasswordCredentials') ? undefined : ConnectionRequestOauth2PasswordCredentialsFromJSON(json['oauth2PasswordCredentials']),
@@ -175,6 +182,7 @@ export function ConnectionRequestToJSON(value?: ConnectionRequest | null): any {
         'consumerRef': value.consumerRef,
         'provider': value.provider,
         'apiKey': value.apiKey,
+        'customAuth': value.customAuth,
         'basicAuth': ConnectionRequestBasicAuthToJSON(value.basicAuth),
         'oauth2ClientCredentials': ConnectionRequestOauth2ClientCredentialsToJSON(value.oauth2ClientCredentials),
         'oauth2PasswordCredentials': ConnectionRequestOauth2PasswordCredentialsToJSON(value.oauth2PasswordCredentials),

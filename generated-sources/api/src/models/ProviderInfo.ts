@@ -37,6 +37,12 @@ import {
     BasicAuthOptsFromJSONTyped,
     BasicAuthOptsToJSON,
 } from './BasicAuthOpts';
+import type { CustomAuthOpts } from './CustomAuthOpts';
+import {
+    CustomAuthOptsFromJSON,
+    CustomAuthOptsFromJSONTyped,
+    CustomAuthOptsToJSON,
+} from './CustomAuthOpts';
 import type { Media } from './Media';
 import {
     MediaFromJSON,
@@ -122,6 +128,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     basicOpts?: BasicAuthOpts;
+    /**
+     * 
+     * @type {CustomAuthOpts}
+     * @memberof ProviderInfo
+     */
+    customOpts?: CustomAuthOpts;
     /**
      * 
      * @type {Support}
@@ -216,6 +228,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'oauth2Opts': !exists(json, 'oauth2Opts') ? undefined : Oauth2OptsFromJSON(json['oauth2Opts']),
         'apiKeyOpts': !exists(json, 'apiKeyOpts') ? undefined : ApiKeyOptsFromJSON(json['apiKeyOpts']),
         'basicOpts': !exists(json, 'basicOpts') ? undefined : BasicAuthOptsFromJSON(json['basicOpts']),
+        'customOpts': !exists(json, 'customOpts') ? undefined : CustomAuthOptsFromJSON(json['customOpts']),
         'support': SupportFromJSON(json['support']),
         'providerOpts': json['providerOpts'],
         'authHealthCheck': !exists(json, 'authHealthCheck') ? undefined : AuthHealthCheckFromJSON(json['authHealthCheck']),
@@ -245,6 +258,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'oauth2Opts': Oauth2OptsToJSON(value.oauth2Opts),
         'apiKeyOpts': ApiKeyOptsToJSON(value.apiKeyOpts),
         'basicOpts': BasicAuthOptsToJSON(value.basicOpts),
+        'customOpts': CustomAuthOptsToJSON(value.customOpts),
         'support': SupportToJSON(value.support),
         'providerOpts': value.providerOpts,
         'authHealthCheck': AuthHealthCheckToJSON(value.authHealthCheck),

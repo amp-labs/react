@@ -80,6 +80,10 @@ src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
+src/models/CustomAuthHeader.ts
+src/models/CustomAuthInput.ts
+src/models/CustomAuthOpts.ts
+src/models/CustomAuthQueryParam.ts
 src/models/DefaultPeriod.ts
 src/models/DefaultPeriodConfig.ts
 src/models/DeleteEvent.ts
