@@ -61,7 +61,7 @@ export function ProtectedConnectionLayout({
 
   const providerInfo = SHOW_CUSTOM_AUTH_TEST_DATA
     ? testProviderInfo
-    : providerInfoData; // TODO: delete when custom auth is implemented
+    : providerInfoData;
 
   useEffect(() => {
     if (isError) {
@@ -130,7 +130,12 @@ export function ProtectedConnectionLayout({
   }
 
   if (providerInfo.authType === "custom") {
-    return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
+    if (SHOW_CUSTOM_AUTH_TEST_DATA) {
+      return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
+    } else {
+      console.error("Custom auth is not implemented");
+      return;
+    }
   }
 
   return <OauthFlow {...sharedProps} />;
