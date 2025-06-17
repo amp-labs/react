@@ -5961,9 +5961,9 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-open@^8.4.0:
+open@^8.0.0:
   version "8.4.2"
-  resolved "https://registry.npmjs.org/open/-/open-8.4.2.tgz"
+  resolved "https://registry.yarnpkg.com/open/-/open-8.4.2.tgz#5b5ffe2a8f793dcd2aad73e550cb87b59cb084f9"
   integrity sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==
   dependencies:
     define-lazy-prop "^2.0.0"
@@ -6482,13 +6482,13 @@ reusify@^1.0.4:
   resolved "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-rollup-plugin-visualizer@^5.12.0:
-  version "5.12.0"
-  resolved "https://registry.npmjs.org/rollup-plugin-visualizer/-/rollup-plugin-visualizer-5.12.0.tgz"
-  integrity sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==
+rollup-plugin-visualizer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-visualizer/-/rollup-plugin-visualizer-6.0.3.tgz#d05bd17e358a6d04bf593cf73556219c9c6d8dad"
+  integrity sha512-ZU41GwrkDcCpVoffviuM9Clwjy5fcUxlz0oMoTXTYsK+tcIFzbdacnrr2n8TXcHxbGKKXtOdjxM2HUS4HjkwIw==
   dependencies:
-    open "^8.4.0"
-    picomatch "^2.3.1"
+    open "^8.0.0"
+    picomatch "^4.0.2"
     source-map "^0.7.4"
     yargs "^17.5.1"
 
