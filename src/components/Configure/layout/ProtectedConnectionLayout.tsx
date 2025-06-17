@@ -59,6 +59,7 @@ export function ProtectedConnectionLayout({
   useConnectionHandler({ onSuccess });
   const queryClient = useQueryClient();
 
+  // TODO: delete when custom auth is implemented
   const providerInfo = SHOW_CUSTOM_AUTH_TEST_DATA
     ? testProviderInfo
     : providerInfoData;
@@ -130,12 +131,7 @@ export function ProtectedConnectionLayout({
   }
 
   if (providerInfo.authType === "custom") {
-    if (SHOW_CUSTOM_AUTH_TEST_DATA) {
-      return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
-    } else {
-      console.error("Custom auth is not implemented");
-      return;
-    }
+    return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
   }
 
   return <OauthFlow {...sharedProps} />;
