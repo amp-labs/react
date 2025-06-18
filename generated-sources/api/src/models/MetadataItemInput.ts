@@ -32,6 +32,12 @@ export interface MetadataItemInput {
      */
     displayName?: string;
     /**
+     * Default value for this metadata item
+     * @type {string}
+     * @memberof MetadataItemInput
+     */
+    defaultValue?: string;
+    /**
      * URL with more information about how to locate this value
      * @type {string}
      * @memberof MetadataItemInput
@@ -67,6 +73,7 @@ export function MetadataItemInputFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'defaultValue': !exists(json, 'defaultValue') ? undefined : json['defaultValue'],
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
         'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
     };
@@ -83,6 +90,7 @@ export function MetadataItemInputToJSON(value?: MetadataItemInput | null): any {
         
         'name': value.name,
         'displayName': value.displayName,
+        'defaultValue': value.defaultValue,
         'docsURL': value.docsURL,
         'moduleDependencies': value.moduleDependencies,
     };
