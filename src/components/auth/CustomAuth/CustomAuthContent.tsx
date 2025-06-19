@@ -7,7 +7,6 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { capitalize } from "src/utils";
 
 import { DocsHelperTextMinimal } from "components/Docs/DocsHelperTextMinimal";
 
