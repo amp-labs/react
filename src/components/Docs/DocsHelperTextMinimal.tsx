@@ -1,3 +1,5 @@
+import { sanitizeHtmlId } from "src/utils";
+
 import { AccessibleLink } from "../ui-base/AccessibleLink";
 import { LabelTooltip } from "../ui-base/Tooltip";
 
@@ -18,7 +20,10 @@ export function DocsHelperTextMinimal({
         <span style={{ textDecoration: "underline" }}>Learn more</span>
       </AccessibleLink>
       {inputName && ` about ${inputName}. `}
-      <LabelTooltip id={`docs-helper-text-${inputName}`} tooltipText={prompt} />
+      <LabelTooltip
+        id={`docs-helper-text-${sanitizeHtmlId(inputName || prompt?.slice(0, 50))}`}
+        tooltipText={prompt}
+      />
     </p>
   );
 }
