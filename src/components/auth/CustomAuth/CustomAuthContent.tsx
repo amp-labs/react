@@ -9,7 +9,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperTextMinimal } from "components/Docs/DocsHelperTextMinimal";
 
 import {
   getProviderMetadata,
@@ -69,18 +69,16 @@ export function CustomAuthForm({
       {customInputs.map((input) => (
         <div key={input.name}>
           {input.docsURL && (
-            <DocsHelperText
+            <DocsHelperTextMinimal
               url={input.docsURL}
-              providerDisplayName={
-                providerInfo.displayName || capitalize(providerInfo.name)
-              }
-              credentialName={input.displayName}
+              prompt={input.prompt || input.displayName}
+              inputName={input.displayName}
             />
           )}
           <FormComponent.PasswordInput
             id={input.name}
             name={input.name}
-            placeholder={input.prompt || input.displayName}
+            placeholder={input.displayName}
             onChange={handleChange}
           />
         </div>
@@ -89,12 +87,10 @@ export function CustomAuthForm({
       {metadataFields.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <DocsHelperText
+            <DocsHelperTextMinimal
               url={metadata.docsURL}
-              providerDisplayName={
-                providerInfo.displayName || capitalize(providerInfo.name)
-              }
-              credentialName={metadata.displayName || metadata.name}
+              prompt={metadata.displayName || metadata.name}
+              inputName={metadata.displayName}
             />
           )}
           <FormComponent.Input
