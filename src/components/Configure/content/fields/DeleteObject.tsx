@@ -1,10 +1,9 @@
 import { useState } from "react";
+import { capitalize } from "lodash";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallIntegrationProps } from "src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
-
-import { FieldHeader } from "./FieldHeader";
 
 export function DeleteObject() {
   const { installation } = useInstallIntegrationProps();
@@ -27,9 +26,14 @@ export function DeleteObject() {
   if (showConfirmation) {
     return (
       <>
-        <FieldHeader string="Stop Syncing" />
-        <p style={{ marginBottom: "1rem" }}>
-          Are you sure you want to stop syncing? This action cannot be undone.
+        <p
+          style={{
+            padding: "1rem 0",
+            color: "var(--amp-colors-text-muted)",
+            fontSize: "0.875rem",
+          }}
+        >
+          Are you sure you want to stop reading?
         </p>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <Button
@@ -46,7 +50,7 @@ export function DeleteObject() {
             style={{ flex: 1 }}
             onClick={handleDelete}
           >
-            Confirm Stop Syncing
+            Confirm stop reading
           </Button>
         </div>
       </>
@@ -55,18 +59,22 @@ export function DeleteObject() {
 
   return (
     <>
-      <FieldHeader string="Stop Syncing" />
-      <p style={{ marginBottom: "1rem" }}>
-        Click to stop syncing this object and all associated data.
-      </p>
-      <Button
+      <button
         type="button"
-        variant="danger"
-        style={{ width: "100%" }}
         onClick={() => setShowConfirmation(true)}
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          textDecoration: "underline",
+          paddingTop: "1rem",
+          margin: 0,
+          fontFamily: "inherit",
+          color: "var(--amp-colors-text-muted)",
+        }}
       >
-        Stop Syncing
-      </Button>
+        Stop reading from <b>{capitalize(selectedObjectName)}</b>
+      </button>
     </>
   );
 }
