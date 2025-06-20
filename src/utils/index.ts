@@ -61,3 +61,32 @@ export const findIntegrationFromList = (
  */
 export const escapeObjectName = (objectName: string) =>
   objectName.replace(/[.:/\\]/g, "\\$&");
+
+/**
+ * Sanitizes a string to be used as a safe HTML ID attribute.
+ * Ensures the ID follows HTML ID naming conventions and is safe for rendering.
+ *
+ * @param id - The string to sanitize
+ * @returns A sanitized string safe for use as an HTML ID
+ */
+export function sanitizeHtmlId(id: string) {
+  if (!id || typeof id !== "string") {
+    return "id_" + Math.random().toString(36).substr(2, 9);
+  }
+
+  return (
+    id
+      // Convert to lowercase
+      .toLowerCase()
+      // Replace spaces and special chars with hyphens
+      .replace(/[^a-z0-9_-]/g, "-")
+      // Remove multiple consecutive hyphens
+      .replace(/-+/g, "-")
+      // Remove leading/trailing hyphens
+      .replace(/^-+|-+$/g, "")
+      // Ensure it starts with a letter
+      .replace(/^[^a-z]/, "id-")
+      // Limit length
+      .substring(0, 50)
+  );
+}

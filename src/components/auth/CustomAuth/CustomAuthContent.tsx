@@ -9,7 +9,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
   getProviderMetadata,
@@ -68,20 +68,16 @@ export function CustomAuthForm({
     >
       {customInputs.map((input) => (
         <div key={input.name}>
-          {input.docsURL && (
-            <DocsHelperText
-              url={input.docsURL}
-              providerDisplayName={
-                providerInfo.displayName || capitalize(providerInfo.name)
-              }
-              credentialName={input.displayName}
-            />
-          )}
+          <DocsHelperTextHeader
+            url={input.docsURL}
+            prompt={input.prompt}
+            inputName={input.displayName}
+          />
           <FormComponent.PasswordInput
             id={input.name}
             name={input.name}
-            placeholder={input.prompt || input.displayName}
             onChange={handleChange}
+            placeholder={""}
           />
         </div>
       ))}
@@ -89,19 +85,19 @@ export function CustomAuthForm({
       {metadataFields.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <DocsHelperText
+            <DocsHelperTextHeader
               url={metadata.docsURL}
-              providerDisplayName={
-                providerInfo.displayName || capitalize(providerInfo.name)
+              prompt={metadata.displayName || metadata.name}
+              inputName={
+                metadata.displayName || capitalize(metadata.name.toLowerCase())
               }
-              credentialName={metadata.displayName || metadata.name}
             />
           )}
           <FormComponent.Input
             id={metadata.name}
             name={metadata.name}
             type="text"
-            placeholder={metadata.displayName || metadata.name}
+            placeholder={""}
             onChange={handleChange}
           />
         </div>

@@ -30,13 +30,15 @@ export const testProviderInfo: ProviderInfo = {
       {
         name: "apiKey",
         displayName: "API Key",
-        prompt: "Enter your API Key",
+        prompt:
+          "The API Key can be found in the API Keys section of the Test Provider dashboard.",
         docsURL: "https://example.com/docs/api-key",
       },
       {
         name: "apiPassword",
         displayName: "API Password",
-        prompt: "Enter your API Password",
+        prompt:
+          "The API Password can be found in the API Keys section of the Test Provider dashboard.",
         docsURL: "https://example.com/docs/api-password",
       },
     ],
