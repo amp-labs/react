@@ -33,8 +33,8 @@ export function DeleteObject() {
             fontSize: "0.875rem",
           }}
         >
-          “Are you sure you want to stop reading from{" "}
-          <b>{capitalize(selectedObjectName)}</b>?”
+          Are you sure you want to stop reading from{" "}
+          <b>{capitalize(selectedObjectName)}</b>?
         </p>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <Button
