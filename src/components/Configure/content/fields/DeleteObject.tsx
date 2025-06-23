@@ -33,7 +33,8 @@ export function DeleteObject() {
             fontSize: "0.875rem",
           }}
         >
-          Are you sure you want to stop reading?
+          “Are you sure you want to stop reading from{" "}
+          <b>{capitalize(selectedObjectName)}</b>?”
         </p>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <Button
@@ -50,7 +51,7 @@ export function DeleteObject() {
             style={{ flex: 1 }}
             onClick={handleDelete}
           >
-            Confirm stop reading
+            Stop reading
           </Button>
         </div>
       </>
