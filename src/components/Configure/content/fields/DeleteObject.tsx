@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { capitalize } from "lodash";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallIntegrationProps } from "src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { capitalize } from "src/utils";
 
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 
