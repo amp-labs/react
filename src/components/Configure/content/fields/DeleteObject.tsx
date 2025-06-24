@@ -1,32 +1,9 @@
 import { useState } from "react";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallIntegrationProps } from "src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { capitalize } from "src/utils";
 
-import { useHydratedRevision } from "../../state/HydratedRevisionContext";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
-
-/**
- * Hook to get the selected object and its display name
- * @returns {object} - The selected object and its display name
- */
-const useSelectedObject = () => {
-  const { hydratedRevision } = useHydratedRevision();
-  const { selectedObjectName } = useSelectedConfigureState();
-
-  const selectedReadObject = hydratedRevision?.content?.read?.objects?.find(
-    (obj) => obj.objectName === selectedObjectName,
-  );
-
-  const displayName =
-    selectedReadObject?.displayName ||
-    (selectedObjectName && capitalize(selectedObjectName));
-
-  return {
-    selectedObject: selectedReadObject,
-    displayName,
-  };
-};
+import { useSelectedObject } from "../useSelectedObject";
 
 /**
  * DeleteObject component
