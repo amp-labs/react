@@ -3,12 +3,40 @@ import { Button } from "src/components/ui-base/Button";
 import { useInstallIntegrationProps } from "src/context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { capitalize } from "src/utils";
 
+import { useHydratedRevision } from "../../state/HydratedRevisionContext";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 
+/**
+ * Hook to get the selected object and its display name
+ * @returns {object} - The selected object and its display name
+ */
+const useSelectedObject = () => {
+  const { hydratedRevision } = useHydratedRevision();
+  const { selectedObjectName } = useSelectedConfigureState();
+
+  const selectedReadObject = hydratedRevision?.content?.read?.objects?.find(
+    (obj) => obj.objectName === selectedObjectName,
+  );
+
+  const displayName =
+    selectedReadObject?.displayName ||
+    (selectedObjectName && capitalize(selectedObjectName));
+
+  return {
+    selectedObject: selectedReadObject,
+    displayName,
+  };
+};
+
+/**
+ * DeleteObject component
+ * @returns {React.ReactNode} - The DeleteObject component
+ */
 export function DeleteObject() {
   const { installation } = useInstallIntegrationProps();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { selectedObjectName } = useSelectedConfigureState();
+  const { displayName: selectedObjectDisplayName } = useSelectedObject();
 
   // only show delete object if read object is present
   if (
@@ -34,7 +62,7 @@ export function DeleteObject() {
           }}
         >
           Are you sure you want to stop reading from{" "}
-          <b>{capitalize(selectedObjectName)}</b>?
+          <b>{selectedObjectDisplayName}</b>?
         </p>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <Button
@@ -74,7 +102,7 @@ export function DeleteObject() {
           color: "var(--amp-colors-text-muted)",
         }}
       >
-        Stop reading from <b>{capitalize(selectedObjectName)}</b>
+        Stop reading from <b>{selectedObjectDisplayName}</b>
       </button>
     </>
   );
