@@ -19,6 +19,12 @@ import {
     CreateDestinationRequestMetadataFromJSONTyped,
     CreateDestinationRequestMetadataToJSON,
 } from './CreateDestinationRequestMetadata';
+import type { CreateDestinationRequestSecrets } from './CreateDestinationRequestSecrets';
+import {
+    CreateDestinationRequestSecretsFromJSON,
+    CreateDestinationRequestSecretsFromJSONTyped,
+    CreateDestinationRequestSecretsToJSON,
+} from './CreateDestinationRequestSecrets';
 
 /**
  * 
@@ -33,11 +39,23 @@ export interface CreateDestinationRequest {
      */
     name: string;
     /**
-     * The type of the destination
+     * The type of the destination.
      * @type {string}
      * @memberof CreateDestinationRequest
      */
-    type: string;
+    type: CreateDestinationRequestTypeEnum;
+    /**
+     * The provider of the destination.
+     * @type {string}
+     * @memberof CreateDestinationRequest
+     */
+    provider?: CreateDestinationRequestProviderEnum;
+    /**
+     * 
+     * @type {CreateDestinationRequestSecrets}
+     * @memberof CreateDestinationRequest
+     */
+    secrets?: CreateDestinationRequestSecrets;
     /**
      * 
      * @type {CreateDestinationRequestMetadata}
@@ -45,6 +63,26 @@ export interface CreateDestinationRequest {
      */
     metadata: CreateDestinationRequestMetadata;
 }
+
+
+/**
+ * @export
+ */
+export const CreateDestinationRequestTypeEnum = {
+    Webhook: 'webhook',
+    Kinesis: 'kinesis'
+} as const;
+export type CreateDestinationRequestTypeEnum = typeof CreateDestinationRequestTypeEnum[keyof typeof CreateDestinationRequestTypeEnum];
+
+/**
+ * @export
+ */
+export const CreateDestinationRequestProviderEnum = {
+    Svix: 'svix',
+    Outpost: 'outpost'
+} as const;
+export type CreateDestinationRequestProviderEnum = typeof CreateDestinationRequestProviderEnum[keyof typeof CreateDestinationRequestProviderEnum];
+
 
 /**
  * Check if a given object implements the CreateDestinationRequest interface.
@@ -70,6 +108,8 @@ export function CreateDestinationRequestFromJSONTyped(json: any, ignoreDiscrimin
         
         'name': json['name'],
         'type': json['type'],
+        'provider': !exists(json, 'provider') ? undefined : json['provider'],
+        'secrets': !exists(json, 'secrets') ? undefined : CreateDestinationRequestSecretsFromJSON(json['secrets']),
         'metadata': CreateDestinationRequestMetadataFromJSON(json['metadata']),
     };
 }
@@ -85,6 +125,8 @@ export function CreateDestinationRequestToJSON(value?: CreateDestinationRequest 
         
         'name': value.name,
         'type': value.type,
+        'provider': value.provider,
+        'secrets': CreateDestinationRequestSecretsToJSON(value.secrets),
         'metadata': CreateDestinationRequestMetadataToJSON(value.metadata),
     };
 }
