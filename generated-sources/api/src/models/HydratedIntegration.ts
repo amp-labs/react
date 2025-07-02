@@ -55,6 +55,12 @@ export interface HydratedIntegration {
      * @type {string}
      * @memberof HydratedIntegration
      */
+    module?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HydratedIntegration
+     */
     provider: string;
     /**
      * 
@@ -99,6 +105,7 @@ export function HydratedIntegrationFromJSONTyped(json: any, ignoreDiscriminator:
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'module': !exists(json, 'module') ? undefined : json['module'],
         'provider': json['provider'],
         'read': !exists(json, 'read') ? undefined : HydratedIntegrationReadFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : HydratedIntegrationWriteFromJSON(json['write']),
@@ -117,6 +124,7 @@ export function HydratedIntegrationToJSON(value?: HydratedIntegration | null): a
         
         'name': value.name,
         'displayName': value.displayName,
+        'module': value.module,
         'provider': value.provider,
         'read': HydratedIntegrationReadToJSON(value.read),
         'write': HydratedIntegrationWriteToJSON(value.write),
