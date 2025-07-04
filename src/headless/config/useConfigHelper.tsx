@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type {
+  BaseProxyConfig,
   BaseReadConfigObject,
   BaseWriteConfigObject,
   FieldSetting,
@@ -53,6 +54,13 @@ export type WriteObjectHandlers = {
     fieldName: string;
     value: FieldSettingWriteOnUpdateEnum;
   }) => void;
+};
+
+export type ProxyHandlers = {
+  object: BaseProxyConfig | undefined;
+  setEnableProxy: () => void;
+  setDisableProxy: () => void;
+  getProxyEnabled: () => boolean;
 };
 
 export function useConfigHelper(initialConfig: InstallationConfigContent) {
@@ -261,6 +269,30 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     [draft.write?.objects],
   );
 
+  const proxy = useCallback(
+    (): ProxyHandlers => ({
+      object: draft.proxy,
+      setEnableProxy: () => {
+        setDraft((prev) =>
+          produce(prev, (draft) => {
+            draft.proxy = { enabled: true };
+          }),
+        );
+      },
+      setDisableProxy: () => {
+        setDraft((prev) =>
+          produce(prev, (draft) => {
+            draft.proxy = { enabled: false };
+          }),
+        );
+      },
+      getProxyEnabled: () => {
+        return draft.proxy?.enabled || false;
+      },
+    }),
+    [draft.proxy],
+  );
+
   const reset = useCallback(() => {
     // set the draft config to the installation config
     setDraft((prev) =>
@@ -271,9 +303,11 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   }, [installation?.config?.content]);
 
   useEffect(() => {
-    console.debug("Installation found", { installation });
-    // sync the installation config to the local config
-    reset();
+    if (installation) {
+      console.debug("Installation found", { installation });
+      // sync the installation config to the local config
+      reset();
+    }
   }, [installation, reset]);
 
   return {
@@ -283,5 +317,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     setDraft,
     readObject,
     writeObject,
+    proxy,
   };
 }
