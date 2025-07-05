@@ -45,6 +45,12 @@ export interface BaseConfigContent {
      */
     provider?: string;
     /**
+     * The SaaS module that we are integrating with.
+     * @type {string}
+     * @memberof BaseConfigContent
+     */
+    module?: string;
+    /**
      * 
      * @type {BaseReadConfig}
      * @memberof BaseConfigContent
@@ -84,6 +90,7 @@ export function BaseConfigContentFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'provider': !exists(json, 'provider') ? undefined : json['provider'],
+        'module': !exists(json, 'module') ? undefined : json['module'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : BaseWriteConfigFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
@@ -100,6 +107,7 @@ export function BaseConfigContentToJSON(value?: BaseConfigContent | null): any {
     return {
         
         'provider': value.provider,
+        'module': value.module,
         'read': BaseReadConfigToJSON(value.read),
         'write': BaseWriteConfigToJSON(value.write),
         'proxy': BaseProxyConfigToJSON(value.proxy),
