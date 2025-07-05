@@ -25,6 +25,12 @@ export interface HydratedIntegrationProxy {
      * @memberof HydratedIntegrationProxy
      */
     enabled?: boolean;
+    /**
+     * Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.
+     * @type {boolean}
+     * @memberof HydratedIntegrationProxy
+     */
+    useModule?: boolean;
 }
 
 /**
@@ -47,6 +53,7 @@ export function HydratedIntegrationProxyFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
+        'useModule': !exists(json, 'useModule') ? undefined : json['useModule'],
     };
 }
 
@@ -60,6 +67,7 @@ export function HydratedIntegrationProxyToJSON(value?: HydratedIntegrationProxy 
     return {
         
         'enabled': value.enabled,
+        'useModule': value.useModule,
     };
 }
 
