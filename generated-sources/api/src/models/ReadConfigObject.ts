@@ -80,7 +80,24 @@ export interface ReadConfigObject {
      * @memberof ReadConfigObject
      */
     backfill?: BackfillConfig;
+    /**
+     * Controls whether this read object is enabled.
+     * @type {string}
+     * @memberof ReadConfigObject
+     */
+    enabled?: ReadConfigObjectEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const ReadConfigObjectEnabledEnum = {
+    Always: 'always',
+    Never: 'never'
+} as const;
+export type ReadConfigObjectEnabledEnum = typeof ReadConfigObjectEnabledEnum[keyof typeof ReadConfigObjectEnabledEnum];
+
 
 /**
  * Check if a given object implements the ReadConfigObject interface.
@@ -114,6 +131,7 @@ export function ReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
         'selectedFieldMappings': json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
+        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
     };
 }
 
@@ -134,6 +152,7 @@ export function ReadConfigObjectToJSON(value?: ReadConfigObject | null): any {
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
+        'enabled': value.enabled,
     };
 }
 
