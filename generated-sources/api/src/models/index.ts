@@ -46,6 +46,7 @@ export * from './CreateBillingAccountSessionRequest';
 export * from './CreateConsumerRequest';
 export * from './CreateDestinationRequest';
 export * from './CreateDestinationRequestMetadata';
+export * from './CreateDestinationRequestSecrets';
 export * from './CreateEvent';
 export * from './CreateGroupRequest';
 export * from './CreateInstallationRequest';
