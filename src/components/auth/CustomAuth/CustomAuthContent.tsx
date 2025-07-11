@@ -23,6 +23,7 @@ type CustomAuthFormProps = {
   handleSubmit: (form: CustomAuthFormData) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
+  metadataFields: MetadataItemInput[];
 };
 
 export function CustomAuthForm({
@@ -30,9 +31,9 @@ export function CustomAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
+  metadataFields,
 }: CustomAuthFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const metadataFields = providerInfo.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -120,6 +121,7 @@ export function CustomAuthContent({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataFields,
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
@@ -129,6 +131,7 @@ export function CustomAuthContent({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
+        metadataFields={metadataFields}
       />
     </AuthCardLayout>
   );

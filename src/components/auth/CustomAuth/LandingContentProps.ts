@@ -1,4 +1,4 @@
-import { ProviderInfo } from "@generated/api/src";
+import { ProviderInfo, MetadataItemInput } from "@generated/api/src";
 
 import { ProviderMetadata } from "../providerMetadata";
 
@@ -12,4 +12,5 @@ export type LandingContentProps = {
   handleSubmit: (form: CustomAuthFormData) => void;
   error: string | null;
   isButtonDisabled?: boolean;
+  metadataFields: MetadataItemInput[];
 };
