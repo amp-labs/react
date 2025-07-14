@@ -1,4 +1,5 @@
 import { Connection, ProviderInfo } from "services/api";
+import { MetadataItemInput } from "@generated/api/src";
 import { useProvider } from "src/hooks/useProvider";
 
 import { OauthFlow2 } from "../AuthorizationCode/OauthFlow2/OauthFlow2";
@@ -17,6 +18,7 @@ type OauthFlowProps = {
   groupName?: string;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
+  metadataFields: MetadataItemInput[];
 };
 
 export function OauthFlow({
@@ -28,6 +30,7 @@ export function OauthFlow({
   groupName,
   selectedConnection,
   setSelectedConnection,
+  metadataFields,
 }: OauthFlowProps) {
   const { providerName } = useProvider(provider);
   if (providerInfo.oauth2Opts === undefined) {
@@ -43,6 +46,7 @@ export function OauthFlow({
     groupRef,
     groupName,
     providerName,
+    metadataFields,
   };
 
   if (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
@@ -22,6 +23,7 @@ type ClientCredentialsFormProps = {
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
+  metadataFields: MetadataItemInput[];
 };
 
 type ClientCredentialsFormData = {
@@ -37,6 +39,7 @@ export function ClientCredentialsForm({
   isButtonDisabled,
   explicitScopesRequired,
   buttonVariant,
+  metadataFields,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -45,7 +48,6 @@ export function ClientCredentialsForm({
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -144,6 +146,7 @@ type ClientCredentialsContentProps = {
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
+  metadataFields: MetadataItemInput[];
 };
 
 export function ClientCredentialsContent({
@@ -153,6 +156,7 @@ export function ClientCredentialsContent({
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
+  metadataFields,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -164,6 +168,7 @@ export function ClientCredentialsContent({
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
         explicitScopesRequired={explicitScopesRequired}
+        metadataFields={metadataFields}
       />
     </AuthCardLayout>
   );
