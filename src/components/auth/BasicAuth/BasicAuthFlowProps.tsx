@@ -1,4 +1,4 @@
-import { Connection, ProviderInfo } from "@generated/api/src";
+import { Connection, ProviderInfo, MetadataItemInput } from "@generated/api/src";
 
 export type BasicAuthFlowProps = {
   provider: string;
@@ -10,4 +10,5 @@ export type BasicAuthFlowProps = {
   children: JSX.Element;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
+  metadataFields: MetadataItemInput[];
 };

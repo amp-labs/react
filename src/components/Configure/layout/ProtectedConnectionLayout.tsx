@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useConnections } from "context/ConnectionsContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { Connection } from "services/api";
+import { Connection, ProviderInfo, Integration } from "services/api";
 import { SuccessTextBox } from "src/components/SuccessTextBox/SuccessTextBox";
 import { Button } from "src/components/ui-base/Button";
 import { handleServerError } from "src/utils/handleServerError";
@@ -21,6 +21,33 @@ import {
 } from "../ComponentContainer";
 
 import { SHOW_CUSTOM_AUTH_TEST_DATA, testProviderInfo } from "./testdata";
+
+/**
+ * Determines the module to use based on provider configuration and integration settings
+ * @param providerInfo Provider information containing module configuration
+ * @param integrationObj Integration object that may override the default module
+ * @returns The module to use, or undefined if no modules are configured
+ * @throws Error if modules are configured but no default module is found
+ */
+function determineModule(
+  providerInfo: ProviderInfo,
+  integrationObj?: Integration | null
+): string | undefined {
+  // If there's more than one module, we need to figure out the current module
+  // to understand which inputs to collect from the user.
+  if (providerInfo.modules && Object.keys(providerInfo.modules).length > 0) {
+    const module = integrationObj?.latestRevision?.content?.module || providerInfo.defaultModule;
+
+    if (!module) {
+      // This should never happen, but we'll throw an error if it does.
+      throw new Error("Default module not found.");
+    }
+
+    return module;
+  }
+
+  return undefined;
+}
 
 interface ProtectedConnectionLayoutProps {
   provider?: string; // passed in from ConnectProvider Component
@@ -53,7 +80,7 @@ export function ProtectedConnectionLayout({
     providerName,
     selectedProvider,
   } = useProvider(provider);
-  const { provider: providerFromProps, isIntegrationDeleted } =
+  const { provider: providerFromProps, isIntegrationDeleted, integrationObj } =
     useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
@@ -105,6 +132,30 @@ export function ProtectedConnectionLayout({
   if (providerInfo == null)
     return <ComponentContainerError message="Provider info was not found." />;
 
+  let module: string | undefined;
+  try {
+    module = determineModule(providerInfo, integrationObj);
+  } catch (error) {
+    return <ComponentContainerError message={(error as Error).message} />;
+  }
+
+  // Filter metadata fields based on the module
+  const getmetadataFields = () => {
+    const metadataFields = providerInfo.metadata?.input || [];
+
+    // If no module, show all fields
+    if (!module) {
+      return metadataFields;
+    }
+
+    // If module exists, only show fields that have dependencies for this module
+    return metadataFields.filter(field =>
+      field.moduleDependencies?.[module] // Only show if has dependency for this module
+    );
+  };
+
+  const metadataFields = getmetadataFields();
+
   const sharedProps = {
     provider: selectedProvider,
     consumerRef,
@@ -115,6 +166,7 @@ export function ProtectedConnectionLayout({
     setSelectedConnection,
     providerName,
     providerInfo,
+    metadataFields,
     onDisconnectSuccess,
   };
 
