@@ -17,6 +17,7 @@ export function CustomAuthFlow({
   groupName,
   children,
   selectedConnection,
+  metadataFields,
 }: CustomAuthFlowProps) {
   const { projectIdOrName } = useProject();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -68,6 +69,7 @@ export function CustomAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={error}
+        metadataFields={metadataFields}
       />
     );
   }

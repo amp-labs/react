@@ -1,4 +1,4 @@
-import { Connection, ProviderInfo } from "@generated/api/src";
+import { Connection, ProviderInfo, MetadataItemInput } from "@generated/api/src";
 
 export type CustomAuthFlowProps = {
   providerInfo: ProviderInfo;
@@ -11,4 +11,5 @@ export type CustomAuthFlowProps = {
   setSelectedConnection: (connection: Connection | null) => void;
   providerName?: string;
   onDisconnectSuccess?: (connection: Connection) => void;
+  metadataFields: MetadataItemInput[];
 };
