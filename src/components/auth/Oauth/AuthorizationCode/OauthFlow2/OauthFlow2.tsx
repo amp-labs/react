@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { MetadataItemInput } from "@generated/api/src";
 import {
   isProviderMetadataValid,
   ProviderMetadata,
@@ -41,6 +42,8 @@ interface OauthFlowProps {
   groupRef: string;
   groupName?: string;
   providerName?: string;
+  metadataFields: MetadataItemInput[];
+  module?: string;
 }
 
 /**
@@ -55,6 +58,8 @@ export function OauthFlow2({
   groupRef,
   groupName,
   providerName,
+  metadataFields,
+  module,
 }: OauthFlowProps) {
   const { projectId } = useProject();
   const queryClient = useQueryClient();
@@ -68,7 +73,6 @@ export function OauthFlow2({
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [metadata, setMetadata] = useState<ProviderMetadata>({});
   const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
 
   const {
     mutateAsync: createOauthConnectionUrlAsync,
@@ -178,8 +182,8 @@ export function OauthFlow2({
 
   // Determine which entry component to show based on provider and metadata
   const entryComponent = (() => {
-    // Salesforce has a special entry component
-    if (provider === PROVIDER_SALESFORCE) {
+    // Salesforce workspace/subdomain entry only for CRM module
+    if (provider === PROVIDER_SALESFORCE && module === "crm") {
       return (
         <SalesforceSubdomainEntry
           handleSubmit={handleSubmit}
@@ -194,7 +198,7 @@ export function OauthFlow2({
       );
     }
 
-    // If there are metadata fields, show the workspace entry form
+    // If there are metadata fields, show the entry form (for providers other than salesforce, or non-crm salesforce modules)
     if (metadataFields.length > 0) {
       return (
         <WorkspaceEntryContent
@@ -212,7 +216,7 @@ export function OauthFlow2({
       );
     }
 
-    // Default to no-workspace entry
+    // Default to no-workspace entry (for non-salesforce providers/non-crm salesforce modules with no metadata requirements)
     return (
       <NoWorkspaceEntryContent
         handleSubmit={handleSubmit}

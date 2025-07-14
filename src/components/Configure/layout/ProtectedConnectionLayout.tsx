@@ -167,6 +167,7 @@ export function ProtectedConnectionLayout({
     providerName,
     providerInfo,
     metadataFields,
+    module,
     onDisconnectSuccess,
   };
 
