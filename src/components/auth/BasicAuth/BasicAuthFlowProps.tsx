@@ -1,4 +1,8 @@
-import { Connection, ProviderInfo, MetadataItemInput } from "@generated/api/src";
+import {
+  Connection,
+  MetadataItemInput,
+  ProviderInfo,
+} from "@generated/api/src";
 
 export type BasicAuthFlowProps = {
   provider: string;

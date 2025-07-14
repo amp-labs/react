@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useConnections } from "context/ConnectionsContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { Connection, ProviderInfo, Integration } from "services/api";
+import { Connection, Integration, ProviderInfo } from "services/api";
 import { SuccessTextBox } from "src/components/SuccessTextBox/SuccessTextBox";
 import { Button } from "src/components/ui-base/Button";
 import { handleServerError } from "src/utils/handleServerError";
@@ -31,12 +31,14 @@ import { SHOW_CUSTOM_AUTH_TEST_DATA, testProviderInfo } from "./testdata";
  */
 function determineModule(
   providerInfo: ProviderInfo,
-  integrationObj?: Integration | null
+  integrationObj?: Integration | null,
 ): string | undefined {
   // If there's more than one module, we need to figure out the current module
   // to understand which inputs to collect from the user.
   if (providerInfo.modules && Object.keys(providerInfo.modules).length > 0) {
-    const module = integrationObj?.latestRevision?.content?.module || providerInfo.defaultModule;
+    const module =
+      integrationObj?.latestRevision?.content?.module ||
+      providerInfo.defaultModule;
 
     if (!module) {
       // This should never happen, but we'll throw an error if it does.
@@ -80,8 +82,11 @@ export function ProtectedConnectionLayout({
     providerName,
     selectedProvider,
   } = useProvider(provider);
-  const { provider: providerFromProps, isIntegrationDeleted, integrationObj } =
-    useInstallIntegrationProps();
+  const {
+    provider: providerFromProps,
+    isIntegrationDeleted,
+    integrationObj,
+  } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
   const queryClient = useQueryClient();
@@ -149,8 +154,8 @@ export function ProtectedConnectionLayout({
     }
 
     // If module exists, only show fields that have dependencies for this module
-    return metadataFields.filter(field =>
-      field.moduleDependencies?.[module] // Only show if has dependency for this module
+    return metadataFields.filter(
+      (field) => field.moduleDependencies?.[module], // Only show if has dependency for this module
     );
   };
 

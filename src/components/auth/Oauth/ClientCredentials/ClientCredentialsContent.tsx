@@ -3,7 +3,6 @@ import { MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
-import { useProviderInfoQuery } from "src/hooks/useProvider";
 import {
   AuthCardLayout,
   AuthTitle,
@@ -18,7 +17,6 @@ import {
 import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 type ClientCredentialsFormProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
@@ -34,7 +32,6 @@ type ClientCredentialsFormData = {
 };
 
 export function ClientCredentialsForm({
-  provider,
   handleSubmit,
   isButtonDisabled,
   explicitScopesRequired,
@@ -47,7 +44,6 @@ export function ClientCredentialsForm({
     scopes: "",
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const { data: providerInfo } = useProviderInfoQuery(provider);
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -140,7 +136,6 @@ export function ClientCredentialsForm({
 }
 
 type ClientCredentialsContentProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
@@ -150,7 +145,6 @@ type ClientCredentialsContentProps = {
 };
 
 export function ClientCredentialsContent({
-  provider,
   handleSubmit,
   error,
   isButtonDisabled,
@@ -164,7 +158,6 @@ export function ClientCredentialsContent({
       <AuthErrorAlert error={error} />
       <br />
       <ClientCredentialsForm
-        provider={provider}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
         explicitScopesRequired={explicitScopesRequired}

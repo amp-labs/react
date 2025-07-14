@@ -1,5 +1,5 @@
-import { Connection, ProviderInfo } from "services/api";
 import { MetadataItemInput } from "@generated/api/src";
+import { Connection, ProviderInfo } from "services/api";
 import { useProvider } from "src/hooks/useProvider";
 
 import { OauthFlow2 } from "../AuthorizationCode/OauthFlow2/OauthFlow2";
