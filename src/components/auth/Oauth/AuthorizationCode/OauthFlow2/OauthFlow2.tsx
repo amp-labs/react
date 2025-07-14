@@ -4,8 +4,8 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { MetadataItemInput } from "@generated/api/src";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   isProviderMetadataValid,
   ProviderMetadata,
@@ -13,7 +13,6 @@ import {
 import { useProject } from "src/context/ProjectContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
-import { useProviderInfoQuery } from "src/hooks/useProvider";
 import { AMP_SERVER } from "src/services/api";
 
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
@@ -72,7 +71,6 @@ export function OauthFlow2({
   const [workspace, setWorkspace] = useState<string>("");
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [metadata, setMetadata] = useState<ProviderMetadata>({});
-  const { data: providerInfo } = useProviderInfoQuery(provider);
 
   const {
     mutateAsync: createOauthConnectionUrlAsync,

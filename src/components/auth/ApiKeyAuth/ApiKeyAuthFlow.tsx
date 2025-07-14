@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import {
   GenerateConnectionOperationRequest,
-  ProviderInfo,
   MetadataItemInput,
+  ProviderInfo,
 } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 import { Connection } from "services/api";
