@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import {
   Connection,
   GenerateConnectionOperationRequest,
+  MetadataItemInput,
 } from "@generated/api/src";
 import { useProject } from "context/ProjectContextProvider";
 
@@ -25,6 +26,7 @@ interface OauthClientCredsContainerProps {
   providerName?: string;
   explicitScopesRequired?: boolean;
   selectedConnection: Connection | null;
+  metadataFields: MetadataItemInput[];
 }
 
 /**
@@ -40,6 +42,7 @@ export function ClientCredsContainer({
   groupName,
   explicitScopesRequired,
   selectedConnection,
+  metadataFields,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useProject();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -93,6 +96,7 @@ export function ClientCredsContainer({
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
+        metadataFields={metadataFields}
       />
     );
   }
