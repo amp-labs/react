@@ -11,11 +11,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
 import { IntegrationListProvider } from "../IntegrationListContextProvider";
+import { JwtTokenProvider } from "../JwtTokenContextProvider";
 import { ProjectProvider } from "../ProjectContextProvider";
 
 interface AmpersandProviderProps {
   options: {
-    apiKey: string;
+    apiKey?: string;
     /**
      * Use `project` instead of `projectId`.
      * @deprecated
@@ -26,6 +27,11 @@ interface AmpersandProviderProps {
      */
     project?: string;
     styles?: object;
+    /**
+     * Callback function to get a JWT token for authorization.
+     * This function should return a Promise that resolves to a JWT token string.
+     */
+    getToken?: (consumerRef: string, groupRef: string) => Promise<string>;
   };
   children: React.ReactNode;
 }
@@ -34,7 +40,7 @@ const queryClient = new QueryClient();
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const {
-    options: { apiKey, projectId, project },
+    options: { apiKey, projectId, project, getToken },
     children,
   } = props;
   const projectIdOrName = project || projectId;
@@ -49,18 +55,28 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     );
   }
 
-  if (!apiKey) {
-    throw new Error("Cannot use AmpersandProvider without an apiKey.");
+  if (!apiKey && !getToken) {
+    throw new Error(
+      "Cannot use AmpersandProvider without an apiKey or getToken.",
+    );
+  }
+
+  if (apiKey && getToken) {
+    throw new Error(
+      "Cannot use AmpersandProvider with both apiKey and getToken.",
+    );
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorStateProvider>
-        <ApiKeyProvider value={apiKey}>
-          <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider>{children}</IntegrationListProvider>
-          </ProjectProvider>
-        </ApiKeyProvider>
+        <JwtTokenProvider getTokenCallback={getToken || null}>
+          <ApiKeyProvider value={null}>
+            <ProjectProvider projectIdOrName={projectIdOrName}>
+              <IntegrationListProvider>{children}</IntegrationListProvider>
+            </ProjectProvider>
+          </ApiKeyProvider>
+        </JwtTokenProvider>
       </ErrorStateProvider>
     </QueryClientProvider>
   );
