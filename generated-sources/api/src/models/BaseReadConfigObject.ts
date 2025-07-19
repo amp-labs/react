@@ -80,7 +80,24 @@ export interface BaseReadConfigObject {
      * @memberof BaseReadConfigObject
      */
     backfill?: BackfillConfig;
+    /**
+     * Controls whether this read object is enabled.
+     * @type {string}
+     * @memberof BaseReadConfigObject
+     */
+    enabled?: BaseReadConfigObjectEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const BaseReadConfigObjectEnabledEnum = {
+    Always: 'always',
+    Never: 'never'
+} as const;
+export type BaseReadConfigObjectEnabledEnum = typeof BaseReadConfigObjectEnabledEnum[keyof typeof BaseReadConfigObjectEnabledEnum];
+
 
 /**
  * Check if a given object implements the BaseReadConfigObject interface.
@@ -109,6 +126,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
+        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
     };
 }
 
@@ -129,6 +147,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
+        'enabled': value.enabled,
     };
 }
 
