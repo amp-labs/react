@@ -1,5 +1,5 @@
 // currently not using a bundler to support alias imports
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import {
   BackfillConfig,
   BaseWriteConfigObject,
@@ -26,6 +26,7 @@ import {
   UpdateInstallationRequestInstallationConfig,
 } from "@generated/api/src";
 import { useApiKey } from "src/context/ApiKeyContextProvider";
+import { JwtTokenContext } from "src/context/JwtTokenContextProvider";
 
 import { ApiService } from "./ApiService";
 import { LIB_VERSION } from "./version";
@@ -110,6 +111,35 @@ export const setApi = (api: ApiService) => {
  */
 export const api = () => apiValue;
 
+// Authentication helper functions
+const createApiKeyAuth = (apiKey: string) => ({
+  header: "X-Api-Key",
+  value: apiKey,
+});
+
+const createJwtAuth = async (jwtToken: any) => {
+  try {
+    const token = await jwtToken.getToken("default", "default");
+    return {
+      header: "Authorization",
+      value: `Bearer ${token}`,
+    };
+  } catch (error) {
+    console.error("Failed to get JWT token for API authentication:", error);
+    throw new Error("Failed to authenticate with JWT token");
+  }
+};
+
+const createAuthConfig = (authHeader: string, authValue: string) =>
+  new Configuration({
+    basePath: AMP_API_ROOT,
+    headers: {
+      "X-Amp-Client": "react",
+      "X-Amp-Client-Version": LIB_VERSION,
+      [authHeader]: authValue,
+    },
+  });
+
 /**
  * hook to access the API service
  *
@@ -118,25 +148,26 @@ export const api = () => apiValue;
  */
 export function useAPI(): () => Promise<ApiService> {
   const apiKey = useApiKey();
+  const jwtToken = useContext(JwtTokenContext);
 
   /** Even though it doesn't need to be be async right now, we want to be able to support other ways
    * to authenticating to the API in the future which may require async operations */
   const getAPI = useCallback(async () => {
-    if (!apiKey) {
-      console.error("Unable to create API service without API key.");
+    if (apiKey) {
+      const auth = createApiKeyAuth(apiKey);
+      const configWithAuth = createAuthConfig(auth.header, auth.value);
+      return new ApiService(configWithAuth);
     }
 
-    const configWithApiKey = new Configuration({
-      basePath: AMP_API_ROOT,
-      headers: {
-        "X-Amp-Client": "react",
-        "X-Amp-Client-Version": LIB_VERSION,
-        "X-Api-Key": apiKey,
-      },
-    });
+    if (jwtToken) {
+      const auth = await createJwtAuth(jwtToken);
+      const configWithAuth = createAuthConfig(auth.header, auth.value);
+      return new ApiService(configWithAuth);
+    }
 
-    return new ApiService(configWithApiKey);
-  }, [apiKey]);
+    console.error("Unable to create API service without API key or JWT token.");
+    throw new Error("No authentication method provided");
+  }, [apiKey, jwtToken]);
 
   return getAPI;
 }
