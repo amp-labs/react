@@ -13,6 +13,9 @@ interface TokenCacheEntry {
   expiresAt: number;
 }
 
+const createCacheKey = (consumerRef: string, groupRef: string) =>
+  `${consumerRef}:${groupRef}`;
+
 type TokenCache = Map<string, TokenCacheEntry>;
 
 interface JwtTokenContextValue {
@@ -61,7 +64,7 @@ export function JwtTokenProvider({
 
   const getCachedToken = useCallback(
     (consumerRef: string, groupRef: string): string | null => {
-      const cacheKey = `${consumerRef}:${groupRef}`;
+      const cacheKey = createCacheKey(consumerRef, groupRef);
       const cached = tokenCache.get(cacheKey);
 
       if (cached && cached.expiresAt > Date.now()) {
@@ -84,7 +87,7 @@ export function JwtTokenProvider({
 
   const setCachedToken = useCallback(
     async (consumerRef: string, groupRef: string, token: string) => {
-      const cacheKey = `${consumerRef}:${groupRef}`;
+      const cacheKey = createCacheKey(consumerRef, groupRef);
 
       // Extract actual expiration time from JWT token using jose library
       const tokenExpiration = await getTokenExpirationTime(token);

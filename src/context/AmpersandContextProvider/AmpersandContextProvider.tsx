@@ -71,7 +71,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     <QueryClientProvider client={queryClient}>
       <ErrorStateProvider>
         <JwtTokenProvider getTokenCallback={getToken || null}>
-          <ApiKeyProvider value={null}>
+          <ApiKeyProvider value={apiKey || null}>
             <ProjectProvider projectIdOrName={projectIdOrName}>
               <IntegrationListProvider>{children}</IntegrationListProvider>
             </ProjectProvider>
