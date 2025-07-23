@@ -31,7 +31,7 @@ import { AmpersandProvider } from './AmpersandContextProvider';
 function App() {
   const getToken = async (consumerRef: string, groupRef: string): Promise<string> => {
     // Your custom token retrieval logic here
-    // This could involve calling your auth service, checking localStorage, etc.
+    // This could involve calling your auth service, checking sessionStorage, etc.
     const response = await fetch('/api/auth/token', {
       method: 'POST',
       headers: {
@@ -61,10 +61,10 @@ function App() {
 
 ### JWT Token Caching
 
-The JWT token provider automatically caches tokens in both memory and localStorage:
+The JWT token provider automatically caches tokens in both memory and sessionStorage:
 
 - **Memory Cache**: Fast access for the current session
-- **localStorage**: Persistence across browser sessions
+- **sessionStorage**: Persistence across browser tabs/windows within the same session
 - **Automatic Expiration**: Tokens are automatically refreshed when they expire
 - **Cache Key**: Tokens are cached using the pattern `{consumerRef}:{groupRef}`
 
