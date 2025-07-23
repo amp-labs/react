@@ -1,5 +1,5 @@
 // currently not using a bundler to support alias imports
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import {
   BackfillConfig,
   BaseWriteConfigObject,
@@ -26,7 +26,8 @@ import {
   UpdateInstallationRequestInstallationConfig,
 } from "@generated/api/src";
 import { useApiKey } from "src/context/ApiKeyContextProvider";
-import { JwtTokenContext } from "src/context/JwtTokenContextProvider";
+import { useJwtToken } from "src/context/JwtTokenContextProvider";
+import { useInstallationProps } from "src/headless/InstallationProvider";
 
 import { ApiService } from "./ApiService";
 import { LIB_VERSION } from "./version";
@@ -117,9 +118,8 @@ const createApiKeyAuth = (apiKey: string) => ({
   value: apiKey,
 });
 
-const createJwtAuth = async (jwtToken: any) => {
+const createJwtAuth = (token: string) => {
   try {
-    const token = await jwtToken.getToken("default", "default");
     return {
       header: "Authorization",
       value: `Bearer ${token}`,
@@ -140,6 +140,9 @@ const createAuthConfig = (authHeader: string, authValue: string) =>
     },
   });
 
+// TODO: remove this flag when we have a proper JWT auth flow
+const ENABLE_JWT_AUTH_FF = false;
+
 /**
  * hook to access the API service
  *
@@ -148,7 +151,8 @@ const createAuthConfig = (authHeader: string, authValue: string) =>
  */
 export function useAPI(): () => Promise<ApiService> {
   const apiKey = useApiKey();
-  const jwtToken = useContext(JwtTokenContext);
+  const { getToken } = useJwtToken();
+  const { consumerRef, groupRef } = useInstallationProps();
 
   /** Even though it doesn't need to be be async right now, we want to be able to support other ways
    * to authenticating to the API in the future which may require async operations */
@@ -159,15 +163,36 @@ export function useAPI(): () => Promise<ApiService> {
       return new ApiService(configWithAuth);
     }
 
-    if (jwtToken) {
-      const auth = await createJwtAuth(jwtToken);
+    if (getToken) {
+      if (!ENABLE_JWT_AUTH_FF) {
+        console.warn(
+          "JWT authentication is disabled. Please use API key authentication.",
+        );
+        throw new Error(
+          "JWT authentication is disabled. Please use API key authentication.",
+        );
+      }
+
+      if (!consumerRef || !groupRef) {
+        console.error(
+          "Unable to create JWT API service without consumerRef or groupRef.",
+          { consumerRef, groupRef },
+        );
+        throw new Error(
+          "Unable to create JWT API service without consumerRef or groupRef.",
+        );
+      }
+      const token = await getToken(consumerRef, groupRef);
+      const auth = createJwtAuth(token);
       const configWithAuth = createAuthConfig(auth.header, auth.value);
       return new ApiService(configWithAuth);
     }
 
     console.error("Unable to create API service without API key or JWT token.");
-    throw new Error("No authentication method provided");
-  }, [apiKey, jwtToken]);
+    throw new Error(
+      "Unable to create API service without API key or JWT token.",
+    );
+  }, [apiKey, getToken, consumerRef, groupRef]);
 
   return getAPI;
 }

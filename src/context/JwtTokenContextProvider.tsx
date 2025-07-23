@@ -13,17 +13,24 @@ interface TokenCacheEntry {
   expiresAt: number;
 }
 
+/**
+ * Create a cache key for the JWT token
+ * @param consumerRef - The consumer reference
+ * @param groupRef - The group reference
+ * @returns The cache key
+ */
 const createCacheKey = (consumerRef: string, groupRef: string) =>
   `${consumerRef}:${groupRef}`;
+
+const SESSION_STORAGE_PREFIX = "amp-labs_jwt_";
 
 type TokenCache = Map<string, TokenCacheEntry>;
 
 interface JwtTokenContextValue {
-  getToken: (consumerRef: string, groupRef: string) => Promise<string>;
-  clearToken: () => void;
+  getToken?: (consumerRef: string, groupRef: string) => Promise<string>;
 }
 
-export const JwtTokenContext = createContext<JwtTokenContextValue | null>(null);
+const JwtTokenContext = createContext<JwtTokenContextValue | null>(null);
 
 interface JwtTokenProviderProps {
   getTokenCallback:
@@ -32,7 +39,11 @@ interface JwtTokenProviderProps {
   children: React.ReactNode;
 }
 
-// JWT token expiration extraction using jose library
+/**
+ * JWT token expiration extraction using jose library
+ * @param token - The JWT token
+ * @returns The expiration time in milliseconds or null if the token is invalid
+ */
 const getTokenExpirationTime = async (
   token: string,
 ): Promise<number | null> => {
@@ -56,6 +67,12 @@ const getTokenExpirationTime = async (
   }
 };
 
+/**
+ * JwtTokenProvider is a context provider for the JWT token
+ * @param getTokenCallback - The callback function to get the JWT token
+ * @param children - The children components
+ * @returns The JwtTokenProvider component
+ */
 export function JwtTokenProvider({
   getTokenCallback,
   children,
@@ -85,6 +102,12 @@ export function JwtTokenProvider({
     [tokenCache],
   );
 
+  /**
+   * Set the token in the cache and sessionStorage
+   * @param consumerRef - The consumer reference
+   * @param groupRef - The group reference
+   * @param token - The JWT token
+   */
   const setCachedToken = useCallback(
     async (consumerRef: string, groupRef: string, token: string) => {
       const cacheKey = createCacheKey(consumerRef, groupRef);
@@ -97,54 +120,39 @@ export function JwtTokenProvider({
 
       setTokenCache((prev) => new Map(prev).set(cacheKey, cacheEntry));
 
-      // Also store in localStorage for persistence
+      // Also store in sessionStorage for persistence
       try {
-        localStorage.setItem(
-          `amp-labs_jwt_${cacheKey}`,
+        sessionStorage.setItem(
+          `${SESSION_STORAGE_PREFIX}${cacheKey}`,
           JSON.stringify(cacheEntry),
         );
       } catch {
-        console.warn("Failed to store JWT token in localStorage");
+        console.warn("Failed to store JWT token in sessionStorage");
       }
     },
     [],
   );
 
-  const clearToken = useCallback(() => {
-    setTokenCache(new Map());
-    // Clear from localStorage
-    try {
-      const keys = Object.keys(localStorage);
-      keys.forEach((key) => {
-        if (key.startsWith("amp-labs_jwt_")) {
-          localStorage.removeItem(key);
-        }
-      });
-    } catch {
-      console.warn("Failed to clear JWT tokens from localStorage");
-    }
-  }, []);
-
-  // Load cached tokens from localStorage on mount
+  // Load cached tokens from sessionStorage on mount
   useEffect(() => {
     try {
       const newCache: TokenCache = new Map();
-      const keys = Object.keys(localStorage);
+      const keys = Object.keys(sessionStorage);
 
       keys.forEach((key) => {
-        if (key.startsWith("amp-labs_jwt_")) {
-          const cacheKey = key.replace("amp-labs_jwt_", "");
-          const stored = localStorage.getItem(key);
+        if (key.startsWith(SESSION_STORAGE_PREFIX)) {
+          const cacheKey = key.replace(SESSION_STORAGE_PREFIX, "");
+          const stored = sessionStorage.getItem(key);
           if (stored) {
             try {
               const cacheEntry: TokenCacheEntry = JSON.parse(stored);
               if (cacheEntry.expiresAt > Date.now()) {
                 newCache.set(cacheKey, cacheEntry);
               } else {
-                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
               }
             } catch {
-              localStorage.removeItem(key);
+              sessionStorage.removeItem(key);
             }
           }
         }
@@ -154,10 +162,16 @@ export function JwtTokenProvider({
         setTokenCache(newCache);
       }
     } catch {
-      console.warn("Failed to load JWT tokens from localStorage");
+      console.warn("Failed to load JWT tokens from sessionStorage");
     }
   }, []);
 
+  /**
+   * Get the token from the cache or fetch a new one
+   * @param consumerRef - The consumer reference
+   * @param groupRef - The group reference
+   * @returns The JWT token
+   */
   const getToken = useCallback(
     async (consumerRef: string, groupRef: string): Promise<string> => {
       // First try to get from cache
@@ -183,8 +197,8 @@ export function JwtTokenProvider({
   );
 
   const contextValue: JwtTokenContextValue = {
-    getToken,
-    clearToken,
+    // If getTokenCallback is set, use it to get the token, otherwise return undefined
+    getToken: getTokenCallback ? getToken : undefined,
   };
 
   return (
