@@ -27,7 +27,7 @@ export function UpdateInstallation({
     loading,
     selectedObjectName,
     apiKey,
-    projectId,
+    projectIdOrName,
     resetBoundary,
     setErrors,
     setMutateInstallationError,
@@ -103,12 +103,12 @@ export function UpdateInstallation({
       installation &&
       selectedObjectName &&
       apiKey &&
-      projectId &&
+      projectIdOrName &&
       hydratedObject
     ) {
       setLoadingState(true);
       const res = onSaveReadUpdateInstallation(
-        projectId,
+        projectIdOrName,
         integrationObj.id,
         installation.id,
         selectedObjectName,
@@ -136,12 +136,12 @@ export function UpdateInstallation({
       installation &&
       selectedObjectName &&
       apiKey &&
-      projectId &&
+      projectIdOrName &&
       hydratedRevision
     ) {
       setLoadingState(true);
       const res = onSaveWriteUpdateInstallation(
-        projectId,
+        projectIdOrName,
         integrationObj.id,
         installation.id,
         apiKey,

@@ -8,7 +8,7 @@ import {
 import { handleServerError } from "src/utils/handleServerError";
 
 export type CreateInstallationSharedProps = {
-  projectId: string;
+  projectIdOrName: string;
   integrationId: string;
   groupRef: string;
   connectionId: string;
@@ -24,7 +24,7 @@ type CreateInstallationAndSetStateProps = CreateInstallationSharedProps & {
 
 export async function createInstallationAndSetState({
   createConfig,
-  projectId,
+  projectIdOrName,
   integrationId,
   groupRef,
   connectionId,
@@ -34,7 +34,7 @@ export async function createInstallationAndSetState({
   onInstallSuccess,
 }: CreateInstallationAndSetStateProps) {
   const createInstallationRequest: CreateInstallationOperationRequest = {
-    projectIdOrName: projectId,
+    projectIdOrName,
     integrationId,
     installation: {
       groupRef,

@@ -46,7 +46,7 @@ const generateUpdateWriteConfigFromConfigureState = (
 };
 
 export const onSaveWriteUpdateInstallation = (
-  projectId: string,
+  projectIdOrName: string,
   integrationId: string,
   installationId: string,
   apiKey: string,
@@ -71,7 +71,7 @@ export const onSaveWriteUpdateInstallation = (
   }
 
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
-    projectIdOrName: projectId,
+    projectIdOrName,
     installationId,
     integrationId,
     installationUpdate: {

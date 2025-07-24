@@ -28,7 +28,7 @@ export function CreateInstallation() {
     selectedObjectName,
     selectedConnection,
     apiKey,
-    projectId,
+    projectIdOrName,
     resetBoundary,
     setErrors,
     setMutateInstallationError,
@@ -97,7 +97,7 @@ export function CreateInstallation() {
       selectedObjectName &&
       selectedConnection?.id &&
       apiKey &&
-      projectId &&
+      projectIdOrName &&
       integrationId &&
       groupRef &&
       consumerRef &&
@@ -105,7 +105,7 @@ export function CreateInstallation() {
     ) {
       setLoadingState(true);
       const res = onSaveReadCreateInstallation(
-        projectId,
+        projectIdOrName,
         integrationId,
         groupRef,
         consumerRef,
@@ -139,7 +139,7 @@ export function CreateInstallation() {
       selectedObjectName &&
       selectedConnection?.id &&
       apiKey &&
-      projectId &&
+      projectIdOrName &&
       integrationId &&
       groupRef &&
       consumerRef &&
@@ -147,7 +147,7 @@ export function CreateInstallation() {
     ) {
       setLoadingState(true);
       const res = onSaveWriteCreateInstallation(
-        projectId,
+        projectIdOrName,
         integrationId,
         groupRef,
         consumerRef,
