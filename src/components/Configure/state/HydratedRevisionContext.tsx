@@ -9,7 +9,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useConnections } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "context/ProjectContextProvider";
 import {
   HydratedIntegrationRead,
   HydratedIntegrationWriteObject,
@@ -23,6 +22,7 @@ import {
 import { UpdateConnectionSection } from "src/components/Configure/content/manage/updateConnection/UpdateConnectionSection";
 import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { handleServerError } from "src/utils/handleServerError";
 
 interface HydratedRevisionContextValue {
@@ -56,7 +56,7 @@ const useHydratedRevisionQuery = () => {
   const queryClient = useQueryClient();
   const getAPI = useAPI();
   const { selectedConnection, isConnectionsLoading } = useConnections();
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { integrationId, integrationObj } = useInstallIntegrationProps();
 
   const connectionId = selectedConnection?.id;

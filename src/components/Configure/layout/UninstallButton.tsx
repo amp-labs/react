@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "context/ProjectContextProvider";
 import { useAPI } from "services/api";
 import { Button } from "src/components/ui-base/Button";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { handleServerError } from "src/utils/handleServerError";
 
 interface UninstallButtonProps {
@@ -44,7 +44,7 @@ export function UninstallButton({
   buttonVariant = "secondary",
   buttonStyle = {},
 }: UninstallButtonProps) {
-  const { projectId } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const {
     integrationId,
     installation,
@@ -53,7 +53,7 @@ export function UninstallButton({
   } = useInstallIntegrationProps();
   const [loading, setLoading] = useState<boolean>(false);
   const isDisabled =
-    !projectId || !integrationId || !installation?.id || loading;
+    !projectIdOrName || !integrationId || !installation?.id || loading;
 
   const deleteInstallationMutation = useDeleteInstallationMutation();
 
@@ -61,14 +61,14 @@ export function UninstallButton({
     if (!isDisabled) {
       setLoading(true);
       console.warn("uninstalling installation", {
-        projectId,
+        projectIdOrName,
         integrationId,
         installationId: installation.id,
       });
 
       deleteInstallationMutation.mutate(
         {
-          projectIdOrName: projectId,
+          projectIdOrName,
           integrationId,
           installationId: installation.id,
         },

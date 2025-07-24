@@ -3,8 +3,8 @@ import { ApiKeyAuthForm } from "src/components/auth/ApiKeyAuth/ApiKeyAuthContent
 import { IFormType } from "src/components/auth/ApiKeyAuth/LandingContentProps";
 import { FormErrorBox } from "src/components/FormErrorBox";
 import { FormSuccessBox } from "src/components/FormSuccessBox";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useConnections } from "src/context/ConnectionsContextProvider";
-import { useProject } from "src/context/ProjectContextProvider";
 import { useUpdateConnectionMutation } from "src/hooks/mutation/useUpdateConnectionMutation";
 import { useProvider } from "src/hooks/useProvider";
 import { handleServerError } from "src/utils/handleServerError";
@@ -17,7 +17,7 @@ import { FieldHeader } from "../../fields/FieldHeader";
  * @returns
  */
 export function UpdateApiKeyConnect({ provider }: { provider?: string }) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { providerName, data: providerInfo } = useProvider(provider);
   const { selectedConnection, isConnectionsLoading } = useConnections();
 

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useAPI } from "src/services/api";
 
 export function useListIntegrationsQuery() {
   const getAPI = useAPI();
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
 
   return useQuery({
     queryKey: ["amp", "integrations", projectIdOrName],

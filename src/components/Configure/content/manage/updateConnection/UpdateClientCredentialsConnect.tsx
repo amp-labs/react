@@ -3,8 +3,8 @@ import { ClientCredentialsForm } from "src/components/auth/Oauth/ClientCredentia
 import { ClientCredentialsCredsContent } from "src/components/auth/Oauth/ClientCredentials/ClientCredentialsCredsContent";
 import { FormErrorBox } from "src/components/FormErrorBox";
 import { FormSuccessBox } from "src/components/FormSuccessBox";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useConnections } from "src/context/ConnectionsContextProvider";
-import { useProject } from "src/context/ProjectContextProvider";
 import { useUpdateConnectionMutation } from "src/hooks/mutation/useUpdateConnectionMutation";
 import { useProvider } from "src/hooks/useProvider";
 import { handleServerError } from "src/utils/handleServerError";
@@ -21,7 +21,7 @@ export function UpdateClientCredentialsConnect({
 }: {
   provider?: string;
 }) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { selectedConnection, isConnectionsLoading } = useConnections();
   const { providerName, data: providerInfo } = useProvider(provider);
   const {

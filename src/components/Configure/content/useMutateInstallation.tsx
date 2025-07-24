@@ -3,7 +3,7 @@ import { useApiKey } from "context/ApiKeyContextProvider";
 import { useConnections } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 
 import {
   useNextIncompleteTabIndex,
@@ -29,7 +29,7 @@ export const useMutateInstallation = () => {
   const { selectedObjectName } = useSelectedObjectName();
   const { selectedConnection } = useConnections();
   const apiKey = useApiKey();
-  const { projectId } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { resetBoundary, setErrors, setError, getError } = useErrorState();
   const {
     resetConfigureState,
@@ -93,7 +93,7 @@ export const useMutateInstallation = () => {
     selectedObjectName,
     selectedConnection,
     apiKey,
-    projectId,
+    projectIdOrName,
     resetBoundary,
     setErrors,
     setMutateInstallationError,

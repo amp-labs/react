@@ -30,6 +30,26 @@ interface AmpersandProviderProps {
   children: React.ReactNode;
 }
 
+interface AmpersandContextValue {
+  options: AmpersandProviderProps["options"];
+  projectIdOrName: string;
+}
+
+export const AmpersandContext = createContext<AmpersandContextValue | null>(
+  null,
+);
+
+export function useAmpersandProviderProps(): AmpersandContextValue {
+  const ampersandContext = useContext(AmpersandContext);
+
+  if (!ampersandContext) {
+    throw new Error(`Cannot call useAmpersandProvider unless your 
+        component is wrapped with AmpersandProvider`);
+  }
+
+  return ampersandContext;
+}
+
 const queryClient = new QueryClient();
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
@@ -53,27 +73,22 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     throw new Error("Cannot use AmpersandProvider without an apiKey.");
   }
 
+  const contextValue: AmpersandContextValue = {
+    options: props.options,
+    projectIdOrName,
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorStateProvider>
-        <ApiKeyProvider value={apiKey}>
-          <ProjectProvider projectIdOrName={projectIdOrName}>
-            <IntegrationListProvider>{children}</IntegrationListProvider>
-          </ProjectProvider>
-        </ApiKeyProvider>
-      </ErrorStateProvider>
+      <AmpersandContext.Provider value={contextValue}>
+        <ErrorStateProvider>
+          <ApiKeyProvider value={apiKey}>
+            <ProjectProvider projectIdOrName={projectIdOrName}>
+              <IntegrationListProvider>{children}</IntegrationListProvider>
+            </ProjectProvider>
+          </ApiKeyProvider>
+        </ErrorStateProvider>
+      </AmpersandContext.Provider>
     </QueryClientProvider>
   );
-}
-
-export const AmpersandContext = createContext(null);
-export function useAmpersandProvider() {
-  const ampersandContext = useContext(AmpersandContext);
-
-  if (!ampersandContext) {
-    throw new Error(`Cannot call useAmpersandProvider unless your 
-        component is wrapped with AmpersandProvider`);
-  }
-
-  return ampersandContext;
 }

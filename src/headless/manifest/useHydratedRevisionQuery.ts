@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 import { useAPI } from "src/services/api";
 
@@ -20,7 +20,7 @@ export const useHydratedRevisionQuery = () => {
     isPending: isConnectionsPending,
     isFetching: isConnectionsFetching,
   } = useConnection();
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
 
