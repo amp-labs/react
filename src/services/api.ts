@@ -140,6 +140,9 @@ const createAuthConfig = (authHeader: string, authValue: string) =>
     },
   });
 
+// TODO: remove this flag when we have a proper JWT auth flow
+const ENABLE_JWT_AUTH_FF = false;
+
 /**
  * hook to access the API service
  *
@@ -161,6 +164,15 @@ export function useAPI(): () => Promise<ApiService> {
     }
 
     if (getToken) {
+      if (!ENABLE_JWT_AUTH_FF) {
+        console.warn(
+          "JWT authentication is disabled. Please use API key authentication.",
+        );
+        throw new Error(
+          "JWT authentication is disabled. Please use API key authentication.",
+        );
+      }
+
       if (!consumerRef || !groupRef) {
         console.error(
           "Unable to create JWT API service without consumerRef or groupRef.",
