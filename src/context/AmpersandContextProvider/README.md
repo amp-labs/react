@@ -64,7 +64,7 @@ function App() {
 The JWT token provider automatically caches tokens in both memory and sessionStorage:
 
 - **Memory Cache**: Fast access for the current session
-- **sessionStorage**: Persistence across browser tabs/windows within the same session
+- **sessionStorage**: Persistence within the same session tab and refreshes
 - **Automatic Expiration**: Tokens are automatically refreshed when they expire
 - **Cache Key**: Tokens are cached using the pattern `{consumerRef}:{groupRef}`
 
