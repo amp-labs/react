@@ -7,7 +7,7 @@ import {
   Connection,
   GenerateConnectionOperationRequest,
 } from "@generated/api/src";
-import { useProject } from "context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 
 import { LoadingCentered } from "components/Loading";
 
@@ -41,7 +41,7 @@ export function ClientCredsContainer({
   explicitScopesRequired,
   selectedConnection,
 }: OauthClientCredsContainerProps) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
   const [error, setError] = useState<string | null>(null);
 

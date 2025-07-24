@@ -96,7 +96,7 @@ const generateCreateReadConfigFromConfigureState = (
 };
 
 export const onSaveReadCreateInstallation = (
-  projectId: string,
+  projectIdOrName: string,
   integrationId: string,
   groupRef: string,
   consumerRef: string,
@@ -122,7 +122,7 @@ export const onSaveReadCreateInstallation = (
 
   return createInstallationAndSetState({
     createConfig,
-    projectId,
+    projectIdOrName,
     integrationId,
     groupRef,
     connectionId,

@@ -3,7 +3,7 @@ import {
   Installation,
 } from "@generated/api/src";
 import { useQueryClient } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
@@ -24,7 +24,7 @@ import { useInstallation } from "./useInstallation";
  *   - `errorMsg` (string | null): The error message, if any.
  */
 export function useCreateInstallation() {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { groupRef, integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { connection } = useConnection();

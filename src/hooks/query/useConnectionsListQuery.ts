@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useAPI } from "src/services/api";
 
 type ConnectionsListQueryProps = {
@@ -11,7 +11,7 @@ export const useConnectionsListQuery = ({
   groupRef,
   provider,
 }: ConnectionsListQueryProps) => {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
 
   const getAPI = useAPI();
   return useQuery({

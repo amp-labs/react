@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useConnections } from "context/ConnectionsContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "context/ProjectContextProvider";
 import {
   CreateInstallationOperationRequest,
   HydratedRevision,
 } from "services/api";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
 
 import { getIsProxyEnabled } from "../../actions/proxy/isProxyEnabled";
@@ -39,7 +39,7 @@ export function ConditionalHasConfigurationLayout({
   children,
 }: ConditionalHasConfigurationLayoutProps) {
   const hasFiredMutationRef = useRef(false);
-  const { projectId } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { hydratedRevision, loading: hydratedRevisionLoading } =
     useHydratedRevision();
   const {
@@ -81,7 +81,7 @@ export function ConditionalHasConfigurationLayout({
       provider
     ) {
       const createInstallationRequest: CreateInstallationOperationRequest = {
-        projectIdOrName: projectId,
+        projectIdOrName,
         integrationId: integrationObj?.id,
         installation: {
           groupRef,
@@ -110,7 +110,7 @@ export function ConditionalHasConfigurationLayout({
     isConfigurationNotRequired,
     installation,
     selectedConnection,
-    projectId,
+    projectIdOrName,
     integrationObj?.id,
     groupRef,
     consumerRef,

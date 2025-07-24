@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useDeleteInstallationMutation } from "src/hooks/mutation/useDeleteInstallationMutation";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 
@@ -17,7 +17,7 @@ import { useInstallation } from "./useInstallation";
  *   - `errorMsg` (string | null): The error message, if any.
  */
 export function useDeleteInstallation() {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { installation } = useInstallation();

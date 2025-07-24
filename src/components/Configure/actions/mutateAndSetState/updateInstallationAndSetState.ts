@@ -9,7 +9,7 @@ import { escapeObjectName } from "src/utils";
 import { handleServerError } from "src/utils/handleServerError";
 
 type UpdateInstallationSharedProps = {
-  projectId: string;
+  projectIdOrName: string;
   integrationId: string;
   installationId: string;
   apiKey: string;
@@ -23,7 +23,7 @@ type UpdateInstallationAndSetStateProps = UpdateInstallationSharedProps & {
 };
 export function updateInstallationAndSetState({
   updateConfig,
-  projectId,
+  projectIdOrName,
   integrationId,
   installationId,
   apiKey,
@@ -33,7 +33,7 @@ export function updateInstallationAndSetState({
   setError,
 }: UpdateInstallationAndSetStateProps) {
   const updateInstallationRequest: UpdateInstallationOperationRequest = {
-    projectIdOrName: projectId,
+    projectIdOrName,
     installationId,
     integrationId,
     installationUpdate: {

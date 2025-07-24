@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { GenerateConnectionOperationRequest } from "@generated/api/src";
-import { useProject } from "context/ProjectContextProvider";
 import { Connection } from "services/api";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
 
@@ -33,7 +33,7 @@ export function NoAuthFlow({
   selectedConnection,
   providerName,
 }: NoAuthFlowProps) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
 
   const onNext = useCallback(() => {

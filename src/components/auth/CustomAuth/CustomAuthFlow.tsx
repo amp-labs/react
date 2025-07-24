@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { GenerateConnectionOperationRequest } from "@generated/api/src";
-import { useProject } from "context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { useCreateConnectionMutation } from "../useCreateConnectionMutation";
@@ -18,7 +18,7 @@ export function CustomAuthFlow({
   children,
   selectedConnection,
 }: CustomAuthFlowProps) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
   const [error, setError] = useState<string | null>(null);
 

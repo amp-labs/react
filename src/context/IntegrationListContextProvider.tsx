@@ -3,8 +3,8 @@ import { useListIntegrationsQuery } from "hooks/query/useIntegrationListQuery";
 import { Integration } from "services/api";
 import { handleServerError } from "src/utils/handleServerError";
 
+import { useAmpersandProviderProps } from "./AmpersandContextProvider/AmpersandContextProvider";
 import { ErrorBoundary, useErrorState } from "./ErrorContextProvider";
-import { useProject } from "./ProjectContextProvider";
 
 interface IntegrationListContextValue {
   integrations: Integration[] | null;
@@ -36,7 +36,7 @@ type IntegrationListContextProviderProps = {
 export function IntegrationListProvider({
   children,
 }: IntegrationListContextProviderProps) {
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const { setError, removeError } = useErrorState();
   const { data: integrations, isLoading, isError } = useListIntegrationsQuery();
 

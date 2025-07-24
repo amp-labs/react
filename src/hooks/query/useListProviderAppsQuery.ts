@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useProject } from "context/ProjectContextProvider";
 import { useAPI } from "services/api";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 
 export const useListProviderAppsQuery = () => {
   const getAPI = useAPI();
-  const { projectIdOrName } = useProject();
+  const { projectIdOrName } = useAmpersandProviderProps();
 
   return useQuery({
     queryKey: ["amp", "providerApps", projectIdOrName],

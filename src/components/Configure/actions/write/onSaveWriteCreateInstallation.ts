@@ -79,7 +79,7 @@ const generateCreateWriteConfigFromConfigureState = (
 };
 
 export const onSaveWriteCreateInstallation = (
-  projectId: string,
+  projectIdOrName: string,
   integrationId: string,
   groupRef: string,
   consumerRef: string,
@@ -103,7 +103,7 @@ export const onSaveWriteCreateInstallation = (
 
   return createInstallationAndSetState({
     createConfig,
-    projectId,
+    projectIdOrName,
     integrationId,
     groupRef,
     connectionId,
