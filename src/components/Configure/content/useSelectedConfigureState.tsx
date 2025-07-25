@@ -1,4 +1,4 @@
-import { useProject } from "context/ProjectContextProvider";
+import { useProjectQuery } from "src/hooks/query";
 
 import { useSelectedObjectName } from "../nav/ObjectManagementNav/ObjectManagementNavContext";
 import { useObjectsConfigureState } from "../state/ConfigurationStateProvider";
@@ -9,7 +9,7 @@ import { getConfigureState } from "../state/utils";
  * @returns {object} configureState for the selected object in nav
  */
 export const useSelectedConfigureState = () => {
-  const { appName } = useProject();
+  const { appName } = useProjectQuery();
   const { objectConfigurationsState, setConfigureState } =
     useObjectsConfigureState();
   const { selectedObjectName } = useSelectedObjectName();

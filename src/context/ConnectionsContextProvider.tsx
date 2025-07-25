@@ -15,9 +15,10 @@ import {
 } from "src/components/Configure/ComponentContainer";
 import { handleServerError } from "src/utils/handleServerError";
 
+import { useProjectQuery } from "../hooks/query";
+
 import { ErrorBoundary, useErrorState } from "./ErrorContextProvider";
 import { useInstallIntegrationProps } from "./InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "./ProjectContextProvider";
 
 interface ConnectionsContextValue {
   connections: Connection[] | null;
@@ -60,7 +61,7 @@ export function ConnectionsProvider({
 }: ConnectionsProviderProps) {
   const queryClient = useQueryClient();
   const { setError, isError } = useErrorState();
-  const { projectId, isLoading: isProjectLoading } = useProject();
+  const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
   const { integrationId, groupRef: groupRefProp } =
     useInstallIntegrationProps();
   const { provider: integrationProvider } = useIntegrationQuery(integrationId);
@@ -97,12 +98,12 @@ export function ConnectionsProvider({
   // legacy set global error state for connections
   useEffect(() => {
     if (isConnectionsError) {
-      setError(ErrorBoundary.CONNECTION_LIST, projectId, true);
+      setError(ErrorBoundary.CONNECTION_LIST, projectIdOrName, true);
       handleServerError(connectionError);
     } else {
-      setError(ErrorBoundary.CONNECTION_LIST, projectId, false);
+      setError(ErrorBoundary.CONNECTION_LIST, projectIdOrName, false);
     }
-  }, [isConnectionsError, setError, projectId, connectionError]);
+  }, [isConnectionsError, setError, projectIdOrName, connectionError]);
 
   const contextValue = useMemo(
     () => ({
@@ -125,21 +126,26 @@ export function ConnectionsProvider({
     return <ComponentContainerLoading />;
   }
 
-  if (isError(ErrorBoundary.PROJECT, projectId)) {
+  if (projectIdOrName && isError(ErrorBoundary.PROJECT, projectIdOrName)) {
     return (
-      <ComponentContainerError message={`Error loading project ${projectId}`} />
+      <ComponentContainerError
+        message={`Error loading project ${projectIdOrName}`}
+      />
     );
   }
 
-  if (isError(ErrorBoundary.CONNECTION_LIST, projectId)) {
+  if (
+    projectIdOrName &&
+    isError(ErrorBoundary.CONNECTION_LIST, projectIdOrName)
+  ) {
     return (
       <ComponentContainerError message="Error retrieving existing connections" />
     );
   }
 
-  if (!projectId) {
+  if (!projectIdOrName) {
     throw new Error(
-      "Project ID not found. ConnectionsProvider must be used within AmpersandProvider",
+      "Project ID or Project Name not found. ConnectionsProvider must be used within AmpersandProvider",
     );
   }
 

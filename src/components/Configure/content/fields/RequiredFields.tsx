@@ -1,4 +1,4 @@
-import { useProject } from "context/ProjectContextProvider";
+import { useProjectQuery } from "src/hooks/query";
 
 import { Tag } from "components/ui-base/Tag";
 
@@ -9,7 +9,7 @@ import { FieldHeader } from "./FieldHeader";
 
 export function RequiredFields() {
   const { configureState } = useSelectedConfigureState();
-  const { appName } = useProject();
+  const { appName } = useProjectQuery();
 
   return (
     <>

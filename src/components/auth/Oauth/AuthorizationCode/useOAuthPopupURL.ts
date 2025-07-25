@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { OauthConnectRequest, ProviderApp } from "@generated/api/src";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useProjectQuery } from "src/hooks/query";
 import {
   useListProviderAppsQuery,
   useOauthConnectQuery,
@@ -22,7 +22,7 @@ export const useOAuthPopupURL = (
   workspace?: string,
   providerMetadata?: ProviderMetadata,
 ) => {
-  const { projectId } = useProject();
+  const { projectId } = useProjectQuery();
   const {
     data: provInfo,
     isLoading: isProvInfoLoading,
@@ -39,7 +39,7 @@ export const useOAuthPopupURL = (
 
   const request: OauthConnectRequest = {
     providerWorkspaceRef: workspace || providerMetadata?.workspace?.value,
-    projectId,
+    projectId: projectId || "", // todo - update to use projectIdOrName
     groupRef,
     groupName,
     consumerRef,

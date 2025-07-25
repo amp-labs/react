@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import { useProject } from "context/ProjectContextProvider";
 import { VerticalTabs } from "src/components/Configure/nav/ObjectManagementNav/v2/Tabs";
 import { NavObject } from "src/components/Configure/types";
+import { useProjectQuery } from "src/hooks/query";
 import { useProvider } from "src/hooks/useProvider";
 import { AmpersandFooter } from "src/layout/AuthCardLayout/AmpersandFooter";
 
@@ -37,7 +37,7 @@ type ObjectManagementNavProps = {
 
 // note: when the object key exists in the config; the user has already completed the object before
 export function ObjectManagementNavV2({ children }: ObjectManagementNavProps) {
-  const { project } = useProject();
+  const { data: project } = useProjectQuery();
   const { installation } = useInstallIntegrationProps();
   const { providerName } = useProvider();
   const { hydratedRevision } = useHydratedRevision();
