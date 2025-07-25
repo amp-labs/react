@@ -2,7 +2,7 @@ import { ConnectionsProvider } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config } from "services/api";
-import { useIntegrationList } from "src/context/IntegrationListContextProvider";
+import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
 
@@ -98,7 +98,7 @@ export function InstallIntegration({
   fieldMapping,
 }: InstallIntegrationProps) {
   const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
-  const { isLoading: isIntegrationListLoading } = useIntegrationList();
+  const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
   const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
