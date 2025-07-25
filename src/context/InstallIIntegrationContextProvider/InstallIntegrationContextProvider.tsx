@@ -13,11 +13,11 @@ import {
   ComponentContainerLoading,
 } from "src/components/Configure/ComponentContainer";
 import { FieldMapping } from "src/components/Configure/InstallIntegration";
+import { useListIntegrationsQuery } from "src/hooks/query";
 import { findIntegrationFromList } from "src/utils";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { ErrorBoundary, useErrorState } from "../ErrorContextProvider";
-import { useIntegrationList } from "../IntegrationListContextProvider";
 
 import { useIsInstallationDeleted } from "./useIsInstallationDeleted";
 
@@ -101,7 +101,7 @@ export function InstallIntegrationProvider({
   fieldMapping,
   resetComponent,
 }: InstallIntegrationProviderProps) {
-  const { integrations } = useIntegrationList();
+  const { data: integrations } = useListIntegrationsQuery();
   const { setError, isError, removeError } = useErrorState();
   const {
     isIntegrationDeleted,

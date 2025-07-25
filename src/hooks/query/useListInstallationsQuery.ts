@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
-import { useIntegrationList } from "src/context/IntegrationListContextProvider";
 import { useAPI } from "src/services/api";
+
+import { useListIntegrationsQuery } from "./useIntegrationListQuery";
 
 export const useListInstallationsQuery = (
   integration?: string,
@@ -9,7 +10,7 @@ export const useListInstallationsQuery = (
 ) => {
   const getAPI = useAPI();
   const { projectIdOrName } = useAmpersandProviderProps(); // in AmpersandProvider
-  const { integrations } = useIntegrationList(); // in AmpersandProvider
+  const { data: integrations } = useListIntegrationsQuery();
 
   const integrationId = integrations?.find(
     (_integration) => _integration.name === integration,
