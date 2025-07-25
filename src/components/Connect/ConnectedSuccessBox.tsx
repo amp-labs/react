@@ -1,4 +1,4 @@
-import { useProject } from "context/ProjectContextProvider";
+import { useProjectQuery } from "src/hooks/query";
 import { useProvider } from "src/hooks/useProvider";
 import { Connection } from "src/services/api";
 
@@ -16,7 +16,7 @@ export function ConnectedSuccessBox({
   onDisconnectSuccess,
   resetComponent,
 }: ConnectedSuccessBoxProps) {
-  const { appName } = useProject();
+  const { appName } = useProjectQuery();
   const { providerName } = useProvider(provider);
 
   const text = `You have successfully connected your ${providerName} account to ${appName}.`;

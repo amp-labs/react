@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAPI } from "services/api";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 
 /**
  * Query to get the project with entitlements
@@ -9,8 +9,7 @@ import { useProject } from "src/context/ProjectContextProvider";
  * @returns
  */
 export const useProjectWithEntitlementsQuery = () => {
-  const { project } = useProject();
-  const projectIdOrName = project?.id;
+  const { projectIdOrName } = useAmpersandProviderProps();
   const getAPI = useAPI();
 
   return useQuery({
