@@ -1,15 +1,17 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAPI } from "services/api";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
+import { ErrorBoundary, useErrorState } from "src/context/ErrorContextProvider";
 
 /**
  * Custom hook to fetch project data using React Query.
- * 
+ *
  * This hook retrieves project information based on the `projectIdOrName` provided
  * by the Ampersand context. It uses the `getProject` method from the API service
  * to fetch the data and returns an enhanced query object with additional properties
  * such as `appName` and `projectId`.
- * 
+ *
  * @returns {Object} An object containing:
  *   - All properties from the React Query result (`data`, `error`, `isLoading`, etc.).
  *   - `projectIdOrName`: The identifier for the project.
@@ -17,6 +19,7 @@ import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/
  *   - `projectId`: The ID of the project (if available).
  */
 const useProjectQuery = () => {
+  const { setError } = useErrorState();
   const getAPI = useAPI();
   const { projectIdOrName } = useAmpersandProviderProps();
 
@@ -27,6 +30,12 @@ const useProjectQuery = () => {
       return api.projectApi.getProject({ projectIdOrName });
     },
   });
+
+  useEffect(() => {
+    if (query.isError) {
+      setError(ErrorBoundary.PROJECT, projectIdOrName);
+    }
+  }, [query.isError, projectIdOrName, setError]);
 
   return {
     ...query,
