@@ -10,7 +10,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
-import { IntegrationListProvider } from "../IntegrationListContextProvider";
 
 interface AmpersandProviderProps {
   options: {
@@ -81,9 +80,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     <QueryClientProvider client={queryClient}>
       <AmpersandContext.Provider value={contextValue}>
         <ErrorStateProvider>
-          <ApiKeyProvider value={apiKey}>
-            <IntegrationListProvider>{children}</IntegrationListProvider>
-          </ApiKeyProvider>
+          <ApiKeyProvider value={apiKey}>{children}</ApiKeyProvider>
         </ErrorStateProvider>
       </AmpersandContext.Provider>
     </QueryClientProvider>
