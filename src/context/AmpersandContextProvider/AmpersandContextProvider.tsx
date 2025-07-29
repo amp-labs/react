@@ -11,7 +11,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
 import { IntegrationListProvider } from "../IntegrationListContextProvider";
-import { ProjectProvider } from "../ProjectContextProvider";
 
 interface AmpersandProviderProps {
   options: {
@@ -83,9 +82,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <AmpersandContext.Provider value={contextValue}>
         <ErrorStateProvider>
           <ApiKeyProvider value={apiKey}>
-            <ProjectProvider projectIdOrName={projectIdOrName}>
-              <IntegrationListProvider>{children}</IntegrationListProvider>
-            </ProjectProvider>
+            <IntegrationListProvider>{children}</IntegrationListProvider>
           </ApiKeyProvider>
         </ErrorStateProvider>
       </AmpersandContext.Provider>
