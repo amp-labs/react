@@ -1,21 +1,9 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Project, useAPI } from "services/api";
+import { Project } from "services/api";
+
+import { useProjectQuery } from "../hooks/query";
 
 import { ErrorBoundary, useErrorState } from "./ErrorContextProvider";
-
-// use react query hook
-const useProjectQuery = (projectIdOrName: string) => {
-  const getAPI = useAPI();
-
-  return useQuery({
-    queryKey: ["project", projectIdOrName],
-    queryFn: async () => {
-      const api = await getAPI();
-      return api.projectApi.getProject({ projectIdOrName });
-    },
-  });
-};
 
 interface ProjectContextValue {
   project: Project | null;
@@ -53,11 +41,7 @@ export function ProjectProvider({
   children,
 }: ProjectProviderProps) {
   const { setError } = useErrorState();
-  const {
-    data: project,
-    isLoading,
-    isError,
-  } = useProjectQuery(projectIdOrName);
+  const { data: project, isLoading, isError } = useProjectQuery();
 
   useEffect(() => {
     if (isError) setError(ErrorBoundary.PROJECT, projectIdOrName);

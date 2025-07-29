@@ -1,5 +1,5 @@
 import { FormCalloutBox } from "src/components/FormCalloutBox";
-import { useProject } from "src/context/ProjectContextProvider";
+import { useProjectQuery } from "src/hooks/query";
 import { useProvider } from "src/hooks/useProvider";
 import { capitalize } from "src/utils";
 
@@ -11,7 +11,7 @@ import { useSelectedConfigureState } from "../useSelectedConfigureState";
  * @returns
  */
 export function ReadObjectMapping() {
-  const { project } = useProject();
+  const { data: project } = useProjectQuery();
   const { hydratedRevision } = useHydratedRevision();
   const { selectedObjectName } = useSelectedConfigureState();
 

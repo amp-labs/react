@@ -4,8 +4,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useProject } from "src/context/ProjectContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
+import { useProjectQuery } from "src/hooks/query";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
 import { AMP_SERVER } from "src/services/api";
 
@@ -45,7 +45,7 @@ export function NoWorkspaceOauthFlow2({
   groupName,
   providerName,
 }: NoWorkspaceOauthFlowProps) {
-  const { projectId } = useProject();
+  const { projectId } = useProjectQuery();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
 
@@ -105,7 +105,7 @@ export function NoWorkspaceOauthFlow2({
           provider,
           consumerRef,
           groupRef,
-          projectId,
+          projectId: projectId || "", // todo - update to use projectIdOrName
           consumerName,
           groupName,
         },
