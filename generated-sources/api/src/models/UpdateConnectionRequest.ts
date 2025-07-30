@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { ConnectionRequest } from './ConnectionRequest';
 import {
     ConnectionRequestFromJSON,
@@ -27,11 +33,11 @@ import {
  */
 export interface UpdateConnectionRequest {
     /**
-     * The fields to update.
-     * @type {Array<string>}
+     * 
+     * @type {Array & Array<string>}
      * @memberof UpdateConnectionRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {ConnectionRequest}
@@ -61,7 +67,7 @@ export function UpdateConnectionRequestFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'connection': ConnectionRequestFromJSON(json['connection']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateConnectionRequestToJSON(value?: UpdateConnectionRequest | 
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'connection': ConnectionRequestToJSON(value.connection),
     };
 }

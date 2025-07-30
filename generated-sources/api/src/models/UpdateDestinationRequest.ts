@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { UpdateDestinationRequestDestination } from './UpdateDestinationRequestDestination';
 import {
     UpdateDestinationRequestDestinationFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface UpdateDestinationRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof UpdateDestinationRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {UpdateDestinationRequestDestination}
@@ -61,7 +67,7 @@ export function UpdateDestinationRequestFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'destination': UpdateDestinationRequestDestinationFromJSON(json['destination']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateDestinationRequestToJSON(value?: UpdateDestinationRequest 
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'destination': UpdateDestinationRequestDestinationToJSON(value.destination),
     };
 }
