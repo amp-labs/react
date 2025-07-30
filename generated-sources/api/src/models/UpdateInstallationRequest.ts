@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { UpdateInstallationRequestInstallation } from './UpdateInstallationRequestInstallation';
 import {
     UpdateInstallationRequestInstallationFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface UpdateInstallationRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof UpdateInstallationRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {UpdateInstallationRequestInstallation}
@@ -61,7 +67,7 @@ export function UpdateInstallationRequestFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'installation': UpdateInstallationRequestInstallationFromJSON(json['installation']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateInstallationRequestToJSON(value?: UpdateInstallationReques
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'installation': UpdateInstallationRequestInstallationToJSON(value.installation),
     };
 }
