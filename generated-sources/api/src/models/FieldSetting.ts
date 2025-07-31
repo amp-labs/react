@@ -31,7 +31,7 @@ export interface FieldSetting {
      * @type {FieldSettingDefault}
      * @memberof FieldSetting
      */
-    default?: FieldSettingDefault;
+    _default?: FieldSettingDefault;
     /**
      * Whether the default value should be applied when creating a record.
      * @type {string}
@@ -85,7 +85,7 @@ export function FieldSettingFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'default': !exists(json, 'default') ? undefined : FieldSettingDefaultFromJSON(json['default']),
+        '_default': !exists(json, 'default') ? undefined : FieldSettingDefaultFromJSON(json['default']),
         'writeOnCreate': !exists(json, 'writeOnCreate') ? undefined : json['writeOnCreate'],
         'writeOnUpdate': !exists(json, 'writeOnUpdate') ? undefined : json['writeOnUpdate'],
     };
@@ -100,7 +100,7 @@ export function FieldSettingToJSON(value?: FieldSetting | null): any {
     }
     return {
         
-        'default': FieldSettingDefaultToJSON(value.default),
+        'default': FieldSettingDefaultToJSON(value._default),
         'writeOnCreate': value.writeOnCreate,
         'writeOnUpdate': value.writeOnUpdate,
     };
