@@ -95,7 +95,7 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       <AmpersandContext.Provider value={contextValue}>
         <ErrorStateProvider>
           <JwtTokenProvider getTokenCallback={getToken || null}>
-            <ApiKeyProvider value={null}>{children}</ApiKeyProvider>
+            <ApiKeyProvider value={apiKey || null}>{children}</ApiKeyProvider>
           </JwtTokenProvider>
         </ErrorStateProvider>
       </AmpersandContext.Provider>
