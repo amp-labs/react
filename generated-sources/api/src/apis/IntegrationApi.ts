@@ -49,6 +49,11 @@ export interface DeleteIntegrationRequest {
     integrationId: string;
 }
 
+export interface GetIntegrationRequest {
+    integrationIdOrName: string;
+    projectIdOrName: string;
+}
+
 export interface ListIntegrationsRequest {
     projectIdOrName: string;
 }
@@ -107,6 +112,22 @@ export interface IntegrationApiInterface {
      * Delete an integration
      */
     deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get an integration by ID or name
+     * @param {string} integrationIdOrName The integration ID or name.
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationApiInterface
+     */
+    getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+
+    /**
+     * Get an integration by ID or name
+     */
+    getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
      * 
@@ -246,6 +267,44 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
      */
     async deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteIntegrationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get an integration by ID or name
+     */
+    async getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+        if (requestParameters.integrationIdOrName === null || requestParameters.integrationIdOrName === undefined) {
+            throw new runtime.RequiredError('integrationIdOrName','Required parameter requestParameters.integrationIdOrName was null or undefined when calling getIntegration.');
+        }
+
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getIntegration.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationIdOrName}`.replace(`{${"integrationIdOrName"}}`, encodeURIComponent(String(requestParameters.integrationIdOrName))).replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an integration by ID or name
+     */
+    async getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.getIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

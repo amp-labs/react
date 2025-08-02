@@ -69,6 +69,7 @@ src/models/CreateBillingAccountSessionRequest.ts
 src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
 src/models/CreateDestinationRequestMetadata.ts
+src/models/CreateDestinationRequestSecrets.ts
 src/models/CreateEvent.ts
 src/models/CreateGroupRequest.ts
 src/models/CreateInstallationRequest.ts

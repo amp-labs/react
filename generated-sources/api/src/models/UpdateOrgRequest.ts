@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { UpdateOrgRequestOrg } from './UpdateOrgRequestOrg';
 import {
     UpdateOrgRequestOrgFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface UpdateOrgRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof UpdateOrgRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {UpdateOrgRequestOrg}
@@ -61,7 +67,7 @@ export function UpdateOrgRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'org': UpdateOrgRequestOrgFromJSON(json['org']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateOrgRequestToJSON(value?: UpdateOrgRequest | null): any {
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'org': UpdateOrgRequestOrgToJSON(value.org),
     };
 }
