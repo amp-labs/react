@@ -99,6 +99,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.0.0",
     "immer": "^10.0.3",
+    "jose": "^6.0.12",
     "lodash.isequal": "^4.5.0",
     "react-tooltip": "^5.28.0"
   },
