@@ -55,13 +55,19 @@ export interface Integration1 {
      * @type {string}
      * @memberof Integration1
      */
+    provider: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Integration1
+     */
     displayName?: string;
     /**
      * 
      * @type {string}
      * @memberof Integration1
      */
-    provider: string;
+    module?: string;
     /**
      * 
      * @type {IntegrationRead}
@@ -110,8 +116,9 @@ export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'name': json['name'],
-        'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'provider': json['provider'],
+        'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'module': !exists(json, 'module') ? undefined : json['module'],
         'read': !exists(json, 'read') ? undefined : IntegrationReadFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : IntegrationWriteFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : IntegrationProxyFromJSON(json['proxy']),
@@ -129,8 +136,9 @@ export function Integration1ToJSON(value?: Integration1 | null): any {
     return {
         
         'name': value.name,
-        'displayName': value.displayName,
         'provider': value.provider,
+        'displayName': value.displayName,
+        'module': value.module,
         'read': IntegrationReadToJSON(value.read),
         'write': IntegrationWriteToJSON(value.write),
         'proxy': IntegrationProxyToJSON(value.proxy),
