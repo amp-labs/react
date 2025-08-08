@@ -31,6 +31,30 @@ export interface CreateDestinationRequestMetadata {
      * @memberof CreateDestinationRequestMetadata
      */
     headers?: { [key: string]: string; } | null;
+    /**
+     * The AWS region where the kinesis destination is hosted.
+     * @type {string}
+     * @memberof CreateDestinationRequestMetadata
+     */
+    kinesisRegion?: string;
+    /**
+     * The name of the Kinesis stream to send events to.
+     * @type {string}
+     * @memberof CreateDestinationRequestMetadata
+     */
+    kinesisStreamName?: string;
+    /**
+     * The endpoint URL for the Kinesis stream.
+     * @type {string}
+     * @memberof CreateDestinationRequestMetadata
+     */
+    kinesisEndpointUrl?: string;
+    /**
+     * The template for the partition key to use when sending events to Kinesis (a JMESPath template)
+     * @type {string}
+     * @memberof CreateDestinationRequestMetadata
+     */
+    kinesisPartitionKeyTemplate?: string;
 }
 
 /**
@@ -54,6 +78,10 @@ export function CreateDestinationRequestMetadataFromJSONTyped(json: any, ignoreD
         
         'url': !exists(json, 'url') ? undefined : json['url'],
         'headers': !exists(json, 'headers') ? undefined : json['headers'],
+        'kinesisRegion': !exists(json, 'kinesisRegion') ? undefined : json['kinesisRegion'],
+        'kinesisStreamName': !exists(json, 'kinesisStreamName') ? undefined : json['kinesisStreamName'],
+        'kinesisEndpointUrl': !exists(json, 'kinesisEndpointUrl') ? undefined : json['kinesisEndpointUrl'],
+        'kinesisPartitionKeyTemplate': !exists(json, 'kinesisPartitionKeyTemplate') ? undefined : json['kinesisPartitionKeyTemplate'],
     };
 }
 
@@ -68,6 +96,10 @@ export function CreateDestinationRequestMetadataToJSON(value?: CreateDestination
         
         'url': value.url,
         'headers': value.headers,
+        'kinesisRegion': value.kinesisRegion,
+        'kinesisStreamName': value.kinesisStreamName,
+        'kinesisEndpointUrl': value.kinesisEndpointUrl,
+        'kinesisPartitionKeyTemplate': value.kinesisPartitionKeyTemplate,
     };
 }
 
