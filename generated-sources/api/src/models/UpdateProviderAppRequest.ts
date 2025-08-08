@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { UpdateProviderAppRequestProviderApp } from './UpdateProviderAppRequestProviderApp';
 import {
     UpdateProviderAppRequestProviderAppFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface UpdateProviderAppRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof UpdateProviderAppRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {UpdateProviderAppRequestProviderApp}
@@ -61,7 +67,7 @@ export function UpdateProviderAppRequestFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'providerApp': UpdateProviderAppRequestProviderAppFromJSON(json['providerApp']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateProviderAppRequestToJSON(value?: UpdateProviderAppRequest 
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'providerApp': UpdateProviderAppRequestProviderAppToJSON(value.providerApp),
     };
 }
