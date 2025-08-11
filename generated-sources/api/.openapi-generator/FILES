@@ -6,9 +6,7 @@ package.json
 src/apis/APIKeyApi.ts
 src/apis/BillingAccountApi.ts
 src/apis/ConnectionApi.ts
-src/apis/ConsumerApi.ts
 src/apis/DestinationApi.ts
-src/apis/GroupApi.ts
 src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
@@ -66,11 +64,10 @@ src/models/ConnectionRequestOauth2PasswordCredentials.ts
 src/models/Consumer.ts
 src/models/CreateBillingAccountSession200Response.ts
 src/models/CreateBillingAccountSessionRequest.ts
-src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
 src/models/CreateDestinationRequestMetadata.ts
+src/models/CreateDestinationRequestSecrets.ts
 src/models/CreateEvent.ts
-src/models/CreateGroupRequest.ts
 src/models/CreateInstallationRequest.ts
 src/models/CreateInstallationRequestConfig.ts
 src/models/CreateIntegrationRequest.ts
