@@ -6,9 +6,8 @@ package.json
 src/apis/APIKeyApi.ts
 src/apis/BillingAccountApi.ts
 src/apis/ConnectionApi.ts
-src/apis/ConsumerApi.ts
+src/apis/DefaultApi.ts
 src/apis/DestinationApi.ts
-src/apis/GroupApi.ts
 src/apis/InstallationApi.ts
 src/apis/IntegrationApi.ts
 src/apis/OAuthApi.ts
@@ -66,15 +65,15 @@ src/models/ConnectionRequestOauth2PasswordCredentials.ts
 src/models/Consumer.ts
 src/models/CreateBillingAccountSession200Response.ts
 src/models/CreateBillingAccountSessionRequest.ts
-src/models/CreateConsumerRequest.ts
 src/models/CreateDestinationRequest.ts
 src/models/CreateDestinationRequestMetadata.ts
+src/models/CreateDestinationRequestSecrets.ts
 src/models/CreateEvent.ts
-src/models/CreateGroupRequest.ts
 src/models/CreateInstallationRequest.ts
 src/models/CreateInstallationRequestConfig.ts
 src/models/CreateIntegrationRequest.ts
 src/models/CreateIntegrationRequestLatestRevision.ts
+src/models/CreateJWTKeyRequest.ts
 src/models/CreateOrgInviteRequest.ts
 src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
@@ -120,6 +119,8 @@ src/models/IntegrationSubscribeObject.ts
 src/models/IntegrationWrite.ts
 src/models/IntegrationWriteObject.ts
 src/models/Invite.ts
+src/models/JWTKey.ts
+src/models/JWTKeyResponse.ts
 src/models/ListOperations200Response.ts
 src/models/Log.ts
 src/models/LogMessage.ts
@@ -144,6 +145,8 @@ src/models/Org.ts
 src/models/PaginationInfo.ts
 src/models/PatchApiKeyRequest.ts
 src/models/PatchApiKeyRequestApiKey.ts
+src/models/PatchJWTKeyRequest.ts
+src/models/PatchJWTKeyRequestJwtKey.ts
 src/models/Problem.ts
 src/models/Project.ts
 src/models/ProjectEntitlements.ts
