@@ -21,9 +21,6 @@ export interface CheckboxItem {
 interface CheckboxPaginationProps {
   items: CheckboxItem[];
   onItemChange: (id: string, checked: boolean) => void;
-  onSelectAllChange: (checked: boolean) => void;
-  isAllChecked?: boolean;
-  isIndeterminate?: boolean;
   itemsPerPage?: number;
   showSelectAll?: boolean;
   showSearch?: boolean;
@@ -33,9 +30,6 @@ interface CheckboxPaginationProps {
 export function CheckboxPagination({
   items,
   onItemChange,
-  onSelectAllChange,
-  isAllChecked = false,
-  isIndeterminate = false,
   itemsPerPage = 8,
   showSelectAll = true,
   showSearch = true,
@@ -60,6 +54,23 @@ export function CheckboxPagination({
     setSearchTerm(value);
     setCurrentPage(1);
   };
+
+  // Handle select all for filtered items only
+  const handleSelectAllChange = (checked: boolean) => {
+    // Only change the checked state of filtered items
+    filteredItems.forEach((item) => {
+      onItemChange(item.id, checked);
+    });
+  };
+
+  // Calculate if all filtered items are checked
+  const areAllFilteredItemsChecked =
+    filteredItems.length > 0 && filteredItems.every((item) => item.isChecked);
+
+  // Calculate if some filtered items are checked (for indeterminate state)
+  const areSomeFilteredItemsChecked = filteredItems.some(
+    (item) => item.isChecked,
+  );
 
   return (
     <CheckboxGroup>
@@ -107,10 +118,12 @@ export function CheckboxPagination({
       {showSelectAll && filteredItems.length >= 2 && (
         <SelectAllCheckbox
           id="select-all-fields"
-          isChecked={isAllChecked}
+          isChecked={areAllFilteredItemsChecked}
           label={`Select all ${filteredItems.length} fields`}
-          onCheckedChange={onSelectAllChange}
-          isIndeterminate={isIndeterminate}
+          onCheckedChange={handleSelectAllChange}
+          isIndeterminate={
+            areSomeFilteredItemsChecked && !areAllFilteredItemsChecked
+          }
         />
       )}
 
