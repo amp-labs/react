@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Input } from "components/form/Input";
 import { Button } from "components/ui-base/Button";
 
 import {
@@ -25,6 +26,8 @@ interface CheckboxPaginationProps {
   isIndeterminate?: boolean;
   itemsPerPage?: number;
   showSelectAll?: boolean;
+  showSearch?: boolean;
+  searchPlaceholder?: string;
 }
 
 export function CheckboxPagination({
@@ -35,17 +38,46 @@ export function CheckboxPagination({
   isIndeterminate = false,
   itemsPerPage = 8,
   showSelectAll = true,
+  showSearch = true,
+  searchPlaceholder = "Search fields...",
 }: CheckboxPaginationProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Calculate pagination
-  const totalPages = Math.ceil(items.length / itemsPerPage);
+  // Filter items based on search term
+  const filteredItems = items.filter((item) =>
+    item.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  // Calculate pagination for filtered items
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentPageItems = items.slice(startIndex, endIndex);
+  const currentPageItems = filteredItems.slice(startIndex, endIndex);
+
+  // Reset to first page when search term changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   return (
     <CheckboxGroup>
+      {showSearch && (
+        <div className={styles.searchContainer}>
+          <Input
+            id="field-search"
+            type="text"
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleSearchChange(e.target.value)
+            }
+            className={styles.searchInput}
+          />
+        </div>
+      )}
+
       {totalPages > 1 && (
         <div className={styles.paginationContainer}>
           <Button
@@ -71,11 +103,12 @@ export function CheckboxPagination({
           </Button>
         </div>
       )}
-      {showSelectAll && items.length >= 2 && (
+
+      {showSelectAll && filteredItems.length >= 2 && (
         <SelectAllCheckbox
           id="select-all-fields"
           isChecked={isAllChecked}
-          label={`Select all ${items.length} fields`}
+          label={`Select all ${filteredItems.length} fields`}
           onCheckedChange={onSelectAllChange}
           isIndeterminate={isIndeterminate}
         />
@@ -94,6 +127,12 @@ export function CheckboxPagination({
           />
         ))}
       </CheckboxFieldsContainer>
+
+      {filteredItems.length === 0 && searchTerm && (
+        <div className={styles.noResults}>
+          No fields found matching &quot;{searchTerm}&quot;
+        </div>
+      )}
     </CheckboxGroup>
   );
 }
