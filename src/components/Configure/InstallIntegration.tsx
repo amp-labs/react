@@ -104,10 +104,6 @@ export function InstallIntegration({
   const { seed, reset } = useForceUpdate();
   const { options } = useAmpersandProviderProps();
 
-  if (isProjectLoading || isIntegrationListLoading) {
-    return <ComponentContainerLoading />;
-  }
-
   // Check if JWT is being used (not supported in InstallIntegration)
   if (options.getToken) {
     console.error(
@@ -118,6 +114,10 @@ export function InstallIntegration({
         message={`JWT authentication is not supported in InstallIntegration. Please use API key authentication instead.`}
       />
     );
+  }
+
+  if (isProjectLoading || isIntegrationListLoading) {
+    return <ComponentContainerLoading />;
   }
 
   if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
