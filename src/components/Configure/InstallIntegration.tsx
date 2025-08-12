@@ -2,6 +2,7 @@ import { ConnectionsProvider } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config } from "services/api";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
@@ -101,9 +102,22 @@ export function InstallIntegration({
   const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
   const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
+  const { options } = useAmpersandProviderProps();
 
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
+  }
+
+  // Check if JWT is being used (not supported in InstallIntegration)
+  if (options.getToken) {
+    console.error(
+      "JWT authentication is not supported in InstallIntegration. Please use API key authentication instead.",
+    );
+    return (
+      <ComponentContainerError
+        message={`JWT authentication is not supported in InstallIntegration. Please use API key authentication instead.`}
+      />
+    );
   }
 
   if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
