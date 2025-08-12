@@ -141,7 +141,7 @@ const createAuthConfig = (authHeader: string, authValue: string) =>
   });
 
 // TODO: remove this flag when we have a proper JWT auth flow
-const ENABLE_JWT_AUTH_FF = false;
+const ENABLE_JWT_AUTH_FF = true;
 
 /**
  * hook to access the API service
