@@ -177,6 +177,14 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/api-keys`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
@@ -216,6 +224,14 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'DELETE',
@@ -253,6 +269,14 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'GET',
@@ -291,6 +315,14 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/api-keys`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
@@ -335,6 +367,14 @@ export class APIKeyApi extends runtime.BaseAPI implements APIKeyApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/api-keys/{apiKey}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"apiKey"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'PATCH',

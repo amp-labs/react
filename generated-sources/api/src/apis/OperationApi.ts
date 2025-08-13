@@ -137,6 +137,14 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
@@ -175,6 +183,14 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/operations/{operationId}/logs`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"operationId"}}`, encodeURIComponent(String(requestParameters.operationId))),
             method: 'GET',
@@ -225,6 +241,14 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'GET',

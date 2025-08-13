@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { PatchApiKeyRequestApiKey } from './PatchApiKeyRequestApiKey';
 import {
     PatchApiKeyRequestApiKeyFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface PatchApiKeyRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof PatchApiKeyRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {PatchApiKeyRequestApiKey}
@@ -61,7 +67,7 @@ export function PatchApiKeyRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'apiKey': PatchApiKeyRequestApiKeyFromJSON(json['apiKey']),
     };
 }
@@ -75,7 +81,7 @@ export function PatchApiKeyRequestToJSON(value?: PatchApiKeyRequest | null): any
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'apiKey': PatchApiKeyRequestApiKeyToJSON(value.apiKey),
     };
 }
