@@ -27,11 +27,11 @@ import {
  */
 export interface PatchApiKeyRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof PatchApiKeyRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<PatchApiKeyRequestUpdateMaskEnum>;
     /**
      * 
      * @type {PatchApiKeyRequestApiKey}
@@ -39,6 +39,18 @@ export interface PatchApiKeyRequest {
      */
     apiKey: PatchApiKeyRequestApiKey;
 }
+
+
+/**
+ * @export
+ */
+export const PatchApiKeyRequestUpdateMaskEnum = {
+    Active: 'active',
+    Label: 'label',
+    Scopes: 'scopes'
+} as const;
+export type PatchApiKeyRequestUpdateMaskEnum = typeof PatchApiKeyRequestUpdateMaskEnum[keyof typeof PatchApiKeyRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the PatchApiKeyRequest interface.

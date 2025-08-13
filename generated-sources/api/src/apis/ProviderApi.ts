@@ -88,6 +88,14 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/providers/{provider}`.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))),
             method: 'GET',
@@ -118,6 +126,14 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/providers`,
             method: 'GET',

@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateProviderAppRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof UpdateProviderAppRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateProviderAppRequestUpdateMaskEnum>;
     /**
      * 
      * @type {UpdateProviderAppRequestProviderApp}
@@ -39,6 +39,20 @@ export interface UpdateProviderAppRequest {
      */
     providerApp: UpdateProviderAppRequestProviderApp;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateProviderAppRequestUpdateMaskEnum = {
+    ExternalRef: 'externalRef',
+    ClientId: 'clientId',
+    ClientSecret: 'clientSecret',
+    Provider: 'provider',
+    Scopes: 'scopes'
+} as const;
+export type UpdateProviderAppRequestUpdateMaskEnum = typeof UpdateProviderAppRequestUpdateMaskEnum[keyof typeof UpdateProviderAppRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateProviderAppRequest interface.

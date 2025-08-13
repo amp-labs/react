@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateProjectRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof UpdateProjectRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateProjectRequestUpdateMaskEnum>;
     /**
      * 
      * @type {UpdateProjectRequestProject}
@@ -39,6 +39,17 @@ export interface UpdateProjectRequest {
      */
     project: UpdateProjectRequestProject;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateProjectRequestUpdateMaskEnum = {
+    AppName: 'appName',
+    Name: 'name'
+} as const;
+export type UpdateProjectRequestUpdateMaskEnum = typeof UpdateProjectRequestUpdateMaskEnum[keyof typeof UpdateProjectRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateProjectRequest interface.

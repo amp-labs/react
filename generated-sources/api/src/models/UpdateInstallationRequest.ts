@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateInstallationRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update. `*` indicates an object name, for example `config.content.read.objects.*` means that you can use the update mask `config.content.read.objects.contact`.
      * @type {Array<string>}
      * @memberof UpdateInstallationRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateInstallationRequestUpdateMaskEnum>;
     /**
      * 
      * @type {UpdateInstallationRequestInstallation}
@@ -39,6 +39,23 @@ export interface UpdateInstallationRequest {
      */
     installation: UpdateInstallationRequestInstallation;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateInstallationRequestUpdateMaskEnum = {
+    Config: 'config',
+    ConnectionId: 'connectionId',
+    ConfigRevisionId: 'config.revisionId',
+    ConfigCreatedBy: 'config.createdBy',
+    ConfigContentReadObjects: 'config.content.read.objects.*',
+    ConfigContentWriteObjects: 'config.content.write.objects.*',
+    ConfigContentWriteObjects: 'config.content.write.objects',
+    ConfigContentSubscribeObjects: 'config.content.subscribe.objects.*'
+} as const;
+export type UpdateInstallationRequestUpdateMaskEnum = typeof UpdateInstallationRequestUpdateMaskEnum[keyof typeof UpdateInstallationRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateInstallationRequest interface.

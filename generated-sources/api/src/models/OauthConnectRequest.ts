@@ -27,23 +27,17 @@ import {
  */
 export interface OauthConnectRequest {
     /**
-     * The identifier for the provider workspace (e.g. the Salesforce subdomain).
-     * @type {string}
-     * @memberof OauthConnectRequest
-     */
-    providerWorkspaceRef?: string;
-    /**
-     * 
-     * @type {{ [key: string]: ProviderMetadataInfo; }}
-     * @memberof OauthConnectRequest
-     */
-    providerMetadata?: { [key: string]: ProviderMetadataInfo; };
-    /**
      * The Ampersand project ID.
      * @type {string}
      * @memberof OauthConnectRequest
      */
     projectId: string;
+    /**
+     * The provider that this app connects to.
+     * @type {string}
+     * @memberof OauthConnectRequest
+     */
+    provider: string;
     /**
      * The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.
      * @type {string}
@@ -69,19 +63,25 @@ export interface OauthConnectRequest {
      */
     consumerName?: string;
     /**
+     * The identifier for the provider workspace (e.g. the Salesforce subdomain).
+     * @type {string}
+     * @memberof OauthConnectRequest
+     */
+    providerWorkspaceRef?: string;
+    /**
+     * 
+     * @type {{ [key: string]: ProviderMetadataInfo; }}
+     * @memberof OauthConnectRequest
+     */
+    providerMetadata?: { [key: string]: ProviderMetadataInfo; };
+    /**
      * ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */
     providerAppId?: string;
     /**
-     * The provider that this app connects to.
-     * @type {string}
-     * @memberof OauthConnectRequest
-     */
-    provider: string;
-    /**
-     * 
+     * This boolean flag is used by the UI library internally. Set it to false or omit it when manually calling this API.
      * @type {boolean}
      * @memberof OauthConnectRequest
      */
@@ -94,9 +94,9 @@ export interface OauthConnectRequest {
 export function instanceOfOauthConnectRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "projectId" in value;
+    isInstance = isInstance && "provider" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "consumerRef" in value;
-    isInstance = isInstance && "provider" in value;
 
     return isInstance;
 }
@@ -111,15 +111,15 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
-        'providerMetadata': !exists(json, 'providerMetadata') ? undefined : (mapValues(json['providerMetadata'], ProviderMetadataInfoFromJSON)),
         'projectId': json['projectId'],
+        'provider': json['provider'],
         'groupRef': json['groupRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
         'consumerRef': json['consumerRef'],
         'consumerName': !exists(json, 'consumerName') ? undefined : json['consumerName'],
+        'providerWorkspaceRef': !exists(json, 'providerWorkspaceRef') ? undefined : json['providerWorkspaceRef'],
+        'providerMetadata': !exists(json, 'providerMetadata') ? undefined : (mapValues(json['providerMetadata'], ProviderMetadataInfoFromJSON)),
         'providerAppId': !exists(json, 'providerAppId') ? undefined : json['providerAppId'],
-        'provider': json['provider'],
         'enableCSRFProtection': !exists(json, 'enableCSRFProtection') ? undefined : json['enableCSRFProtection'],
     };
 }
@@ -133,15 +133,15 @@ export function OauthConnectRequestToJSON(value?: OauthConnectRequest | null): a
     }
     return {
         
-        'providerWorkspaceRef': value.providerWorkspaceRef,
-        'providerMetadata': value.providerMetadata === undefined ? undefined : (mapValues(value.providerMetadata, ProviderMetadataInfoToJSON)),
         'projectId': value.projectId,
+        'provider': value.provider,
         'groupRef': value.groupRef,
         'groupName': value.groupName,
         'consumerRef': value.consumerRef,
         'consumerName': value.consumerName,
+        'providerWorkspaceRef': value.providerWorkspaceRef,
+        'providerMetadata': value.providerMetadata === undefined ? undefined : (mapValues(value.providerMetadata, ProviderMetadataInfoToJSON)),
         'providerAppId': value.providerAppId,
-        'provider': value.provider,
         'enableCSRFProtection': value.enableCSRFProtection,
     };
 }

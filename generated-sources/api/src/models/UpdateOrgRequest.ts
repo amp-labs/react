@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateOrgRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof UpdateOrgRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateOrgRequestUpdateMaskEnum>;
     /**
      * 
      * @type {UpdateOrgRequestOrg}
@@ -39,6 +39,16 @@ export interface UpdateOrgRequest {
      */
     org: UpdateOrgRequestOrg;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateOrgRequestUpdateMaskEnum = {
+    Label: 'label'
+} as const;
+export type UpdateOrgRequestUpdateMaskEnum = typeof UpdateOrgRequestUpdateMaskEnum[keyof typeof UpdateOrgRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateOrgRequest interface.

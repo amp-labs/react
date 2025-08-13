@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateDestinationRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof UpdateDestinationRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateDestinationRequestUpdateMaskEnum>;
     /**
      * 
      * @type {UpdateDestinationRequestDestination}
@@ -39,6 +39,18 @@ export interface UpdateDestinationRequest {
      */
     destination: UpdateDestinationRequestDestination;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateDestinationRequestUpdateMaskEnum = {
+    Name: 'name',
+    MetadataUrl: 'metadata.url',
+    MetadataHeaders: 'metadata.headers'
+} as const;
+export type UpdateDestinationRequestUpdateMaskEnum = typeof UpdateDestinationRequestUpdateMaskEnum[keyof typeof UpdateDestinationRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateDestinationRequest interface.

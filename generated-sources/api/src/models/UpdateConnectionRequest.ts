@@ -27,11 +27,11 @@ import {
  */
 export interface UpdateConnectionRequest {
     /**
-     * The fields to update.
+     * Array of field paths specifying which fields to update.
      * @type {Array<string>}
      * @memberof UpdateConnectionRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateConnectionRequestUpdateMaskEnum>;
     /**
      * 
      * @type {ConnectionRequest}
@@ -39,6 +39,21 @@ export interface UpdateConnectionRequest {
      */
     connection: ConnectionRequest;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateConnectionRequestUpdateMaskEnum = {
+    ProviderWorkspaceRef: 'providerWorkspaceRef',
+    ProviderMetadata: 'providerMetadata',
+    ApiKey: 'apiKey',
+    BasicAuth: 'basicAuth',
+    Oauth2ClientCredentials: 'oauth2ClientCredentials',
+    Oauth2PasswordCredentials: 'oauth2PasswordCredentials'
+} as const;
+export type UpdateConnectionRequestUpdateMaskEnum = typeof UpdateConnectionRequestUpdateMaskEnum[keyof typeof UpdateConnectionRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateConnectionRequest interface.
