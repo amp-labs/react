@@ -182,7 +182,7 @@ export function useAPI(): () => Promise<ApiService> {
           "Unable to create JWT API service without consumerRef or groupRef.",
         );
       }
-      const token = await getToken(consumerRef, groupRef);
+      const token = await getToken({ consumerRef, groupRef });
       const auth = createJwtAuth(token);
       const configWithAuth = createAuthConfig(auth.header, auth.value);
       return new ApiService(configWithAuth);
