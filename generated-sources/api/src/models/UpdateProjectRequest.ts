@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Array & Array<string> } from './Array &amp; Array&lt;string&gt;';
+import {
+    Array &amp; Array&lt;string&gt;FromJSON,
+    Array &amp; Array&lt;string&gt;FromJSONTyped,
+    Array &amp; Array&lt;string&gt;ToJSON,
+} from './Array &amp; Array&lt;string&gt;';
 import type { UpdateProjectRequestProject } from './UpdateProjectRequestProject';
 import {
     UpdateProjectRequestProjectFromJSON,
@@ -28,10 +34,10 @@ import {
 export interface UpdateProjectRequest {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array & Array<string>}
      * @memberof UpdateProjectRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array & Array<string>;
     /**
      * 
      * @type {UpdateProjectRequestProject}
@@ -61,7 +67,7 @@ export function UpdateProjectRequestFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'updateMask': json['updateMask'],
+        'updateMask': Array &amp; Array&lt;string&gt;FromJSON(json['updateMask']),
         'project': UpdateProjectRequestProjectFromJSON(json['project']),
     };
 }
@@ -75,7 +81,7 @@ export function UpdateProjectRequestToJSON(value?: UpdateProjectRequest | null):
     }
     return {
         
-        'updateMask': value.updateMask,
+        'updateMask': Array &amp; Array&lt;string&gt;ToJSON(value.updateMask),
         'project': UpdateProjectRequestProjectToJSON(value.project),
     };
 }

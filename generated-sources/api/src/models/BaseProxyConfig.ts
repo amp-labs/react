@@ -25,6 +25,12 @@ export interface BaseProxyConfig {
      * @memberof BaseProxyConfig
      */
     enabled?: boolean;
+    /**
+     * Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.
+     * @type {boolean}
+     * @memberof BaseProxyConfig
+     */
+    useModule?: boolean;
 }
 
 /**
@@ -47,6 +53,7 @@ export function BaseProxyConfigFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
+        'useModule': !exists(json, 'useModule') ? undefined : json['useModule'],
     };
 }
 
@@ -60,6 +67,7 @@ export function BaseProxyConfigToJSON(value?: BaseProxyConfig | null): any {
     return {
         
         'enabled': value.enabled,
+        'useModule': value.useModule,
     };
 }
 
