@@ -235,6 +235,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs`,
             method: 'POST',
@@ -272,6 +280,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/invites`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'POST',
@@ -311,6 +327,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/invites/{inviteId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))).replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters.inviteId))),
             method: 'DELETE',
@@ -344,6 +368,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'GET',
@@ -382,6 +414,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/invites/{inviteId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))).replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters.inviteId))),
             method: 'GET',
@@ -416,6 +456,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/builders`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'GET',
@@ -450,6 +498,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/invites`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'GET',
@@ -490,6 +546,14 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'PATCH',

@@ -58,6 +58,11 @@ export interface ListInstallationsRequest {
     groupRef?: string;
 }
 
+export interface ListInstallationsForProjectRequest {
+    projectIdOrName: string;
+    groupRef?: string;
+}
+
 export interface UpdateInstallationOperationRequest {
     projectIdOrName: string;
     integrationId: string;
@@ -141,6 +146,23 @@ export interface InstallationApiInterface {
     listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
 
     /**
+     * Lists all installations for a given project and query parameters. 
+     * @summary List installations for a project
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} [groupRef] The group ref to filter by.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    listInstallationsForProjectRaw(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>>;
+
+    /**
+     * Lists all installations for a given project and query parameters. 
+     * List installations for a project
+     */
+    listInstallationsForProject(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
+
+    /**
      * 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
@@ -191,6 +213,14 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'POST',
@@ -234,6 +264,14 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'DELETE',
@@ -275,6 +313,14 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'GET',
@@ -317,6 +363,14 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
             method: 'GET',
@@ -332,6 +386,54 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
      */
     async listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
         const response = await this.listInstallationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists all installations for a given project and query parameters. 
+     * List installations for a project
+     */
+    async listInstallationsForProjectRaw(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listInstallationsForProject.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.groupRef !== undefined) {
+            queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/installations`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(InstallationFromJSON));
+    }
+
+    /**
+     * Lists all installations for a given project and query parameters. 
+     * List installations for a project
+     */
+    async listInstallationsForProject(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
+        const response = await this.listInstallationsForProjectRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -365,6 +467,14 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))),
             method: 'PATCH',

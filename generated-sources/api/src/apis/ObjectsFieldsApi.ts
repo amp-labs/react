@@ -120,6 +120,14 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/providers/{provider}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
             method: 'GET',
@@ -168,6 +176,14 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
             method: 'GET',

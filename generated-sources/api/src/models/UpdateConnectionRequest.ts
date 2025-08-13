@@ -27,7 +27,7 @@ import {
  */
 export interface UpdateConnectionRequest {
     /**
-     * The fields to update.
+     * Array of field paths specifying which fields to update. Allowed values: providerWorkspaceRef, providerMetadata, apiKey, basicAuth, oauth2ClientCredentials, oauth2PasswordCredentials
      * @type {Array<string>}
      * @memberof UpdateConnectionRequest
      */

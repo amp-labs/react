@@ -45,7 +45,7 @@ export interface OauthUpdateRequest {
  */
 export interface OAuthApiInterface {
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow.
+     * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
      * @summary Get URL for OAuth flow
      * @param {OauthConnectRequest} connectOAuthParams 
      * @param {*} [options] Override http request option.
@@ -55,7 +55,7 @@ export interface OAuthApiInterface {
     oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow.
+     * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
      * Get URL for OAuth flow
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
@@ -85,7 +85,7 @@ export interface OAuthApiInterface {
 export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow.
+     * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
      * Get URL for OAuth flow
      */
     async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
@@ -103,6 +103,14 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/oauth-connect`,
             method: 'POST',
@@ -119,7 +127,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow.
+     * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
      * Get URL for OAuth flow
      */
     async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
@@ -148,6 +156,14 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/projects/{projectIdOrName}/connections/{connectionId}:oauth-update`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"connectionId"}}`, encodeURIComponent(String(requestParameters.connectionId))),
             method: 'PATCH',
