@@ -27,7 +27,7 @@ import {
  */
 export interface UpdateDestinationRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update. Allowed values: name, metadata.url, metadata.headers
      * @type {Array<string>}
      * @memberof UpdateDestinationRequest
      */

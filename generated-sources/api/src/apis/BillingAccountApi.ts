@@ -110,6 +110,14 @@ export class BillingAccountApi extends runtime.BaseAPI implements BillingAccount
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/billingAccounts/{billingAccountId}/portalSession`.replace(`{${"billingAccountId"}}`, encodeURIComponent(String(requestParameters.billingAccountId))),
             method: 'POST',
@@ -145,6 +153,14 @@ export class BillingAccountApi extends runtime.BaseAPI implements BillingAccount
             headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
         }
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/orgs/{orgId}/billingAccount`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
             method: 'GET',

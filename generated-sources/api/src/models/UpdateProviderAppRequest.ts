@@ -27,7 +27,7 @@ import {
  */
 export interface UpdateProviderAppRequest {
     /**
-     * 
+     * Array of field paths specifying which fields to update. Allowed values: externalRef, clientId, clientSecret, provider, scopes
      * @type {Array<string>}
      * @memberof UpdateProviderAppRequest
      */
