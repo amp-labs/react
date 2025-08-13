@@ -29,7 +29,13 @@ interface AmpersandProviderProps {
      * Callback function to get a JWT token for authorization.
      * This function should return a Promise that resolves to a JWT token string.
      */
-    getToken?: (consumerRef: string, groupRef: string) => Promise<string>;
+    getToken?: ({
+      consumerRef,
+      groupRef,
+    }: {
+      consumerRef: string;
+      groupRef: string;
+    }) => Promise<string>;
   };
   children: React.ReactNode;
 }

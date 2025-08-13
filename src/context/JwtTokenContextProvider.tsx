@@ -23,14 +23,26 @@ const getSessionStorageKey = (cacheKey: string) =>
   `${SESSION_STORAGE_PREFIX}${cacheKey}`;
 
 interface JwtTokenContextValue {
-  getToken?: (consumerRef: string, groupRef: string) => Promise<string>;
+  getToken?: ({
+    consumerRef,
+    groupRef,
+  }: {
+    consumerRef: string;
+    groupRef: string;
+  }) => Promise<string>;
 }
 
 const JwtTokenContext = createContext<JwtTokenContextValue | null>(null);
 
 interface JwtTokenProviderProps {
   getTokenCallback:
-    | ((consumerRef: string, groupRef: string) => Promise<string>)
+    | (({
+        consumerRef,
+        groupRef,
+      }: {
+        consumerRef: string;
+        groupRef: string;
+      }) => Promise<string>)
     | null;
   children: React.ReactNode;
 }
@@ -169,7 +181,13 @@ export function JwtTokenProvider({
   );
 
   const getToken = useCallback(
-    async (consumerRef: string, groupRef: string): Promise<string> => {
+    async ({
+      consumerRef,
+      groupRef,
+    }: {
+      consumerRef: string;
+      groupRef: string;
+    }): Promise<string> => {
       // Check all caches first
       const cachedToken = getCachedToken(consumerRef, groupRef);
       if (cachedToken) {
@@ -182,7 +200,7 @@ export function JwtTokenProvider({
       }
 
       try {
-        const token = await getTokenCallback(consumerRef, groupRef);
+        const token = await getTokenCallback({ consumerRef, groupRef });
         await setCachedToken(consumerRef, groupRef, token);
         return token;
       } catch (error) {
