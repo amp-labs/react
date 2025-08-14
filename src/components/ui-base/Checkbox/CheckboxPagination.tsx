@@ -89,32 +89,6 @@ export function CheckboxPagination({
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className={styles.paginationContainer}>
-          <Button
-            type="button"
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-            variant="ghost"
-          >
-            &lt;
-          </Button>
-          <span className={styles.pageInfo}>
-            {currentPage} of {totalPages}
-          </span>
-          <Button
-            type="button"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
-            disabled={currentPage === totalPages}
-            variant="ghost"
-          >
-            &gt;
-          </Button>
-        </div>
-      )}
-
       {showSelectAll && filteredItems.length >= 2 && (
         <SelectAllCheckbox
           id="select-all-fields"
@@ -140,6 +114,32 @@ export function CheckboxPagination({
           />
         ))}
       </CheckboxFieldsContainer>
+
+      {totalPages > 1 && (
+        <div className={styles.paginationContainer}>
+          <Button
+            type="button"
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            variant="ghost"
+          >
+            &lt;
+          </Button>
+          <span className={styles.pageInfo}>
+            {currentPage} of {totalPages}
+          </span>
+          <Button
+            type="button"
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
+            disabled={currentPage === totalPages}
+            variant="ghost"
+          >
+            &gt;
+          </Button>
+        </div>
+      )}
 
       {filteredItems.length === 0 && searchTerm && (
         <div className={styles.noResults}>
