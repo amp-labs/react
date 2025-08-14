@@ -93,7 +93,7 @@ export function CheckboxPagination({
         <SelectAllCheckbox
           id="select-all-fields"
           isChecked={areAllFilteredItemsChecked}
-          label={`Select all ${filteredItems.length} fields`}
+          label={`Select all ${filteredItems.length} ${searchTerm ? 'matching ' : ''}fields`}
           onCheckedChange={handleSelectAllChange}
           isIndeterminate={
             areSomeFilteredItemsChecked && !areAllFilteredItemsChecked
