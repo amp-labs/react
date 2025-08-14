@@ -89,7 +89,7 @@ export function CheckboxPagination({
         </div>
       )}
 
-      {showSelectAll && filteredItems.length >= 2 && (
+      {showSelectAll && items.length >= 2 && (
         <SelectAllCheckbox
           id="select-all-fields"
           isChecked={areAllFilteredItemsChecked}
