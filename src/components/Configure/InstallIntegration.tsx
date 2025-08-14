@@ -3,6 +3,7 @@ import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config } from "services/api";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
+import { InstallationProvider } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
@@ -87,7 +88,7 @@ interface InstallIntegrationProps {
   onUninstallSuccess?: (installationId: string) => void;
 }
 
-export function InstallIntegration({
+const InstallIntegrationContent = ({
   integration,
   consumerRef,
   consumerName,
@@ -97,7 +98,7 @@ export function InstallIntegration({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
-}: InstallIntegrationProps) {
+}: InstallIntegrationProps) => {
   const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
   const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
   const { isError, errorState } = useErrorState();
@@ -179,5 +180,42 @@ export function InstallIntegration({
         </ConnectionsProvider>
       </InstallIntegrationProvider>
     </div>
+  );
+};
+
+export function InstallIntegration({
+  integration,
+  consumerRef,
+  consumerName,
+  groupRef,
+  groupName,
+  onInstallSuccess,
+  onUpdateSuccess,
+  onUninstallSuccess,
+  fieldMapping,
+}: InstallIntegrationProps) {
+  const props: InstallIntegrationProps = {
+    integration,
+    consumerRef,
+    consumerName,
+    groupRef,
+    groupName,
+    onInstallSuccess,
+    onUpdateSuccess,
+    onUninstallSuccess,
+    fieldMapping,
+  };
+
+  return (
+    // eventually will use the headless providers for integration, consumer, and group etc
+    <InstallationProvider
+      integration={integration}
+      consumerRef={consumerRef}
+      consumerName={consumerName}
+      groupRef={groupRef}
+      groupName={groupName}
+    >
+      <InstallIntegrationContent {...props} />
+    </InstallationProvider>
   );
 }
