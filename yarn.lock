@@ -3645,9 +3645,9 @@ doctrine@^2.1.0:
     esutils "^2.0.2"
 
 downshift@^9.0.8:
-  version "9.0.9"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-9.0.9.tgz#fd683a376a21bcc52f0d13d6cda47b4ea521f62b"
-  integrity sha512-ygOT8blgiz5liDuEFAIaPeU4dDEa+w9p6PHVUisPIjrkF5wfR59a52HpGWAVVMoWnoFO8po2mZSScKZueihS7g==
+  version "9.0.10"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-9.0.10.tgz#44e4d34bba63c1b7cd5a41ea4bead1b569ae061c"
+  integrity sha512-TP/iqV6bBok6eGD5tZ8boM8Xt7/+DZvnVNr8cNIhbAm2oUBd79Tudiccs2hbcV9p7xAgS/ozE7Hxy3a9QqS6Mw==
   dependencies:
     "@babel/runtime" "^7.24.5"
     compute-scroll-into-view "^3.1.0"
