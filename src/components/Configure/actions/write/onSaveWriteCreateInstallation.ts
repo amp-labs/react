@@ -39,7 +39,7 @@ const getWriteObjectsFromHydratedRevision = (
  * @param consumerRef
  * @returns
  */
-const generateCreateWriteConfigFromConfigureState = (
+export const generateCreateWriteConfigFromConfigureState = (
   configureState: ConfigureState,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
