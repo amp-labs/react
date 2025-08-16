@@ -32,7 +32,7 @@ import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
  * @param schedule
  * @returns
  */
-const generateUpdateReadConfigFromConfigureState = (
+export const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedObject: HydratedIntegrationObject,
