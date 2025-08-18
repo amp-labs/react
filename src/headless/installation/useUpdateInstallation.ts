@@ -60,8 +60,12 @@ export function useUpdateInstallation() {
     const updateMask = [];
     // add write objects to update mask
     if (
-      config?.write?.objects &&
-      Object.keys(config.write.objects).length > 0
+      // check if config has write objects
+      (config?.write?.objects &&
+        Object.keys(config.write.objects).length > 0) ||
+      // or check if write object already exists in installation (could update to no write objects)
+      (installation?.config?.content?.write?.objects &&
+        Object.keys(installation.config.content.write.objects).length > 0)
     ) {
       updateMask.push("config.content.write.objects");
     }
