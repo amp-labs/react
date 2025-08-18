@@ -1,6 +1,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import { Installation, Integration } from "services/api";
+import { toInstallationConfigContentFromUpdate } from "src/headless/config/types";
 import { useUpdateInstallation } from "src/headless/installation/useUpdateInstallation";
 
 import { generateUpdateReadConfigFromConfigureState } from "../actions/read/onSaveReadUpdateInstallation";
@@ -107,8 +108,18 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
         hydratedObject.backfill,
       );
 
+      if (
+        !updateConfig.content ||
+        // check if the config content is valid and allows to be converted to InstallationConfigContent
+        !toInstallationConfigContentFromUpdate(updateConfig.content)
+      ) {
+        console.error("UpdateInstallation - invalid config content");
+        setLoadingState(false);
+        return;
+      }
+
       updateInstallation({
-        config: updateConfig.content as any, // TODO: fix this type
+        config: updateConfig.content,
         onSuccess: (installation) => {
           setInstallation(installation);
           onUpdateSuccess?.(installation.id, installation.config);
@@ -135,8 +146,18 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
         hydratedRevision,
       );
 
+      if (
+        !updateConfig.content ||
+        // check if the config content is valid and allows to be converted to InstallationConfigContent
+        !toInstallationConfigContentFromUpdate(updateConfig.content)
+      ) {
+        console.error("UpdateInstallation - invalid config content");
+        setLoadingState(false);
+        return;
+      }
+
       updateInstallation({
-        config: updateConfig.content as any, // TODO: fix this type
+        config: updateConfig.content,
         onSuccess: (installation) => {
           setInstallation(installation);
           onUpdateSuccess?.(installation.id, installation.config);
