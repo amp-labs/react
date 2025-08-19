@@ -26,7 +26,7 @@ export interface UpdateEvent {
      */
     enabled?: UpdateEventEnabledEnum;
     /**
-     * If all, the integration will watch all fields for updates.
+     * If `all`, the integration will watch all fields for updates. If `selected`, the integration will watch only the fields that are selected by the user. If `inheritFieldsAndMapping` is true for Subscribe action, the integration will watch the selected fields from read action that are selected by the user.
      * @type {string}
      * @memberof UpdateEvent
      */
@@ -52,7 +52,8 @@ export type UpdateEventEnabledEnum = typeof UpdateEventEnabledEnum[keyof typeof 
  * @export
  */
 export const UpdateEventWatchFieldsAutoEnum = {
-    All: 'all'
+    All: 'all',
+    Selected: 'selected'
 } as const;
 export type UpdateEventWatchFieldsAutoEnum = typeof UpdateEventWatchFieldsAutoEnum[keyof typeof UpdateEventWatchFieldsAutoEnum];
 
