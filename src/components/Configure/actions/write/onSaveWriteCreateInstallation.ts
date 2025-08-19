@@ -54,7 +54,6 @@ const generateCreateWriteConfigFromConfigureState = (
 
   // create config request object
   const createConfigObj: CreateInstallationRequestConfig = {
-    revisionId: hydratedRevision.id,
     createdBy: `consumer:${consumerRef}`,
     content: {
       provider: hydratedRevision.content.provider,
