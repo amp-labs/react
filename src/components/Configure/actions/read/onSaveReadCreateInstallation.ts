@@ -43,7 +43,7 @@ const getObjectFromHydratedRevision = (
  * @param consumerRef
  * @returns
  */
-const generateCreateReadConfigFromConfigureState = (
+export const generateCreateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedRevision: HydratedRevision,
