@@ -37,6 +37,12 @@ export interface LogMessage {
      * @memberof LogMessage
      */
     operationId?: string;
+    /**
+     * The details of the log.
+     * @type {{ [key: string]: string; }}
+     * @memberof LogMessage
+     */
+    details?: { [key: string]: string; };
 }
 
 /**
@@ -62,6 +68,7 @@ export function LogMessageFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'msg': json['msg'],
         'error': !exists(json, 'error') ? undefined : json['error'],
         'operationId': !exists(json, 'operation_id') ? undefined : json['operation_id'],
+        'details': !exists(json, 'details') ? undefined : json['details'],
     };
 }
 
@@ -77,6 +84,7 @@ export function LogMessageToJSON(value?: LogMessage | null): any {
         'msg': value.msg,
         'error': value.error,
         'operation_id': value.operationId,
+        'details': value.details,
     };
 }
 
