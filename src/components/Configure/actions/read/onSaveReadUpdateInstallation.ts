@@ -29,14 +29,12 @@ import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
  * @param config
  * @param objectName
  * @param hydratedObject
- * @param schedule
  * @returns
  */
 const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedObject: HydratedIntegrationObject,
-  schedule: string,
   hydratedRevision: HydratedRevision,
   backfill?: BackfillConfig,
 ): UpdateInstallationRequestInstallationConfig => {
@@ -54,9 +52,6 @@ const generateUpdateReadConfigFromConfigureState = (
         objects: {
           [objectName]: {
             objectName,
-            // these two fields are copied from previous config, otherwise they will override null
-            schedule,
-            destination: hydratedObject?.destination || "",
             selectedFields,
             selectedFieldMappings,
             selectedValueMappings: selectedValuesMappings || {},
@@ -97,7 +92,6 @@ export const onSaveReadUpdateInstallation = (
     configureState,
     selectedObjectName || "",
     hydratedObject,
-    hydratedObject.schedule,
     hydratedRevision,
     hydratedObject.backfill,
   );
