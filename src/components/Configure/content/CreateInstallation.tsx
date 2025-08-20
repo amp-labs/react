@@ -6,7 +6,7 @@ import { ErrorBoundary } from "context/ErrorContextProvider";
 import { useCreateInstallation } from "src/headless/installation/useCreateInstallation";
 
 import { generateCreateReadConfigFromConfigureState } from "../actions/read/onSaveReadCreateInstallation";
-import { onSaveWriteCreateInstallation } from "../actions/write/onSaveWriteCreateInstallation";
+import { generateCreateWriteConfigFromConfigureState } from "../actions/write/onSaveWriteCreateInstallation";
 import { WRITE_CONST } from "../nav/ObjectManagementNav/constant";
 import { setHydrateConfigState } from "../state/utils";
 import { validateFieldMappings } from "../utils";
@@ -20,16 +20,13 @@ const UNDEFINED_CONFIG = undefined;
 //  Create Installation Flow
 export function CreateInstallation() {
   const {
-    integrationId,
-    groupRef,
     consumerRef,
     setInstallation,
     hydratedRevision,
     loading,
     selectedObjectName,
     selectedConnection,
-    apiKey,
-    projectIdOrName,
+
     resetBoundary,
     setErrors,
     setMutateInstallationError,
@@ -144,32 +141,35 @@ export function CreateInstallation() {
     if (
       selectedObjectName &&
       selectedConnection?.id &&
-      apiKey &&
-      projectIdOrName &&
-      integrationId &&
-      groupRef &&
       consumerRef &&
       hydratedRevision
     ) {
       setLoadingState(true);
-      const res = onSaveWriteCreateInstallation(
-        projectIdOrName,
-        integrationId,
-        groupRef,
-        consumerRef,
-        selectedConnection.id,
-        apiKey,
-        hydratedRevision,
-        configureState,
-        setMutateInstallationError(selectedObjectName),
-        setInstallation,
-        onInstallSuccess,
-      );
 
-      res.finally(() => {
+      const createConfig = generateCreateWriteConfigFromConfigureState(
+        configureState,
+        hydratedRevision,
+        consumerRef,
+      );
+      if (!createConfig) {
+        console.error("Error when generating createConfig from configureState");
         setLoadingState(false);
-        resetPendingConfigurationState(selectedObjectName); // reset write pending/isModified state
-        onNextIncompleteTab();
+        return;
+      }
+
+      createInstallation({
+        config: createConfig.content,
+        onSuccess: (installation) => {
+          setInstallation(installation);
+          onInstallSuccess?.(installation.id, installation.config);
+          setLoadingState(false);
+          resetPendingConfigurationState(selectedObjectName); // reset write pending/isModified state
+          onNextIncompleteTab();
+        },
+        onError: (error) => {
+          setMutateInstallationError(selectedObjectName)(error.message);
+          setLoadingState(false);
+        },
       });
     } else {
       console.error(
