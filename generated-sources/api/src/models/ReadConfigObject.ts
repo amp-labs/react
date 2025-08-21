@@ -43,13 +43,13 @@ export interface ReadConfigObject {
      * @type {string}
      * @memberof ReadConfigObject
      */
-    schedule: string;
+    schedule?: string;
     /**
      * The name of the destination that the result should be sent to.
      * @type {string}
      * @memberof ReadConfigObject
      */
-    destination: string;
+    destination?: string;
     /**
      * This is a map of field names to booleans indicating whether they should be read. If a field is already included in `selectedFieldMappings`, it does not need to be included here.
      * @type {{ [key: string]: boolean; }}
@@ -88,8 +88,6 @@ export interface ReadConfigObject {
 export function instanceOfReadConfigObject(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "objectName" in value;
-    isInstance = isInstance && "schedule" in value;
-    isInstance = isInstance && "destination" in value;
     isInstance = isInstance && "selectedFields" in value;
     isInstance = isInstance && "selectedFieldMappings" in value;
 
@@ -107,8 +105,8 @@ export function ReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'objectName': json['objectName'],
-        'schedule': json['schedule'],
-        'destination': json['destination'],
+        'schedule': !exists(json, 'schedule') ? undefined : json['schedule'],
+        'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': json['selectedFields'],
         'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
         'selectedFieldMappings': json['selectedFieldMappings'],
