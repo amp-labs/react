@@ -27,7 +27,8 @@ import {
  */
 export interface UpdateOrgRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values: label
+     * Array of field paths specifying which fields to update. Allowed values include:
+     * - label
      * @type {Array<string>}
      * @memberof UpdateOrgRequest
      */
