@@ -27,7 +27,16 @@ import {
  */
 export interface UpdateInstallationRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values: config, connectionId, config.revisionId, config.createdBy, config.content.read.objects.*, config.content.write.objects.*, config.content.subscribe.objects.*. The * operator allows you to specify any object name (e.g., 'config.content.read.objects.contacts' or 'config.content.write.objects.leads')
+     * Array of field paths specifying which fields to update. Allowed values include:
+     * - connectionId
+     * - config.revisionId
+     * - config.createdBy
+     * - config.content.read.objects.<object-name>
+     * - config.content.write.objects.<object-name>
+     * - config.content.write.objects
+     * - config.content.subscribe.objects.<object-name>
+     * 
+     * `<object-name>` means you can specify any object name.
      * @type {Array<string>}
      * @memberof UpdateInstallationRequest
      */

@@ -27,7 +27,10 @@ import {
  */
 export interface PatchApiKeyRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values: active, label, scopes
+     * Array of field paths specifying which fields to update. Allowed values include:
+     * - active
+     * - label
+     * - scopes
      * @type {Array<string>}
      * @memberof PatchApiKeyRequest
      */
