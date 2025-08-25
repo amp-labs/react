@@ -34,7 +34,6 @@ import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
-  hydratedObject: HydratedIntegrationObject,
   hydratedRevision: HydratedRevision,
   backfill?: BackfillConfig,
 ): UpdateInstallationRequestInstallationConfig => {
@@ -91,7 +90,6 @@ export const onSaveReadUpdateInstallation = (
   const updateConfig = generateUpdateReadConfigFromConfigureState(
     configureState,
     selectedObjectName || "",
-    hydratedObject,
     hydratedRevision,
     hydratedObject.backfill,
   );
