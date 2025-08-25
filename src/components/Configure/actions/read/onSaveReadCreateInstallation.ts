@@ -73,8 +73,6 @@ export const generateCreateReadConfigFromConfigureState = (
         objects: {
           [objectName]: {
             objectName,
-            schedule: obj.schedule,
-            destination: obj.destination,
             selectedFields,
             selectedFieldMappings,
             selectedValueMappings: selectedValuesMappings || {},
