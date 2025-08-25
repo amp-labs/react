@@ -24,21 +24,6 @@ export function OptionalFieldsV2() {
     }
   };
 
-  const onSelectAllCheckboxChange = (checked: boolean) => {
-    if (selectedObjectName && readOptionalFields) {
-      readOptionalFields.forEach((field) => {
-        if (!isIntegrationFieldMapping(field)) {
-          setOptionalField(
-            selectedObjectName,
-            setConfigureState,
-            field.fieldName,
-            checked,
-          );
-        }
-      });
-    }
-  };
-
   const checkboxItems = useMemo<CheckboxItem[]>(
     () =>
       // optional fields should all be pre-defined
@@ -59,11 +44,6 @@ export function OptionalFieldsV2() {
   );
 
   const shouldRender = !!(readOptionalFields && readOptionalFields.length > 0);
-  const isAllChecked = checkboxItems.every(
-    (item) => selectedOptionalFields?.[item.id] === true,
-  );
-  const isIndeterminate =
-    !isAllChecked && Object.keys(selectedOptionalFields || {}).length > 0;
 
   return (
     shouldRender && (
@@ -76,9 +56,6 @@ export function OptionalFieldsV2() {
           key={`${selectedObjectName}-${readOptionalFields?.length}`}
           items={checkboxItems}
           onItemChange={onCheckboxChange}
-          onSelectAllChange={onSelectAllCheckboxChange}
-          isAllChecked={isAllChecked}
-          isIndeterminate={isIndeterminate}
           showSelectAll={checkboxItems.length >= 2}
         />
       </>

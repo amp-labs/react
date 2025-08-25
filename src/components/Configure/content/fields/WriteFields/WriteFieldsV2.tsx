@@ -25,25 +25,7 @@ export function WriteFieldsV2() {
     }
   };
 
-  const onSelectAllChange = (checked: boolean) => {
-    if (selectedObjectName && configureState) {
-      configureState?.write?.writeObjects?.forEach((field) => {
-        setNonConfigurableWriteField(
-          selectedObjectName,
-          setConfigureState,
-          field.objectName,
-          checked,
-        );
-      });
-    }
-  };
-
   const shouldRender = !!writeObjects;
-  const isAllChecked =
-    Object.keys(selectedWriteFields || {}).length ===
-    configureState?.write?.writeObjects?.length;
-  const isIndeterminate =
-    !isAllChecked && Object.keys(selectedWriteFields || {}).length > 0;
 
   const checkboxItems: CheckboxItem[] =
     writeObjects?.map((field) => ({
@@ -59,9 +41,6 @@ export function WriteFieldsV2() {
         <CheckboxPagination
           items={checkboxItems}
           onItemChange={onItemChange}
-          onSelectAllChange={onSelectAllChange}
-          isAllChecked={isAllChecked}
-          isIndeterminate={isIndeterminate}
           showSelectAll={writeObjects.length >= 2}
         />
       </>
