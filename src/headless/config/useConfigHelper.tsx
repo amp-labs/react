@@ -80,7 +80,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
    *
    * Side Effects:
    * - Modifies the `_draft.read.objects` property by adding or updating the specified object.
-   * - Sets default values for `schedule`, `destination`, and `selectedFields` based on the manifest.
+   * - Sets default values for `selectedFields` based on the manifest.
    * - Ensures required fields are initialized if not already set.
    */
   const initializeObjectWithDefaults = useCallback(
@@ -93,8 +93,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
 
       // note: prefilling default values from manifest can be removed once taken care of in the backend
       const selectedObject = getReadObjectFromManifest(objectName);
-      const defaultSchedule = selectedObject?.object?.schedule;
-      const defaultDestination = selectedObject?.object?.destination;
 
       // Add required fields to defaultSelectedFields
       const defaultSelectedFields: { [key: string]: boolean } = {};
@@ -106,8 +104,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
 
       // Initialize required fields for object from manifest if not set
       obj.objectName = obj.objectName || objectName;
-      obj.schedule = obj.schedule || defaultSchedule || "";
-      obj.destination = obj.destination || defaultDestination || "";
       obj.selectedFields = obj.selectedFields || defaultSelectedFields;
 
       objects[objectName] = obj;
