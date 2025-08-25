@@ -89,11 +89,15 @@ export function CheckboxPagination({
         </div>
       )}
 
+      {/* Select all checkbox */}
+      {/* // Render the "Select all" checkbox, which allows users to select or deselect all currently filtered items.
+      // This checkbox appears only if the `showSelectAll` prop is true and there are at least 2 items.
+      // The checked and indeterminate states reflect the selection state of the filtered items. */}
       {showSelectAll && items.length >= 2 && (
         <SelectAllCheckbox
           id="select-all-fields"
           isChecked={areAllFilteredItemsChecked}
-          label={`Select all ${filteredItems.length} ${searchTerm ? 'matching ' : ''}fields`}
+          label={`Select all ${filteredItems.length} ${searchTerm ? "matching " : ""}fields`}
           onCheckedChange={handleSelectAllChange}
           isIndeterminate={
             areSomeFilteredItemsChecked && !areAllFilteredItemsChecked
