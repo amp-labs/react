@@ -27,7 +27,9 @@ import {
  */
 export interface UpdateProjectRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values: appName, name
+     * Array of field paths specifying which fields to update. Allowed values include:
+     * - appName
+     * - name
      * @type {Array<string>}
      * @memberof UpdateProjectRequest
      */
