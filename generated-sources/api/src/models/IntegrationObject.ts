@@ -104,7 +104,23 @@ export interface IntegrationObject {
      * @memberof IntegrationObject
      */
     delivery?: Delivery;
+    /**
+     * If set to `always`, the integration will automatically install upon user connection and skip the user field selection step.
+     * @type {string}
+     * @memberof IntegrationObject
+     */
+    enabled?: IntegrationObjectEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const IntegrationObjectEnabledEnum = {
+    Always: 'always'
+} as const;
+export type IntegrationObjectEnabledEnum = typeof IntegrationObjectEnabledEnum[keyof typeof IntegrationObjectEnabledEnum];
+
 
 /**
  * Check if a given object implements the IntegrationObject interface.
@@ -138,6 +154,7 @@ export function IntegrationObjectFromJSONTyped(json: any, ignoreDiscriminator: b
         'optionalFieldsAuto': !exists(json, 'optionalFieldsAuto') ? undefined : OptionalFieldsAutoOptionFromJSON(json['optionalFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
         'delivery': !exists(json, 'delivery') ? undefined : DeliveryFromJSON(json['delivery']),
+        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
     };
 }
 
@@ -160,6 +177,7 @@ export function IntegrationObjectToJSON(value?: IntegrationObject | null): any {
         'optionalFieldsAuto': OptionalFieldsAutoOptionToJSON(value.optionalFieldsAuto),
         'backfill': BackfillToJSON(value.backfill),
         'delivery': DeliveryToJSON(value.delivery),
+        'enabled': value.enabled,
     };
 }
 
