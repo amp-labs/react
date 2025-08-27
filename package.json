@@ -20,9 +20,9 @@
   "module": "./build/amp-react.es.js",
   "exports": {
     ".": {
+      "types": "./build/index.d.ts",
       "import": "./build/amp-react.es.js",
-      "require": "./build/amp-react.cjs.js",
-      "types": "./build/index.d.ts"
+      "require": "./build/amp-react.cjs.js"
     },
     "./styles": "./build/style.css"
   },
