@@ -102,8 +102,6 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
       const updateConfig = generateUpdateReadConfigFromConfigureState(
         configureState,
         selectedObjectName,
-        hydratedObject,
-        hydratedObject.schedule || "",
         hydratedRevision,
         hydratedObject.backfill,
       );
