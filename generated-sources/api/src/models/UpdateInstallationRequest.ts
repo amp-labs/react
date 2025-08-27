@@ -35,6 +35,7 @@ export interface UpdateInstallationRequest {
      * - config.content.write.objects.<object-name>
      * - config.content.write.objects
      * - config.content.subscribe.objects.<object-name>
+     * - config.content.proxy.enabled
      * 
      * `<object-name>` means you can specify any object name.
      * @type {Array<string>}
