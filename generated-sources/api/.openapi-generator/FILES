@@ -88,6 +88,7 @@ src/models/DefaultPeriodConfig.ts
 src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
+src/models/DestinationSecrets.ts
 src/models/FieldMetadata.ts
 src/models/FieldSetting.ts
 src/models/FieldSettingDefault.ts

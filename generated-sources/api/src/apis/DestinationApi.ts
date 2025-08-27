@@ -47,6 +47,8 @@ export interface DeleteDestinationRequest {
 export interface GetDestinationRequest {
     projectIdOrName: string;
     destination: string;
+    includeSecrets?: boolean;
+    rotate?: boolean;
 }
 
 export interface ListDestinationsRequest {
@@ -103,6 +105,8 @@ export interface DestinationApiInterface {
      * @summary Get a destination
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} destination The destination name.
+     * @param {boolean} [includeSecrets] Include secrets in the response
+     * @param {boolean} [rotate] Rotate the destination secrets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
@@ -260,6 +264,14 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.includeSecrets !== undefined) {
+            queryParameters['includeSecrets'] = requestParameters.includeSecrets;
+        }
+
+        if (requestParameters.rotate !== undefined) {
+            queryParameters['rotate'] = requestParameters.rotate;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
