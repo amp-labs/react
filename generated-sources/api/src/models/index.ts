@@ -66,6 +66,7 @@ export * from './DefaultPeriodConfig';
 export * from './DeleteEvent';
 export * from './Delivery';
 export * from './Destination';
+export * from './DestinationSecrets';
 export * from './FieldMetadata';
 export * from './FieldSetting';
 export * from './FieldSettingDefault';

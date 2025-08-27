@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DestinationSecrets } from './DestinationSecrets';
+import {
+    DestinationSecretsFromJSON,
+    DestinationSecretsFromJSONTyped,
+    DestinationSecretsToJSON,
+} from './DestinationSecrets';
 import type { UpdateDestinationRequestDestinationMetadata } from './UpdateDestinationRequestDestinationMetadata';
 import {
     UpdateDestinationRequestDestinationMetadataFromJSON,
@@ -62,6 +68,12 @@ export interface Destination {
      * @memberof Destination
      */
     updateTime?: Date;
+    /**
+     * 
+     * @type {DestinationSecrets}
+     * @memberof Destination
+     */
+    secrets?: DestinationSecrets;
 }
 
 /**
@@ -94,6 +106,7 @@ export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'metadata': UpdateDestinationRequestDestinationMetadataFromJSON(json['metadata']),
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
+        'secrets': !exists(json, 'secrets') ? undefined : DestinationSecretsFromJSON(json['secrets']),
     };
 }
 
@@ -112,6 +125,7 @@ export function DestinationToJSON(value?: Destination | null): any {
         'metadata': UpdateDestinationRequestDestinationMetadataToJSON(value.metadata),
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
+        'secrets': DestinationSecretsToJSON(value.secrets),
     };
 }
 
