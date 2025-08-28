@@ -41,4 +41,13 @@ export function toCreateConfigContent(
   return config;
 }
 
+/**
+ * Type guard to safely convert UpdateInstallationConfigContent to InstallationConfigContent
+ */
+export function toInstallationConfigContentFromUpdate(
+  config: UpdateInstallationConfigContent,
+): config is InstallationConfigContent {
+  return config !== null && config !== undefined;
+}
+
 export type { InstallationConfigContent };
