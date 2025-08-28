@@ -2,10 +2,7 @@
   "name": "@amp-labs/react",
   "version": "2.8.8",
   "description": "Ampersand React library.",
-  "author": {
-    "name": "Ampersand Labs",
-    "url": "http://withampersand.com"
-  },
+  "author": "Ampersand Labs (http://withampersand.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amp-labs/react/issues"
@@ -24,7 +21,7 @@
       "import": "./build/amp-react.es.js",
       "require": "./build/amp-react.cjs.js"
     },
-    "./styles": "./build/style.css"
+    "./styles": "./build/react.css"
   },
   "files": [
     "build"
@@ -103,5 +100,7 @@
     "lodash.isequal": "^4.5.0",
     "react-tooltip": "^5.28.0"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "keywords": [],
+  "type": "commonjs"
 }
