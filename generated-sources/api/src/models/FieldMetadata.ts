@@ -21,7 +21,7 @@ import {
 } from './FieldValue';
 
 /**
- * 
+ * Metadata about a field. Please note that different providers have different levels of support for field metadata. Please reach out to support@withampersand.com if need expanded support for a particular provider.
  * @export
  * @interface FieldMetadata
  */

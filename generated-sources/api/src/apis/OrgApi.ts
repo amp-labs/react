@@ -49,7 +49,7 @@ export interface CreateOrgOperationRequest {
 
 export interface CreateOrgInviteOperationRequest {
     orgId: string;
-    createOrgInviteRequest?: CreateOrgInviteRequest;
+    invite?: CreateOrgInviteRequest;
 }
 
 export interface DeleteOrgInviteRequest {
@@ -76,7 +76,7 @@ export interface ListOrgInvitesRequest {
 
 export interface UpdateOrgOperationRequest {
     orgId: string;
-    updateOrgRequest: UpdateOrgRequest;
+    orgUpdate: UpdateOrgRequest;
 }
 
 /**
@@ -105,7 +105,7 @@ export interface OrgApiInterface {
      * 
      * @summary Invite a user to an organization
      * @param {string} orgId ID of the organization.
-     * @param {CreateOrgInviteRequest} [createOrgInviteRequest] 
+     * @param {CreateOrgInviteRequest} [invite] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgApiInterface
@@ -198,7 +198,7 @@ export interface OrgApiInterface {
      * 
      * @summary Update an organization
      * @param {string} orgId ID of the organization.
-     * @param {UpdateOrgRequest} updateOrgRequest 
+     * @param {UpdateOrgRequest} orgUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgApiInterface
@@ -293,7 +293,7 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateOrgInviteRequestToJSON(requestParameters.createOrgInviteRequest),
+            body: CreateOrgInviteRequestToJSON(requestParameters.invite),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InviteFromJSON(jsonValue));
@@ -532,8 +532,8 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             throw new runtime.RequiredError('orgId','Required parameter requestParameters.orgId was null or undefined when calling updateOrg.');
         }
 
-        if (requestParameters.updateOrgRequest === null || requestParameters.updateOrgRequest === undefined) {
-            throw new runtime.RequiredError('updateOrgRequest','Required parameter requestParameters.updateOrgRequest was null or undefined when calling updateOrg.');
+        if (requestParameters.orgUpdate === null || requestParameters.orgUpdate === undefined) {
+            throw new runtime.RequiredError('orgUpdate','Required parameter requestParameters.orgUpdate was null or undefined when calling updateOrg.');
         }
 
         const queryParameters: any = {};
@@ -559,7 +559,7 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateOrgRequestToJSON(requestParameters.updateOrgRequest),
+            body: UpdateOrgRequestToJSON(requestParameters.orgUpdate),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
