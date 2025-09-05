@@ -17,12 +17,18 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   ObjectMetadata,
+  UpsertMetadataRequest,
+  UpsertMetadataResponse,
 } from '../models';
 import {
     ApiProblemFromJSON,
     ApiProblemToJSON,
     ObjectMetadataFromJSON,
     ObjectMetadataToJSON,
+    UpsertMetadataRequestFromJSON,
+    UpsertMetadataRequestToJSON,
+    UpsertMetadataResponseFromJSON,
+    UpsertMetadataResponseToJSON,
 } from '../models';
 
 export interface GetObjectMetadataForConnectionRequest {
@@ -37,6 +43,20 @@ export interface GetObjectMetadataForInstallationRequest {
     integrationId: string;
     objectName: string;
     groupRef?: string;
+}
+
+export interface UpsertMetadataForConnectionRequest {
+    projectIdOrName: string;
+    provider: string;
+    groupRef: string;
+    upsertMetadataRequest: UpsertMetadataRequest;
+}
+
+export interface UpsertMetadataForInstallationRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    groupRef: string;
+    upsertMetadataRequest: UpsertMetadataRequest;
 }
 
 /**
@@ -83,6 +103,44 @@ export interface ObjectsFieldsApiInterface {
      * Get object metadata for installation
      */
     getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
+
+    /**
+     * Create or update fields in the SaaS instance tied to a connection.
+     * @summary Upsert custom fields for connection
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} provider The provider that this connection connects to.
+     * @param {string} groupRef The ID that your app uses to identify the group of users for this Connection.
+     * @param {UpsertMetadataRequest} upsertMetadataRequest Metadata upsert request containing field definitions to create or update
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ObjectsFieldsApiInterface
+     */
+    upsertMetadataForConnectionRaw(requestParameters: UpsertMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertMetadataResponse>>;
+
+    /**
+     * Create or update fields in the SaaS instance tied to a connection.
+     * Upsert custom fields for connection
+     */
+    upsertMetadataForConnection(requestParameters: UpsertMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertMetadataResponse>;
+
+    /**
+     * Create or update custom fields for an integration installation.
+     * @summary Upsert custom fields for installation
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} groupRef The groupRef for the installation
+     * @param {UpsertMetadataRequest} upsertMetadataRequest Metadata upsert request containing field definitions to create or update
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ObjectsFieldsApiInterface
+     */
+    upsertMetadataForInstallationRaw(requestParameters: UpsertMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertMetadataResponse>>;
+
+    /**
+     * Create or update custom fields for an integration installation.
+     * Upsert custom fields for installation
+     */
+    upsertMetadataForInstallation(requestParameters: UpsertMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertMetadataResponse>;
 
 }
 
@@ -200,6 +258,132 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
      */
     async getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
         const response = await this.getObjectMetadataForInstallationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create or update fields in the SaaS instance tied to a connection.
+     * Upsert custom fields for connection
+     */
+    async upsertMetadataForConnectionRaw(requestParameters: UpsertMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertMetadataResponse>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling upsertMetadataForConnection.');
+        }
+
+        if (requestParameters.provider === null || requestParameters.provider === undefined) {
+            throw new runtime.RequiredError('provider','Required parameter requestParameters.provider was null or undefined when calling upsertMetadataForConnection.');
+        }
+
+        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
+            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling upsertMetadataForConnection.');
+        }
+
+        if (requestParameters.upsertMetadataRequest === null || requestParameters.upsertMetadataRequest === undefined) {
+            throw new runtime.RequiredError('upsertMetadataRequest','Required parameter requestParameters.upsertMetadataRequest was null or undefined when calling upsertMetadataForConnection.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.groupRef !== undefined) {
+            queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/providers/{provider}/object-metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpsertMetadataRequestToJSON(requestParameters.upsertMetadataRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpsertMetadataResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Create or update fields in the SaaS instance tied to a connection.
+     * Upsert custom fields for connection
+     */
+    async upsertMetadataForConnection(requestParameters: UpsertMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertMetadataResponse> {
+        const response = await this.upsertMetadataForConnectionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create or update custom fields for an integration installation.
+     * Upsert custom fields for installation
+     */
+    async upsertMetadataForInstallationRaw(requestParameters: UpsertMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertMetadataResponse>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling upsertMetadataForInstallation.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling upsertMetadataForInstallation.');
+        }
+
+        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
+            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling upsertMetadataForInstallation.');
+        }
+
+        if (requestParameters.upsertMetadataRequest === null || requestParameters.upsertMetadataRequest === undefined) {
+            throw new runtime.RequiredError('upsertMetadataRequest','Required parameter requestParameters.upsertMetadataRequest was null or undefined when calling upsertMetadataForInstallation.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.groupRef !== undefined) {
+            queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/object-metadata`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpsertMetadataRequestToJSON(requestParameters.upsertMetadataRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpsertMetadataResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Create or update custom fields for an integration installation.
+     * Upsert custom fields for installation
+     */
+    async upsertMetadataForInstallation(requestParameters: UpsertMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertMetadataResponse> {
+        const response = await this.upsertMetadataForInstallationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
