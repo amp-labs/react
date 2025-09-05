@@ -31,6 +31,8 @@ src/models/ApiKeyOptsQuery.ts
 src/models/ApiKeyRequest.ts
 src/models/ApiProblem.ts
 src/models/AssociationChangeEvent.ts
+src/models/AssociationDefinition.ts
+src/models/AssociationLabels.ts
 src/models/AuthHealthCheck.ts
 src/models/AuthType.ts
 src/models/Backfill.ts
@@ -89,9 +91,11 @@ src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
 src/models/DestinationSecrets.ts
+src/models/FieldDefinition.ts
 src/models/FieldMetadata.ts
 src/models/FieldSetting.ts
 src/models/FieldSettingDefault.ts
+src/models/FieldUpsertResult.ts
 src/models/FieldValue.ts
 src/models/GenerateConnectionRequest.ts
 src/models/Group.ts
@@ -131,6 +135,7 @@ src/models/MediaTypeRegular.ts
 src/models/MetadataItemInput.ts
 src/models/MetadataItemPostAuthentication.ts
 src/models/ModuleInfo.ts
+src/models/NumericFieldOptions.ts
 src/models/Oauth2AuthorizationCode.ts
 src/models/Oauth2AuthorizationCodeAccessToken.ts
 src/models/Oauth2AuthorizationCodeRefreshToken.ts
@@ -162,6 +167,7 @@ src/models/ReadConfigObject.ts
 src/models/Revision.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
+src/models/StringFieldOptions.ts
 src/models/SubscribeConfig.ts
 src/models/SubscribeConfigAllOf.ts
 src/models/SubscribeConfigObject.ts
@@ -185,6 +191,8 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
+src/models/UpsertMetadataRequest.ts
+src/models/UpsertMetadataResponse.ts
 src/models/ValueDefault.ts
 src/models/ValueDefaultBoolean.ts
 src/models/ValueDefaultInteger.ts
