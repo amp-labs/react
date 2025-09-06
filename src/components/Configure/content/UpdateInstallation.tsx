@@ -1,9 +1,11 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import { Installation, Integration } from "services/api";
+import { toInstallationConfigContentFromUpdate } from "src/headless/config/types";
+import { useUpdateInstallation } from "src/headless/installation/useUpdateInstallation";
 
-import { onSaveReadUpdateInstallation } from "../actions/read/onSaveReadUpdateInstallation";
-import { onSaveWriteUpdateInstallation } from "../actions/write/onSaveWriteUpdateInstallation";
+import { generateUpdateReadConfigFromConfigureState } from "../actions/read/onSaveReadUpdateInstallation";
+import { generateUpdateWriteConfigFromConfigureState } from "../actions/write/onSaveWriteUpdateInstallation";
 import { WRITE_CONST } from "../nav/ObjectManagementNav/constant";
 import { setHydrateConfigState } from "../state/utils";
 import { validateFieldMappings } from "../utils";
@@ -17,17 +19,12 @@ interface UpdateInstallationProps {
 }
 
 //  Update Installation Flow
-export function UpdateInstallation({
-  installation,
-  integrationObj,
-}: UpdateInstallationProps) {
+export function UpdateInstallation({ installation }: UpdateInstallationProps) {
   const {
     setInstallation,
     hydratedRevision,
     loading,
     selectedObjectName,
-    apiKey,
-    projectIdOrName,
     resetBoundary,
     setErrors,
     setMutateInstallationError,
@@ -40,6 +37,7 @@ export function UpdateInstallation({
   } = useMutateInstallation();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
+  const { updateInstallation } = useUpdateInstallation();
   const isWriteSelected = selectedObjectName === WRITE_CONST;
 
   const errorMsg = getMutateInstallationError(selectedObjectName);
@@ -98,33 +96,39 @@ export function UpdateInstallation({
       return;
     }
 
-    if (
-      hydratedRevision &&
-      installation &&
-      selectedObjectName &&
-      apiKey &&
-      projectIdOrName &&
-      hydratedObject
-    ) {
+    if (hydratedRevision && selectedObjectName && hydratedObject) {
       setLoadingState(true);
-      const res = onSaveReadUpdateInstallation(
-        projectIdOrName,
-        integrationObj.id,
-        installation.id,
-        selectedObjectName,
-        apiKey,
+
+      const updateConfig = generateUpdateReadConfigFromConfigureState(
         configureState,
-        setInstallation,
-        hydratedObject,
+        selectedObjectName,
         hydratedRevision,
-        setMutateInstallationError(selectedObjectName), // setError
-        onUpdateSuccess,
+        hydratedObject.backfill,
       );
 
-      res.finally(() => {
+      if (
+        !updateConfig.content ||
+        // check if the config content is valid and allows to be converted to InstallationConfigContent
+        !toInstallationConfigContentFromUpdate(updateConfig.content)
+      ) {
+        console.error("UpdateInstallation - invalid config content");
         setLoadingState(false);
-        resetPendingConfigurationState(selectedObjectName);
-        onNextIncompleteTab();
+        return;
+      }
+
+      updateInstallation({
+        config: updateConfig.content,
+        onSuccess: (installation) => {
+          setInstallation(installation);
+          onUpdateSuccess?.(installation.id, installation.config);
+          setLoadingState(false);
+          resetPendingConfigurationState(selectedObjectName);
+          onNextIncompleteTab();
+        },
+        onError: (error) => {
+          setMutateInstallationError(selectedObjectName)(error.message);
+          setLoadingState(false);
+        },
       });
     } else {
       console.error("UpdateInstallation - onSaveUpdate missing required props");
@@ -132,30 +136,37 @@ export function UpdateInstallation({
   };
 
   const onSaveWrite = () => {
-    if (
-      installation &&
-      selectedObjectName &&
-      apiKey &&
-      projectIdOrName &&
-      hydratedRevision
-    ) {
+    if (selectedObjectName && hydratedRevision) {
       setLoadingState(true);
-      const res = onSaveWriteUpdateInstallation(
-        projectIdOrName,
-        integrationObj.id,
-        installation.id,
-        apiKey,
+
+      const updateConfig = generateUpdateWriteConfigFromConfigureState(
         configureState,
         hydratedRevision,
-        setMutateInstallationError(selectedObjectName), // setError
-        setInstallation,
-        onUpdateSuccess,
       );
 
-      res.finally(() => {
+      if (
+        !updateConfig.content ||
+        // check if the config content is valid and allows to be converted to InstallationConfigContent
+        !toInstallationConfigContentFromUpdate(updateConfig.content)
+      ) {
+        console.error("UpdateInstallation - invalid config content");
         setLoadingState(false);
-        resetPendingConfigurationState(selectedObjectName);
-        onNextIncompleteTab();
+        return;
+      }
+
+      updateInstallation({
+        config: updateConfig.content,
+        onSuccess: (installation) => {
+          setInstallation(installation);
+          onUpdateSuccess?.(installation.id, installation.config);
+          setLoadingState(false);
+          resetPendingConfigurationState(selectedObjectName);
+          onNextIncompleteTab();
+        },
+        onError: (error) => {
+          setMutateInstallationError(selectedObjectName)(error.message);
+          setLoadingState(false);
+        },
       });
     } else {
       console.error("UpdateInstallation - onSaveUpdate missing required props");
