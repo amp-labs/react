@@ -82,7 +82,7 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "vite": "5.4.11",
+    "vite": "7.1.5",
     "vite-plugin-dts": "^4.1.0"
   },
   "peerDependencies": {
