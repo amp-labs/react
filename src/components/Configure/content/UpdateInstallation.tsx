@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
-import { Installation, Integration } from "services/api";
+import { Installation } from "services/api";
 import { useUpdateInstallation } from "src/headless/installation/useUpdateInstallation";
 import { ConfigContent } from "src/headless/types";
 
@@ -15,7 +15,6 @@ import { useMutateInstallation } from "./useMutateInstallation";
 
 interface UpdateInstallationProps {
   installation: Installation;
-  integrationObj: Integration;
 }
 
 //  Update Installation Flow
