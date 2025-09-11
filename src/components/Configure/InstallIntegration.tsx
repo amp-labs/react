@@ -88,6 +88,8 @@ interface InstallIntegrationProps {
   onUninstallSuccess?: (installationId: string) => void;
 }
 
+const ENABLE_JWT_AUTH_FF = false;
+
 const InstallIntegrationContent = ({
   integration,
   consumerRef,
@@ -105,8 +107,8 @@ const InstallIntegrationContent = ({
   const { seed, reset } = useForceUpdate();
   const { options } = useAmpersandProviderProps();
 
-  // Check if JWT is being used (not supported in InstallIntegration)
-  if (options.getToken) {
+  // Check if JWT is being used (check feature flag)
+  if (options.getToken && !ENABLE_JWT_AUTH_FF) {
     console.error(
       "JWT authentication is not supported in InstallIntegration. Please use API key authentication instead.",
     );

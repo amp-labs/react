@@ -14,10 +14,7 @@ export function InstallationContent() {
 
   return installation && integrationObj ? (
     // If installation exists, render update installation flow
-    <UpdateInstallation
-      installation={installation}
-      integrationObj={integrationObj}
-    />
+    <UpdateInstallation installation={installation} />
   ) : (
     // No installation, render create installation flow
     <CreateInstallation />

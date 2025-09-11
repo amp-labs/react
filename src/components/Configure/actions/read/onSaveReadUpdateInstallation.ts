@@ -31,7 +31,7 @@ import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
  * @param hydratedObject
  * @returns
  */
-const generateUpdateReadConfigFromConfigureState = (
+export const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
   objectName: string,
   hydratedRevision: HydratedRevision,

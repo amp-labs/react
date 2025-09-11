@@ -20,7 +20,7 @@ import { generateConfigWriteObjects } from "./generateConfigWriteObjects";
  * @param configureState
  * @returns
  */
-const generateUpdateWriteConfigFromConfigureState = (
+export const generateUpdateWriteConfigFromConfigureState = (
   configureState: ConfigureState,
   hydratedRevision: HydratedRevision,
 ): UpdateInstallationRequestInstallationConfig => {
