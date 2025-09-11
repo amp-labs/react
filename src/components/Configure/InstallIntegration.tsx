@@ -107,7 +107,7 @@ const InstallIntegrationContent = ({
   const { seed, reset } = useForceUpdate();
   const { options } = useAmpersandProviderProps();
 
-  // Check if JWT is being used (not supported in InstallIntegration)
+  // Check if JWT is being used (check feature flag)
   if (options.getToken && !ENABLE_JWT_AUTH_FF) {
     console.error(
       "JWT authentication is not supported in InstallIntegration. Please use API key authentication instead.",
