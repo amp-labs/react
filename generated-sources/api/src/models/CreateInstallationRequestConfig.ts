@@ -27,9 +27,10 @@ import {
  */
 export interface CreateInstallationRequestConfig {
     /**
-     * The ID of the revision that this config is based on. If omitted, the latest revision is assumed.
+     * Deprecated: This field will be automatically set to the latest revision.
      * @type {string}
      * @memberof CreateInstallationRequestConfig
+     * @deprecated
      */
     revisionId?: string;
     /**
