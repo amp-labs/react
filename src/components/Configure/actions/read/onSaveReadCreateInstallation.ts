@@ -1,8 +1,6 @@
 import {
-  Config,
   CreateInstallationRequestConfig,
   HydratedRevision,
-  Installation,
 } from "services/api";
 
 import {
@@ -11,7 +9,6 @@ import {
   generateSelectedValuesMappingsFromConfigureState,
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
-import { createInstallationAndSetState } from "../mutateAndSetState/createInstallationAndSetState";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 /**
  * gets matching object from hydratedRevision
@@ -90,42 +87,4 @@ export const generateCreateReadConfigFromConfigureState = (
   }
 
   return createConfigObj;
-};
-
-export const onSaveReadCreateInstallation = (
-  projectIdOrName: string,
-  integrationId: string,
-  groupRef: string,
-  consumerRef: string,
-  connectionId: string,
-  objectName: string,
-  apiKey: string,
-  hydratedRevision: HydratedRevision,
-  configureState: ConfigureState,
-  setError: (error: string) => void,
-  setInstallation: (installationObj: Installation) => void,
-  onInstallSuccess?: (installationId: string, config: Config) => void, // success callback function
-): Promise<void | null> => {
-  const createConfig = generateCreateReadConfigFromConfigureState(
-    configureState,
-    objectName,
-    hydratedRevision,
-    consumerRef,
-  );
-  if (!createConfig) {
-    console.error("Error when generating createConfig from configureState");
-    return Promise.resolve(null);
-  }
-
-  return createInstallationAndSetState({
-    createConfig,
-    projectIdOrName,
-    integrationId,
-    groupRef,
-    connectionId,
-    apiKey,
-    setError,
-    setInstallation,
-    onInstallSuccess,
-  });
 };

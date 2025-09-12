@@ -1,9 +1,6 @@
 import {
   BackfillConfig,
-  Config,
-  HydratedIntegrationObject,
   HydratedRevision,
-  Installation,
   UpdateInstallationRequestInstallationConfig,
 } from "services/api";
 
@@ -13,7 +10,6 @@ import {
   generateSelectedValuesMappingsFromConfigureState,
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
-import { updateInstallationAndSetState } from "../mutateAndSetState/updateInstallationAndSetState";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 
 /**
@@ -70,44 +66,4 @@ export const generateUpdateReadConfigFromConfigureState = (
   }
 
   return updateConfigObject;
-};
-
-export const onSaveReadUpdateInstallation = (
-  projectIdOrName: string,
-  integrationId: string,
-  installationId: string,
-  selectedObjectName: string,
-  apiKey: string,
-  configureState: ConfigureState,
-  setInstallation: (installationObj: Installation) => void,
-  hydratedObject: HydratedIntegrationObject,
-  hydratedRevision: HydratedRevision,
-  setError: (error: string) => void,
-  onUpdateSuccess?: (installationId: string, config: Config) => void,
-): Promise<void | null> => {
-  // get configuration state
-  // transform configuration state to update shape
-  const updateConfig = generateUpdateReadConfigFromConfigureState(
-    configureState,
-    selectedObjectName || "",
-    hydratedRevision,
-    hydratedObject.backfill,
-  );
-
-  if (!updateConfig) {
-    console.error("Error when generating updateConfig from configureState");
-    return Promise.resolve(null);
-  }
-
-  return updateInstallationAndSetState({
-    updateConfig,
-    projectIdOrName,
-    integrationId,
-    installationId,
-    apiKey,
-    selectedObjectName,
-    setError,
-    setInstallation,
-    onUpdateSuccess,
-  });
 };

@@ -1,12 +1,9 @@
 import {
-  Config,
   CreateInstallationRequestConfig,
   HydratedRevision,
-  Installation,
 } from "services/api";
 
 import { ConfigureState } from "../../types";
-import { createInstallationAndSetState } from "../mutateAndSetState/createInstallationAndSetState";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
 
 import { generateConfigWriteObjects } from "./generateConfigWriteObjects";
@@ -75,40 +72,4 @@ export const generateCreateWriteConfigFromConfigureState = (
   }
 
   return createConfigObj;
-};
-
-export const onSaveWriteCreateInstallation = (
-  projectIdOrName: string,
-  integrationId: string,
-  groupRef: string,
-  consumerRef: string,
-  connectionId: string,
-  apiKey: string,
-  hydratedRevision: HydratedRevision,
-  configureState: ConfigureState,
-  setError: (error: string) => void,
-  setInstallation: (installationObj: Installation) => void,
-  onInstallSuccess?: (installationId: string, config: Config) => void,
-): Promise<void | null> => {
-  const createConfig = generateCreateWriteConfigFromConfigureState(
-    configureState,
-    hydratedRevision,
-    consumerRef,
-  );
-  if (!createConfig) {
-    console.error("Error when generating createConfig from configureState");
-    return Promise.resolve(null);
-  }
-
-  return createInstallationAndSetState({
-    createConfig,
-    projectIdOrName,
-    integrationId,
-    groupRef,
-    connectionId,
-    apiKey,
-    setError,
-    setInstallation,
-    onInstallSuccess,
-  });
 };
