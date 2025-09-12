@@ -22,7 +22,7 @@ export function ConfigProvider({
 
 /**
  * useLocalConfig is used to manage a local draft state of the config
- * it's used to manage the config state with getters, setters, and resetters
+ * It's used to manage the config state with getters, setters, and resetters.
  * @returns {
  *  draft: InstallationConfigContent;
  *  get: () => InstallationConfigContent;
