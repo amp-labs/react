@@ -67,4 +67,3 @@ export const generateUpdateReadConfigFromConfigureState = (
 
   return updateConfigObject;
 };
-
