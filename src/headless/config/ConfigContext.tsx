@@ -44,7 +44,7 @@ export function useLocalConfig() {
 }
 
 /**
- * legacy hook for backwards compatibility (same as useLocalConfig)
+ * Legacy hook for backwards compatibility (use useLocalConfig instead)
  * @deprecated
  * @returns
  */
