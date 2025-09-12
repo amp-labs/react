@@ -14,7 +14,7 @@ export { useDeleteInstallation } from "./installation/useDeleteInstallation";
 export { useManifest } from "./manifest/useManifest";
 
 // Config Hooks
-export { useConfig } from "./config/ConfigContext";
+export { useConfig, useLocalConfig } from "./config/ConfigContext";
 
 // Config Bridge Types
 export type { InstallationConfigContent } from "./config/types";
