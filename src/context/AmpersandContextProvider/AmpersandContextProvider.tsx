@@ -5,7 +5,7 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
@@ -36,6 +36,12 @@ interface AmpersandProviderProps {
       consumerRef: string;
       groupRef: string;
     }) => Promise<string>;
+    /**
+     * Optional query configuration options for TanStack Query behavior.
+     */
+    queryOptions?: {
+      refetchOnWindowFocus?: boolean;
+    };
   };
   children: React.ReactNode;
 }
@@ -60,13 +66,23 @@ export function useAmpersandProviderProps(): AmpersandContextValue {
   return ampersandContext;
 }
 
-const queryClient = new QueryClient();
-
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const {
-    options: { apiKey, projectId, project, getToken },
+    options: { apiKey, projectId, project, getToken, queryOptions },
     children,
   } = props;
+
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: queryOptions?.refetchOnWindowFocus ?? true,
+          },
+        },
+      }),
+    [queryOptions?.refetchOnWindowFocus],
+  );
   const projectIdOrName = project || projectId;
   if (projectId && project) {
     throw new Error(
