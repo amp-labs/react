@@ -8,6 +8,7 @@ import type {
   FieldSettingWriteOnCreateEnum,
   FieldSettingWriteOnUpdateEnum,
 } from "@generated/api/src";
+import type { Installation } from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
 
@@ -66,7 +67,7 @@ export type ProxyHandlers = {
 
 export function useConfigHelper(initialConfig: InstallationConfigContent) {
   const [draft, setDraft] = useState<InstallationConfigContent>(initialConfig);
-  const previousInstallationRef = useRef<typeof installation>();
+  const previousInstallationRef = useRef<Installation | undefined>(undefined);
 
   const { getReadObject: getReadObjectFromManifest, data: manifest } =
     useManifest();
@@ -303,15 +304,22 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   useEffect(() => {
     if (installation) {
       console.debug("Installation found", { installation });
-      // Only reset if the installation object is strictly different
-      if (!isEqual(previousInstallationRef.current, installation)) {
-        console.debug("Installation changed, resetting config", {
-          previous: previousInstallationRef.current,
-          current: installation,
-        });
-        // sync the installation config to the local config
-        reset();
+
+      // initialize previous installation ref if not set
+      if (!previousInstallationRef.current) {
         previousInstallationRef.current = installation;
+        reset();
+      } else {
+        // Only reset if the installation object is strictly different
+        if (!isEqual(previousInstallationRef.current, installation)) {
+          console.debug("Installation changed, resetting config", {
+            previous: previousInstallationRef.current,
+            current: installation,
+          });
+          // sync the installation config to the local config
+          reset();
+          previousInstallationRef.current = installation;
+        }
       }
     }
   }, [installation, reset]);
