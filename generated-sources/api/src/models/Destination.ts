@@ -13,18 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DestinationMetadata } from './DestinationMetadata';
+import {
+    DestinationMetadataFromJSON,
+    DestinationMetadataFromJSONTyped,
+    DestinationMetadataToJSON,
+} from './DestinationMetadata';
 import type { DestinationSecrets } from './DestinationSecrets';
 import {
     DestinationSecretsFromJSON,
     DestinationSecretsFromJSONTyped,
     DestinationSecretsToJSON,
 } from './DestinationSecrets';
-import type { UpdateDestinationRequestDestinationMetadata } from './UpdateDestinationRequestDestinationMetadata';
-import {
-    UpdateDestinationRequestDestinationMetadataFromJSON,
-    UpdateDestinationRequestDestinationMetadataFromJSONTyped,
-    UpdateDestinationRequestDestinationMetadataToJSON,
-} from './UpdateDestinationRequestDestinationMetadata';
 
 /**
  * 
@@ -52,10 +52,10 @@ export interface Destination {
     type: string;
     /**
      * 
-     * @type {UpdateDestinationRequestDestinationMetadata}
+     * @type {DestinationMetadata}
      * @memberof Destination
      */
-    metadata: UpdateDestinationRequestDestinationMetadata;
+    metadata: DestinationMetadata;
     /**
      * The time the destination was created.
      * @type {Date}
@@ -103,7 +103,7 @@ export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'id': json['id'],
         'name': json['name'],
         'type': json['type'],
-        'metadata': UpdateDestinationRequestDestinationMetadataFromJSON(json['metadata']),
+        'metadata': DestinationMetadataFromJSON(json['metadata']),
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
         'secrets': !exists(json, 'secrets') ? undefined : DestinationSecretsFromJSON(json['secrets']),
@@ -122,7 +122,7 @@ export function DestinationToJSON(value?: Destination | null): any {
         'id': value.id,
         'name': value.name,
         'type': value.type,
-        'metadata': UpdateDestinationRequestDestinationMetadataToJSON(value.metadata),
+        'metadata': DestinationMetadataToJSON(value.metadata),
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
         'secrets': DestinationSecretsToJSON(value.secrets),

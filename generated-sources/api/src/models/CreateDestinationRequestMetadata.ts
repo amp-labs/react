@@ -36,25 +36,25 @@ export interface CreateDestinationRequestMetadata {
      * @type {string}
      * @memberof CreateDestinationRequestMetadata
      */
-    kinesisRegion?: string;
+    region?: string;
     /**
      * The name of the Kinesis stream to send events to.
      * @type {string}
      * @memberof CreateDestinationRequestMetadata
      */
-    kinesisStreamName?: string;
+    streamName?: string;
     /**
      * The endpoint URL for the Kinesis stream.
      * @type {string}
      * @memberof CreateDestinationRequestMetadata
      */
-    kinesisEndpointUrl?: string;
+    endpointUrl?: string;
     /**
      * The template for the partition key to use when sending events to Kinesis (a JMESPath template)
      * @type {string}
      * @memberof CreateDestinationRequestMetadata
      */
-    kinesisPartitionKeyTemplate?: string;
+    partitionKeyTemplate?: string;
 }
 
 /**
@@ -78,10 +78,10 @@ export function CreateDestinationRequestMetadataFromJSONTyped(json: any, ignoreD
         
         'url': !exists(json, 'url') ? undefined : json['url'],
         'headers': !exists(json, 'headers') ? undefined : json['headers'],
-        'kinesisRegion': !exists(json, 'kinesisRegion') ? undefined : json['kinesisRegion'],
-        'kinesisStreamName': !exists(json, 'kinesisStreamName') ? undefined : json['kinesisStreamName'],
-        'kinesisEndpointUrl': !exists(json, 'kinesisEndpointUrl') ? undefined : json['kinesisEndpointUrl'],
-        'kinesisPartitionKeyTemplate': !exists(json, 'kinesisPartitionKeyTemplate') ? undefined : json['kinesisPartitionKeyTemplate'],
+        'region': !exists(json, 'region') ? undefined : json['region'],
+        'streamName': !exists(json, 'streamName') ? undefined : json['streamName'],
+        'endpointUrl': !exists(json, 'endpointUrl') ? undefined : json['endpointUrl'],
+        'partitionKeyTemplate': !exists(json, 'partitionKeyTemplate') ? undefined : json['partitionKeyTemplate'],
     };
 }
 
@@ -96,10 +96,10 @@ export function CreateDestinationRequestMetadataToJSON(value?: CreateDestination
         
         'url': value.url,
         'headers': value.headers,
-        'kinesisRegion': value.kinesisRegion,
-        'kinesisStreamName': value.kinesisStreamName,
-        'kinesisEndpointUrl': value.kinesisEndpointUrl,
-        'kinesisPartitionKeyTemplate': value.kinesisPartitionKeyTemplate,
+        'region': value.region,
+        'streamName': value.streamName,
+        'endpointUrl': value.endpointUrl,
+        'partitionKeyTemplate': value.partitionKeyTemplate,
     };
 }
 

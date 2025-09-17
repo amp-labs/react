@@ -19,6 +19,12 @@ import {
     UpdateDestinationRequestDestinationMetadataFromJSONTyped,
     UpdateDestinationRequestDestinationMetadataToJSON,
 } from './UpdateDestinationRequestDestinationMetadata';
+import type { UpdateDestinationRequestDestinationSecrets } from './UpdateDestinationRequestDestinationSecrets';
+import {
+    UpdateDestinationRequestDestinationSecretsFromJSON,
+    UpdateDestinationRequestDestinationSecretsFromJSONTyped,
+    UpdateDestinationRequestDestinationSecretsToJSON,
+} from './UpdateDestinationRequestDestinationSecrets';
 
 /**
  * 
@@ -38,6 +44,12 @@ export interface UpdateDestinationRequestDestination {
      * @memberof UpdateDestinationRequestDestination
      */
     metadata?: UpdateDestinationRequestDestinationMetadata;
+    /**
+     * 
+     * @type {UpdateDestinationRequestDestinationSecrets}
+     * @memberof UpdateDestinationRequestDestination
+     */
+    secrets?: UpdateDestinationRequestDestinationSecrets;
 }
 
 /**
@@ -61,6 +73,7 @@ export function UpdateDestinationRequestDestinationFromJSONTyped(json: any, igno
         
         'name': !exists(json, 'name') ? undefined : json['name'],
         'metadata': !exists(json, 'metadata') ? undefined : UpdateDestinationRequestDestinationMetadataFromJSON(json['metadata']),
+        'secrets': !exists(json, 'secrets') ? undefined : UpdateDestinationRequestDestinationSecretsFromJSON(json['secrets']),
     };
 }
 
@@ -75,6 +88,7 @@ export function UpdateDestinationRequestDestinationToJSON(value?: UpdateDestinat
         
         'name': value.name,
         'metadata': UpdateDestinationRequestDestinationMetadataToJSON(value.metadata),
+        'secrets': UpdateDestinationRequestDestinationSecretsToJSON(value.secrets),
     };
 }
 
