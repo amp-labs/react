@@ -73,10 +73,17 @@ export function ValueMappingItem({
     (item: { value: string } | null) => {
       if (!item) return;
 
-      // check if the value is already mapped to another field
+      // Validate that target values are unique within the same field
+      // This prevents multiple source values from mapping to the same target value
+      // Examples:
+      //   ✅ Valid: red → orange, orange → red (bidirectional mapping allowed)
+      //   ❌ Invalid: red → green, orange → green (duplicate target "green")
+      // Compare against other source fields (keys), not the current target value
+      // This prevents false duplicates when a user selects the same value for the same source field
       if (
-        Object.values(selectedValueMappingForField).some(
-          (mapping) => mapping === item.value && mapping !== fieldValue,
+        Object.entries(selectedValueMappingForField).some(
+          ([key, mapping]) =>
+            mapping === item.value && key !== mappedValue.mappedValue,
         )
       ) {
         // Find all the fields that have the same value that need to shown as
@@ -84,9 +91,8 @@ export function ValueMappingItem({
         const duplicateKeys = [
           ...Object.entries(selectedValueMappingForField)
             .filter(
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              ([_, mapping]) =>
-                mapping === item.value && mapping !== fieldValue,
+              ([key, mapping]) =>
+                mapping === item.value && key !== mappedValue.mappedValue,
             )
             .map(([key]) => key),
           mappedValue.mappedValue,
@@ -114,7 +120,6 @@ export function ValueMappingItem({
     [
       onSelectChange,
       selectedValueMappingForField,
-      fieldValue,
       fieldName,
       mappedValue.mappedValue,
       resetBoundary,
