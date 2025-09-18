@@ -31,6 +31,30 @@ export interface UpdateDestinationRequestDestinationMetadata {
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
     headers?: { [key: string]: string; } | null;
+    /**
+     * The AWS region where the kinesis destination is hosted.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    region?: string;
+    /**
+     * The name of the Kinesis stream to send events to.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    streamName?: string;
+    /**
+     * The endpoint URL for the Kinesis stream.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    endpointUrl?: string;
+    /**
+     * The template for the partition key to use when sending events to Kinesis (a JMESPath template)
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    partitionKeyTemplate?: string;
 }
 
 /**
@@ -54,6 +78,10 @@ export function UpdateDestinationRequestDestinationMetadataFromJSONTyped(json: a
         
         'url': !exists(json, 'url') ? undefined : json['url'],
         'headers': !exists(json, 'headers') ? undefined : json['headers'],
+        'region': !exists(json, 'region') ? undefined : json['region'],
+        'streamName': !exists(json, 'streamName') ? undefined : json['streamName'],
+        'endpointUrl': !exists(json, 'endpointUrl') ? undefined : json['endpointUrl'],
+        'partitionKeyTemplate': !exists(json, 'partitionKeyTemplate') ? undefined : json['partitionKeyTemplate'],
     };
 }
 
@@ -68,6 +96,10 @@ export function UpdateDestinationRequestDestinationMetadataToJSON(value?: Update
         
         'url': value.url,
         'headers': value.headers,
+        'region': value.region,
+        'streamName': value.streamName,
+        'endpointUrl': value.endpointUrl,
+        'partitionKeyTemplate': value.partitionKeyTemplate,
     };
 }
 

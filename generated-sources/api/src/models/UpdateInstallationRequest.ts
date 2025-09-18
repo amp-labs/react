@@ -29,7 +29,6 @@ export interface UpdateInstallationRequest {
     /**
      * Array of field paths specifying which fields to update. Allowed values include:
      * - connectionId
-     * - config.revisionId
      * - config.createdBy
      * - config.content.read.objects.<object-name>
      * - config.content.write.objects.<object-name>

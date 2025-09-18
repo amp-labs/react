@@ -90,6 +90,7 @@ src/models/DefaultPeriodConfig.ts
 src/models/DeleteEvent.ts
 src/models/Delivery.ts
 src/models/Destination.ts
+src/models/DestinationMetadata.ts
 src/models/DestinationSecrets.ts
 src/models/FieldDefinition.ts
 src/models/FieldMetadata.ts
@@ -180,6 +181,7 @@ src/models/UpdateConnectionRequest.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
 src/models/UpdateDestinationRequestDestinationMetadata.ts
+src/models/UpdateDestinationRequestDestinationSecrets.ts
 src/models/UpdateEvent.ts
 src/models/UpdateInstallationConfigContent.ts
 src/models/UpdateInstallationRequest.ts

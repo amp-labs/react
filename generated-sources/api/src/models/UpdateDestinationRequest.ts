@@ -31,6 +31,13 @@ export interface UpdateDestinationRequest {
      * - name
      * - metadata.url
      * - metadata.headers
+     * - metadata.region
+     * - metadata.streamName
+     * - metadata.endpointUrl
+     * - metadata.partitionKeyTemplate
+     * - secrets.awsKeyId
+     * - secrets.awsSecretKey
+     * - secrets.awsSessionToken
      * @type {Array<string>}
      * @memberof UpdateDestinationRequest
      */
