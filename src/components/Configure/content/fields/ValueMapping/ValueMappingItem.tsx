@@ -75,11 +75,6 @@ export function ValueMappingItem({
 
       // Validate that target values are unique within the same field
       // This prevents multiple source values from mapping to the same target value
-      // Examples:
-      //   ✅ Valid: red → orange, orange → red (bidirectional mapping allowed)
-      //   ❌ Invalid: red → green, orange → green (duplicate target "green")
-      // Compare against other source fields (keys), not the current target value
-      // This prevents false duplicates when a user selects the same value for the same source field
       if (
         Object.entries(selectedValueMappingForField).some(
           ([key, mapping]) =>

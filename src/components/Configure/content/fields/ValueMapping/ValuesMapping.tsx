@@ -126,6 +126,7 @@ export function ValueMappings() {
   );
 
   // Separate useEffect to check for modifications when selectedMappings changes
+  // update the modified flag when the value mappings are modified
   useEffect(() => {
     if (
       selectedObjectName &&
@@ -150,6 +151,7 @@ export function ValueMappings() {
     configureState?.read?.savedConfig?.selectedValueMappings,
   ]);
 
+  // update the modified flag when the value mappings is initialized
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
