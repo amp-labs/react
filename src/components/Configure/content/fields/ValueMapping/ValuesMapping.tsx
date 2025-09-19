@@ -10,6 +10,16 @@ import { setValueMapping, setValueMappingModified } from "./setValueMapping";
 import { ValueHeader } from "./ValueHeader";
 import { ValueMappingItem } from "./ValueMappingItem";
 
+/**
+ * ValueMappings component displays the value mappings for the selected object
+ * It shows the value mappings for a field mapping that overrides the default value mappings
+ *
+ * implementation detail:
+ * The value mapping array must be of the same length as the mappedValues array (see documentation for provider)
+ * example: Salesforce Clean Status has 8 mapped values, so the value mapping array must be of length 8
+ *
+ * @returns
+ */
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
   const { selectedObjectName, configureState, setConfigureState } =
@@ -146,7 +156,7 @@ export function ValueMappings() {
         const fieldNameValues = fieldNameObject?.values;
         if (!fieldNameValues) return null;
 
-        // Show if the values array is of the same length as the mappedValues array
+        // special note: Show if the values array is of the same length as the mappedValues array
         const fieldNameValuesLength = Object.keys(fieldNameValues).length;
         const mappedValuesLength = Object.keys(
           field?.mappedValues || [],
