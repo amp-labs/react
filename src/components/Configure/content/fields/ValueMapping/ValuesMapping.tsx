@@ -180,15 +180,36 @@ export function ValueMappings() {
                   );
                   const hasError =
                     Array.isArray(errors) && errors.includes(value.mappedValue);
-                  const valueOptions =
+
+                  // Get all available options
+                  const allValueOptions =
                     configureState?.read?.allFieldsMetadata?.[field.fieldName!]
                       ?.values || [];
+
+                  // Get currently selected values for this field (excluding current value)
+                  const mappingsForField =
+                    selectedMappings?.[field.fieldName!] || {};
+                  const currentlySelectedValues =
+                    Object.values(mappingsForField).filter(Boolean);
+                  const currentValueSelection =
+                    mappingsForField[value.mappedValue];
+
+                  // Filter options to show: unselected values + current selection (if any)
+                  const availableOptions = allValueOptions.filter(
+                    (option: { value: string }) => {
+                      const isCurrentSelection =
+                        option.value === currentValueSelection;
+                      const isAlreadySelected =
+                        currentlySelectedValues.includes(option.value);
+                      return isCurrentSelection || !isAlreadySelected;
+                    },
+                  );
 
                   return (
                     <>
                       <ValueMappingItem
                         key={`${value.mappedValue}-${field.fieldName}`}
-                        allValueOptions={valueOptions}
+                        allValueOptions={availableOptions}
                         mappedValue={value}
                         onSelectChange={onSelectChange}
                         fieldName={field?.fieldName || ""}
