@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import isEqual from "lodash.isequal";
 import { FormControl } from "src/components/form/FormControl";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
@@ -18,7 +19,6 @@ export function ValueMappings() {
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const selectedMappings = configureState?.read?.selectedValueMappings;
   const isValueMappingsModified = configureState?.read?.isValueMappingsModified;
-  const hasSetModified = useRef(false);
 
   const valuesMappings = useMemo(() => {
     // get all the fields that have fieldMappings from the selected object
@@ -70,6 +70,31 @@ export function ValueMappings() {
     [selectedObjectName, setConfigureState, isError, removeError],
   );
 
+  // Separate useEffect to check for modifications when selectedMappings changes
+  useEffect(() => {
+    if (
+      selectedObjectName &&
+      selectedMappings &&
+      configureState?.read?.savedConfig?.selectedValueMappings
+    ) {
+      const savedValueMappings =
+        configureState?.read?.savedConfig?.selectedValueMappings;
+      const updatedValueMappings = selectedMappings;
+      const isModified = !isEqual(savedValueMappings, updatedValueMappings);
+
+      setValueMappingModified(
+        selectedObjectName,
+        setConfigureState,
+        isModified,
+      );
+    }
+  }, [
+    selectedMappings,
+    selectedObjectName,
+    setConfigureState,
+    configureState?.read?.savedConfig?.selectedValueMappings,
+  ]);
+
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
@@ -78,24 +103,17 @@ export function ValueMappings() {
           (f) => f.fieldName && f.mappedValues!.length > 0,
         ) || [];
 
-      // Check if all values are mapped for all fields
-      const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
+      // Check if any values are mapped for any field
+      const hasAnyMappings = fieldsWithMappings.some((field) => {
         const mappingsForField = selectedMappings[field.fieldName!] || {};
-        const areValuesSameLength =
-          Object.keys(mappingsForField).length ===
-          Object.keys(field.mappedValues!).length;
-        return areValuesSameLength;
+        return Object.keys(mappingsForField).length > 0;
       });
 
-      if (allFieldsFullyMapped && fieldsWithMappings.length > 0) {
-        // Only set modified flag if we haven't set it before and it's currently false
-        if (!isValueMappingsModified && !hasSetModified.current) {
+      if (hasAnyMappings && fieldsWithMappings.length > 0) {
+        // Set modified flag as soon as any mapping is made
+        if (!isValueMappingsModified) {
           setValueMappingModified(selectedObjectName, setConfigureState, true);
-          hasSetModified.current = true;
         }
-      } else {
-        // Reset the ref if not all values are mapped
-        hasSetModified.current = false;
       }
     }
   }, [
