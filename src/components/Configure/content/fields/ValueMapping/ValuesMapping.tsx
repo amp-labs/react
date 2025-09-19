@@ -18,6 +18,51 @@ import { ValueMappingItem } from "./ValueMappingItem";
  * The value mapping array must be of the same length as the mappedValues array (see documentation for provider)
  * example: Salesforce Clean Status has 8 mapped values, so the value mapping array must be of length 8
  *
+ * i.e. to pass into Mailmonkey
+ * const mapping: FieldMapping = {
+  "contact": [
+    {
+      mapToName: "custom_enum",
+      prompt: "Map the values for custom_enum",
+      // 8 mapped values map to 8 values in contact: Clean Status
+      mappedValues: [
+        {
+          mappedValue: "red",
+          mappedDisplayValue: "red"
+        },
+        {
+          mappedValue: "orange",
+          mappedDisplayValue: "orange"
+        },
+        {
+          mappedValue: "blue",
+          mappedDisplayValue: "blue"
+        },
+        {
+          mappedValue: "green",
+          mappedDisplayValue: "green"
+        },
+        {
+          mappedValue: "yellow",
+          mappedDisplayValue: "yellow"
+        },
+        {
+          mappedValue: "purple",
+          mappedDisplayValue: "purple"
+        },
+        {
+          mappedValue: "brown",
+          mappedDisplayValue: "brown"
+        },
+        {
+          mappedValue: "gray",
+          mappedDisplayValue: "gray"
+        },
+      ]
+    }
+  ]
+};
+ * 
  * @returns
  */
 export function ValueMappings() {
