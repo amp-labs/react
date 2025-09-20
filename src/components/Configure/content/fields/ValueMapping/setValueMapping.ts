@@ -52,18 +52,3 @@ export function setValueMapping(
     ),
   );
 }
-
-export function setValueMappingModified(
-  selectedObjectName: string,
-  setConfigureState: (
-    objectName: string,
-    producer: (draft: Draft<ConfigureState>) => void,
-  ) => void,
-  isModified: boolean,
-) {
-  setConfigureState(selectedObjectName, (draft) => {
-    if (draft.read) {
-      draft.read.isValueMappingsModified = isModified;
-    }
-  });
-}
