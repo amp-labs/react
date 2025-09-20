@@ -18,7 +18,7 @@ import { ValueMappingItem } from "./ValueMappingItem";
  * The value mapping array must be of the same length as the mappedValues array (see documentation for provider)
  * example: Salesforce Clean Status has 8 mapped values, so the value mapping array must be of length 8
  *
- * i.e. to pass into Mailmonkey
+ * i.e. sample input to InstallIntegration
  * const mapping: FieldMapping = {
   "contact": [
     {
