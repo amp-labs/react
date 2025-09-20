@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Button } from "src/components/ui-base/Button";
 import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
-import { ErrorBoundary, useErrorState } from "src/context/ErrorContextProvider";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
@@ -22,7 +21,6 @@ interface ValueMappingItemProps {
   fieldName: string;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   allValueOptions: ValueOption[];
-  hasError?: boolean;
 }
 
 export function ValueMappingItem({
@@ -30,14 +28,9 @@ export function ValueMappingItem({
   onSelectChange,
   fieldName,
   allValueOptions,
-  hasError,
 }: ValueMappingItemProps) {
   const { configureState, selectedObjectName, setConfigureState } =
     useSelectedConfigureState();
-  const [disabled, setDisabled] = useState(true);
-
-  const { getError, setError, resetBoundary, isError, removeError } =
-    useErrorState();
 
   const selectedValueMappingForField = useMemo(
     () => configureState?.read?.selectedValueMappings?.[fieldName] || {},
@@ -48,16 +41,6 @@ export function ValueMappingItem({
     () => selectedValueMappingForField?.[mappedValue.mappedValue],
     [selectedValueMappingForField, mappedValue.mappedValue],
   );
-
-  useEffect(() => {
-    setDisabled(false);
-  }, [
-    mappedValue,
-    setConfigureState,
-    selectedObjectName,
-    fieldValue,
-    configureState,
-  ]);
 
   const items = useMemo(
     () =>
@@ -73,37 +56,6 @@ export function ValueMappingItem({
     (item: { value: string } | null) => {
       if (!item) return;
 
-      // Validate that target values are unique within the same field
-      // This prevents multiple source values from mapping to the same target value
-      if (
-        Object.entries(selectedValueMappingForField).some(
-          ([key, mapping]) =>
-            mapping === item.value && key !== mappedValue.mappedValue,
-        )
-      ) {
-        // Find all the fields that have the same value that need to shown as
-        // error'ed out fields
-        const duplicateKeys = [
-          ...Object.entries(selectedValueMappingForField)
-            .filter(
-              ([key, mapping]) =>
-                mapping === item.value && key !== mappedValue.mappedValue,
-            )
-            .map(([key]) => key),
-          mappedValue.mappedValue,
-        ];
-
-        // Set error for all the fields that have the same value
-        setError(ErrorBoundary.VALUE_MAPPING, fieldName, duplicateKeys);
-        return;
-      }
-
-      if (getError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
-        // if you're here in the code, it means that the value is not already mapped to another field
-        // so we can remove the error for all the fields that have the same value
-        resetBoundary(ErrorBoundary.VALUE_MAPPING);
-      }
-
       onSelectChange({
         target: {
           name: mappedValue.mappedValue,
@@ -112,34 +64,24 @@ export function ValueMappingItem({
         } as unknown as HTMLSelectElement,
       } as unknown as React.ChangeEvent<HTMLSelectElement>);
     },
-    [
-      onSelectChange,
-      selectedValueMappingForField,
-      fieldName,
-      mappedValue.mappedValue,
-      resetBoundary,
-      setError,
-      getError,
-    ],
+    [onSelectChange, fieldName, mappedValue.mappedValue],
   );
 
   const SelectComponent = useMemo(
     () => (
       <ComboBox
         key={fieldValue}
-        disabled={disabled}
         items={items}
         selectedValue={fieldValue || null}
         onSelectedItemChange={onValueChange}
         placeholder="Please select one"
         style={{
-          border: hasError ? "2px solid red" : undefined,
           borderRadius: "8px",
           width: "100%",
         }}
       />
     ),
-    [fieldValue, disabled, items, onValueChange, hasError],
+    [fieldValue, items, onValueChange],
   );
 
   const onClear = useCallback(() => {
@@ -151,18 +93,12 @@ export function ValueMappingItem({
         "",
         fieldName,
       );
-
-      if (isError(ErrorBoundary.VALUE_MAPPING, fieldName)) {
-        removeError(ErrorBoundary.VALUE_MAPPING, fieldName);
-      }
     }
   }, [
     selectedObjectName,
     setConfigureState,
     mappedValue.mappedValue,
     fieldName,
-    isError,
-    removeError,
   ]);
   return (
     <div

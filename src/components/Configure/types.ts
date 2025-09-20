@@ -47,14 +47,12 @@ export type ConfigureStateRead = {
   selectedValueMappings: SelectValueMappings | null;
   isOptionalFieldsModified: boolean; // checks if selected optional fields is modified
   isRequiredMapFieldsModified: boolean; // checks if required map fields is modified
-  isValueMappingsModified: boolean; // checks if value mappings is modified
   savedConfig: SavedConfigureState; // check when to know if config is saved / modified
 };
 
 type SavedConfigureState = {
   optionalFields: SelectOptionalFields;
   requiredMapFields: SelectMappingFields;
-  selectedValueMappings: SelectValueMappings;
 };
 
 export type ConfigureState = {
