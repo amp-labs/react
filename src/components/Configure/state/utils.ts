@@ -105,7 +105,6 @@ const generateConfigurationStateRead = (
     savedConfig: {
       optionalFields: optionalFieldsSaved, // from config
       requiredMapFields: requiredMapFieldsSaved, // from config
-      selectedValueMappings,
     },
   };
 };

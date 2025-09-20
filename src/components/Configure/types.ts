@@ -53,7 +53,6 @@ export type ConfigureStateRead = {
 type SavedConfigureState = {
   optionalFields: SelectOptionalFields;
   requiredMapFields: SelectMappingFields;
-  selectedValueMappings: SelectValueMappings;
 };
 
 export type ConfigureState = {
