@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Button } from "src/components/ui-base/Button";
 import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 
@@ -31,7 +31,6 @@ export function ValueMappingItem({
 }: ValueMappingItemProps) {
   const { configureState, selectedObjectName, setConfigureState } =
     useSelectedConfigureState();
-  const [disabled, setDisabled] = useState(true);
 
   const selectedValueMappingForField = useMemo(
     () => configureState?.read?.selectedValueMappings?.[fieldName] || {},
@@ -42,16 +41,6 @@ export function ValueMappingItem({
     () => selectedValueMappingForField?.[mappedValue.mappedValue],
     [selectedValueMappingForField, mappedValue.mappedValue],
   );
-
-  useEffect(() => {
-    setDisabled(false);
-  }, [
-    mappedValue,
-    setConfigureState,
-    selectedObjectName,
-    fieldValue,
-    configureState,
-  ]);
 
   const items = useMemo(
     () =>
@@ -82,7 +71,6 @@ export function ValueMappingItem({
     () => (
       <ComboBox
         key={fieldValue}
-        disabled={disabled}
         items={items}
         selectedValue={fieldValue || null}
         onSelectedItemChange={onValueChange}
@@ -93,7 +81,7 @@ export function ValueMappingItem({
         }}
       />
     ),
-    [fieldValue, disabled, items, onValueChange],
+    [fieldValue, items, onValueChange],
   );
 
   const onClear = useCallback(() => {

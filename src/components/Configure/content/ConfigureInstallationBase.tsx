@@ -1,5 +1,6 @@
 import { FormEventHandler } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import isEqual from "lodash.isequal";
 import { Button } from "src/components/ui-base/Button";
 
 import { FormErrorBox } from "components/FormErrorBox";
@@ -46,11 +47,22 @@ export function ConfigureInstallationBase({
       !!getReadObject(config, selectedObjectName)) ||
     false;
 
+  // is modified derived state
+  const savedValueMappings =
+    configureState?.read?.savedConfig?.selectedValueMappings;
+  const selectedValueMappings = configureState?.read?.selectedValueMappings;
+
+  // check if value mappings (local) is equal to saved value mappings (server)
+  const isValueMappingsModified = isEqual(
+    savedValueMappings,
+    selectedValueMappings,
+  );
+
   // has the form been modified?
   const isReadModified =
     configureState?.read?.isOptionalFieldsModified ||
     configureState?.read?.isRequiredMapFieldsModified ||
-    configureState?.read?.isValueMappingsModified;
+    isValueMappingsModified;
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
 

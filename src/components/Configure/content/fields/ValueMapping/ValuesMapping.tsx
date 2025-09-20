@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import isEqual from "lodash.isequal";
 import { FormControl } from "src/components/form/FormControl";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
-import { setValueMapping, setValueMappingModified } from "./setValueMapping";
+import { setValueMapping } from "./setValueMapping";
 import {
   getAvailableOptions,
   getFieldDisplayName,
@@ -76,7 +75,6 @@ export function ValueMappings() {
 
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const selectedMappings = configureState?.read?.selectedValueMappings;
-  const isValueMappingsModified = configureState?.read?.isValueMappingsModified;
 
   const valuesMappings = useMemo(() => {
     // get all the fields that have fieldMappings from the selected object
@@ -123,51 +121,6 @@ export function ValueMappings() {
     },
     [selectedObjectName, setConfigureState],
   );
-
-  // Track modifications when value mappings change
-  useEffect(() => {
-    if (!selectedObjectName || !selectedMappings) return;
-
-    const savedValueMappings =
-      configureState?.read?.savedConfig?.selectedValueMappings;
-
-    // Compare with saved state if available
-    if (savedValueMappings) {
-      const isModified = !isEqual(savedValueMappings, selectedMappings);
-      setValueMappingModified(
-        selectedObjectName,
-        setConfigureState,
-        isModified,
-      );
-      return;
-    }
-
-    // If no saved state, check if any mappings exist
-    const fieldsWithMappings =
-      fieldMapping?.[selectedObjectName]?.filter(
-        (f) => f.fieldName && f.mappedValues!.length > 0,
-      ) || [];
-
-    const hasAnyMappings = fieldsWithMappings.some((field) => {
-      const mappingsForField = selectedMappings[field.fieldName!] || {};
-      return Object.keys(mappingsForField).length > 0;
-    });
-
-    if (
-      hasAnyMappings &&
-      fieldsWithMappings.length > 0 &&
-      !isValueMappingsModified
-    ) {
-      setValueMappingModified(selectedObjectName, setConfigureState, true);
-    }
-  }, [
-    selectedMappings,
-    selectedObjectName,
-    setConfigureState,
-    configureState?.read?.savedConfig?.selectedValueMappings,
-    fieldMapping,
-    isValueMappingsModified,
-  ]);
 
   return valuesMappings?.length ? (
     <>
