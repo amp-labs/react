@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import isEqual from "lodash.isequal";
 import { FormControl } from "src/components/form/FormControl";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
@@ -9,6 +10,61 @@ import { setValueMapping, setValueMappingModified } from "./setValueMapping";
 import { ValueHeader } from "./ValueHeader";
 import { ValueMappingItem } from "./ValueMappingItem";
 
+/**
+ * ValueMappings component displays the value mappings for the selected object
+ * It shows the value mappings for a field mapping that overrides the default value mappings
+ *
+ * implementation detail:
+ * The value mapping array must be of the same length as the mappedValues array (see documentation for provider)
+ * example: Salesforce Clean Status has 8 mapped values, so the value mapping array must be of length 8
+ *
+ * i.e. sample input to InstallIntegration
+ * const mapping: FieldMapping = {
+  "contact": [
+    {
+      mapToName: "custom_enum",
+      prompt: "Map the values for custom_enum",
+      // 8 mapped values map to 8 values in contact: Clean Status
+      mappedValues: [
+        {
+          mappedValue: "red",
+          mappedDisplayValue: "red"
+        },
+        {
+          mappedValue: "orange",
+          mappedDisplayValue: "orange"
+        },
+        {
+          mappedValue: "blue",
+          mappedDisplayValue: "blue"
+        },
+        {
+          mappedValue: "green",
+          mappedDisplayValue: "green"
+        },
+        {
+          mappedValue: "yellow",
+          mappedDisplayValue: "yellow"
+        },
+        {
+          mappedValue: "purple",
+          mappedDisplayValue: "purple"
+        },
+        {
+          mappedValue: "brown",
+          mappedDisplayValue: "brown"
+        },
+        {
+          mappedValue: "gray",
+          mappedDisplayValue: "gray"
+        },
+      ]
+    }
+  ]
+};
+ * 
+ * @returns
+ */
 export function ValueMappings() {
   const { fieldMapping } = useInstallIntegrationProps();
   const { selectedObjectName, configureState, setConfigureState } =
@@ -18,7 +74,6 @@ export function ValueMappings() {
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const selectedMappings = configureState?.read?.selectedValueMappings;
   const isValueMappingsModified = configureState?.read?.isValueMappingsModified;
-  const hasSetModified = useRef(false);
 
   const valuesMappings = useMemo(() => {
     // get all the fields that have fieldMappings from the selected object
@@ -70,6 +125,33 @@ export function ValueMappings() {
     [selectedObjectName, setConfigureState, isError, removeError],
   );
 
+  // Separate useEffect to check for modifications when selectedMappings changes
+  // update the modified flag when the value mappings are modified
+  useEffect(() => {
+    if (
+      selectedObjectName &&
+      selectedMappings &&
+      configureState?.read?.savedConfig?.selectedValueMappings
+    ) {
+      const savedValueMappings =
+        configureState?.read?.savedConfig?.selectedValueMappings;
+      const updatedValueMappings = selectedMappings;
+      const isModified = !isEqual(savedValueMappings, updatedValueMappings);
+
+      setValueMappingModified(
+        selectedObjectName,
+        setConfigureState,
+        isModified,
+      );
+    }
+  }, [
+    selectedMappings,
+    selectedObjectName,
+    setConfigureState,
+    configureState?.read?.savedConfig?.selectedValueMappings,
+  ]);
+
+  // update the modified flag when the value mappings is initialized
   useEffect(() => {
     if (selectedObjectName && selectedMappings) {
       // Find all fields that have mappedValues
@@ -78,24 +160,17 @@ export function ValueMappings() {
           (f) => f.fieldName && f.mappedValues!.length > 0,
         ) || [];
 
-      // Check if all values are mapped for all fields
-      const allFieldsFullyMapped = fieldsWithMappings.every((field) => {
+      // Check if any values are mapped for any field
+      const hasAnyMappings = fieldsWithMappings.some((field) => {
         const mappingsForField = selectedMappings[field.fieldName!] || {};
-        const areValuesSameLength =
-          Object.keys(mappingsForField).length ===
-          Object.keys(field.mappedValues!).length;
-        return areValuesSameLength;
+        return Object.keys(mappingsForField).length > 0;
       });
 
-      if (allFieldsFullyMapped && fieldsWithMappings.length > 0) {
-        // Only set modified flag if we haven't set it before and it's currently false
-        if (!isValueMappingsModified && !hasSetModified.current) {
+      if (hasAnyMappings && fieldsWithMappings.length > 0) {
+        // Set modified flag as soon as any mapping is made
+        if (!isValueMappingsModified) {
           setValueMappingModified(selectedObjectName, setConfigureState, true);
-          hasSetModified.current = true;
         }
-      } else {
-        // Reset the ref if not all values are mapped
-        hasSetModified.current = false;
       }
     }
   }, [
@@ -128,7 +203,7 @@ export function ValueMappings() {
         const fieldNameValues = fieldNameObject?.values;
         if (!fieldNameValues) return null;
 
-        // Show if the values array is of the same length as the mappedValues array
+        // special note: Show if the values array is of the same length as the mappedValues array
         const fieldNameValuesLength = Object.keys(fieldNameValues).length;
         const mappedValuesLength = Object.keys(
           field?.mappedValues || [],
@@ -162,15 +237,36 @@ export function ValueMappings() {
                   );
                   const hasError =
                     Array.isArray(errors) && errors.includes(value.mappedValue);
-                  const valueOptions =
+
+                  // Get all available options
+                  const allValueOptions =
                     configureState?.read?.allFieldsMetadata?.[field.fieldName!]
                       ?.values || [];
+
+                  // Get currently selected values for this field (excluding current value)
+                  const mappingsForField =
+                    selectedMappings?.[field.fieldName!] || {};
+                  const currentlySelectedValues =
+                    Object.values(mappingsForField).filter(Boolean);
+                  const currentValueSelection =
+                    mappingsForField[value.mappedValue];
+
+                  // Filter options to show: unselected values + current selection (if any)
+                  const availableOptions = allValueOptions.filter(
+                    (option: { value: string }) => {
+                      const isCurrentSelection =
+                        option.value === currentValueSelection;
+                      const isAlreadySelected =
+                        currentlySelectedValues.includes(option.value);
+                      return isCurrentSelection || !isAlreadySelected;
+                    },
+                  );
 
                   return (
                     <>
                       <ValueMappingItem
                         key={`${value.mappedValue}-${field.fieldName}`}
-                        allValueOptions={valueOptions}
+                        allValueOptions={availableOptions}
                         mappedValue={value}
                         onSelectChange={onSelectChange}
                         fieldName={field?.fieldName || ""}
