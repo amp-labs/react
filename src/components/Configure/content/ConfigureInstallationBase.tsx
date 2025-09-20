@@ -1,5 +1,4 @@
 import { FormEventHandler } from "react";
-import isEqual from "lodash.isequal";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallation } from "src/headless/installation/useInstallation";
 
@@ -15,6 +14,7 @@ import { useHydratedRevision } from "../state/HydratedRevisionContext";
 import { getReadObject } from "../utils";
 
 import { ReadFields } from "./fields/ReadFields";
+import { isValueMappingsEqual } from "./fields/ValueMapping/utils";
 import { WriteFields } from "./fields/WriteFields";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
@@ -48,15 +48,16 @@ export function ConfigureInstallationBase({
     false;
 
   // fetched from server
-  const serverValueMappings =
-    selectedObjectName &&
-    config?.content?.read?.objects?.[selectedObjectName]?.selectedValueMappings;
+  const serverValueMappings = selectedObjectName
+    ? config?.content?.read?.objects?.[selectedObjectName]
+        ?.selectedValueMappings
+    : undefined;
 
   // is modified derived state
   const selectedValueMappings = configureState?.read?.selectedValueMappings;
 
   // check if value mappings (local) is equal to saved value mappings (server)
-  const isValueMappingsModified = !isEqual(
+  const isValueMappingsModified = !isValueMappingsEqual(
     serverValueMappings,
     selectedValueMappings,
   );

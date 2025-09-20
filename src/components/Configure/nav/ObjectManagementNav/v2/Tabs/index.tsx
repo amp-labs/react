@@ -1,6 +1,6 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavIcon } from "assets/NavIcon";
-import isEqual from "lodash.isequal";
+import { isValueMappingsEqual } from "src/components/Configure/content/fields/ValueMapping/utils";
 import {
   NavObject,
   ObjectConfigurationsState,
@@ -116,21 +116,10 @@ export function VerticalTabs({
             configureState?.read?.selectedValueMappings;
 
           // check if value mappings (local) is equal to saved value mappings (server)
-          const isValueMappingsModified = !isEqual(
+          const isValueMappingsModified = !isValueMappingsEqual(
             savedValueMappings,
             selectedValueMappings,
           );
-
-          console.group("object", object.name);
-          console.log("isOptionalFieldsModified", isOptionalFieldsModified);
-          console.log(
-            "isRequiredMapFieldsModified",
-            isRequiredMapFieldsModified,
-          );
-          console.log("isValueMappingsModified", isValueMappingsModified);
-          console.log("savedValueMappings", savedValueMappings);
-          console.log("selectedValueMappings", selectedValueMappings);
-          console.groupEnd();
 
           const isPending =
             isOptionalFieldsModified ||
