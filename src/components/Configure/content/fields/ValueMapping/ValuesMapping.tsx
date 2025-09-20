@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
-import isEqual from "lodash.isequal";
 import { FormControl } from "src/components/form/FormControl";
 
+import { useValueMappingStore } from "../../../../../stores/valueMappingStore";
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 
 import { setValueMapping, setValueMappingModified } from "./setValueMapping";
@@ -71,9 +71,17 @@ export function ValueMappings() {
     useSelectedConfigureState();
   const { isError, removeError, getError } = useErrorState();
 
+  // Zustand store hooks
+  const {
+    updateMapping,
+    loadFromExternal,
+    saveSnapshot,
+    getMappingForField,
+    isDirty,
+  } = useValueMappingStore();
+
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const selectedMappings = configureState?.read?.selectedValueMappings;
-  const isValueMappingsModified = configureState?.read?.isValueMappingsModified;
 
   const valuesMappings = useMemo(() => {
     // get all the fields that have fieldMappings from the selected object
@@ -105,9 +113,10 @@ export function ValueMappings() {
         fieldName: string;
       };
 
-      // if place holder value is chosen, we don't change state
-      if (!value) return;
+      // Update Zustand store
+      updateMapping(fieldName, name, value);
 
+      // Still update the old state for backward compatibility
       if (selectedObjectName) {
         setValueMapping(
           selectedObjectName,
@@ -122,65 +131,47 @@ export function ValueMappings() {
         removeError(ErrorBoundary.VALUE_MAPPING, name);
       }
     },
-    [selectedObjectName, setConfigureState, isError, removeError],
+    [
+      selectedObjectName,
+      setConfigureState,
+      isError,
+      removeError,
+      updateMapping,
+    ],
   );
 
-  // Separate useEffect to check for modifications when selectedMappings changes
-  // update the modified flag when the value mappings are modified
+  // Sync external state with Zustand store
   useEffect(() => {
-    if (
-      selectedObjectName &&
-      selectedMappings &&
-      configureState?.read?.savedConfig?.selectedValueMappings
-    ) {
-      const savedValueMappings =
-        configureState?.read?.savedConfig?.selectedValueMappings;
-      const updatedValueMappings = selectedMappings;
-      const isModified = !isEqual(savedValueMappings, updatedValueMappings);
+    if (selectedMappings) {
+      loadFromExternal(selectedMappings);
+    }
+  }, [selectedMappings, loadFromExternal]);
 
+  // Initialize saved state when component mounts or saved config changes
+  useEffect(() => {
+    if (configureState?.read?.savedConfig?.selectedValueMappings) {
+      const savedValueMappings =
+        configureState.read.savedConfig.selectedValueMappings;
+      loadFromExternal(savedValueMappings);
+      saveSnapshot(); // Set this as the saved state for dirty comparison
+    }
+  }, [
+    configureState?.read?.savedConfig?.selectedValueMappings,
+    loadFromExternal,
+    saveSnapshot,
+  ]);
+
+  // Update the modified flag based on Zustand dirty state
+  useEffect(() => {
+    if (selectedObjectName) {
+      const zustandIsDirty = isDirty();
       setValueMappingModified(
         selectedObjectName,
         setConfigureState,
-        isModified,
+        zustandIsDirty,
       );
     }
-  }, [
-    selectedMappings,
-    selectedObjectName,
-    setConfigureState,
-    configureState?.read?.savedConfig?.selectedValueMappings,
-  ]);
-
-  // update the modified flag when the value mappings is initialized
-  useEffect(() => {
-    if (selectedObjectName && selectedMappings) {
-      // Find all fields that have mappedValues
-      const fieldsWithMappings =
-        fieldMapping?.[selectedObjectName]?.filter(
-          (f) => f.fieldName && f.mappedValues!.length > 0,
-        ) || [];
-
-      // Check if any values are mapped for any field
-      const hasAnyMappings = fieldsWithMappings.some((field) => {
-        const mappingsForField = selectedMappings[field.fieldName!] || {};
-        return Object.keys(mappingsForField).length > 0;
-      });
-
-      if (hasAnyMappings && fieldsWithMappings.length > 0) {
-        // Set modified flag as soon as any mapping is made
-        if (!isValueMappingsModified) {
-          setValueMappingModified(selectedObjectName, setConfigureState, true);
-        }
-      }
-    }
-  }, [
-    selectedMappings,
-    valuesMappings,
-    selectedObjectName,
-    setConfigureState,
-    fieldMapping,
-    isValueMappingsModified,
-  ]);
+  }, [selectedObjectName, setConfigureState, isDirty]);
 
   return valuesMappings?.length ? (
     <>
@@ -244,8 +235,7 @@ export function ValueMappings() {
                       ?.values || [];
 
                   // Get currently selected values for this field (excluding current value)
-                  const mappingsForField =
-                    selectedMappings?.[field.fieldName!] || {};
+                  const mappingsForField = getMappingForField(field.fieldName!);
                   const currentlySelectedValues =
                     Object.values(mappingsForField).filter(Boolean);
                   const currentValueSelection =

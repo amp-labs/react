@@ -12,6 +12,7 @@ import { setHydrateConfigState } from "../state/utils";
 import { validateFieldMappings } from "../utils";
 
 import { ConfigureInstallationBase } from "./ConfigureInstallationBase";
+import { useValueMappingButtonState } from "./hooks/useValueMappingButtonState";
 import { useMutateInstallation } from "./useMutateInstallation";
 
 // the config should be undefined for create flow
@@ -42,6 +43,7 @@ export function CreateInstallation() {
   const [isLoading, setLoadingState] = useState<boolean>(false);
   // migrate to use headless installation hooks
   const { createInstallation } = useCreateInstallation();
+  const { saveValueMappingSnapshot } = useValueMappingButtonState();
 
   const isWriteSelected = selectedObjectName === WRITE_CONST;
 
@@ -117,6 +119,8 @@ export function CreateInstallation() {
         config: createConfig.content,
         onSuccess: (installation) => {
           setInstallation(installation);
+          // Save Zustand snapshot after successful creation
+          saveValueMappingSnapshot();
           onInstallSuccess?.(installation.id, installation.config);
           setLoadingState(false);
           resetPendingConfigurationState(selectedObjectName);
@@ -161,6 +165,8 @@ export function CreateInstallation() {
         config: createConfig.content,
         onSuccess: (installation) => {
           setInstallation(installation);
+          // Save Zustand snapshot after successful creation
+          saveValueMappingSnapshot();
           onInstallSuccess?.(installation.id, installation.config);
           setLoadingState(false);
           resetPendingConfigurationState(selectedObjectName); // reset write pending/isModified state

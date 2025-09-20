@@ -11,6 +11,7 @@ import { setHydrateConfigState } from "../state/utils";
 import { validateFieldMappings } from "../utils";
 
 import { ConfigureInstallationBase } from "./ConfigureInstallationBase";
+import { useValueMappingButtonState } from "./hooks/useValueMappingButtonState";
 import { useMutateInstallation } from "./useMutateInstallation";
 
 interface UpdateInstallationProps {
@@ -35,6 +36,7 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
     onNextIncompleteTab,
   } = useMutateInstallation();
   const { updateInstallation } = useUpdateInstallation();
+  const { saveValueMappingSnapshot } = useValueMappingButtonState();
 
   const [isLoading, setLoadingState] = useState<boolean>(false);
   const isWriteSelected = selectedObjectName === WRITE_CONST;
@@ -119,6 +121,8 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
         config: updateConfig.content as Partial<ConfigContent>, // type cast to Partial<ConfigContent> to match config types
         onSuccess: (installation) => {
           setInstallation(installation);
+          // Save Zustand snapshot after successful update
+          saveValueMappingSnapshot();
           onUpdateSuccess?.(installation.id, installation.config);
           setLoadingState(false);
           resetPendingConfigurationState(selectedObjectName!);
@@ -154,6 +158,8 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
         config: updateConfig.content as Partial<ConfigContent>,
         onSuccess: (installation) => {
           setInstallation(installation);
+          // Save Zustand snapshot after successful update
+          saveValueMappingSnapshot();
           onUpdateSuccess?.(installation.id, installation.config);
           setLoadingState(false);
           resetPendingConfigurationState(selectedObjectName!);

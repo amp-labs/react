@@ -13,8 +13,13 @@ import {
 import { useHydratedRevision } from "../state/HydratedRevisionContext";
 import { getReadObject } from "../utils";
 
+import {
+  debugButtonConditions,
+  debugSaveButtonState,
+} from "./debug/saveButtonDebug";
 import { ReadFields } from "./fields/ReadFields";
 import { WriteFields } from "./fields/WriteFields";
+import { useValueMappingButtonState } from "./hooks/useValueMappingButtonState";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
 
@@ -37,6 +42,7 @@ export function ConfigureInstallationBase({
   const { installation } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { configureState, selectedObjectName } = useSelectedConfigureState();
+  const { isValueMappingsModified } = useValueMappingButtonState();
 
   // check if selected object is completed.
   const config = installation?.config;
@@ -47,10 +53,11 @@ export function ConfigureInstallationBase({
     false;
 
   // has the form been modified?
+  // Use Zustand dirty state for value mappings instead of configure state
   const isReadModified =
     configureState?.read?.isOptionalFieldsModified ||
     configureState?.read?.isRequiredMapFieldsModified ||
-    configureState?.read?.isValueMappingsModified;
+    isValueMappingsModified;
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
 
@@ -67,6 +74,23 @@ export function ConfigureInstallationBase({
     !configureState ||
     !selectedObjectName ||
     !isStateNew;
+
+  // Debug logging for save button state
+  debugSaveButtonState({
+    loading,
+    isLoading,
+    hasConfigureState: !!configureState,
+    selectedObjectName,
+    isStateNew,
+    isModified,
+    isReadModified,
+    isWriteModified,
+    isValueMappingsModified,
+    isDisabled,
+    isCreateMode,
+    isSelectedReadConfigComplete,
+    isSelectedReadObjectComplete,
+  });
 
   // is write selected?
   const isNonConfigurableWrite = selectedObjectName === WRITE_CONST;
@@ -107,6 +131,15 @@ export function ConfigureInstallationBase({
           <>
             {ButtonBridgeSubmit}
             {ButtonBridgeReset}
+            {/* Debug button - remove in production */}
+            <Button
+              type="button"
+              onClick={debugButtonConditions}
+              variant="ghost"
+              style={{ fontSize: "12px", padding: "4px 8px" }}
+            >
+              🔍 Debug
+            </Button>
           </>
         )}
       </div>
