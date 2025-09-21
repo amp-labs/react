@@ -63,28 +63,16 @@ const generateConfigurationStateRead = (
     (object?.allFields as HydratedIntegrationFieldExistent[]) || [];
   const allFieldsMetadata = object?.allFieldsMetadata || {};
   const content = config?.content;
-  const readSelectedFields =
-    content?.read?.objects?.[objectName]?.selectedFields || {};
   const selectedValueMappings =
     content?.read?.objects?.[objectName]?.selectedValueMappings || {};
   const selectedFieldMappings =
     content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
 
-  // Filter optionalFieldsSaved to only include optional fields
-  const optionalFieldsSaved = Object.entries(readSelectedFields).reduce(
-    (acc, [fieldName, value]) => {
-      const isOptionalField = optionalFields?.some(
-        (field): field is HydratedIntegrationFieldExistent =>
-          !isIntegrationFieldMapping(field) &&
-          "fieldName" in field &&
-          field.fieldName === fieldName,
-      );
-      if (isOptionalField) {
-        acc[fieldName] = value;
-      }
-      return acc;
-    },
-    {} as SelectOptionalFields,
+  // Get optional fields from saved config (server)
+  const serverOptionalSelected = getServerOptionalSelectedFields(
+    config,
+    { content: { read: readAction } } as HydratedRevision,
+    objectName,
   );
 
   const requiredMapFieldsSaved = { ...selectedFieldMappings };
@@ -97,13 +85,11 @@ const generateConfigurationStateRead = (
     requiredMapFields, // from hydrated revision
     optionalMapFields, // from hydrated revision
     // selected state
-    selectedOptionalFields: optionalFieldsSaved,
+    selectedOptionalFields: serverOptionalSelected,
     selectedFieldMappings,
     selectedValueMappings,
-    isOptionalFieldsModified: false,
     isRequiredMapFieldsModified: false,
     savedConfig: {
-      optionalFields: optionalFieldsSaved, // from config
       requiredMapFields: requiredMapFieldsSaved, // from config
     },
   };
@@ -253,6 +239,60 @@ export const generateSelectedValuesMappingsFromConfigureState = (
 ) => {
   const { selectedValueMappings } = configureState?.read || {};
   return selectedValueMappings;
+};
+
+/**
+ * gets the server optional selected fields from the installation config
+ * filtered by optional fields from the hydrated revision
+ * @param config - installation config
+ * @param hydratedRevision - hydrated revision data
+ * @param objectName - object name to get fields for
+ * @returns selected optional fields from server config
+ */
+export const getServerOptionalSelectedFields = (
+  config: Config | undefined,
+  hydratedRevision: HydratedRevision,
+  objectName: string,
+): SelectOptionalFields => {
+  if (!config || !hydratedRevision) {
+    return {};
+  }
+
+  const readAction = hydratedRevision?.content?.read;
+  if (!readAction) {
+    return {};
+  }
+
+  // Get optional fields from hydrated revision
+  const object = getObjectFromAction(readAction, objectName);
+  const optionalFields = object && getOptionalFieldsFromObject(object);
+
+  // Create a Set of optional field names for O(1) lookup performance
+  const optionalFieldNames = new Set(
+    optionalFields
+      ?.filter(
+        (field): field is HydratedIntegrationFieldExistent =>
+          !isIntegrationFieldMapping(field) && !!field.fieldName,
+      )
+      .map((field) => field.fieldName) || [],
+  );
+
+  // Get server selected fields from config
+  const readSelectedFields =
+    config?.content?.read?.objects?.[objectName]?.selectedFields || {};
+
+  // Filter to only include optional fields that are selected
+  const serverOptionalSelected = Object.entries(readSelectedFields).reduce(
+    (acc, [fieldName, value]) => {
+      if (optionalFieldNames.has(fieldName)) {
+        acc[fieldName] = value;
+      }
+      return acc;
+    },
+    {} as SelectOptionalFields,
+  );
+
+  return serverOptionalSelected;
 };
 
 // get configure state of single object

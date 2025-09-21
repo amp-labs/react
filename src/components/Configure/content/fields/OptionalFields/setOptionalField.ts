@@ -1,6 +1,5 @@
 import { Draft } from "immer";
 
-import { isFieldObjectEqual } from "../../../state/utils";
 import { ConfigureState } from "../../../types";
 
 function setOptionalFieldProducer(
@@ -12,17 +11,6 @@ function setOptionalFieldProducer(
   draftSelectedOptionalFields[fieldKey] = checked;
   if (!checked) {
     delete draftSelectedOptionalFields[fieldKey];
-  }
-
-  if (draft.read?.savedConfig.optionalFields) {
-    const savedFields = draft.read.savedConfig.optionalFields;
-    const updatedFields = draftSelectedOptionalFields;
-    const isModified = !isFieldObjectEqual(savedFields, updatedFields);
-    // immer exception if we try to set a value
-
-    draft.read.isOptionalFieldsModified = isModified;
-  } else {
-    console.warn("read.savedConfig.optionalFields is undefined");
   }
 }
 

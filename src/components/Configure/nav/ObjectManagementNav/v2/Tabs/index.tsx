@@ -1,12 +1,15 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavIcon } from "assets/NavIcon";
 import { isValueMappingsEqual } from "src/components/Configure/content/fields/ValueMapping/utils";
+import { getServerOptionalSelectedFields } from "src/components/Configure/state/utils";
 import {
   NavObject,
   ObjectConfigurationsState,
 } from "src/components/Configure/types";
+import { isOptionalFieldsEqual } from "src/components/Configure/utils";
 import { Divider } from "src/components/ui-base/Divider";
 import { useInstallation } from "src/headless/installation/useInstallation";
+import { useHydratedRevisionQuery } from "src/headless/manifest/useHydratedRevisionQuery";
 
 import { WRITE_CONST } from "../../constant";
 
@@ -87,6 +90,7 @@ export function VerticalTabs({
   objectConfigurationsState,
   writeNavObject,
 }: VerticalTabsProps) {
+  const { data: hydratedRevision } = useHydratedRevisionQuery();
   const { installation } = useInstallation();
   const serverConfig = installation?.config; // from server
 
@@ -104,10 +108,24 @@ export function VerticalTabs({
           const configureState = objectConfigurationsState?.[object.name]; // local state
 
           // todo migrate to derived state
-          const isOptionalFieldsModified =
-            configureState?.read?.isOptionalFieldsModified;
           const isRequiredMapFieldsModified =
             configureState?.read?.isRequiredMapFieldsModified;
+
+          // server optional fields
+          const serverOptionalFields = hydratedRevision
+            ? getServerOptionalSelectedFields(
+                serverConfig,
+                hydratedRevision,
+                object.name,
+              )
+            : undefined;
+          const selectedOptionalFields =
+            configureState?.read?.selectedOptionalFields;
+
+          const isOptionalFieldsModified = !isOptionalFieldsEqual(
+            serverOptionalFields,
+            selectedOptionalFields,
+          );
 
           // derived state for value mappings modified
           // is modified derived state
