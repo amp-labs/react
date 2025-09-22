@@ -295,6 +295,27 @@ export const getServerOptionalSelectedFields = (
   return serverOptionalSelected;
 };
 
+/**
+ * gets the server field mappings from the installation config
+ * @param config - installation config
+ * @param objectName - object name to get field mappings for
+ * @returns selected field mappings from server config
+ */
+export const getServerFieldMappings = (
+  config: Config | undefined,
+  objectName: string,
+): SelectMappingFields => {
+  if (!config || !objectName) {
+    return {};
+  }
+
+  // Get server selected field mappings from config
+  const serverFieldMappings =
+    config?.content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
+
+  return serverFieldMappings;
+};
+
 // get configure state of single object
 export function getConfigureState(
   objectName: string,

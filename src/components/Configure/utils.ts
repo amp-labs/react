@@ -221,3 +221,41 @@ export function isOptionalFieldsEqual(
   // Both are non-empty, use deep equality check
   return isEqual(serverOptionalFields, localOptionalFields);
 }
+
+/**
+ * Compares two field mappings objects, treating undefined and empty objects as equal
+ * @param serverFieldMappings - field mappings from server (can be undefined)
+ * @param localFieldMappings - field mappings from local state (can be empty object)
+ * @returns true if they should be considered equal (not modified)
+ */
+export function isFieldMappingsEqual(
+  serverFieldMappings: Record<string, string | undefined> | undefined,
+  localFieldMappings: Record<string, string | undefined> | null | undefined,
+): boolean {
+  // Helper function to check if a field mappings object is effectively empty
+  const isEffectivelyEmpty = (
+    obj: Record<string, string | undefined> | null | undefined,
+  ): boolean => {
+    // Use lodash isEmpty for null, undefined, and empty object checks
+    if (isEmpty(obj)) return true;
+
+    // Check if all field mappings are undefined or empty strings (effectively unmapped)
+    return Object.values(obj!).every((value) => !value || value === "");
+  };
+
+  const isEmpty1 = isEffectivelyEmpty(serverFieldMappings);
+  const isEmpty2 = isEffectivelyEmpty(localFieldMappings);
+
+  // If both are empty, they're equal
+  if (isEmpty1 && isEmpty2) {
+    return true;
+  }
+
+  // If only one is empty, they're not equal
+  if (isEmpty1 !== isEmpty2) {
+    return false;
+  }
+
+  // Both are non-empty, use deep equality check
+  return isEqual(serverFieldMappings, localFieldMappings);
+}
