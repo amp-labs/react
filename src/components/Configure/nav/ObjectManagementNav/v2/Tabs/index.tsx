@@ -1,6 +1,5 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavIcon } from "assets/NavIcon";
-import { isValueMappingsEqual } from "src/components/Configure/content/fields/ValueMapping/utils";
 import {
   getServerFieldMappings,
   getServerOptionalSelectedFields,
@@ -12,6 +11,7 @@ import {
 import {
   isFieldMappingsEqual,
   isOptionalFieldsEqual,
+  isValueMappingsEqual,
 } from "src/components/Configure/utils";
 import { Divider } from "src/components/ui-base/Divider";
 import { useInstallation } from "src/headless/installation/useInstallation";

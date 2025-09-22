@@ -19,10 +19,10 @@ import {
   getReadObject,
   isFieldMappingsEqual,
   isOptionalFieldsEqual,
+  isValueMappingsEqual,
 } from "../utils";
 
 import { ReadFields } from "./fields/ReadFields";
-import { isValueMappingsEqual } from "./fields/ValueMapping/utils";
 import { WriteFields } from "./fields/WriteFields";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
