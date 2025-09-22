@@ -131,7 +131,7 @@ export function ConfigurationProvider({
         produce((draft) => {
           const readDraft = draft[objectName]?.read;
           if (readDraft) {
-            readDraft.isRequiredMapFieldsModified = false;
+            // Note: isRequiredMapFieldsModified is now derived state, no longer stored
           }
         }),
       );

@@ -35,14 +35,6 @@ export function areWriteObjectsEqual(
   return isEqual(prevWriteObjects, currentWriteObjects);
 }
 
-// uses lodash deep equality check to compare two saved fields objects
-export function isFieldObjectEqual(
-  prevFields: SelectMappingFields | SelectOptionalFields,
-  currentFields: SelectMappingFields | SelectOptionalFields,
-): boolean {
-  return isEqual(prevFields, currentFields);
-}
-
 const generateConfigurationStateRead = (
   readAction: HydratedIntegrationRead | undefined,
   objectName: string,
@@ -75,8 +67,6 @@ const generateConfigurationStateRead = (
     objectName,
   );
 
-  const requiredMapFieldsSaved = { ...selectedFieldMappings };
-
   return {
     allFields, // from hydrated revision
     allFieldsMetadata, // from hydrated revision
@@ -88,10 +78,6 @@ const generateConfigurationStateRead = (
     selectedOptionalFields: serverOptionalSelected,
     selectedFieldMappings,
     selectedValueMappings,
-    isRequiredMapFieldsModified: false,
-    savedConfig: {
-      requiredMapFields: requiredMapFieldsSaved, // from config
-    },
   };
 };
 
