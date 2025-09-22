@@ -17,9 +17,31 @@ function setFieldMappingProducer(
   fields.forEach((mapping) => {
     const { field, value } = mapping;
     if (value === null) {
+      // Get the current field name before deleting the mapping
+      const currentFieldName = draftRequiredMapFields[field];
       delete draftRequiredMapFields[field];
+
+      // Clear corresponding value mappings when field mapping is cleared
+      // This ensures value mapping local state is cleared when UI is hidden
+      if (currentFieldName && draft?.read?.selectedValueMappings) {
+        if (draft.read.selectedValueMappings[currentFieldName]) {
+          delete draft.read.selectedValueMappings[currentFieldName];
+        }
+      }
     } else {
+      const previousFieldName = draftRequiredMapFields[field];
       draftRequiredMapFields[field] = value;
+
+      // Clear value mappings for the previous field name if it changed
+      if (
+        previousFieldName &&
+        previousFieldName !== value &&
+        draft?.read?.selectedValueMappings
+      ) {
+        if (draft.read.selectedValueMappings[previousFieldName]) {
+          delete draft.read.selectedValueMappings[previousFieldName];
+        }
+      }
     }
   });
 
