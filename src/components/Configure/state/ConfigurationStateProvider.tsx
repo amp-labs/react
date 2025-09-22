@@ -114,6 +114,7 @@ export function ConfigurationProvider({
     [setObjectConfigurationsState],
   );
 
+  // todo: remove this function and use derived state instead
   const resetWritePendingConfigurationState = useCallback(() => {
     setObjectConfigurationsState(
       produce((draft) => {
@@ -125,20 +126,7 @@ export function ConfigurationProvider({
     );
   }, [setObjectConfigurationsState]);
 
-  const resetReadPendingConfigurationState = useCallback(
-    (objectName: string) => {
-      setObjectConfigurationsState(
-        produce((draft) => {
-          const readDraft = draft[objectName]?.read;
-          if (readDraft) {
-            // Note: isRequiredMapFieldsModified is now derived state, no longer stored
-          }
-        }),
-      );
-    },
-    [setObjectConfigurationsState],
-  );
-
+  // todo: remove this function and use derived state instead
   // set configure state of single object
   const resetPendingConfigurationState = useCallback(
     (objectName: string) => {
@@ -147,10 +135,10 @@ export function ConfigurationProvider({
         resetWritePendingConfigurationState();
       } else {
         // read case
-        resetReadPendingConfigurationState(objectName);
+        // no longer needed, is derived state
       }
     },
-    [resetReadPendingConfigurationState, resetWritePendingConfigurationState],
+    [resetWritePendingConfigurationState],
   );
 
   const contextValue = useMemo(
