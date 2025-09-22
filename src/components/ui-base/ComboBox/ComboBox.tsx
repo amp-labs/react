@@ -107,7 +107,7 @@ export function ComboBox({
     // This ensures the input shows the correct selected value after user clicks outside
     if (selectedValue && selectedValueLabel) {
       setInputValue(selectedValueLabel);
-    } else if (!selectedValue) {
+    } else {
       // If no value is selected, clear the input
       setInputValue("");
     }
