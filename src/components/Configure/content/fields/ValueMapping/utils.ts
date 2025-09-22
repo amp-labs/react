@@ -1,5 +1,3 @@
-import isEqual from "lodash.isequal";
-
 interface Field {
   fieldName?: string;
   mapToName?: string;
