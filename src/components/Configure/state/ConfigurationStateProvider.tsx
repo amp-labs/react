@@ -131,7 +131,6 @@ export function ConfigurationProvider({
         produce((draft) => {
           const readDraft = draft[objectName]?.read;
           if (readDraft) {
-            readDraft.isOptionalFieldsModified = false;
             readDraft.isRequiredMapFieldsModified = false;
           }
         }),

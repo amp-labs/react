@@ -59,6 +59,7 @@
     "@babel/preset-typescript": "^7.23.2",
     "@jest/globals": "^30.0.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@types/lodash.isempty": "^4.4.9",
     "@types/lodash.isequal": "^4.5.7",
     "@types/node": "^24.0.0",
     "@types/react": "18.3.2",
@@ -100,6 +101,7 @@
     "globals": "^16.0.0",
     "immer": "^10.0.3",
     "jose": "^6.0.12",
+    "lodash.isempty": "^4.4.0",
     "lodash.isequal": "^4.5.0",
     "react-tooltip": "^5.28.0"
   },

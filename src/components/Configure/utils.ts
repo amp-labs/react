@@ -1,5 +1,7 @@
 import { IntegrationFieldExistent } from "@generated/api/src";
 import { ErrorBoundary } from "context/ErrorContextProvider";
+import isEmpty from "lodash.isempty";
+import isEqual from "lodash.isequal";
 import {
   Config,
   HydratedIntegrationField,
@@ -178,4 +180,44 @@ export function validateFieldMappings(
     );
   }
   return { errorList };
+}
+
+/**
+ * Compares two optional fields objects, treating undefined and empty objects as equal
+ * @param serverOptionalFields - optional fields from server (can be undefined)
+ * @param localOptionalFields - optional fields from local state (can be empty object)
+ * @returns true if they should be considered equal (not modified)
+ */
+export function isOptionalFieldsEqual(
+  serverOptionalFields: Record<string, boolean> | undefined,
+  localOptionalFields: Record<string, boolean> | null | undefined,
+): boolean {
+  // Helper function to check if an optional fields object is effectively empty
+  const isEffectivelyEmpty = (
+    obj: Record<string, boolean> | null | undefined,
+  ): boolean => {
+    // Use lodash isEmpty for null, undefined, and empty object checks
+    if (isEmpty(obj)) return true;
+
+    // Check if all field selections are false or undefined (effectively unselected)
+    return Object.values(obj!).every(
+      (value) => value === false || value === undefined,
+    );
+  };
+
+  const isEmpty1 = isEffectivelyEmpty(serverOptionalFields);
+  const isEmpty2 = isEffectivelyEmpty(localOptionalFields);
+
+  // If both are empty, they're equal
+  if (isEmpty1 && isEmpty2) {
+    return true;
+  }
+
+  // If only one is empty, they're not equal
+  if (isEmpty1 !== isEmpty2) {
+    return false;
+  }
+
+  // Both are non-empty, use deep equality check
+  return isEqual(serverOptionalFields, localOptionalFields);
 }

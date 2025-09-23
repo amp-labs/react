@@ -11,14 +11,14 @@ import {
   WRITE_CONST,
 } from "../nav/ObjectManagementNav/constant";
 import { useHydratedRevision } from "../state/HydratedRevisionContext";
-import { getReadObject } from "../utils";
+import { getServerOptionalSelectedFields } from "../state/utils";
+import { getReadObject, isOptionalFieldsEqual } from "../utils";
 
 import { ReadFields } from "./fields/ReadFields";
 import { isValueMappingsEqual } from "./fields/ValueMapping/utils";
 import { WriteFields } from "./fields/WriteFields";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
-
 interface ConfigureInstallationBaseProps {
   isCreateMode?: boolean;
   onSave: FormEventHandler;
@@ -47,6 +47,29 @@ export function ConfigureInstallationBase({
       !!getReadObject(config, selectedObjectName)) ||
     false;
 
+  // todo migrate to derived state
+  const isRequiredMapFieldsModified =
+    configureState?.read?.isRequiredMapFieldsModified;
+
+  // optional fields ///////////////
+  // fetched from server
+  const serverOptionalFields =
+    hydratedRevision && selectedObjectName
+      ? getServerOptionalSelectedFields(
+          config,
+          hydratedRevision,
+          selectedObjectName,
+        )
+      : undefined;
+  const selectedOptionalFields = configureState?.read?.selectedOptionalFields;
+
+  // is modified derived state
+  const isOptionalFieldsModified = !isOptionalFieldsEqual(
+    serverOptionalFields,
+    selectedOptionalFields,
+  );
+
+  // value mappings ///////////////
   // fetched from server
   const serverValueMappings = selectedObjectName
     ? config?.content?.read?.objects?.[selectedObjectName]
@@ -64,8 +87,8 @@ export function ConfigureInstallationBase({
 
   // has the form been modified?
   const isReadModified =
-    configureState?.read?.isOptionalFieldsModified ||
-    configureState?.read?.isRequiredMapFieldsModified ||
+    isOptionalFieldsModified ||
+    isRequiredMapFieldsModified ||
     isValueMappingsModified;
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
