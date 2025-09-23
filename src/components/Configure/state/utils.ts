@@ -228,8 +228,9 @@ export const generateSelectedValuesMappingsFromConfigureState = (
 };
 
 /**
- * gets the server optional selected fields from the installation config
- * filtered by optional fields from the hydrated revision
+ * Get the intersection of fields that are:
+ * - optional fields in the hydrated revision
+ * - selected fields in the config (includes both required and optional fields)
  * @param config - installation config
  * @param hydratedRevision - hydrated revision data
  * @param objectName - object name to get fields for
