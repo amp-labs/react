@@ -1,6 +1,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavIcon } from "assets/NavIcon";
 import {
+  areWriteObjectsEqual,
   getServerFieldMappings,
   getServerOptionalSelectedFields,
 } from "src/components/Configure/state/utils";
@@ -100,6 +101,10 @@ export function VerticalTabs({
   const { installation } = useInstallation();
   const serverConfig = installation?.config; // from server
 
+  const serverWriteObjects = serverConfig?.content?.write?.objects;
+  const selectedWriteObjects =
+    objectConfigurationsState?.other?.write?.selectedWriteObjects;
+
   return (
     <Tabs.Root
       value={value}
@@ -171,15 +176,21 @@ export function VerticalTabs({
           );
         })}
         {/* Other / Write Tab */}
-        {writeNavObject && (
-          <WriteTab
-            completed={writeNavObject.completed}
-            pending={
-              objectConfigurationsState?.other?.write?.isWriteModified || false
-            }
-            displayName="Write"
-          />
-        )}
+        {writeNavObject &&
+          (() => {
+            const isWriteModified = !areWriteObjectsEqual(
+              serverWriteObjects || {},
+              selectedWriteObjects || {},
+            );
+
+            return (
+              <WriteTab
+                completed={writeNavObject.completed}
+                pending={isWriteModified}
+                displayName="Write"
+              />
+            );
+          })()}
 
         {/* Manage Tab */}
         <ManageTab />

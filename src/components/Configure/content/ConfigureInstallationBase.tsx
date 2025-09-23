@@ -12,6 +12,7 @@ import {
 } from "../nav/ObjectManagementNav/constant";
 import { useHydratedRevision } from "../state/HydratedRevisionContext";
 import {
+  areWriteObjectsEqual,
   getServerFieldMappings,
   getServerOptionalSelectedFields,
 } from "../state/utils";
@@ -101,12 +102,22 @@ export function ConfigureInstallationBase({
     selectedValueMappings,
   );
 
+  // write objects ///////////////
+  // fetched from server
+  const serverWriteObjects = config?.content?.write?.objects;
+  const selectedWriteObjects = configureState?.write?.selectedWriteObjects;
+
+  // is modified derived state
+  const isWriteModified = !areWriteObjectsEqual(
+    serverWriteObjects || {},
+    selectedWriteObjects || {},
+  );
+
   // has the form been modified?
   const isReadModified =
     isOptionalFieldsModified ||
     isFieldMappingsModified ||
     isValueMappingsModified;
-  const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
 
   // if the read object is not completed, it is a new state

@@ -58,10 +58,17 @@ export function useUpdateInstallation() {
 
     // add write objects to update mask
     const updateMask = [];
-    // add write objects to update mask
+    const currentWriteObjectsLength = Object.keys(
+      config?.write?.objects || {},
+    ).length;
+    const previousWriteObjectsLength = Object.keys(
+      installation?.config?.content?.write?.objects || {},
+    ).length;
+
+    // push update mask if write objects length > 0 or if length === 0 and installation had objects previously
     if (
-      config?.write?.objects &&
-      Object.keys(config.write.objects).length > 0
+      currentWriteObjectsLength > 0 ||
+      (currentWriteObjectsLength === 0 && previousWriteObjectsLength > 0)
     ) {
       updateMask.push("config.content.write.objects");
     }
@@ -89,6 +96,10 @@ export function useUpdateInstallation() {
         },
       },
     };
+
+    console.group("Update Installation");
+    console.log("updateInstallationRequest", updateInstallationRequest);
+    console.groupEnd();
 
     return updateInstallationMutation(updateInstallationRequest, {
       onSuccess: (data) => {

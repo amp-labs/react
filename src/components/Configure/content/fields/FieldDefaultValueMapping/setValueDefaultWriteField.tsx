@@ -1,6 +1,5 @@
 import { Draft } from "immer";
 
-import { areWriteObjectsEqual } from "../../../state/utils";
 import { ConfigureState } from "../../../types";
 
 function setValueDefaultWriteFieldProducer(
@@ -39,18 +38,6 @@ function setValueDefaultWriteFieldProducer(
       }
     }
 
-    // check is modified
-    if (draft?.write?.savedConfig?.selectedWriteObjects) {
-      const savedWriteObjects = draft.write.savedConfig.selectedWriteObjects;
-      const updatedWriteObjects = draftSelectedWriteFields;
-      const isModified = !areWriteObjectsEqual(
-        savedWriteObjects,
-        updatedWriteObjects,
-      );
-      // immer syntax to set a value
-
-      draft.write.isWriteModified = isModified;
-    }
 
     // DEBUG: print out the draft
     // console.debug('Set default value', JSON.stringify(draft?.write, null, 2));

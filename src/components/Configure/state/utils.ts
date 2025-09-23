@@ -1,4 +1,3 @@
-import isEqual from "lodash.isequal";
 import {
   Config,
   HydratedIntegrationFieldExistent,
@@ -27,12 +26,30 @@ import {
   isIntegrationFieldMapping,
 } from "../utils";
 
-// uses lodash deep equality check to compare two saved write objects (typed checked)
+// compares two write objects by checking if they have the same objectNames
+// implemntation detail: sdk generates selectedValueDefaults, selectedFieldSettings;
+// todo: switch to not pass the undefined values to the sdk
 export function areWriteObjectsEqual(
   prevWriteObjects: SelectedWriteObjects,
   currentWriteObjects: SelectedWriteObjects,
 ): boolean {
-  return isEqual(prevWriteObjects, currentWriteObjects);
+  // check if the write objects have the same objectNames
+  // (do not check for equality of the write object selected values, selected fields, etc. yet)
+  const prevObjectNames = new Set(
+    Object.values(prevWriteObjects).map(
+      (writeObject) => writeObject?.objectName,
+    ),
+  );
+  const currentObjectNames = new Set(
+    Object.values(currentWriteObjects).map(
+      (writeObject) => writeObject?.objectName,
+    ),
+  );
+
+  return (
+    prevObjectNames.size === currentObjectNames.size &&
+    [...prevObjectNames].every((name) => currentObjectNames.has(name))
+  );
 }
 
 const generateConfigurationStateRead = (
@@ -94,10 +111,6 @@ const generateConfigurationStateWrite = (
   return {
     writeObjects: writeAction?.objects || [],
     selectedWriteObjects: writeObjects || {},
-    isWriteModified: false,
-    savedConfig: {
-      selectedWriteObjects: writeObjects || {},
-    },
   };
 };
 
