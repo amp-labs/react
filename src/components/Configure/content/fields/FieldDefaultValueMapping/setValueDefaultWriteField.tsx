@@ -38,7 +38,6 @@ function setValueDefaultWriteFieldProducer(
       }
     }
 
-
     // DEBUG: print out the draft
     // console.debug('Set default value', JSON.stringify(draft?.write, null, 2));
   }

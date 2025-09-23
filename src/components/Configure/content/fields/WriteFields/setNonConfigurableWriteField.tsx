@@ -23,7 +23,6 @@ function setNonConfigurableWriteFieldProducer(
       delete draftSelectedWriteFields[fieldKey];
     }
 
-
     // DEBUG: print out the draft
     // console.debug(JSON.stringify(draft, null, 2));
   }
