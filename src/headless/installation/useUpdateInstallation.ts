@@ -97,10 +97,6 @@ export function useUpdateInstallation() {
       },
     };
 
-    console.group("Update Installation");
-    console.log("updateInstallationRequest", updateInstallationRequest);
-    console.groupEnd();
-
     return updateInstallationMutation(updateInstallationRequest, {
       onSuccess: (data) => {
         onSuccess?.(data);
