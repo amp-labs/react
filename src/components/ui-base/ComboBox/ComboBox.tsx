@@ -71,7 +71,6 @@ export function ComboBox({
     highlightedIndex,
     getItemProps,
     setInputValue,
-    selectedItem,
   } = useCombobox<Option>({
     items: filteredItems,
     selectedItem: selectedValue
@@ -104,12 +103,13 @@ export function ComboBox({
 
   // reset the input value when the input is blurred
   const handleBlur = () => {
-    if (
-      selectedValue &&
-      selectedValueLabel &&
-      selectedValue !== selectedItem?.value
-    ) {
-      setInputValue(selectedValueLabel || "");
+    // Always restore the selected value's label when blurring
+    // This ensures the input shows the correct selected value after user clicks outside
+    if (selectedValue && selectedValueLabel) {
+      setInputValue(selectedValueLabel);
+    } else {
+      // If no value is selected, clear the input
+      setInputValue("");
     }
   };
 
