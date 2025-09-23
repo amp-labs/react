@@ -35,14 +35,6 @@ export function areWriteObjectsEqual(
   return isEqual(prevWriteObjects, currentWriteObjects);
 }
 
-// uses lodash deep equality check to compare two saved fields objects
-export function isFieldObjectEqual(
-  prevFields: SelectMappingFields | SelectOptionalFields,
-  currentFields: SelectMappingFields | SelectOptionalFields,
-): boolean {
-  return isEqual(prevFields, currentFields);
-}
-
 const generateConfigurationStateRead = (
   readAction: HydratedIntegrationRead | undefined,
   objectName: string,
@@ -75,8 +67,6 @@ const generateConfigurationStateRead = (
     objectName,
   );
 
-  const requiredMapFieldsSaved = { ...selectedFieldMappings };
-
   return {
     allFields, // from hydrated revision
     allFieldsMetadata, // from hydrated revision
@@ -88,10 +78,6 @@ const generateConfigurationStateRead = (
     selectedOptionalFields: serverOptionalSelected,
     selectedFieldMappings,
     selectedValueMappings,
-    isRequiredMapFieldsModified: false,
-    savedConfig: {
-      requiredMapFields: requiredMapFieldsSaved, // from config
-    },
   };
 };
 
@@ -242,8 +228,9 @@ export const generateSelectedValuesMappingsFromConfigureState = (
 };
 
 /**
- * gets the server optional selected fields from the installation config
- * filtered by optional fields from the hydrated revision
+ * Get the intersection of fields that are:
+ * - optional fields in the hydrated revision
+ * - selected fields in the config (includes both required and optional fields)
  * @param config - installation config
  * @param hydratedRevision - hydrated revision data
  * @param objectName - object name to get fields for
@@ -293,6 +280,27 @@ export const getServerOptionalSelectedFields = (
   );
 
   return serverOptionalSelected;
+};
+
+/**
+ * gets the server field mappings from the installation config
+ * @param config - installation config
+ * @param objectName - object name to get field mappings for
+ * @returns selected field mappings from server config
+ */
+export const getServerFieldMappings = (
+  config: Config | undefined,
+  objectName: string,
+): SelectMappingFields => {
+  if (!config || !objectName) {
+    return {};
+  }
+
+  // Get server selected field mappings from config
+  const serverFieldMappings =
+    config?.content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
+
+  return serverFieldMappings;
 };
 
 // get configure state of single object

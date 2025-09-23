@@ -183,41 +183,113 @@ export function validateFieldMappings(
 }
 
 /**
- * Compares two optional fields objects, treating undefined and empty objects as equal
- * @param serverOptionalFields - optional fields from server (can be undefined)
- * @param localOptionalFields - optional fields from local state (can be empty object)
- * @returns true if they should be considered equal (not modified)
+ * Helper function that checks if an object is effectively "empty" based on custom logic
+ *
+ * This handles these cases:
+ * 1. null, undefined, or {} → considered empty
+ * 2. Objects where all values are considered "empty" by custom logic
+ *
+ * Example: { field1: false, field2: undefined } → empty if false/undefined are "empty values"
+ */
+function isObjectEffectivelyEmpty(
+  obj: Record<string, any> | null | undefined,
+  isValueEmpty: (value: any) => boolean,
+): boolean {
+  // Handle null, undefined, or empty object {}
+  if (isEmpty(obj)) return true;
+
+  // Check if all values in the object are considered "empty"
+  // Example: { field1: false, field2: false } where false = empty
+  return Object.values(obj).every(isValueEmpty);
+}
+
+/**
+ * Generic comparison function for server vs local data
+ *
+ * The pattern we use everywhere:
+ * 1. If both server and local are "empty" → they're equal (no changes)
+ * 2. If only one is empty → they're different (user made changes)
+ * 3. If both have data → use deep comparison
+ */
+function isServerAndLocalDataEqual(
+  serverData: Record<string, any> | undefined,
+  localData: Record<string, any> | null | undefined,
+  isValueEmpty: (value: any) => boolean,
+): boolean {
+  const serverIsEmpty = isObjectEffectivelyEmpty(serverData, isValueEmpty);
+  const localIsEmpty = isObjectEffectivelyEmpty(localData, isValueEmpty);
+
+  // Both empty = no changes made
+  if (serverIsEmpty && localIsEmpty) {
+    return true;
+  }
+
+  // One empty, one not = changes were made
+  if (serverIsEmpty !== localIsEmpty) {
+    return false;
+  }
+
+  // Both have data = compare them deeply
+  return isEqual(serverData, localData);
+}
+
+/**
+ * Compares optional fields from server vs local state
+ *
+ * Example usage:
+ * - Server: undefined (no saved selections)
+ * - Local: { field1: false, field2: false } (user didn't select anything)
+ * - Result: true (both are effectively "empty")
  */
 export function isOptionalFieldsEqual(
   serverOptionalFields: Record<string, boolean> | undefined,
   localOptionalFields: Record<string, boolean> | null | undefined,
 ): boolean {
-  // Helper function to check if an optional fields object is effectively empty
-  const isEffectivelyEmpty = (
-    obj: Record<string, boolean> | null | undefined,
-  ): boolean => {
-    // Use lodash isEmpty for null, undefined, and empty object checks
-    if (isEmpty(obj)) return true;
+  return isServerAndLocalDataEqual(
+    serverOptionalFields,
+    localOptionalFields,
+    (value) => value === false || value === undefined, // false/undefined = not selected
+  );
+}
 
-    // Check if all field selections are false or undefined (effectively unselected)
-    return Object.values(obj!).every(
-      (value) => value === false || value === undefined,
-    );
-  };
+/**
+ * Compares field mappings from server vs local state
+ *
+ * Example usage:
+ * - Server: undefined (no saved mappings)
+ * - Local: { field1: "", field2: "" } (user didn't map anything)
+ * - Result: true (both are effectively "empty")
+ */
+export function isFieldMappingsEqual(
+  serverFieldMappings: Record<string, string | undefined> | undefined,
+  localFieldMappings: Record<string, string | undefined> | null | undefined,
+): boolean {
+  return isServerAndLocalDataEqual(
+    serverFieldMappings,
+    localFieldMappings,
+    (value) => !value || value === "", // empty string/undefined = not mapped
+  );
+}
 
-  const isEmpty1 = isEffectivelyEmpty(serverOptionalFields);
-  const isEmpty2 = isEffectivelyEmpty(localOptionalFields);
-
-  // If both are empty, they're equal
-  if (isEmpty1 && isEmpty2) {
-    return true;
-  }
-
-  // If only one is empty, they're not equal
-  if (isEmpty1 !== isEmpty2) {
-    return false;
-  }
-
-  // Both are non-empty, use deep equality check
-  return isEqual(serverOptionalFields, localOptionalFields);
+/**
+ * Compares value mappings from server vs local state
+ *
+ * Example usage:
+ * - Server: undefined (no saved value mappings)
+ * - Local: { field1: {} } (user created field but no value mappings)
+ * - Result: true (both are effectively "empty")
+ */
+export function isValueMappingsEqual(
+  serverValueMappings: Record<string, Record<string, string>> | undefined,
+  localValueMappings: Record<string, Record<string, string>> | null | undefined,
+): boolean {
+  return isServerAndLocalDataEqual(
+    serverValueMappings,
+    localValueMappings,
+    (fieldMapping) => {
+      // A field mapping is "empty" if it's not an object or has no keys
+      if (!fieldMapping || typeof fieldMapping !== "object") return true;
+      return Object.keys(fieldMapping).length === 0;
+    },
+  );
 }

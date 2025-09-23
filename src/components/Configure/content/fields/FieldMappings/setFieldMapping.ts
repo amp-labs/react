@@ -1,6 +1,5 @@
 import { Draft } from "immer";
 
-import { isFieldObjectEqual } from "../../../state/utils";
 import { ConfigureState } from "../../../types";
 
 export type MappingFields = {
@@ -23,14 +22,7 @@ function setFieldMappingProducer(
     }
   });
 
-  if (draft?.read) {
-    const savedFields = draft.read.savedConfig.requiredMapFields;
-    const updatedFields = draftRequiredMapFields;
-    const isModified = !isFieldObjectEqual(savedFields, updatedFields);
-    // immer exception if we try to set a value
-
-    draft.read.isRequiredMapFieldsModified = isModified;
-  }
+  // Note: isModified is now derived state, no longer stored in local state
 }
 
 export function setFieldMapping(

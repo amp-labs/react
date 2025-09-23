@@ -1,12 +1,18 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavIcon } from "assets/NavIcon";
-import { isValueMappingsEqual } from "src/components/Configure/content/fields/ValueMapping/utils";
-import { getServerOptionalSelectedFields } from "src/components/Configure/state/utils";
+import {
+  getServerFieldMappings,
+  getServerOptionalSelectedFields,
+} from "src/components/Configure/state/utils";
 import {
   NavObject,
   ObjectConfigurationsState,
 } from "src/components/Configure/types";
-import { isOptionalFieldsEqual } from "src/components/Configure/utils";
+import {
+  isFieldMappingsEqual,
+  isOptionalFieldsEqual,
+  isValueMappingsEqual,
+} from "src/components/Configure/utils";
 import { Divider } from "src/components/ui-base/Divider";
 import { useInstallation } from "src/headless/installation/useInstallation";
 import { useHydratedRevisionQuery } from "src/headless/manifest/useHydratedRevisionQuery";
@@ -107,9 +113,18 @@ export function VerticalTabs({
             serverConfig?.content?.read?.objects?.[object.name];
           const configureState = objectConfigurationsState?.[object.name]; // local state
 
-          // todo migrate to derived state
-          const isRequiredMapFieldsModified =
-            configureState?.read?.isRequiredMapFieldsModified;
+          // field mappings derived state (captures both required and optional map fields)
+          const serverFieldMappings = getServerFieldMappings(
+            serverConfig,
+            object.name,
+          );
+          const selectedFieldMappings =
+            configureState?.read?.selectedFieldMappings;
+
+          const isFieldMappingsModified = !isFieldMappingsEqual(
+            serverFieldMappings,
+            selectedFieldMappings,
+          );
 
           // server optional fields
           const serverOptionalFields = hydratedRevision
@@ -141,7 +156,7 @@ export function VerticalTabs({
 
           const isPending =
             isOptionalFieldsModified ||
-            isRequiredMapFieldsModified ||
+            isFieldMappingsModified ||
             isValueMappingsModified ||
             false;
 

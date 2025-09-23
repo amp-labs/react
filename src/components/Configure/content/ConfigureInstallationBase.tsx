@@ -11,11 +11,18 @@ import {
   WRITE_CONST,
 } from "../nav/ObjectManagementNav/constant";
 import { useHydratedRevision } from "../state/HydratedRevisionContext";
-import { getServerOptionalSelectedFields } from "../state/utils";
-import { getReadObject, isOptionalFieldsEqual } from "../utils";
+import {
+  getServerFieldMappings,
+  getServerOptionalSelectedFields,
+} from "../state/utils";
+import {
+  getReadObject,
+  isFieldMappingsEqual,
+  isOptionalFieldsEqual,
+  isValueMappingsEqual,
+} from "../utils";
 
 import { ReadFields } from "./fields/ReadFields";
-import { isValueMappingsEqual } from "./fields/ValueMapping/utils";
 import { WriteFields } from "./fields/WriteFields";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
@@ -47,9 +54,18 @@ export function ConfigureInstallationBase({
       !!getReadObject(config, selectedObjectName)) ||
     false;
 
-  // todo migrate to derived state
-  const isRequiredMapFieldsModified =
-    configureState?.read?.isRequiredMapFieldsModified;
+  // field mappings ///////////////
+  // fetched from server
+  const serverFieldMappings = selectedObjectName
+    ? getServerFieldMappings(config, selectedObjectName)
+    : undefined;
+  const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
+
+  // is modified derived state (captures both required and optional map fields)
+  const isFieldMappingsModified = !isFieldMappingsEqual(
+    serverFieldMappings,
+    selectedFieldMappings,
+  );
 
   // optional fields ///////////////
   // fetched from server
@@ -88,7 +104,7 @@ export function ConfigureInstallationBase({
   // has the form been modified?
   const isReadModified =
     isOptionalFieldsModified ||
-    isRequiredMapFieldsModified ||
+    isFieldMappingsModified ||
     isValueMappingsModified;
   const isWriteModified = configureState?.write?.isWriteModified;
   const isModified = isReadModified || isWriteModified;
