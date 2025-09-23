@@ -211,7 +211,7 @@ function isObjectEffectivelyEmpty(
  * 2. If only one is empty → they're different (user made changes)
  * 3. If both have data → use deep comparison
  */
-function compareServerAndLocalData(
+function isServerAndLocalDataEqual(
   serverData: Record<string, any> | undefined,
   localData: Record<string, any> | null | undefined,
   isValueEmpty: (value: any) => boolean,
@@ -245,7 +245,7 @@ export function isOptionalFieldsEqual(
   serverOptionalFields: Record<string, boolean> | undefined,
   localOptionalFields: Record<string, boolean> | null | undefined,
 ): boolean {
-  return compareServerAndLocalData(
+  return isServerAndLocalDataEqual(
     serverOptionalFields,
     localOptionalFields,
     (value) => value === false || value === undefined, // false/undefined = not selected
@@ -264,7 +264,7 @@ export function isFieldMappingsEqual(
   serverFieldMappings: Record<string, string | undefined> | undefined,
   localFieldMappings: Record<string, string | undefined> | null | undefined,
 ): boolean {
-  return compareServerAndLocalData(
+  return isServerAndLocalDataEqual(
     serverFieldMappings,
     localFieldMappings,
     (value) => !value || value === "", // empty string/undefined = not mapped
@@ -283,7 +283,7 @@ export function isValueMappingsEqual(
   serverValueMappings: Record<string, Record<string, string>> | undefined,
   localValueMappings: Record<string, Record<string, string>> | null | undefined,
 ): boolean {
-  return compareServerAndLocalData(
+  return isServerAndLocalDataEqual(
     serverValueMappings,
     localValueMappings,
     (fieldMapping) => {
