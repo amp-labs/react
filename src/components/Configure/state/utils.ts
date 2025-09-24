@@ -27,7 +27,7 @@ import {
 } from "../utils";
 
 // compares two write objects by checking if they have the same objectNames
-// implemntation detail: sdk generates selectedValueDefaults, selectedFieldSettings;
+// implementation detail: sdk generates selectedValueDefaults, selectedFieldSettings;
 // todo: switch to not pass the undefined values to the sdk
 export function areWriteObjectsEqual(
   prevWriteObjects: SelectedWriteObjects,
