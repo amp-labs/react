@@ -31,6 +31,24 @@ export interface DestinationMetadata {
      * @memberof DestinationMetadata
      */
     headers?: { [key: string]: string; } | null;
+    /**
+     * The name of the Kinesis stream
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    streamName?: string;
+    /**
+     * The AWS region for the destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    region?: string;
+    /**
+     * Template for generating partition keys
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    partitionKeyTemplate?: string;
 }
 
 /**
@@ -54,6 +72,9 @@ export function DestinationMetadataFromJSONTyped(json: any, ignoreDiscriminator:
         
         'url': !exists(json, 'url') ? undefined : json['url'],
         'headers': !exists(json, 'headers') ? undefined : json['headers'],
+        'streamName': !exists(json, 'streamName') ? undefined : json['streamName'],
+        'region': !exists(json, 'region') ? undefined : json['region'],
+        'partitionKeyTemplate': !exists(json, 'partitionKeyTemplate') ? undefined : json['partitionKeyTemplate'],
     };
 }
 
@@ -68,6 +89,9 @@ export function DestinationMetadataToJSON(value?: DestinationMetadata | null): a
         
         'url': value.url,
         'headers': value.headers,
+        'streamName': value.streamName,
+        'region': value.region,
+        'partitionKeyTemplate': value.partitionKeyTemplate,
     };
 }
 
