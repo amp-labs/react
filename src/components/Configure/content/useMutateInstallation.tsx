@@ -31,11 +31,8 @@ export const useMutateInstallation = () => {
   const apiKey = useApiKey();
   const { projectIdOrName } = useAmpersandProviderProps();
   const { resetBoundary, setErrors, setError, getError } = useErrorState();
-  const {
-    resetConfigureState,
-    objectConfigurationsState,
-    resetPendingConfigurationState,
-  } = useObjectsConfigureState();
+  const { resetConfigureState, objectConfigurationsState } =
+    useObjectsConfigureState();
   const configureState = getConfigureState(
     selectedObjectName || "",
     objectConfigurationsState,
@@ -101,7 +98,6 @@ export const useMutateInstallation = () => {
     resetMutateInstallationErrorState,
     resetConfigureState,
     objectConfigurationsState,
-    resetPendingConfigurationState,
     configureState,
     onInstallSuccess,
     onUpdateSuccess,

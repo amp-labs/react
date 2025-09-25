@@ -10,17 +10,11 @@ export type SelectedWriteObjects = {
   [objectName: string]: BaseWriteConfigObject;
 };
 
-type SavedWriteConfigureState = {
-  selectedWriteObjects: SelectedWriteObjects;
-};
-
 // write state slice
 // currently tracks all write objects insteaad of just a single objectname
 export type ConfigureStateWrite = {
   writeObjects: HydratedIntegrationWriteObject[] | null;
   selectedWriteObjects: SelectedWriteObjects | null;
-  isWriteModified: boolean;
-  savedConfig: SavedWriteConfigureState; // check when to know if config is saved / modified
 };
 
 export type SelectOptionalFields = {

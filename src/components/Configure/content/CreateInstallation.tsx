@@ -34,7 +34,6 @@ export function CreateInstallation() {
     resetMutateInstallationErrorState,
     resetConfigureState,
     objectConfigurationsState,
-    resetPendingConfigurationState,
     configureState,
     onInstallSuccess,
     onNextIncompleteTab,
@@ -119,7 +118,6 @@ export function CreateInstallation() {
           setInstallation(installation);
           onInstallSuccess?.(installation.id, installation.config);
           setLoadingState(false);
-          resetPendingConfigurationState(selectedObjectName);
           onNextIncompleteTab();
         },
         onError: (error) => {
@@ -163,7 +161,6 @@ export function CreateInstallation() {
           setInstallation(installation);
           onInstallSuccess?.(installation.id, installation.config);
           setLoadingState(false);
-          resetPendingConfigurationState(selectedObjectName); // reset write pending/isModified state
           onNextIncompleteTab();
         },
         onError: (error) => {

@@ -29,7 +29,6 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
     setMutateInstallationError,
     getMutateInstallationError,
     resetConfigureState,
-    resetPendingConfigurationState,
     configureState,
     onUpdateSuccess,
     onNextIncompleteTab,
@@ -121,7 +120,6 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
           setInstallation(installation);
           onUpdateSuccess?.(installation.id, installation.config);
           setLoadingState(false);
-          resetPendingConfigurationState(selectedObjectName!);
           onNextIncompleteTab();
         },
         onError: (error) => {
@@ -156,7 +154,6 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
           setInstallation(installation);
           onUpdateSuccess?.(installation.id, installation.config);
           setLoadingState(false);
-          resetPendingConfigurationState(selectedObjectName!);
           onNextIncompleteTab();
         },
         onError: (error) => {

@@ -9,7 +9,6 @@ import React, {
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Draft, produce } from "immer";
 
-import { WRITE_CONST } from "../nav/ObjectManagementNav/constant";
 import { ConfigureState, ObjectConfigurationsState } from "../types";
 
 import { useHydratedRevision } from "./HydratedRevisionContext";
@@ -29,7 +28,6 @@ export const ConfigurationContext = createContext<
         objectName: string,
         configureState: ConfigureState,
       ) => void;
-      resetPendingConfigurationState: (objectName: string) => void;
     }
   | undefined
 >(undefined);
@@ -114,47 +112,14 @@ export function ConfigurationProvider({
     [setObjectConfigurationsState],
   );
 
-  // todo: remove this function and use derived state instead
-  const resetWritePendingConfigurationState = useCallback(() => {
-    setObjectConfigurationsState(
-      produce((draft) => {
-        const writeDraft = draft.other.write;
-        if (writeDraft) {
-          writeDraft.isWriteModified = false;
-        }
-      }),
-    );
-  }, [setObjectConfigurationsState]);
-
-  // todo: remove this function and use derived state instead
-  // set configure state of single object
-  const resetPendingConfigurationState = useCallback(
-    (objectName: string) => {
-      // write case
-      if (objectName === WRITE_CONST) {
-        resetWritePendingConfigurationState();
-      } else {
-        // read case
-        // no longer needed, is derived state
-      }
-    },
-    [resetWritePendingConfigurationState],
-  );
-
   const contextValue = useMemo(
     () => ({
       objectConfigurationsState,
       setObjectConfigurationsState,
       setConfigureState,
       resetConfigureState,
-      resetPendingConfigurationState,
     }),
-    [
-      objectConfigurationsState,
-      resetConfigureState,
-      resetPendingConfigurationState,
-      setConfigureState,
-    ],
+    [objectConfigurationsState, resetConfigureState, setConfigureState],
   );
 
   return (
