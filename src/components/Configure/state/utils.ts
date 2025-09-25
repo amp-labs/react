@@ -28,7 +28,10 @@ import {
 
 // compares two write objects by checking if they have the same objectNames
 // implementation detail: sdk generates selectedValueDefaults, selectedFieldSettings;
-// todo: switch to not pass the undefined values to the sdk
+// todo: update openapi spec so the generated SDK no longer have
+//    undefined values for selectedValueDefaults, selectedFieldSettings
+// note: nothing is passing undefined values to the SDK,
+//    the SDK is generating fields with undefined values
 export function areWriteObjectsEqual(
   prevWriteObjects: SelectedWriteObjects,
   currentWriteObjects: SelectedWriteObjects,
