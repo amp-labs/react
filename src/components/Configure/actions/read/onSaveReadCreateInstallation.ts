@@ -3,6 +3,7 @@ import {
   HydratedRevision,
 } from "services/api";
 
+import type { FieldMapping } from "../../InstallIntegration";
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
@@ -11,7 +12,6 @@ import {
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
-import type { FieldMapping } from "../../InstallIntegration";
 
 /**
  * gets matching object from hydratedRevision
@@ -54,7 +54,7 @@ export const generateCreateReadConfigFromConfigureState = (
     generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings =
     generateSelectedFieldMappingsFromConfigureState(configureState);
-  const dynamicFieldMappings = getObjectDynamicMappings(
+  const dynamicMappingsInput = getObjectDynamicMappings(
     objectName,
     fieldMapping,
   );
@@ -80,7 +80,7 @@ export const generateCreateReadConfigFromConfigureState = (
             objectName,
             selectedFields,
             selectedFieldMappings,
-            dynamicFieldMappings,
+            dynamicMappingsInput,
             selectedValueMappings: selectedValuesMappings || {},
             backfill: obj.backfill,
           },

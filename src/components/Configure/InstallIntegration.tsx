@@ -1,12 +1,12 @@
 import { ConnectionsProvider } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import type { DynamicMappingsInputEntry } from "services/api";
 import { Config } from "services/api";
 import { InstallationProvider } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
-import type { DynamicFieldMappingEntry } from "services/api";
 
 import {
   ComponentContainerError,
@@ -25,7 +25,7 @@ import resetStyles from "src/styles/resetCss.module.css";
  * A map of object names to FieldMappingEntry arrays, with each FieldMappingEntry representing a field.
  */
 export type FieldMapping = {
-  [key: string]: Array<DynamicFieldMappingEntry>;
+  [key: string]: Array<DynamicMappingsInputEntry>;
 };
 
 interface InstallIntegrationProps {

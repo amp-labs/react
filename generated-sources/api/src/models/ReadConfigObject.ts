@@ -69,11 +69,11 @@ export interface ReadConfigObject {
      */
     selectedValueMappings?: { [key: string]: { [key: string]: string; }; };
     /**
-     * Stores information about dynamic field mappings.
-     * @type {{ [key: string]: Array<DynamicMappingsInputEntry>; }}
+     * An array containing all available dynamic field and value mappings for this installation, provided by the InstallIntegration component. This array represents the complete set of possible mappings, regardless of which ones are currently selected. The actual selected mappings are stored separately in the selectedFieldMappings property.
+     * @type {Array<DynamicMappingsInputEntry>}
      * @memberof ReadConfigObject
      */
-    dynamicMappingsInput?: { [key: string]: Array<DynamicMappingsInputEntry>; };
+    dynamicMappingsInput?: Array<DynamicMappingsInputEntry>;
     /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}
@@ -121,7 +121,7 @@ export function ReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': json['selectedFields'],
         'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
-        'dynamicMappingsInput': !exists(json, 'dynamicMappingsInput') ? undefined : json['dynamicMappingsInput'],
+        'dynamicMappingsInput': !exists(json, 'dynamicMappingsInput') ? undefined : ((json['dynamicMappingsInput'] as Array<any>).map(DynamicMappingsInputEntryFromJSON)),
         'selectedFieldMappings': json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
@@ -142,7 +142,7 @@ export function ReadConfigObjectToJSON(value?: ReadConfigObject | null): any {
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedValueMappings': value.selectedValueMappings,
-        'dynamicMappingsInput': value.dynamicMappingsInput,
+        'dynamicMappingsInput': value.dynamicMappingsInput === undefined ? undefined : ((value.dynamicMappingsInput as Array<any>).map(DynamicMappingsInputEntryToJSON)),
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),

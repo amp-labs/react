@@ -4,6 +4,7 @@ import {
   UpdateInstallationRequestInstallationConfig,
 } from "services/api";
 
+import type { FieldMapping } from "../../InstallIntegration";
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
@@ -12,7 +13,6 @@ import {
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
-import type { FieldMapping } from "../../InstallIntegration";
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -40,7 +40,7 @@ export const generateUpdateReadConfigFromConfigureState = (
     generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings =
     generateSelectedFieldMappingsFromConfigureState(configureState);
-  const dynamicFieldMappings = getObjectDynamicMappings(
+  const dynamicMappingsInput = getObjectDynamicMappings(
     objectName,
     fieldMapping,
   );
@@ -56,7 +56,7 @@ export const generateUpdateReadConfigFromConfigureState = (
             objectName,
             selectedFields,
             selectedFieldMappings,
-            dynamicFieldMappings,
+            dynamicMappingsInput,
             selectedValueMappings: selectedValuesMappings || {},
             backfill,
           },
