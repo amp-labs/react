@@ -93,6 +93,7 @@ src/models/Destination.ts
 src/models/DestinationMetadata.ts
 src/models/DestinationSecrets.ts
 src/models/FieldDefinition.ts
+src/models/FieldMappingEntry.ts
 src/models/FieldMetadata.ts
 src/models/FieldSetting.ts
 src/models/FieldSettingDefault.ts
@@ -130,6 +131,7 @@ src/models/JWTKeyResponse.ts
 src/models/ListOperations200Response.ts
 src/models/Log.ts
 src/models/LogMessage.ts
+src/models/MappedValue.ts
 src/models/Media.ts
 src/models/MediaTypeDarkMode.ts
 src/models/MediaTypeRegular.ts

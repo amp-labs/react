@@ -19,6 +19,12 @@ import {
     BackfillConfigFromJSONTyped,
     BackfillConfigToJSON,
 } from './BackfillConfig';
+import type { FieldMappingEntry } from './FieldMappingEntry';
+import {
+    FieldMappingEntryFromJSON,
+    FieldMappingEntryFromJSONTyped,
+    FieldMappingEntryToJSON,
+} from './FieldMappingEntry';
 import type { SelectedFieldsAutoConfig } from './SelectedFieldsAutoConfig';
 import {
     SelectedFieldsAutoConfigFromJSON,
@@ -63,6 +69,12 @@ export interface BaseReadConfigObject {
      */
     selectedValueMappings?: { [key: string]: { [key: string]: string; }; };
     /**
+     * Stores information about dynamic field mappings.
+     * @type {{ [key: string]: Array<FieldMappingEntry>; }}
+     * @memberof BaseReadConfigObject
+     */
+    dynamicFieldMappings?: { [key: string]: Array<FieldMappingEntry>; };
+    /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}
      * @memberof BaseReadConfigObject
@@ -106,6 +118,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
+        'dynamicFieldMappings': !exists(json, 'dynamicFieldMappings') ? undefined : json['dynamicFieldMappings'],
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
@@ -126,6 +139,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedValueMappings': value.selectedValueMappings,
+        'dynamicFieldMappings': value.dynamicFieldMappings,
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
