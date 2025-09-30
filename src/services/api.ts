@@ -8,6 +8,7 @@ import {
   Connection,
   CreateInstallationOperationRequest,
   CreateInstallationRequestConfig,
+  DynamicFieldMappingEntry,
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
@@ -223,4 +224,5 @@ export type {
   ProviderInfo,
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
+  DynamicFieldMappingEntry,
 };

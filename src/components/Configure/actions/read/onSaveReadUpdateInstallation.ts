@@ -12,6 +12,7 @@ import {
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
+import type { FieldMapping } from "../../InstallIntegration";
 
 /**
  * given a configureState, config, and objectName, generate the config object that is need for
@@ -33,7 +34,7 @@ export const generateUpdateReadConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   backfill?: BackfillConfig,
-  fieldMapping?: { [key: string]: Array<import("services/api").FieldMappingEntry>; },
+  fieldMapping?: FieldMapping,
 ): UpdateInstallationRequestInstallationConfig => {
   const selectedFields =
     generateSelectedFieldsFromConfigureState(configureState);

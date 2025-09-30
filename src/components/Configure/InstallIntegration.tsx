@@ -6,7 +6,7 @@ import { InstallationProvider } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
-import type { FieldMappingEntry, MappedValue } from "services/api";
+import type { DynamicFieldMappingEntry } from "services/api";
 
 import {
   ComponentContainerError,
@@ -21,40 +21,11 @@ import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
 
 import resetStyles from "src/styles/resetCss.module.css";
 
-export interface MappedValue {
-  mappedValue: string;
-  mappedDisplayValue: string;
-}
-
-export type FieldMappingEntry = {
-  /**
-   * The name of the field in your application.
-   */
-  mapToName: string;
-  /**
-   * Optional display name of the field to show the user in the mapping UI.
-   */
-  mapToDisplayName?: string;
-  /**
-   * Optional prompt to show the user in the mapping UI.
-   */
-  prompt?: string;
-  /**
-   * If you would like the user to map a set of possible values,
-   * this is the list of possible values of the field in your application.
-   */
-  mappedValues?: MappedValue[];
-  /**
-   * The name of the field in SaaS provider, if present, then we will not prompt the user to map the field.
-   */
-  fieldName?: string;
-};
-
 /**
  * A map of object names to FieldMappingEntry arrays, with each FieldMappingEntry representing a field.
  */
 export type FieldMapping = {
-  [key: string]: Array<FieldMappingEntry>;
+  [key: string]: Array<DynamicFieldMappingEntry>;
 };
 
 interface InstallIntegrationProps {

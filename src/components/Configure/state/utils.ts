@@ -1,6 +1,6 @@
 import {
   Config,
-  FieldMappingEntry,
+  DynamicFieldMappingEntry,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
   HydratedIntegrationWrite,
@@ -242,7 +242,7 @@ export const generateSelectedFieldMappingsFromConfigureState = (
 export const getObjectDynamicMappings = (
   objectName: string,
   fieldMapping?: FieldMapping,
-): { [key: string]: Array<FieldMappingEntry>; } => {
+): { [key: string]: Array<DynamicFieldMappingEntry>; } => {
   if (!fieldMapping || !fieldMapping[objectName]) {
     return {};
   }

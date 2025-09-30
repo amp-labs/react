@@ -11,6 +11,8 @@ import {
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
+import type { FieldMapping } from "../../InstallIntegration";
+
 /**
  * gets matching object from hydratedRevision
  * @param hydratedRevision
@@ -46,7 +48,7 @@ export const generateCreateReadConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
-  fieldMapping?: import("../../InstallIntegration").FieldMapping,
+  fieldMapping?: FieldMapping,
 ): CreateInstallationRequestConfig | null => {
   const selectedFields =
     generateSelectedFieldsFromConfigureState(configureState);
