@@ -1,6 +1,4 @@
-import {
-  FieldMapping,
-} from "src/components/Configure/InstallIntegration";
+import { FieldMapping } from "src/components/Configure/InstallIntegration";
 import { Config, Connection } from "src/services/api";
 
 /**
