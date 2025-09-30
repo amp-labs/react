@@ -242,14 +242,12 @@ export const generateSelectedFieldMappingsFromConfigureState = (
 export const getObjectDynamicMappings = (
   objectName: string,
   fieldMapping?: FieldMapping,
-): { [key: string]: Array<DynamicMappingsInputEntry> } => {
+): Array<DynamicMappingsInputEntry> => {
   if (!fieldMapping || !fieldMapping[objectName]) {
-    return {};
+    return [];
   }
 
-  return {
-    [objectName]: fieldMapping[objectName],
-  };
+  return fieldMapping[objectName];
 };
 
 /**
