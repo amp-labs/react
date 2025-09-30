@@ -19,12 +19,12 @@ import {
     BackfillConfigFromJSONTyped,
     BackfillConfigToJSON,
 } from './BackfillConfig';
-import type { FieldMappingEntry } from './FieldMappingEntry';
+import type { DynamicFieldMappingEntry } from './DynamicFieldMappingEntry';
 import {
-    FieldMappingEntryFromJSON,
-    FieldMappingEntryFromJSONTyped,
-    FieldMappingEntryToJSON,
-} from './FieldMappingEntry';
+    DynamicFieldMappingEntryFromJSON,
+    DynamicFieldMappingEntryFromJSONTyped,
+    DynamicFieldMappingEntryToJSON,
+} from './DynamicFieldMappingEntry';
 import type { SelectedFieldsAutoConfig } from './SelectedFieldsAutoConfig';
 import {
     SelectedFieldsAutoConfigFromJSON,
@@ -70,10 +70,10 @@ export interface BaseReadConfigObject {
     selectedValueMappings?: { [key: string]: { [key: string]: string; }; };
     /**
      * Stores information about dynamic field mappings.
-     * @type {{ [key: string]: Array<FieldMappingEntry>; }}
+     * @type {{ [key: string]: Array<DynamicFieldMappingEntry>; }}
      * @memberof BaseReadConfigObject
      */
-    dynamicFieldMappings?: { [key: string]: Array<FieldMappingEntry>; };
+    dynamicFieldMappings?: { [key: string]: Array<DynamicFieldMappingEntry>; };
     /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}

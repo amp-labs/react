@@ -6,6 +6,7 @@ import { InstallationProvider } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
+import type { FieldMappingEntry, MappedValue } from "services/api";
 
 import {
   ComponentContainerError,

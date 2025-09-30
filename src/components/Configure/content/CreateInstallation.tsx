@@ -37,6 +37,7 @@ export function CreateInstallation() {
     configureState,
     onInstallSuccess,
     onNextIncompleteTab,
+    fieldMapping,
   } = useMutateInstallation();
   const [isLoading, setLoadingState] = useState<boolean>(false);
   // migrate to use headless installation hooks
@@ -105,6 +106,7 @@ export function CreateInstallation() {
         selectedObjectName,
         hydratedRevision,
         consumerRef,
+        fieldMapping,
       );
       if (!createConfig) {
         console.error("Error when generating createConfig from configureState");

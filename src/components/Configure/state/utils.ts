@@ -1,11 +1,13 @@
 import {
   Config,
+  FieldMappingEntry,
   HydratedIntegrationFieldExistent,
   HydratedIntegrationRead,
   HydratedIntegrationWrite,
   HydratedRevision,
 } from "services/api";
 
+import type { FieldMapping } from "../InstallIntegration";
 import {
   ConfigureState,
   ConfigureStateRead,
@@ -229,6 +231,25 @@ export const generateSelectedFieldMappingsFromConfigureState = (
   }
 
   return selectedRequiredMapFieldsSubmit;
+};
+
+/**
+ * generates dynamicFieldMappings object for Config from fieldMapping prop
+ * @param objectName - object name to get field mappings for
+ * @param fieldMapping - dynamic field mappings from InstallIntegration component
+ * @returns
+ */
+export const getObjectDynamicMappings = (
+  objectName: string,
+  fieldMapping?: FieldMapping,
+): { [key: string]: Array<FieldMappingEntry>; } => {
+  if (!fieldMapping || !fieldMapping[objectName]) {
+    return {};
+  }
+
+  return {
+    [objectName]: fieldMapping[objectName],
+  };
 };
 
 /**

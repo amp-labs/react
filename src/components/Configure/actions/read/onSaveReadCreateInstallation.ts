@@ -7,6 +7,7 @@ import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
   generateSelectedValuesMappingsFromConfigureState,
+  getObjectDynamicMappings,
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
@@ -45,11 +46,16 @@ export const generateCreateReadConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
+  fieldMapping?: import("../../InstallIntegration").FieldMapping,
 ): CreateInstallationRequestConfig | null => {
   const selectedFields =
     generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings =
     generateSelectedFieldMappingsFromConfigureState(configureState);
+  const dynamicFieldMappings = getObjectDynamicMappings(
+    objectName,
+    fieldMapping,
+  );
   const selectedValuesMappings =
     generateSelectedValuesMappingsFromConfigureState(configureState);
 
@@ -72,6 +78,7 @@ export const generateCreateReadConfigFromConfigureState = (
             objectName,
             selectedFields,
             selectedFieldMappings,
+            dynamicFieldMappings,
             selectedValueMappings: selectedValuesMappings || {},
             backfill: obj.backfill,
           },

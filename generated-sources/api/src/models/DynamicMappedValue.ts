@@ -16,27 +16,27 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface MappedValue
+ * @interface DynamicMappedValue
  */
-export interface MappedValue {
+export interface DynamicMappedValue {
     /**
      * 
      * @type {string}
-     * @memberof MappedValue
+     * @memberof DynamicMappedValue
      */
     mappedValue: string;
     /**
      * 
      * @type {string}
-     * @memberof MappedValue
+     * @memberof DynamicMappedValue
      */
     mappedDisplayValue: string;
 }
 
 /**
- * Check if a given object implements the MappedValue interface.
+ * Check if a given object implements the DynamicMappedValue interface.
  */
-export function instanceOfMappedValue(value: object): boolean {
+export function instanceOfDynamicMappedValue(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "mappedValue" in value;
     isInstance = isInstance && "mappedDisplayValue" in value;
@@ -44,11 +44,11 @@ export function instanceOfMappedValue(value: object): boolean {
     return isInstance;
 }
 
-export function MappedValueFromJSON(json: any): MappedValue {
-    return MappedValueFromJSONTyped(json, false);
+export function DynamicMappedValueFromJSON(json: any): DynamicMappedValue {
+    return DynamicMappedValueFromJSONTyped(json, false);
 }
 
-export function MappedValueFromJSONTyped(json: any, ignoreDiscriminator: boolean): MappedValue {
+export function DynamicMappedValueFromJSONTyped(json: any, ignoreDiscriminator: boolean): DynamicMappedValue {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -59,7 +59,7 @@ export function MappedValueFromJSONTyped(json: any, ignoreDiscriminator: boolean
     };
 }
 
-export function MappedValueToJSON(value?: MappedValue | null): any {
+export function DynamicMappedValueToJSON(value?: DynamicMappedValue | null): any {
     if (value === undefined) {
         return undefined;
     }
