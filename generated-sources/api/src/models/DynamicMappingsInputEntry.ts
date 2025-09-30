@@ -13,66 +13,66 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { DynamicMappedValue } from './DynamicMappedValue';
+import type { DynamicMappingsInputMappedValue } from './DynamicMappingsInputMappedValue';
 import {
-    DynamicMappedValueFromJSON,
-    DynamicMappedValueFromJSONTyped,
-    DynamicMappedValueToJSON,
-} from './DynamicMappedValue';
+    DynamicMappingsInputMappedValueFromJSON,
+    DynamicMappingsInputMappedValueFromJSONTyped,
+    DynamicMappingsInputMappedValueToJSON,
+} from './DynamicMappingsInputMappedValue';
 
 /**
  * 
  * @export
- * @interface DynamicFieldMappingEntry
+ * @interface DynamicMappingsInputEntry
  */
-export interface DynamicFieldMappingEntry {
+export interface DynamicMappingsInputEntry {
     /**
      * The name of the field in your application.
      * @type {string}
-     * @memberof DynamicFieldMappingEntry
+     * @memberof DynamicMappingsInputEntry
      */
     mapToName: string;
     /**
      * Optional display name of the field to show the user in the mapping UI.
      * @type {string}
-     * @memberof DynamicFieldMappingEntry
+     * @memberof DynamicMappingsInputEntry
      */
     mapToDisplayName?: string;
     /**
      * Optional prompt to show the user in the mapping UI.
      * @type {string}
-     * @memberof DynamicFieldMappingEntry
+     * @memberof DynamicMappingsInputEntry
      */
     prompt?: string;
     /**
      * If you would like the user to map a set of possible values, this is the list of possible values of the field in your application.
-     * @type {Array<DynamicMappedValue>}
-     * @memberof DynamicFieldMappingEntry
+     * @type {Array<DynamicMappingsInputMappedValue>}
+     * @memberof DynamicMappingsInputEntry
      */
-    mappedValues?: Array<DynamicMappedValue>;
+    mappedValues?: Array<DynamicMappingsInputMappedValue>;
     /**
      * The name of the field in SaaS provider, if present, then we will not prompt the user to map the field.
      * @type {string}
-     * @memberof DynamicFieldMappingEntry
+     * @memberof DynamicMappingsInputEntry
      */
     fieldName?: string;
 }
 
 /**
- * Check if a given object implements the DynamicFieldMappingEntry interface.
+ * Check if a given object implements the DynamicMappingsInputEntry interface.
  */
-export function instanceOfDynamicFieldMappingEntry(value: object): boolean {
+export function instanceOfDynamicMappingsInputEntry(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "mapToName" in value;
 
     return isInstance;
 }
 
-export function DynamicFieldMappingEntryFromJSON(json: any): DynamicFieldMappingEntry {
-    return DynamicFieldMappingEntryFromJSONTyped(json, false);
+export function DynamicMappingsInputEntryFromJSON(json: any): DynamicMappingsInputEntry {
+    return DynamicMappingsInputEntryFromJSONTyped(json, false);
 }
 
-export function DynamicFieldMappingEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): DynamicFieldMappingEntry {
+export function DynamicMappingsInputEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): DynamicMappingsInputEntry {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -81,12 +81,12 @@ export function DynamicFieldMappingEntryFromJSONTyped(json: any, ignoreDiscrimin
         'mapToName': json['mapToName'],
         'mapToDisplayName': !exists(json, 'mapToDisplayName') ? undefined : json['mapToDisplayName'],
         'prompt': !exists(json, 'prompt') ? undefined : json['prompt'],
-        'mappedValues': !exists(json, 'mappedValues') ? undefined : ((json['mappedValues'] as Array<any>).map(DynamicMappedValueFromJSON)),
+        'mappedValues': !exists(json, 'mappedValues') ? undefined : ((json['mappedValues'] as Array<any>).map(DynamicMappingsInputMappedValueFromJSON)),
         'fieldName': !exists(json, 'fieldName') ? undefined : json['fieldName'],
     };
 }
 
-export function DynamicFieldMappingEntryToJSON(value?: DynamicFieldMappingEntry | null): any {
+export function DynamicMappingsInputEntryToJSON(value?: DynamicMappingsInputEntry | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -98,7 +98,7 @@ export function DynamicFieldMappingEntryToJSON(value?: DynamicFieldMappingEntry 
         'mapToName': value.mapToName,
         'mapToDisplayName': value.mapToDisplayName,
         'prompt': value.prompt,
-        'mappedValues': value.mappedValues === undefined ? undefined : ((value.mappedValues as Array<any>).map(DynamicMappedValueToJSON)),
+        'mappedValues': value.mappedValues === undefined ? undefined : ((value.mappedValues as Array<any>).map(DynamicMappingsInputMappedValueToJSON)),
         'fieldName': value.fieldName,
     };
 }

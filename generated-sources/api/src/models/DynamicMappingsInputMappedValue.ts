@@ -16,27 +16,27 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface DynamicMappedValue
+ * @interface DynamicMappingsInputMappedValue
  */
-export interface DynamicMappedValue {
+export interface DynamicMappingsInputMappedValue {
     /**
      * 
      * @type {string}
-     * @memberof DynamicMappedValue
+     * @memberof DynamicMappingsInputMappedValue
      */
     mappedValue: string;
     /**
      * 
      * @type {string}
-     * @memberof DynamicMappedValue
+     * @memberof DynamicMappingsInputMappedValue
      */
     mappedDisplayValue: string;
 }
 
 /**
- * Check if a given object implements the DynamicMappedValue interface.
+ * Check if a given object implements the DynamicMappingsInputMappedValue interface.
  */
-export function instanceOfDynamicMappedValue(value: object): boolean {
+export function instanceOfDynamicMappingsInputMappedValue(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "mappedValue" in value;
     isInstance = isInstance && "mappedDisplayValue" in value;
@@ -44,11 +44,11 @@ export function instanceOfDynamicMappedValue(value: object): boolean {
     return isInstance;
 }
 
-export function DynamicMappedValueFromJSON(json: any): DynamicMappedValue {
-    return DynamicMappedValueFromJSONTyped(json, false);
+export function DynamicMappingsInputMappedValueFromJSON(json: any): DynamicMappingsInputMappedValue {
+    return DynamicMappingsInputMappedValueFromJSONTyped(json, false);
 }
 
-export function DynamicMappedValueFromJSONTyped(json: any, ignoreDiscriminator: boolean): DynamicMappedValue {
+export function DynamicMappingsInputMappedValueFromJSONTyped(json: any, ignoreDiscriminator: boolean): DynamicMappingsInputMappedValue {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -59,7 +59,7 @@ export function DynamicMappedValueFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function DynamicMappedValueToJSON(value?: DynamicMappedValue | null): any {
+export function DynamicMappingsInputMappedValueToJSON(value?: DynamicMappingsInputMappedValue | null): any {
     if (value === undefined) {
         return undefined;
     }
