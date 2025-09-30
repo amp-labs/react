@@ -92,6 +92,8 @@ src/models/Delivery.ts
 src/models/Destination.ts
 src/models/DestinationMetadata.ts
 src/models/DestinationSecrets.ts
+src/models/DynamicMappingsInputEntry.ts
+src/models/DynamicMappingsInputMappedValue.ts
 src/models/FieldDefinition.ts
 src/models/FieldMetadata.ts
 src/models/FieldSetting.ts

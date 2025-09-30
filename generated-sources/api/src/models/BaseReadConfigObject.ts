@@ -19,6 +19,12 @@ import {
     BackfillConfigFromJSONTyped,
     BackfillConfigToJSON,
 } from './BackfillConfig';
+import type { DynamicMappingsInputEntry } from './DynamicMappingsInputEntry';
+import {
+    DynamicMappingsInputEntryFromJSON,
+    DynamicMappingsInputEntryFromJSONTyped,
+    DynamicMappingsInputEntryToJSON,
+} from './DynamicMappingsInputEntry';
 import type { SelectedFieldsAutoConfig } from './SelectedFieldsAutoConfig';
 import {
     SelectedFieldsAutoConfigFromJSON,
@@ -63,6 +69,12 @@ export interface BaseReadConfigObject {
      */
     selectedValueMappings?: { [key: string]: { [key: string]: string; }; };
     /**
+     * An array containing all available dynamic field and value mappings for this installation, provided by the InstallIntegration component. This array represents the complete set of possible mappings, regardless of which ones are currently selected. The actual selected mappings are stored separately in the selectedFieldMappings property.
+     * @type {Array<DynamicMappingsInputEntry>}
+     * @memberof BaseReadConfigObject
+     */
+    dynamicMappingsInput?: Array<DynamicMappingsInputEntry>;
+    /**
      * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)
      * @type {{ [key: string]: string; }}
      * @memberof BaseReadConfigObject
@@ -106,6 +118,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
+        'dynamicMappingsInput': !exists(json, 'dynamicMappingsInput') ? undefined : ((json['dynamicMappingsInput'] as Array<any>).map(DynamicMappingsInputEntryFromJSON)),
         'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
@@ -126,6 +139,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedValueMappings': value.selectedValueMappings,
+        'dynamicMappingsInput': value.dynamicMappingsInput === undefined ? undefined : ((value.dynamicMappingsInput as Array<any>).map(DynamicMappingsInputEntryToJSON)),
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
