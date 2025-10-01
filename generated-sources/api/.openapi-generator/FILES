@@ -23,6 +23,7 @@ src/apis/UserApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/AcceptInviteRequest.ts
+src/models/AddUserToOrgRequest.ts
 src/models/ApiKey.ts
 src/models/ApiKeyAsBasicOpts.ts
 src/models/ApiKeyOpts.ts
@@ -53,6 +54,8 @@ src/models/BuilderInfo.ts
 src/models/BuilderInfoOrgRole.ts
 src/models/BuilderInfoProjectRolesValue.ts
 src/models/BulkWriteSupport.ts
+src/models/ClaimDomainRequest.ts
+src/models/ClaimedDomainResponse.ts
 src/models/Config.ts
 src/models/ConfigContent.ts
 src/models/ConfigContentAllOf.ts
