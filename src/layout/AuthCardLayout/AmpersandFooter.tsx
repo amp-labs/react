@@ -33,11 +33,11 @@ export function AmpersandFooter() {
         aria-label="Go to Ampersand"
         rel="noreferrer noopener"
       >
-      <img
-        style={{ height: ".8em" }}
-        src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
-        alt="Ampersand"
-      />
+        <img
+          style={{ height: ".8em" }}
+          src="https://res.cloudinary.com/dycvts6vp/image/upload/v1723671980/ampersand-logo-black.svg"
+          alt="Ampersand"
+        />
       </a>
     </footer>
   );

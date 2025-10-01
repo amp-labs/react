@@ -32,6 +32,7 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
     configureState,
     onUpdateSuccess,
     onNextIncompleteTab,
+    fieldMapping,
   } = useMutateInstallation();
   const { updateInstallation } = useUpdateInstallation();
 
@@ -106,6 +107,7 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
         selectedObjectName,
         hydratedRevision,
         hydratedObject.backfill,
+        fieldMapping,
       );
 
       if (!updateConfig) {

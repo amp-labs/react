@@ -3,13 +3,16 @@ import {
   HydratedRevision,
 } from "services/api";
 
+import type { FieldMapping } from "../../InstallIntegration";
 import {
   generateSelectedFieldMappingsFromConfigureState,
   generateSelectedFieldsFromConfigureState,
   generateSelectedValuesMappingsFromConfigureState,
+  getObjectDynamicMappings,
 } from "../../state/utils";
 import { ConfigureState } from "../../types";
 import { getIsProxyEnabled } from "../proxy/isProxyEnabled";
+
 /**
  * gets matching object from hydratedRevision
  * @param hydratedRevision
@@ -45,11 +48,16 @@ export const generateCreateReadConfigFromConfigureState = (
   objectName: string,
   hydratedRevision: HydratedRevision,
   consumerRef: string,
+  fieldMapping?: FieldMapping,
 ): CreateInstallationRequestConfig | null => {
   const selectedFields =
     generateSelectedFieldsFromConfigureState(configureState);
   const selectedFieldMappings =
     generateSelectedFieldMappingsFromConfigureState(configureState);
+  const dynamicMappingsInput = getObjectDynamicMappings(
+    objectName,
+    fieldMapping,
+  );
   const selectedValuesMappings =
     generateSelectedValuesMappingsFromConfigureState(configureState);
 
@@ -72,6 +80,7 @@ export const generateCreateReadConfigFromConfigureState = (
             objectName,
             selectedFields,
             selectedFieldMappings,
+            dynamicMappingsInput,
             selectedValueMappings: selectedValuesMappings || {},
             backfill: obj.backfill,
           },

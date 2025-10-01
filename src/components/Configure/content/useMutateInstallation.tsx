@@ -24,6 +24,7 @@ export const useMutateInstallation = () => {
     setInstallation,
     onInstallSuccess,
     onUpdateSuccess,
+    fieldMapping,
   } = useInstallIntegrationProps();
   const { hydratedRevision, loading } = useHydratedRevision();
   const { selectedObjectName } = useSelectedObjectName();
@@ -102,5 +103,6 @@ export const useMutateInstallation = () => {
     onInstallSuccess,
     onUpdateSuccess,
     onNextIncompleteTab,
+    fieldMapping,
   };
 };
