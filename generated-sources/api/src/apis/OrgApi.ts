@@ -15,8 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
+  AddUserToOrgRequest,
   ApiProblem,
   Builder,
+  ClaimDomainRequest,
+  ClaimedDomainResponse,
   CreateOrgInviteRequest,
   CreateOrgRequest,
   InputValidationProblem,
@@ -25,10 +28,16 @@ import type {
   UpdateOrgRequest,
 } from '../models';
 import {
+    AddUserToOrgRequestFromJSON,
+    AddUserToOrgRequestToJSON,
     ApiProblemFromJSON,
     ApiProblemToJSON,
     BuilderFromJSON,
     BuilderToJSON,
+    ClaimDomainRequestFromJSON,
+    ClaimDomainRequestToJSON,
+    ClaimedDomainResponseFromJSON,
+    ClaimedDomainResponseToJSON,
     CreateOrgInviteRequestFromJSON,
     CreateOrgInviteRequestToJSON,
     CreateOrgRequestFromJSON,
@@ -42,6 +51,19 @@ import {
     UpdateOrgRequestFromJSON,
     UpdateOrgRequestToJSON,
 } from '../models';
+
+export interface AddUserToOrgOperationRequest {
+    orgId: string;
+    addUserToOrgRequest: AddUserToOrgRequest;
+}
+
+export interface CheckClaimedDomainRequest {
+    domain: string;
+}
+
+export interface ClaimDomainOperationRequest {
+    claimDomainRequest: ClaimDomainRequest;
+}
 
 export interface CreateOrgOperationRequest {
     org: CreateOrgRequest;
@@ -70,6 +92,10 @@ export interface ListOrgBuildersRequest {
     orgId: string;
 }
 
+export interface ListOrgClaimedDomainsRequest {
+    orgId: string;
+}
+
 export interface ListOrgInvitesRequest {
     orgId: string;
 }
@@ -86,6 +112,54 @@ export interface UpdateOrgOperationRequest {
  * @interface OrgApiInterface
  */
 export interface OrgApiInterface {
+    /**
+     * 
+     * @summary Add user to an organization
+     * @param {string} orgId ID of the organization.
+     * @param {AddUserToOrgRequest} addUserToOrgRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgApiInterface
+     */
+    addUserToOrgRaw(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Add user to an organization
+     */
+    addUserToOrg(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * @summary Check if a domain is claimed
+     * @param {string} domain Email address, domain name, or URL to check. The domain will be extracted and sanitized automatically.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgApiInterface
+     */
+    checkClaimedDomainRaw(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>>;
+
+    /**
+     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Check if a domain is claimed
+     */
+    checkClaimedDomain(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse>;
+
+    /**
+     * Claim a domain for an organization. Accepts email, domain, or URL.
+     * @summary Claim a domain
+     * @param {ClaimDomainRequest} claimDomainRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgApiInterface
+     */
+    claimDomainRaw(requestParameters: ClaimDomainOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>>;
+
+    /**
+     * Claim a domain for an organization. Accepts email, domain, or URL.
+     * Claim a domain
+     */
+    claimDomain(requestParameters: ClaimDomainOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse>;
+
     /**
      * 
      * @summary Create a new organization
@@ -180,6 +254,22 @@ export interface OrgApiInterface {
     listOrgBuilders(requestParameters: ListOrgBuildersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Builder>>;
 
     /**
+     * Get all domains claimed by a specific organization
+     * @summary List organization\'s claimed domains
+     * @param {string} orgId Organization ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgApiInterface
+     */
+    listOrgClaimedDomainsRaw(requestParameters: ListOrgClaimedDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClaimedDomainResponse>>>;
+
+    /**
+     * Get all domains claimed by a specific organization
+     * List organization\'s claimed domains
+     */
+    listOrgClaimedDomains(requestParameters: ListOrgClaimedDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClaimedDomainResponse>>;
+
+    /**
      * 
      * @summary List invites for an organization
      * @param {string} orgId ID of the organization.
@@ -216,6 +306,149 @@ export interface OrgApiInterface {
  * 
  */
 export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
+
+    /**
+     * Add user to an organization
+     */
+    async addUserToOrgRaw(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.orgId === null || requestParameters.orgId === undefined) {
+            throw new runtime.RequiredError('orgId','Required parameter requestParameters.orgId was null or undefined when calling addUserToOrg.');
+        }
+
+        if (requestParameters.addUserToOrgRequest === null || requestParameters.addUserToOrgRequest === undefined) {
+            throw new runtime.RequiredError('addUserToOrgRequest','Required parameter requestParameters.addUserToOrgRequest was null or undefined when calling addUserToOrg.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/orgs/{orgId}/memberships`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddUserToOrgRequestToJSON(requestParameters.addUserToOrgRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Add user to an organization
+     */
+    async addUserToOrg(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.addUserToOrgRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Check if a domain is claimed
+     */
+    async checkClaimedDomainRaw(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>> {
+        if (requestParameters.domain === null || requestParameters.domain === undefined) {
+            throw new runtime.RequiredError('domain','Required parameter requestParameters.domain was null or undefined when calling checkClaimedDomain.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.domain !== undefined) {
+            queryParameters['domain'] = requestParameters.domain;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/claimed-domains`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClaimedDomainResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Check if a domain is claimed
+     */
+    async checkClaimedDomain(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse> {
+        const response = await this.checkClaimedDomainRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Claim a domain for an organization. Accepts email, domain, or URL.
+     * Claim a domain
+     */
+    async claimDomainRaw(requestParameters: ClaimDomainOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>> {
+        if (requestParameters.claimDomainRequest === null || requestParameters.claimDomainRequest === undefined) {
+            throw new runtime.RequiredError('claimDomainRequest','Required parameter requestParameters.claimDomainRequest was null or undefined when calling claimDomain.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/claimed-domains`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ClaimDomainRequestToJSON(requestParameters.claimDomainRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClaimedDomainResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Claim a domain for an organization. Accepts email, domain, or URL.
+     * Claim a domain
+     */
+    async claimDomain(requestParameters: ClaimDomainOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse> {
+        const response = await this.claimDomainRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Create a new organization
@@ -479,6 +712,50 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
      */
     async listOrgBuilders(requestParameters: ListOrgBuildersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Builder>> {
         const response = await this.listOrgBuildersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all domains claimed by a specific organization
+     * List organization\'s claimed domains
+     */
+    async listOrgClaimedDomainsRaw(requestParameters: ListOrgClaimedDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClaimedDomainResponse>>> {
+        if (requestParameters.orgId === null || requestParameters.orgId === undefined) {
+            throw new runtime.RequiredError('orgId','Required parameter requestParameters.orgId was null or undefined when calling listOrgClaimedDomains.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/orgs/{orgId}/claimed-domains`.replace(`{${"orgId"}}`, encodeURIComponent(String(requestParameters.orgId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ClaimedDomainResponseFromJSON));
+    }
+
+    /**
+     * Get all domains claimed by a specific organization
+     * List organization\'s claimed domains
+     */
+    async listOrgClaimedDomains(requestParameters: ListOrgClaimedDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClaimedDomainResponse>> {
+        const response = await this.listOrgClaimedDomainsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
