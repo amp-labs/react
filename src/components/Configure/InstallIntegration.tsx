@@ -22,7 +22,7 @@ import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
 import resetStyles from "src/styles/resetCss.module.css";
 
 /**
- * A map of object names to FieldMappingEntry arrays, with each FieldMappingEntry representing a field.
+ * A map of object names to DynamicMappingsInputEntry arrays, with each DynamicMappingsInputEntry representing a field.
  */
 export type FieldMapping = {
   [key: string]: Array<DynamicMappingsInputEntry>;
