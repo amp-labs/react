@@ -1,3 +1,4 @@
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query";
 
@@ -7,6 +8,8 @@ import { isIntegrationFieldMapping } from "../../utils";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 
 import { FieldHeader } from "./FieldHeader";
+
+import classes from "./requiredFields.module.css";
 
 export function RequiredFields() {
   const { data: hydratedRevision } = useManifest();
@@ -20,8 +23,16 @@ export function RequiredFields() {
   const error = selectedObject?.error;
   const requiredFields = selectedObject?.requiredFields;
 
-  if (selectedObject?.error) {
-    return <div>{error}</div>;
+  if (error) {
+    return (
+      <div className={classes.errorAlert}>
+        <div className={classes.errorHeader}>
+          <ExclamationTriangleIcon className={classes.errorIcon} />
+          <span className={classes.errorTitle}>Unable to load object</span>
+        </div>
+        <div className={classes.errorMessage}>{error}</div>
+      </div>
+    );
   }
 
   return (
