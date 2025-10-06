@@ -1,3 +1,4 @@
+import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query";
 
 import { Tag } from "components/ui-base/Tag";
@@ -6,10 +7,23 @@ import { isIntegrationFieldMapping } from "../../utils";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 
 import { FieldHeader } from "./FieldHeader";
+import { ObjectErrorAlert } from "./ObjectErrorAlert";
 
 export function RequiredFields() {
-  const { configureState } = useSelectedConfigureState();
+  const { data: hydratedRevision } = useManifest();
+  const { selectedObjectName } = useSelectedConfigureState();
   const { appName } = useProjectQuery();
+
+  const selectedObject = hydratedRevision?.content?.read?.objects?.find(
+    (obj) => obj.objectName === selectedObjectName,
+  );
+
+  const error = selectedObject?.error;
+  const requiredFields = selectedObject?.requiredFields;
+
+  if (error) {
+    return <ObjectErrorAlert error={error} />;
+  }
 
   return (
     <>
@@ -22,8 +36,8 @@ export function RequiredFields() {
           flexWrap: "wrap",
         }}
       >
-        {configureState?.read?.requiredFields?.length
-          ? configureState.read?.requiredFields.map((field) => {
+        {requiredFields?.length
+          ? requiredFields.map((field) => {
               if (!isIntegrationFieldMapping(field)) {
                 return <Tag key={field.fieldName}>{field.displayName}</Tag>;
               }

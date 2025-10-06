@@ -1,0 +1,37 @@
+.errorAlert {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--amp-default-border-radius);
+    background-color: var(--amp-colors-status-critical-muted);
+    border-left: 3px solid var(--amp-colors-status-critical);
+}
+
+.errorHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.errorIcon {
+    color: var(--amp-colors-status-critical);
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.errorTitle {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--amp-colors-status-critical-dark);
+}
+
+.errorMessage {
+    font-size: 0.8125rem;
+    color: var(--amp-colors-status-critical-dark);
+    line-height: 1.5;
+    padding-left: 1.5rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    word-break: break-word;
+}

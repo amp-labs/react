@@ -126,13 +126,19 @@ export function ConfigureInstallationBase({
   // is this a new state (modified or creating a new state)
   const isStateNew = isModified || isCreateMode || isSelectedReadObjectComplete;
 
+  // if the selected read object has an error in the manifest, it should not be saved
+  const isSelectedReadObjectError = !!hydratedRevision?.content?.read?.objects?.find(
+    (obj) => obj.objectName === selectedObjectName,
+  )?.error;
+
   // should the save button be disabled?
   const isDisabled =
     loading ||
     isLoading ||
     !configureState ||
     !selectedObjectName ||
-    !isStateNew;
+    !isStateNew ||
+    isSelectedReadObjectError;
 
   // is write selected?
   const isNonConfigurableWrite = selectedObjectName === WRITE_CONST;
