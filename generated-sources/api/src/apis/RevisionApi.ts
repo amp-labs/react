@@ -35,6 +35,7 @@ export interface CreateRevisionOperationRequest {
     projectIdOrName: string;
     integrationId: string;
     revision: CreateRevisionRequest;
+    destructive?: boolean;
 }
 
 export interface GetHydratedRevisionRequest {
@@ -57,6 +58,7 @@ export interface RevisionApiInterface {
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
      * @param {CreateRevisionRequest} revision 
+     * @param {boolean} [destructive] Defaults to false. This flag controls whether to perform destructive actions when deploying integrations, like pausing all read actions for an object that was removed in the latest revision.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RevisionApiInterface
@@ -111,6 +113,10 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.destructive !== undefined) {
+            queryParameters['destructive'] = requestParameters.destructive;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
