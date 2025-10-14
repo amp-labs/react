@@ -7,6 +7,7 @@ export * from './DestinationApi';
 export * from './InstallationApi';
 export * from './IntegrationApi';
 export * from './JWTKeyApi';
+export * from './NotificationApi';
 export * from './OAuthApi';
 export * from './ObjectsFieldsApi';
 export * from './OperationApi';
