@@ -39,7 +39,7 @@ interface TokenData {
   expiresAt: number;
 }
 
-// const DEFAULT_TOKEN_EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes
+const DEFAULT_TOKEN_EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes
 
 /**
  * Extract JWT token expiration time
@@ -47,22 +47,14 @@ interface TokenData {
 const getTokenExpirationTime = (token: string): number | null => {
   try {
     const payload = decodeJwt(token);
-    console.log("[JWT Debug] Decoded JWT payload", { payload });
 
     if (payload.exp && typeof payload.exp === "number") {
-      const expirationTime = payload.exp * 1000; // Convert seconds to milliseconds
-      console.log("[JWT Debug] Token expiration extracted", {
-        exp: payload.exp,
-        expirationTime,
-        expiresAt: new Date(expirationTime).toISOString(),
-      });
-      return expirationTime;
+      return payload.exp * 1000; // Convert seconds to milliseconds
     }
 
-    console.warn("[JWT Debug] No exp field in JWT payload");
     return null;
   } catch (error) {
-    console.warn("[JWT Debug] Failed to decode JWT token:", error);
+    console.warn("Failed to decode JWT token:", error);
     return null;
   }
 };
@@ -100,34 +92,15 @@ export function JwtTokenProvider({
 
       const queryKey = createTokenQueryKey(consumerRef, groupRef);
 
-      console.log("[JWT Debug] getToken called", { consumerRef, groupRef });
-
       // Let React Query handle caching and expiration
       const data = await queryClient.fetchQuery({
         queryKey,
         queryFn: async (): Promise<TokenData> => {
-          console.log(
-            "[JWT Debug] Calling getTokenCallback (via React Query)",
-            { consumerRef, groupRef },
-          );
-
           const token = await getTokenCallback({ consumerRef, groupRef });
-          const expirationTime = await getTokenExpirationTime(token);
-          if (!expirationTime) {
-            console.warn(
-              "Failed to get token expiration time, using default expiration",
-            );
-          }
-          console.log("[JWT Debug] Token expiration time", { expirationTime });
-          const expiresAt = expirationTime || Date.now();
+          const expirationTime = getTokenExpirationTime(token);
 
-          console.log("[JWT Debug] Token fetched and cached", {
-            consumerRef,
-            groupRef,
-            expiresAt: new Date(expiresAt).toISOString(),
-            expiresInMs: expiresAt - Date.now(),
-            expiresInMinutes: Math.floor((expiresAt - Date.now()) / 60000),
-          });
+          const expiresAt =
+            expirationTime || Date.now() + DEFAULT_TOKEN_EXPIRATION_TIME;
 
           return { token, expiresAt };
         },
@@ -138,17 +111,8 @@ export function JwtTokenProvider({
 
           const timeUntilExpiry = data.expiresAt - Date.now();
 
-          // Token is stale when it expires (with 1 min buffer)
-          const staleTime = Math.max(0, timeUntilExpiry - 60000);
-
-          console.log("[JWT Debug] Token staleTime calculated", {
-            consumerRef,
-            groupRef,
-            staleTime,
-            staleInMinutes: Math.floor(staleTime / 60000),
-          });
-
-          return staleTime;
+          // Token is stale when it expires (with 30 seconds buffer)
+          return Math.max(0, timeUntilExpiry - 30000); // 30 seconds buffer
         },
         gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
         retry: 2,

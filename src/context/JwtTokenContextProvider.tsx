@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { jwtVerify } from "jose";
+import { decodeJwt } from "jose";
 
 interface TokenCacheEntry {
   token: string;
@@ -50,17 +50,15 @@ interface JwtTokenProviderProps {
 /**
  * Extract JWT token expiration time
  */
-const getTokenExpirationTime = async (
-  token: string,
-): Promise<number | null> => {
+const getTokenExpirationTime = (token: string): number | null => {
   try {
-    const decoded = await jwtVerify(token, new Uint8Array(0), {
-      algorithms: [], // Skip signature verification
-    });
-    const payload = decoded.payload;
-    return payload.exp && typeof payload.exp === "number"
-      ? payload.exp * 1000 // jwt expiration is in seconds, convert to milliseconds
-      : null;
+    const payload = decodeJwt(token);
+
+    if (payload.exp && typeof payload.exp === "number") {
+      return payload.exp * 1000; // Convert seconds to milliseconds
+    }
+
+    return null;
   } catch (error) {
     console.warn("Failed to decode JWT token:", error);
     return null;
