@@ -99,10 +99,12 @@ export function ConditionalHasConfigurationLayout({
       if (isCreateInstallationIdle && !hasFiredMutationRef.current) {
         createInstallation(createInstallationRequest, {
           onSuccess: (_installation) => {
-            onInstallSuccess?.(_installation?.id, _installation.config);
+            if (!hasFiredMutationRef.current) {
+              onInstallSuccess?.(_installation?.id, _installation.config);
+              hasFiredMutationRef.current = true; // only fire the mutation once
+            }
           },
         });
-        hasFiredMutationRef.current = true; // only fire the mutation once
       }
     }
   }, [
