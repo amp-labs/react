@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AcceptInviteRequest';
+export * from './AddUserToOrgRequest';
 export * from './ApiKey';
 export * from './ApiKeyAsBasicOpts';
 export * from './ApiKeyOpts';
@@ -31,6 +32,8 @@ export * from './BuilderInfo';
 export * from './BuilderInfoOrgRole';
 export * from './BuilderInfoProjectRolesValue';
 export * from './BulkWriteSupport';
+export * from './ClaimDomainRequest';
+export * from './ClaimedDomainResponse';
 export * from './Config';
 export * from './ConfigContent';
 export * from './ConfigContentAllOf';
