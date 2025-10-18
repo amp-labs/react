@@ -51,6 +51,12 @@ export interface BaseReadConfigObject {
      */
     schedule?: string;
     /**
+     * If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.
+     * @type {boolean}
+     * @memberof BaseReadConfigObject
+     */
+    disabled?: boolean;
+    /**
      * The name of the destination that the result should be sent to.
      * @type {string}
      * @memberof BaseReadConfigObject
@@ -115,6 +121,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         
         'objectName': !exists(json, 'objectName') ? undefined : json['objectName'],
         'schedule': !exists(json, 'schedule') ? undefined : json['schedule'],
+        'disabled': !exists(json, 'disabled') ? undefined : json['disabled'],
         'destination': !exists(json, 'destination') ? undefined : json['destination'],
         'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
         'selectedValueMappings': !exists(json, 'selectedValueMappings') ? undefined : json['selectedValueMappings'],
@@ -136,6 +143,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         
         'objectName': value.objectName,
         'schedule': value.schedule,
+        'disabled': value.disabled,
         'destination': value.destination,
         'selectedFields': value.selectedFields,
         'selectedValueMappings': value.selectedValueMappings,
