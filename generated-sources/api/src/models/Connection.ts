@@ -118,6 +118,9 @@ export interface Connection {
     authScheme: ConnectionAuthSchemeEnum;
     /**
      * The status of the connection.
+     * - `created`: The connection has just been created or the access token was just refreshed.
+     * - `working`: The connection has successfully been used to make a request.
+     * - `bad_credentials`: The connection encountered credential-related issues when making a request, or when attempting to refresh the access token.
      * @type {string}
      * @memberof Connection
      */
