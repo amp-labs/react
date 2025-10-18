@@ -37,6 +37,7 @@ import {
 export interface BatchUpsertIntegrationsOperationRequest {
     projectIdOrName: string;
     batchUpsertIntegrationsRequest: BatchUpsertIntegrationsRequest;
+    destructive?: boolean;
 }
 
 export interface CreateIntegrationOperationRequest {
@@ -70,6 +71,7 @@ export interface IntegrationApiInterface {
      * @summary Batch upsert a group of integrations
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {BatchUpsertIntegrationsRequest} batchUpsertIntegrationsRequest 
+     * @param {boolean} [destructive] Defaults to false. This flag controls whether to perform destructive actions when deploying integrations, like pausing all read actions for an object that was removed in the latest revision.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -164,6 +166,10 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.destructive !== undefined) {
+            queryParameters['destructive'] = requestParameters.destructive;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
