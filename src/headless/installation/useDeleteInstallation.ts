@@ -6,11 +6,14 @@ import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 import { useInstallationProps } from "../InstallationProvider";
 
 import { useInstallation } from "./useInstallation";
+import { useInstallationValidation } from "./useInstallationValidation";
 
 /**
  * delete installation hook
  * @returns {Object} An object containing:
  *   - `deleteInstallation` (function): A function to delete the installation.
+ *   - `canDelete` (boolean): Whether the installation can be deleted.
+ *   - `validationErrors` (Object): Detailed validation error information.
  *   - `isIdle` (boolean): Whether the mutation is idle.
  *   - `isPending` (boolean): Whether the mutation is pending.
  *   - `error` (Error | null): The error object, if any.
@@ -21,6 +24,7 @@ export function useDeleteInstallation() {
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { installation } = useInstallation();
+  const { canDelete, validationErrors } = useInstallationValidation();
   const queryClient = useQueryClient();
   const {
     mutate: deleteInstallationMutation,
@@ -74,6 +78,8 @@ export function useDeleteInstallation() {
 
   return {
     deleteInstallation,
+    canDelete,
+    validationErrors,
     isIdle,
     isPending,
     error,
