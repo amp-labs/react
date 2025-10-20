@@ -50,10 +50,16 @@ export function useCreateInstallation() {
     onSettled?: () => void;
   }) => {
     if (installation) {
-      throw Error("Installation already created. Try updating instead.");
+      const error = new Error("Installation already created. Try updating instead.");
+      onError?.(error);
+      onSettled?.();
+      return;
     }
     if (!integrationObj) {
-      throw Error("No integration found");
+      const error = new Error("No integration found");
+      onError?.(error);
+      onSettled?.();
+      return;
     }
     // assemble create installation requests from providers
     const createInstallationRequest: CreateInstallationOperationRequest = {

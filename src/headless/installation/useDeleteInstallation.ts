@@ -40,10 +40,18 @@ export function useDeleteInstallation() {
     onSettled?: () => void;
   }) => {
     if (!installation) {
-      throw Error("Installation not found. Not able to delete installation.");
+      const error = new Error(
+        "Installation not found. Not able to delete installation.",
+      );
+      onError?.(error);
+      onSettled?.();
+      return;
     }
     if (!integrationObj) {
-      throw Error("No integration found");
+      const error = new Error("No integration found");
+      onError?.(error);
+      onSettled?.();
+      return;
     }
     return deleteInstallationMutation(
       {
