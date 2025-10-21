@@ -13,6 +13,7 @@ import {
   ComponentContainerLoading,
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
+import { InstallIntegrationErrorBoundary } from "./ErrorBoundary";
 import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
@@ -165,15 +166,22 @@ export function InstallIntegration({
   };
 
   return (
-    // eventually will use the headless providers for integration, consumer, and group etc
-    <InstallationProvider
-      integration={integration}
-      consumerRef={consumerRef}
-      consumerName={consumerName}
-      groupRef={groupRef}
-      groupName={groupName}
+    // catch errors in the InstallIntegrationContent component
+    <InstallIntegrationErrorBoundary
+      fallback={
+        <ComponentContainerError message="Something went wrong, couldn't find integration information" />
+      }
     >
-      <InstallIntegrationContent {...props} />
-    </InstallationProvider>
+      {/* eventually will use the headless providers for integration, consumer, and group etc */}
+      <InstallationProvider
+        integration={integration}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+      >
+        <InstallIntegrationContent {...props} />
+      </InstallationProvider>
+    </InstallIntegrationErrorBoundary>
   );
 }

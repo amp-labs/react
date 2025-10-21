@@ -127,9 +127,10 @@ export function ConfigureInstallationBase({
   const isStateNew = isModified || isCreateMode || isSelectedReadObjectComplete;
 
   // if the selected read object has an error in the manifest, it should not be saved
-  const isSelectedReadObjectError = !!hydratedRevision?.content?.read?.objects?.find(
-    (obj) => obj.objectName === selectedObjectName,
-  )?.error;
+  const isSelectedReadObjectError =
+    !!hydratedRevision?.content?.read?.objects?.find(
+      (obj) => obj.objectName === selectedObjectName,
+    )?.error;
 
   // should the save button be disabled?
   const isDisabled =
