@@ -64,8 +64,8 @@ export function useCreateInstallation() {
 
     // Validate config before creating installation
     const configResult = toCreateConfigContent(config);
-    if (configResult.error || !configResult.data) {
-      onError?.(configResult.error || new Error("Invalid config"));
+    if (configResult.error) {
+      onError?.(configResult.error);
       onSettled?.();
       return;
     }
