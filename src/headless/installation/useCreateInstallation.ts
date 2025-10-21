@@ -50,7 +50,9 @@ export function useCreateInstallation() {
     onSettled?: () => void;
   }) => {
     if (installation) {
-      const error = new Error("Installation already created. Try updating instead.");
+      const error = new Error(
+        "Installation already created. Try updating instead.",
+      );
       onError?.(error);
       onSettled?.();
       return;

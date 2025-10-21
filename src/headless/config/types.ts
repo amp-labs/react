@@ -32,9 +32,10 @@ export function toUpdateConfigContent(
  * Helper to convert InstallationConfigContent to ConfigContent
  * Returns result object with either data or error
  */
-export function toCreateConfigContent(
-  config: InstallationConfigContent,
-): { data?: ConfigContent; error?: Error } {
+export function toCreateConfigContent(config: InstallationConfigContent): {
+  data?: ConfigContent;
+  error?: Error;
+} {
   if (!isValidCreateConfig(config)) {
     return {
       error: new Error("Config must have a provider field for creation"),
