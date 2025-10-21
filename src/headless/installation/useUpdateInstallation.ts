@@ -48,12 +48,18 @@ export function useUpdateInstallation() {
     onSettled?: () => void;
   }) => {
     if (!installation) {
-      throw Error(
+      const error = new Error(
         "Installation not created yet. Try creating the installation first.",
       );
+      onError?.(error);
+      onSettled?.();
+      return;
     }
     if (!integrationObj) {
-      throw Error("No integration found");
+      const error = new Error("No integration found");
+      onError?.(error);
+      onSettled?.();
+      return;
     }
 
     // add write objects to update mask
