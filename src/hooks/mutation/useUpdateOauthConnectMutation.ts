@@ -8,10 +8,14 @@ export const useUpdateOauthConnectMutation = () => {
   return useMutation({
     mutationKey: ["updateOauthConnection"],
     mutationFn: async (request: OauthUpdateRequest) => {
-      const api = await getAPI();
+      // Validate required fields before making API call
       if (!request.projectIdOrName || !request.connectionId) {
-        throw new Error("Project ID and connection ID are required");
+        // Return rejected promise instead of throw to be more explicit
+        return Promise.reject(
+          new Error("Project ID and connection ID are required"),
+        );
       }
+      const api = await getAPI();
       return api.oAuthApi.oauthUpdate(request);
     },
     onSuccess: () => {
