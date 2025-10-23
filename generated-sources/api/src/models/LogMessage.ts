@@ -19,6 +19,7 @@ import { exists, mapValues } from '../runtime';
  * @interface LogMessage
  */
 export interface LogMessage {
+    [key: string]: any | any;
     /**
      * The use-readable message.
      * @type {string}
@@ -65,6 +66,7 @@ export function LogMessageFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
+            ...json,
         'msg': json['msg'],
         'error': !exists(json, 'error') ? undefined : json['error'],
         'operationId': !exists(json, 'operation_id') ? undefined : json['operation_id'],
@@ -81,6 +83,7 @@ export function LogMessageToJSON(value?: LogMessage | null): any {
     }
     return {
         
+            ...value,
         'msg': value.msg,
         'error': value.error,
         'operation_id': value.operationId,
