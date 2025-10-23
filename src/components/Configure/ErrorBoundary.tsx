@@ -15,13 +15,12 @@ interface ErrorBoundaryState {
 }
 
 /**
- * React Error Boundary component that catches JavaScript errors anywhere in the child component tree
+ * Generic React Error Boundary component that catches JavaScript errors anywhere in the child component tree
  * and displays a fallback UI instead of crashing the whole application.
  *
- * This is especially important for the InstallIntegration component to prevent errors in hooks
- * or rendering from crashing the parent application.
+ * This is used across Ampersand components to prevent errors in hooks or rendering from crashing the parent application.
  */
-export class InstallIntegrationErrorBoundary extends Component<
+export class AmpersandErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -37,7 +36,7 @@ export class InstallIntegrationErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     // Log error to console for debugging
-    console.error("InstallIntegration Error Boundary caught an error:", error);
+    console.error("Ampersand Error Boundary caught an error:", error);
     console.error("[Error Info]:", errorInfo);
 
     // Call optional error callback
@@ -64,3 +63,8 @@ export class InstallIntegrationErrorBoundary extends Component<
     return this.props.children;
   }
 }
+
+/**
+ * @deprecated Use AmpersandErrorBoundary instead. This alias is kept for backward compatibility.
+ */
+export const InstallIntegrationErrorBoundary = AmpersandErrorBoundary;
