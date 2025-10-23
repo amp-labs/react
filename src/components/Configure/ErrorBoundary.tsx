@@ -63,8 +63,3 @@ export class AmpersandErrorBoundary extends Component<
     return this.props.children;
   }
 }
-
-/**
- * @deprecated Use AmpersandErrorBoundary instead. This alias is kept for backward compatibility.
- */
-export const InstallIntegrationErrorBoundary = AmpersandErrorBoundary;
