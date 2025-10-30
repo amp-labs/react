@@ -99,10 +99,6 @@ export function HydratedRevisionProvider({
     [hydratedRevision, isHydratedRevisionLoading],
   );
 
-  if (isHydratedRevisionLoading) {
-    return <ComponentContainerLoading />;
-  }
-
   const providerName = integrationObj?.provider || "provider";
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
@@ -141,6 +137,8 @@ export function HydratedRevisionProvider({
       </ComponentContainerError>
     );
   }
+
+  if (isHydratedRevisionLoading) return <ComponentContainerLoading />;
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>
