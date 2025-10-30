@@ -70,7 +70,8 @@ export function ConnectProvider({
       <div className={resetStyles.resetContainer} key={seed}>
         {/* InstallationProvider is nested in ConnectionsProvider and API service JWT auth */}
         <InstallationProvider
-          integration={provider}
+          // integration is not used in the ConnectProvider, but is required by the InstallationProvider
+          integration={"no-integration-connect-provider"}
           consumerRef={consumerRef}
           consumerName={consumerName}
           groupRef={groupRef}
