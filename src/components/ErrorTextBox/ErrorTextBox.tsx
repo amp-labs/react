@@ -13,6 +13,9 @@ interface ErrorTextBoxProps {
 export function InnerErrorTextBox({ message }: { message: string }) {
   return (
     <Box className={classes.errorBox}>
+      <div className={classes.errorIconWrapper}>
+        <ErrorIcon width="20" height="20" />
+      </div>
       <p className={classes.errorText}>{message}</p>
     </Box>
   );
@@ -21,7 +24,6 @@ export function InnerErrorTextBox({ message }: { message: string }) {
 export function ErrorTextBox({ message, children }: ErrorTextBoxProps) {
   return (
     <Container className={classes.errorBoxContainer}>
-      <ErrorIcon />
       <InnerErrorTextBox message={message} />
       {children}
     </Container>
