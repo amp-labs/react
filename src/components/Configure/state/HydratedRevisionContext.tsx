@@ -66,13 +66,10 @@ export function HydratedRevisionProvider({
 
   const {
     data: hydratedRevision,
-    isPending,
-    isFetching,
+    isLoading: isHydratedRevisionLoading,
     isError: isHydratedRevisionError,
     error: hydrateRevisionError,
   } = useManifest();
-
-  const loading = isPending || isFetching;
 
   useEffect(() => {
     if (isHydratedRevisionError) {
@@ -95,14 +92,14 @@ export function HydratedRevisionProvider({
   const contextValue = useMemo(
     () => ({
       hydratedRevision: hydratedRevision || null,
-      loading,
+      loading: isHydratedRevisionLoading,
       readAction: hydratedRevision?.content?.read,
       writeObjects: hydratedRevision?.content?.write?.objects || [],
     }),
-    [hydratedRevision, loading],
+    [hydratedRevision, isHydratedRevisionLoading],
   );
 
-  if (loading) {
+  if (isHydratedRevisionLoading) {
     return <ComponentContainerLoading />;
   }
 

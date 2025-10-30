@@ -47,6 +47,7 @@ export interface Manifest {
 export function useManifest() {
   const hydratedRevisionQuery = useHydratedRevisionQuery();
   const {
+    isLoading,
     isPending,
     isFetching,
     isError,
@@ -116,11 +117,12 @@ export function useManifest() {
 
   return {
     data: hydatedRevision,
-    ...manifest,
+    isLoading,
     isPending,
     isFetching,
     isError,
     isSuccess,
     error,
+    ...manifest,
   };
 }
