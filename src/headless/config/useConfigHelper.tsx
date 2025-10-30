@@ -23,6 +23,7 @@ export type ReadObjectHandlers = {
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;
   getFieldMapping: (fieldName: string) => string | undefined;
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
+  deleteFieldMapping: (mapToName: string) => void;
 };
 
 export type WriteObjectHandlers = {
@@ -152,6 +153,19 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
             // Initialize selectedFieldMappings if it doesn't exist
             obj.selectedFieldMappings = obj.selectedFieldMappings || {};
             obj.selectedFieldMappings[mapToName] = fieldName;
+          }),
+        );
+      },
+
+      deleteFieldMapping: (mapToName: string) => {
+        setDraft((prev) =>
+          produce(prev, (_draft) => {
+            const selectedFieldMappings =
+              _draft.read?.objects?.[objectName]?.selectedFieldMappings;
+
+            if (selectedFieldMappings && mapToName in selectedFieldMappings) {
+              delete selectedFieldMappings[mapToName];
+            }
           }),
         );
       },
