@@ -5,15 +5,12 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useConnections } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import {
   HydratedIntegrationRead,
   HydratedIntegrationWriteObject,
   HydratedRevision,
-  useAPI,
 } from "services/api";
 import {
   ComponentContainerError,
@@ -22,7 +19,7 @@ import {
 import { UpdateConnectionSection } from "src/components/Configure/content/manage/updateConnection/UpdateConnectionSection";
 import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
-import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
+import { useManifest } from "src/headless/manifest/useManifest";
 import { handleServerError } from "src/utils/handleServerError";
 
 interface HydratedRevisionContextValue {
@@ -52,56 +49,6 @@ export const useHydratedRevision = () => {
   return context;
 };
 
-const useHydratedRevisionQuery = () => {
-  const queryClient = useQueryClient();
-  const getAPI = useAPI();
-  const { selectedConnection, isConnectionsLoading } = useConnections();
-  const { projectIdOrName } = useAmpersandProviderProps();
-  const { integrationId, integrationObj } = useInstallIntegrationProps();
-
-  const connectionId = selectedConnection?.id;
-  const revisionId = integrationObj?.latestRevision?.id;
-
-  useEffect(() => {
-    if (!connectionId) {
-      // clear the query cache if connectionId is not set (includes resetting cached errors)
-      queryClient.invalidateQueries({ queryKey: ["amp", "hydratedRevision"] });
-    }
-  }, [connectionId, queryClient]);
-
-  return useQuery({
-    queryKey: [
-      "amp",
-      "hydratedRevision",
-      projectIdOrName,
-      integrationId,
-      revisionId,
-      connectionId,
-    ],
-    queryFn: async () => {
-      if (!projectIdOrName) throw new Error("projectIdOrName is required");
-      if (!integrationId) throw new Error("integrationId is required");
-      if (!revisionId) throw new Error("revisionId is required");
-      if (!connectionId) throw new Error("connectionId is required");
-
-      const api = await getAPI();
-      return api.revisionApi.getHydratedRevision({
-        projectIdOrName,
-        integrationId,
-        revisionId,
-        connectionId,
-      });
-    },
-    retry: 3, // retry 3 times before showing error
-    enabled:
-      !!projectIdOrName &&
-      !!integrationId &&
-      !!revisionId &&
-      !!connectionId &&
-      !isConnectionsLoading,
-  });
-};
-
 type HydratedRevisionProviderProps = {
   children?: React.ReactNode;
   resetComponent: () => void; // optional prop to reset the component on error
@@ -119,10 +66,10 @@ export function HydratedRevisionProvider({
 
   const {
     data: hydratedRevision,
-    isLoading: loading,
+    isLoading: isHydratedRevisionLoading,
     isError: isHydratedRevisionError,
     error: hydrateRevisionError,
-  } = useHydratedRevisionQuery();
+  } = useManifest();
 
   useEffect(() => {
     if (isHydratedRevisionError) {
@@ -145,16 +92,12 @@ export function HydratedRevisionProvider({
   const contextValue = useMemo(
     () => ({
       hydratedRevision: hydratedRevision || null,
-      loading,
+      loading: isHydratedRevisionLoading,
       readAction: hydratedRevision?.content?.read,
       writeObjects: hydratedRevision?.content?.write?.objects || [],
     }),
-    [hydratedRevision, loading],
+    [hydratedRevision, isHydratedRevisionLoading],
   );
-
-  if (loading) {
-    return <ComponentContainerLoading />;
-  }
 
   const providerName = integrationObj?.provider || "provider";
 
@@ -194,6 +137,8 @@ export function HydratedRevisionProvider({
       </ComponentContainerError>
     );
   }
+
+  if (isHydratedRevisionLoading) return <ComponentContainerLoading />;
 
   return (
     <HydratedRevisionContext.Provider value={contextValue}>

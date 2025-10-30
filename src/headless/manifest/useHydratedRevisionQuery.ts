@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useIntegrationQuery } from "src/hooks/query/useIntegrationQuery";
 import { useAPI } from "src/services/api";
@@ -13,7 +12,6 @@ import { useConnection } from "../useConnection";
  * @returns
  */
 export const useHydratedRevisionQuery = () => {
-  const queryClient = useQueryClient();
   const getAPI = useAPI();
   const {
     connection,
@@ -28,13 +26,6 @@ export const useHydratedRevisionQuery = () => {
   const integrationId = integrationObj?.id;
   const revisionId = integrationObj?.latestRevision?.id;
   const isConnectionsLoading = isConnectionsPending || isConnectionsFetching;
-
-  useEffect(() => {
-    if (!connectionId) {
-      // clear the query cache if connectionId is not set (includes resetting cached errors)
-      queryClient.invalidateQueries({ queryKey: ["amp", "hydratedRevision"] });
-    }
-  }, [connectionId, queryClient]);
 
   return useQuery({
     queryKey: [
@@ -59,7 +50,6 @@ export const useHydratedRevisionQuery = () => {
         connectionId,
       });
     },
-    retry: 3, // retry 3 times before showing error
     enabled:
       !!projectIdOrName &&
       !!integrationId &&
