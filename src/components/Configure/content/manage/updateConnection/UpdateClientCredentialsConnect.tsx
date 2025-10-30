@@ -90,11 +90,11 @@ export function UpdateClientCredentialsConnect({
         )}
 
         <ClientCredentialsForm
-          provider={providerName || ""}
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           explicitScopesRequired={explicitScopesRequired}
           buttonVariant="ghost"
+          metadataFields={[]}
         />
       </div>
     </>

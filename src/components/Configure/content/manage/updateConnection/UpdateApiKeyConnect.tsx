@@ -95,6 +95,7 @@ export function UpdateApiKeyConnect({ provider }: { provider?: string }) {
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           buttonVariant="ghost"
           submitButtonType="button"
+          metadataFields={[]}
         />
       </div>
     </>
