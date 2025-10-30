@@ -71,7 +71,7 @@ export function ConnectProvider({
         {/* InstallationProvider is nested in ConnectionsProvider and API service JWT auth */}
         <InstallationProvider
           // integration is not used in the ConnectProvider, but is required by the InstallationProvider
-          integration={"no-integration-connect-provider"}
+          integration={"connect-provider-dummy-string"}
           consumerRef={consumerRef}
           consumerName={consumerName}
           groupRef={groupRef}
