@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import {
   GenerateConnectionOperationRequest,
+  MetadataItemInput,
   ProviderInfo,
 } from "@generated/api/src";
 import { Connection } from "services/api";
@@ -20,6 +21,7 @@ type ApiKeyAuthFlowProps = {
   groupName?: string;
   children: JSX.Element;
   selectedConnection: Connection | null;
+  metadataFields: MetadataItemInput[];
 };
 
 export function ApiKeyAuthFlow({
@@ -31,6 +33,7 @@ export function ApiKeyAuthFlow({
   groupName,
   children,
   selectedConnection,
+  metadataFields,
 }: ApiKeyAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -72,6 +75,7 @@ export function ApiKeyAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={null}
+        metadataFields={metadataFields}
       />
     );
   }
