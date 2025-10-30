@@ -4,6 +4,8 @@ import { InstallationProvider } from "src/headless";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
 import { Connection } from "src/services/api";
 
+import { ComponentContainerError } from "components/Configure/ComponentContainer";
+import { AmpersandErrorBoundary } from "components/Configure/ErrorBoundary";
 import { ProtectedConnectionLayout } from "components/Configure/layout/ProtectedConnectionLayout";
 import { RedirectHandler } from "components/RedirectHandler";
 
@@ -60,36 +62,43 @@ export function ConnectProvider({
   );
 
   return (
-    <div className={resetStyles.resetContainer} key={seed}>
-      {/* InstallationProvider is nested in ConnectionsProvider and API service JWT auth */}
-      <InstallationProvider
-        integration={provider}
-        consumerRef={consumerRef}
-        consumerName={consumerName}
-        groupRef={groupRef}
-        groupName={groupName}
-      >
-        <ConnectionsProvider groupRef={groupRef} provider={provider}>
-          <ProtectedConnectionLayout
-            resetComponent={reset}
-            provider={provider}
-            consumerRef={consumerRef}
-            consumerName={consumerName}
-            groupRef={groupRef}
-            groupName={groupName}
-            onSuccess={onSuccessFx}
-            onDisconnectSuccess={onDisconnectSuccess}
-          >
-            <RedirectHandler redirectURL={redirectUrl}>
-              <ConnectedSuccessBox
-                resetComponent={reset}
-                provider={provider}
-                onDisconnectSuccess={onDisconnectSuccess}
-              />
-            </RedirectHandler>
-          </ProtectedConnectionLayout>
-        </ConnectionsProvider>
-      </InstallationProvider>
-    </div>
+    <AmpersandErrorBoundary
+      fallback={
+        <ComponentContainerError message="Something went wrong with the connection. Please try again." />
+      }
+    >
+      <div className={resetStyles.resetContainer} key={seed}>
+        {/* InstallationProvider is nested in ConnectionsProvider and API service JWT auth */}
+        <InstallationProvider
+          // integration is not used in the ConnectProvider, but is required by the InstallationProvider
+          integration={"connect-provider-dummy-string"}
+          consumerRef={consumerRef}
+          consumerName={consumerName}
+          groupRef={groupRef}
+          groupName={groupName}
+        >
+          <ConnectionsProvider groupRef={groupRef} provider={provider}>
+            <ProtectedConnectionLayout
+              resetComponent={reset}
+              provider={provider}
+              consumerRef={consumerRef}
+              consumerName={consumerName}
+              groupRef={groupRef}
+              groupName={groupName}
+              onSuccess={onSuccessFx}
+              onDisconnectSuccess={onDisconnectSuccess}
+            >
+              <RedirectHandler redirectURL={redirectUrl}>
+                <ConnectedSuccessBox
+                  resetComponent={reset}
+                  provider={provider}
+                  onDisconnectSuccess={onDisconnectSuccess}
+                />
+              </RedirectHandler>
+            </ProtectedConnectionLayout>
+          </ConnectionsProvider>
+        </InstallationProvider>
+      </div>
+    </AmpersandErrorBoundary>
   );
 }

@@ -13,7 +13,7 @@ import {
   ComponentContainerLoading,
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
-import { InstallIntegrationErrorBoundary } from "./ErrorBoundary";
+import { AmpersandErrorBoundary } from "./ErrorBoundary";
 import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
@@ -167,7 +167,7 @@ export function InstallIntegration({
 
   return (
     // catch errors in the InstallIntegrationContent component
-    <InstallIntegrationErrorBoundary
+    <AmpersandErrorBoundary
       fallback={
         <ComponentContainerError message="Something went wrong, couldn't find integration information" />
       }
@@ -182,6 +182,6 @@ export function InstallIntegration({
       >
         <InstallIntegrationContent {...props} />
       </InstallationProvider>
-    </InstallIntegrationErrorBoundary>
+    </AmpersandErrorBoundary>
   );
 }

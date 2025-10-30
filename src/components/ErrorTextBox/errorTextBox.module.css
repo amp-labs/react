@@ -1,22 +1,40 @@
 .errorBoxContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  padding: 30px;
+  padding: 48px 32px;
   min-height: 300px;
 }
 
 .errorBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1em 2rem;
-    border-radius: var(--amp-default-border-radius);
-    background-color: var(--amp-colors-status-critical-muted);
-    border: 1px solid var(--amp-colors-status-critical-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--amp-default-border-radius);
+  background-color: var(--amp-colors-status-critical-muted);
+  border: 1px solid var(--amp-colors-status-critical-muted);
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.errorIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.errorIcon {
+  color: var(--amp-colors-status-critical-dark);
 }
 
 .errorText {
-    color: var(--amp-colors-status-critical-dark);
+  color: var(--amp-colors-status-critical-dark);
+  margin: 0;
+  line-height: 1.5;
+  font-size: 1rem;
+  flex: 1;
 }

@@ -1,2 +1,2 @@
 export { InstallIntegration } from "./InstallIntegration";
-export { InstallIntegrationErrorBoundary } from "./ErrorBoundary";
+export { AmpersandErrorBoundary } from "./ErrorBoundary";
