@@ -63,6 +63,17 @@ export function useCreateInstallation() {
       onSettled?.();
       return;
     }
+
+    // Validate config before creating installation
+    const configResult = toCreateConfigContent(config);
+    if (configResult.error || !configResult.data) {
+      onError?.(
+        configResult.error || new Error("Invalid configuration data"),
+      );
+      onSettled?.();
+      return;
+    }
+
     // assemble create installation requests from providers
     const createInstallationRequest: CreateInstallationOperationRequest = {
       projectIdOrName,
@@ -71,7 +82,7 @@ export function useCreateInstallation() {
         groupRef,
         connectionId: connection?.id,
         config: {
-          content: toCreateConfigContent(config),
+          content: configResult.data,
         },
       },
     };

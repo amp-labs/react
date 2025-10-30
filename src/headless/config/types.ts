@@ -30,15 +30,18 @@ export function toUpdateConfigContent(
 
 /**
  * Helper to convert InstallationConfigContent to ConfigContent
- * Throws error if required fields are missing
+ * Returns result object with either data or error
  */
-export function toCreateConfigContent(
-  config: InstallationConfigContent,
-): ConfigContent {
+export function toCreateConfigContent(config: InstallationConfigContent): {
+  data?: ConfigContent;
+  error?: Error;
+} {
   if (!isValidCreateConfig(config)) {
-    throw new Error("Config must have a provider field for creation");
+    return {
+      error: new Error("Config must have a provider field for creation"),
+    };
   }
-  return config;
+  return { data: config };
 }
 
 export type { InstallationConfigContent };
