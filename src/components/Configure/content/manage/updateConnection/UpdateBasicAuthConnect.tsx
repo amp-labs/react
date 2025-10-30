@@ -99,6 +99,7 @@ export function UpdateBasicAuthConnect({ provider }: { provider?: string }) {
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           buttonVariant="ghost"
+          metadataFields={[]}
         />
       </div>
     </>
