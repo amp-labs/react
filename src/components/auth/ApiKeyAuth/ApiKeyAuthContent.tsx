@@ -26,6 +26,7 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
+  metadataFields: MetadataItemInput[];
 };
 
 type ApiKeyFormData = {
@@ -40,9 +41,9 @@ export function ApiKeyAuthForm({
   isButtonDisabled,
   buttonVariant,
   submitButtonType,
+  metadataFields,
 }: ApiKeyAuthFormProps) {
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
-  const metadataFields = providerInfo.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -128,6 +129,7 @@ function ApiKeyAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataFields,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -140,6 +142,7 @@ function ApiKeyAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled}
+        metadataFields={metadataFields}
       />
     </AuthCardLayout>
   );

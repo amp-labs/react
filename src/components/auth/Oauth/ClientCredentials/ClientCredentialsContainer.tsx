@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import {
   Connection,
   GenerateConnectionOperationRequest,
+  MetadataItemInput,
 } from "@generated/api/src";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 
@@ -25,6 +26,7 @@ interface OauthClientCredsContainerProps {
   providerName?: string;
   explicitScopesRequired?: boolean;
   selectedConnection: Connection | null;
+  metadataFields: MetadataItemInput[];
 }
 
 /**
@@ -40,6 +42,7 @@ export function ClientCredsContainer({
   groupName,
   explicitScopesRequired,
   selectedConnection,
+  metadataFields,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -88,11 +91,11 @@ export function ClientCredsContainer({
   if (selectedConnection === null) {
     return (
       <ClientCredentialsContent
-        provider={provider}
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
+        metadataFields={metadataFields}
       />
     );
   }
