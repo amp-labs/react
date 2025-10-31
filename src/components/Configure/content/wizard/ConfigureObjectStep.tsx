@@ -7,7 +7,7 @@
  * 3. Get AI-powered suggestions for field mappings
  */
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
@@ -23,6 +23,8 @@ import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless/manifest/useManifest";
 
 import { isIntegrationFieldMapping } from "../../utils";
+
+import { ObjectMappingCallout } from "./components/ObjectMappingCallout";
 
 interface ConfigureObjectStepProps {
   objectName: string;
@@ -213,6 +215,9 @@ export function ConfigureObjectStep({
       <p style={{ color: "#64748b", marginTop: "8px" }}>
         Select the fields you want to sync and map them to your data source
       </p>
+
+      {/* Object Mapping Info */}
+      <ObjectMappingCallout objectName={objectName} />
 
       {/* Required Fields */}
       {requiredFieldNoMappings.length > 0 && (
