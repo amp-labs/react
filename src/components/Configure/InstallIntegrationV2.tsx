@@ -7,7 +7,7 @@ import { useProjectQuery } from "src/hooks/query";
 import { ComponentContainerLoading } from "./ComponentContainer";
 import { InstallationContentV2 } from "./content/InstallationContentV2";
 import { ProtectedInstallationContent } from "./content/ProtectedInstallationContent";
-import { InstallIntegrationErrorBoundary } from "./ErrorBoundary";
+import { AmpersandErrorBoundary } from "./ErrorBoundary";
 
 import resetStyles from "src/styles/resetCss.module.css";
 
@@ -127,7 +127,7 @@ export function InstallIntegrationV2({
 }: InstallIntegrationV2Props) {
   return (
     // Error boundary will catch all errors and display error.message
-    <InstallIntegrationErrorBoundary>
+    <AmpersandErrorBoundary>
       <InstallIntegrationContentV2
         integration={integration}
         consumerRef={consumerRef}
@@ -139,6 +139,6 @@ export function InstallIntegrationV2({
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
       />
-    </InstallIntegrationErrorBoundary>
+    </AmpersandErrorBoundary>
   );
 }

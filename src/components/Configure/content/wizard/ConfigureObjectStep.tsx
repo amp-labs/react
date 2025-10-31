@@ -22,7 +22,6 @@ import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless/manifest/useManifest";
 
-import { SmartFieldSuggest } from "../../ai/SmartFieldSuggest";
 import { isIntegrationFieldMapping } from "../../utils";
 
 interface ConfigureObjectStepProps {
@@ -36,12 +35,18 @@ export function ConfigureObjectStep({
   onBack,
   onNext,
 }: ConfigureObjectStepProps) {
-  const { getReadObject, getCustomerFieldsForObject } = useManifest();
-  const { readObject } = useLocalConfig();
+  const { getReadObject, getWriteObject, getCustomerFieldsForObject } =
+    useManifest();
+  const { readObject, writeObject } = useLocalConfig();
 
   const objectHandlers = readObject(objectName);
+  const writeHandlers = writeObject(objectName);
   const manifestObject = getReadObject(objectName);
+  const manifestWriteObject = getWriteObject(objectName);
   const customerFields = getCustomerFieldsForObject(objectName);
+
+  // Track if write is enabled for this object
+  const isWriteEnabled = !!writeHandlers.getWriteObject();
 
   // Split fields into those with and without mappings
 
@@ -87,16 +92,6 @@ export function ConfigureObjectStep({
       ),
     [optionalFieldsAll],
   );
-
-  console.group("fields");
-  console.log("requiredFieldNoMappings", requiredFieldNoMappings);
-  console.log("requiredFieldMappings", requiredFieldMappings);
-  console.log("optionalFieldNoMappings", optionalFieldNoMappings);
-  console.log("optionalFieldMappings", optionalFieldMappings);
-  console.groupEnd();
-
-  // Track which field is being mapped (for showing SmartFieldSuggest)
-  const [mappingField, setMappingField] = useState<string | null>(null);
 
   // Convert optional fields to checkbox items for V1 CheckboxPagination
   const optionalCheckboxItems = useMemo<CheckboxItem[]>(
@@ -167,106 +162,6 @@ export function ConfigureObjectStep({
             Clear
           </Button>
         </div>
-      </div>
-    );
-  };
-
-  const handleFieldToggle = (fieldName: string, isRequired: boolean) => {
-    if (isRequired) return; // Can't toggle required fields
-
-    const currentlySelected = objectHandlers.getSelectedField(fieldName);
-    objectHandlers.setSelectedField({
-      fieldName,
-      selected: !currentlySelected,
-    });
-  };
-
-  const handleAcceptSuggestion = (fieldName: string, mapToName: string) => {
-    // Apply the mapping
-    objectHandlers.setFieldMapping({ fieldName, mapToName });
-    // Select the field if not already selected
-    if (!objectHandlers.getSelectedField(fieldName)) {
-      objectHandlers.setSelectedField({ fieldName, selected: true });
-    }
-    // Close the suggestions
-    setMappingField(null);
-  };
-
-  const renderOptionalFieldRow = (field: HydratedIntegrationField) => {
-    // Handle the union type - check if it's an existent field with fieldName
-    const fieldName =
-      "fieldName" in field ? field.fieldName : field.mapToName || "";
-    if (!fieldName) return null;
-
-    const isSelected = objectHandlers.getSelectedField(fieldName);
-    const currentMapping = objectHandlers.getFieldMapping(fieldName);
-    const isShowingSuggestions = mappingField === fieldName;
-
-    return (
-      <div
-        key={fieldName}
-        style={{
-          padding: "12px",
-          background: isSelected ? "#f0f9ff" : "#f8fafc",
-          borderRadius: "6px",
-          marginBottom: "8px",
-          border: `1px solid ${isSelected ? "#0891b2" : "#e2e8f0"}`,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={() => handleFieldToggle(fieldName, false)}
-            style={{ cursor: "pointer" }}
-          />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600 }}>{fieldName}</div>
-            {currentMapping && (
-              <div
-                style={{ fontSize: "14px", color: "#64748b", marginTop: "4px" }}
-              >
-                Maps to: <strong>{currentMapping}</strong>
-              </div>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() =>
-              setMappingField(isShowingSuggestions ? null : fieldName)
-            }
-            style={{
-              padding: "6px 12px",
-              background: isShowingSuggestions ? "#0891b2" : "#e2e8f0",
-              color: isShowingSuggestions ? "white" : "#334155",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "12px",
-            }}
-          >
-            {isShowingSuggestions ? "Hide Suggestions" : "Map Field"}
-          </button>
-        </div>
-
-        {isShowingSuggestions && customerFields.allFields && (
-          <div
-            style={{
-              marginTop: "12px",
-              paddingTop: "12px",
-              borderTop: "1px solid #e2e8f0",
-            }}
-          >
-            <SmartFieldSuggest
-              requiredField={field}
-              availableFields={customerFields.allFields}
-              currentSelection={currentMapping}
-              onAcceptSuggestion={(suggestedFieldName: string) =>
-                handleAcceptSuggestion(fieldName, suggestedFieldName)
-              }
-            />
-          </div>
-        )}
       </div>
     );
   };
@@ -387,6 +282,96 @@ export function ConfigureObjectStep({
           </h3>
           <div>
             {optionalFieldMappings.map((field) => renderFieldMappingRow(field))}
+          </div>
+        </div>
+      )}
+
+      {/* Write Configuration */}
+      {manifestWriteObject.object && (
+        <div style={{ marginTop: "32px" }}>
+          <div
+            style={{
+              padding: "16px",
+              background: "#fefce8",
+              border: "1px solid #fde047",
+              borderRadius: "6px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <h3
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    marginBottom: "4px",
+                  }}
+                >
+                  Enable Write
+                </h3>
+                <p style={{ fontSize: "14px", color: "#78716c", margin: 0 }}>
+                  Allow data to be written back to {objectName}
+                </p>
+              </div>
+              <label
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "48px",
+                  height: "24px",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isWriteEnabled}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      writeHandlers.setEnableWrite();
+                    } else {
+                      writeHandlers.setDisableWrite();
+                    }
+                  }}
+                  style={{
+                    opacity: 0,
+                    width: 0,
+                    height: 0,
+                  }}
+                />
+                <span
+                  style={{
+                    position: "absolute",
+                    cursor: "pointer",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: isWriteEnabled ? "#0891b2" : "#cbd5e1",
+                    transition: "0.3s",
+                    borderRadius: "24px",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "absolute",
+                      content: '""',
+                      height: "18px",
+                      width: "18px",
+                      left: isWriteEnabled ? "26px" : "3px",
+                      bottom: "3px",
+                      backgroundColor: "white",
+                      transition: "0.3s",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </span>
+              </label>
+            </div>
           </div>
         </div>
       )}
