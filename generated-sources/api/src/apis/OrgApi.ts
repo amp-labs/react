@@ -113,7 +113,7 @@ export interface UpdateOrgOperationRequest {
  */
 export interface OrgApiInterface {
     /**
-     * 
+     * Adds a builder to an organization. Two authorization modes - Org owner inviting another user, or self-joining via claimed domain (authenticated user\'s email domain should be claimed by this organization).
      * @summary Add user to an organization
      * @param {string} orgId ID of the organization.
      * @param {AddUserToOrgRequest} addUserToOrgRequest 
@@ -124,12 +124,13 @@ export interface OrgApiInterface {
     addUserToOrgRaw(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Adds a builder to an organization. Two authorization modes - Org owner inviting another user, or self-joining via claimed domain (authenticated user\'s email domain should be claimed by this organization).
      * Add user to an organization
      */
     addUserToOrg(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Returns claimed domain information if authenticated user is an owner of the organization that claimed the domain, or if the user\'s email domain matches the claimed domain.
      * @summary Check if a domain is claimed
      * @param {string} domain Accepts an email address, domain name, or URL. The domain will be automatically extracted: for emails, the portion after @ is used (e.g., \&quot;user@example.com\&quot; becomes \&quot;example.com\&quot;); for URLs, the hostname is extracted (e.g., \&quot;https://www.example.com\&quot; becomes \&quot;example.com\&quot;). 
      * @param {*} [options] Override http request option.
@@ -139,7 +140,7 @@ export interface OrgApiInterface {
     checkClaimedDomainRaw(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>>;
 
     /**
-     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Returns claimed domain information if authenticated user is an owner of the organization that claimed the domain, or if the user\'s email domain matches the claimed domain.
      * Check if a domain is claimed
      */
     checkClaimedDomain(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse>;
@@ -308,6 +309,7 @@ export interface OrgApiInterface {
 export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
     /**
+     * Adds a builder to an organization. Two authorization modes - Org owner inviting another user, or self-joining via claimed domain (authenticated user\'s email domain should be claimed by this organization).
      * Add user to an organization
      */
     async addUserToOrgRaw(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -324,10 +326,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -349,6 +347,7 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
     }
 
     /**
+     * Adds a builder to an organization. Two authorization modes - Org owner inviting another user, or self-joining via claimed domain (authenticated user\'s email domain should be claimed by this organization).
      * Add user to an organization
      */
     async addUserToOrg(requestParameters: AddUserToOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -356,7 +355,7 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
     }
 
     /**
-     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Returns claimed domain information if authenticated user is an owner of the organization that claimed the domain, or if the user\'s email domain matches the claimed domain.
      * Check if a domain is claimed
      */
     async checkClaimedDomainRaw(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimedDomainResponse>> {
@@ -371,10 +370,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -395,7 +390,7 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
     }
 
     /**
-     * Check if a domain is claimed by an organization. Accepts email, domain, or URL.
+     * Returns claimed domain information if authenticated user is an owner of the organization that claimed the domain, or if the user\'s email domain matches the claimed domain.
      * Check if a domain is claimed
      */
     async checkClaimedDomain(requestParameters: CheckClaimedDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimedDomainResponse> {
@@ -417,10 +412,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;

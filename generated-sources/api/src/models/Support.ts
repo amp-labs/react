@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BatchWriteSupport } from './BatchWriteSupport';
+import {
+    BatchWriteSupportFromJSON,
+    BatchWriteSupportFromJSONTyped,
+    BatchWriteSupportToJSON,
+} from './BatchWriteSupport';
 import type { BulkWriteSupport } from './BulkWriteSupport';
 import {
     BulkWriteSupportFromJSON,
@@ -68,6 +74,12 @@ export interface Support {
      * @memberof Support
      */
     subscribeSupport?: SubscribeSupport;
+    /**
+     * 
+     * @type {BatchWriteSupport}
+     * @memberof Support
+     */
+    batchWrite?: BatchWriteSupport;
 }
 
 /**
@@ -100,6 +112,7 @@ export function SupportFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'subscribe': json['subscribe'],
         'write': json['write'],
         'subscribeSupport': !exists(json, 'subscribeSupport') ? undefined : SubscribeSupportFromJSON(json['subscribeSupport']),
+        'batchWrite': !exists(json, 'batchWrite') ? undefined : BatchWriteSupportFromJSON(json['batchWrite']),
     };
 }
 
@@ -118,6 +131,7 @@ export function SupportToJSON(value?: Support | null): any {
         'subscribe': value.subscribe,
         'write': value.write,
         'subscribeSupport': SubscribeSupportToJSON(value.subscribeSupport),
+        'batchWrite': BatchWriteSupportToJSON(value.batchWrite),
     };
 }
 
