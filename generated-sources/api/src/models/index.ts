@@ -26,6 +26,8 @@ export * from './BaseWriteConfig';
 export * from './BaseWriteConfigObject';
 export * from './BasicAuthOpts';
 export * from './BatchUpsertIntegrationsRequest';
+export * from './BatchWriteSupport';
+export * from './BatchWriteSupportConfig';
 export * from './BillingAccount';
 export * from './Builder';
 export * from './BuilderInfo';
