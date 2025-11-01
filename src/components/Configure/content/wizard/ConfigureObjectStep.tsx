@@ -7,7 +7,7 @@
  * 3. Get AI-powered suggestions for field mappings
  */
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   HydratedIntegrationField,
   HydratedIntegrationFieldExistent,
@@ -49,6 +49,9 @@ export function ConfigureObjectStep({
 
   // Track if write is enabled for this object
   const isWriteEnabled = !!writeHandlers.getWriteObject();
+
+  // Track if showing all selected optional fields (for when > 10)
+  const [showAllSelectedFields, setShowAllSelectedFields] = useState(false);
 
   // Split fields into those with and without mappings
 
@@ -264,6 +267,96 @@ export function ConfigureObjectStep({
             onItemChange={handleOptionalFieldChange}
             showSelectAll={optionalCheckboxItems.length >= 2}
           />
+
+          {/* Selected Optional Fields Pills */}
+          {optionalCheckboxItems.some((item) => item.isChecked) &&
+            (() => {
+              const selectedFields = optionalCheckboxItems.filter(
+                (item) => item.isChecked,
+              );
+              const hasMany = selectedFields.length > 10;
+              const displayedFields =
+                hasMany && !showAllSelectedFields
+                  ? selectedFields.slice(0, 10)
+                  : selectedFields;
+
+              return (
+                <div style={{ marginTop: "16px" }}>
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      marginBottom: "8px",
+                      color: "#64748b",
+                    }}
+                  >
+                    Selected Fields ({selectedFields.length})
+                  </div>
+                  <div
+                    style={{
+                      padding: "12px",
+                      background: "#f0f9ff",
+                      borderRadius: "6px",
+                      border: "1px solid #bae6fd",
+                    }}
+                  >
+                    <div
+                      style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}
+                    >
+                      {displayedFields.map((item) => (
+                        <div
+                          key={item.id}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "6px 12px",
+                            background: "#e0f2fe",
+                            border: "1px solid #0891b2",
+                            borderRadius: "6px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: 500,
+                              color: "#0c4a6e",
+                            }}
+                          >
+                            {item.label}
+                          </div>
+                        </div>
+                      ))}
+                      {hasMany && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowAllSelectedFields(!showAllSelectedFields)
+                          }
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "6px 12px",
+                            background: "#e0f2fe",
+                            border: "1px solid #0891b2",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontSize: "13px",
+                            fontWeight: 500,
+                            color: "#0c4a6e",
+                          }}
+                        >
+                          {showAllSelectedFields
+                            ? "Show Less ↑"
+                            : `Show All (${selectedFields.length}) ↓`}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
         </div>
       )}
 

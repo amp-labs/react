@@ -90,7 +90,10 @@ export function CreateInstallationWizard({
           // After configuring, check if there are more unconfigured objects
           const nextObject = getNextUnconfiguredObject();
           if (nextObject) {
-            setCurrentStep({ type: "configure-object", objectName: nextObject });
+            setCurrentStep({
+              type: "configure-object",
+              objectName: nextObject,
+            });
           } else {
             // All objects configured, go to review
             setCurrentStep({ type: "review" });
@@ -102,23 +105,68 @@ export function CreateInstallationWizard({
 
   // Review step
   if (currentStep.type === "review") {
+    const hasWriteObjects =
+      draft.write?.objects && Object.keys(draft.write.objects).length > 0;
+
     return (
       <div style={{ padding: "20px", fontFamily: "system-ui" }}>
         <h2>Review Configuration</h2>
+        <p style={{ color: "#64748b", marginTop: "8px" }}>
+          Review your configuration before creating the installation
+        </p>
 
+        {/* Read Objects */}
         <div style={{ marginTop: "20px" }}>
-          <h3>Read Objects</h3>
+          <h3 style={{ fontSize: "18px", marginBottom: "12px" }}>
+            Read Objects
+          </h3>
           <pre
             style={{
               background: "#f1f5f9",
               padding: "12px",
               borderRadius: "4px",
               overflow: "auto",
+              fontSize: "12px",
             }}
           >
             {JSON.stringify(draft.read?.objects, null, 2)}
           </pre>
         </div>
+
+        {/* Write Objects */}
+        {hasWriteObjects && (
+          <div style={{ marginTop: "20px" }}>
+            <h3 style={{ fontSize: "18px", marginBottom: "12px" }}>
+              Write Objects
+              <span
+                style={{
+                  marginLeft: "8px",
+                  fontSize: "12px",
+                  fontWeight: 400,
+                  color: "#64748b",
+                }}
+              >
+                (
+                {draft.write?.objects
+                  ? Object.keys(draft.write.objects).length
+                  : 0}{" "}
+                enabled)
+              </span>
+            </h3>
+            <pre
+              style={{
+                background: "#fefce8",
+                padding: "12px",
+                borderRadius: "4px",
+                overflow: "auto",
+                fontSize: "12px",
+                border: "1px solid #fde047",
+              }}
+            >
+              {JSON.stringify(draft.write?.objects, null, 2)}
+            </pre>
+          </div>
+        )}
 
         <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
           <button
