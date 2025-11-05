@@ -42,6 +42,8 @@ export function WriteFieldsV2() {
           items={checkboxItems}
           onItemChange={onItemChange}
           showSelectAll={writeObjects.length >= 2}
+          searchPlaceholder="Search objects..."
+          itemName="objects"
         />
       </>
     )
