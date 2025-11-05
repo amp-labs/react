@@ -149,7 +149,7 @@ export function CheckboxPagination({
 
       {filteredItems.length === 0 && searchTerm && (
         <div className={styles.noResults}>
-          No ${itemName} found matching &quot;{searchTerm}&quot;
+          No {itemName} found matching &quot;{searchTerm}&quot;
         </div>
       )}
     </CheckboxGroup>

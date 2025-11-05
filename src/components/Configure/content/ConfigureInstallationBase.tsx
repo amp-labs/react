@@ -24,7 +24,7 @@ import {
 } from "../utils";
 
 import { ReadFields } from "./fields/ReadFields";
-import { WriteFields } from "./fields/WriteFields";
+import { WriteFields } from "./fields/WriteObjects";
 import { ManageContent } from "./manage/ManageContent";
 import { useSelectedConfigureState } from "./useSelectedConfigureState";
 interface ConfigureInstallationBaseProps {
