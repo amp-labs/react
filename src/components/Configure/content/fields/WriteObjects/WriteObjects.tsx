@@ -3,7 +3,7 @@
 import { WriteObjectsV2 } from "./WriteObjectsV2";
 
 /**
- * Bridge component to WriteFieldsV2
+ * Bridge component to WriteObjectsV2
  * @returns
  */
 export function WriteObjects() {
