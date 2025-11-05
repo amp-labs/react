@@ -2,9 +2,9 @@ import { Draft } from "immer";
 
 import { ConfigureState } from "../../../types";
 
-function setNonConfigurableWriteFieldProducer(
+function setNonConfigurableWriteObjectProducer(
   draft: Draft<ConfigureState>,
-  fieldKey: string,
+  objectKey: string,
   checked: boolean,
 ) {
   if (draft?.write?.selectedWriteObjects === null) {
@@ -14,13 +14,13 @@ function setNonConfigurableWriteFieldProducer(
   }
 
   if (draft?.write) {
-    const draftSelectedWriteFields = draft.write.selectedWriteObjects;
+    const draftSelectedWriteObjects = draft.write.selectedWriteObjects;
     if (checked) {
-      draftSelectedWriteFields[fieldKey] = { objectName: fieldKey };
+      draftSelectedWriteObjects[objectKey] = { objectName: objectKey };
     }
 
     if (!checked) {
-      delete draftSelectedWriteFields[fieldKey];
+      delete draftSelectedWriteObjects[objectKey];
     }
 
     // DEBUG: print out the draft
@@ -28,16 +28,16 @@ function setNonConfigurableWriteFieldProducer(
   }
 }
 
-export function setNonConfigurableWriteField(
+export function setNonConfigurableWriteObject(
   selectedObjectName: string,
   setConfigureState: (
     objectName: string,
     producer: (draft: Draft<ConfigureState>) => void,
   ) => void,
-  fieldKey: string,
+  objectKey: string,
   checked: boolean,
 ) {
   setConfigureState(selectedObjectName, (draft) => {
-    setNonConfigurableWriteFieldProducer(draft, fieldKey, checked);
+    setNonConfigurableWriteObjectProducer(draft, objectKey, checked);
   });
 }
