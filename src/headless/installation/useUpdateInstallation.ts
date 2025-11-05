@@ -64,19 +64,22 @@ export function useUpdateInstallation() {
 
     // add write objects to update mask
     const updateMask = [];
-    const currentWriteObjectsLength = Object.keys(
-      config?.write?.objects || {},
-    ).length;
-    const previousWriteObjectsLength = Object.keys(
-      installation?.config?.content?.write?.objects || {},
-    ).length;
 
-    // push update mask if write objects length > 0 or if length === 0 and installation had objects previously
-    if (
-      currentWriteObjectsLength > 0 ||
-      (currentWriteObjectsLength === 0 && previousWriteObjectsLength > 0)
-    ) {
-      updateMask.push("config.content.write.objects");
+    if (config?.write?.objects) {
+      const currentWriteObjectsLength = Object.keys(
+        config.write.objects,
+      ).length;
+      const previousWriteObjectsLength = Object.keys(
+        installation?.config?.content?.write?.objects || {},
+      ).length;
+
+      // push update mask if write objects length > 0 or if length === 0 and installation had objects previously
+      if (
+        currentWriteObjectsLength > 0 ||
+        (currentWriteObjectsLength === 0 && previousWriteObjectsLength > 0)
+      ) {
+        updateMask.push("config.content.write.objects");
+      }
     }
 
     // add read objects to update mask
