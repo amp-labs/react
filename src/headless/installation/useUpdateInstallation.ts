@@ -67,7 +67,7 @@ export function useUpdateInstallation() {
 
     if (config?.write?.objects) {
       const currentWriteObjectsLength = Object.keys(
-        config?.write?.objects || {},
+        config.write.objects,
       ).length;
       const previousWriteObjectsLength = Object.keys(
         installation?.config?.content?.write?.objects || {},
