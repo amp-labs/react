@@ -6,8 +6,8 @@
  */
 
 import React, { createContext, useContext } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ResponseError } from "@generated/api/src";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";

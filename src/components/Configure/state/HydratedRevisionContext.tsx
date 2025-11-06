@@ -75,9 +75,10 @@ export function HydratedRevisionProvider({
   useEffect(() => {
     if (!isHydratedRevisionSuccess && !isHydratedRevisionError) {
       // Do nothing, we are waiting for the query to complete.
-    } else if (isHydratedRevisionError ) {
+    } else if (isHydratedRevisionError) {
       setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-      if (hydrateRevisionError) handleServerError(hydrateRevisionError, setReadableErrorMsg);
+      if (hydrateRevisionError)
+        handleServerError(hydrateRevisionError, setReadableErrorMsg);
     } else {
       removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
       setReadableErrorMsg(null);
