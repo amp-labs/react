@@ -69,12 +69,15 @@ export function HydratedRevisionProvider({
     isLoading: isHydratedRevisionLoading,
     isError: isHydratedRevisionError,
     error: hydrateRevisionError,
+    isSuccess: isHydratedRevisionSuccess,
   } = useManifest();
 
   useEffect(() => {
-    if (isHydratedRevisionError) {
+    if (!isHydratedRevisionSuccess && !isHydratedRevisionError) {
+      // Do nothing, we are waiting for the query to complete.
+    } else if (isHydratedRevisionError ) {
       setError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
-      handleServerError(hydrateRevisionError, setReadableErrorMsg);
+      if (hydrateRevisionError) handleServerError(hydrateRevisionError, setReadableErrorMsg);
     } else {
       removeError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier);
       setReadableErrorMsg(null);
@@ -82,6 +85,7 @@ export function HydratedRevisionProvider({
     }
   }, [
     isHydratedRevisionError,
+    isHydratedRevisionSuccess,
     errorIntegrationIdentifier,
     setError,
     removeError,
@@ -106,7 +110,7 @@ export function HydratedRevisionProvider({
       integrationObj?.name || integrationId || "unknown integration";
     const errorMsg = `${
       readableErrorMsg
-        ? `: ${readableErrorMsg}`
+        ? `${readableErrorMsg}`
         : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`
     }`;
 
