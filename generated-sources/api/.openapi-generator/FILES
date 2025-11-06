@@ -49,6 +49,8 @@ src/models/BaseWriteConfig.ts
 src/models/BaseWriteConfigObject.ts
 src/models/BasicAuthOpts.ts
 src/models/BatchUpsertIntegrationsRequest.ts
+src/models/BatchWriteSupport.ts
+src/models/BatchWriteSupportConfig.ts
 src/models/BillingAccount.ts
 src/models/Builder.ts
 src/models/BuilderInfo.ts
