@@ -21,6 +21,7 @@ import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionB
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
 import { useManifest } from "src/headless/manifest/useManifest";
 import { handleServerError } from "src/utils/handleServerError";
+import { capitalize } from "src/utils";
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
@@ -111,7 +112,7 @@ export function HydratedRevisionProvider({
       integrationObj?.name || integrationId || "unknown integration";
     const errorMsg = `${
       readableErrorMsg
-        ? readableErrorMsg
+        ? capitalize(readableErrorMsg)
         : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`
     }`;
 
