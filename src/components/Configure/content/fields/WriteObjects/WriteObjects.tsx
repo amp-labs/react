@@ -1,15 +1,15 @@
 // import { FieldDefaultValueMapping } from '../FieldDefaultValueMapping/FieldDefaultValueMapping';
 
-import { WriteFieldsV2 } from "./WriteFieldsV2";
+import { WriteObjectsV2 } from "./WriteObjectsV2";
 
 /**
- * Bridge component to WriteFieldsV2
+ * Bridge component to WriteObjectsV2
  * @returns
  */
-export function WriteFields() {
+export function WriteObjects() {
   return (
     <>
-      <WriteFieldsV2 />
+      <WriteObjectsV2 />
       {/* TODO(ENG-1970): Bring this back when new valueDefault format is supported */}
       {/* <FieldDefaultValueMapping /> */}
     </>

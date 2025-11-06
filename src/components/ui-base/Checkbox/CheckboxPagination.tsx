@@ -25,6 +25,7 @@ interface CheckboxPaginationProps {
   showSelectAll?: boolean;
   showSearch?: boolean;
   searchPlaceholder?: string;
+  itemName?: string;
 }
 
 export function CheckboxPagination({
@@ -34,6 +35,7 @@ export function CheckboxPagination({
   showSelectAll = true,
   showSearch = true,
   searchPlaceholder = "Search fields...",
+  itemName = "fields",
 }: CheckboxPaginationProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -97,7 +99,7 @@ export function CheckboxPagination({
         <SelectAllCheckbox
           id="select-all-fields"
           isChecked={areAllFilteredItemsChecked}
-          label={`Select all ${filteredItems.length} ${searchTerm ? "matching " : ""}fields`}
+          label={`Select all ${filteredItems.length} ${searchTerm ? "matching " : ""}${itemName}`}
           onCheckedChange={handleSelectAllChange}
           isIndeterminate={
             areSomeFilteredItemsChecked && !areAllFilteredItemsChecked
@@ -147,7 +149,7 @@ export function CheckboxPagination({
 
       {filteredItems.length === 0 && searchTerm && (
         <div className={styles.noResults}>
-          No fields found matching &quot;{searchTerm}&quot;
+          No {itemName} found matching &quot;{searchTerm}&quot;
         </div>
       )}
     </CheckboxGroup>
