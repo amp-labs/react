@@ -6,6 +6,7 @@
  */
 
 import React, { createContext, useContext } from "react";
+import { ResponseError } from "@generated/api/src";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
@@ -60,7 +61,25 @@ export function useAmpersandProviderProps(): AmpersandContextValue {
   return ampersandContext;
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        // Don't retry on 4xx client errors - these indicate user/data issues, not transient failures
+        if (error instanceof ResponseError) {
+          const status = error.response.status;
+          if (status >= 400 && status < 500) {
+            return false;
+          }
+        }
+        // Retry up to 3 times for other errors (network issues, 5xx, etc.)
+        // This is react-query's default behavior, so we preserve it:
+        // https://tanstack.com/query/v4/docs/framework/react/guides/query-retries
+        return failureCount < 3;
+      },
+    },
+  },
+});
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const {
