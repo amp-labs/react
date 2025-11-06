@@ -111,7 +111,7 @@ export function HydratedRevisionProvider({
       integrationObj?.name || integrationId || "unknown integration";
     const errorMsg = `${
       readableErrorMsg
-        ? `${readableErrorMsg}`
+        ? readableErrorMsg
         : `Error retrieving objects from ${providerName} or integration details for ${intNameOrId}`
     }`;
 
