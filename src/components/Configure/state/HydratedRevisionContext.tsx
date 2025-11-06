@@ -20,8 +20,8 @@ import { UpdateConnectionSection } from "src/components/Configure/content/manage
 import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
 import { useManifest } from "src/headless/manifest/useManifest";
-import { handleServerError } from "src/utils/handleServerError";
 import { capitalize } from "src/utils";
+import { handleServerError } from "src/utils/handleServerError";
 
 interface HydratedRevisionContextValue {
   hydratedRevision: HydratedRevision | null;
