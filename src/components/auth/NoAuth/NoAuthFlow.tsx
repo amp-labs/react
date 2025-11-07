@@ -16,6 +16,7 @@ type NoAuthFlowProps = {
   providerName?: string;
   children: JSX.Element;
   selectedConnection: Connection | null;
+  moduleError?: string | null;
 };
 
 /**
@@ -32,6 +33,7 @@ export function NoAuthFlow({
   children,
   selectedConnection,
   providerName,
+  moduleError,
 }: NoAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -62,7 +64,7 @@ export function NoAuthFlow({
     return (
       <NoAuthContent
         handleSubmit={onNext}
-        error={null}
+        error={moduleError || null}
         providerName={providerName}
       />
     );

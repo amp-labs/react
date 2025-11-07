@@ -27,6 +27,7 @@ interface OauthClientCredsContainerProps {
   explicitScopesRequired?: boolean;
   selectedConnection: Connection | null;
   metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 }
 
 /**
@@ -43,10 +44,11 @@ export function ClientCredsContainer({
   explicitScopesRequired,
   selectedConnection,
   metadataFields,
+  moduleError,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(moduleError || null);
 
   //  generate connection from client credentials
   const handleSubmit = useCallback(

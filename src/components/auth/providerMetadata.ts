@@ -61,21 +61,20 @@ export function isProviderMetadataValid(
  * Determines which module to use for filtering metadata fields.
  *
  * Logic:
- * 1. If provider has no modules (providerInfo.modules is empty/undefined) → return "" (empty string means no modules)
+ * 1. If provider has no modules (providerInfo.modules is empty/undefined) → return { module: "", error: null }
  * 2. If provider has modules:
  *    a. Use integrationModule if provided
  *    b. Fall back to providerInfo.defaultModule
- *    c. If neither exists, throw an error (provider has modules but no valid module determined)
+ *    c. If neither exists, return error message instead of throwing
  *
  * @param integrationModule - Module specified on the integration/revision
  * @param providerInfo - Provider information containing modules and defaultModule
- * @returns Module string to use for filtering, or "" if provider has no modules
- * @throws Error if provider has modules but no valid module can be determined
+ * @returns Object with module string (or "") and optional error message
  */
 export function determineModule(
   integrationModule: string | undefined,
   providerInfo: ProviderInfo | null | undefined,
-): string {
+): { module: string; error: string | null } {
   // Check if provider has any modules defined
   const providerModules = providerInfo?.modules;
   const hasModules = providerModules && Object.keys(providerModules).length > 0;
@@ -83,7 +82,7 @@ export function determineModule(
   // If provider has no modules, return empty string to indicate "no modules"
   // This means all metadata fields should be shown
   if (!hasModules) {
-    return "";
+    return { module: "", error: null };
   }
 
   // Provider has modules - determine which one to use
@@ -92,13 +91,13 @@ export function determineModule(
   // If we still don't have a module, this is an error condition
   // Provider has modules but integration didn't specify one and there's no default
   if (!moduleToUse) {
-    throw new Error(
-      `Provider "${providerInfo?.name}" has modules but no valid module could be determined. ` +
-        `Integration must specify a module or provider must have a defaultModule.`,
-    );
+    return {
+      module: "",
+      error: `Could not determine module for provider ${providerInfo?.name}`,
+    };
   }
 
-  return moduleToUse;
+  return { module: moduleToUse, error: null };
 }
 
 /**

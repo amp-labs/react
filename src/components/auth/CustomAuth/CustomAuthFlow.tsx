@@ -18,10 +18,11 @@ export function CustomAuthFlow({
   children,
   selectedConnection,
   metadataFields,
+  moduleError,
 }: CustomAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(moduleError || null);
 
   const onNext = useCallback(
     (form: CustomAuthFormData) => {
