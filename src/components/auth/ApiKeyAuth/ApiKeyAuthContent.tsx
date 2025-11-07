@@ -98,7 +98,9 @@ export function ApiKeyAuthForm({
             <DocsHelperText
               url={metadata.docsURL}
               providerDisplayName={providerName || capitalize(provider)}
-              credentialName={metadata.displayName || metadata.name}
+              credentialName={
+                metadata.displayName || capitalize(metadata.name.toLowerCase())
+              }
             />
           )}
           <FormComponent.Input

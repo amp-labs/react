@@ -3,6 +3,7 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
+import { capitalize } from "src/utils";
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
@@ -35,7 +36,9 @@ export function WorkspaceEntryContent({
             <DocsHelperText
               url={metadata.docsURL}
               providerDisplayName={providerName || ""}
-              credentialName={metadata.displayName || metadata.name}
+              credentialName={
+                metadata.displayName || capitalize(metadata.name.toLowerCase())
+              }
             />
           )}
           <FormComponent.Input

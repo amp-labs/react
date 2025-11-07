@@ -7,7 +7,7 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { convertTextareaToArray } from "src/utils";
+import { capitalize, convertTextareaToArray } from "src/utils";
 
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
@@ -119,7 +119,9 @@ export function ClientCredentialsForm({
               <DocsHelperText
                 url={metadata.docsURL}
                 providerDisplayName={providerName || ""}
-                credentialName={metadata.displayName || metadata.name}
+                credentialName={
+                  metadata.displayName || capitalize(metadata.name.toLowerCase())
+                }
               />
             )}
             <FormComponent.Input
