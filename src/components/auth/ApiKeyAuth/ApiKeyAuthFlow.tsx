@@ -22,6 +22,7 @@ type ApiKeyAuthFlowProps = {
   children: JSX.Element;
   selectedConnection: Connection | null;
   metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 };
 
 export function ApiKeyAuthFlow({
@@ -34,6 +35,7 @@ export function ApiKeyAuthFlow({
   children,
   selectedConnection,
   metadataFields,
+  moduleError,
 }: ApiKeyAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -74,7 +76,7 @@ export function ApiKeyAuthFlow({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={onNext}
-        error={null}
+        error={moduleError || null}
         metadataFields={metadataFields}
       />
     );

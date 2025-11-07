@@ -42,6 +42,7 @@ interface OauthFlowProps {
   groupName?: string;
   providerName?: string;
   metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 }
 
 /**
@@ -57,13 +58,14 @@ export function OauthFlow2({
   groupName,
   providerName,
   metadataFields,
+  moduleError,
 }: OauthFlowProps) {
   const { projectId } = useProjectQuery();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
 
-  // error state
-  const [error, setError] = useState<string | null>(null);
+  // error state - initialize with moduleError if present
+  const [error, setError] = useState<string | null>(moduleError || null);
 
   // workspace and metadata states
   const [workspace, setWorkspace] = useState<string>("");
@@ -188,7 +190,8 @@ export function OauthFlow2({
           isButtonDisabled={
             workspace.length === 0 ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
         />
       );
@@ -204,7 +207,8 @@ export function OauthFlow2({
           isButtonDisabled={
             !isProviderMetadataValid(metadataFields, formData) ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
           providerName={providerName}
           metadataFields={metadataFields}
@@ -218,7 +222,9 @@ export function OauthFlow2({
         handleSubmit={handleSubmit}
         error={error}
         providerName={providerName}
-        isButtonDisabled={isCreatingOauthConnection || isConnectionsFetching}
+        isButtonDisabled={
+          isCreatingOauthConnection || isConnectionsFetching || !!error
+        }
       />
     );
   })();
