@@ -15,6 +15,6 @@ export type CustomAuthFlowProps = {
   setSelectedConnection: (connection: Connection | null) => void;
   providerName?: string;
   onDisconnectSuccess?: (connection: Connection) => void;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
   moduleError?: string | null;
 };

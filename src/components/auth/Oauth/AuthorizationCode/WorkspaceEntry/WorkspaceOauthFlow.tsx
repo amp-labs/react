@@ -45,7 +45,7 @@ export function WorkspaceOauthFlow({
   const [metadata, setMetadata] = useState<ProviderMetadata>({});
 
   const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
+  const metadataInputs = providerInfo?.metadata?.input || [];
 
   const {
     url: oAuthPopupURL,
@@ -93,7 +93,7 @@ export function WorkspaceOauthFlow({
 
   const providerHandleSubmit = async () => {
     setLocalError(null);
-    if (!isProviderMetadataValid(metadataFields, formData)) {
+    if (!isProviderMetadataValid(metadataInputs, formData)) {
       setLocalError("Please fill in all required fields");
       return;
     }
@@ -122,10 +122,10 @@ export function WorkspaceOauthFlow({
         setFormData={handleFormDataChange}
         error={errorMessage}
         isButtonDisabled={
-          !isProviderMetadataValid(metadataFields, formData) || isLoading
+          !isProviderMetadataValid(metadataInputs, formData) || isLoading
         }
         providerName={providerName}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     );
 

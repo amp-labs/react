@@ -26,7 +26,7 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 type ApiKeyFormData = {
@@ -41,7 +41,7 @@ export function ApiKeyAuthForm({
   isButtonDisabled,
   buttonVariant,
   submitButtonType,
-  metadataFields,
+  metadataInputs,
 }: ApiKeyAuthFormProps) {
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
 
@@ -56,13 +56,13 @@ export function ApiKeyAuthForm({
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     handleSubmit({
       apiKey,
@@ -92,7 +92,7 @@ export function ApiKeyAuthForm({
         placeholder="API Key"
         onChange={handleChange}
       />
-      {metadataFields.map((metadata: MetadataItemInput) => (
+      {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
             <DocsHelperText
@@ -129,7 +129,7 @@ function ApiKeyAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
-  metadataFields,
+  metadataInputs,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -142,7 +142,7 @@ function ApiKeyAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled || !!error}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

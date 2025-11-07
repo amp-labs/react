@@ -21,7 +21,7 @@ type ClientCredentialsFormProps = {
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 type ClientCredentialsFormData = {
@@ -36,7 +36,7 @@ export function ClientCredentialsForm({
   isButtonDisabled,
   explicitScopesRequired,
   buttonVariant,
-  metadataFields,
+  metadataInputs,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -61,7 +61,7 @@ export function ClientCredentialsForm({
 
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
 
   const isSubmitDisabled =
     isButtonDisabled ||
@@ -70,7 +70,7 @@ export function ClientCredentialsForm({
     !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     const req: ClientCredentialsCredsContent = {
       clientId,
@@ -109,7 +109,7 @@ export function ClientCredentialsForm({
           />
         )}
 
-        {metadataFields.map((metadata) => (
+        {metadataInputs.map((metadata) => (
           <FormComponent.Input
             key={metadata.name}
             id={metadata.name}
@@ -141,7 +141,7 @@ type ClientCredentialsContentProps = {
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 export function ClientCredentialsContent({
@@ -150,7 +150,7 @@ export function ClientCredentialsContent({
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
-  metadataFields,
+  metadataInputs,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -161,7 +161,7 @@ export function ClientCredentialsContent({
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

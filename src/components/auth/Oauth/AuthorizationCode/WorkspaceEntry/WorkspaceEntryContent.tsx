@@ -21,14 +21,14 @@ export function WorkspaceEntryContent({
   error,
   isButtonDisabled,
   providerName,
-  metadataFields,
+  metadataInputs,
 }: WorkspaceEntryProps) {
   return (
     <AuthCardLayout>
       <AuthTitle>Enter your {providerName} workspace</AuthTitle>
       <AuthErrorAlert error={error} />
       <br />
-      {metadataFields.map((metadata: MetadataItemInput) => (
+      {metadataInputs.map((metadata: MetadataItemInput) => (
         <FormComponent.Input
           key={metadata.name}
           id={metadata.name}

@@ -142,7 +142,7 @@ export function ProtectedConnectionLayout({
     providerName,
     providerInfo,
     onDisconnectSuccess,
-    metadataFields: filteredMetadataFields,
+    metadataInputs: filteredMetadataFields,
     moduleError,
   };
 

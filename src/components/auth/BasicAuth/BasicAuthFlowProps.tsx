@@ -14,6 +14,6 @@ export type BasicAuthFlowProps = {
   children: JSX.Element;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
   moduleError?: string | null;
 };

@@ -25,7 +25,7 @@ type BasicAuthFormProps = {
   handleSubmit: (form: BasicCreds) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 type FormData = {
@@ -40,7 +40,7 @@ export function BasicAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
-  metadataFields,
+  metadataInputs,
 }: BasicAuthFormProps) {
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -61,11 +61,11 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     handleSubmit({
       user: username,
@@ -105,7 +105,7 @@ export function BasicAuthForm({
         placeholder="Password"
         onChange={handleChange}
       />
-      {metadataFields.map((metadata: MetadataItemInput) => (
+      {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
             <DocsHelperText
@@ -142,7 +142,7 @@ function BasicAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
-  metadataFields,
+  metadataInputs,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -155,7 +155,7 @@ function BasicAuthContentForm({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled || !!error}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

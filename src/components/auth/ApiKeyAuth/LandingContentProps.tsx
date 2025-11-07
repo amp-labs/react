@@ -8,7 +8,7 @@ export type LandingContentProps = {
   handleSubmit: (form: IFormType) => void;
   error: string | null;
   isButtonDisabled?: boolean;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 export interface IFormType {
