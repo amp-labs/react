@@ -23,7 +23,7 @@ type CustomAuthFormProps = {
   handleSubmit: (form: CustomAuthFormData) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };
 
 export function CustomAuthForm({
@@ -31,7 +31,7 @@ export function CustomAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
-  metadataFields,
+  metadataInputs,
 }: CustomAuthFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>({});
 
@@ -42,12 +42,12 @@ export function CustomAuthForm({
     setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
   const customInputs = providerInfo.customOpts?.inputs || [];
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
     const customAuthFields = Object.fromEntries(
       customInputs.map((input) => [input.name, formData[input.name]]),
     );
@@ -83,7 +83,7 @@ export function CustomAuthForm({
         </div>
       ))}
       {/* do we support metadata fields and custom auth at the same time? */}
-      {metadataFields.map((metadata: MetadataItemInput) => (
+      {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
             <DocsHelperTextHeader
@@ -121,7 +121,7 @@ export function CustomAuthContent({
   handleSubmit,
   error,
   isButtonDisabled,
-  metadataFields,
+  metadataInputs,
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
@@ -131,7 +131,7 @@ export function CustomAuthContent({
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
         isButtonDisabled={isButtonDisabled || !!error}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

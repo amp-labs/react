@@ -17,7 +17,7 @@ export function CustomAuthFlow({
   groupName,
   children,
   selectedConnection,
-  metadataFields,
+  metadataInputs,
   moduleError,
 }: CustomAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
@@ -70,7 +70,7 @@ export function CustomAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={error}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     );
   }

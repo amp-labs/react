@@ -6,5 +6,5 @@ export type WorkspaceEntryProps = {
   error: string | null;
   isButtonDisabled?: boolean;
   providerName?: string;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };

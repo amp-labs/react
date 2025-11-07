@@ -8,18 +8,18 @@ export type ProviderMetadata = Record<string, ProviderMetadataInfo>;
 
 /**
  * Get the required metadata for the provider from the form data.
- * @param metadataFields - The metadata required by the provider. Is defined in the provider info.
+ * @param metadataInputs - The metadata required by the provider. Is defined in the provider info.
  * @param formData - The form data to get the metadata from.
  * @returns Metadata that can be sent over the API.
  */
 export function getProviderMetadata(
-  metadataFields: MetadataItemInput[],
+  metadataInputs: MetadataItemInput[],
   formData: Record<string, string>,
 ): ProviderMetadata {
   const metadata: ProviderMetadata = {};
   const missingFields: string[] = [];
 
-  metadataFields.forEach((item: MetadataItemInput) => {
+  metadataInputs.forEach((item: MetadataItemInput) => {
     const value = formData[item.name];
     if (!value || value.trim() === "") {
       missingFields.push(item.displayName || item.name);
@@ -43,15 +43,15 @@ export function getProviderMetadata(
 /**
  * Check if the required metadata for the provider has been filled in.
  * This will be more useful when we have required/optional metadata later on.
- * @param metadataFields - The metadata required by the provider. Is defined in the provider info.
+ * @param metadataInputs - The metadata required by the provider. Is defined in the provider info.
  * @param formData - The form data to check the metadata against.
  * @returns True if all required metadata has been filled in, false otherwise.
  */
 export function isProviderMetadataValid(
-  metadataFields: MetadataItemInput[],
+  metadataInputs: MetadataItemInput[],
   formData: Record<string, string>,
 ): boolean {
-  return metadataFields.every((item: MetadataItemInput) => {
+  return metadataInputs.every((item: MetadataItemInput) => {
     const value = formData[item.name];
     return value && value.trim() !== "";
   });
@@ -107,22 +107,22 @@ export function determineModule(
  * 2. Field has no moduleDependencies (apply to all modules) → include field
  * 3. Field has the module in their moduleDependencies (case-insensitive) → include field
  *
- * @param metadataFields - All metadata fields from provider info
+ * @param metadataInputs - All metadata fields from provider info
  * @param module - The module determined by determineModule() ("" means no modules, show all)
  * @returns Filtered array of metadata fields applicable to this module
  */
 export function filterMetadataByModule(
-  metadataFields: MetadataItemInput[],
+  metadataInputs: MetadataItemInput[],
   module: string,
 ): MetadataItemInput[] {
   // Empty string means provider has no modules at all - return all fields
   if (module === "") {
-    return metadataFields;
+    return metadataInputs;
   }
 
   const moduleLowerCase = module.toLowerCase();
 
-  return metadataFields.filter((field) => {
+  return metadataInputs.filter((field) => {
     // If field has no module dependencies, it applies to all modules
     if (!field.moduleDependencies) {
       return true;

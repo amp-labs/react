@@ -26,7 +26,7 @@ interface OauthClientCredsContainerProps {
   providerName?: string;
   explicitScopesRequired?: boolean;
   selectedConnection: Connection | null;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
   moduleError?: string | null;
 }
 
@@ -43,7 +43,7 @@ export function ClientCredsContainer({
   groupName,
   explicitScopesRequired,
   selectedConnection,
-  metadataFields,
+  metadataInputs,
   moduleError,
 }: OauthClientCredsContainerProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
@@ -97,7 +97,7 @@ export function ClientCredsContainer({
         handleSubmit={handleSubmit}
         error={error}
         explicitScopesRequired={explicitScopesRequired}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     );
   }

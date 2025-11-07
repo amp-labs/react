@@ -41,7 +41,7 @@ interface OauthFlowProps {
   groupRef: string;
   groupName?: string;
   providerName?: string;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
   moduleError?: string | null;
 }
 
@@ -57,7 +57,7 @@ export function OauthFlow2({
   groupRef,
   groupName,
   providerName,
-  metadataFields,
+  metadataInputs,
   moduleError,
 }: OauthFlowProps) {
   const { projectId } = useProjectQuery();
@@ -137,8 +137,8 @@ export function OauthFlow2({
 
     // Validate metadata fields if they exist
     if (
-      metadataFields.length > 0 &&
-      !isProviderMetadataValid(metadataFields, formData)
+      metadataInputs.length > 0 &&
+      !isProviderMetadataValid(metadataInputs, formData)
     ) {
       setError("Please fill in all required fields");
       return;
@@ -198,20 +198,20 @@ export function OauthFlow2({
     }
 
     // If there are metadata fields, show the workspace entry form
-    if (metadataFields.length > 0) {
+    if (metadataInputs.length > 0) {
       return (
         <WorkspaceEntryContent
           handleSubmit={handleSubmit}
           setFormData={handleFormDataChange}
           error={error}
           isButtonDisabled={
-            !isProviderMetadataValid(metadataFields, formData) ||
+            !isProviderMetadataValid(metadataInputs, formData) ||
             isCreatingOauthConnection ||
             isConnectionsFetching ||
             !!error
           }
           providerName={providerName}
-          metadataFields={metadataFields}
+          metadataInputs={metadataInputs}
         />
       );
     }

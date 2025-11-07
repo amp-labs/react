@@ -14,5 +14,5 @@ export type LandingContentProps = {
   handleSubmit: (form: BasicCreds) => void;
   error: string | null;
   isButtonDisabled?: boolean;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
 };

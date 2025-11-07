@@ -17,7 +17,7 @@ export function BasicAuthFlow({
   groupName,
   children,
   selectedConnection,
-  metadataFields,
+  metadataInputs,
   moduleError,
 }: BasicAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
@@ -63,7 +63,7 @@ export function BasicAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={moduleError || null}
-        metadataFields={metadataFields}
+        metadataInputs={metadataInputs}
       />
     );
   }

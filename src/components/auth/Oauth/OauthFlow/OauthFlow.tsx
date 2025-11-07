@@ -18,7 +18,7 @@ type OauthFlowProps = {
   groupName?: string;
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
-  metadataFields: MetadataItemInput[];
+  metadataInputs: MetadataItemInput[];
   moduleError?: string | null;
 };
 
@@ -31,7 +31,7 @@ export function OauthFlow({
   groupName,
   selectedConnection,
   setSelectedConnection,
-  metadataFields,
+  metadataInputs,
   moduleError,
 }: OauthFlowProps) {
   const { providerName } = useProvider(provider);
@@ -48,7 +48,7 @@ export function OauthFlow({
     groupRef,
     groupName,
     providerName,
-    metadataFields,
+    metadataInputs,
     moduleError,
   };
 

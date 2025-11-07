@@ -95,7 +95,7 @@ export function UpdateClientCredentialsConnect({
           explicitScopesRequired={explicitScopesRequired}
           buttonVariant="ghost"
           // We currently do not support updating metadata inputs for connections.
-          metadataFields={[]}
+          metadataInputs={[]}
         />
       </div>
     </>
