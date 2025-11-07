@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { MetadataItemInput } from "@generated/api/src";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   isProviderMetadataValid,
@@ -12,7 +13,6 @@ import {
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
 import { useProjectQuery } from "src/hooks/query";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
-import { useProviderInfoQuery } from "src/hooks/useProvider";
 import { AMP_SERVER } from "src/services/api";
 
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
@@ -41,6 +41,8 @@ interface OauthFlowProps {
   groupRef: string;
   groupName?: string;
   providerName?: string;
+  metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 }
 
 /**
@@ -55,20 +57,20 @@ export function OauthFlow2({
   groupRef,
   groupName,
   providerName,
+  metadataFields,
+  moduleError,
 }: OauthFlowProps) {
   const { projectId } = useProjectQuery();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
 
-  // error state
-  const [error, setError] = useState<string | null>(null);
+  // error state - initialize with moduleError if present
+  const [error, setError] = useState<string | null>(moduleError || null);
 
   // workspace and metadata states
   const [workspace, setWorkspace] = useState<string>("");
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [metadata, setMetadata] = useState<ProviderMetadata>({});
-  const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
 
   const {
     mutateAsync: createOauthConnectionUrlAsync,
@@ -188,7 +190,8 @@ export function OauthFlow2({
           isButtonDisabled={
             workspace.length === 0 ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
         />
       );
@@ -204,7 +207,8 @@ export function OauthFlow2({
           isButtonDisabled={
             !isProviderMetadataValid(metadataFields, formData) ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
           providerName={providerName}
           metadataFields={metadataFields}
@@ -218,7 +222,9 @@ export function OauthFlow2({
         handleSubmit={handleSubmit}
         error={error}
         providerName={providerName}
-        isButtonDisabled={isCreatingOauthConnection || isConnectionsFetching}
+        isButtonDisabled={
+          isCreatingOauthConnection || isConnectionsFetching || !!error
+        }
       />
     );
   })();

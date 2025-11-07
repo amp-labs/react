@@ -25,6 +25,7 @@ type BasicAuthFormProps = {
   handleSubmit: (form: BasicCreds) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
+  metadataFields: MetadataItemInput[];
 };
 
 type FormData = {
@@ -39,12 +40,12 @@ export function BasicAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
+  metadataFields,
 }: BasicAuthFormProps) {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
   });
-  const metadataFields = providerInfo.metadata?.input || [];
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
 
@@ -141,6 +142,7 @@ function BasicAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataFields,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -152,7 +154,8 @@ function BasicAuthContentForm({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
+        metadataFields={metadataFields}
       />
     </AuthCardLayout>
   );
