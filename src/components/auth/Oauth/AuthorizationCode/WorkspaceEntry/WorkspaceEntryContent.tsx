@@ -5,7 +5,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
-import { MetadataHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperText } from "components/Docs/DocsHelperText";
 import { FormComponent } from "components/form";
 import { Button } from "components/ui-base/Button";
 
@@ -32,9 +32,10 @@ export function WorkspaceEntryContent({
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <MetadataHelperText
+            <DocsHelperText
               url={metadata.docsURL}
-              fieldName={metadata.displayName || metadata.name}
+              providerDisplayName={providerName || ""}
+              credentialName={metadata.displayName || metadata.name}
             />
           )}
           <FormComponent.Input

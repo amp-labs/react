@@ -9,7 +9,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { convertTextareaToArray } from "src/utils";
 
-import { MetadataHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
   getProviderMetadata,
@@ -24,6 +24,7 @@ type ClientCredentialsFormProps = {
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
   metadataInputs: MetadataItemInput[];
+  providerName?: string;
 };
 
 type ClientCredentialsFormData = {
@@ -39,6 +40,7 @@ export function ClientCredentialsForm({
   explicitScopesRequired,
   buttonVariant,
   metadataInputs,
+  providerName,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -114,9 +116,10 @@ export function ClientCredentialsForm({
         {metadataInputs.map((metadata) => (
           <div key={metadata.name}>
             {metadata.docsURL && (
-              <MetadataHelperText
+              <DocsHelperText
                 url={metadata.docsURL}
-                fieldName={metadata.displayName || metadata.name}
+                providerDisplayName={providerName || ""}
+                credentialName={metadata.displayName || metadata.name}
               />
             )}
             <FormComponent.Input
@@ -171,6 +174,7 @@ export function ClientCredentialsContent({
         isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
         metadataInputs={metadataInputs}
+        providerName={providerName}
       />
     </AuthCardLayout>
   );

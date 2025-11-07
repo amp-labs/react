@@ -10,7 +10,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
-import { DocsHelperText, MetadataHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
   getProviderMetadata,
@@ -108,9 +108,10 @@ export function BasicAuthForm({
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <MetadataHelperText
+            <DocsHelperText
               url={metadata.docsURL}
-              fieldName={metadata.displayName || metadata.name}
+              providerDisplayName={providerName || capitalize(provider)}
+              credentialName={metadata.displayName || metadata.name}
             />
           )}
           <FormComponent.Input
