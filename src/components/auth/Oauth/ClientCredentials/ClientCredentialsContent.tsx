@@ -9,6 +9,8 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { convertTextareaToArray } from "src/utils";
 
+import { MetadataHelperText } from "components/Docs/DocsHelperText";
+
 import {
   getProviderMetadata,
   isProviderMetadataValid,
@@ -110,14 +112,21 @@ export function ClientCredentialsForm({
         )}
 
         {metadataInputs.map((metadata) => (
-          <FormComponent.Input
-            key={metadata.name}
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={handleChange}
-          />
+          <div key={metadata.name}>
+            {metadata.docsURL && (
+              <MetadataHelperText
+                url={metadata.docsURL}
+                fieldName={metadata.displayName || metadata.name}
+              />
+            )}
+            <FormComponent.Input
+              id={metadata.name}
+              name={metadata.name}
+              type="text"
+              placeholder={metadata.displayName || metadata.name}
+              onChange={handleChange}
+            />
+          </div>
         ))}
       </div>
       <AuthErrorAlert error={submitError} />

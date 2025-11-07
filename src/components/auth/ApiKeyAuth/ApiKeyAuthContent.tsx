@@ -10,7 +10,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperText, MetadataHelperText } from "components/Docs/DocsHelperText";
 
 import {
   getProviderMetadata,
@@ -95,10 +95,9 @@ export function ApiKeyAuthForm({
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <DocsHelperText
+            <MetadataHelperText
               url={metadata.docsURL}
-              providerDisplayName={providerName || capitalize(provider)}
-              credentialName={metadata.displayName || metadata.name}
+              fieldName={metadata.displayName || metadata.name}
             />
           )}
           <FormComponent.Input

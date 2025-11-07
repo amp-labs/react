@@ -20,3 +20,27 @@ export function DocsHelperText({
     </p>
   );
 }
+
+type MetadataHelperTextProps = {
+  url: string;
+  fieldName: string;
+};
+
+export function MetadataHelperText({
+  url,
+  fieldName,
+}: MetadataHelperTextProps) {
+  return (
+    <p
+      style={{
+        color: "var(--amp-colors-text-muted)",
+        marginBottom: "0.5rem",
+      }}
+    >
+      <AccessibleLink href={url} newTab>
+        <span style={{ textDecoration: "underline" }}>Learn more</span>
+      </AccessibleLink>{" "}
+      about where to find your {fieldName}.
+    </p>
+  );
+}

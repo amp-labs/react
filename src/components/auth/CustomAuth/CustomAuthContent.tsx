@@ -9,6 +9,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
+import { MetadataHelperText } from "components/Docs/DocsHelperText";
 import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
@@ -86,12 +87,9 @@ export function CustomAuthForm({
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <div key={metadata.name}>
           {metadata.docsURL && (
-            <DocsHelperTextHeader
+            <MetadataHelperText
               url={metadata.docsURL}
-              prompt={metadata.displayName || metadata.name}
-              inputName={
-                metadata.displayName || capitalize(metadata.name.toLowerCase())
-              }
+              fieldName={metadata.displayName || metadata.name}
             />
           )}
           <FormComponent.Input

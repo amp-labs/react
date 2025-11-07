@@ -5,6 +5,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
+import { MetadataHelperText } from "components/Docs/DocsHelperText";
 import { FormComponent } from "components/form";
 import { Button } from "components/ui-base/Button";
 
@@ -29,16 +30,23 @@ export function WorkspaceEntryContent({
       <AuthErrorAlert error={error} />
       <br />
       {metadataInputs.map((metadata: MetadataItemInput) => (
-        <FormComponent.Input
-          key={metadata.name}
-          id={metadata.name}
-          name={metadata.name}
-          type="text"
-          placeholder={metadata.displayName || metadata.name}
-          onChange={(event) =>
-            setFormData(metadata.name, event.currentTarget.value)
-          }
-        />
+        <div key={metadata.name}>
+          {metadata.docsURL && (
+            <MetadataHelperText
+              url={metadata.docsURL}
+              fieldName={metadata.displayName || metadata.name}
+            />
+          )}
+          <FormComponent.Input
+            id={metadata.name}
+            name={metadata.name}
+            type="text"
+            placeholder={metadata.displayName || metadata.name}
+            onChange={(event) =>
+              setFormData(metadata.name, event.currentTarget.value)
+            }
+          />
+        </div>
       ))}
       <br />
       <Button
