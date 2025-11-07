@@ -154,7 +154,7 @@ function BasicAuthContentForm({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
         metadataFields={metadataFields}
       />
     </AuthCardLayout>

@@ -159,7 +159,7 @@ export function ClientCredentialsContent({
       <br />
       <ClientCredentialsForm
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
         metadataFields={metadataFields}
       />

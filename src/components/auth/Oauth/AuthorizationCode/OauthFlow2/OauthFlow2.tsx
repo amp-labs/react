@@ -190,7 +190,8 @@ export function OauthFlow2({
           isButtonDisabled={
             workspace.length === 0 ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
         />
       );
@@ -206,7 +207,8 @@ export function OauthFlow2({
           isButtonDisabled={
             !isProviderMetadataValid(metadataFields, formData) ||
             isCreatingOauthConnection ||
-            isConnectionsFetching
+            isConnectionsFetching ||
+            !!error
           }
           providerName={providerName}
           metadataFields={metadataFields}
@@ -220,7 +222,9 @@ export function OauthFlow2({
         handleSubmit={handleSubmit}
         error={error}
         providerName={providerName}
-        isButtonDisabled={isCreatingOauthConnection || isConnectionsFetching}
+        isButtonDisabled={
+          isCreatingOauthConnection || isConnectionsFetching || !!error
+        }
       />
     );
   })();
