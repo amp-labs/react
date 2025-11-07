@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
-import { useProviderInfoQuery } from "src/hooks/useProvider";
 import {
   AuthCardLayout,
   AuthTitle,
@@ -17,11 +17,11 @@ import {
 import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 type ClientCredentialsFormProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
+  metadataFields: MetadataItemInput[];
 };
 
 type ClientCredentialsFormData = {
@@ -32,11 +32,11 @@ type ClientCredentialsFormData = {
 };
 
 export function ClientCredentialsForm({
-  provider,
   handleSubmit,
   isButtonDisabled,
   explicitScopesRequired,
   buttonVariant,
+  metadataFields,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -44,8 +44,6 @@ export function ClientCredentialsForm({
     scopes: "",
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -138,21 +136,21 @@ export function ClientCredentialsForm({
 }
 
 type ClientCredentialsContentProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
+  metadataFields: MetadataItemInput[];
 };
 
 export function ClientCredentialsContent({
-  provider,
   handleSubmit,
   error,
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
+  metadataFields,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -160,10 +158,10 @@ export function ClientCredentialsContent({
       <AuthErrorAlert error={error} />
       <br />
       <ClientCredentialsForm
-        provider={provider}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
+        metadataFields={metadataFields}
       />
     </AuthCardLayout>
   );

@@ -17,6 +17,8 @@ export function BasicAuthFlow({
   groupName,
   children,
   selectedConnection,
+  metadataFields,
+  moduleError,
 }: BasicAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
@@ -60,7 +62,8 @@ export function BasicAuthFlow({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={onNext}
-        error={null}
+        error={moduleError || null}
+        metadataFields={metadataFields}
       />
     );
   }
