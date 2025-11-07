@@ -45,12 +45,6 @@ export interface UpdateInstallationConfigContent {
      */
     provider?: string;
     /**
-     * The SaaS module that we are integrating with.
-     * @type {string}
-     * @memberof UpdateInstallationConfigContent
-     */
-    module?: string;
-    /**
      * 
      * @type {BaseReadConfig}
      * @memberof UpdateInstallationConfigContent
@@ -90,7 +84,6 @@ export function UpdateInstallationConfigContentFromJSONTyped(json: any, ignoreDi
     return {
         
         'provider': !exists(json, 'provider') ? undefined : json['provider'],
-        'module': !exists(json, 'module') ? undefined : json['module'],
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : BaseWriteConfigFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
@@ -107,7 +100,6 @@ export function UpdateInstallationConfigContentToJSON(value?: UpdateInstallation
     return {
         
         'provider': value.provider,
-        'module': value.module,
         'read': BaseReadConfigToJSON(value.read),
         'write': BaseWriteConfigToJSON(value.write),
         'proxy': BaseProxyConfigToJSON(value.proxy),
