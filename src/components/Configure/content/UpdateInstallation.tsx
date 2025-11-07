@@ -105,8 +105,6 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
       const updateConfig = generateUpdateReadConfigFromConfigureState(
         configureState,
         selectedObjectName,
-        hydratedRevision,
-        hydratedObject.backfill,
         fieldMapping,
       );
 
@@ -137,10 +135,8 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
   const onSaveWrite = () => {
     if (configureState && hydratedRevision) {
       setLoadingState(true);
-      const updateConfig = generateUpdateWriteConfigFromConfigureState(
-        configureState,
-        hydratedRevision,
-      );
+      const updateConfig =
+        generateUpdateWriteConfigFromConfigureState(configureState);
 
       if (!updateConfig) {
         console.error(
