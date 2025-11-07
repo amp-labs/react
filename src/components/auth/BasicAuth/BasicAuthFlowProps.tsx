@@ -15,4 +15,5 @@ export type BasicAuthFlowProps = {
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
   metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 };

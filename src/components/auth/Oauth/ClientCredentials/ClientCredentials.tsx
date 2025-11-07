@@ -13,6 +13,7 @@ interface ClientCredsFlowProps {
   selectedConnection: Connection | null;
   setSelectedConnection: (connection: Connection | null) => void;
   metadataFields: MetadataItemInput[];
+  moduleError?: string | null;
 }
 
 export function ClientCredentials({ ...props }: ClientCredsFlowProps) {
