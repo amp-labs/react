@@ -72,11 +72,14 @@ export function ProtectedConnectionLayout({
     : providerInfoData;
 
   // Determine which module to use for filtering metadata:
-  // - If provider has no modules (Object.keys(providerInfo.modules).length === 0) → returns ""
+  // - If provider has no modules → returns { module: "", error: null }
   // - If provider has modules → use integration's module or fall back to provider's defaultModule
-  // - Throws error if provider has modules but no valid module can be determined
+  // - Returns error if provider has modules but no valid module can be determined
   const integrationModule = integrationObj?.latestRevision?.content?.module;
-  const module = determineModule(integrationModule, providerInfo);
+  const { module, error: moduleError } = determineModule(
+    integrationModule,
+    providerInfo,
+  );
 
   // Filter metadata based on the determined module
   // - If module is "" (provider has no modules) → returns all fields for metadata collection.
@@ -140,6 +143,7 @@ export function ProtectedConnectionLayout({
     providerInfo,
     onDisconnectSuccess,
     metadataFields: filteredMetadataFields,
+    moduleError,
   };
 
   if (providerInfo.authType === "none") {
