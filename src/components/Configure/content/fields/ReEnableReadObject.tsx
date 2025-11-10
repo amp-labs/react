@@ -83,7 +83,7 @@ export function ReEnableReadObject() {
         >
           {isPending
             ? "Re-enabling..."
-            : "Re-enable reading from <b>{selectedObjectDisplayName}</b>"}
+            : `Re-enable reading from ${selectedObjectDisplayName}`}
         </Button>
       </FormCalloutBox>
     </>
