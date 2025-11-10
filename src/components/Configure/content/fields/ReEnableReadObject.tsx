@@ -64,24 +64,9 @@ export function ReEnableReadObject() {
               flexShrink: 0,
             }}
           />
-          <span
-            style={{
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              color: "var(--amp-colors-status-warning-dark)",
-            }}
-          >
-            Reading is currently disabled
-          </span>
+          <span style={{ fontWeight: 600 }}>Reading is currently disabled</span>
         </div>
-        <p
-          style={{
-            fontSize: "0.8125rem",
-            color: "var(--amp-colors-status-warning-dark)",
-            margin: "0.5rem 0 0 1.5rem",
-            lineHeight: 1.5,
-          }}
-        >
+        <p style={{ marginTop: "0.5rem", fontSize: "0.875rem" }}>
           This object is not being synced. Click below to re-enable reading from{" "}
           <b>{selectedObjectDisplayName}</b>.
         </p>
