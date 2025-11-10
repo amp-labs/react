@@ -7,7 +7,9 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { convertTextareaToArray } from "src/utils";
+import { capitalize, convertTextareaToArray } from "src/utils";
+
+import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
   getProviderMetadata,
@@ -22,6 +24,7 @@ type ClientCredentialsFormProps = {
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
   metadataInputs: MetadataItemInput[];
+  providerName?: string;
 };
 
 type ClientCredentialsFormData = {
@@ -37,6 +40,7 @@ export function ClientCredentialsForm({
   explicitScopesRequired,
   buttonVariant,
   metadataInputs,
+  providerName,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -110,14 +114,24 @@ export function ClientCredentialsForm({
         )}
 
         {metadataInputs.map((metadata) => (
-          <FormComponent.Input
-            key={metadata.name}
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={handleChange}
-          />
+          <div key={metadata.name}>
+            {metadata.docsURL && (
+              <DocsHelperText
+                url={metadata.docsURL}
+                providerDisplayName={providerName || ""}
+                credentialName={
+                  metadata.displayName || capitalize(metadata.name.toLowerCase())
+                }
+              />
+            )}
+            <FormComponent.Input
+              id={metadata.name}
+              name={metadata.name}
+              type="text"
+              placeholder={metadata.displayName || metadata.name}
+              onChange={handleChange}
+            />
+          </div>
         ))}
       </div>
       <AuthErrorAlert error={submitError} />
@@ -162,6 +176,7 @@ export function ClientCredentialsContent({
         isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
         metadataInputs={metadataInputs}
+        providerName={providerName}
       />
     </AuthCardLayout>
   );

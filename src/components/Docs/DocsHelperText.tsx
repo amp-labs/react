@@ -12,7 +12,12 @@ export function DocsHelperText({
   credentialName,
 }: DocsHelperTextProps) {
   return (
-    <p style={{ color: "var(--amp-colors-text-muted)" }}>
+    <p
+      style={{
+        color: "var(--amp-colors-text-muted)",
+        marginBottom: "0.5rem",
+      }}
+    >
       <AccessibleLink href={url} newTab>
         <span style={{ textDecoration: "underline" }}>Learn more</span>
       </AccessibleLink>{" "}
