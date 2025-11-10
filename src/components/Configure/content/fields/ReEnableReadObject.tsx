@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { FormCalloutBox } from "src/components/FormCalloutBox";
+import { FormSuccessBox } from "src/components/FormSuccessBox";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallation } from "src/headless/installation/useInstallation";
 
@@ -22,8 +23,14 @@ export function ReEnableReadingObject() {
     : undefined;
   if (!readObject) return null;
 
+  // If reading is already enabled, show a success box
   const isDisabled = readObject.disabled;
-  if (!isDisabled) return null;
+  if (!isDisabled)
+    return (
+      <FormSuccessBox>
+        <p>Reading from {selectedObjectDisplayName} is enabled.</p>
+      </FormSuccessBox>
+    );
 
   const handleReenable = () => {
     if (!selectedObjectName) return;
