@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { FormCalloutBox } from "src/components/FormCalloutBox";
 import { FormSuccessBox } from "src/components/FormSuccessBox";
@@ -12,10 +11,9 @@ import { useToggleReadingObject } from "./useToggleReadingObject";
 
 export function ReEnableReadingObject() {
   const { installation } = useInstallation();
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const { selectedObjectName } = useSelectedConfigureState();
   const { displayName: selectedObjectDisplayName } = useSelectedObject();
-  const { toggleReadingObject, isPending } = useToggleReadingObject();
+  const { toggleReadingObject } = useToggleReadingObject();
 
   // Only show if read object is present and disabled
   const readObject = selectedObjectName
@@ -38,51 +36,12 @@ export function ReEnableReadingObject() {
     toggleReadingObject({
       objectName: selectedObjectName,
       disabled: false,
-      onSuccess: () => {
-        setShowConfirmation(false);
-      },
       onError: (error) => {
         console.error("Error re-enabling read object:", error);
         // Keep confirmation dialog open on error so user can retry
       },
     });
   };
-
-  if (showConfirmation) {
-    return (
-      <FormCalloutBox>
-        <p
-          style={{
-            padding: "1rem 0",
-            color: "var(--amp-colors-text-muted)",
-            fontSize: "0.875rem",
-          }}
-        >
-          Are you sure you want to re-enable reading from{" "}
-          <b>{selectedObjectDisplayName}</b>?
-        </p>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <Button
-            type="button"
-            variant="ghost"
-            style={{ flex: 1 }}
-            onClick={() => setShowConfirmation(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            variant="danger"
-            style={{ flex: 1 }}
-            onClick={handleReenable}
-            disabled={isPending}
-          >
-            {isPending ? "Re-enabling..." : "Re-enable reading"}
-          </Button>
-        </div>
-      </FormCalloutBox>
-    );
-  }
 
   return (
     <>
@@ -123,25 +82,21 @@ export function ReEnableReadingObject() {
             lineHeight: 1.5,
           }}
         >
-          This object is not being synced. Click below to re-enable reading.
+          This object is not being synced. Click below to re-enable reading from{" "}
+          <b>{selectedObjectDisplayName}</b>.
         </p>
 
-        <button
+        <Button
           type="button"
-          onClick={() => setShowConfirmation(true)}
+          onClick={handleReenable}
+          variant="ghost"
           style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            textDecoration: "underline",
-            paddingTop: "1rem",
-            margin: 0,
-            fontFamily: "inherit",
-            color: "var(--amp-colors-text-muted)",
+            marginTop: "1rem",
+            width: "100%",
           }}
         >
           Re-enable reading from <b>{selectedObjectDisplayName}</b>
-        </button>
+        </Button>
       </FormCalloutBox>
     </>
   );

@@ -19,10 +19,14 @@ export function DisableReadObject() {
     ? installation?.config?.content?.read?.objects?.[selectedObjectName]
     : undefined;
 
-  if (!readObject) return null;
+  if (!readObject) {
+    return null;
+  }
 
   const isDisabled = readObject.disabled;
-  if (!isDisabled) return null;
+  if (isDisabled) {
+    return null;
+  }
 
   const handleDisable = () => {
     if (!selectedObjectName) return;
