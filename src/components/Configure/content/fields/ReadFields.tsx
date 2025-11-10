@@ -3,7 +3,7 @@ import { OptionalFieldMappings, RequiredFieldMappings } from "./FieldMappings";
 import { useClearOldFieldMappings } from "./FieldMappings/useClearOldFieldMappings";
 import { ReadObjectMapping } from "./ObjectMapping";
 import { OptionalFields } from "./OptionalFields";
-import { ReenableObject } from "./ReenableObject";
+import { ReEnableReadingObject } from "./ReEnableReadObject";
 import { RequiredFields } from "./RequiredFields";
 import { ValueMappings } from "./ValueMapping";
 
@@ -14,7 +14,7 @@ export function ReadFields() {
 
   return (
     <>
-      {SHOW_DISABLE_READ_OBJECT && <ReenableObject />}
+      {SHOW_DISABLE_READ_OBJECT && <ReEnableReadingObject />}
       <ReadObjectMapping />
       <RequiredFields />
       <RequiredFieldMappings />

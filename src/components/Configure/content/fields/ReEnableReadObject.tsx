@@ -9,7 +9,7 @@ import { useSelectedObject } from "../useSelectedObject";
 
 import { useToggleReadingObject } from "./useToggleReadingObject";
 
-export function ReenableObject() {
+export function ReEnableReadingObject() {
   const { installation } = useInstallation();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { selectedObjectName } = useSelectedConfigureState();
@@ -17,19 +17,15 @@ export function ReenableObject() {
   const { toggleReadingObject, isPending } = useToggleReadingObject();
 
   // Only show if read object is present and disabled
-  if (
-    !selectedObjectName ||
-    !installation?.config?.content?.read?.objects?.[selectedObjectName]
-  )
-    return null;
+  const readObject = selectedObjectName
+    ? installation?.config?.content?.read?.objects?.[selectedObjectName]
+    : undefined;
+  if (!readObject) return null;
 
-  const isDisabled =
-    installation?.config?.content?.read?.objects?.[selectedObjectName]
-      ?.disabled;
-
+  const isDisabled = readObject.disabled;
   if (!isDisabled) return null;
 
-  const handleRenable = () => {
+  const handleReenable = () => {
     if (!selectedObjectName) return;
 
     toggleReadingObject({
@@ -71,7 +67,7 @@ export function ReenableObject() {
             type="button"
             variant="danger"
             style={{ flex: 1 }}
-            onClick={handleRenable}
+            onClick={handleReenable}
             disabled={isPending}
           >
             {isPending ? "Re-enabling..." : "Re-enable reading"}

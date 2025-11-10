@@ -15,17 +15,14 @@ export function DisableReadObject() {
   const { toggleReadingObject, isPending } = useToggleReadingObject();
 
   // Only show if read object is present and not disabled
-  if (
-    !selectedObjectName ||
-    !installation?.config?.content?.read?.objects?.[selectedObjectName]
-  )
-    return null;
+  const readObject = selectedObjectName
+    ? installation?.config?.content?.read?.objects?.[selectedObjectName]
+    : undefined;
 
-  const isDisabled =
-    installation?.config?.content?.read?.objects?.[selectedObjectName]
-      ?.disabled;
+  if (!readObject) return null;
 
-  if (isDisabled) return null;
+  const isDisabled = readObject.disabled;
+  if (!isDisabled) return null;
 
   const handleDisable = () => {
     if (!selectedObjectName) return;
