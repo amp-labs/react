@@ -113,6 +113,9 @@ export const generateReadNavObjects = (
 ) => {
   const navObjects: NavObject[] = [];
   hydratedRevision.content?.read?.objects?.forEach((object) => {
+    const readObject = config
+      ? getReadObject(config, object.objectName)
+      : undefined;
     navObjects.push({
       name: object?.objectName,
       displayName:
@@ -121,7 +124,8 @@ export const generateReadNavObjects = (
         (object?.objectName && capitalize(object?.objectName)), // fallback to objectName
       // if no config, object is not completed
       // object is completed if the key exists in the config
-      completed: config ? !!getReadObject(config, object.objectName) : false,
+      completed: !!readObject,
+      disabled: readObject?.disabled,
     });
   });
 
