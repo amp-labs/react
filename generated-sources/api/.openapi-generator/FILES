@@ -90,6 +90,7 @@ src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
 src/models/CreateTargetRequest.ts
 src/models/CreateTargetRequestMetadata.ts
+src/models/CreateTopicDestinationRouteRequest.ts
 src/models/CreateTopicRequest.ts
 src/models/CreateTopicTargetRouteRequest.ts
 src/models/CustomAuthHeader.ts
@@ -153,6 +154,7 @@ src/models/NotificationEventTopicRoute.ts
 src/models/NotificationTarget.ts
 src/models/NotificationTargetMetadata.ts
 src/models/NotificationTopic.ts
+src/models/NotificationTopicDestinationRoute.ts
 src/models/NotificationTopicTargetRoute.ts
 src/models/NumericFieldOptions.ts
 src/models/Oauth2AuthorizationCode.ts
