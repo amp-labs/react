@@ -9,7 +9,7 @@ import { useSelectedObject } from "../useSelectedObject";
 
 import { useToggleReadingObject } from "./useToggleReadingObject";
 
-export function ReEnableReadingObject() {
+export function ReEnableReadObject() {
   const { installation } = useInstallation();
   const { selectedObjectName } = useSelectedConfigureState();
   const { displayName: selectedObjectDisplayName } = useSelectedObject();
