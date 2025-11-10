@@ -13,7 +13,7 @@ export function ReEnableReadObject() {
   const { installation } = useInstallation();
   const { selectedObjectName } = useSelectedConfigureState();
   const { displayName: selectedObjectDisplayName } = useSelectedObject();
-  const { toggleReadingObject } = useToggleReadingObject();
+  const { toggleReadingObject, isPending } = useToggleReadingObject();
 
   // Only show if read object is present and disabled
   const readObject = selectedObjectName
@@ -79,8 +79,11 @@ export function ReEnableReadObject() {
             marginTop: "1rem",
             width: "100%",
           }}
+          disabled={isPending}
         >
-          Re-enable reading from <b>{selectedObjectDisplayName}</b>
+          {isPending
+            ? "Re-enabling..."
+            : "Re-enable reading from <b>{selectedObjectDisplayName}</b>"}
         </Button>
       </FormCalloutBox>
     </>
