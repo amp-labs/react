@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UpdateTopicRequest {
     /**
-     * A human-readable label for the notification topic.
+     * A human-readable label for the topic.
      * @type {string}
      * @memberof UpdateTopicRequest
      */
