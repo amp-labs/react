@@ -34,8 +34,7 @@ export function WorkspaceEntryContent({
         <div
           key={metadata.name}
           style={{
-            marginBottom:
-              index === metadataInputs.length - 1 ? "0" : "1.5rem",
+            marginBottom: index === metadataInputs.length - 1 ? "0" : "1.5rem",
           }}
         >
           {metadata.docsURL && (

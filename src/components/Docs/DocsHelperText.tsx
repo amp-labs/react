@@ -1,4 +1,5 @@
 import { AccessibleLink } from "../ui-base/AccessibleLink";
+
 import { MetadataPromptText } from "./MetadataPromptText";
 
 type DocsHelperTextProps = {
