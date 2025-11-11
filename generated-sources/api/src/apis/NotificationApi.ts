@@ -18,6 +18,7 @@ import type {
   ApiProblem,
   CreateEventTopicRouteRequest,
   CreateTargetRequest,
+  CreateTopicDestinationRouteRequest,
   CreateTopicRequest,
   CreateTopicTargetRouteRequest,
   InputValidationProblem,
@@ -25,6 +26,7 @@ import type {
   NotificationTarget,
   NotificationTopic,
   NotificationTopicTargetRoute,
+  TopicDestinationRoute,
   UpdateTargetRequest,
   UpdateTopicRequest,
 } from '../models';
@@ -35,6 +37,8 @@ import {
     CreateEventTopicRouteRequestToJSON,
     CreateTargetRequestFromJSON,
     CreateTargetRequestToJSON,
+    CreateTopicDestinationRouteRequestFromJSON,
+    CreateTopicDestinationRouteRequestToJSON,
     CreateTopicRequestFromJSON,
     CreateTopicRequestToJSON,
     CreateTopicTargetRouteRequestFromJSON,
@@ -49,6 +53,8 @@ import {
     NotificationTopicToJSON,
     NotificationTopicTargetRouteFromJSON,
     NotificationTopicTargetRouteToJSON,
+    TopicDestinationRouteFromJSON,
+    TopicDestinationRouteToJSON,
     UpdateTargetRequestFromJSON,
     UpdateTargetRequestToJSON,
     UpdateTopicRequestFromJSON,
@@ -68,6 +74,11 @@ export interface CreateTargetOperationRequest {
 export interface CreateTopicOperationRequest {
     projectIdOrName: string;
     topic: CreateTopicRequest;
+}
+
+export interface CreateTopicDestinationRouteOperationRequest {
+    projectIdOrName: string;
+    topicDestinationRoute: CreateTopicDestinationRouteRequest;
 }
 
 export interface CreateTopicTargetRouteOperationRequest {
@@ -90,6 +101,11 @@ export interface DeleteTopicRequest {
     topicId: string;
 }
 
+export interface DeleteTopicDestinationRouteRequest {
+    projectIdOrName: string;
+    routeId: string;
+}
+
 export interface DeleteTopicTargetRouteRequest {
     projectIdOrName: string;
     routeId: string;
@@ -108,6 +124,12 @@ export interface ListEventTopicRoutesRequest {
 
 export interface ListTargetsRequest {
     projectIdOrName: string;
+}
+
+export interface ListTopicDestinationRoutesRequest {
+    projectIdOrName: string;
+    topicId?: string;
+    destinationId?: string;
 }
 
 export interface ListTopicTargetRoutesRequest {
@@ -173,8 +195,8 @@ export interface NotificationApiInterface {
     createTarget(requestParameters: CreateTargetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTarget>;
 
     /**
-     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
-     * @summary Create a notification topic
+     * Create a new topic for the project. Topics are used to categorize and organize notifications.
+     * @summary Create a topic
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {CreateTopicRequest} topic 
      * @param {*} [options] Override http request option.
@@ -184,10 +206,27 @@ export interface NotificationApiInterface {
     createTopicRaw(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>>;
 
     /**
-     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
-     * Create a notification topic
+     * Create a new topic for the project. Topics are used to categorize and organize notifications.
+     * Create a topic
      */
     createTopic(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic>;
+
+    /**
+     * Create a new route that connects a topic to a destination.
+     * @summary Create a topic destination route
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {CreateTopicDestinationRouteRequest} topicDestinationRoute 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    createTopicDestinationRouteRaw(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TopicDestinationRoute>>;
+
+    /**
+     * Create a new route that connects a topic to a destination.
+     * Create a topic destination route
+     */
+    createTopicDestinationRoute(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TopicDestinationRoute>;
 
     /**
      * 
@@ -239,7 +278,7 @@ export interface NotificationApiInterface {
 
     /**
      * 
-     * @summary Delete a notification topic
+     * @summary Delete a topic
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} topicId The notification topic ID.
      * @param {*} [options] Override http request option.
@@ -249,9 +288,26 @@ export interface NotificationApiInterface {
     deleteTopicRaw(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Delete a notification topic
+     * Delete a topic
      */
     deleteTopic(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Remove the link between a topic and a destination.
+     * @summary Delete a topic destination route
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} routeId The topic destination route ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    deleteTopicDestinationRouteRaw(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Remove the link between a topic and a destination.
+     * Delete a topic destination route
+     */
+    deleteTopicDestinationRoute(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -318,6 +374,24 @@ export interface NotificationApiInterface {
     listTargets(requestParameters: ListTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTarget>>;
 
     /**
+     * Retrieve all topic-to-destination routes for a project with optional filtering.
+     * @summary List topic destination routes
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} [topicId] Filter by topic ID.
+     * @param {string} [destinationId] Filter by destination ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    listTopicDestinationRoutesRaw(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TopicDestinationRoute>>>;
+
+    /**
+     * Retrieve all topic-to-destination routes for a project with optional filtering.
+     * List topic destination routes
+     */
+    listTopicDestinationRoutes(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TopicDestinationRoute>>;
+
+    /**
      * 
      * @summary List notification topic-target routes
      * @param {string} projectIdOrName The Ampersand project ID or project name.
@@ -336,7 +410,7 @@ export interface NotificationApiInterface {
 
     /**
      * 
-     * @summary List notification topics
+     * @summary List topics
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -345,7 +419,7 @@ export interface NotificationApiInterface {
     listTopicsRaw(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTopic>>>;
 
     /**
-     * List notification topics
+     * List topics
      */
     listTopics(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopic>>;
 
@@ -368,9 +442,9 @@ export interface NotificationApiInterface {
 
     /**
      * 
-     * @summary Update a notification topic
+     * @summary Update a topic
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} topicId The notification topic ID.
+     * @param {string} topicId The topic ID.
      * @param {UpdateTopicRequest} updateTopicRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -379,7 +453,7 @@ export interface NotificationApiInterface {
     updateTopicRaw(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>>;
 
     /**
-     * Update a notification topic
+     * Update a topic
      */
     updateTopic(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic>;
 
@@ -491,8 +565,8 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
-     * Create a notification topic
+     * Create a new topic for the project. Topics are used to categorize and organize notifications.
+     * Create a topic
      */
     async createTopicRaw(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -522,7 +596,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
             }
         }
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/notifications/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            path: `/projects/{projectIdOrName}/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -533,11 +607,62 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
-     * Create a notification topic
+     * Create a new topic for the project. Topics are used to categorize and organize notifications.
+     * Create a topic
      */
     async createTopic(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic> {
         const response = await this.createTopicRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new route that connects a topic to a destination.
+     * Create a topic destination route
+     */
+    async createTopicDestinationRouteRaw(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TopicDestinationRoute>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createTopicDestinationRoute.');
+        }
+
+        if (requestParameters.topicDestinationRoute === null || requestParameters.topicDestinationRoute === undefined) {
+            throw new runtime.RequiredError('topicDestinationRoute','Required parameter requestParameters.topicDestinationRoute was null or undefined when calling createTopicDestinationRoute.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTopicDestinationRouteRequestToJSON(requestParameters.topicDestinationRoute),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicDestinationRouteFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a new route that connects a topic to a destination.
+     * Create a topic destination route
+     */
+    async createTopicDestinationRoute(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TopicDestinationRoute> {
+        const response = await this.createTopicDestinationRouteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -681,7 +806,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Delete a notification topic
+     * Delete a topic
      */
     async deleteTopicRaw(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -709,7 +834,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
             }
         }
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/notifications/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            path: `/projects/{projectIdOrName}/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -719,10 +844,57 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Delete a notification topic
+     * Delete a topic
      */
     async deleteTopic(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteTopicRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Remove the link between a topic and a destination.
+     * Delete a topic destination route
+     */
+    async deleteTopicDestinationRouteRaw(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteTopicDestinationRoute.');
+        }
+
+        if (requestParameters.routeId === null || requestParameters.routeId === undefined) {
+            throw new runtime.RequiredError('routeId','Required parameter requestParameters.routeId was null or undefined when calling deleteTopicDestinationRoute.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes/{routeId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"routeId"}}`, encodeURIComponent(String(requestParameters.routeId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove the link between a topic and a destination.
+     * Delete a topic destination route
+     */
+    async deleteTopicDestinationRoute(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTopicDestinationRouteRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -909,6 +1081,58 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
+     * Retrieve all topic-to-destination routes for a project with optional filtering.
+     * List topic destination routes
+     */
+    async listTopicDestinationRoutesRaw(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TopicDestinationRoute>>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listTopicDestinationRoutes.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.topicId !== undefined) {
+            queryParameters['topicId'] = requestParameters.topicId;
+        }
+
+        if (requestParameters.destinationId !== undefined) {
+            queryParameters['destinationId'] = requestParameters.destinationId;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TopicDestinationRouteFromJSON));
+    }
+
+    /**
+     * Retrieve all topic-to-destination routes for a project with optional filtering.
+     * List topic destination routes
+     */
+    async listTopicDestinationRoutes(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TopicDestinationRoute>> {
+        const response = await this.listTopicDestinationRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List notification topic-target routes
      */
     async listTopicTargetRoutesRaw(requestParameters: ListTopicTargetRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTopicTargetRoute>>> {
@@ -959,7 +1183,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * List notification topics
+     * List topics
      */
     async listTopicsRaw(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTopic>>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -983,7 +1207,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
             }
         }
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/notifications/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            path: `/projects/{projectIdOrName}/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -993,7 +1217,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * List notification topics
+     * List topics
      */
     async listTopics(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopic>> {
         const response = await this.listTopicsRaw(requestParameters, initOverrides);
@@ -1054,7 +1278,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Update a notification topic
+     * Update a topic
      */
     async updateTopicRaw(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -1088,7 +1312,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
             }
         }
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/notifications/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            path: `/projects/{projectIdOrName}/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -1099,7 +1323,7 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
-     * Update a notification topic
+     * Update a topic
      */
     async updateTopic(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic> {
         const response = await this.updateTopicRaw(requestParameters, initOverrides);

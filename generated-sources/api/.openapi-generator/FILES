@@ -90,6 +90,7 @@ src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
 src/models/CreateTargetRequest.ts
 src/models/CreateTargetRequestMetadata.ts
+src/models/CreateTopicDestinationRouteRequest.ts
 src/models/CreateTopicRequest.ts
 src/models/CreateTopicTargetRouteRequest.ts
 src/models/CustomAuthHeader.ts
@@ -195,6 +196,7 @@ src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
 src/models/TokenMetadataFieldsOtherFieldsInner.ts
+src/models/TopicDestinationRoute.ts
 src/models/UpdateConnectionRequest.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
