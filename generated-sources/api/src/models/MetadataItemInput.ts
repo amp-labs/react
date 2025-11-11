@@ -32,6 +32,12 @@ export interface MetadataItemInput {
      */
     displayName?: string;
     /**
+     * Human-readable description that can contain instructions on how to collect metadata
+     * @type {string}
+     * @memberof MetadataItemInput
+     */
+    prompt?: string;
+    /**
      * Default value for this metadata item
      * @type {string}
      * @memberof MetadataItemInput
@@ -73,6 +79,7 @@ export function MetadataItemInputFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'prompt': !exists(json, 'prompt') ? undefined : json['prompt'],
         'defaultValue': !exists(json, 'defaultValue') ? undefined : json['defaultValue'],
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
         'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
@@ -90,6 +97,7 @@ export function MetadataItemInputToJSON(value?: MetadataItemInput | null): any {
         
         'name': value.name,
         'displayName': value.displayName,
+        'prompt': value.prompt,
         'defaultValue': value.defaultValue,
         'docsURL': value.docsURL,
         'moduleDependencies': value.moduleDependencies,
