@@ -92,8 +92,14 @@ export function ApiKeyAuthForm({
         placeholder="API Key"
         onChange={handleChange}
       />
-      {metadataInputs.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
+      {metadataInputs.map((metadata: MetadataItemInput, index: number) => (
+        <div
+          key={metadata.name}
+          style={{
+            marginBottom:
+              index === metadataInputs.length - 1 ? "0" : "1.5rem",
+          }}
+        >
           {metadata.docsURL && (
             <DocsHelperText
               url={metadata.docsURL}
@@ -101,6 +107,7 @@ export function ApiKeyAuthForm({
               credentialName={
                 metadata.displayName || capitalize(metadata.name.toLowerCase())
               }
+              prompt={metadata.prompt}
             />
           )}
           <FormComponent.Input

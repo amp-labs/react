@@ -30,8 +30,14 @@ export function WorkspaceEntryContent({
       <AuthTitle>Enter your {providerName} workspace</AuthTitle>
       <AuthErrorAlert error={error} />
       <br />
-      {metadataInputs.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
+      {metadataInputs.map((metadata: MetadataItemInput, index: number) => (
+        <div
+          key={metadata.name}
+          style={{
+            marginBottom:
+              index === metadataInputs.length - 1 ? "0" : "1.5rem",
+          }}
+        >
           {metadata.docsURL && (
             <DocsHelperText
               url={metadata.docsURL}
@@ -39,6 +45,7 @@ export function WorkspaceEntryContent({
               credentialName={
                 metadata.displayName || capitalize(metadata.name.toLowerCase())
               }
+              prompt={metadata.prompt}
             />
           )}
           <FormComponent.Input

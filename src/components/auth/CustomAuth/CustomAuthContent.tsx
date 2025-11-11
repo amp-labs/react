@@ -82,15 +82,19 @@ export function CustomAuthForm({
         </div>
       ))}
       {/* do we support metadata fields and custom auth at the same time? */}
-      {metadataInputs.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperTextHeader
-              url={metadata.docsURL}
-              prompt={metadata.displayName || metadata.name}
-              inputName={metadata.displayName || metadata.name}
-            />
-          )}
+      {metadataInputs.map((metadata: MetadataItemInput, index: number) => (
+        <div
+          key={metadata.name}
+          style={{
+            marginBottom:
+              index === metadataInputs.length - 1 ? "0" : "1.5rem",
+          }}
+        >
+          <DocsHelperTextHeader
+            url={metadata.docsURL}
+            prompt={metadata.prompt}
+            inputName={metadata.displayName || metadata.name}
+          />
           <FormComponent.Input
             id={metadata.name}
             name={metadata.name}

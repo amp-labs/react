@@ -113,8 +113,14 @@ export function ClientCredentialsForm({
           />
         )}
 
-        {metadataInputs.map((metadata) => (
-          <div key={metadata.name}>
+        {metadataInputs.map((metadata, index: number) => (
+          <div
+            key={metadata.name}
+            style={{
+              marginBottom:
+                index === metadataInputs.length - 1 ? "0" : "1.5rem",
+            }}
+          >
             {metadata.docsURL && (
               <DocsHelperText
                 url={metadata.docsURL}
@@ -122,6 +128,7 @@ export function ClientCredentialsForm({
                 credentialName={
                   metadata.displayName || capitalize(metadata.name.toLowerCase())
                 }
+                prompt={metadata.prompt}
               />
             )}
             <FormComponent.Input
