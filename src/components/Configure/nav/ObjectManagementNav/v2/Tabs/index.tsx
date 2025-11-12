@@ -29,6 +29,7 @@ type NavObjectItemProps = {
   completed: boolean;
   pending: boolean;
   displayName?: string;
+  disabled?: boolean;
 };
 
 function NavObjectTab({
@@ -36,6 +37,7 @@ function NavObjectTab({
   completed,
   pending,
   displayName,
+  disabled,
 }: NavObjectItemProps) {
   return (
     <Tabs.Trigger value={objectName} className={styles.tabTrigger}>
@@ -47,7 +49,7 @@ function NavObjectTab({
           marginRight: ".5rem",
         }}
       >
-        {NavIcon(completed, pending)}
+        {NavIcon(!disabled && completed, pending)}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span>{displayName || objectName}</span>
           {pending && (
@@ -171,6 +173,7 @@ export function VerticalTabs({
               objectName={object.name}
               displayName={object.displayName}
               completed={object.completed}
+              disabled={object.disabled}
               pending={isPending}
             />
           );

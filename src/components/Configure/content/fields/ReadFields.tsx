@@ -1,25 +1,27 @@
-import { DeleteObject } from "./DeleteObject";
+import { DisableReadObject } from "./DisableReadObject";
 import { OptionalFieldMappings, RequiredFieldMappings } from "./FieldMappings";
 import { useClearOldFieldMappings } from "./FieldMappings/useClearOldFieldMappings";
 import { ReadObjectMapping } from "./ObjectMapping";
 import { OptionalFields } from "./OptionalFields";
+import { ReEnableReadObject } from "./ReEnableReadObject";
 import { RequiredFields } from "./RequiredFields";
 import { ValueMappings } from "./ValueMapping";
 
-const SHOW_DELETE_OBJECT = false;
+const SHOW_DISABLE_READ_OBJECT = false;
 
 export function ReadFields() {
   useClearOldFieldMappings();
 
   return (
     <>
+      {SHOW_DISABLE_READ_OBJECT && <ReEnableReadObject />}
       <ReadObjectMapping />
       <RequiredFields />
       <RequiredFieldMappings />
       <OptionalFieldMappings />
       <ValueMappings />
       <OptionalFields />
-      {SHOW_DELETE_OBJECT && <DeleteObject />}
+      {SHOW_DISABLE_READ_OBJECT && <DisableReadObject />}
     </>
   );
 }
