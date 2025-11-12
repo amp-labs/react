@@ -26,7 +26,7 @@ export interface CreateEventTopicRouteRequest {
      */
     eventType: CreateEventTopicRouteRequestEventTypeEnum;
     /**
-     * The ID of the notification topic to route events to.
+     * The ID of the topic to route events to.
      * @type {string}
      * @memberof CreateEventTopicRouteRequest
      */

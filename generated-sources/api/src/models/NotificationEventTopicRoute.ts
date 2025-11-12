@@ -32,7 +32,7 @@ export interface NotificationEventTopicRoute {
      */
     eventType: NotificationEventTopicRouteEventTypeEnum;
     /**
-     * The ID of the notification topic to route events to.
+     * The ID of the topic to route events to.
      * @type {string}
      * @memberof NotificationEventTopicRoute
      */
