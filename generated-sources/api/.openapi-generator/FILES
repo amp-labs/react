@@ -83,6 +83,7 @@ src/models/CreateInstallationRequestConfig.ts
 src/models/CreateIntegrationRequest.ts
 src/models/CreateIntegrationRequestLatestRevision.ts
 src/models/CreateJWTKeyRequest.ts
+src/models/CreateNotificationTopicRequest.ts
 src/models/CreateOrgInviteRequest.ts
 src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
@@ -90,6 +91,7 @@ src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
 src/models/CreateTargetRequest.ts
 src/models/CreateTargetRequestMetadata.ts
+src/models/CreateTopicDestinationRouteRequest.ts
 src/models/CreateTopicRequest.ts
 src/models/CreateTopicTargetRouteRequest.ts
 src/models/CustomAuthHeader.ts
@@ -195,6 +197,8 @@ src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts
 src/models/TokenMetadataFieldsOtherFieldsInner.ts
+src/models/Topic.ts
+src/models/TopicDestinationRoute.ts
 src/models/UpdateConnectionRequest.ts
 src/models/UpdateDestinationRequest.ts
 src/models/UpdateDestinationRequestDestination.ts
@@ -205,6 +209,7 @@ src/models/UpdateInstallationConfigContent.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts
 src/models/UpdateInstallationRequestInstallationConfig.ts
+src/models/UpdateNotificationTopicRequest.ts
 src/models/UpdateOrgRequest.ts
 src/models/UpdateOrgRequestOrg.ts
 src/models/UpdateProjectRequest.ts
