@@ -57,11 +57,11 @@ export function InstallationContentV2(_props: InstallationContentV2Props) {
   // So we can assume connection exists at this point
 
   // Route to appropriate flow based on installation state
-  // if (installation) {
-  //   // Installation exists - show update flow
-  //   // return <UpdateInstallation installation={installation} />;
-  //   return <div>Update Installation</div>;
-  // }
+  if (installation) {
+    // Installation exists - show update flow
+    // return <UpdateInstallation installation={installation} />;
+    return <div>Update Installation</div>;
+  }
 
   // No installation - show create wizard
   return <CreateInstallationWizard onSuccess={_props.onInstallSuccess} />;

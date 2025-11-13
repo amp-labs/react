@@ -80,26 +80,69 @@ export function CreateInstallationWizard({
     });
   };
 
+  // Calculate progress
+  const configuredCount = readObjects.filter((obj) =>
+    isObjectConfigured(obj.objectName),
+  ).length;
+
+  // Progress indicator component (shown on all steps)
+  const ProgressIndicator = () => (
+    <div
+      style={{
+        marginBottom: "24px",
+        padding: "12px",
+        background: "#f0f9ff",
+        borderRadius: "6px",
+        border: "1px solid #0891b2",
+      }}
+    >
+      <div style={{ fontSize: "14px", fontWeight: 600, color: "#0891b2" }}>
+        Progress: {configuredCount} / {readObjects.length} objects configured
+      </div>
+      <div
+        style={{
+          marginTop: "8px",
+          height: "8px",
+          background: "#e2e8f0",
+          borderRadius: "4px",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${(configuredCount / readObjects.length) * 100}%`,
+            height: "100%",
+            background: "#0891b2",
+            transition: "width 0.3s ease",
+          }}
+        />
+      </div>
+    </div>
+  );
+
   // Configure object step
   if (currentStep.type === "configure-object") {
     return (
-      <ConfigureObjectStep
-        objectName={currentStep.objectName}
-        onBack={() => setCurrentStep({ type: "objects-list" })}
-        onNext={() => {
-          // After configuring, check if there are more unconfigured objects
-          const nextObject = getNextUnconfiguredObject();
-          if (nextObject) {
-            setCurrentStep({
-              type: "configure-object",
-              objectName: nextObject,
-            });
-          } else {
-            // All objects configured, go to review
-            setCurrentStep({ type: "review" });
-          }
-        }}
-      />
+      <div style={{ padding: "20px", fontFamily: "system-ui" }}>
+        <ProgressIndicator />
+        <ConfigureObjectStep
+          objectName={currentStep.objectName}
+          onBack={() => setCurrentStep({ type: "objects-list" })}
+          onNext={() => {
+            // After configuring, check if there are more unconfigured objects
+            const nextObject = getNextUnconfiguredObject();
+            if (nextObject) {
+              setCurrentStep({
+                type: "configure-object",
+                objectName: nextObject,
+              });
+            } else {
+              // All objects configured, go to review
+              setCurrentStep({ type: "review" });
+            }
+          }}
+        />
+      </div>
     );
   }
 
@@ -110,6 +153,7 @@ export function CreateInstallationWizard({
 
     return (
       <div style={{ padding: "20px", fontFamily: "system-ui" }}>
+        <ProgressIndicator />
         <h2>Review Configuration</h2>
         <p style={{ color: "#64748b", marginTop: "8px" }}>
           Review your configuration before creating the installation
@@ -204,50 +248,15 @@ export function CreateInstallationWizard({
   }
 
   // Objects list step
-  const configuredCount = readObjects.filter((obj) =>
-    isObjectConfigured(obj.objectName),
-  ).length;
   const allConfigured = configuredCount === readObjects.length;
 
   return (
     <div style={{ padding: "20px", fontFamily: "system-ui" }}>
+      <ProgressIndicator />
       <h2>Configure Installation</h2>
       <p style={{ color: "#64748b", marginTop: "8px" }}>
         Select and configure the objects you want to sync
       </p>
-
-      {/* Progress indicator */}
-      <div
-        style={{
-          marginTop: "16px",
-          padding: "12px",
-          background: "#f0f9ff",
-          borderRadius: "6px",
-          border: "1px solid #0891b2",
-        }}
-      >
-        <div style={{ fontSize: "14px", fontWeight: 600, color: "#0891b2" }}>
-          Progress: {configuredCount} / {readObjects.length} objects configured
-        </div>
-        <div
-          style={{
-            marginTop: "8px",
-            height: "8px",
-            background: "#e2e8f0",
-            borderRadius: "4px",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              width: `${(configuredCount / readObjects.length) * 100}%`,
-              height: "100%",
-              background: "#0891b2",
-              transition: "width 0.3s ease",
-            }}
-          />
-        </div>
-      </div>
 
       <div style={{ marginTop: "24px" }}>
         <h3>Available Objects</h3>

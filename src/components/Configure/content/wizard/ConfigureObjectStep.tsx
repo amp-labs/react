@@ -213,7 +213,7 @@ export function ConfigureObjectStep({
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "system-ui" }}>
+    <div style={{ fontFamily: "system-ui" }}>
       <h2>Configure {objectName}</h2>
       <p style={{ color: "#64748b", marginTop: "8px" }}>
         Select the fields you want to sync and map them to your data source
