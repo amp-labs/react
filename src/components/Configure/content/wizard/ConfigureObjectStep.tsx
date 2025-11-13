@@ -255,6 +255,30 @@ export function ConfigureObjectStep({
         </div>
       )}
 
+      {/* Required Field Mappings */}
+      {requiredFieldMappings.length > 0 && (
+        <div style={{ marginTop: "24px" }}>
+          <h3 style={{ fontSize: "16px", marginBottom: "12px" }}>
+            Required Field Mappings
+          </h3>
+          <div>
+            {requiredFieldMappings.map((field) => renderFieldMappingRow(field))}
+          </div>
+        </div>
+      )}
+
+      {/* Optional Field Mappings */}
+      {optionalFieldMappings.length > 0 && (
+        <div style={{ marginTop: "24px" }}>
+          <h3 style={{ fontSize: "16px", marginBottom: "12px" }}>
+            Optional Field Mappings
+          </h3>
+          <div>
+            {optionalFieldMappings.map((field) => renderFieldMappingRow(field))}
+          </div>
+        </div>
+      )}
+
       {/* Optional Fields */}
       {optionalCheckboxItems.length > 0 && (
         <div style={{ marginTop: "24px" }}>
@@ -357,30 +381,6 @@ export function ConfigureObjectStep({
                 </div>
               );
             })()}
-        </div>
-      )}
-
-      {/* Required Field Mappings */}
-      {requiredFieldMappings.length > 0 && (
-        <div style={{ marginTop: "24px" }}>
-          <h3 style={{ fontSize: "16px", marginBottom: "12px" }}>
-            Required Field Mappings
-          </h3>
-          <div>
-            {requiredFieldMappings.map((field) => renderFieldMappingRow(field))}
-          </div>
-        </div>
-      )}
-
-      {/* Optional Field Mappings */}
-      {optionalFieldMappings.length > 0 && (
-        <div style={{ marginTop: "24px" }}>
-          <h3 style={{ fontSize: "16px", marginBottom: "12px" }}>
-            Optional Field Mappings
-          </h3>
-          <div>
-            {optionalFieldMappings.map((field) => renderFieldMappingRow(field))}
-          </div>
         </div>
       )}
 
