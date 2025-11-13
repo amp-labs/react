@@ -42,7 +42,6 @@ export function getProviderMetadata(
 
 /**
  * Check if the required metadata for the provider has been filled in.
- * This will be more useful when we have required/optional metadata later on.
  * @param metadataInputs - The metadata required by the provider. Is defined in the provider info.
  * @param formData - The form data to check the metadata against.
  * @returns True if all required metadata has been filled in, false otherwise.
@@ -101,15 +100,17 @@ export function determineModule(
 }
 
 /**
- * Filter metadata fields based on module dependencies.
- * Only returns fields that either:
+ * Filter metadata fields based on dependent modules.
+ * Only returns fields that should be shown for the current module:
  * 1. Module is "" (empty string = provider has no modules) → return all fields
- * 2. Field has no moduleDependencies (apply to all modules) → include field
- * 3. Field has the module in their moduleDependencies (case-insensitive) → include field
+ * 2. Field has no dependentModules (apply to all modules) → include field
+ * 3. Field has the module in their dependentModules:
+ *    - If optional: true → EXCLUDE (don't show this field)
+ *    - If optional: false or undefined → INCLUDE (show as required field)
  *
  * @param metadataInputs - All metadata fields from provider info
  * @param module - The module determined by determineModule() ("" means no modules, show all)
- * @returns Filtered array of metadata fields applicable to this module
+ * @returns Filtered array of metadata fields that should be displayed for this module
  */
 export function filterMetadataByModule(
   metadataInputs: MetadataItemInput[],
@@ -123,14 +124,25 @@ export function filterMetadataByModule(
   const moduleLowerCase = module.toLowerCase();
 
   return metadataInputs.filter((field) => {
-    // If field has no module dependencies, it applies to all modules
-    if (!field.moduleDependencies) {
+    // If field isn't dependent on specific modules, it applies to all modules
+    if (!field.dependentModules) {
       return true;
     }
 
-    // Check if this module is in the field's dependencies (case-insensitive)
-    return Object.keys(field.moduleDependencies).some(
+    // Find if this module exists in dependentModules (case-insensitive)
+    const matchingModuleKey = Object.keys(field.dependentModules).find(
       (key) => key.toLowerCase() === moduleLowerCase,
     );
+
+    // Module not found in dependentModules - field doesn't apply to this module
+    if (!matchingModuleKey) {
+      return false;
+    }
+
+    // Check the optional flag for this module
+    const dependentModule = field.dependentModules[matchingModuleKey];
+    // optional: true means DON'T show the field (filter it out)
+    // optional: false or undefined means DO show the field (it's required)
+    return dependentModule?.optional !== true;
   });
 }

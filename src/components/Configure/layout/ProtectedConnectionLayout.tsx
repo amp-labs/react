@@ -83,7 +83,7 @@ export function ProtectedConnectionLayout({
 
   // Filter metadata based on the determined module
   // - If module is "" (provider has no modules) → returns all fields for metadata collection.
-  // - Otherwise → filters fields based on moduleDependencies
+  // - Otherwise → filters fields based on dependentModules
   const allMetadataFields = providerInfo?.metadata?.input || [];
   const filteredMetadataFields = filterMetadataByModule(
     allMetadataFields,
