@@ -40,10 +40,20 @@ export function CreateInstallationWizard({
     type: "objects-list",
   });
 
+  // Track which objects have been confirmed/visited by the user
+  const [confirmedObjects, setConfirmedObjects] = useState<Set<string>>(
+    new Set(),
+  );
+
   const readObjects = manifest?.content?.read?.objects || [];
 
   // Helper to check if an object has been configured
   const isObjectConfigured = (objectName: string) => {
+    // First check if the user has confirmed this object by clicking "Next"
+    if (!confirmedObjects.has(objectName)) {
+      return false;
+    }
+
     const obj = readObject(objectName);
     const manifestObject = manifest?.content?.read?.objects?.find(
       (o) => o.objectName === objectName,
@@ -53,14 +63,16 @@ export function CreateInstallationWizard({
 
     const allRequiredFields = manifestObject.requiredFields || [];
 
-    // Check if all required fields are configured
+    // Check if all required field mappings are configured
+    // Note: Regular required fields (with fieldName) are always included automatically,
+    // so we only need to validate field mappings (with mapToName)
     return allRequiredFields.every((field) => {
-      // Check regular required fields (with fieldName)
+      // Regular required fields (with fieldName) are always valid - they're auto-included
       if ("fieldName" in field && field.fieldName) {
-        return obj.getSelectedField(field.fieldName);
+        return true;
       }
 
-      // Check required field mappings (with mapToName)
+      // Check required field mappings (with mapToName) - these need to be explicitly set
       if ("mapToName" in field && field.mapToName) {
         const mapping = obj.getFieldMapping(field.mapToName);
         return mapping && mapping.trim() !== "";
@@ -217,8 +229,47 @@ export function CreateInstallationWizard({
           objectName={currentStep.objectName}
           onBack={() => setCurrentStep({ type: "objects-list" })}
           onNext={() => {
+            // Mark this object as confirmed
+            const updatedConfirmed = new Set([
+              ...confirmedObjects,
+              currentStep.objectName,
+            ]);
+            setConfirmedObjects(updatedConfirmed);
+
+            // Helper to check if object is configured with the updated confirmed set
+            const isConfiguredWithUpdatedSet = (objectName: string) => {
+              if (!updatedConfirmed.has(objectName)) {
+                return false;
+              }
+
+              const obj = readObject(objectName);
+              const manifestObject = manifest?.content?.read?.objects?.find(
+                (o) => o.objectName === objectName,
+              );
+
+              if (!manifestObject) return false;
+
+              const allRequiredFields = manifestObject.requiredFields || [];
+
+              return allRequiredFields.every((field) => {
+                if ("fieldName" in field && field.fieldName) {
+                  return true;
+                }
+
+                if ("mapToName" in field && field.mapToName) {
+                  const mapping = obj.getFieldMapping(field.mapToName);
+                  return mapping && mapping.trim() !== "";
+                }
+
+                return false;
+              });
+            };
+
             // After configuring, check if there are more unconfigured objects
-            const nextObject = getNextUnconfiguredObject();
+            const nextObject = readObjects.find(
+              (obj) => !isConfiguredWithUpdatedSet(obj.objectName),
+            )?.objectName;
+
             if (nextObject) {
               setCurrentStep({
                 type: "configure-object",
