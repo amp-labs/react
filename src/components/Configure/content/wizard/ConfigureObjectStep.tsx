@@ -53,6 +53,9 @@ export function ConfigureObjectStep({
   // Track if showing all selected optional fields (for when > 10)
   const [showAllSelectedFields, setShowAllSelectedFields] = useState(false);
 
+  // Track if showing optional fields section
+  const [showOptionalFields, setShowOptionalFields] = useState(false);
+
   // Split fields into those with and without mappings
 
   const requiredFieldsAll = useMemo(
@@ -212,6 +215,90 @@ export function ConfigureObjectStep({
     );
   };
 
+  // Reusable switch component
+  const Switch = ({
+    checked,
+    onChange,
+    label,
+    description,
+  }: {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    label: string;
+    description?: string;
+  }) => (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "12px 16px",
+        background: "#f8fafc",
+        border: "1px solid #e2e8f0",
+        borderRadius: "6px",
+        marginBottom: "12px",
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: "14px", fontWeight: 600, color: "#0f172a" }}>
+          {label}
+        </div>
+        {description && (
+          <div style={{ fontSize: "13px", color: "#64748b", marginTop: "2px" }}>
+            {description}
+          </div>
+        )}
+      </div>
+      <label
+        style={{
+          position: "relative",
+          display: "inline-block",
+          width: "48px",
+          height: "24px",
+          cursor: "pointer",
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          style={{
+            opacity: 0,
+            width: 0,
+            height: 0,
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            cursor: "pointer",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: checked ? "#0891b2" : "#cbd5e1",
+            transition: "0.3s",
+            borderRadius: "24px",
+          }}
+        >
+          <span
+            style={{
+              position: "absolute",
+              content: '""',
+              height: "18px",
+              width: "18px",
+              left: checked ? "26px" : "3px",
+              bottom: "3px",
+              backgroundColor: "white",
+              transition: "0.3s",
+              borderRadius: "50%",
+            }}
+          />
+        </span>
+      </label>
+    </div>
+  );
+
   return (
     <div style={{ fontFamily: "system-ui" }}>
       <h2>Configure {objectName}</h2>
@@ -285,12 +372,22 @@ export function ConfigureObjectStep({
           <h3 style={{ fontSize: "16px", marginBottom: "12px" }}>
             Optional Fields
           </h3>
-          <CheckboxPagination
-            key={`${objectName}-${optionalCheckboxItems.length}`}
-            items={optionalCheckboxItems}
-            onItemChange={handleOptionalFieldChange}
-            showSelectAll={optionalCheckboxItems.length >= 2}
+
+          <Switch
+            checked={showOptionalFields}
+            onChange={setShowOptionalFields}
+            label="Show Optional Fields"
+            description={`${optionalCheckboxItems.filter((item) => item.isChecked).length} of ${optionalCheckboxItems.length} fields selected`}
           />
+
+          {showOptionalFields && (
+            <CheckboxPagination
+              key={`${objectName}-${optionalCheckboxItems.length}`}
+              items={optionalCheckboxItems}
+              onItemChange={handleOptionalFieldChange}
+              showSelectAll={optionalCheckboxItems.length >= 2}
+            />
+          )}
 
           {/* Selected Optional Fields Pills */}
           {optionalCheckboxItems.some((item) => item.isChecked) &&
