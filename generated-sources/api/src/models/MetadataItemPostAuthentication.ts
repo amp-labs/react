@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DependentModule } from './DependentModule';
+import {
+    DependentModuleFromJSON,
+    DependentModuleFromJSONTyped,
+    DependentModuleToJSON,
+} from './DependentModule';
+
 /**
  * 
  * @export
@@ -27,10 +34,10 @@ export interface MetadataItemPostAuthentication {
     name: string;
     /**
      * Does this metadata item only apply to a specific module?
-     * @type {{ [key: string]: object; }}
+     * @type {{ [key: string]: DependentModule; }}
      * @memberof MetadataItemPostAuthentication
      */
-    moduleDependencies?: { [key: string]: object; };
+    dependentModules?: { [key: string]: DependentModule; };
 }
 
 /**
@@ -54,7 +61,7 @@ export function MetadataItemPostAuthenticationFromJSONTyped(json: any, ignoreDis
     return {
         
         'name': json['name'],
-        'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
+        'dependentModules': !exists(json, 'dependentModules') ? undefined : (mapValues(json['dependentModules'], DependentModuleFromJSON)),
     };
 }
 
@@ -68,7 +75,7 @@ export function MetadataItemPostAuthenticationToJSON(value?: MetadataItemPostAut
     return {
         
         'name': value.name,
-        'moduleDependencies': value.moduleDependencies,
+        'dependentModules': value.dependentModules === undefined ? undefined : (mapValues(value.dependentModules, DependentModuleToJSON)),
     };
 }
 
