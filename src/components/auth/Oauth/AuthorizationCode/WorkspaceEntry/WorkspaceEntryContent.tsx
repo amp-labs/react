@@ -3,11 +3,9 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { capitalize } from "src/utils";
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
-import { DocsHelperText } from "components/Docs/DocsHelperText";
-import { FormComponent } from "components/form";
+import { MetadataInput } from "components/auth/MetadataInput";
 import { Button } from "components/ui-base/Button";
 
 import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
@@ -30,35 +28,16 @@ export function WorkspaceEntryContent({
       <AuthTitle>Enter your {providerName} workspace</AuthTitle>
       <AuthErrorAlert error={error} />
       <br />
-      {metadataInputs.map((metadata: MetadataItemInput, index: number) => (
-        <div
+      {metadataInputs.map((metadata: MetadataItemInput) => (
+        <MetadataInput
           key={metadata.name}
-          style={{
-            marginBottom: index === metadataInputs.length - 1 ? "0" : "1.5rem",
-          }}
-        >
-          {metadata.docsURL && (
-            <DocsHelperText
-              url={metadata.docsURL}
-              providerDisplayName={providerName || ""}
-              credentialName={
-                metadata.displayName || capitalize(metadata.name.toLowerCase())
-              }
-              prompt={metadata.prompt}
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={(event) =>
-              setFormData(metadata.name, event.currentTarget.value)
-            }
-          />
-        </div>
+          metadata={metadata}
+          onChange={(event) =>
+            setFormData(metadata.name, event.currentTarget.value)
+          }
+          providerName={providerName}
+        />
       ))}
-      <br />
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}
