@@ -1,0 +1,1 @@
+export { MetadataInput } from "./MetadataInput";

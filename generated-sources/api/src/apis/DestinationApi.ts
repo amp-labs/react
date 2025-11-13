@@ -17,21 +17,36 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   CreateDestinationRequest,
+  CreateTopicDestinationRouteRequest,
+  CreateTopicRequest,
   Destination,
   InputValidationProblem,
+  Topic,
+  TopicDestinationRoute,
   UpdateDestinationRequest,
+  UpdateTopicRequest,
 } from '../models';
 import {
     ApiProblemFromJSON,
     ApiProblemToJSON,
     CreateDestinationRequestFromJSON,
     CreateDestinationRequestToJSON,
+    CreateTopicDestinationRouteRequestFromJSON,
+    CreateTopicDestinationRouteRequestToJSON,
+    CreateTopicRequestFromJSON,
+    CreateTopicRequestToJSON,
     DestinationFromJSON,
     DestinationToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
+    TopicFromJSON,
+    TopicToJSON,
+    TopicDestinationRouteFromJSON,
+    TopicDestinationRouteToJSON,
     UpdateDestinationRequestFromJSON,
     UpdateDestinationRequestToJSON,
+    UpdateTopicRequestFromJSON,
+    UpdateTopicRequestToJSON,
 } from '../models';
 
 export interface CreateDestinationOperationRequest {
@@ -39,9 +54,29 @@ export interface CreateDestinationOperationRequest {
     destination: CreateDestinationRequest;
 }
 
+export interface CreateTopicOperationRequest {
+    projectIdOrName: string;
+    topic: CreateTopicRequest;
+}
+
+export interface CreateTopicDestinationRouteOperationRequest {
+    projectIdOrName: string;
+    topicDestinationRoute: CreateTopicDestinationRouteRequest;
+}
+
 export interface DeleteDestinationRequest {
     projectIdOrName: string;
     destination: string;
+}
+
+export interface DeleteTopicRequest {
+    projectIdOrName: string;
+    topicId: string;
+}
+
+export interface DeleteTopicDestinationRouteRequest {
+    projectIdOrName: string;
+    routeId: string;
 }
 
 export interface GetDestinationRequest {
@@ -55,10 +90,26 @@ export interface ListDestinationsRequest {
     projectIdOrName: string;
 }
 
+export interface ListTopicDestinationRoutesRequest {
+    projectIdOrName: string;
+    topicId?: string;
+    destinationId?: string;
+}
+
+export interface ListTopicsRequest {
+    projectIdOrName: string;
+}
+
 export interface UpdateDestinationOperationRequest {
     projectIdOrName: string;
     destination: string;
     destinationUpdate: UpdateDestinationRequest;
+}
+
+export interface UpdateTopicOperationRequest {
+    projectIdOrName: string;
+    topicId: string;
+    updateTopicRequest: UpdateTopicRequest;
 }
 
 /**
@@ -86,6 +137,38 @@ export interface DestinationApiInterface {
 
     /**
      * 
+     * @summary Create a topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {CreateTopicRequest} topic 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    createTopicRaw(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Topic>>;
+
+    /**
+     * Create a topic
+     */
+    createTopic(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Topic>;
+
+    /**
+     * 
+     * @summary Create a topic destination route
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {CreateTopicDestinationRouteRequest} topicDestinationRoute 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    createTopicDestinationRouteRaw(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TopicDestinationRoute>>;
+
+    /**
+     * Create a topic destination route
+     */
+    createTopicDestinationRoute(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TopicDestinationRoute>;
+
+    /**
+     * 
      * @summary Delete a destination
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} destination The destination ID
@@ -99,6 +182,38 @@ export interface DestinationApiInterface {
      * Delete a destination
      */
     deleteDestination(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Delete a topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} topicId The topic ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    deleteTopicRaw(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete a topic
+     */
+    deleteTopic(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Delete a topic destination route
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} routeId The topic destination route ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    deleteTopicDestinationRouteRaw(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete a topic destination route
+     */
+    deleteTopicDestinationRoute(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -135,6 +250,38 @@ export interface DestinationApiInterface {
 
     /**
      * 
+     * @summary List topic destination routes
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} [topicId] Filter by topic ID.
+     * @param {string} [destinationId] Filter by destination ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    listTopicDestinationRoutesRaw(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TopicDestinationRoute>>>;
+
+    /**
+     * List topic destination routes
+     */
+    listTopicDestinationRoutes(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TopicDestinationRoute>>;
+
+    /**
+     * 
+     * @summary List topics
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    listTopicsRaw(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Topic>>>;
+
+    /**
+     * List topics
+     */
+    listTopics(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Topic>>;
+
+    /**
+     * 
      * @summary Update a destination
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} destination The destination ID.
@@ -149,6 +296,23 @@ export interface DestinationApiInterface {
      * Update a destination
      */
     updateDestination(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination>;
+
+    /**
+     * 
+     * @summary Update a topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} topicId The topic ID.
+     * @param {UpdateTopicRequest} updateTopicRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DestinationApiInterface
+     */
+    updateTopicRaw(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Topic>>;
+
+    /**
+     * Update a topic
+     */
+    updateTopic(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Topic>;
 
 }
 
@@ -207,6 +371,104 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
     }
 
     /**
+     * Create a topic
+     */
+    async createTopicRaw(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Topic>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createTopic.');
+        }
+
+        if (requestParameters.topic === null || requestParameters.topic === undefined) {
+            throw new runtime.RequiredError('topic','Required parameter requestParameters.topic was null or undefined when calling createTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTopicRequestToJSON(requestParameters.topic),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a topic
+     */
+    async createTopic(requestParameters: CreateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Topic> {
+        const response = await this.createTopicRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a topic destination route
+     */
+    async createTopicDestinationRouteRaw(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TopicDestinationRoute>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createTopicDestinationRoute.');
+        }
+
+        if (requestParameters.topicDestinationRoute === null || requestParameters.topicDestinationRoute === undefined) {
+            throw new runtime.RequiredError('topicDestinationRoute','Required parameter requestParameters.topicDestinationRoute was null or undefined when calling createTopicDestinationRoute.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTopicDestinationRouteRequestToJSON(requestParameters.topicDestinationRoute),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicDestinationRouteFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a topic destination route
+     */
+    async createTopicDestinationRoute(requestParameters: CreateTopicDestinationRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TopicDestinationRoute> {
+        const response = await this.createTopicDestinationRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Delete a destination
      */
     async deleteDestinationRaw(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -249,6 +511,96 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      */
     async deleteDestination(requestParameters: DeleteDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteDestinationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Delete a topic
+     */
+    async deleteTopicRaw(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteTopic.');
+        }
+
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling deleteTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a topic
+     */
+    async deleteTopic(requestParameters: DeleteTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTopicRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Delete a topic destination route
+     */
+    async deleteTopicDestinationRouteRaw(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteTopicDestinationRoute.');
+        }
+
+        if (requestParameters.routeId === null || requestParameters.routeId === undefined) {
+            throw new runtime.RequiredError('routeId','Required parameter requestParameters.routeId was null or undefined when calling deleteTopicDestinationRoute.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes/{routeId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"routeId"}}`, encodeURIComponent(String(requestParameters.routeId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a topic destination route
+     */
+    async deleteTopicDestinationRoute(requestParameters: DeleteTopicDestinationRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTopicDestinationRouteRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -348,6 +700,98 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
     }
 
     /**
+     * List topic destination routes
+     */
+    async listTopicDestinationRoutesRaw(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TopicDestinationRoute>>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listTopicDestinationRoutes.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.topicId !== undefined) {
+            queryParameters['topicId'] = requestParameters.topicId;
+        }
+
+        if (requestParameters.destinationId !== undefined) {
+            queryParameters['destinationId'] = requestParameters.destinationId;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topic-destination-routes`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TopicDestinationRouteFromJSON));
+    }
+
+    /**
+     * List topic destination routes
+     */
+    async listTopicDestinationRoutes(requestParameters: ListTopicDestinationRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TopicDestinationRoute>> {
+        const response = await this.listTopicDestinationRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List topics
+     */
+    async listTopicsRaw(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Topic>>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listTopics.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TopicFromJSON));
+    }
+
+    /**
+     * List topics
+     */
+    async listTopics(requestParameters: ListTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Topic>> {
+        const response = await this.listTopicsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Update a destination
      */
     async updateDestinationRaw(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
@@ -397,6 +841,59 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
      */
     async updateDestination(requestParameters: UpdateDestinationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination> {
         const response = await this.updateDestinationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a topic
+     */
+    async updateTopicRaw(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Topic>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateTopic.');
+        }
+
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling updateTopic.');
+        }
+
+        if (requestParameters.updateTopicRequest === null || requestParameters.updateTopicRequest === undefined) {
+            throw new runtime.RequiredError('updateTopicRequest','Required parameter requestParameters.updateTopicRequest was null or undefined when calling updateTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateTopicRequestToJSON(requestParameters.updateTopicRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a topic
+     */
+    async updateTopic(requestParameters: UpdateTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Topic> {
+        const response = await this.updateTopicRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

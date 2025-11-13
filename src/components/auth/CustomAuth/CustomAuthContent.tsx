@@ -8,6 +8,7 @@ import {
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
+import { MetadataInput } from "components/auth/MetadataInput";
 import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
@@ -83,22 +84,12 @@ export function CustomAuthForm({
       ))}
       {/* do we support metadata fields and custom auth at the same time? */}
       {metadataInputs.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperTextHeader
-              url={metadata.docsURL}
-              prompt={metadata.displayName || metadata.name}
-              inputName={metadata.displayName || metadata.name}
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={""}
-            onChange={handleChange}
-          />
-        </div>
+        <MetadataInput
+          key={metadata.name}
+          metadata={metadata}
+          onChange={handleChange}
+          variant="header"
+        />
       ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}

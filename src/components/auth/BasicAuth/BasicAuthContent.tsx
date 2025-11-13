@@ -10,6 +10,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
+import { MetadataInput } from "components/auth/MetadataInput";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
@@ -106,24 +107,12 @@ export function BasicAuthForm({
         onChange={handleChange}
       />
       {metadataInputs.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperText
-              url={metadata.docsURL}
-              providerDisplayName={providerName || capitalize(provider)}
-              credentialName={
-                metadata.displayName || capitalize(metadata.name.toLowerCase())
-              }
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={handleChange}
-          />
-        </div>
+        <MetadataInput
+          key={metadata.name}
+          metadata={metadata}
+          onChange={handleChange}
+          providerName={providerName || capitalize(provider)}
+        />
       ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}

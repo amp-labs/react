@@ -16,73 +16,74 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface NotificationTopic
+ * @interface TopicDestinationRoute
  */
-export interface NotificationTopic {
+export interface TopicDestinationRoute {
     /**
-     * The notification topic ID.
+     * The topic destination route ID.
      * @type {string}
-     * @memberof NotificationTopic
+     * @memberof TopicDestinationRoute
      */
     id: string;
     /**
-     * A human-readable label for the notification topic.
+     * The ID of the topic.
      * @type {string}
-     * @memberof NotificationTopic
+     * @memberof TopicDestinationRoute
      */
-    label: string;
+    topicId: string;
+    /**
+     * The ID of the destination.
+     * @type {string}
+     * @memberof TopicDestinationRoute
+     */
+    destinationId: string;
     /**
      * The Ampersand project ID.
      * @type {string}
-     * @memberof NotificationTopic
+     * @memberof TopicDestinationRoute
      */
     projectId: string;
     /**
-     * The time when the notification topic was created.
+     * The time when the topic destination route was created.
      * @type {Date}
-     * @memberof NotificationTopic
+     * @memberof TopicDestinationRoute
      */
     createTime: Date;
-    /**
-     * The time when the notification topic was last updated.
-     * @type {Date}
-     * @memberof NotificationTopic
-     */
-    updateTime?: Date;
 }
 
 /**
- * Check if a given object implements the NotificationTopic interface.
+ * Check if a given object implements the TopicDestinationRoute interface.
  */
-export function instanceOfNotificationTopic(value: object): boolean {
+export function instanceOfTopicDestinationRoute(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "topicId" in value;
+    isInstance = isInstance && "destinationId" in value;
     isInstance = isInstance && "projectId" in value;
     isInstance = isInstance && "createTime" in value;
 
     return isInstance;
 }
 
-export function NotificationTopicFromJSON(json: any): NotificationTopic {
-    return NotificationTopicFromJSONTyped(json, false);
+export function TopicDestinationRouteFromJSON(json: any): TopicDestinationRoute {
+    return TopicDestinationRouteFromJSONTyped(json, false);
 }
 
-export function NotificationTopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): NotificationTopic {
+export function TopicDestinationRouteFromJSONTyped(json: any, ignoreDiscriminator: boolean): TopicDestinationRoute {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'label': json['label'],
+        'topicId': json['topicId'],
+        'destinationId': json['destinationId'],
         'projectId': json['projectId'],
         'createTime': (new Date(json['createTime'])),
-        'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
 }
 
-export function NotificationTopicToJSON(value?: NotificationTopic | null): any {
+export function TopicDestinationRouteToJSON(value?: TopicDestinationRoute | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -92,10 +93,10 @@ export function NotificationTopicToJSON(value?: NotificationTopic | null): any {
     return {
         
         'id': value.id,
-        'label': value.label,
+        'topicId': value.topicId,
+        'destinationId': value.destinationId,
         'projectId': value.projectId,
         'createTime': (value.createTime.toISOString()),
-        'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };
 }
 

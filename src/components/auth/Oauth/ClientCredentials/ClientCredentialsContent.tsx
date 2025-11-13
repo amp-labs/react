@@ -7,9 +7,9 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { capitalize, convertTextareaToArray } from "src/utils";
+import { convertTextareaToArray } from "src/utils";
 
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { MetadataInput } from "components/auth/MetadataInput";
 
 import {
   getProviderMetadata,
@@ -114,24 +114,12 @@ export function ClientCredentialsForm({
         )}
 
         {metadataInputs.map((metadata) => (
-          <div key={metadata.name}>
-            {metadata.docsURL && (
-              <DocsHelperText
-                url={metadata.docsURL}
-                providerDisplayName={providerName || ""}
-                credentialName={
-                  metadata.displayName || capitalize(metadata.name.toLowerCase())
-                }
-              />
-            )}
-            <FormComponent.Input
-              id={metadata.name}
-              name={metadata.name}
-              type="text"
-              placeholder={metadata.displayName || metadata.name}
-              onChange={handleChange}
-            />
-          </div>
+          <MetadataInput
+            key={metadata.name}
+            metadata={metadata}
+            onChange={handleChange}
+            providerName={providerName}
+          />
         ))}
       </div>
       <AuthErrorAlert error={submitError} />
