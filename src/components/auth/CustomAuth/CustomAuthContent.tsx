@@ -8,8 +8,8 @@ import {
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
-import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 import { MetadataInput } from "components/auth/MetadataInput";
+import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
   getProviderMetadata,

@@ -7,7 +7,7 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { capitalize, convertTextareaToArray } from "src/utils";
+import { convertTextareaToArray } from "src/utils";
 
 import { MetadataInput } from "components/auth/MetadataInput";
 

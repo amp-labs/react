@@ -10,8 +10,8 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
-import { DocsHelperText } from "components/Docs/DocsHelperText";
 import { MetadataInput } from "components/auth/MetadataInput";
+import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
   getProviderMetadata,
