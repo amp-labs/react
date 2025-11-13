@@ -86,39 +86,116 @@ export function CreateInstallationWizard({
   ).length;
 
   // Progress indicator component (shown on all steps)
-  const ProgressIndicator = () => (
-    <div
-      style={{
-        marginBottom: "24px",
-        padding: "12px",
-        background: "#f0f9ff",
-        borderRadius: "6px",
-        border: "1px solid #0891b2",
-      }}
-    >
-      <div style={{ fontSize: "14px", fontWeight: 600, color: "#0891b2" }}>
-        Progress: {configuredCount} / {readObjects.length} objects configured
-      </div>
+  const ProgressIndicator = () => {
+    const currentObjectName =
+      currentStep.type === "configure-object" ? currentStep.objectName : null;
+
+    return (
       <div
         style={{
-          marginTop: "8px",
-          height: "8px",
-          background: "#e2e8f0",
-          borderRadius: "4px",
-          overflow: "hidden",
+          marginBottom: "24px",
+          padding: "12px",
+          background: "#f0f9ff",
+          borderRadius: "6px",
+          border: "1px solid #0891b2",
         }}
       >
+        <div style={{ fontSize: "14px", fontWeight: 600, color: "#0891b2" }}>
+          Progress: {configuredCount} / {readObjects.length} objects configured
+        </div>
         <div
           style={{
-            width: `${(configuredCount / readObjects.length) * 100}%`,
-            height: "100%",
-            background: "#0891b2",
-            transition: "width 0.3s ease",
+            marginTop: "8px",
+            height: "8px",
+            background: "#e2e8f0",
+            borderRadius: "4px",
+            overflow: "hidden",
           }}
-        />
+        >
+          <div
+            style={{
+              width: `${(configuredCount / readObjects.length) * 100}%`,
+              height: "100%",
+              background: "#0891b2",
+              transition: "width 0.3s ease",
+            }}
+          />
+        </div>
+
+        {/* Object pills */}
+        <div
+          style={{
+            marginTop: "12px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+          }}
+        >
+          {readObjects.map((obj) => {
+            const configured = isObjectConfigured(obj.objectName);
+            const isCurrent = currentObjectName === obj.objectName;
+
+            return (
+              <button
+                key={obj.objectName}
+                type="button"
+                onClick={() => {
+                  if (currentStep.type !== "review") {
+                    setCurrentStep({
+                      type: "configure-object",
+                      objectName: obj.objectName,
+                    });
+                  }
+                }}
+                disabled={currentStep.type === "review"}
+                style={{
+                  padding: "6px 12px",
+                  background: configured
+                    ? "#dcfce7"
+                    : isCurrent
+                      ? "#e0f2fe"
+                      : "#f1f5f9",
+                  border: `2px solid ${
+                    isCurrent
+                      ? "#0891b2"
+                      : configured
+                        ? "#22c55e"
+                        : "#e2e8f0"
+                  }`,
+                  borderRadius: "6px",
+                  fontSize: "13px",
+                  fontWeight: isCurrent ? 600 : 500,
+                  color: configured ? "#166534" : isCurrent ? "#0c4a6e" : "#64748b",
+                  cursor:
+                    currentStep.type === "review" ? "not-allowed" : "pointer",
+                  opacity: currentStep.type === "review" ? 0.6 : 1,
+                  transition: "all 0.2s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentStep.type !== "review") {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                {configured && (
+                  <span style={{ fontSize: "14px", color: "#22c55e" }}>✓</span>
+                )}
+                {obj.displayName || obj.objectName}
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Configure object step
   if (currentStep.type === "configure-object") {
