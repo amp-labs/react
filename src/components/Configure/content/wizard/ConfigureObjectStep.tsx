@@ -118,6 +118,18 @@ export function ConfigureObjectStep({
     objectHandlers.setSelectedField({ fieldName: id, selected: checked });
   };
 
+  // Check if all required field mappings are configured
+  const areRequiredFieldMappingsValid = useMemo(() => {
+    if (requiredFieldMappings.length === 0) {
+      return true; // No required mappings, so valid
+    }
+
+    return requiredFieldMappings.every((field) => {
+      const mapping = objectHandlers.getFieldMapping(field.mapToName);
+      return mapping && mapping.trim() !== "";
+    });
+  }, [requiredFieldMappings, objectHandlers]);
+
   // Render field mapping row (for Required/Optional Field Mappings sections)
   const renderFieldMappingRow = (field: IntegrationFieldMapping) => {
     const currentMapping = objectHandlers.getFieldMapping(field.mapToName);
@@ -579,34 +591,55 @@ export function ConfigureObjectStep({
       )}
 
       {/* Navigation Buttons */}
-      <div style={{ marginTop: "32px", display: "flex", gap: "12px" }}>
-        <button
-          type="button"
-          onClick={onBack}
-          style={{
-            padding: "8px 16px",
-            background: "#e2e8f0",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          style={{
-            padding: "8px 16px",
-            background: "#0891b2",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          Next
-        </button>
+      <div style={{ marginTop: "32px" }}>
+        {!areRequiredFieldMappingsValid && (
+          <div
+            style={{
+              marginBottom: "12px",
+              padding: "12px",
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              borderRadius: "6px",
+              color: "#991b1b",
+              fontSize: "14px",
+            }}
+          >
+            Please map all required fields before continuing
+          </div>
+        )}
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button
+            type="button"
+            onClick={onBack}
+            style={{
+              padding: "8px 16px",
+              background: "#e2e8f0",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={!areRequiredFieldMappingsValid}
+            style={{
+              padding: "8px 16px",
+              background: areRequiredFieldMappingsValid
+                ? "#0891b2"
+                : "#cbd5e1",
+              color: areRequiredFieldMappingsValid ? "white" : "#94a3b8",
+              border: "none",
+              borderRadius: "4px",
+              cursor: areRequiredFieldMappingsValid ? "pointer" : "not-allowed",
+              opacity: areRequiredFieldMappingsValid ? 1 : 0.6,
+            }}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

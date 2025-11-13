@@ -45,16 +45,27 @@ export function CreateInstallationWizard({
   // Helper to check if an object has been configured
   const isObjectConfigured = (objectName: string) => {
     const obj = readObject(objectName);
-    const requiredFields =
-      manifest?.content?.read?.objects
-        ?.find((o) => o.objectName === objectName)
-        ?.requiredFields?.filter((f) => "fieldName" in f) || [];
+    const manifestObject = manifest?.content?.read?.objects?.find(
+      (o) => o.objectName === objectName,
+    );
 
-    // Check if all required fields are selected
-    return requiredFields.every((field) => {
-      if ("fieldName" in field) {
+    if (!manifestObject) return false;
+
+    const allRequiredFields = manifestObject.requiredFields || [];
+
+    // Check if all required fields are configured
+    return allRequiredFields.every((field) => {
+      // Check regular required fields (with fieldName)
+      if ("fieldName" in field && field.fieldName) {
         return obj.getSelectedField(field.fieldName);
       }
+
+      // Check required field mappings (with mapToName)
+      if ("mapToName" in field && field.mapToName) {
+        const mapping = obj.getFieldMapping(field.mapToName);
+        return mapping && mapping.trim() !== "";
+      }
+
       return false;
     });
   };
