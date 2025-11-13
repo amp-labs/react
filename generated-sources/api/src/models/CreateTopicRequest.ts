@@ -20,11 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateTopicRequest {
     /**
-     * A human-readable label for the notification topic.
+     * The name of the topic. Must contain only letters, numbers, and dashes.
      * @type {string}
      * @memberof CreateTopicRequest
      */
-    label: string;
+    name: string;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface CreateTopicRequest {
  */
 export function instanceOfCreateTopicRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
@@ -47,7 +47,7 @@ export function CreateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'label': json['label'],
+        'name': json['name'],
     };
 }
 
@@ -60,7 +60,7 @@ export function CreateTopicRequestToJSON(value?: CreateTopicRequest | null): any
     }
     return {
         
-        'label': value.label,
+        'name': value.name,
     };
 }
 

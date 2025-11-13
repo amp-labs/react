@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DependentModule } from './DependentModule';
+import {
+    DependentModuleFromJSON,
+    DependentModuleFromJSONTyped,
+    DependentModuleToJSON,
+} from './DependentModule';
+
 /**
  * 
  * @export
@@ -32,6 +39,12 @@ export interface MetadataItemInput {
      */
     displayName?: string;
     /**
+     * Human-readable description that can contain instructions on how to collect metadata
+     * @type {string}
+     * @memberof MetadataItemInput
+     */
+    prompt?: string;
+    /**
      * Default value for this metadata item
      * @type {string}
      * @memberof MetadataItemInput
@@ -45,10 +58,10 @@ export interface MetadataItemInput {
     docsURL?: string;
     /**
      * Does this metadata item only apply to a specific module?
-     * @type {{ [key: string]: object; }}
+     * @type {{ [key: string]: DependentModule; }}
      * @memberof MetadataItemInput
      */
-    moduleDependencies?: { [key: string]: object; };
+    dependentModules?: { [key: string]: DependentModule; };
 }
 
 /**
@@ -73,9 +86,10 @@ export function MetadataItemInputFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'name': json['name'],
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
+        'prompt': !exists(json, 'prompt') ? undefined : json['prompt'],
         'defaultValue': !exists(json, 'defaultValue') ? undefined : json['defaultValue'],
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
-        'moduleDependencies': !exists(json, 'moduleDependencies') ? undefined : json['moduleDependencies'],
+        'dependentModules': !exists(json, 'dependentModules') ? undefined : (mapValues(json['dependentModules'], DependentModuleFromJSON)),
     };
 }
 
@@ -90,9 +104,10 @@ export function MetadataItemInputToJSON(value?: MetadataItemInput | null): any {
         
         'name': value.name,
         'displayName': value.displayName,
+        'prompt': value.prompt,
         'defaultValue': value.defaultValue,
         'docsURL': value.docsURL,
-        'moduleDependencies': value.moduleDependencies,
+        'dependentModules': value.dependentModules === undefined ? undefined : (mapValues(value.dependentModules, DependentModuleToJSON)),
     };
 }
 

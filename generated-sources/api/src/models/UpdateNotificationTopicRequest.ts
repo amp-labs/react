@@ -16,32 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UpdateTopicRequest
+ * @interface UpdateNotificationTopicRequest
  */
-export interface UpdateTopicRequest {
+export interface UpdateNotificationTopicRequest {
     /**
-     * A human-readable label for the topic.
+     * A human-readable label for the notification topic.
      * @type {string}
-     * @memberof UpdateTopicRequest
+     * @memberof UpdateNotificationTopicRequest
      */
     label: string;
 }
 
 /**
- * Check if a given object implements the UpdateTopicRequest interface.
+ * Check if a given object implements the UpdateNotificationTopicRequest interface.
  */
-export function instanceOfUpdateTopicRequest(value: object): boolean {
+export function instanceOfUpdateNotificationTopicRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "label" in value;
 
     return isInstance;
 }
 
-export function UpdateTopicRequestFromJSON(json: any): UpdateTopicRequest {
-    return UpdateTopicRequestFromJSONTyped(json, false);
+export function UpdateNotificationTopicRequestFromJSON(json: any): UpdateNotificationTopicRequest {
+    return UpdateNotificationTopicRequestFromJSONTyped(json, false);
 }
 
-export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateTopicRequest {
+export function UpdateNotificationTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateNotificationTopicRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -51,7 +51,7 @@ export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any {
+export function UpdateNotificationTopicRequestToJSON(value?: UpdateNotificationTopicRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
