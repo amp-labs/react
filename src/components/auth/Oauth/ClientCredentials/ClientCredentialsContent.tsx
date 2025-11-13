@@ -120,7 +120,8 @@ export function ClientCredentialsForm({
                 url={metadata.docsURL}
                 providerDisplayName={providerName || ""}
                 credentialName={
-                  metadata.displayName || capitalize(metadata.name.toLowerCase())
+                  metadata.displayName ||
+                  capitalize(metadata.name.toLowerCase())
                 }
               />
             )}
