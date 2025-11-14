@@ -17,12 +17,15 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   CreateEventTopicRouteRequest,
+  CreateNotificationTopicRequest,
   CreateTargetRequest,
   CreateTopicTargetRouteRequest,
   InputValidationProblem,
   NotificationEventTopicRoute,
   NotificationTarget,
+  NotificationTopic,
   NotificationTopicTargetRoute,
+  UpdateNotificationTopicRequest,
   UpdateTargetRequest,
 } from '../models';
 import {
@@ -30,6 +33,8 @@ import {
     ApiProblemToJSON,
     CreateEventTopicRouteRequestFromJSON,
     CreateEventTopicRouteRequestToJSON,
+    CreateNotificationTopicRequestFromJSON,
+    CreateNotificationTopicRequestToJSON,
     CreateTargetRequestFromJSON,
     CreateTargetRequestToJSON,
     CreateTopicTargetRouteRequestFromJSON,
@@ -40,8 +45,12 @@ import {
     NotificationEventTopicRouteToJSON,
     NotificationTargetFromJSON,
     NotificationTargetToJSON,
+    NotificationTopicFromJSON,
+    NotificationTopicToJSON,
     NotificationTopicTargetRouteFromJSON,
     NotificationTopicTargetRouteToJSON,
+    UpdateNotificationTopicRequestFromJSON,
+    UpdateNotificationTopicRequestToJSON,
     UpdateTargetRequestFromJSON,
     UpdateTargetRequestToJSON,
 } from '../models';
@@ -49,6 +58,11 @@ import {
 export interface CreateEventTopicRouteOperationRequest {
     projectIdOrName: string;
     eventTopicRoute: CreateEventTopicRouteRequest;
+}
+
+export interface CreateNotificationTopicOperationRequest {
+    projectIdOrName: string;
+    topic: CreateNotificationTopicRequest;
 }
 
 export interface CreateTargetOperationRequest {
@@ -66,6 +80,11 @@ export interface DeleteEventTopicRouteRequest {
     routeId: string;
 }
 
+export interface DeleteNotificationTopicRequest {
+    projectIdOrName: string;
+    topicId: string;
+}
+
 export interface DeleteTargetRequest {
     projectIdOrName: string;
     targetId: string;
@@ -74,6 +93,11 @@ export interface DeleteTargetRequest {
 export interface DeleteTopicTargetRouteRequest {
     projectIdOrName: string;
     routeId: string;
+}
+
+export interface GetNotificationTopicRequest {
+    projectIdOrName: string;
+    topicId: string;
 }
 
 export interface GetTargetByIdRequest {
@@ -87,6 +111,10 @@ export interface ListEventTopicRoutesRequest {
     eventType?: ListEventTopicRoutesEventTypeEnum;
 }
 
+export interface ListNotificationTopicsRequest {
+    projectIdOrName: string;
+}
+
 export interface ListTargetsRequest {
     projectIdOrName: string;
 }
@@ -95,6 +123,12 @@ export interface ListTopicTargetRoutesRequest {
     projectIdOrName: string;
     topicId?: string;
     targetId?: string;
+}
+
+export interface UpdateNotificationTopicOperationRequest {
+    projectIdOrName: string;
+    topicId: string;
+    updateTopicRequest: UpdateNotificationTopicRequest;
 }
 
 export interface UpdateTargetOperationRequest {
@@ -125,6 +159,23 @@ export interface NotificationApiInterface {
      * Create a notification event-topic route
      */
     createEventTopicRoute(requestParameters: CreateEventTopicRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationEventTopicRoute>;
+
+    /**
+     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
+     * @summary Create a notification topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {CreateNotificationTopicRequest} topic 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    createNotificationTopicRaw(requestParameters: CreateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>>;
+
+    /**
+     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
+     * Create a notification topic
+     */
+    createNotificationTopic(requestParameters: CreateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic>;
 
     /**
      * 
@@ -176,6 +227,22 @@ export interface NotificationApiInterface {
 
     /**
      * 
+     * @summary Delete a notification topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} topicId The notification topic ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    deleteNotificationTopicRaw(requestParameters: DeleteNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete a notification topic
+     */
+    deleteNotificationTopic(requestParameters: DeleteNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
      * @summary Delete a notification target
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} targetId The notification target ID.
@@ -205,6 +272,22 @@ export interface NotificationApiInterface {
      * Delete a notification topic-target route
      */
     deleteTopicTargetRoute(requestParameters: DeleteTopicTargetRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get a notification topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} topicId The notification topic ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    getNotificationTopicRaw(requestParameters: GetNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>>;
+
+    /**
+     * Get a notification topic
+     */
+    getNotificationTopic(requestParameters: GetNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic>;
 
     /**
      * 
@@ -241,6 +324,21 @@ export interface NotificationApiInterface {
 
     /**
      * 
+     * @summary List notification topics
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    listNotificationTopicsRaw(requestParameters: ListNotificationTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTopic>>>;
+
+    /**
+     * List notification topics
+     */
+    listNotificationTopics(requestParameters: ListNotificationTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopic>>;
+
+    /**
+     * 
      * @summary List notification targets
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {*} [options] Override http request option.
@@ -270,6 +368,23 @@ export interface NotificationApiInterface {
      * List notification topic-target routes
      */
     listTopicTargetRoutes(requestParameters: ListTopicTargetRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopicTargetRoute>>;
+
+    /**
+     * 
+     * @summary Update a notification topic
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} topicId The notification topic ID.
+     * @param {UpdateNotificationTopicRequest} updateTopicRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NotificationApiInterface
+     */
+    updateNotificationTopicRaw(requestParameters: UpdateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>>;
+
+    /**
+     * Update a notification topic
+     */
+    updateNotificationTopic(requestParameters: UpdateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic>;
 
     /**
      * 
@@ -341,6 +456,57 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
      */
     async createEventTopicRoute(requestParameters: CreateEventTopicRouteOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationEventTopicRoute> {
         const response = await this.createEventTopicRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
+     * Create a notification topic
+     */
+    async createNotificationTopicRaw(requestParameters: CreateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling createNotificationTopic.');
+        }
+
+        if (requestParameters.topic === null || requestParameters.topic === undefined) {
+            throw new runtime.RequiredError('topic','Required parameter requestParameters.topic was null or undefined when calling createNotificationTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/notifications/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateNotificationTopicRequestToJSON(requestParameters.topic),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NotificationTopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a new notification topic for the project. Topics are used to categorize and organize notifications.
+     * Create a notification topic
+     */
+    async createNotificationTopic(requestParameters: CreateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic> {
+        const response = await this.createNotificationTopicRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -488,6 +654,51 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
+     * Delete a notification topic
+     */
+    async deleteNotificationTopicRaw(requestParameters: DeleteNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteNotificationTopic.');
+        }
+
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling deleteNotificationTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/notifications/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a notification topic
+     */
+    async deleteNotificationTopic(requestParameters: DeleteNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteNotificationTopicRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Delete a notification target
      */
     async deleteTargetRaw(requestParameters: DeleteTargetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -575,6 +786,52 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
      */
     async deleteTopicTargetRoute(requestParameters: DeleteTopicTargetRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteTopicTargetRouteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get a notification topic
+     */
+    async getNotificationTopicRaw(requestParameters: GetNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getNotificationTopic.');
+        }
+
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling getNotificationTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/notifications/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NotificationTopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a notification topic
+     */
+    async getNotificationTopic(requestParameters: GetNotificationTopicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic> {
+        const response = await this.getNotificationTopicRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -674,6 +931,48 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
     }
 
     /**
+     * List notification topics
+     */
+    async listNotificationTopicsRaw(requestParameters: ListNotificationTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTopic>>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling listNotificationTopics.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/notifications/topics`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(NotificationTopicFromJSON));
+    }
+
+    /**
+     * List notification topics
+     */
+    async listNotificationTopics(requestParameters: ListNotificationTopicsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopic>> {
+        const response = await this.listNotificationTopicsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List notification targets
      */
     async listTargetsRaw(requestParameters: ListTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<NotificationTarget>>> {
@@ -762,6 +1061,59 @@ export class NotificationApi extends runtime.BaseAPI implements NotificationApiI
      */
     async listTopicTargetRoutes(requestParameters: ListTopicTargetRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<NotificationTopicTargetRoute>> {
         const response = await this.listTopicTargetRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a notification topic
+     */
+    async updateNotificationTopicRaw(requestParameters: UpdateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationTopic>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling updateNotificationTopic.');
+        }
+
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling updateNotificationTopic.');
+        }
+
+        if (requestParameters.updateTopicRequest === null || requestParameters.updateTopicRequest === undefined) {
+            throw new runtime.RequiredError('updateTopicRequest','Required parameter requestParameters.updateTopicRequest was null or undefined when calling updateNotificationTopic.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/notifications/topics/{topicId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateNotificationTopicRequestToJSON(requestParameters.updateTopicRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NotificationTopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a notification topic
+     */
+    async updateNotificationTopic(requestParameters: UpdateNotificationTopicOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationTopic> {
+        const response = await this.updateNotificationTopicRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
