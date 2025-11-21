@@ -64,6 +64,7 @@ export interface NotificationEventTopicRoute {
 export const NotificationEventTopicRouteEventTypeEnum = {
     ReadBackfillDone: 'read.backfill.done',
     ConnectionCreated: 'connection.created',
+    ConnectionError: 'connection.error',
     InstallationCreated: 'installation.created',
     InstallationUpdated: 'installation.updated',
     InstallationDeleted: 'installation.deleted',
