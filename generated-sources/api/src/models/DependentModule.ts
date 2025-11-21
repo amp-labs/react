@@ -14,44 +14,43 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * Dependency for a single module.
  * @export
- * @interface UpdateTopicRequest
+ * @interface DependentModule
  */
-export interface UpdateTopicRequest {
+export interface DependentModule {
     /**
-     * A human-readable name for the topic.
-     * @type {string}
-     * @memberof UpdateTopicRequest
+     * Whether this input is optional for the module.
+     * @type {boolean}
+     * @memberof DependentModule
      */
-    name: string;
+    optional?: boolean;
 }
 
 /**
- * Check if a given object implements the UpdateTopicRequest interface.
+ * Check if a given object implements the DependentModule interface.
  */
-export function instanceOfUpdateTopicRequest(value: object): boolean {
+export function instanceOfDependentModule(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
 
-export function UpdateTopicRequestFromJSON(json: any): UpdateTopicRequest {
-    return UpdateTopicRequestFromJSONTyped(json, false);
+export function DependentModuleFromJSON(json: any): DependentModule {
+    return DependentModuleFromJSONTyped(json, false);
 }
 
-export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateTopicRequest {
+export function DependentModuleFromJSONTyped(json: any, ignoreDiscriminator: boolean): DependentModule {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
+        'optional': !exists(json, 'optional') ? undefined : json['optional'],
     };
 }
 
-export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any {
+export function DependentModuleToJSON(value?: DependentModule | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +59,7 @@ export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any
     }
     return {
         
-        'name': value.name,
+        'optional': value.optional,
     };
 }
 
