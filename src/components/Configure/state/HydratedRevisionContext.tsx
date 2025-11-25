@@ -17,6 +17,7 @@ import {
   ComponentContainerLoading,
 } from "src/components/Configure/ComponentContainer";
 import { UpdateConnectionSection } from "src/components/Configure/content/manage/updateConnection/UpdateConnectionSection";
+import { UninstallButton } from "src/components/Configure/layout/UninstallButton";
 import { RemoveConnectionButton } from "src/components/Connect/RemoveConnectionButton";
 import { InnerErrorTextBox } from "src/components/ErrorTextBox/ErrorTextBox";
 import { useManifest } from "src/headless/manifest/useManifest";
@@ -59,7 +60,8 @@ export function HydratedRevisionProvider({
   children,
   resetComponent,
 }: HydratedRevisionProviderProps) {
-  const { integrationId, integrationObj } = useInstallIntegrationProps();
+  const { integrationId, integrationObj, installation } =
+    useInstallIntegrationProps();
   const { isError, removeError, setError } = useErrorState();
   const errorIntegrationIdentifier = integrationObj?.name || integrationId;
   const [readableErrorMsg, setReadableErrorMsg] = useState<string | null>(null);
@@ -106,10 +108,10 @@ export function HydratedRevisionProvider({
   );
 
   const providerName = integrationObj?.provider || "provider";
+  const intNameOrId =
+    integrationObj?.name || integrationId || "unknown integration";
 
   if (isError(ErrorBoundary.HYDRATED_REVISION, errorIntegrationIdentifier)) {
-    const intNameOrId =
-      integrationObj?.name || integrationId || "unknown integration";
     const errorMsg = `${
       readableErrorMsg
         ? capitalize(readableErrorMsg)
@@ -128,17 +130,30 @@ export function HydratedRevisionProvider({
           }}
         >
           <UpdateConnectionSection provider={providerName} />
-          <p>
-            If authentication is failing, please try reauthenticating using the
-            section above before deleting and recreating the connection.
-          </p>
+          {installation ? (
+            <p>
+              If authentication is failing, please try reauthenticating using
+              the section above before uninstalling the integration.
+            </p>
+          ) : (
+            <p>
+              If authentication is failing, please try reauthenticating using
+              the section above before deleting and recreating the connection.
+            </p>
+          )}
+
           {connectionError && <InnerErrorTextBox message={connectionError} />}
-          <RemoveConnectionButton
-            buttonText="Delete Connection"
-            resetComponent={resetComponent}
-            buttonVariant="danger"
-            onDisconnectError={(error: string) => setConnectionError(error)}
-          />
+          {/* Backend won't allow deleting a connection if installation is found */}
+          {installation ? (
+            <UninstallButton buttonText="Uninstall" buttonVariant="danger" />
+          ) : (
+            <RemoveConnectionButton
+              buttonText="Delete Connection"
+              resetComponent={resetComponent}
+              buttonVariant="danger"
+              onDisconnectError={(error: string) => setConnectionError(error)}
+            />
+          )}
         </div>
       </ComponentContainerError>
     );
