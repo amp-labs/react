@@ -88,11 +88,8 @@ src/models/CreateOrgRequest.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
-src/models/CreateTargetRequest.ts
-src/models/CreateTargetRequestMetadata.ts
 src/models/CreateTopicDestinationRouteRequest.ts
 src/models/CreateTopicRequest.ts
-src/models/CreateTopicTargetRouteRequest.ts
 src/models/CustomAuthHeader.ts
 src/models/CustomAuthInput.ts
 src/models/CustomAuthOpts.ts
@@ -106,10 +103,13 @@ src/models/DestinationMetadata.ts
 src/models/DestinationSecrets.ts
 src/models/DynamicMappingsInputEntry.ts
 src/models/DynamicMappingsInputMappedValue.ts
+src/models/FieldCreatedEvent.ts
 src/models/FieldDefinition.ts
+src/models/FieldDeletedEvent.ts
 src/models/FieldMetadata.ts
 src/models/FieldSetting.ts
 src/models/FieldSettingDefault.ts
+src/models/FieldTypeChangedEvent.ts
 src/models/FieldUpsertResult.ts
 src/models/FieldValue.ts
 src/models/GenerateConnectionRequest.ts
@@ -151,9 +151,6 @@ src/models/MetadataItemInput.ts
 src/models/MetadataItemPostAuthentication.ts
 src/models/ModuleInfo.ts
 src/models/NotificationEventTopicRoute.ts
-src/models/NotificationTarget.ts
-src/models/NotificationTargetMetadata.ts
-src/models/NotificationTopicTargetRoute.ts
 src/models/NumericFieldOptions.ts
 src/models/Oauth2AuthorizationCode.ts
 src/models/Oauth2AuthorizationCodeAccessToken.ts
@@ -213,8 +210,6 @@ src/models/UpdateProjectRequest.ts
 src/models/UpdateProjectRequestProject.ts
 src/models/UpdateProviderAppRequest.ts
 src/models/UpdateProviderAppRequestProviderApp.ts
-src/models/UpdateTargetRequest.ts
-src/models/UpdateTargetRequestTarget.ts
 src/models/UpdateTopicRequest.ts
 src/models/UpsertMetadataRequest.ts
 src/models/UpsertMetadataResponse.ts
@@ -223,6 +218,8 @@ src/models/ValueDefaultBoolean.ts
 src/models/ValueDefaultInteger.ts
 src/models/ValueDefaultString.ts
 src/models/ValueDefaults.ts
+src/models/WatchSchema.ts
+src/models/WatchSchemaAllObjects.ts
 src/models/WriteConfig.ts
 src/models/WriteConfigAllOf.ts
 src/models/WriteConfigObject.ts
