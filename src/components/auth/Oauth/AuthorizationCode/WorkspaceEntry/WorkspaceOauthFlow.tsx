@@ -8,10 +8,7 @@ import { useProviderInfoQuery } from "src/hooks/useProvider";
 import { OAuthWindow } from "../OAuthWindow/OAuthWindow";
 import { useOAuthPopupURL } from "../useOAuthPopupURL";
 
-import { SalesforceSubdomainEntry } from "./Salesforce/SalesforceSubdomainEntry";
 import { WorkspaceEntryContent } from "./WorkspaceEntryContent";
-
-const PROVIDER_SALESFORCE = "salesforce";
 
 interface WorkspaceOauthFlowProps {
   provider: string;
@@ -36,7 +33,6 @@ export function WorkspaceOauthFlow({
   groupName,
   providerName,
 }: WorkspaceOauthFlowProps) {
-  const [workspace, setWorkspace] = useState<string>("");
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [localError, setLocalError] = useState<string | null>(null);
   // keeps track of whether the OAuth popup URL should be passed to the OAuthWindow
@@ -58,7 +54,7 @@ export function WorkspaceOauthFlow({
     provider,
     consumerName,
     groupName,
-    provider === PROVIDER_SALESFORCE ? workspace : metadata?.workspace?.value,
+    metadata?.workspace?.value,
     metadata,
   );
 
@@ -76,15 +72,6 @@ export function WorkspaceOauthFlow({
   const onWindowClose = useCallback(() => {
     setShowURL(false);
   }, [setShowURL]);
-
-  const setSalesforceWorkspace = (workspace: string) => {
-    setWorkspace(workspace);
-    setFormData((prev) => ({ ...prev, workspace: workspace }));
-    setMetadata((prev) => ({
-      ...prev,
-      workspace: { value: workspace, source: "input" },
-    }));
-  };
 
   const handleFormDataChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -106,28 +93,19 @@ export function WorkspaceOauthFlow({
     }
   };
 
-  // custom entry component for Salesforce provider
-  const workspaceEntryComponent =
-    provider === PROVIDER_SALESFORCE ? (
-      <SalesforceSubdomainEntry
-        handleSubmit={providerHandleSubmit}
-        setWorkspace={setSalesforceWorkspace}
-        error={errorMessage}
-        isButtonDisabled={workspace.length === 0}
-      />
-    ) : (
-      // general workspace entry component
-      <WorkspaceEntryContent
-        handleSubmit={providerHandleSubmit}
-        setFormData={handleFormDataChange}
-        error={errorMessage}
-        isButtonDisabled={
-          !isProviderMetadataValid(metadataInputs, formData) || isLoading
-        }
-        providerName={providerName}
-        metadataInputs={metadataInputs}
-      />
-    );
+  // general workspace entry component
+  const workspaceEntryComponent = (
+    <WorkspaceEntryContent
+      handleSubmit={providerHandleSubmit}
+      setFormData={handleFormDataChange}
+      error={errorMessage}
+      isButtonDisabled={
+        !isProviderMetadataValid(metadataInputs, formData) || isLoading
+      }
+      providerName={providerName}
+      metadataInputs={metadataInputs}
+    />
+  );
 
   return (
     <OAuthWindow
