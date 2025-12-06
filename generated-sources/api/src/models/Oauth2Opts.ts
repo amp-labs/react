@@ -63,6 +63,12 @@ export interface Oauth2Opts {
      */
     audience?: Array<string>;
     /**
+     * Maps input scopes to their full OAuth scope values with template variable support. Scopes not in this map are passed through unchanged. Needed for some providers.
+     * @type {{ [key: string]: string; }}
+     * @memberof Oauth2Opts
+     */
+    scopeMappings?: { [key: string]: string; };
+    /**
      * 
      * @type {TokenMetadataFields}
      * @memberof Oauth2Opts
@@ -125,6 +131,7 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'explicitScopesRequired': json['explicitScopesRequired'],
         'explicitWorkspaceRequired': json['explicitWorkspaceRequired'],
         'audience': !exists(json, 'audience') ? undefined : json['audience'],
+        'scopeMappings': !exists(json, 'scopeMappings') ? undefined : json['scopeMappings'],
         'tokenMetadataFields': TokenMetadataFieldsFromJSON(json['tokenMetadataFields']),
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
         'authURLParams': !exists(json, 'authURLParams') ? undefined : json['authURLParams'],
@@ -146,6 +153,7 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'explicitScopesRequired': value.explicitScopesRequired,
         'explicitWorkspaceRequired': value.explicitWorkspaceRequired,
         'audience': value.audience,
+        'scopeMappings': value.scopeMappings,
         'tokenMetadataFields': TokenMetadataFieldsToJSON(value.tokenMetadataFields),
         'docsURL': value.docsURL,
         'authURLParams': value.authURLParams,
