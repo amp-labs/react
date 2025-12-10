@@ -85,7 +85,8 @@ export function useReceiveMessageEventHandler(
         // event.data.message sent by server message
         // See `server/shared/oauth/connection.go` for the HTML that the server sends back to the UI library.
         onError?.(
-          event?.data?.message ?? "Something went wrong. Please try again.",
+          event?.data?.message ??
+            "Something went wrong, try refreshing this page, and then try again.",
         );
         // do not close the window if error occurs
       }
