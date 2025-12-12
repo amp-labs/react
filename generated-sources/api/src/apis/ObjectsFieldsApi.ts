@@ -36,6 +36,7 @@ export interface GetObjectMetadataForConnectionRequest {
     provider: string;
     objectName: string;
     groupRef?: string;
+    excludeReadOnly?: boolean;
 }
 
 export interface GetObjectMetadataForInstallationRequest {
@@ -43,6 +44,7 @@ export interface GetObjectMetadataForInstallationRequest {
     integrationId: string;
     objectName: string;
     groupRef?: string;
+    excludeReadOnly?: boolean;
 }
 
 export interface UpsertMetadataForConnectionRequest {
@@ -73,6 +75,7 @@ export interface ObjectsFieldsApiInterface {
      * @param {string} provider The API Provider
      * @param {string} objectName Object name (mapped or unmapped)
      * @param {string} [groupRef] The groupRef for the connection.
+     * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
@@ -92,6 +95,7 @@ export interface ObjectsFieldsApiInterface {
      * @param {string} integrationId The integration ID.
      * @param {string} objectName Object name (mapped or unmapped)
      * @param {string} [groupRef] The groupRef for the installation
+     * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
@@ -172,6 +176,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             queryParameters['groupRef'] = requestParameters.groupRef;
         }
 
+        if (requestParameters.excludeReadOnly !== undefined) {
+            queryParameters['excludeReadOnly'] = requestParameters.excludeReadOnly;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -226,6 +234,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
 
         if (requestParameters.groupRef !== undefined) {
             queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        if (requestParameters.excludeReadOnly !== undefined) {
+            queryParameters['excludeReadOnly'] = requestParameters.excludeReadOnly;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
