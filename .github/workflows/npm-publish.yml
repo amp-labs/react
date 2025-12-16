@@ -54,7 +54,7 @@ jobs:
           echo "Running dry-run publish..."
           npm publish --dry-run --access public --tag ${{ github.event.inputs.tag }}
         else
-          yarn publish --non-interactive --access public --tag ${{ github.event.inputs.tag }}
+          npm publish --access public --tag ${{ github.event.inputs.tag }}
         fi
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
