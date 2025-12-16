@@ -10,6 +10,11 @@ on:
         description: 'Tag for the SDK version'
         required: true
         default: 'latest'
+      dry_run:
+        description: 'Dry run (test without actually publishing)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   publish:
@@ -20,7 +25,7 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.AMPERSAND_OPS_PAT }}
-        ref: main
+        ref: ${{ github.ref }}
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -43,12 +48,19 @@ jobs:
 
     - name: Publish to npm
       id: publish_to_npm
-      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --access public --tag ${{ github.event.inputs.tag }}
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          echo "Running dry-run publish..."
+          npm publish --dry-run --access public --tag ${{ github.event.inputs.tag }}
+        else
+          yarn publish --non-interactive --access public --tag ${{ github.event.inputs.tag }}
+        fi
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: Push changes back to repository
-      if: steps.publish_to_npm.conclusion == 'success'
+      if: steps.publish_to_npm.conclusion == 'success' && github.event.inputs.dry_run != 'true'
       run: |
         git config --global user.email "devops@withampersand.com"
         git config --global user.name "Ampersand Ops"
