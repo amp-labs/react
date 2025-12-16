@@ -35,7 +35,7 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        always-auth: true
+        registry-url: 'https://registry.npmjs.org'
 
     - name: Install yarn
       run: npm i -g yarn
