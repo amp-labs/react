@@ -7,21 +7,19 @@ import { ReEnableReadObject } from "./ReEnableReadObject";
 import { RequiredFields } from "./RequiredFields";
 import { ValueMappings } from "./ValueMapping";
 
-const SHOW_DISABLE_READ_OBJECT = false;
-
 export function ReadFields() {
   useClearOldFieldMappings();
 
   return (
     <>
-      {SHOW_DISABLE_READ_OBJECT && <ReEnableReadObject />}
+      <ReEnableReadObject />
       <ReadObjectMapping />
       <RequiredFields />
       <RequiredFieldMappings />
       <OptionalFieldMappings />
       <ValueMappings />
       <OptionalFields />
-      {SHOW_DISABLE_READ_OBJECT && <DisableReadObject />}
+      <DisableReadObject />
     </>
   );
 }
