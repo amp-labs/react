@@ -54,9 +54,9 @@ jobs:
       run: |
         if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
           echo "Running dry-run publish..."
-          npm publish --dry-run --tag ${{ github.event.inputs.tag }}
+          npm publish --dry-run --access public --tag ${{ github.event.inputs.tag }}
         else
-          npm publish --tag ${{ github.event.inputs.tag }}
+          npm publish --access public --tag ${{ github.event.inputs.tag }}
         fi
 
     - name: Push changes back to repository
