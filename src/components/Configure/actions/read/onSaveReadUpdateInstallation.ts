@@ -13,12 +13,10 @@ import { ConfigureState } from "../../types";
  * given a configureState, objectName, and fieldMapping, generate the config object that is need for
  * update installation request.
  *
- * 1. get required fields from configureState
- * 2. get optional fields from configureState
- * 3. merge required fields and optional fields into selectedFields
- * 4. get required custom map fields from configureState
- * 5. generate modified config object based on update mask
- * @returns
+ * @param configureState
+ * @param objectName
+ * @param fieldMapping
+ * @returns UpdateInstallationRequestInstallationConfig
  */
 export const generateUpdateReadConfigFromConfigureState = (
   configureState: ConfigureState,
