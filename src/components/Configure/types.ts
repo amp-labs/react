@@ -30,7 +30,7 @@ export type SelectValueMappings = {
   [fieldName: string]: { [mappedValue: string]: string };
 };
 
-//ConfigureStateRead contains relevant information from the Revision and current Config
+// ConfigureStateRead contains relevant information from the Revision and current Config
 // which are useful for generating the new config state.
 export type ConfigureStateRead = {
   allFields: HydratedIntegrationFieldExistent[] | null; // needed for custom mapping
@@ -44,7 +44,7 @@ export type ConfigureStateRead = {
   selectedValueMappings: SelectValueMappings | null;
 };
 
-//ConfigureState contains relevant information from the Revision and current Config
+// ConfigureState contains relevant information from the Revision and current Config
 // which are useful for generating the new config state.
 export type ConfigureState = {
   // read state slice
