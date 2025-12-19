@@ -20,11 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UpdateTopicRequest {
     /**
-     * A human-readable label for the topic.
+     * A human-readable name for the topic.
      * @type {string}
      * @memberof UpdateTopicRequest
      */
-    label: string;
+    name: string;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface UpdateTopicRequest {
  */
 export function instanceOfUpdateTopicRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
@@ -47,7 +47,7 @@ export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'label': json['label'],
+        'name': json['name'],
     };
 }
 
@@ -60,7 +60,7 @@ export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any
     }
     return {
         
-        'label': value.label,
+        'name': value.name,
     };
 }
 
