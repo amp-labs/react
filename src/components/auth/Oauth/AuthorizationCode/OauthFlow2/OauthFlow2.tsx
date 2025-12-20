@@ -16,12 +16,10 @@ import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery
 import { AMP_SERVER } from "src/services/api";
 
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
-import { SalesforceSubdomainEntry } from "../WorkspaceEntry/Salesforce/SalesforceSubdomainEntry";
 import { WorkspaceEntryContent } from "../WorkspaceEntry/WorkspaceEntryContent";
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
-const PROVIDER_SALESFORCE = "salesforce";
 
 /** Payload shape we expect from the popup */
 type AuthEvent =
@@ -68,7 +66,6 @@ export function OauthFlow2({
   const [error, setError] = useState<string | null>(moduleError || null);
 
   // workspace and metadata states
-  const [workspace, setWorkspace] = useState<string>("");
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [metadata, setMetadata] = useState<ProviderMetadata>({});
 
@@ -105,16 +102,6 @@ export function OauthFlow2({
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
   }, [queryClient]);
-
-  // Salesforce specific (separate case that can be refactored)
-  const setSalesforceWorkspace = (workspace: string) => {
-    setWorkspace(workspace);
-    setFormData((prev) => ({ ...prev, workspace: workspace }));
-    setMetadata((prev) => ({
-      ...prev,
-      workspace: { value: workspace, source: "input" },
-    }));
-  };
 
   const handleFormDataChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -153,10 +140,7 @@ export function OauthFlow2({
           projectId: projectId || "", // todo - update to use projectIdOrName
           consumerName,
           groupName,
-          providerWorkspaceRef:
-            provider === PROVIDER_SALESFORCE
-              ? workspace
-              : metadata?.workspace?.value,
+          providerWorkspaceRef: metadata?.workspace?.value,
           providerMetadata: metadata,
         },
       });
@@ -180,23 +164,6 @@ export function OauthFlow2({
 
   // Determine which entry component to show based on provider and metadata
   const entryComponent = (() => {
-    // Salesforce has a special entry component
-    if (provider === PROVIDER_SALESFORCE) {
-      return (
-        <SalesforceSubdomainEntry
-          handleSubmit={handleSubmit}
-          setWorkspace={setSalesforceWorkspace}
-          error={error}
-          isButtonDisabled={
-            workspace.length === 0 ||
-            isCreatingOauthConnection ||
-            isConnectionsFetching ||
-            !!error
-          }
-        />
-      );
-    }
-
     // If there are metadata fields, show the workspace entry form
     if (metadataInputs.length > 0) {
       return (
