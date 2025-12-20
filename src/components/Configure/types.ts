@@ -35,7 +35,6 @@ export type SelectValueMappings = {
 export type ConfigureStateRead = {
   allFields: HydratedIntegrationFieldExistent[] | null; // needed for custom mapping
   allFieldsMetadata: any; // needed for values mapping // TODO: better types.
-  requiredFields: HydratedIntegrationField[] | null;
   optionalFields: HydratedIntegrationField[] | null;
   requiredMapFields: IntegrationFieldMapping[] | null;
   optionalMapFields: IntegrationFieldMapping[] | null;

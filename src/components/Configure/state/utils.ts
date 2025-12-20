@@ -22,7 +22,6 @@ import {
   getObjectFromAction,
   getOptionalFieldsFromObject,
   getOptionalMapFieldsFromObject,
-  getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
   isIntegrationFieldMapping,
 } from "../utils";
@@ -66,7 +65,6 @@ const generateConfigurationStateRead = (
   }
   // refactor this section to be immutable at hydrated revision level
   const object = getObjectFromAction(readAction, objectName);
-  const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
   const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
   const optionalMapFields = object && getOptionalMapFieldsFromObject(object);
@@ -91,7 +89,6 @@ const generateConfigurationStateRead = (
   return {
     allFields, // from hydrated revision
     allFieldsMetadata, // from hydrated revision
-    requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
     optionalMapFields, // from hydrated revision
