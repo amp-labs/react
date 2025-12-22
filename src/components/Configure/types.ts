@@ -62,4 +62,5 @@ export type NavObject = {
   name: string;
   displayName?: string;
   completed: boolean;
+  disabled?: boolean;
 };

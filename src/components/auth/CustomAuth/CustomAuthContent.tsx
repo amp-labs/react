@@ -7,8 +7,8 @@ import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
-import { capitalize } from "src/utils";
 
+import { MetadataInput } from "components/auth/MetadataInput";
 import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
@@ -23,6 +23,7 @@ type CustomAuthFormProps = {
   handleSubmit: (form: CustomAuthFormData) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
+  metadataInputs: MetadataItemInput[];
 };
 
 export function CustomAuthForm({
@@ -30,9 +31,9 @@ export function CustomAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
+  metadataInputs,
 }: CustomAuthFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const metadataFields = providerInfo.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -41,12 +42,12 @@ export function CustomAuthForm({
     setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
   const customInputs = providerInfo.customOpts?.inputs || [];
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
     const customAuthFields = Object.fromEntries(
       customInputs.map((input) => [input.name, formData[input.name]]),
     );
@@ -82,25 +83,13 @@ export function CustomAuthForm({
         </div>
       ))}
       {/* do we support metadata fields and custom auth at the same time? */}
-      {metadataFields.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperTextHeader
-              url={metadata.docsURL}
-              prompt={metadata.displayName || metadata.name}
-              inputName={
-                metadata.displayName || capitalize(metadata.name.toLowerCase())
-              }
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={""}
-            onChange={handleChange}
-          />
-        </div>
+      {metadataInputs.map((metadata: MetadataItemInput) => (
+        <MetadataInput
+          key={metadata.name}
+          metadata={metadata}
+          onChange={handleChange}
+          variant="header"
+        />
       ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
@@ -120,6 +109,7 @@ export function CustomAuthContent({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataInputs,
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
@@ -128,7 +118,8 @@ export function CustomAuthContent({
       <CustomAuthForm
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

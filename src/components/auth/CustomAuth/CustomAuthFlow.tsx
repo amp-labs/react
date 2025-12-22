@@ -17,10 +17,12 @@ export function CustomAuthFlow({
   groupName,
   children,
   selectedConnection,
+  metadataInputs,
+  moduleError,
 }: CustomAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const createConnectionMutation = useCreateConnectionMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(moduleError || null);
 
   const onNext = useCallback(
     (form: CustomAuthFormData) => {
@@ -68,6 +70,7 @@ export function CustomAuthFlow({
         providerInfo={providerInfo}
         handleSubmit={onNext}
         error={error}
+        metadataInputs={metadataInputs}
       />
     );
   }

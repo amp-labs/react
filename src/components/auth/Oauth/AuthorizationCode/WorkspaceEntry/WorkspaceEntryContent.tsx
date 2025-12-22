@@ -5,7 +5,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
-import { FormComponent } from "components/form";
+import { MetadataInput } from "components/auth/MetadataInput";
 import { Button } from "components/ui-base/Button";
 
 import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
@@ -21,26 +21,23 @@ export function WorkspaceEntryContent({
   error,
   isButtonDisabled,
   providerName,
-  metadataFields,
+  metadataInputs,
 }: WorkspaceEntryProps) {
   return (
     <AuthCardLayout>
       <AuthTitle>Enter your {providerName} workspace</AuthTitle>
       <AuthErrorAlert error={error} />
       <br />
-      {metadataFields.map((metadata: MetadataItemInput) => (
-        <FormComponent.Input
+      {metadataInputs.map((metadata: MetadataItemInput) => (
+        <MetadataInput
           key={metadata.name}
-          id={metadata.name}
-          name={metadata.name}
-          type="text"
-          placeholder={metadata.displayName || metadata.name}
+          metadata={metadata}
           onChange={(event) =>
             setFormData(metadata.name, event.currentTarget.value)
           }
+          providerName={providerName}
         />
       ))}
-      <br />
       <Button
         style={{ marginTop: "1em", width: "100%" }}
         disabled={isButtonDisabled}

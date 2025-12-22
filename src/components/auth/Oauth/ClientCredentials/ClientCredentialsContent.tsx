@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { MetadataItemInput } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
 import { Button } from "src/components/ui-base/Button";
-import { useProviderInfoQuery } from "src/hooks/useProvider";
 import {
   AuthCardLayout,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { convertTextareaToArray } from "src/utils";
+
+import { MetadataInput } from "components/auth/MetadataInput";
 
 import {
   getProviderMetadata,
@@ -17,11 +19,12 @@ import {
 import { ClientCredentialsCredsContent } from "./ClientCredentialsCredsContent";
 
 type ClientCredentialsFormProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   isButtonDisabled?: boolean;
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
+  metadataInputs: MetadataItemInput[];
+  providerName?: string;
 };
 
 type ClientCredentialsFormData = {
@@ -32,11 +35,12 @@ type ClientCredentialsFormData = {
 };
 
 export function ClientCredentialsForm({
-  provider,
   handleSubmit,
   isButtonDisabled,
   explicitScopesRequired,
   buttonVariant,
+  metadataInputs,
+  providerName,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -44,8 +48,6 @@ export function ClientCredentialsForm({
     scopes: "",
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const { data: providerInfo } = useProviderInfoQuery(provider);
-  const metadataFields = providerInfo?.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -63,7 +65,7 @@ export function ClientCredentialsForm({
 
   const isClientSecretValid = clientSecret.length > 0;
   const isClientIdValid = clientId.length > 0;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
 
   const isSubmitDisabled =
     isButtonDisabled ||
@@ -72,7 +74,7 @@ export function ClientCredentialsForm({
     !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     const req: ClientCredentialsCredsContent = {
       clientId,
@@ -111,14 +113,12 @@ export function ClientCredentialsForm({
           />
         )}
 
-        {metadataFields.map((metadata) => (
-          <FormComponent.Input
+        {metadataInputs.map((metadata) => (
+          <MetadataInput
             key={metadata.name}
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
+            metadata={metadata}
             onChange={handleChange}
+            providerName={providerName}
           />
         ))}
       </div>
@@ -138,21 +138,21 @@ export function ClientCredentialsForm({
 }
 
 type ClientCredentialsContentProps = {
-  provider: string;
   handleSubmit: (creds: ClientCredentialsCredsContent) => void;
   error: string | null;
   explicitScopesRequired?: boolean;
   isButtonDisabled?: boolean;
   providerName?: string;
+  metadataInputs: MetadataItemInput[];
 };
 
 export function ClientCredentialsContent({
-  provider,
   handleSubmit,
   error,
   isButtonDisabled,
   providerName,
   explicitScopesRequired,
+  metadataInputs,
 }: ClientCredentialsContentProps) {
   return (
     <AuthCardLayout>
@@ -160,10 +160,11 @@ export function ClientCredentialsContent({
       <AuthErrorAlert error={error} />
       <br />
       <ClientCredentialsForm
-        provider={provider}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
+        metadataInputs={metadataInputs}
+        providerName={providerName}
       />
     </AuthCardLayout>
   );

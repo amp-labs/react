@@ -10,6 +10,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
+import { MetadataInput } from "components/auth/MetadataInput";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
@@ -25,6 +26,7 @@ type BasicAuthFormProps = {
   handleSubmit: (form: BasicCreds) => void;
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
+  metadataInputs: MetadataItemInput[];
 };
 
 type FormData = {
@@ -39,12 +41,12 @@ export function BasicAuthForm({
   handleSubmit,
   isButtonDisabled,
   buttonVariant,
+  metadataInputs,
 }: BasicAuthFormProps) {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
   });
-  const metadataFields = providerInfo.metadata?.input || [];
   const { username, password } = formData;
   const { providerName } = useProvider(provider);
 
@@ -60,11 +62,11 @@ export function BasicAuthForm({
   // TODO(ENG-1424): Uncomment the following line when we handle this properly.
   // const isPassValid = password.length > 0;
   // const isSubmitDisabled = isButtonDisabled || !isUserValid || !isPassValid;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     handleSubmit({
       user: username,
@@ -104,23 +106,13 @@ export function BasicAuthForm({
         placeholder="Password"
         onChange={handleChange}
       />
-      {metadataFields.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperText
-              url={metadata.docsURL}
-              providerDisplayName={providerName || capitalize(provider)}
-              credentialName={metadata.displayName || metadata.name}
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={handleChange}
-          />
-        </div>
+      {metadataInputs.map((metadata: MetadataItemInput) => (
+        <MetadataInput
+          key={metadata.name}
+          metadata={metadata}
+          onChange={handleChange}
+          providerName={providerName || capitalize(provider)}
+        />
       ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
@@ -141,6 +133,7 @@ function BasicAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataInputs,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -152,7 +145,8 @@ function BasicAuthContentForm({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

@@ -90,11 +90,12 @@ export function UpdateClientCredentialsConnect({
         )}
 
         <ClientCredentialsForm
-          provider={providerName || ""}
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           explicitScopesRequired={explicitScopesRequired}
           buttonVariant="ghost"
+          // We currently do not support updating metadata inputs for connections.
+          metadataInputs={[]}
         />
       </div>
     </>

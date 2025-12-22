@@ -99,6 +99,8 @@ export function UpdateBasicAuthConnect({ provider }: { provider?: string }) {
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           buttonVariant="ghost"
+          // We currently do not support updating metadata inputs for connections.
+          metadataInputs={[]}
         />
       </div>
     </>

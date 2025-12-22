@@ -10,6 +10,7 @@ import {
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 import { capitalize } from "src/utils";
 
+import { MetadataInput } from "components/auth/MetadataInput";
 import { DocsHelperText } from "components/Docs/DocsHelperText";
 
 import {
@@ -26,6 +27,7 @@ type ApiKeyAuthFormProps = {
   isButtonDisabled?: boolean;
   buttonVariant?: "ghost";
   submitButtonType?: "submit" | "button";
+  metadataInputs: MetadataItemInput[];
 };
 
 type ApiKeyFormData = {
@@ -40,9 +42,9 @@ export function ApiKeyAuthForm({
   isButtonDisabled,
   buttonVariant,
   submitButtonType,
+  metadataInputs,
 }: ApiKeyAuthFormProps) {
   const [formData, setFormData] = useState<ApiKeyFormData>({ apiKey: "" });
-  const metadataFields = providerInfo.metadata?.input || [];
 
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -55,13 +57,13 @@ export function ApiKeyAuthForm({
   const { providerName } = useProvider(provider);
 
   const isApiKeyValid = apiKey.length > 0;
-  const isMetadataValid = isProviderMetadataValid(metadataFields, formData);
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
 
   const onHandleSubmit = () => {
-    const metadata = getProviderMetadata(metadataFields, formData);
+    const metadata = getProviderMetadata(metadataInputs, formData);
 
     handleSubmit({
       apiKey,
@@ -91,23 +93,13 @@ export function ApiKeyAuthForm({
         placeholder="API Key"
         onChange={handleChange}
       />
-      {metadataFields.map((metadata: MetadataItemInput) => (
-        <div key={metadata.name}>
-          {metadata.docsURL && (
-            <DocsHelperText
-              url={metadata.docsURL}
-              providerDisplayName={providerName || capitalize(provider)}
-              credentialName={metadata.displayName || metadata.name}
-            />
-          )}
-          <FormComponent.Input
-            id={metadata.name}
-            name={metadata.name}
-            type="text"
-            placeholder={metadata.displayName || metadata.name}
-            onChange={handleChange}
-          />
-        </div>
+      {metadataInputs.map((metadata: MetadataItemInput) => (
+        <MetadataInput
+          key={metadata.name}
+          metadata={metadata}
+          onChange={handleChange}
+          providerName={providerName || capitalize(provider)}
+        />
       ))}
       <Button
         style={{ marginTop: "1em", width: "100%" }}
@@ -128,6 +120,7 @@ function ApiKeyAuthContentForm({
   handleSubmit,
   error,
   isButtonDisabled,
+  metadataInputs,
 }: LandingContentProps) {
   const { providerName } = useProvider(provider);
 
@@ -139,7 +132,8 @@ function ApiKeyAuthContentForm({
         provider={provider}
         providerInfo={providerInfo}
         handleSubmit={handleSubmit}
-        isButtonDisabled={isButtonDisabled}
+        isButtonDisabled={isButtonDisabled || !!error}
+        metadataInputs={metadataInputs}
       />
     </AuthCardLayout>
   );

@@ -12,6 +12,10 @@ import { BasicAuthFlow } from "components/auth/BasicAuth/BasicAuthFlow";
 import { CustomAuthFlow } from "components/auth/CustomAuth/CustomAuthFlow";
 import { NoAuthFlow } from "components/auth/NoAuth/NoAuthFlow";
 import { OauthFlow } from "components/auth/Oauth/OauthFlow/OauthFlow";
+import {
+  determineModule,
+  filterMetadataByModule,
+} from "components/auth/providerMetadata";
 import { useConnectionHandler } from "components/Connect/useConnectionHandler";
 
 import { useProvider } from "../../../hooks/useProvider";
@@ -53,8 +57,11 @@ export function ProtectedConnectionLayout({
     providerName,
     selectedProvider,
   } = useProvider(provider);
-  const { provider: providerFromProps, isIntegrationDeleted } =
-    useInstallIntegrationProps();
+  const {
+    provider: providerFromProps,
+    isIntegrationDeleted,
+    integrationObj,
+  } = useInstallIntegrationProps();
   const { selectedConnection, setSelectedConnection } = useConnections();
   useConnectionHandler({ onSuccess });
   const queryClient = useQueryClient();
@@ -63,6 +70,25 @@ export function ProtectedConnectionLayout({
   const providerInfo = SHOW_CUSTOM_AUTH_TEST_DATA
     ? testProviderInfo
     : providerInfoData;
+
+  // Determine which module to use for filtering metadata:
+  // - If provider has no modules → returns { module: "", error: null }
+  // - If provider has modules → use integration's module or fall back to provider's defaultModule
+  // - Returns error if provider has modules but no valid module can be determined
+  const integrationModule = integrationObj?.latestRevision?.content?.module;
+  const { module, error: moduleError } = determineModule(
+    integrationModule,
+    providerInfo,
+  );
+
+  // Filter metadata based on the determined module
+  // - If module is "" (provider has no modules) → returns all fields for metadata collection.
+  // - Otherwise → filters fields based on moduleDependencies
+  const allMetadataFields = providerInfo?.metadata?.input || [];
+  const filteredMetadataFields = filterMetadataByModule(
+    allMetadataFields,
+    module,
+  );
 
   useEffect(() => {
     if (isError) {
@@ -116,6 +142,8 @@ export function ProtectedConnectionLayout({
     providerName,
     providerInfo,
     onDisconnectSuccess,
+    metadataInputs: filteredMetadataFields,
+    moduleError,
   };
 
   if (providerInfo.authType === "none") {

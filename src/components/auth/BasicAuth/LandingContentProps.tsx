@@ -1,4 +1,4 @@
-import { ProviderInfo } from "@generated/api/src";
+import { MetadataItemInput, ProviderInfo } from "@generated/api/src";
 
 import { ProviderMetadata } from "../providerMetadata";
 
@@ -14,4 +14,5 @@ export type LandingContentProps = {
   handleSubmit: (form: BasicCreds) => void;
   error: string | null;
   isButtonDisabled?: boolean;
+  metadataInputs: MetadataItemInput[];
 };

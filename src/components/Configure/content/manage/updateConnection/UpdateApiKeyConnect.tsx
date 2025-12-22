@@ -95,6 +95,8 @@ export function UpdateApiKeyConnect({ provider }: { provider?: string }) {
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
           buttonVariant="ghost"
           submitButtonType="button"
+          // We currently do not support updating metadata inputs for connections.
+          metadataInputs={[]}
         />
       </div>
     </>
