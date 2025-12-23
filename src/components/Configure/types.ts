@@ -10,8 +10,9 @@ export type SelectedWriteObjects = {
   [objectName: string]: BaseWriteConfigObject;
 };
 
-// write state slice
-// currently tracks all write objects insteaad of just a single objectname
+// ConfigureStateWrite contains relevant information from the Revision and current Config
+// which are useful for generating the new config state.
+// It currently tracks all write objects instead of just a single object.
 export type ConfigureStateWrite = {
   writeObjects: HydratedIntegrationWriteObject[] | null;
   selectedWriteObjects: SelectedWriteObjects | null;
@@ -29,18 +30,23 @@ export type SelectValueMappings = {
   [fieldName: string]: { [mappedValue: string]: string };
 };
 
+// ConfigureStateRead contains relevant information from the Revision and current Config
+// which are useful for generating the new config state.
 export type ConfigureStateRead = {
+  // From the hydrated revision:
   allFields: HydratedIntegrationFieldExistent[] | null; // needed for custom mapping
   allFieldsMetadata: any; // needed for values mapping // TODO: better types.
-  requiredFields: HydratedIntegrationField[] | null;
   optionalFields: HydratedIntegrationField[] | null;
   requiredMapFields: IntegrationFieldMapping[] | null;
   optionalMapFields: IntegrationFieldMapping[] | null;
+  // From the user's selection:
   selectedOptionalFields: SelectOptionalFields | null;
   selectedFieldMappings: SelectMappingFields | null;
   selectedValueMappings: SelectValueMappings | null;
 };
 
+// ConfigureState contains relevant information from the Revision and current Config
+// which are useful for generating the new config state.
 export type ConfigureState = {
   // read state slice
   read: ConfigureStateRead | null;

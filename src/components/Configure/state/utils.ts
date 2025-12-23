@@ -19,11 +19,9 @@ import {
 } from "../types";
 import {
   generateAllNavObjects,
-  getFieldKeyValue,
   getObjectFromAction,
   getOptionalFieldsFromObject,
   getOptionalMapFieldsFromObject,
-  getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
   isIntegrationFieldMapping,
 } from "../utils";
@@ -67,7 +65,6 @@ const generateConfigurationStateRead = (
   }
   // refactor this section to be immutable at hydrated revision level
   const object = getObjectFromAction(readAction, objectName);
-  const requiredFields = object && getRequiredFieldsFromObject(object);
   const optionalFields = object && getOptionalFieldsFromObject(object);
   const requiredMapFields = object && getRequiredMapFieldsFromObject(object);
   const optionalMapFields = object && getOptionalMapFieldsFromObject(object);
@@ -92,7 +89,6 @@ const generateConfigurationStateRead = (
   return {
     allFields, // from hydrated revision
     allFieldsMetadata, // from hydrated revision
-    requiredFields, // from hydrated revision
     optionalFields, // from hydrated revision
     requiredMapFields, // from hydrated revision
     optionalMapFields, // from hydrated revision
@@ -185,24 +181,10 @@ export const resetAllObjectsConfigurationState = (
  */
 export const generateSelectedFieldsFromConfigureState = (
   configureState: ConfigureState,
-) => {
-  const { requiredFields, selectedOptionalFields } = configureState?.read || {};
-  const fields = new Set<string>();
-  requiredFields?.forEach((field) => fields.add(getFieldKeyValue(field)));
+): Record<string, boolean> => {
+  const { selectedOptionalFields } = configureState?.read || {};
 
-  // convert set to object for config
-  const selectedFields = Array.from(fields).reduce(
-    (acc, field) => ({
-      ...acc,
-      [field]: true,
-    }),
-    {},
-  );
-
-  return {
-    ...selectedFields,
-    ...(selectedOptionalFields || {}), // adds optional fields that are selected (true)
-  };
+  return selectedOptionalFields || {};
 };
 
 /**
@@ -212,7 +194,7 @@ export const generateSelectedFieldsFromConfigureState = (
  */
 export const generateSelectedFieldMappingsFromConfigureState = (
   configureState: ConfigureState,
-) => {
+): Record<string, string> => {
   const { selectedFieldMappings: selectedRequiredMapFields } =
     configureState?.read || {};
   // filter out undefined values of selectedRequiredMapFields
