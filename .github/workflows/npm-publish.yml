@@ -11,6 +11,10 @@ on:
         required: true
         default: 'latest'
 
+permissions:
+  id-token: write  # Required for OIDC, https://docs.npmjs.com/trusted-publishers
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -27,7 +31,7 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        always-auth: true
+        registry-url: 'https://registry.npmjs.org/'
 
     - name: Install yarn
       run: npm i -g yarn
@@ -43,9 +47,7 @@ jobs:
 
     - name: Publish to npm
       id: publish_to_npm
-      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --tag ${{ github.event.inputs.tag }}
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: npm publish --tag ${{ github.event.inputs.tag }}
 
     - name: Push changes back to repository
       if: steps.publish_to_npm.conclusion == 'success'
@@ -60,4 +62,3 @@ jobs:
         git push origin HEAD:${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.AMPERSAND_OPS_PAT }}
-
