@@ -36,6 +36,7 @@ export interface GetObjectMetadataForConnectionRequest {
     provider: string;
     objectName: string;
     groupRef?: string;
+    excludeReadOnly?: boolean;
 }
 
 export interface GetObjectMetadataForInstallationRequest {
@@ -43,19 +44,18 @@ export interface GetObjectMetadataForInstallationRequest {
     integrationId: string;
     objectName: string;
     groupRef?: string;
+    excludeReadOnly?: boolean;
 }
 
 export interface UpsertMetadataForConnectionRequest {
     projectIdOrName: string;
     provider: string;
-    groupRef: string;
     upsertMetadataRequest: UpsertMetadataRequest;
 }
 
 export interface UpsertMetadataForInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
-    groupRef: string;
     upsertMetadataRequest: UpsertMetadataRequest;
 }
 
@@ -73,6 +73,7 @@ export interface ObjectsFieldsApiInterface {
      * @param {string} provider The API Provider
      * @param {string} objectName Object name (mapped or unmapped)
      * @param {string} [groupRef] The groupRef for the connection.
+     * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
@@ -92,6 +93,7 @@ export interface ObjectsFieldsApiInterface {
      * @param {string} integrationId The integration ID.
      * @param {string} objectName Object name (mapped or unmapped)
      * @param {string} [groupRef] The groupRef for the installation
+     * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ObjectsFieldsApiInterface
@@ -109,7 +111,6 @@ export interface ObjectsFieldsApiInterface {
      * @summary Upsert custom fields for connection
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} provider The provider that this connection connects to.
-     * @param {string} groupRef The ID that your app uses to identify the group of users for this Connection.
      * @param {UpsertMetadataRequest} upsertMetadataRequest Metadata upsert request containing field definitions to create or update
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -128,7 +129,6 @@ export interface ObjectsFieldsApiInterface {
      * @summary Upsert custom fields for installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
-     * @param {string} groupRef The groupRef for the installation
      * @param {UpsertMetadataRequest} upsertMetadataRequest Metadata upsert request containing field definitions to create or update
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -170,6 +170,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
 
         if (requestParameters.groupRef !== undefined) {
             queryParameters['groupRef'] = requestParameters.groupRef;
+        }
+
+        if (requestParameters.excludeReadOnly !== undefined) {
+            queryParameters['excludeReadOnly'] = requestParameters.excludeReadOnly;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -228,6 +232,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             queryParameters['groupRef'] = requestParameters.groupRef;
         }
 
+        if (requestParameters.excludeReadOnly !== undefined) {
+            queryParameters['excludeReadOnly'] = requestParameters.excludeReadOnly;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -274,19 +282,11 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             throw new runtime.RequiredError('provider','Required parameter requestParameters.provider was null or undefined when calling upsertMetadataForConnection.');
         }
 
-        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
-            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling upsertMetadataForConnection.');
-        }
-
         if (requestParameters.upsertMetadataRequest === null || requestParameters.upsertMetadataRequest === undefined) {
             throw new runtime.RequiredError('upsertMetadataRequest','Required parameter requestParameters.upsertMetadataRequest was null or undefined when calling upsertMetadataForConnection.');
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters.groupRef !== undefined) {
-            queryParameters['groupRef'] = requestParameters.groupRef;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -337,19 +337,11 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
             throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling upsertMetadataForInstallation.');
         }
 
-        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
-            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling upsertMetadataForInstallation.');
-        }
-
         if (requestParameters.upsertMetadataRequest === null || requestParameters.upsertMetadataRequest === undefined) {
             throw new runtime.RequiredError('upsertMetadataRequest','Required parameter requestParameters.upsertMetadataRequest was null or undefined when calling upsertMetadataForInstallation.');
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters.groupRef !== undefined) {
-            queryParameters['groupRef'] = requestParameters.groupRef;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
