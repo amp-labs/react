@@ -64,10 +64,12 @@ export interface NotificationEventTopicRoute {
 export const NotificationEventTopicRouteEventTypeEnum = {
     ReadBackfillDone: 'read.backfill.done',
     ConnectionCreated: 'connection.created',
+    ConnectionError: 'connection.error',
     InstallationCreated: 'installation.created',
     InstallationUpdated: 'installation.updated',
     InstallationDeleted: 'installation.deleted',
-    ReadSchedulePaused: 'read.schedule.paused'
+    ReadSchedulePaused: 'read.schedule.paused',
+    DestinationWebhookDisabled: 'destination.webhook.disabled'
 } as const;
 export type NotificationEventTopicRouteEventTypeEnum = typeof NotificationEventTopicRouteEventTypeEnum[keyof typeof NotificationEventTopicRouteEventTypeEnum];
 
