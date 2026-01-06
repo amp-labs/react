@@ -20,6 +20,7 @@ import type {
   CreateTopicDestinationRouteRequest,
   CreateTopicRequest,
   Destination,
+  DestinationWithSecrets,
   InputValidationProblem,
   Topic,
   TopicDestinationRoute,
@@ -37,6 +38,8 @@ import {
     CreateTopicRequestToJSON,
     DestinationFromJSON,
     DestinationToJSON,
+    DestinationWithSecretsFromJSON,
+    DestinationWithSecretsToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
     TopicFromJSON,
@@ -226,12 +229,12 @@ export interface DestinationApiInterface {
      * @throws {RequiredError}
      * @memberof DestinationApiInterface
      */
-    getDestinationRaw(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>>;
+    getDestinationRaw(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DestinationWithSecrets>>;
 
     /**
      * Get a destination
      */
-    getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination>;
+    getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DestinationWithSecrets>;
 
     /**
      * 
@@ -606,7 +609,7 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
     /**
      * Get a destination
      */
-    async getDestinationRaw(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Destination>> {
+    async getDestinationRaw(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DestinationWithSecrets>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getDestination.');
         }
@@ -646,13 +649,13 @@ export class DestinationApi extends runtime.BaseAPI implements DestinationApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DestinationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DestinationWithSecretsFromJSON(jsonValue));
     }
 
     /**
      * Get a destination
      */
-    async getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Destination> {
+    async getDestination(requestParameters: GetDestinationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DestinationWithSecrets> {
         const response = await this.getDestinationRaw(requestParameters, initOverrides);
         return await response.value();
     }
