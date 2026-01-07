@@ -40,10 +40,12 @@ export interface CreateEventTopicRouteRequest {
 export const CreateEventTopicRouteRequestEventTypeEnum = {
     ReadBackfillDone: 'read.backfill.done',
     ConnectionCreated: 'connection.created',
+    ConnectionError: 'connection.error',
     InstallationCreated: 'installation.created',
     InstallationUpdated: 'installation.updated',
     InstallationDeleted: 'installation.deleted',
-    ReadSchedulePaused: 'read.schedule.paused'
+    ReadSchedulePaused: 'read.schedule.paused',
+    DestinationWebhookDisabled: 'destination.webhook.disabled'
 } as const;
 export type CreateEventTopicRouteRequestEventTypeEnum = typeof CreateEventTopicRouteRequestEventTypeEnum[keyof typeof CreateEventTopicRouteRequestEventTypeEnum];
 
