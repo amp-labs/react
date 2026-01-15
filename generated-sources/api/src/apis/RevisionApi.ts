@@ -53,7 +53,7 @@ export interface GetHydratedRevisionRequest {
  */
 export interface RevisionApiInterface {
     /**
-     * 
+     * We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly, unless you have an advanced use case.
      * @summary Create a new revision.
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -66,6 +66,7 @@ export interface RevisionApiInterface {
     createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly, unless you have an advanced use case.
      * Create a new revision.
      */
     createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
@@ -97,6 +98,7 @@ export interface RevisionApiInterface {
 export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface {
 
     /**
+     * We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly, unless you have an advanced use case.
      * Create a new revision.
      */
     async createRevisionRaw(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -146,6 +148,7 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     }
 
     /**
+     * We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly, unless you have an advanced use case.
      * Create a new revision.
      */
     async createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
