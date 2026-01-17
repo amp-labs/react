@@ -27,6 +27,12 @@ import {
  */
 export interface UpsertMetadataRequest {
     /**
+     * The ID that your app uses to identify the group of users for this request.
+     * @type {string}
+     * @memberof UpsertMetadataRequest
+     */
+    groupRef: string;
+    /**
      * Maps object names to field definitions
      * @type {{ [key: string]: Array<FieldDefinition>; }}
      * @memberof UpsertMetadataRequest
@@ -39,6 +45,7 @@ export interface UpsertMetadataRequest {
  */
 export function instanceOfUpsertMetadataRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "fields" in value;
 
     return isInstance;
@@ -54,6 +61,7 @@ export function UpsertMetadataRequestFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
+        'groupRef': json['groupRef'],
         'fields': json['fields'],
     };
 }
@@ -67,6 +75,7 @@ export function UpsertMetadataRequestToJSON(value?: UpsertMetadataRequest | null
     }
     return {
         
+        'groupRef': value.groupRef,
         'fields': value.fields,
     };
 }
