@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { NotificationEventType } from './NotificationEventType';
+import {
+    NotificationEventTypeFromJSON,
+    NotificationEventTypeFromJSONTyped,
+    NotificationEventTypeToJSON,
+} from './NotificationEventType';
+
 /**
  * 
  * @export
@@ -26,11 +33,11 @@ export interface NotificationEventTopicRoute {
      */
     id: string;
     /**
-     * The type of notification event.
-     * @type {string}
+     * 
+     * @type {NotificationEventType}
      * @memberof NotificationEventTopicRoute
      */
-    eventType: NotificationEventTopicRouteEventTypeEnum;
+    eventType: NotificationEventType;
     /**
      * The ID of the topic to route events to.
      * @type {string}
@@ -57,21 +64,6 @@ export interface NotificationEventTopicRoute {
     updateTime?: Date;
 }
 
-
-/**
- * @export
- */
-export const NotificationEventTopicRouteEventTypeEnum = {
-    ReadBackfillDone: 'read.backfill.done',
-    ConnectionCreated: 'connection.created',
-    InstallationCreated: 'installation.created',
-    InstallationUpdated: 'installation.updated',
-    InstallationDeleted: 'installation.deleted',
-    ReadSchedulePaused: 'read.schedule.paused'
-} as const;
-export type NotificationEventTopicRouteEventTypeEnum = typeof NotificationEventTopicRouteEventTypeEnum[keyof typeof NotificationEventTopicRouteEventTypeEnum];
-
-
 /**
  * Check if a given object implements the NotificationEventTopicRoute interface.
  */
@@ -97,7 +89,7 @@ export function NotificationEventTopicRouteFromJSONTyped(json: any, ignoreDiscri
     return {
         
         'id': json['id'],
-        'eventType': json['eventType'],
+        'eventType': NotificationEventTypeFromJSON(json['eventType']),
         'topicId': json['topicId'],
         'projectId': json['projectId'],
         'createTime': (new Date(json['createTime'])),
@@ -115,7 +107,7 @@ export function NotificationEventTopicRouteToJSON(value?: NotificationEventTopic
     return {
         
         'id': value.id,
-        'eventType': value.eventType,
+        'eventType': NotificationEventTypeToJSON(value.eventType),
         'topicId': value.topicId,
         'projectId': value.projectId,
         'createTime': (value.createTime.toISOString()),
