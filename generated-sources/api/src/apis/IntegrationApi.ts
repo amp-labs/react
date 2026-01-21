@@ -67,7 +67,7 @@ export interface ListIntegrationsRequest {
  */
 export interface IntegrationApiInterface {
     /**
-     * 
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * @summary Batch upsert a group of integrations
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {BatchUpsertIntegrationsRequest} batchUpsertIntegrationsRequest 
@@ -79,6 +79,7 @@ export interface IntegrationApiInterface {
     batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
 
     /**
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
@@ -100,7 +101,7 @@ export interface IntegrationApiInterface {
     createIntegration(requestParameters: CreateIntegrationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * 
+     * Delete an integration and all its installations.
      * @summary Delete an integration
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -111,6 +112,7 @@ export interface IntegrationApiInterface {
     deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Delete an integration and all its installations.
      * Delete an integration
      */
     deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
@@ -154,6 +156,7 @@ export interface IntegrationApiInterface {
 export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInterface {
 
     /**
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     async batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
@@ -199,6 +202,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     async batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
@@ -255,6 +259,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
+     * Delete an integration and all its installations.
      * Delete an integration
      */
     async deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -293,6 +298,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
+     * Delete an integration and all its installations.
      * Delete an integration
      */
     async deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
