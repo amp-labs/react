@@ -30,13 +30,14 @@ export interface UpdateInstallationRequest {
      * Array of field paths specifying which fields to update. Allowed values include:
      * - connectionId
      * - config.createdBy
-     * - config.content.read.objects.<object-name>
-     * - config.content.write.objects.<object-name>
+     * - config.content.read.objects.OBJECT_NAME
+     * - config.content.write.objects.OBJECT_NAME
      * - config.content.write.objects
-     * - config.content.subscribe.objects.<object-name>
+     * - config.content.subscribe.objects.OBJECT_NAME
+     * - config.content.subscribe.objects
      * - config.content.proxy.enabled
      * 
-     * `<object-name>` means you can specify any object name.
+     * `OBJECT_NAME` means you can specify any object name.
      * @type {Array<string>}
      * @memberof UpdateInstallationRequest
      */

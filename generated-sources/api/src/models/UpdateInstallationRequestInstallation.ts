@@ -21,7 +21,7 @@ import {
 } from './UpdateInstallationRequestInstallationConfig';
 
 /**
- * The installation fields to update. (Only include the fields you'd like to update.)
+ * The installation fields to update. (You only need to include the fields you'd like to update, which are specified in the update masks. The rest will be ignored.)
  * @export
  * @interface UpdateInstallationRequestInstallation
  */

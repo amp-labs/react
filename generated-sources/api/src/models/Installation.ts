@@ -69,6 +69,12 @@ export interface Installation {
      */
     healthStatus: string;
     /**
+     * The status of the latest operation for this installation.
+     * @type {string}
+     * @memberof Installation
+     */
+    lastOperationStatus?: InstallationLastOperationStatusEnum;
+    /**
      * 
      * @type {Connection}
      * @memberof Installation
@@ -99,6 +105,18 @@ export interface Installation {
      */
     config: Config;
 }
+
+
+/**
+ * @export
+ */
+export const InstallationLastOperationStatusEnum = {
+    Success: 'success',
+    Failure: 'failure',
+    InProgress: 'in_progress'
+} as const;
+export type InstallationLastOperationStatusEnum = typeof InstallationLastOperationStatusEnum[keyof typeof InstallationLastOperationStatusEnum];
+
 
 /**
  * Check if a given object implements the Installation interface.
@@ -132,6 +150,7 @@ export function InstallationFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'integrationId': json['integrationId'],
         'group': !exists(json, 'group') ? undefined : GroupFromJSON(json['group']),
         'healthStatus': json['healthStatus'],
+        'lastOperationStatus': !exists(json, 'lastOperationStatus') ? undefined : json['lastOperationStatus'],
         'connection': ConnectionFromJSON(json['connection']),
         'createTime': (new Date(json['createTime'])),
         'createdBy': json['createdBy'],
@@ -154,6 +173,7 @@ export function InstallationToJSON(value?: Installation | null): any {
         'integrationId': value.integrationId,
         'group': GroupToJSON(value.group),
         'healthStatus': value.healthStatus,
+        'lastOperationStatus': value.lastOperationStatus,
         'connection': ConnectionToJSON(value.connection),
         'createTime': (value.createTime.toISOString()),
         'createdBy': value.createdBy,
