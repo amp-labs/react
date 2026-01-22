@@ -9,6 +9,8 @@ interface UseIsIntegrationInstalledResult {
   isLoaded: boolean;
   isIntegrationInstalled: boolean | null;
   config?: Config;
+  isError: boolean;
+  error: Error | null;
 }
 
 /**
@@ -51,5 +53,7 @@ export const useIsIntegrationInstalled = (
     isIntegrationInstalled,
     isLoading: isInstallationLoading,
     config,
+    isError,
+    error,
   };
 };

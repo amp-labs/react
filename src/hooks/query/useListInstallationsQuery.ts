@@ -18,16 +18,17 @@ export const useListInstallationsQuery = (
 ) => {
   const getAPI = useAPI(groupRef, consumerRefOverride);
   const { projectIdOrName } = useAmpersandProviderProps(); // in AmpersandProvider
-  const { data: integrations } = useListIntegrationsQuery(
-    groupRef,
-    consumerRefOverride,
-  );
+  const {
+    data: integrations,
+    isError: isIntegrationError,
+    error: integrationError,
+  } = useListIntegrationsQuery(groupRef, consumerRefOverride);
 
   const integrationId = integrations?.find(
     (_integration) => _integration.name === integration,
   )?.id;
 
-  return useQuery({
+  const installationsQuery = useQuery({
     queryKey: [
       "amp",
       "installations",
@@ -48,10 +49,18 @@ export const useListInstallationsQuery = (
       });
     },
     enabled:
+      !isIntegrationError &&
       !!projectIdOrName &&
       !!integrationId &&
       !!groupRef &&
       !!integrations &&
       integrations.length > 0,
   });
+
+  // Bubble up integration errors if the installations query didn't run
+  return {
+    ...installationsQuery,
+    isError: installationsQuery.isError || isIntegrationError,
+    error: installationsQuery.error || integrationError,
+  };
 };
