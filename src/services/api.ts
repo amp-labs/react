@@ -147,13 +147,30 @@ const ENABLE_JWT_AUTH_FF = true;
 /**
  * hook to access the API service
  *
+ * @param consumerRefOverride - Optional consumerRef to use instead of context value.
+ *                              Required for JWT auth if not provided via InstallationProvider.
+ * @param groupRefOverride - Optional groupRef to use instead of context value.
+ *                           Required for JWT auth if not provided via InstallationProvider.
+ * @returns A function that returns a Promise resolving to an ApiService instance
  *
- * @returns
+ * @remarks
+ * For JWT authentication, consumerRef and groupRef must be provided either:
+ * 1. Via InstallationProvider context, or
+ * 2. As parameters to this hook (overrides context values)
+ *
+ * For API key authentication, these parameters are not required.
  */
-export function useAPI(): () => Promise<ApiService> {
+export function useAPI(
+  consumerRefOverride?: string,
+  groupRefOverride?: string,
+): () => Promise<ApiService> {
   const apiKey = useApiKey();
   const { getToken } = useJwtToken();
-  const { consumerRef, groupRef } = useInstallationProps();
+  const contextProps = useInstallationProps();
+
+  // Use provided overrides, fall back to context values
+  const consumerRef = consumerRefOverride || contextProps.consumerRef;
+  const groupRef = groupRefOverride || contextProps.groupRef;
 
   /** Even though it doesn't need to be be async right now, we want to be able to support other ways
    * to authenticating to the API in the future which may require async operations */
@@ -180,7 +197,8 @@ export function useAPI(): () => Promise<ApiService> {
           { consumerRef, groupRef },
         );
         throw new Error(
-          "Unable to create JWT API service without consumerRef or groupRef.",
+          "Unable to create JWT API service without consumerRef or groupRef. " +
+            "Provide via InstallationProvider or useAPI parameters.",
         );
       }
       const token = await getToken({ consumerRef, groupRef });
