@@ -13,10 +13,15 @@ import { handleServerError } from "src/utils/handleServerError";
  * from the API service to fetch the data and returns an enhanced query object
  * with additional properties such as `integrations`.
  *
+ * @param groupRefOverride - Group reference. Required for JWT auth if not provided via InstallationProvider.
+ * @param consumerRefOverride - Consumer reference. Required for JWT auth if not provided via InstallationProvider.
  * @returns {Object} An object containing:
  */
-export function useListIntegrationsQuery() {
-  const getAPI = useAPI();
+export function useListIntegrationsQuery(
+  groupRefOverride?: string,
+  consumerRefOverride?: string,
+) {
+  const getAPI = useAPI(groupRefOverride, consumerRefOverride);
   const { projectIdOrName } = useAmpersandProviderProps();
   const { setError, removeError } = useErrorState();
 

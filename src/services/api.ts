@@ -147,10 +147,10 @@ const ENABLE_JWT_AUTH_FF = true;
 /**
  * hook to access the API service
  *
- * @param consumerRefOverride - Optional consumerRef to use instead of context value.
- *                              Required for JWT auth if not provided via InstallationProvider.
  * @param groupRefOverride - Optional groupRef to use instead of context value.
  *                           Required for JWT auth if not provided via InstallationProvider.
+ * @param consumerRefOverride - Optional consumerRef to use instead of context value.
+ *                              Required for JWT auth if not provided via InstallationProvider.
  * @returns A function that returns a Promise resolving to an ApiService instance
  *
  * @remarks
@@ -161,12 +161,12 @@ const ENABLE_JWT_AUTH_FF = true;
  * For API key authentication, these parameters are not required.
  */
 export function useAPI(
-  consumerRefOverride?: string,
   groupRefOverride?: string,
+  consumerRefOverride?: string,
 ): () => Promise<ApiService> {
   const apiKey = useApiKey();
   const { getToken } = useJwtToken();
-  const contextProps = useInstallationProps();
+  const contextProps = useInstallationProps(); // in InstallationProvider
 
   // Use provided overrides, fall back to context values
   const consumerRef = consumerRefOverride || contextProps.consumerRef;

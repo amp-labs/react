@@ -8,17 +8,20 @@ import { useListIntegrationsQuery } from "./useIntegrationListQuery";
  * Query hook to list installations for a specific integration and group
  *
  * @param integration - Integration name or ID
- * @param groupRef - Group reference. Required for JWT auth if not provided via InstallationProvider.
- * @param consumerRef - Consumer reference. Required for JWT auth if not provided via InstallationProvider.
+ * @param groupRef - Group reference.
+ * @param consumerRefOverride - Consumer reference. Required for JWT auth if not provided via InstallationProvider.
  */
 export const useListInstallationsQuery = (
   integration?: string,
   groupRef?: string,
-  consumerRef?: string,
+  consumerRefOverride?: string,
 ) => {
-  const getAPI = useAPI(consumerRef, groupRef);
+  const getAPI = useAPI(groupRef, consumerRefOverride);
   const { projectIdOrName } = useAmpersandProviderProps(); // in AmpersandProvider
-  const { data: integrations } = useListIntegrationsQuery();
+  const { data: integrations } = useListIntegrationsQuery(
+    groupRef,
+    consumerRefOverride,
+  );
 
   const integrationId = integrations?.find(
     (_integration) => _integration.name === integration,
