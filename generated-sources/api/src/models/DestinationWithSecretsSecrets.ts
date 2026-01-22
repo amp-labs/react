@@ -16,31 +16,31 @@ import { exists, mapValues } from '../runtime';
 /**
  * Destination secrets (only included when includeSecrets is true)
  * @export
- * @interface DestinationSecrets
+ * @interface DestinationWithSecretsSecrets
  */
-export interface DestinationSecrets {
+export interface DestinationWithSecretsSecrets {
     /**
      * Webhook signing key for the destination (only included for webhook destinations)
      * @type {string}
-     * @memberof DestinationSecrets
+     * @memberof DestinationWithSecretsSecrets
      */
     webhookSigningKey?: string;
 }
 
 /**
- * Check if a given object implements the DestinationSecrets interface.
+ * Check if a given object implements the DestinationWithSecretsSecrets interface.
  */
-export function instanceOfDestinationSecrets(value: object): boolean {
+export function instanceOfDestinationWithSecretsSecrets(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function DestinationSecretsFromJSON(json: any): DestinationSecrets {
-    return DestinationSecretsFromJSONTyped(json, false);
+export function DestinationWithSecretsSecretsFromJSON(json: any): DestinationWithSecretsSecrets {
+    return DestinationWithSecretsSecretsFromJSONTyped(json, false);
 }
 
-export function DestinationSecretsFromJSONTyped(json: any, ignoreDiscriminator: boolean): DestinationSecrets {
+export function DestinationWithSecretsSecretsFromJSONTyped(json: any, ignoreDiscriminator: boolean): DestinationWithSecretsSecrets {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -50,7 +50,7 @@ export function DestinationSecretsFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function DestinationSecretsToJSON(value?: DestinationSecrets | null): any {
+export function DestinationWithSecretsSecretsToJSON(value?: DestinationWithSecretsSecrets | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -106,10 +106,10 @@ export interface ProviderInfo {
     baseURL: string;
     /**
      * 
-     * @type {any}
+     * @type {string}
      * @memberof ProviderInfo
      */
-    defaultModule: any | null;
+    defaultModule: string;
     /**
      * 
      * @type {Oauth2Opts}
