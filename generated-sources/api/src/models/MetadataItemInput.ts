@@ -50,7 +50,7 @@ export interface MetadataItemInput {
      */
     docsURL?: string;
     /**
-     * Does this metadata item only apply to a specific module?
+     * Specifies which modules REQUIRE (depend on) this metadata item. This field lists the modules that depend on/require the metadata item. Example: If "workspace" metadata has moduleDependencies: {crm: {}}, it means the CRM module requires the workspace metadata to function. Each module that needs this metadata item MUST be specified in this field. Even if it is all modules. The empty ModuleDependency {} is for future-proofing in case we need to add additional configuration options.
      * @type {{ [key: string]: object; }}
      * @memberof MetadataItemInput
      */

@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { AccessTokenOpts } from './AccessTokenOpts';
+import {
+    AccessTokenOptsFromJSON,
+    AccessTokenOptsFromJSONTyped,
+    AccessTokenOptsToJSON,
+} from './AccessTokenOpts';
 import type { TokenMetadataFields } from './TokenMetadataFields';
 import {
     TokenMetadataFieldsFromJSON,
@@ -63,6 +69,12 @@ export interface Oauth2Opts {
      */
     audience?: Array<string>;
     /**
+     * Maps input scopes to their full OAuth scope values with template variable support. Scopes not in this map are passed through unchanged. Needed for some providers.
+     * @type {{ [key: string]: string; }}
+     * @memberof Oauth2Opts
+     */
+    scopeMappings?: { [key: string]: string; };
+    /**
      * 
      * @type {TokenMetadataFields}
      * @memberof Oauth2Opts
@@ -80,6 +92,12 @@ export interface Oauth2Opts {
      * @memberof Oauth2Opts
      */
     authURLParams?: { [key: string]: string; };
+    /**
+     * 
+     * @type {AccessTokenOpts}
+     * @memberof Oauth2Opts
+     */
+    accessTokenOpts?: AccessTokenOpts;
 }
 
 
@@ -125,9 +143,11 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'explicitScopesRequired': json['explicitScopesRequired'],
         'explicitWorkspaceRequired': json['explicitWorkspaceRequired'],
         'audience': !exists(json, 'audience') ? undefined : json['audience'],
+        'scopeMappings': !exists(json, 'scopeMappings') ? undefined : json['scopeMappings'],
         'tokenMetadataFields': TokenMetadataFieldsFromJSON(json['tokenMetadataFields']),
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
         'authURLParams': !exists(json, 'authURLParams') ? undefined : json['authURLParams'],
+        'accessTokenOpts': !exists(json, 'accessTokenOpts') ? undefined : AccessTokenOptsFromJSON(json['accessTokenOpts']),
     };
 }
 
@@ -146,9 +166,11 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'explicitScopesRequired': value.explicitScopesRequired,
         'explicitWorkspaceRequired': value.explicitWorkspaceRequired,
         'audience': value.audience,
+        'scopeMappings': value.scopeMappings,
         'tokenMetadataFields': TokenMetadataFieldsToJSON(value.tokenMetadataFields),
         'docsURL': value.docsURL,
         'authURLParams': value.authURLParams,
+        'accessTokenOpts': AccessTokenOptsToJSON(value.accessTokenOpts),
     };
 }
 

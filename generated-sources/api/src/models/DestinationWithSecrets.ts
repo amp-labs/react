@@ -19,55 +19,67 @@ import {
     DestinationMetadataFromJSONTyped,
     DestinationMetadataToJSON,
 } from './DestinationMetadata';
+import type { DestinationWithSecretsSecrets } from './DestinationWithSecretsSecrets';
+import {
+    DestinationWithSecretsSecretsFromJSON,
+    DestinationWithSecretsSecretsFromJSONTyped,
+    DestinationWithSecretsSecretsToJSON,
+} from './DestinationWithSecretsSecrets';
 
 /**
- * 
+ * Destination object with secrets field (returned by getDestination when includeSecrets is true)
  * @export
- * @interface Destination
+ * @interface DestinationWithSecrets
  */
-export interface Destination {
+export interface DestinationWithSecrets {
     /**
      * The destination ID.
      * @type {string}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     id: string;
     /**
      * User-defined name for the destination
      * @type {string}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     name: string;
     /**
      * The type of the destination
      * @type {string}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     type: string;
     /**
      * 
      * @type {DestinationMetadata}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     metadata: DestinationMetadata;
     /**
      * The time the destination was created.
      * @type {Date}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     createTime: Date;
     /**
      * The time the destination was updated.
      * @type {Date}
-     * @memberof Destination
+     * @memberof DestinationWithSecrets
      */
     updateTime?: Date;
+    /**
+     * 
+     * @type {DestinationWithSecretsSecrets}
+     * @memberof DestinationWithSecrets
+     */
+    secrets?: DestinationWithSecretsSecrets;
 }
 
 /**
- * Check if a given object implements the Destination interface.
+ * Check if a given object implements the DestinationWithSecrets interface.
  */
-export function instanceOfDestination(value: object): boolean {
+export function instanceOfDestinationWithSecrets(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
@@ -78,11 +90,11 @@ export function instanceOfDestination(value: object): boolean {
     return isInstance;
 }
 
-export function DestinationFromJSON(json: any): Destination {
-    return DestinationFromJSONTyped(json, false);
+export function DestinationWithSecretsFromJSON(json: any): DestinationWithSecrets {
+    return DestinationWithSecretsFromJSONTyped(json, false);
 }
 
-export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Destination {
+export function DestinationWithSecretsFromJSONTyped(json: any, ignoreDiscriminator: boolean): DestinationWithSecrets {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -94,10 +106,11 @@ export function DestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'metadata': DestinationMetadataFromJSON(json['metadata']),
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
+        'secrets': !exists(json, 'secrets') ? undefined : DestinationWithSecretsSecretsFromJSON(json['secrets']),
     };
 }
 
-export function DestinationToJSON(value?: Destination | null): any {
+export function DestinationWithSecretsToJSON(value?: DestinationWithSecrets | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -112,6 +125,7 @@ export function DestinationToJSON(value?: Destination | null): any {
         'metadata': DestinationMetadataToJSON(value.metadata),
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
+        'secrets': DestinationWithSecretsSecretsToJSON(value.secrets),
     };
 }
 
