@@ -37,6 +37,12 @@ import {
     IntegrationWriteFromJSONTyped,
     IntegrationWriteToJSON,
 } from './IntegrationWrite';
+import type { WatchSchema } from './WatchSchema';
+import {
+    WatchSchemaFromJSON,
+    WatchSchemaFromJSONTyped,
+    WatchSchemaToJSON,
+} from './WatchSchema';
 
 /**
  * 
@@ -92,6 +98,12 @@ export interface Integration1 {
      * @memberof Integration1
      */
     subscribe?: IntegrationSubscribe;
+    /**
+     * 
+     * @type {WatchSchema}
+     * @memberof Integration1
+     */
+    watchSchema?: WatchSchema;
 }
 
 /**
@@ -123,6 +135,7 @@ export function Integration1FromJSONTyped(json: any, ignoreDiscriminator: boolea
         'write': !exists(json, 'write') ? undefined : IntegrationWriteFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : IntegrationProxyFromJSON(json['proxy']),
         'subscribe': !exists(json, 'subscribe') ? undefined : IntegrationSubscribeFromJSON(json['subscribe']),
+        'watchSchema': !exists(json, 'watchSchema') ? undefined : WatchSchemaFromJSON(json['watchSchema']),
     };
 }
 
@@ -143,6 +156,7 @@ export function Integration1ToJSON(value?: Integration1 | null): any {
         'write': IntegrationWriteToJSON(value.write),
         'proxy': IntegrationProxyToJSON(value.proxy),
         'subscribe': IntegrationSubscribeToJSON(value.subscribe),
+        'watchSchema': WatchSchemaToJSON(value.watchSchema),
     };
 }
 
