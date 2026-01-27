@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => ({
       entry: "./src/index.ts",
       formats: ["es", "cjs"],
       fileName: (format) => `amp-react.${format}.js`,
+      cssFileName: "style",
     },
     rollupOptions: {
       external: [

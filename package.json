@@ -20,9 +20,9 @@
   "module": "./build/amp-react.es.js",
   "exports": {
     ".": {
+      "types": "./build/index.d.ts",
       "import": "./build/amp-react.es.js",
-      "require": "./build/amp-react.cjs.js",
-      "types": "./build/index.d.ts"
+      "require": "./build/amp-react.cjs.js"
     },
     "./styles": "./build/style.css"
   },
@@ -83,7 +83,7 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "vite": "5.4.11",
+    "vite": "^7.3.1",
     "vite-plugin-dts": "^4.1.0"
   },
   "peerDependencies": {
