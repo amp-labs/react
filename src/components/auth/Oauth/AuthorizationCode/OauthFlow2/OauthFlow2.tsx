@@ -15,6 +15,7 @@ import { useProjectQuery } from "src/hooks/query";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
 import { AMP_SERVER } from "src/services/api";
 
+import { enableCSRFProtection } from "../enableCSRFprotection";
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
 import { WorkspaceEntryContent } from "../WorkspaceEntry/WorkspaceEntryContent";
 
@@ -142,6 +143,7 @@ export function OauthFlow2({
           groupName,
           providerWorkspaceRef: metadata?.workspace?.value,
           providerMetadata: metadata,
+          enableCSRFProtection,
         },
       });
 
