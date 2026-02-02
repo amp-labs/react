@@ -1,3 +1,5 @@
+"use client";
+
 // Installation Provider
 export { InstallationProvider } from "./InstallationProvider";
 

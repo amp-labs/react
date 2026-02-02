@@ -24,6 +24,26 @@ This repository contains the Ampersand React library, a set of React components 
 ## Prerequisites
 - React version 18+
 
+### Next.js App Router
+
+This library uses React hooks, browser APIs, and client-side dependencies throughout, making it a client-side library. When using Next.js App Router (v13+), ensure that components importing from `@amp-labs/react` are within a client boundary.
+
+The library includes the `'use client'` directive at its entry points, so it should work automatically in most cases. If you encounter SSR-related errors, wrap your usage in a client component:
+
+```tsx
+'use client';
+
+import { AmpersandProvider, ConnectProvider } from '@amp-labs/react';
+
+export function MyIntegrationComponent() {
+  return (
+    <AmpersandProvider options={options}>
+      <ConnectProvider /* ... */ />
+    </AmpersandProvider>
+  );
+}
+```
+
 ### Legacy (@amp-labs/react 1.x.x)
 Requires 
 - Chakra 2.4.4 - 2.10 (https://chakra-ui.com/getting-started)
