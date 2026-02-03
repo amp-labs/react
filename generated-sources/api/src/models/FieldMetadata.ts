@@ -57,6 +57,18 @@ export interface FieldMetadata {
      */
     readOnly?: boolean;
     /**
+     * Whether the field is custom field.
+     * @type {boolean}
+     * @memberof FieldMetadata
+     */
+    isCustom?: boolean;
+    /**
+     * Whether the field is required when creating a new record.
+     * @type {boolean}
+     * @memberof FieldMetadata
+     */
+    isRequired?: boolean;
+    /**
      * If the valueType is singleSelect or multiSelect, this is a list of possible values
      * @type {Array<FieldValue>}
      * @memberof FieldMetadata
@@ -108,6 +120,8 @@ export function FieldMetadataFromJSONTyped(json: any, ignoreDiscriminator: boole
         'valueType': !exists(json, 'valueType') ? undefined : json['valueType'],
         'providerType': !exists(json, 'providerType') ? undefined : json['providerType'],
         'readOnly': !exists(json, 'readOnly') ? undefined : json['readOnly'],
+        'isCustom': !exists(json, 'isCustom') ? undefined : json['isCustom'],
+        'isRequired': !exists(json, 'isRequired') ? undefined : json['isRequired'],
         'values': !exists(json, 'values') ? undefined : ((json['values'] as Array<any>).map(FieldValueFromJSON)),
     };
 }
@@ -126,6 +140,8 @@ export function FieldMetadataToJSON(value?: FieldMetadata | null): any {
         'valueType': value.valueType,
         'providerType': value.providerType,
         'readOnly': value.readOnly,
+        'isCustom': value.isCustom,
+        'isRequired': value.isRequired,
         'values': value.values === undefined ? undefined : ((value.values as Array<any>).map(FieldValueToJSON)),
     };
 }
