@@ -16,42 +16,42 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UpdateTopicRequest
+ * @interface DeletionSettings
  */
-export interface UpdateTopicRequest {
+export interface DeletionSettings {
     /**
-     * A human-readable name for the topic.
-     * @type {string}
-     * @memberof UpdateTopicRequest
+     * Whether deletion is enabled for this object
+     * @type {boolean}
+     * @memberof DeletionSettings
      */
-    name: string;
+    enabled: boolean;
 }
 
 /**
- * Check if a given object implements the UpdateTopicRequest interface.
+ * Check if a given object implements the DeletionSettings interface.
  */
-export function instanceOfUpdateTopicRequest(value: object): boolean {
+export function instanceOfDeletionSettings(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "enabled" in value;
 
     return isInstance;
 }
 
-export function UpdateTopicRequestFromJSON(json: any): UpdateTopicRequest {
-    return UpdateTopicRequestFromJSONTyped(json, false);
+export function DeletionSettingsFromJSON(json: any): DeletionSettings {
+    return DeletionSettingsFromJSONTyped(json, false);
 }
 
-export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateTopicRequest {
+export function DeletionSettingsFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeletionSettings {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
+        'enabled': json['enabled'],
     };
 }
 
-export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any {
+export function DeletionSettingsToJSON(value?: DeletionSettings | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +60,7 @@ export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any
     }
     return {
         
-        'name': value.name,
+        'enabled': value.enabled,
     };
 }
 
