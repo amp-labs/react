@@ -19,6 +19,7 @@ import type {
   CreateInstallationRequest,
   InputValidationProblem,
   Installation,
+  PatchObjectConfigContentRequest,
   UpdateInstallationRequest,
 } from '../models';
 import {
@@ -30,6 +31,8 @@ import {
     InputValidationProblemToJSON,
     InstallationFromJSON,
     InstallationToJSON,
+    PatchObjectConfigContentRequestFromJSON,
+    PatchObjectConfigContentRequestToJSON,
     UpdateInstallationRequestFromJSON,
     UpdateInstallationRequestToJSON,
 } from '../models';
@@ -61,6 +64,13 @@ export interface ListInstallationsRequest {
 export interface ListInstallationsForProjectRequest {
     projectIdOrName: string;
     groupRef?: string;
+}
+
+export interface PatchObjectConfigContentOperationRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    objectName: string;
+    patchObjectConfigContent: PatchObjectConfigContentRequest;
 }
 
 export interface UpdateInstallationOperationRequest {
@@ -95,7 +105,7 @@ export interface InstallationApiInterface {
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * 
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * @summary Delete an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -107,6 +117,7 @@ export interface InstallationApiInterface {
     deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
@@ -163,7 +174,26 @@ export interface InstallationApiInterface {
     listInstallationsForProject(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Updates a single object\'s configuration within an installation using JSON Patch syntax. 
+     * @summary Update an installation object
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The integration ID.
+     * @param {string} objectName The object name whose config content will be patched. Must match an object name defined in the integration\&#39;s manifest for the specified action type (read, subscribe, or write). Common examples include: &#x60;account&#x60;, &#x60;contact&#x60;, &#x60;lead&#x60;, &#x60;opportunity&#x60; (for Salesforce), &#x60;deal&#x60;, &#x60;company&#x60; (for HubSpot), etc. 
+     * @param {PatchObjectConfigContentRequest} patchObjectConfigContent 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    patchObjectConfigContentRaw(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
+
+    /**
+     * Updates a single object\'s configuration within an installation using JSON Patch syntax. 
+     * Update an installation object
+     */
+    patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
+
+    /**
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -176,7 +206,7 @@ export interface InstallationApiInterface {
     updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -242,6 +272,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -284,6 +315,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -439,7 +471,66 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Updates a single object\'s configuration within an installation using JSON Patch syntax. 
+     * Update an installation object
+     */
+    async patchObjectConfigContentRaw(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling patchObjectConfigContent.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling patchObjectConfigContent.');
+        }
+
+        if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
+            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling patchObjectConfigContent.');
+        }
+
+        if (requestParameters.patchObjectConfigContent === null || requestParameters.patchObjectConfigContent === undefined) {
+            throw new runtime.RequiredError('patchObjectConfigContent','Required parameter requestParameters.patchObjectConfigContent was null or undefined when calling patchObjectConfigContent.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/config-content`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchObjectConfigContentRequestToJSON(requestParameters.patchObjectConfigContent),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InstallationFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates a single object\'s configuration within an installation using JSON Patch syntax. 
+     * Update an installation object
+     */
+    async patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
+        const response = await this.patchObjectConfigContentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -489,7 +580,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {

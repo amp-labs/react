@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DeletionSettings } from './DeletionSettings';
+import {
+    DeletionSettingsFromJSON,
+    DeletionSettingsFromJSONTyped,
+    DeletionSettingsToJSON,
+} from './DeletionSettings';
 import type { FieldSetting } from './FieldSetting';
 import {
     FieldSettingFromJSON,
@@ -38,6 +44,12 @@ export interface WriteConfigObject {
      * @memberof WriteConfigObject
      */
     objectName: string;
+    /**
+     * 
+     * @type {DeletionSettings}
+     * @memberof WriteConfigObject
+     */
+    deletionSettings?: DeletionSettings;
     /**
      * This is a map of field names to default values. These values will be used when writing to the object.
      * @type {{ [key: string]: ValueDefault; }}
@@ -74,6 +86,7 @@ export function WriteConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'objectName': json['objectName'],
+        'deletionSettings': !exists(json, 'deletionSettings') ? undefined : DeletionSettingsFromJSON(json['deletionSettings']),
         'selectedValueDefaults': !exists(json, 'selectedValueDefaults') ? undefined : (mapValues(json['selectedValueDefaults'], ValueDefaultFromJSON)),
         'selectedFieldSettings': !exists(json, 'selectedFieldSettings') ? undefined : (mapValues(json['selectedFieldSettings'], FieldSettingFromJSON)),
     };
@@ -89,6 +102,7 @@ export function WriteConfigObjectToJSON(value?: WriteConfigObject | null): any {
     return {
         
         'objectName': value.objectName,
+        'deletionSettings': DeletionSettingsToJSON(value.deletionSettings),
         'selectedValueDefaults': value.selectedValueDefaults === undefined ? undefined : (mapValues(value.selectedValueDefaults, ValueDefaultToJSON)),
         'selectedFieldSettings': value.selectedFieldSettings === undefined ? undefined : (mapValues(value.selectedFieldSettings, FieldSettingToJSON)),
     };

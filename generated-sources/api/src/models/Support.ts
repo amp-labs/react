@@ -25,6 +25,12 @@ import {
     BulkWriteSupportFromJSONTyped,
     BulkWriteSupportToJSON,
 } from './BulkWriteSupport';
+import type { SearchSupport } from './SearchSupport';
+import {
+    SearchSupportFromJSON,
+    SearchSupportFromJSONTyped,
+    SearchSupportToJSON,
+} from './SearchSupport';
 import type { SubscribeSupport } from './SubscribeSupport';
 import {
     SubscribeSupportFromJSON,
@@ -80,6 +86,12 @@ export interface Support {
      * @memberof Support
      */
     batchWrite?: BatchWriteSupport;
+    /**
+     * 
+     * @type {SearchSupport}
+     * @memberof Support
+     */
+    search: SearchSupport;
 }
 
 /**
@@ -92,6 +104,7 @@ export function instanceOfSupport(value: object): boolean {
     isInstance = isInstance && "read" in value;
     isInstance = isInstance && "subscribe" in value;
     isInstance = isInstance && "write" in value;
+    isInstance = isInstance && "search" in value;
 
     return isInstance;
 }
@@ -113,6 +126,7 @@ export function SupportFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'write': json['write'],
         'subscribeSupport': !exists(json, 'subscribeSupport') ? undefined : SubscribeSupportFromJSON(json['subscribeSupport']),
         'batchWrite': !exists(json, 'batchWrite') ? undefined : BatchWriteSupportFromJSON(json['batchWrite']),
+        'search': SearchSupportFromJSON(json['search']),
     };
 }
 
@@ -132,6 +146,7 @@ export function SupportToJSON(value?: Support | null): any {
         'write': value.write,
         'subscribeSupport': SubscribeSupportToJSON(value.subscribeSupport),
         'batchWrite': BatchWriteSupportToJSON(value.batchWrite),
+        'search': SearchSupportToJSON(value.search),
     };
 }
 

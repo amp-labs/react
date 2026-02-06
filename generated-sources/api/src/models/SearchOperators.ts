@@ -16,42 +16,42 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UpdateTopicRequest
+ * @interface SearchOperators
  */
-export interface UpdateTopicRequest {
+export interface SearchOperators {
     /**
-     * A human-readable name for the topic.
-     * @type {string}
-     * @memberof UpdateTopicRequest
+     * 
+     * @type {boolean}
+     * @memberof SearchOperators
      */
-    name: string;
+    equals: boolean;
 }
 
 /**
- * Check if a given object implements the UpdateTopicRequest interface.
+ * Check if a given object implements the SearchOperators interface.
  */
-export function instanceOfUpdateTopicRequest(value: object): boolean {
+export function instanceOfSearchOperators(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "equals" in value;
 
     return isInstance;
 }
 
-export function UpdateTopicRequestFromJSON(json: any): UpdateTopicRequest {
-    return UpdateTopicRequestFromJSONTyped(json, false);
+export function SearchOperatorsFromJSON(json: any): SearchOperators {
+    return SearchOperatorsFromJSONTyped(json, false);
 }
 
-export function UpdateTopicRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateTopicRequest {
+export function SearchOperatorsFromJSONTyped(json: any, ignoreDiscriminator: boolean): SearchOperators {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
+        'equals': json['equals'],
     };
 }
 
-export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any {
+export function SearchOperatorsToJSON(value?: SearchOperators | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +60,7 @@ export function UpdateTopicRequestToJSON(value?: UpdateTopicRequest | null): any
     }
     return {
         
-        'name': value.name,
+        'equals': value.equals,
     };
 }
 
