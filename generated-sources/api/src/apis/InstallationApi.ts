@@ -105,7 +105,7 @@ export interface InstallationApiInterface {
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * 
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * @summary Delete an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -117,6 +117,7 @@ export interface InstallationApiInterface {
     deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
@@ -192,7 +193,7 @@ export interface InstallationApiInterface {
     patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -205,7 +206,7 @@ export interface InstallationApiInterface {
     updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -271,6 +272,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -313,6 +315,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -527,7 +530,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -577,7 +580,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
