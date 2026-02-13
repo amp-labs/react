@@ -57,8 +57,8 @@ export type WriteObjectHandlers = {
     fieldName: string;
     value: FieldSettingWriteOnUpdateEnum;
   }) => void;
-  enableDeletion: () => void;
-  disableDeletion: () => void;
+  setEnableDeletion: () => void;
+  setDisableDeletion: () => void;
 };
 
 export type ProxyHandlers = {
@@ -279,7 +279,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
           getFieldSetting(fieldName, "writeOnUpdate"),
         setWriteOnUpdateSetting: ({ fieldName, value }) =>
           setFieldSetting(fieldName, "writeOnUpdate", value),
-        enableDeletion: () => {
+        setEnableDeletion: () => {
           setDraft((prev) =>
             produce(prev, (_draft) => {
               const { obj } = initializeWriteObject(_draft);
@@ -287,7 +287,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
             }),
           );
         },
-        disableDeletion: () => {
+        setDisableDeletion: () => {
           setDraft((prev) =>
             produce(prev, (_draft) => {
               const { obj } = initializeWriteObject(_draft);
