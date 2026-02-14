@@ -168,6 +168,8 @@ export * from './ReadConfig';
 export * from './ReadConfigAllOf';
 export * from './ReadConfigObject';
 export * from './Revision';
+export * from './SearchOperators';
+export * from './SearchSupport';
 export * from './SelectedFieldsAutoConfig';
 export * from './SignedUrl';
 export * from './StringFieldOptions';
