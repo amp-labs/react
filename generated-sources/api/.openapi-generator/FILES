@@ -191,6 +191,8 @@ src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
 src/models/Revision.ts
+src/models/SearchOperators.ts
+src/models/SearchSupport.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
 src/models/StringFieldOptions.ts
