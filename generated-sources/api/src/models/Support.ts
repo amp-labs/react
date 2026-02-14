@@ -25,6 +25,12 @@ import {
     BulkWriteSupportFromJSONTyped,
     BulkWriteSupportToJSON,
 } from './BulkWriteSupport';
+import type { SearchSupport } from './SearchSupport';
+import {
+    SearchSupportFromJSON,
+    SearchSupportFromJSONTyped,
+    SearchSupportToJSON,
+} from './SearchSupport';
 import type { SubscribeSupport } from './SubscribeSupport';
 import {
     SubscribeSupportFromJSON,
@@ -70,6 +76,12 @@ export interface Support {
     write: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof Support
+     */
+    _delete: boolean;
+    /**
+     * 
      * @type {SubscribeSupport}
      * @memberof Support
      */
@@ -80,6 +92,12 @@ export interface Support {
      * @memberof Support
      */
     batchWrite?: BatchWriteSupport;
+    /**
+     * 
+     * @type {SearchSupport}
+     * @memberof Support
+     */
+    search: SearchSupport;
 }
 
 /**
@@ -92,6 +110,8 @@ export function instanceOfSupport(value: object): boolean {
     isInstance = isInstance && "read" in value;
     isInstance = isInstance && "subscribe" in value;
     isInstance = isInstance && "write" in value;
+    isInstance = isInstance && "_delete" in value;
+    isInstance = isInstance && "search" in value;
 
     return isInstance;
 }
@@ -111,8 +131,10 @@ export function SupportFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'read': json['read'],
         'subscribe': json['subscribe'],
         'write': json['write'],
+        '_delete': json['delete'],
         'subscribeSupport': !exists(json, 'subscribeSupport') ? undefined : SubscribeSupportFromJSON(json['subscribeSupport']),
         'batchWrite': !exists(json, 'batchWrite') ? undefined : BatchWriteSupportFromJSON(json['batchWrite']),
+        'search': SearchSupportFromJSON(json['search']),
     };
 }
 
@@ -130,8 +152,10 @@ export function SupportToJSON(value?: Support | null): any {
         'read': value.read,
         'subscribe': value.subscribe,
         'write': value.write,
+        'delete': value._delete,
         'subscribeSupport': SubscribeSupportToJSON(value.subscribeSupport),
         'batchWrite': BatchWriteSupportToJSON(value.batchWrite),
+        'search': SearchSupportToJSON(value.search),
     };
 }
 
