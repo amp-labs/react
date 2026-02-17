@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   ApiProblem,
+  BackfillProgress,
   CreateInstallationRequest,
   InputValidationProblem,
   Installation,
@@ -25,6 +26,8 @@ import type {
 import {
     ApiProblemFromJSON,
     ApiProblemToJSON,
+    BackfillProgressFromJSON,
+    BackfillProgressToJSON,
     CreateInstallationRequestFromJSON,
     CreateInstallationRequestToJSON,
     InputValidationProblemFromJSON,
@@ -47,6 +50,13 @@ export interface DeleteInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
     installationId: string;
+}
+
+export interface GetBackfillProgressRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    installationId: string;
+    objectName: string;
 }
 
 export interface GetInstallationRequest {
@@ -105,7 +115,7 @@ export interface InstallationApiInterface {
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * 
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * @summary Delete an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -117,9 +127,29 @@ export interface InstallationApiInterface {
     deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * @summary Get backfill progress for an installation object
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The Ampersand integration ID.
+     * @param {string} installationId The Ampersand installation ID.
+     * @param {string} objectName Name of the object being synced (e.g., \&quot;contact\&quot;, \&quot;account\&quot;).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InstallationApiInterface
+     */
+    getBackfillProgressRaw(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackfillProgress>>;
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress for an installation object
+     */
+    getBackfillProgress(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillProgress>;
 
     /**
      * 
@@ -192,7 +222,7 @@ export interface InstallationApiInterface {
     patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -205,7 +235,7 @@ export interface InstallationApiInterface {
     updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -271,6 +301,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallationRaw(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -313,10 +344,67 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations. 
      * Delete an installation
      */
     async deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteInstallationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress for an installation object
+     */
+    async getBackfillProgressRaw(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackfillProgress>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
+            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getBackfillProgress.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/objects/{objectName}/backfill-progress`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BackfillProgressFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress for an installation object
+     */
+    async getBackfillProgress(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillProgress> {
+        const response = await this.getBackfillProgressRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -527,7 +615,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -577,7 +665,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
      * Update an installation
      */
     async updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
