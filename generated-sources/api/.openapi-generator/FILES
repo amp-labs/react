@@ -41,6 +41,7 @@ src/models/AuthHealthCheck.ts
 src/models/AuthType.ts
 src/models/Backfill.ts
 src/models/BackfillConfig.ts
+src/models/BackfillProgress.ts
 src/models/BaseConfigContent.ts
 src/models/BaseProxyConfig.ts
 src/models/BaseReadConfig.ts
@@ -191,6 +192,8 @@ src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
 src/models/Revision.ts
+src/models/SearchOperators.ts
+src/models/SearchSupport.ts
 src/models/SelectedFieldsAutoConfig.ts
 src/models/SignedUrl.ts
 src/models/StringFieldOptions.ts

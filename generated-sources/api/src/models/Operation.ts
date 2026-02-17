@@ -38,37 +38,40 @@ export interface Operation {
      */
     configId: string;
     /**
-     * The action type to perform for the given object.
+     * The type of action that was performed (`read`, `write`, or `subscribe`).
      * @type {string}
      * @memberof Operation
      */
     actionType: string;
     /**
-     * The operation ID.
+     * Unique identifier for this operation. Use this to fetch operation details or list logs for debugging.
      * @type {string}
      * @memberof Operation
      */
     id: string;
     /**
-     * The Ampersand installation ID.
+     * The Ampersand installation ID (customer instance) that this operation ran for.
      * @type {string}
      * @memberof Operation
      */
     installationId: string;
     /**
      * The status of the operation.
+     * - `success`: The operation completed successfully
+     * - `failure`: The operation failed 
+     * - `in_progress`: The operation is currently running
      * @type {string}
      * @memberof Operation
      */
     status: string;
     /**
-     * The result of the operation.
+     * A human-readable summary of what the operation accomplished. Examples: `[contact] No new data found`, `Batch write completed (3 succeeded, 1 failed)`. May be absent.
      * @type {string}
      * @memberof Operation
      */
     result?: string;
     /**
-     * Metadata associated with the operation.
+     * Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), and `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations.
      * @type {object}
      * @memberof Operation
      */
