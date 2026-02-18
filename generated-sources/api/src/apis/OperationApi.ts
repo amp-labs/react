@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   ApiProblem,
+  BackfillProgress,
   InputValidationProblem,
   ListOperations200Response,
   Log,
@@ -24,6 +25,8 @@ import type {
 import {
     ApiProblemFromJSON,
     ApiProblemToJSON,
+    BackfillProgressFromJSON,
+    BackfillProgressToJSON,
     InputValidationProblemFromJSON,
     InputValidationProblemToJSON,
     ListOperations200ResponseFromJSON,
@@ -33,6 +36,13 @@ import {
     OperationFromJSON,
     OperationToJSON,
 } from '../models';
+
+export interface GetBackfillProgressRequest {
+    projectIdOrName: string;
+    integrationId: string;
+    installationId: string;
+    objectName: string;
+}
 
 export interface GetOperationRequest {
     projectIdOrName: string;
@@ -59,6 +69,25 @@ export interface ListOperationsRequest {
  * @interface OperationApiInterface
  */
 export interface OperationApiInterface {
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * @summary Get backfill progress
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The Ampersand integration ID.
+     * @param {string} installationId The Ampersand installation ID.
+     * @param {string} objectName Name of the object being synced (e.g., \&quot;contact\&quot;, \&quot;account\&quot;).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OperationApiInterface
+     */
+    getBackfillProgressRaw(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackfillProgress>>;
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress
+     */
+    getBackfillProgress(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillProgress>;
+
     /**
      * 
      * @summary Get an operation
@@ -116,6 +145,62 @@ export interface OperationApiInterface {
  * 
  */
 export class OperationApi extends runtime.BaseAPI implements OperationApiInterface {
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress
+     */
+    async getBackfillProgressRaw(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackfillProgress>> {
+        if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
+            throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
+            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.installationId === null || requestParameters.installationId === undefined) {
+            throw new runtime.RequiredError('installationId','Required parameter requestParameters.installationId was null or undefined when calling getBackfillProgress.');
+        }
+
+        if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
+            throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getBackfillProgress.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/objects/{objectName}/backfill-progress`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))).replace(`{${"installationId"}}`, encodeURIComponent(String(requestParameters.installationId))).replace(`{${"objectName"}}`, encodeURIComponent(String(requestParameters.objectName))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BackfillProgressFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve backfill progress (records processed, estimated total) for an object. Use to track progress of an initial data sync.
+     * Get backfill progress
+     */
+    async getBackfillProgress(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillProgress> {
+        const response = await this.getBackfillProgressRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get an operation
