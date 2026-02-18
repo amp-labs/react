@@ -40,6 +40,9 @@ export interface FieldSetting {
     writeOnCreate?: FieldSettingWriteOnCreateEnum;
     /**
      * Whether the default value should be applied when updating a record.
+     * - always: Always write to the field on update
+     * - never: Never write to the field on update
+     * - ifEmpty: Only write to the field if it's currently empty (unset or empty string). 
      * @type {string}
      * @memberof FieldSetting
      */
@@ -61,7 +64,8 @@ export type FieldSettingWriteOnCreateEnum = typeof FieldSettingWriteOnCreateEnum
  */
 export const FieldSettingWriteOnUpdateEnum = {
     Always: 'always',
-    Never: 'never'
+    Never: 'never',
+    IfEmpty: 'ifEmpty'
 } as const;
 export type FieldSettingWriteOnUpdateEnum = typeof FieldSettingWriteOnUpdateEnum[keyof typeof FieldSettingWriteOnUpdateEnum];
 
