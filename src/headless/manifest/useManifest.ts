@@ -7,6 +7,10 @@
   const requiredFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getRequiredFields();
   const optionalFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getOptionalFields();
 
+  // Get the required and optional field mappings (fields that the user must map)
+  const requiredMapFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getRequiredMapFields();
+  const optionalMapFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getOptionalMapFields();
+
   // Get all the fields that exist in the customer's Hubspot Contact object
   const allFields = manifest.getCustomerFieldsForObject(SELECTED_OBJECT_NAME)
  */
@@ -15,17 +19,31 @@ import { useMemo } from "react";
 import {
   FieldMetadata,
   HydratedIntegrationField,
+  HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   HydratedIntegrationWriteObject,
+  IntegrationFieldMapping,
 } from "@generated/api/src";
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
+
+/**
+ * Type guard for IntegrationFieldMapping.
+ * A field is a mapping if it does not have a fieldName property.
+ */
+function isIntegrationFieldMapping(
+  field: HydratedIntegrationField,
+): field is IntegrationFieldMapping {
+  return !(field as HydratedIntegrationFieldExistent).fieldName;
+}
 
 export interface Manifest {
   getReadObject: (objectName: string) => {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
+    getRequiredMapFields: () => IntegrationFieldMapping[] | null;
+    getOptionalMapFields: () => IntegrationFieldMapping[] | null;
   };
   getWriteObject: (objectName: string) => {
     object: HydratedIntegrationWriteObject | null;
@@ -70,6 +88,8 @@ export function useManifest() {
             object: null,
             getRequiredFields: () => null,
             getOptionalFields: () => null,
+            getRequiredMapFields: () => null,
+            getOptionalMapFields: () => null,
           };
         }
 
@@ -79,6 +99,14 @@ export function useManifest() {
             object.requiredFields ?? [],
           getOptionalFields: (): HydratedIntegrationField[] =>
             object.optionalFields ?? [],
+          getRequiredMapFields: (): IntegrationFieldMapping[] =>
+            (object.requiredFields?.filter(
+              (field) => isIntegrationFieldMapping(field) && !!field.mapToName,
+            ) as IntegrationFieldMapping[]) ?? [],
+          getOptionalMapFields: (): IntegrationFieldMapping[] =>
+            (object.optionalFields?.filter(
+              (field) => isIntegrationFieldMapping(field) && !!field.mapToName,
+            ) as IntegrationFieldMapping[]) ?? [],
         };
       },
       getWriteObject: (objectName: string) => {
