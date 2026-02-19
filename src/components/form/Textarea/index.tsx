@@ -3,8 +3,7 @@ import classNames from "classnames";
 
 import classes from "./textarea.module.css";
 
-export interface TextareaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
   isError?: boolean;
 }
