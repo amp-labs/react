@@ -19,23 +19,18 @@ import { useMemo } from "react";
 import {
   FieldMetadata,
   HydratedIntegrationField,
-  HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
 } from "@generated/api/src";
+import {
+  getOptionalFieldsFromObject,
+  getOptionalMapFieldsFromObject,
+  getRequiredFieldsFromObject,
+  getRequiredMapFieldsFromObject,
+} from "src/utils/manifest";
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
-
-/**
- * Type guard for IntegrationFieldMapping.
- * A field is a mapping if it does not have a fieldName property.
- */
-function isIntegrationFieldMapping(
-  field: HydratedIntegrationField,
-): field is IntegrationFieldMapping {
-  return !(field as HydratedIntegrationFieldExistent).fieldName;
-}
 
 export interface Manifest {
   getReadObject: (objectName: string) => {
@@ -96,17 +91,13 @@ export function useManifest() {
         return {
           object,
           getRequiredFields: (): HydratedIntegrationField[] =>
-            object.requiredFields ?? [],
+            getRequiredFieldsFromObject(object) ?? [],
           getOptionalFields: (): HydratedIntegrationField[] =>
-            object.optionalFields ?? [],
+            getOptionalFieldsFromObject(object) ?? [],
           getRequiredMapFields: (): IntegrationFieldMapping[] =>
-            (object.requiredFields?.filter(
-              (field) => isIntegrationFieldMapping(field) && !!field.mapToName,
-            ) as IntegrationFieldMapping[]) ?? [],
+            getRequiredMapFieldsFromObject(object) ?? [],
           getOptionalMapFields: (): IntegrationFieldMapping[] =>
-            (object.optionalFields?.filter(
-              (field) => isIntegrationFieldMapping(field) && !!field.mapToName,
-            ) as IntegrationFieldMapping[]) ?? [],
+            getOptionalMapFieldsFromObject(object) ?? [],
         };
       },
       getWriteObject: (objectName: string) => {
