@@ -6,6 +6,7 @@ import {
   HydratedIntegrationWrite,
   HydratedRevision,
 } from "services/api";
+import { isIntegrationFieldMapping } from "src/utils/manifest";
 
 import type { FieldMapping } from "../InstallIntegration";
 import {
@@ -23,7 +24,6 @@ import {
   getOptionalFieldsFromObject,
   getOptionalMapFieldsFromObject,
   getRequiredMapFieldsFromObject,
-  isIntegrationFieldMapping,
 } from "../utils";
 
 // compares two write objects by checking if they have the same objectNames
@@ -276,7 +276,8 @@ export const getServerOptionalSelectedFields = (
     optionalFields
       ?.filter(
         (field): field is HydratedIntegrationFieldExistent =>
-          !isIntegrationFieldMapping(field) && !!field.fieldName,
+          !isIntegrationFieldMapping(field) &&
+          !!(field as HydratedIntegrationFieldExistent).fieldName,
       )
       .map((field) => field.fieldName) || [],
   );

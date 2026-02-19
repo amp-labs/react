@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { HydratedIntegrationFieldExistent } from "services/api";
+import { isIntegrationFieldMapping } from "src/utils/manifest";
 
 import {
   CheckboxItem,
   CheckboxPagination,
 } from "components/ui-base/Checkbox/CheckboxPagination";
 
-import { isIntegrationFieldMapping } from "../../../utils";
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
 import { FieldHeader } from "../FieldHeader";
 

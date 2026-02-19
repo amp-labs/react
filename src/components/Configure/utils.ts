@@ -42,6 +42,7 @@ export {
   getOptionalMapFieldsFromObject,
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
+  isIntegrationFieldMapping,
 };
 
 export const getReadObject = (config: Config, objectName: string) =>
