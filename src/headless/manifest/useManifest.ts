@@ -2,14 +2,13 @@
  * Based on sample
  *
   const manifest = useManifest();
+  const read = manifest.getReadObject(SELECTED_OBJECT_NAME);
 
-  // Get the required and optional fields defined in amp.yaml (allows ide flexibility)
-  const requiredFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getRequiredFields();
-  const optionalFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getOptionalFields();
-
-  // Get the required and optional field mappings (fields that the user must map)
-  const requiredMapFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getRequiredMapFields();
-  const optionalMapFields = manifest.getReadObject(SELECTED_OBJECT_NAME).getOptionalMapFields();
+  // Include param: "raw" (default, existent + mappings), "no-mappings", or "mappings"
+  const requiredFields = read.getRequiredFields();           // raw
+  const requiredNoMappings = read.getRequiredFields("no-mappings");
+  const requiredMappings = read.getRequiredFields("mappings"); // or read.getRequiredMapFields()
+  const optionalFields = read.getOptionalFields("no-mappings");
 
   // Get all the fields that exist in the customer's Hubspot Contact object
   const allFields = manifest.getCustomerFieldsForObject(SELECTED_OBJECT_NAME)
@@ -32,12 +31,27 @@ import {
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
 
+/** Filter for getRequiredFields / getOptionalFields: raw (all), no-mappings (existent only), or mappings only. */
+export type FieldInclude = "raw" | "no-mappings" | "mappings";
+
 export interface Manifest {
   getReadObject: (objectName: string) => {
     object: HydratedIntegrationObject | null;
-    getRequiredFields: () => HydratedIntegrationField[] | null;
-    getOptionalFields: () => HydratedIntegrationField[] | null;
+    /**
+     * Required fields. Default "raw" (existent + mappings). Use "no-mappings" or "mappings" to filter.
+     */
+    getRequiredFields: (
+      include?: FieldInclude,
+    ) => HydratedIntegrationField[] | IntegrationFieldMapping[] | null;
+    /**
+     * Optional fields. Default "raw" (existent + mappings). Use "no-mappings" or "mappings" to filter.
+     */
+    getOptionalFields: (
+      include?: FieldInclude,
+    ) => HydratedIntegrationField[] | IntegrationFieldMapping[] | null;
+    /** Required mapping fields. Same as getRequiredFields('mappings'). */
     getRequiredMapFields: () => IntegrationFieldMapping[] | null;
+    /** Optional mapping fields. Same as getOptionalFields('mappings'). */
     getOptionalMapFields: () => IntegrationFieldMapping[] | null;
   };
   getWriteObject: (objectName: string) => {
@@ -88,16 +102,33 @@ export function useManifest() {
           };
         }
 
+        const getRequiredFields = (
+          include: FieldInclude = "raw",
+        ): HydratedIntegrationField[] | IntegrationFieldMapping[] => {
+          if (include === "mappings")
+            return getRequiredMapFieldsFromObject(object) ?? [];
+          if (include === "no-mappings")
+            return getRequiredFieldsFromObject(object) ?? [];
+          return object.requiredFields ?? [];
+        };
+        const getOptionalFields = (
+          include: FieldInclude = "raw",
+        ): HydratedIntegrationField[] | IntegrationFieldMapping[] => {
+          if (include === "mappings")
+            return getOptionalMapFieldsFromObject(object) ?? [];
+          if (include === "no-mappings")
+            return getOptionalFieldsFromObject(object) ?? [];
+          return object.optionalFields ?? [];
+        };
+
         return {
           object,
-          getRequiredFields: (): HydratedIntegrationField[] =>
-            getRequiredFieldsFromObject(object) ?? [],
-          getOptionalFields: (): HydratedIntegrationField[] =>
-            getOptionalFieldsFromObject(object) ?? [],
+          getRequiredFields,
+          getOptionalFields,
           getRequiredMapFields: (): IntegrationFieldMapping[] =>
-            getRequiredMapFieldsFromObject(object) ?? [],
+            getRequiredFields("mappings") as IntegrationFieldMapping[],
           getOptionalMapFields: (): IntegrationFieldMapping[] =>
-            getOptionalMapFieldsFromObject(object) ?? [],
+            getOptionalFields("mappings") as IntegrationFieldMapping[],
         };
       },
       getWriteObject: (objectName: string) => {

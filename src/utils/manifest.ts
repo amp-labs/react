@@ -16,7 +16,8 @@ export function isIntegrationFieldMapping(
 }
 
 /**
- * Returns the required fields from an object, filtering out mappings.
+ * Returns the required existent fields from an object (mappings excluded).
+ * For required mapping fields use getRequiredMapFieldsFromObject.
  *
  * @param object HydratedIntegrationObject
  * @returns HydratedIntegrationField[] | null
@@ -34,7 +35,8 @@ export function getRequiredFieldsFromObject(
 }
 
 /**
- * Returns the optional fields from an object, filtering out mappings.
+ * Returns the optional existent fields from an object (mappings excluded).
+ * For optional mapping fields use getOptionalMapFieldsFromObject.
  *
  * @param object HydratedIntegrationObject
  * @returns HydratedIntegrationField[] | null
