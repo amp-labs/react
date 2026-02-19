@@ -21,6 +21,12 @@ export const testProviderInfo: ProviderInfo = {
     read: true,
     subscribe: true,
     write: true,
+    _delete: true,
+    search: {
+      operators: {
+        equals: true,
+      },
+    },
   },
   providerOpts: {
     modules: "test-module",
