@@ -1,4 +1,3 @@
-import { IntegrationFieldExistent } from "@generated/api/src";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import isEmpty from "lodash.isempty";
 import isEqual from "lodash.isequal";
@@ -11,20 +10,16 @@ import {
   IntegrationFieldMapping,
 } from "services/api";
 import { capitalize } from "src/utils";
+import {
+  getOptionalFieldsFromObject,
+  getOptionalMapFieldsFromObject,
+  getRequiredFieldsFromObject,
+  getRequiredMapFieldsFromObject,
+  isIntegrationFieldMapping,
+} from "src/utils/manifest";
 
 import { WRITE_CONST } from "./nav/ObjectManagementNav/constant";
 import { NavObject, SelectMappingFields } from "./types";
-/**
- * type guard for IntegrationFieldMapping | IntegrationFieldExistent
- *
- * @param field HydratedIntegrationField
- * @returns
- */
-export function isIntegrationFieldMapping(
-  field: HydratedIntegrationField,
-): field is IntegrationFieldMapping {
-  return !(field as IntegrationFieldExistent).fieldName;
-}
 
 // 1. get object
 /**
@@ -42,53 +37,13 @@ export function getObjectFromAction(
   );
 }
 
-// 2a. get required fields
-export function getRequiredFieldsFromObject(
-  object: HydratedIntegrationObject,
-): HydratedIntegrationField[] | null {
-  return (
-    object?.requiredFields?.filter(
-      (rf: HydratedIntegrationField) =>
-        !isIntegrationFieldMapping(rf) && !!rf.fieldName,
-    ) || null
-  );
-}
-
-// 2b. get required custom mapping fields
-export function getRequiredMapFieldsFromObject(
-  object: HydratedIntegrationObject,
-): IntegrationFieldMapping[] | null {
-  const requiredMapFields =
-    object?.requiredFields?.filter(
-      (rf: HydratedIntegrationField) =>
-        isIntegrationFieldMapping(rf) && !!rf.mapToName,
-    ) || [];
-  return requiredMapFields as IntegrationFieldMapping[]; // type hack
-}
-
-// 2c. get optional custom mapping fields
-export function getOptionalMapFieldsFromObject(
-  object: HydratedIntegrationObject,
-): IntegrationFieldMapping[] | null {
-  const optionalMapFields =
-    object?.optionalFields?.filter(
-      (rf: HydratedIntegrationField) =>
-        isIntegrationFieldMapping(rf) && !!rf.mapToName,
-    ) || [];
-  return optionalMapFields as IntegrationFieldMapping[]; // type hack
-}
-
-// 3. get optional fields
-export function getOptionalFieldsFromObject(
-  object: HydratedIntegrationObject,
-): HydratedIntegrationField[] | null {
-  return (
-    object?.optionalFields?.filter(
-      (rf: HydratedIntegrationField) =>
-        !isIntegrationFieldMapping(rf) && !!rf.fieldName,
-    ) || null
-  );
-}
+export {
+  getOptionalFieldsFromObject,
+  getOptionalMapFieldsFromObject,
+  getRequiredFieldsFromObject,
+  getRequiredMapFieldsFromObject,
+  isIntegrationFieldMapping,
+};
 
 export const getReadObject = (config: Config, objectName: string) =>
   config?.content?.read?.objects?.[objectName];

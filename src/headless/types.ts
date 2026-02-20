@@ -17,6 +17,7 @@ import type {
   HydratedIntegrationObject,
   HydratedRevision,
   Installation,
+  IntegrationFieldMapping,
   UpdateInstallationConfigContent,
 } from "@generated/api/src";
 // enum types
@@ -47,6 +48,7 @@ export type {
   HydratedIntegrationObject,
   HydratedRevision,
   Installation,
+  IntegrationFieldMapping,
   UpdateInstallationConfigContent,
 };
 

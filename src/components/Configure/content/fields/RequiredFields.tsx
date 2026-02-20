@@ -1,9 +1,9 @@
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query";
+import { isIntegrationFieldMapping } from "src/utils/manifest";
 
 import { Tag } from "components/ui-base/Tag";
 
-import { isIntegrationFieldMapping } from "../../utils";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 
 import { FieldHeader } from "./FieldHeader";
@@ -38,10 +38,8 @@ export function RequiredFields() {
       >
         {requiredFields?.length
           ? requiredFields.map((field) => {
-              if (!isIntegrationFieldMapping(field)) {
-                return <Tag key={field.fieldName}>{field.displayName}</Tag>;
-              }
-              return null; // fallback for customed mapped fields
+              if (isIntegrationFieldMapping(field)) return null;
+              return <Tag key={field.fieldName}>{field.displayName}</Tag>;
             })
           : "There are no required fields."}
       </div>
