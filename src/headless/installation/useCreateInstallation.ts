@@ -13,11 +13,14 @@ import { useInstallationProps } from "../InstallationProvider";
 import { useConnection } from "../useConnection";
 
 import { useInstallation } from "./useInstallation";
+import { useInstallationValidation } from "./useInstallationValidation";
 
 /**
  * create installation hook
  * @returns {Object} An object containing:
  *   - `createInstallation` (function): A function to create the installation.
+ *   - `canCreate` (boolean): Whether a new installation can be created.
+ *   - `validationErrors` (Object): Detailed validation error information.
  *   - `isIdle` (boolean): Whether the mutation is idle.
  *   - `isPending` (boolean): Whether the mutation is pending.
  *   - `error` (Error | null): The error object, if any.
@@ -29,6 +32,7 @@ export function useCreateInstallation() {
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { connection } = useConnection();
   const { installation } = useInstallation();
+  const { canCreate, validationErrors } = useInstallationValidation();
   const queryClient = useQueryClient();
   const {
     mutate: createInstallationMutation,
@@ -103,6 +107,8 @@ export function useCreateInstallation() {
 
   return {
     createInstallation,
+    canCreate,
+    validationErrors,
     isIdle,
     isPending,
     error,
