@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MetadataItemInput } from "@generated/api/src";
 import {
   AuthCardLayout,
@@ -6,15 +7,13 @@ import {
 
 import { AuthErrorAlert } from "components/auth/AuthErrorAlert/AuthErrorAlert";
 import { MetadataInput } from "components/auth/MetadataInput";
+import { getPackageInstallUrl } from "components/auth/PackageInstallBanner/getPackageInstallUrl";
+import { PackageInstallStep } from "components/auth/PackageInstallBanner/PackageInstallStep";
+import { Stepper } from "components/auth/PackageInstallBanner/Stepper";
 import { Button } from "components/ui-base/Button";
 
 import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
 
-/**
- *
- * @param param0
- * @returns
- */
 export function WorkspaceEntryContent({
   handleSubmit,
   setFormData,
@@ -23,29 +22,53 @@ export function WorkspaceEntryContent({
   providerName,
   metadataInputs,
 }: WorkspaceEntryProps) {
+  const packageInstallUrl = getPackageInstallUrl(metadataInputs);
+  const [step, setStep] = useState<"install" | "authorize">(
+    packageInstallUrl ? "install" : "authorize",
+  );
+
+  if (packageInstallUrl && step === "install") {
+    return (
+      <AuthCardLayout>
+        <PackageInstallStep
+          packageInstallUrl={packageInstallUrl}
+          providerName={providerName}
+          onSkip={() => setStep("authorize")}
+        />
+      </AuthCardLayout>
+    );
+  }
+
   return (
     <AuthCardLayout>
-      <AuthTitle>Enter your {providerName} workspace</AuthTitle>
-      <AuthErrorAlert error={error} />
-      <br />
-      {metadataInputs.map((metadata: MetadataItemInput) => (
-        <MetadataInput
-          key={metadata.name}
-          metadata={metadata}
-          onChange={(event) =>
-            setFormData(metadata.name, event.currentTarget.value)
-          }
-          providerName={providerName}
-        />
-      ))}
-      <Button
-        style={{ marginTop: "1em", width: "100%" }}
-        disabled={isButtonDisabled}
-        type="submit"
-        onClick={handleSubmit}
-      >
-        Next
-      </Button>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <AuthTitle>Enter your {providerName} workspace</AuthTitle>
+        {packageInstallUrl && (
+          <Stepper
+            currentStep={2}
+            onStepClick={() => setStep("install")}
+          />
+        )}
+        <AuthErrorAlert error={error} />
+        {metadataInputs.map((metadata: MetadataItemInput) => (
+          <MetadataInput
+            key={metadata.name}
+            metadata={metadata}
+            onChange={(event) =>
+              setFormData(metadata.name, event.currentTarget.value)
+            }
+            providerName={providerName}
+          />
+        ))}
+        <Button
+          style={{ width: "100%" }}
+          disabled={isButtonDisabled}
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Next
+        </Button>
+      </div>
     </AuthCardLayout>
   );
 }
