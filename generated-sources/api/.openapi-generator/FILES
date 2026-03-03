@@ -191,6 +191,8 @@ src/models/ProviderMetadataInfo.ts
 src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
+src/models/ReadFilter.ts
+src/models/ReadFilterValue.ts
 src/models/Revision.ts
 src/models/SearchOperators.ts
 src/models/SearchSupport.ts

@@ -19,6 +19,12 @@ import {
     DefaultPeriodConfigFromJSONTyped,
     DefaultPeriodConfigToJSON,
 } from './DefaultPeriodConfig';
+import type { ReadFilter } from './ReadFilter';
+import {
+    ReadFilterFromJSON,
+    ReadFilterFromJSONTyped,
+    ReadFilterToJSON,
+} from './ReadFilter';
 
 /**
  * 
@@ -32,6 +38,12 @@ export interface BackfillConfig {
      * @memberof BackfillConfig
      */
     defaultPeriod: DefaultPeriodConfig;
+    /**
+     * Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.
+     * @type {Array<ReadFilter>}
+     * @memberof BackfillConfig
+     */
+    filter?: Array<ReadFilter>;
 }
 
 /**
@@ -55,6 +67,7 @@ export function BackfillConfigFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'defaultPeriod': DefaultPeriodConfigFromJSON(json['defaultPeriod']),
+        'filter': !exists(json, 'filter') ? undefined : ((json['filter'] as Array<any>).map(ReadFilterFromJSON)),
     };
 }
 
@@ -68,6 +81,7 @@ export function BackfillConfigToJSON(value?: BackfillConfig | null): any {
     return {
         
         'defaultPeriod': DefaultPeriodConfigToJSON(value.defaultPeriod),
+        'filter': value.filter === undefined ? undefined : ((value.filter as Array<any>).map(ReadFilterToJSON)),
     };
 }
 
