@@ -1,26 +1,27 @@
 /* CSS Reset Scoped with CSS Modules */
 
+@layer reset {
+  .resetContainer {
+      /* Box sizing */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
 
-.resetContainer {
-    /* Box sizing */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
+      * {
+        font-family: var(--amp-font-family);
+      }
+
+      :where(h1, h2, h3, h4, h5, h6, p) {
+        margin: 0;
+        padding: 0;
+      }
+
+      :where(button) {
+        cursor: pointer;
+      }
+
     }
-
-    * {
-      font-family: var(--amp-font-family);
-    }
-
-    :where(h1, h2, h3, h4, h5, h6, p) {
-      margin: 0;
-      padding: 0;
-    }
-
-    :where(button) {
-      cursor: pointer;
-    }
-
-  }
+}
   
