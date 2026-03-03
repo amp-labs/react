@@ -90,6 +90,7 @@ const InstallIntegrationContent = ({
   // Once we enter wizard mode, stay in it until the user explicitly exits
   const enteredWizardMode = useRef(false);
   const [wizardDismissed, setWizardDismissed] = useState(false);
+  const prevSeedRef = useRef(seed);
 
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
@@ -117,6 +118,12 @@ const InstallIntegrationContent = ({
     );
   }
 
+  // Reset wizard state when component is reset (e.g., after uninstall)
+  if (prevSeedRef.current !== seed) {
+    prevSeedRef.current = seed;
+    setWizardDismissed(false);
+  }
+
   // Lock into wizard mode once we detect no installation
   if (variant === "wizard" && !installation && !isInstallationPending) {
     enteredWizardMode.current = true;
@@ -126,6 +133,7 @@ const InstallIntegrationContent = ({
   if (enteredWizardMode.current && !wizardDismissed) {
     return (
       <InstallWizard
+        key={seed + 1} // force update when seed changes
         integration={integration}
         consumerRef={consumerRef}
         consumerName={consumerName}
