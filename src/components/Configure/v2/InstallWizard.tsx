@@ -39,6 +39,7 @@ interface InstallWizardProps {
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
+  onEditConfiguration?: () => void;
 }
 
 const InstallWizardContent = ({
@@ -51,6 +52,7 @@ const InstallWizardContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  onEditConfiguration,
 }: InstallWizardProps) => {
   const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
   const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
@@ -119,7 +121,7 @@ const InstallWizardContent = ({
                   <ReviewStep />
                 </WizardStepContainer>
                 <WizardStepContainer step={WizardStep.Success}>
-                  <SuccessStep />
+                  <SuccessStep onEditConfiguration={onEditConfiguration} />
                 </WizardStepContainer>
               </WizardLayout>
             </div>

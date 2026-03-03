@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { ConnectionsProvider } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
@@ -14,9 +15,8 @@ import {
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
 import { AmpersandErrorBoundary } from "./ErrorBoundary";
-import {
-  ConditionalHasConfigurationLayout,
-} from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
+// eslint-disable-next-line max-len
+import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
 import { ConfigurationProvider } from "./state/ConfigurationStateProvider";
@@ -87,6 +87,10 @@ const InstallIntegrationContent = ({
   const { isError, errorState } = useErrorState();
   const { seed, reset } = useForceUpdate();
 
+  // Once we enter wizard mode, stay in it until the user explicitly exits
+  const enteredWizardMode = useRef(false);
+  const [wizardDismissed, setWizardDismissed] = useState(false);
+
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
   }
@@ -113,8 +117,13 @@ const InstallIntegrationContent = ({
     );
   }
 
-  // Use wizard flow for new installations when variant is "wizard"
+  // Lock into wizard mode once we detect no installation
   if (variant === "wizard" && !installation && !isInstallationPending) {
+    enteredWizardMode.current = true;
+  }
+
+  // Stay in wizard mode until user clicks "Edit Configuration"
+  if (enteredWizardMode.current && !wizardDismissed) {
     return (
       <InstallWizard
         integration={integration}
@@ -126,6 +135,7 @@ const InstallIntegrationContent = ({
         onInstallSuccess={onInstallSuccess}
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
+        onEditConfiguration={() => setWizardDismissed(true)}
       />
     );
   }

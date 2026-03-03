@@ -1,4 +1,5 @@
 import { SuccessCheckmarkIcon } from "assets/SuccessIcon";
+import { Button } from "src/components/ui-base/Button";
 
 const containerStyle: React.CSSProperties = {
   display: "flex",
@@ -21,7 +22,11 @@ const descriptionStyle: React.CSSProperties = {
   margin: 0,
 };
 
-export function SuccessStep() {
+interface SuccessStepProps {
+  onEditConfiguration?: () => void;
+}
+
+export function SuccessStep({ onEditConfiguration }: SuccessStepProps) {
   return (
     <div style={containerStyle}>
       <SuccessCheckmarkIcon />
@@ -29,6 +34,11 @@ export function SuccessStep() {
       <p style={descriptionStyle}>
         Your integration has been configured and is now active.
       </p>
+      {onEditConfiguration && (
+        <Button type="button" onClick={onEditConfiguration}>
+          Edit Configuration
+        </Button>
+      )}
     </div>
   );
 }
