@@ -1,0 +1,190 @@
+.selectObjects {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: var(--amp-v2-spacing-lg);
+}
+
+.title {
+  font-size: var(--amp-v2-heading-2);
+  font-weight: var(--amp-v2-font-weight-semibold);
+  color: var(--amp-colors-text-standout);
+  margin-bottom: var(--amp-v2-spacing-xs);
+}
+
+.description {
+  font-size: var(--amp-v2-body);
+  color: var(--amp-colors-text-muted);
+}
+
+.objectList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-v2-spacing-sm);
+}
+
+.objectCard {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-v2-spacing-md);
+  padding: var(--amp-v2-spacing-md) var(--amp-v2-spacing-lg);
+  border: 1px solid var(--amp-v2-card-border);
+  border-radius: var(--amp-v2-card-border-radius);
+  background: var(--amp-v2-card-bg);
+  cursor: pointer;
+  transition: all var(--amp-v2-transition-fast);
+}
+
+.objectCard:hover {
+  background: var(--amp-v2-card-hover-bg);
+  border-color: var(--amp-v2-card-border-hover);
+}
+
+.objectCard.selected {
+  border-color: var(--amp-v2-card-selected-border);
+  background: var(--amp-v2-card-selected-bg);
+}
+
+.checkbox {
+  width: var(--amp-v2-checkbox-size);
+  height: var(--amp-v2-checkbox-size);
+  flex-shrink: 0;
+  accent-color: var(--amp-v2-checkbox-checked-bg);
+  cursor: pointer;
+}
+
+.objectInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-v2-spacing-xs);
+  flex: 1;
+}
+
+.objectName {
+  font-size: var(--amp-v2-body);
+  font-weight: var(--amp-v2-font-weight-medium);
+  color: var(--amp-colors-text-standout);
+}
+
+.badges {
+  display: flex;
+  gap: var(--amp-v2-spacing-sm);
+}
+
+.badge {
+  font-size: var(--amp-v2-badge-font-size);
+  padding: var(--amp-v2-badge-padding);
+  background: var(--amp-v2-badge-bg);
+  color: var(--amp-v2-badge-text);
+  border-radius: var(--amp-v2-badge-border-radius);
+}
+
+/* Write Toggle */
+.writeToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-v2-spacing-sm);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.writeToggleLabel {
+  font-size: var(--amp-v2-small);
+  font-weight: var(--amp-v2-font-weight-medium);
+  color: var(--amp-colors-text-muted);
+}
+
+.writeInfoTrigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--amp-colors-text-muted);
+  cursor: help;
+  flex-shrink: 0;
+}
+
+.writeInfoTooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  width: max-content;
+  max-width: 240px;
+  padding: var(--amp-v2-spacing-xs) var(--amp-v2-spacing-sm);
+  font-size: var(--amp-v2-small);
+  font-weight: normal;
+  color: var(--amp-colors-text-regular);
+  background: var(--amp-colors-bg-primary, #fff);
+  border: 1px solid var(--amp-colors-border);
+  border-radius: var(--amp-default-border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.writeInfoTrigger:hover .writeInfoTooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  inset: 0;
+  background: var(--amp-colors-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toggleSlider::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+  background: var(--amp-v2-wizard-step-active);
+}
+
+.toggleSwitch input:checked + .toggleSlider::before {
+  transform: translateX(16px);
+}
+
+.loading,
+.error,
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--amp-v2-spacing-xl);
+  font-size: var(--amp-v2-body);
+  color: var(--amp-colors-text-muted);
+}
+
+.error {
+  color: var(--amp-colors-status-critical);
+}

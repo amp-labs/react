@@ -64,8 +64,14 @@ export function useCreateInstallation() {
       return;
     }
 
+    // Ensure provider is set from the integration object
+    const configWithProvider = {
+      ...config,
+      provider: config.provider || integrationObj.provider || "",
+    };
+
     // Validate config before creating installation
-    const configResult = toCreateConfigContent(config);
+    const configResult = toCreateConfigContent(configWithProvider);
     if (configResult.error || !configResult.data) {
       onError?.(configResult.error || new Error("Invalid configuration data"));
       onSettled?.();

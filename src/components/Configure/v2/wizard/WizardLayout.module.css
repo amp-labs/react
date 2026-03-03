@@ -1,0 +1,13 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--amp-v2-wizard-max-width);
+  margin: 0 auto;
+  padding: var(--amp-v2-spacing-lg);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  padding: var(--amp-v2-spacing-md) 0;
+}

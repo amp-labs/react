@@ -14,7 +14,8 @@ import { useWizard } from "../wizard/WizardContext";
 import styles from "./ReviewStep.module.css";
 
 export function ReviewStep() {
-  const { state, prevStep, setSubmitting, setSubmissionError } = useWizard();
+  const { state, prevStep, nextStep, setSubmitting, setSubmissionError } =
+    useWizard();
   const { selectedObjects } = state;
   const manifest = useManifest();
   const localConfig = useLocalConfig();
@@ -100,6 +101,7 @@ export function ReviewStep() {
         setSubmitting(false);
         setInstallation(installation);
         onInstallSuccess?.(installation.id, installation.config as Config);
+        nextStep();
       },
       onError: (error) => {
         setSubmitting(false);
