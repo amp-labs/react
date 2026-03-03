@@ -3,7 +3,7 @@ import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import type { DynamicMappingsInputEntry } from "services/api";
 import { Config } from "services/api";
-import { InstallationProvider } from "src/headless";
+import { InstallationProvider, useInstallation } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
@@ -14,11 +14,14 @@ import {
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
 import { AmpersandErrorBoundary } from "./ErrorBoundary";
-import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
+import {
+  ConditionalHasConfigurationLayout,
+} from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
 import { ConfigurationProvider } from "./state/ConfigurationStateProvider";
 import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
+import { InstallWizard } from "./v2/InstallWizard";
 
 import resetStyles from "src/styles/resetCss.module.css";
 
@@ -58,6 +61,12 @@ interface InstallIntegrationProps {
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
+  /**
+   * @hidden
+   * When "wizard", uses the new wizard-based install flow for new installations.
+   * Existing installations still show the standard configuration view.
+   */
+  variant?: "wizard";
 }
 
 const InstallIntegrationContent = ({
@@ -70,7 +79,9 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  variant,
 }: InstallIntegrationProps) => {
+  const { installation, isPending: isInstallationPending } = useInstallation();
   const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
   const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
   const { isError, errorState } = useErrorState();
@@ -99,6 +110,23 @@ const InstallIntegrationContent = ({
   if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
     return (
       <ComponentContainerError message="Something went wrong, couldn't find integration information" />
+    );
+  }
+
+  // Use wizard flow for new installations when variant is "wizard"
+  if (variant === "wizard" && !installation && !isInstallationPending) {
+    return (
+      <InstallWizard
+        integration={integration}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
+        groupRef={groupRef}
+        groupName={groupName}
+        fieldMapping={fieldMapping}
+        onInstallSuccess={onInstallSuccess}
+        onUpdateSuccess={onUpdateSuccess}
+        onUninstallSuccess={onUninstallSuccess}
+      />
     );
   }
 
@@ -142,28 +170,8 @@ const InstallIntegrationContent = ({
   );
 };
 
-export function InstallIntegration({
-  integration,
-  consumerRef,
-  consumerName,
-  groupRef,
-  groupName,
-  onInstallSuccess,
-  onUpdateSuccess,
-  onUninstallSuccess,
-  fieldMapping,
-}: InstallIntegrationProps) {
-  const props: InstallIntegrationProps = {
-    integration,
-    consumerRef,
-    consumerName,
-    groupRef,
-    groupName,
-    onInstallSuccess,
-    onUpdateSuccess,
-    onUninstallSuccess,
-    fieldMapping,
-  };
+export function InstallIntegration(props: InstallIntegrationProps) {
+  const { integration, consumerRef, consumerName, groupRef, groupName } = props;
 
   return (
     // catch errors in the InstallIntegrationContent component
