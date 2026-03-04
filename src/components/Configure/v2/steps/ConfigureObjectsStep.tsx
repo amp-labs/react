@@ -196,6 +196,7 @@ export function ConfigureObjectsStep() {
     prevObject,
     nextStep,
     prevStep,
+    setCurrentObjectIndex,
   } = useWizard();
 
   const { selectedObjects, currentObjectIndex } = state;
@@ -384,27 +385,46 @@ export function ConfigureObjectsStep() {
     prevObject,
   ]);
 
-  // Progress bar calculation — track all sub-pages across all objects
+  // Object tabs — each tab shows dots for its sub-pages
   const currentObjectPages = useMemo(
     () => (currentObjectName ? getSubPages(manifest, currentObjectName) : []),
     [manifest, currentObjectName],
   );
   const currentPageIndex = currentObjectPages.indexOf(subPage);
 
-  const { totalPages, completedPages } = useMemo(() => {
-    let total = 0;
-    let completed = 0;
-    for (let i = 0; i < selectedObjects.length; i++) {
-      const pages = getSubPages(manifest, selectedObjects[i]);
-      total += pages.length;
-      if (i < currentObjectIndex) {
-        completed += pages.length;
-      } else if (i === currentObjectIndex) {
-        completed += Math.max(0, currentPageIndex);
-      }
-    }
-    return { totalPages: total, completedPages: completed };
+  const objectTabs = useMemo(() => {
+    return selectedObjects.map((objName, objIndex) => {
+      const pages = getSubPages(manifest, objName);
+      const displayName =
+        manifest.getReadObject(objName)?.object?.displayName || objName;
+
+      const dots = pages.map((_, pageIdx) => {
+        if (objIndex < currentObjectIndex) return "complete" as const;
+        if (objIndex === currentObjectIndex) {
+          if (pageIdx < currentPageIndex) return "complete" as const;
+          if (pageIdx === currentPageIndex) return "active" as const;
+          return "pending" as const;
+        }
+        return "pending" as const;
+      });
+
+      return { objName, displayName, dots, objIndex };
+    });
   }, [selectedObjects, manifest, currentObjectIndex, currentPageIndex]);
+
+  const handleTabClick = useCallback(
+    (objIndex: number) => {
+      if (objIndex > currentObjectIndex) return;
+      if (objIndex === currentObjectIndex) return;
+      // Navigate to a completed object — land on its last sub-page
+      const objName = selectedObjects[objIndex];
+      if (objName) {
+        pendingSubPageRef.current = getLastSubPage(manifest, objName);
+      }
+      setCurrentObjectIndex(objIndex);
+    },
+    [currentObjectIndex, selectedObjects, manifest, setCurrentObjectIndex],
+  );
 
   if (!currentObjectName || !currentManifestObject) {
     return <div className={styles.empty}>No objects to configure.</div>;
@@ -415,27 +435,35 @@ export function ConfigureObjectsStep() {
   const appName = projectAppName || "Your App";
   const providerDisplayName = providerName || provider || "Provider";
 
-  const progressPercent =
-    totalPages > 0 ? Math.round((completedPages / totalPages) * 100) : 0;
-
   return (
     <div className={styles.configureObjects}>
-      {/* Progress Bar */}
-      <div className={styles.progressBarContainer}>
-        <div className={styles.progressBarText}>
-          Configuring {objectDisplayName} ({currentPageIndex + 1} of{" "}
-          {currentObjectPages.length}{" "}
-          {currentObjectPages.length === 1 ? "page" : "pages"})
-        </div>
-        <div className={styles.progressBar}>
-          <div
-            className={styles.progressBarFill}
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-        <div className={styles.progressPercentage}>
-          {progressPercent}% complete
-        </div>
+      {/* Object Tabs */}
+      <div className={styles.objectTabs}>
+        {objectTabs.map((tab) => (
+          <button
+            key={tab.objName}
+            type="button"
+            className={`${styles.objectTab}${tab.objIndex === currentObjectIndex ? ` ${styles.objectTabActive}` : ""}`}
+            disabled={tab.objIndex > currentObjectIndex}
+            onClick={() => handleTabClick(tab.objIndex)}
+          >
+            <span className={styles.objectTabLabel}>{tab.displayName}</span>
+            <span className={styles.objectTabDots}>
+              {tab.dots.map((status, dotIdx) => (
+                <span
+                  key={dotIdx}
+                  className={`${styles.dot} ${
+                    status === "complete"
+                      ? styles.dotComplete
+                      : status === "active"
+                        ? styles.dotActive
+                        : styles.dotPending
+                  }`}
+                />
+              ))}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Centered Card */}
