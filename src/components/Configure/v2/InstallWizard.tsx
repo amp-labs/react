@@ -13,7 +13,7 @@ import {
 } from "../ComponentContainer";
 import { AmpersandErrorBoundary } from "../ErrorBoundary";
 
-import { ConfigureObjectsGate } from "./steps/ConfigureObjectsStep";
+import { ConfigureObjectsGate } from "./steps/configure-objects";
 import { ConnectStep } from "./steps/ConnectStep";
 import { ReviewStep } from "./steps/ReviewStep";
 import { SelectObjectsStep } from "./steps/SelectObjectsStep";

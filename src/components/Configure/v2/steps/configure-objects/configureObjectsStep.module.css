@@ -4,77 +4,6 @@
 }
 
 /* ============================================ */
-/* Object Tabs                                  */
-/* ============================================ */
-
-.objectTabs {
-  display: flex;
-  justify-content: flex-start;
-  gap: var(--amp-v2-spacing-sm);
-  margin-bottom: var(--amp-v2-spacing-lg);
-}
-
-.objectTab {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  padding: var(--amp-v2-spacing-xs) var(--amp-v2-spacing-md);
-  border: none;
-  border-radius: var(--amp-default-border-radius);
-  background: transparent;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.objectTab:hover {
-  background: var(--amp-v2-stepper-tab-selected);
-}
-
-.objectTab:disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-.objectTab:disabled:hover {
-  background: transparent;
-}
-
-.objectTabActive {
-  background: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.06));
-}
-
-.objectTabLabel {
-  font-size: var(--amp-v2-small);
-  font-weight: var(--amp-v2-font-weight-semibold);
-  color: var(--amp-colors-text-standout);
-  white-space: nowrap;
-}
-
-.objectTabDots {
-  display: flex;
-  gap: 4px;
-}
-
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.dotComplete {
-  background: var(--amp-v2-wizard-step-active);
-}
-
-.dotActive {
-  background: var(--amp-v2-wizard-step-active);
-}
-
-.dotPending {
-  background: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.3));
-}
-
-/* ============================================ */
 /* Centered Card Panel                          */
 /* ============================================ */
 
@@ -202,7 +131,31 @@
 }
 
 /* ============================================ */
-/* Field Mappings (inline on mappings sub-page) */
+/* Shared disabled input (used by MappingRow    */
+/* and FieldsContent for object mapping)        */
+/* ============================================ */
+
+.mappingDisabledInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--amp-v2-spacing-sm) var(--amp-v2-spacing-md);
+  font-size: var(--amp-v2-body);
+  font-family: inherit;
+  color: var(--amp-colors-text-muted);
+  background: var(--amp-colors-bg-secondary, #f5f5f5);
+  border: 1px solid var(--amp-colors-border);
+  border-radius: var(--amp-default-border-radius);
+  cursor: default;
+}
+
+.mappingDisabledInputText {
+  font-weight: var(--amp-v2-font-weight-medium);
+}
+
+/* ============================================ */
+/* Field Mappings (column headers)              */
 /* ============================================ */
 
 .mappingContent {
@@ -227,104 +180,4 @@
 
 .mappingColumnArrow {
   width: 24px;
-}
-
-/* Mapping rows */
-.mappingRow {
-  display: grid;
-  grid-template-columns: 1fr 24px 1fr;
-  align-items: center;
-  gap: var(--amp-v2-spacing-sm);
-  padding: var(--amp-v2-spacing-sm) 0;
-  border-bottom: 1px solid var(--amp-colors-border);
-}
-
-.mappingRow:last-of-type {
-  border-bottom: none;
-}
-
-.mappingField {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: var(--amp-v2-body);
-  color: var(--amp-colors-text-regular);
-}
-
-.mappingDisabledInput {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: var(--amp-v2-spacing-sm) var(--amp-v2-spacing-md);
-  font-size: var(--amp-v2-body);
-  font-family: inherit;
-  color: var(--amp-colors-text-muted);
-  background: var(--amp-colors-bg-secondary, #f5f5f5);
-  border: 1px solid var(--amp-colors-border);
-  border-radius: var(--amp-default-border-radius);
-  cursor: default;
-}
-
-.mappingDisabledInputText {
-  font-weight: var(--amp-v2-font-weight-medium);
-}
-
-.mappingInfoTrigger {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: var(--amp-colors-text-muted);
-  cursor: help;
-  flex-shrink: 0;
-}
-
-.mappingInfoTooltip {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  width: max-content;
-  max-width: 240px;
-  padding: var(--amp-v2-spacing-xs) var(--amp-v2-spacing-sm);
-  font-size: var(--amp-v2-small);
-  font-weight: normal;
-  color: var(--amp-colors-text-regular);
-  background: var(--amp-colors-bg-primary, #fff);
-  border: 1px solid var(--amp-colors-border);
-  border-radius: var(--amp-default-border-radius);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.mappingInfoTrigger:hover .mappingInfoTooltip {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mappingSelect {
-  width: 100%;
-  padding: var(--amp-v2-spacing-sm) var(--amp-v2-spacing-md);
-  font-size: var(--amp-v2-body);
-  font-family: inherit;
-  color: var(--amp-colors-text-regular);
-  background: var(--amp-colors-input-bg, #fff);
-  border: 1px solid var(--amp-colors-border);
-  border-radius: var(--amp-default-border-radius);
-  cursor: pointer;
-  appearance: auto;
-}
-
-.requiredAsterisk {
-  color: var(--amp-v2-required-asterisk);
-  margin-left: 2px;
-}
-
-.mappingArrow {
-  text-align: center;
-  font-size: var(--amp-v2-body);
-  color: var(--amp-colors-text-muted);
 }
