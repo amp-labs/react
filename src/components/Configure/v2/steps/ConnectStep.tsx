@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useConnections } from "context/ConnectionsContextProvider";
-import { Connection } from "services/api";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
+import { ConnectedSuccessBox } from "src/components/Connect/ConnectedSuccessBox";
 
 import { ProtectedConnectionLayout } from "../../layout/ProtectedConnectionLayout";
 import { useWizard, WizardStep } from "../wizard/WizardContext";
+import { WizardNavigation } from "../wizard/WizardNavigation";
 
 import styles from "./ConnectStep.module.css";
 
@@ -23,18 +25,36 @@ export function ConnectStep({
   resetComponent,
 }: ConnectStepProps) {
   const { goToStep } = useWizard();
+  const { provider } = useInstallIntegrationProps();
   const { selectedConnection } = useConnections();
 
-  // Auto-advance to Step 2 when connection is established
+  // Track whether a connection existed on mount.
+  // If not, auto-advance when one is established (fresh auth flow).
+  const hadConnectionOnMount = useRef(!!selectedConnection);
+
   useEffect(() => {
-    if (selectedConnection) {
+    if (!hadConnectionOnMount.current && selectedConnection) {
       goToStep(WizardStep.SelectObjects);
     }
   }, [selectedConnection, goToStep]);
 
-  const handleConnectionSuccess = (_connection: Connection) => {
-    goToStep(WizardStep.SelectObjects);
-  };
+  // If already connected (e.g. navigated back), show manage connection UI.
+  if (hadConnectionOnMount.current && selectedConnection) {
+    return (
+      <div className={styles.connectStep}>
+        <div className={styles.connected}>
+          <ConnectedSuccessBox
+            provider={provider}
+            resetComponent={resetComponent}
+          />
+          <WizardNavigation
+            showBack={false}
+            onNext={() => goToStep(WizardStep.SelectObjects)}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.connectStep}>
@@ -43,11 +63,17 @@ export function ConnectStep({
         consumerName={consumerName}
         groupRef={groupRef}
         groupName={groupName}
-        onSuccess={handleConnectionSuccess}
         resetComponent={resetComponent}
       >
         <div className={styles.connected}>
-          <p>Connected successfully. Proceeding to next step...</p>
+          <ConnectedSuccessBox
+            provider={provider}
+            resetComponent={resetComponent}
+          />
+          <WizardNavigation
+            showBack={false}
+            onNext={() => goToStep(WizardStep.SelectObjects)}
+          />
         </div>
       </ProtectedConnectionLayout>
     </div>

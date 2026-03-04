@@ -1,12 +1,12 @@
 .connectStep {
+  display: flex;
+  flex-direction: column;
   min-height: 200px;
+  flex: 1;
 }
 
 .connected {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--amp-v2-spacing-xl);
-  color: var(--amp-colors-text-muted);
-  font-size: var(--amp-v2-body);
+  flex-direction: column;
+  flex: 1;
 }
