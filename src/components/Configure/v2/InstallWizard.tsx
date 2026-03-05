@@ -1,10 +1,8 @@
 import { ConnectionsProvider } from "context/ConnectionsContextProvider";
-import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config } from "services/api";
 import { InstallationProvider } from "src/headless";
-import { useListIntegrationsQuery } from "src/hooks/query";
-import { useProjectQuery } from "src/hooks/query";
+import { useListIntegrationsQuery, useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
 
 import {
@@ -54,16 +52,22 @@ const InstallWizardContent = ({
   fieldMapping,
   onEditConfiguration,
 }: InstallWizardProps) => {
-  const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
-  const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
-  const { isError, errorState } = useErrorState();
+  const {
+    projectIdOrName,
+    isLoading: isProjectLoading,
+    isError: isProjectError,
+  } = useProjectQuery();
+  const {
+    isLoading: isIntegrationListLoading,
+    isError: isIntegrationListError,
+  } = useListIntegrationsQuery();
   const { seed, reset } = useForceUpdate();
 
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
   }
 
-  if (isError(ErrorBoundary.PROJECT, projectIdOrName)) {
+  if (isProjectError) {
     return (
       <ComponentContainerError
         message={`Error loading project ${projectIdOrName}`}
@@ -71,15 +75,9 @@ const InstallWizardContent = ({
     );
   }
 
-  if (isError(ErrorBoundary.INTEGRATION_LIST, projectIdOrName)) {
+  if (isIntegrationListError) {
     return (
       <ComponentContainerError message="Error retrieving integrations for the project, double check the API key" />
-    );
-  }
-
-  if (errorState[ErrorBoundary.INTEGRATION_LIST]?.apiError) {
-    return (
-      <ComponentContainerError message="Something went wrong, couldn't find integration information" />
     );
   }
 
