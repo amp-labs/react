@@ -82,10 +82,15 @@ export function SelectObjectsStep() {
       localConfig.ensureObject(objectName);
     });
 
-    // Remove deselected objects from the config draft
+    // Remove deselected objects from the config draft and clean up write state
     previouslySelected.forEach((objectName) => {
       if (!selected.has(objectName)) {
         localConfig.removeObject(objectName);
+        setWriteEnabled((prev) => {
+          const next = new Set(prev);
+          next.delete(objectName);
+          return next;
+        });
       }
     });
 
