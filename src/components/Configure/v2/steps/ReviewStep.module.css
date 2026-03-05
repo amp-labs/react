@@ -1,0 +1,110 @@
+.reviewStep {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: var(--amp-v2-spacing-lg);
+}
+
+.title {
+  font-size: var(--amp-v2-heading-2);
+  font-weight: var(--amp-v2-font-weight-semibold);
+  color: var(--amp-colors-text-standout);
+  margin-bottom: var(--amp-v2-spacing-xs);
+}
+
+.description {
+  font-size: var(--amp-v2-body);
+  color: var(--amp-colors-text-muted);
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-v2-spacing-sm);
+  margin-bottom: var(--amp-v2-spacing-lg);
+}
+
+.summaryCard {
+  padding: var(--amp-v2-spacing-md) 0;
+  border-bottom: 1px solid var(--amp-colors-border);
+}
+
+.summaryCard:last-child {
+  border-bottom: none;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--amp-v2-spacing-sm);
+}
+
+.objectName {
+  font-size: var(--amp-v2-body);
+  font-weight: var(--amp-v2-font-weight-semibold);
+  color: var(--amp-colors-text-standout);
+}
+
+.objectDescription {
+  font-size: var(--amp-v2-small);
+  color: var(--amp-colors-text-muted);
+}
+
+.cardDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--amp-v2-spacing-xs);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--amp-v2-badge-padding);
+  background: var(--amp-v2-badge-bg);
+  color: var(--amp-v2-badge-text);
+  border-radius: var(--amp-v2-badge-border-radius);
+  font-size: var(--amp-v2-badge-font-size);
+}
+
+.cardMappings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--amp-v2-spacing-xs);
+  margin-top: var(--amp-v2-spacing-xs);
+}
+
+.mappingPill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--amp-v2-badge-padding);
+  background: var(--amp-v2-badge-bg);
+  color: var(--amp-v2-badge-text);
+  border-radius: var(--amp-v2-badge-border-radius);
+  font-size: var(--amp-v2-badge-font-size);
+}
+
+.error {
+  padding: var(--amp-v2-spacing-md);
+  margin-bottom: var(--amp-v2-spacing-md);
+  background: var(--amp-v2-status-invalid-bg);
+  color: var(--amp-v2-status-invalid-text);
+  border-radius: var(--amp-default-border-radius);
+  font-size: var(--amp-v2-small);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: var(--amp-v2-spacing-lg);
+  border-top: 1px solid var(--amp-colors-border);
+  margin-top: var(--amp-v2-spacing-lg);
+}
+
+.createButton {
+  font-size: var(--amp-v2-body);
+}

@@ -1,0 +1,12 @@
+.connectStep {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  flex: 1;
+}
+
+.connected {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

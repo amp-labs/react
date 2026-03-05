@@ -1,0 +1,6 @@
+.installWizard {
+  font-family: var(--amp-font-family);
+  color: var(--amp-colors-text-regular);
+  max-width: var(--amp-v2-wizard-max-width);
+  margin: 0 auto;
+}
