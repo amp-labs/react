@@ -35,8 +35,8 @@ export function FieldsContent({
         <div className={sharedStyles.fieldSection}>
           <h3 className={sharedStyles.sectionTitle}>Object Mapping</h3>
           <p className={sharedStyles.helperText}>
-            This {providerDisplayName} object is mapped to the
-            corresponding {appName} object.
+            This {providerDisplayName} object is mapped to the corresponding{" "}
+            {appName} object.
           </p>
           <div className={sharedStyles.objectMappingInline}>
             <div className={sharedStyles.mappingDisabledInput}>
@@ -45,11 +45,7 @@ export function FieldsContent({
               </span>
             </div>
             <div className={sharedStyles.objectMappingArrow}>
-              {isMappingBidirectional ? (
-                <WidthIcon />
-              ) : (
-                <ArrowRightIcon />
-              )}
+              {isMappingBidirectional ? <WidthIcon /> : <ArrowRightIcon />}
             </div>
             <div className={sharedStyles.mappingDisabledInput}>
               <span className={sharedStyles.mappingDisabledInputText}>

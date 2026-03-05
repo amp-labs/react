@@ -20,8 +20,8 @@ export function AdditionalFieldsContent({
     <>
       <h3 className={sharedStyles.sectionTitle}>Additional Fields</h3>
       <p className={sharedStyles.helperText}>
-        Would you like to share any optional {providerDisplayName} fields
-        with {appName}?
+        Would you like to share any optional {providerDisplayName} fields with{" "}
+        {appName}?
       </p>
       <CheckboxPagination
         items={optionalFieldItems}

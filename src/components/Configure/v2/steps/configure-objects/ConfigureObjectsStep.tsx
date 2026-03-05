@@ -26,13 +26,8 @@ export function ConfigureObjectsStep() {
   const { appName: projectAppName } = useProjectQuery();
   const { currentObjectName } = useWizard();
 
-  const {
-    subPage,
-    currentPageIndex,
-    handleNext,
-    handleBack,
-    handleTabClick,
-  } = useSubPageNavigation();
+  const { subPage, currentPageIndex, handleNext, handleBack, handleTabClick } =
+    useSubPageNavigation();
 
   // Get manifest data for the current object
   const currentManifestObject = useMemo(() => {
@@ -69,9 +64,6 @@ export function ConfigureObjectsStep() {
 
   // Derived booleans for current object
   const hasRequiredFields = requiredFields.length > 0;
-  const hasOptionalFields = optionalFields.length > 0;
-  const hasMappings =
-    requiredMapFields.length > 0 || optionalMapFields.length > 0;
 
   // Object mapping data
   const objectMapToName = currentManifestObject?.object?.mapToName;
@@ -81,8 +73,7 @@ export function ConfigureObjectsStep() {
   const hasFieldsContent = hasRequiredFields || hasObjectMapping;
 
   const isMappingBidirectional =
-    !!currentObjectName &&
-    !!localConfig.writeObject(currentObjectName).object;
+    !!currentObjectName && !!localConfig.writeObject(currentObjectName).object;
 
   // Get config handlers for the current object
   const configHandlers = useMemo(() => {

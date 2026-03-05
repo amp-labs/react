@@ -1,6 +1,6 @@
-import type { Manifest } from "src/headless/types";
 import type { HydratedIntegrationField } from "@generated/api/src";
 import type { HydratedIntegrationFieldExistent } from "@generated/api/src";
+import type { Manifest } from "src/headless/types";
 
 export type SubPage = "fields" | "mappings" | "additional";
 
@@ -69,10 +69,7 @@ export function getLastSubPage(
 /**
  * Return the ordered list of sub-pages an object will visit.
  */
-export function getSubPages(
-  manifest: Manifest,
-  objectName: string,
-): SubPage[] {
+export function getSubPages(manifest: Manifest, objectName: string): SubPage[] {
   const obj = manifest.getReadObject(objectName);
   if (!obj) return ["fields"];
 

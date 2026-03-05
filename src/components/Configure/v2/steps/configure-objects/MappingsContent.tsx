@@ -30,8 +30,8 @@ export function MappingsContent({
     <>
       <h3 className={sharedStyles.sectionTitle}>Field Mappings</h3>
       <p className={sharedStyles.helperText}>
-        Map {providerDisplayName} fields to the corresponding {appName}{" "}
-        fields for read
+        Map {providerDisplayName} fields to the corresponding {appName} fields
+        for read
         {isMappingBidirectional ? " and write" : ""}.
       </p>
       <div className={sharedStyles.mappingContent}>

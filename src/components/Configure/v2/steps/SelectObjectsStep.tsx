@@ -157,8 +157,18 @@ export function SelectObjectsStep() {
               aria-checked={isSelected}
               tabIndex={0}
               className={`${styles.objectCard} ${isSelected ? styles.selected : ""}`}
-              onClick={() => toggleObject(obj.objectName)}
+              onClick={(e) => {
+                const isWriteToggle = (e.target as HTMLElement).closest(
+                  `.${styles.writeToggle}`,
+                );
+                if (isWriteToggle) return;
+                toggleObject(obj.objectName);
+              }}
               onKeyDown={(e) => {
+                const isWriteToggle = (e.target as HTMLElement).closest(
+                  `.${styles.writeToggle}`,
+                );
+                if (isWriteToggle) return;
                 if (e.key === " " || e.key === "Enter") {
                   e.preventDefault();
                   toggleObject(obj.objectName);
@@ -179,10 +189,7 @@ export function SelectObjectsStep() {
                 </span>
               </div>
               {hasWrite && isSelected && (
-                <label
-                  className={styles.writeToggle}
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <label className={styles.writeToggle}>
                   <span className={styles.writeToggleLabel}>Write Enabled</span>
                   <span className={styles.writeInfoTrigger}>
                     <InfoCircledIcon />

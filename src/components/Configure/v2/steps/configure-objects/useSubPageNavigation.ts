@@ -4,11 +4,7 @@ import { useManifest } from "src/headless";
 import { useWizard } from "../../wizard/WizardContext";
 
 import type { SubPage } from "./subPageUtils";
-import {
-  getInitialSubPage,
-  getLastSubPage,
-  getSubPages,
-} from "./subPageUtils";
+import { getInitialSubPage, getLastSubPage, getSubPages } from "./subPageUtils";
 
 export function useSubPageNavigation() {
   const manifest = useManifest();
@@ -43,7 +39,6 @@ export function useSubPageNavigation() {
     } else if (currentObjectName) {
       setSubPage(getInitialSubPage(manifest, currentObjectName));
     }
-
   }, [currentObjectName, manifest]);
 
   // Derived booleans for current object
@@ -59,11 +54,15 @@ export function useSubPageNavigation() {
   }, [currentManifestObject]);
 
   const hasOptionalFields = useMemo(() => {
-    return (currentManifestObject?.getOptionalFields("no-mappings")?.length ?? 0) > 0;
+    return (
+      (currentManifestObject?.getOptionalFields("no-mappings")?.length ?? 0) > 0
+    );
   }, [currentManifestObject]);
 
   const hasFieldsContent = useMemo(() => {
-    const hasRequiredFields = (currentManifestObject?.getRequiredFields("no-mappings")?.length ?? 0) > 0;
+    const hasRequiredFields =
+      (currentManifestObject?.getRequiredFields("no-mappings")?.length ?? 0) >
+      0;
     const hasObjectMapping = !!currentManifestObject?.object?.mapToName;
     return hasRequiredFields || hasObjectMapping;
   }, [currentManifestObject]);
