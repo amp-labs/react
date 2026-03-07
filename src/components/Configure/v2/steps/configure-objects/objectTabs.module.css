@@ -1,0 +1,66 @@
+.objectTabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--amp-v2-spacing-sm);
+  margin-bottom: var(--amp-v2-spacing-lg);
+}
+
+.objectTab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: var(--amp-v2-spacing-xs) var(--amp-v2-spacing-md);
+  border: none;
+  border-radius: var(--amp-default-border-radius);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.objectTab:hover {
+  background: var(--amp-v2-stepper-tab-selected);
+}
+
+.objectTab:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.objectTab:disabled:hover {
+  background: transparent;
+}
+
+.objectTabActive {
+  background: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.06));
+}
+
+.objectTabLabel {
+  font-size: var(--amp-v2-small);
+  font-weight: var(--amp-v2-font-weight-semibold);
+  color: var(--amp-colors-text-standout);
+  white-space: nowrap;
+}
+
+.objectTabDots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dotComplete {
+  background: var(--amp-v2-wizard-step-active);
+}
+
+.dotActive {
+  background: var(--amp-v2-wizard-step-active);
+}
+
+.dotPending {
+  background: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.3));
+}
