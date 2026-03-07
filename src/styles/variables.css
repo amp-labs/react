@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 :root {
-    /* font */
+    /* ============================================ */
+    /* TIER 1: PRIMITIVES (internal, do not override) */
+    /* ============================================ */
+
+    /* Font */
     --amp-font-family: 'DM Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-    /* COLOR TOKENS */
+    /* Color palette */
     --amp-colors-white: #ffffff;
     --amp-colors-black: #111111;
     --amp-colors-primary: #000000;
@@ -20,24 +24,8 @@
     --amp-colors-neutral-700: #646266;
     --amp-colors-neutral-800: #363638;
     --amp-colors-neutral-900: #1D1D1D;
-    
-    /* SEMANTIC COLORS */
 
-    /* typography colors */
-    --amp-colors-text-standout: light-dark(var(--amp-colors-black), var(--amp-colors-white));
-    --amp-colors-text-regular: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-100));
-    --amp-colors-text-muted: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
-
-    /* bg-surfaces */
-    --amp-colors-bg-primary: light-dark(var(--amp-colors-white), var(--amp-colors-neutral-800));
-    --amp-colors-bg-secondary: light-dark(var(--amp-colors-neutral-50), var(--amp-colors-neutral-900));
-    --amp-colors-bg-highlight: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
-
-    /* default border */
-    --amp-colors-border: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
-    --amp-default-border-radius: 6px;
-
-    /* status */
+    /* Status primitives */
     --amp-colors-status-critical-dark: #702525;
     --amp-colors-status-critical: #E73D3D;
     --amp-colors-status-critical-muted: #FFD9D9;
@@ -45,175 +33,132 @@
     --amp-colors-status-success-dark: #2A704A;
     --amp-colors-status-success: #49E792;
     --amp-colors-status-success-muted: #DCFFEC;
-     
-    /* links */
+
+    /* ============================================ */
+    /* TIER 2: SEMANTIC TOKENS (public theming API) */
+    /* ============================================ */
+
+    /* Surfaces */
+    --amp-surface-primary: light-dark(var(--amp-colors-white), var(--amp-colors-neutral-800));
+    --amp-surface-secondary: light-dark(var(--amp-colors-neutral-50), var(--amp-colors-neutral-900));
+    --amp-surface-sunken: light-dark(var(--amp-colors-neutral-100), var(--amp-colors-neutral-900));
+    --amp-surface-hover: light-dark(#FAFAFA, var(--amp-colors-neutral-900));
+    --amp-surface-selected: light-dark(#F5F5F5, var(--amp-colors-neutral-800));
+    --amp-surface-highlight: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
+
+    /* Text */
+    --amp-text-primary: light-dark(var(--amp-colors-black), var(--amp-colors-white));
+    --amp-text-secondary: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-100));
+    --amp-text-muted: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
+    --amp-text-on-emphasis: var(--amp-colors-white);
+
+    /* Borders */
+    --amp-border-default: light-dark(var(--amp-colors-neutral-300), var(--amp-colors-neutral-700));
+    --amp-border-emphasis: light-dark(#E5E5E5, var(--amp-colors-neutral-600));
+    --amp-border-strong: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
+
+    /* Accent */
+    --amp-accent: var(--amp-colors-primary);
+    --amp-accent-hover: light-dark(#333333, #CCCCCC);
+    --amp-accent-text: var(--amp-colors-white);
+
+    /* Status */
+    --amp-status-success: var(--amp-colors-status-success);
+    --amp-status-success-subtle: var(--amp-colors-status-success-muted);
+    --amp-status-success-text: var(--amp-colors-status-success-dark);
+    --amp-status-error: var(--amp-colors-status-critical);
+    --amp-status-error-subtle: var(--amp-colors-status-critical-muted);
+    --amp-status-error-text: var(--amp-colors-status-critical-dark);
+    --amp-status-warning: #E8A230;
+    --amp-status-warning-subtle: light-dark(#FFF4D9, #704A25);
+    --amp-status-warning-text: light-dark(#704A25, #FFF4D9);
+
+    /* Interactive */
+    --amp-disabled-opacity: 0.5;
+
+    /* ============================================ */
+    /* TIER 3: SCALE TOKENS (public API)            */
+    /* ============================================ */
+
+    /* Spacing */
+    --amp-space-1: 0.25rem;   /* 4px */
+    --amp-space-2: 0.5rem;    /* 8px */
+    --amp-space-3: 0.75rem;   /* 12px */
+    --amp-space-4: 1rem;      /* 16px */
+    --amp-space-5: 1.5rem;    /* 24px */
+    --amp-space-6: 2rem;      /* 32px */
+    --amp-space-7: 2.5rem;    /* 40px */
+
+    /* Text sizes */
+    --amp-font-size-xs: 0.8125rem;  /* 13px */
+    --amp-font-size-sm: 0.875rem;   /* 14px */
+    --amp-font-size-md: 0.9375rem;  /* 15px */
+    --amp-font-size-lg: 1.25rem;    /* 20px */
+    --amp-font-size-xl: 1.5rem;     /* 24px */
+
+    /* Font weights */
+    --amp-font-normal: 400;
+    --amp-font-medium: 500;
+    --amp-font-semibold: 600;
+
+    /* Radii */
+    --amp-radius-sm: 4px;
+    --amp-radius-md: 6px;
+    --amp-radius-lg: 12px;
+
+    /* Shadows */
+    --amp-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --amp-shadow-md: 0 2px 16px rgba(0, 0, 0, 0.08);
+
+    /* Durations */
+    --amp-duration-fast: 150ms;
+    --amp-duration-normal: 250ms;
+
+    /* ============================================ */
+    /* V1 ALIASES (deprecated, remove in next major)*/
+    /* ============================================ */
+
+    /* Typography colors */
+    --amp-colors-text-standout: var(--amp-text-primary);
+    --amp-colors-text-regular: var(--amp-text-secondary);
+    --amp-colors-text-muted: var(--amp-text-muted);
+
+    /* Surfaces */
+    --amp-colors-bg-primary: var(--amp-surface-primary);
+    --amp-colors-bg-secondary: var(--amp-surface-secondary);
+    --amp-colors-bg-highlight: var(--amp-surface-highlight);
+
+    /* Default border */
+    --amp-colors-border: var(--amp-border-default);
+    --amp-default-border-radius: var(--amp-radius-md);
+
+    /* Links */
     --amp-colors-link-text: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
     --amp-colors-link-focus: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-700));
-    /* optional use brand colors */
     --amp-colors-link-active: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
 
-    /* button */
-    --amp-colors-button-primary: var(--amp-colors-primary);
-    --amp-colors-button-text: var(--amp-colors-white);
+    /* Button */
+    --amp-colors-button-primary: var(--amp-accent);
+    --amp-colors-button-text: var(--amp-accent-text);
     --amp-button-font-size: 1rem;
 
-    /* input */
+    /* Input */
     --amp-colors-input-border-default: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-700));
     --amp-colors-input-border-disabled: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-600));
     --amp-colors-input-border-focus: light-dark(var(--amp-colors-neutral-900), var(--amp-colors-neutral-50));
     --amp-colors-input-border-hover: light-dark(var(--amp-colors-neutral-500), var(--amp-colors-neutral-600));
-    
+
     --amp-colors-input-content-default: light-dark(var(--amp-colors-black), var(--amp-colors-white));
     --amp-colors-input-content-disabled: var(--amp-colors-neutral-600);
     --amp-colors-input-content-placeholder-text: var(--amp-colors-neutral-600);
-    
+
     --amp-colors-input-surface-default: light-dark(var(--amp-colors-white), var(--amp-colors-neutral-900));
     --amp-colors-input-surface-disabled: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-700));
     --amp-colors-input-surface-focus: light-dark(var(--amp-colors-white), var(--amp-colors-black));
     --amp-colors-input-surface-hover: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-800));
 
-    /* ============================================ */
-    /* V2 DESIGN TOKENS - InstallWizard            */
-    /* Extracted from existing V1 implementation   */
-    /* ============================================ */
-
-    /* Wizard-specific colors */
-    --amp-v2-wizard-step-active: var(--amp-colors-primary);
-    --amp-v2-wizard-step-complete: var(--amp-colors-status-success);
-    --amp-v2-wizard-step-incomplete: var(--amp-colors-neutral-400);
-    --amp-v2-wizard-step-text: light-dark(var(--amp-colors-neutral-700), var(--amp-colors-neutral-200));
-    --amp-v2-wizard-step-pending: light-dark(#E5E5E5, var(--amp-colors-neutral-700));
-
-    /* Progress indicators */
-    --amp-v2-progress-bg: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-800));
-    --amp-v2-progress-fill: var(--amp-colors-primary);
-
-    /* Stepper navigation */
-    --amp-v2-stepper-tab-default: light-dark(transparent, transparent);
-    --amp-v2-stepper-tab-selected: light-dark(rgba(0, 0, 0, 0.08), var(--amp-colors-neutral-700));
-    --amp-v2-stepper-tab-hover: light-dark(rgba(0, 0, 0, 0.05), var(--amp-colors-neutral-800));
-    --amp-v2-stepper-tab-complete: var(--amp-colors-status-success-muted);
-    --amp-v2-stepper-tab-incomplete: var(--amp-colors-status-critical-muted);
-
-    /* Object cards */
-    --amp-v2-card-bg: var(--amp-colors-bg-primary);
-    --amp-v2-card-border: light-dark(transparent, var(--amp-colors-border));
-    --amp-v2-card-border-hover: light-dark(#E5E5E5, var(--amp-colors-neutral-600));
-    --amp-v2-card-hover-bg: light-dark(#FAFAFA, var(--amp-colors-neutral-900));
-    --amp-v2-card-selected-border: var(--amp-colors-primary);
-    --amp-v2-card-selected-bg: light-dark(#F5F5F5, var(--amp-colors-neutral-800));
-    --amp-v2-card-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-    --amp-v2-card-border-radius: 12px;
-    --amp-v2-card-padding: 2rem 2.5rem;
-
-    /* Editor panels */
-    --amp-v2-panel-bg: var(--amp-colors-bg-primary);
-    --amp-v2-panel-border: var(--amp-colors-border);
-    --amp-v2-panel-header-bg: light-dark(var(--amp-colors-neutral-50), var(--amp-colors-neutral-900));
-
-    /* Status badges */
-    --amp-v2-status-valid-bg: var(--amp-colors-status-success-muted);
-    --amp-v2-status-valid-text: var(--amp-colors-status-success-dark);
-    --amp-v2-status-invalid-bg: var(--amp-colors-status-critical-muted);
-    --amp-v2-status-invalid-text: var(--amp-colors-status-critical-dark);
-    --amp-v2-status-warning-bg: light-dark(#FFF4D9, #704A25);
-    --amp-v2-status-warning-text: light-dark(#704A25, #FFF4D9);
-
-    /* Badges (Field Tags) */
-    --amp-v2-badge-bg: light-dark(#F5F5F5, var(--amp-colors-neutral-800));
-    --amp-v2-badge-text: light-dark(#333333, var(--amp-colors-neutral-200));
-    --amp-v2-badge-border-radius: 4px;
-    --amp-v2-badge-padding: 0.25rem 0.625rem;
-    --amp-v2-badge-font-size: 0.875rem;
-
-    /* Required field indicator */
-    --amp-v2-required-asterisk: var(--amp-colors-status-critical);
-
-    /* Sidebar navigation (Object Tabs) */
-    --amp-v2-sidebar-tab-bg: transparent;
-    --amp-v2-sidebar-tab-bg-hover: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.1));
-    --amp-v2-sidebar-tab-bg-active: light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.15));
-    --amp-v2-sidebar-tab-text: light-dark(#333333, var(--amp-colors-white));
-    --amp-v2-sidebar-tab-text-active: light-dark(var(--amp-colors-black), var(--amp-colors-white));
-    --amp-v2-sidebar-tab-padding: 0.75rem 1rem;
-    --amp-v2-sidebar-tab-border-radius: 6px;
-    --amp-v2-sidebar-tab-margin: 0.25rem 0;
-
-    /* Pagination */
-    --amp-v2-pagination-text: light-dark(#666666, var(--amp-colors-neutral-400));
-    --amp-v2-pagination-text-active: light-dark(var(--amp-colors-black), var(--amp-colors-white));
-    --amp-v2-pagination-bg-active: light-dark(#F5F5F5, var(--amp-colors-neutral-700));
-    --amp-v2-pagination-border-radius: 4px;
-
-    /* Typography Scale */
-    --amp-v2-heading-1: 1.5rem;     /* 24px - Page titles */
-    --amp-v2-heading-2: 1.25rem;    /* 20px - Section titles */
-    --amp-v2-heading-3: 1rem;       /* 16px - Subsection titles */
-    --amp-v2-body: 0.9375rem;       /* 15px - Body text */
-    --amp-v2-small: 0.875rem;       /* 14px - Small text */
-    --amp-v2-tiny: 0.8125rem;       /* 13px - Tiny text */
-
-    /* Font Weights */
-    --amp-v2-font-weight-regular: 400;
-    --amp-v2-font-weight-medium: 500;
-    --amp-v2-font-weight-semibold: 600;
-
-    /* Spacing Scale */
-    --amp-v2-spacing-xs: 0.25rem;   /* 4px */
-    --amp-v2-spacing-sm: 0.5rem;    /* 8px */
-    --amp-v2-spacing-md: 1rem;      /* 16px */
-    --amp-v2-spacing-lg: 1.5rem;    /* 24px */
-    --amp-v2-spacing-xl: 2rem;      /* 32px */
-    --amp-v2-spacing-2xl: 2.5rem;   /* 40px */
-
-    /* Layout Dimensions */
-    --amp-v2-sidebar-width: 220px;
-    --amp-v2-main-content-max-width: 900px;
-    --amp-v2-card-max-width: 800px;
-    --amp-v2-wizard-max-width: 800px;
-
-    /* Buttons (V2 specific) */
-    --amp-v2-button-primary-bg: var(--amp-colors-button-primary);
-    --amp-v2-button-primary-text: var(--amp-colors-button-text);
-    --amp-v2-button-primary-border-radius: 8px;
-    --amp-v2-button-primary-padding: 0.875rem 2rem;
-    --amp-v2-button-primary-font-size: 1rem;
-    --amp-v2-button-primary-font-weight: var(--amp-v2-font-weight-medium);
-
-    --amp-v2-button-secondary-bg: transparent;
-    --amp-v2-button-secondary-text: light-dark(#333333, var(--amp-colors-white));
-    --amp-v2-button-secondary-border: light-dark(#D0D0D0, var(--amp-colors-neutral-600));
-
-    /* Input Fields (V2 specific) */
-    --amp-v2-input-bg: var(--amp-colors-input-surface-default);
-    --amp-v2-input-border: var(--amp-colors-input-border-default);
-    --amp-v2-input-border-focus: var(--amp-colors-input-border-focus);
-    --amp-v2-input-border-hover: var(--amp-colors-input-border-hover);
-    --amp-v2-input-border-radius: 6px;
-    --amp-v2-input-padding: 0.75rem 1rem;
-    --amp-v2-input-text: var(--amp-colors-input-content-default);
-    --amp-v2-input-placeholder: var(--amp-colors-input-content-placeholder-text);
-
-    /* Search Input */
-    --amp-v2-search-icon-color: light-dark(#666666, var(--amp-colors-neutral-400));
-
-    /* Checkboxes */
-    --amp-v2-checkbox-size: 20px;
-    --amp-v2-checkbox-border: light-dark(#D0D0D0, var(--amp-colors-neutral-600));
-    --amp-v2-checkbox-checked-bg: var(--amp-colors-primary);
-    --amp-v2-checkbox-checked-icon: var(--amp-colors-white);
-
-    /* Animations */
-    --amp-v2-transition-fast: 150ms ease;
-    --amp-v2-transition-normal: 250ms ease;
-    --amp-v2-transition-slow: 350ms ease;
-
-    /* Z-index layers */
-    --amp-v2-z-index-dropdown: 1000;
-    --amp-v2-z-index-modal: 2000;
-    --amp-v2-z-index-tooltip: 3000;
-
-    /* Focus states */
-    --amp-v2-focus-outline: 2px solid var(--amp-colors-primary);
-    --amp-v2-focus-outline-offset: 2px;
+    /* Previously undefined V1 tokens (fix broken references) */
+    --amp-colors-tabs-background: transparent;
+    --amp-colors-focus-border: var(--amp-accent);
+    --amp-colors-background-muted: var(--amp-surface-secondary);
 }

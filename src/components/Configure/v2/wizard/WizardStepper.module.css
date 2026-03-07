@@ -1,7 +1,7 @@
 .stepper {
   display: flex;
   align-items: center;
-  padding: var(--amp-v2-spacing-md) 0;
+  padding: var(--amp-space-4) 0;
   gap: 0;
 }
 
@@ -23,22 +23,22 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--amp-v2-wizard-step-pending);
-  color: var(--amp-v2-wizard-step-text);
-  font-size: var(--amp-v2-small);
-  font-weight: var(--amp-v2-font-weight-semibold);
+  background: var(--amp-border-default);
+  color: var(--amp-text-muted);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
   flex-shrink: 0;
-  transition: all var(--amp-v2-transition-fast);
+  transition: all var(--amp-duration-fast) ease;
 }
 
 .active .stepIndicator {
-  background: var(--amp-v2-wizard-step-active);
-  color: var(--amp-colors-white);
+  background: var(--amp-accent);
+  color: var(--amp-accent-text);
 }
 
 .complete .stepIndicator {
-  background: var(--amp-v2-wizard-step-complete);
-  color: var(--amp-colors-white);
+  background: var(--amp-status-success);
+  color: var(--amp-text-on-emphasis);
 }
 
 .stepNumber {
@@ -51,31 +51,31 @@
 }
 
 .stepLabel {
-  margin-left: var(--amp-v2-spacing-sm);
-  font-size: var(--amp-v2-small);
-  font-weight: var(--amp-v2-font-weight-medium);
-  color: var(--amp-v2-wizard-step-text);
+  margin-left: var(--amp-space-2);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-muted);
   white-space: nowrap;
-  transition: color var(--amp-v2-transition-fast);
+  transition: color var(--amp-duration-fast) ease;
 }
 
 .active .stepLabel {
-  color: var(--amp-colors-text-standout);
-  font-weight: var(--amp-v2-font-weight-semibold);
+  color: var(--amp-text-primary);
+  font-weight: var(--amp-font-semibold);
 }
 
 .complete .stepLabel {
-  color: var(--amp-colors-text-regular);
+  color: var(--amp-text-secondary);
 }
 
 .connector {
   flex: 1;
   height: 2px;
-  margin: 0 var(--amp-v2-spacing-md);
-  background: var(--amp-v2-wizard-step-pending);
-  transition: background var(--amp-v2-transition-fast);
+  margin: 0 var(--amp-space-4);
+  background: var(--amp-border-default);
+  transition: background var(--amp-duration-fast) ease;
 }
 
 .complete .connector {
-  background: var(--amp-v2-wizard-step-complete);
+  background: var(--amp-status-success);
 }

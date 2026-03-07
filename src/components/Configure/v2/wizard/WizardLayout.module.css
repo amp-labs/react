@@ -1,13 +1,13 @@
 .layout {
   display: flex;
   flex-direction: column;
-  max-width: var(--amp-v2-wizard-max-width);
+  max-width: 800px;
   margin: 0 auto;
-  padding: var(--amp-v2-spacing-lg);
+  padding: var(--amp-space-5);
 }
 
 .content {
   flex: 1;
   min-height: 0;
-  padding: var(--amp-v2-spacing-md) 0;
+  padding: var(--amp-space-4) 0;
 }

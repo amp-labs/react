@@ -8,26 +8,26 @@
 /* ============================================ */
 
 .objectConfigPanel {
-  border: 1px solid var(--amp-colors-border);
-  border-radius: 12px;
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
   padding: 2.5rem;
-  background: var(--amp-colors-bg-primary, #fff);
-  margin-bottom: var(--amp-v2-spacing-lg);
+  background: var(--amp-surface-primary);
+  margin-bottom: var(--amp-space-5);
 }
 
 .objectName {
-  font-size: var(--amp-v2-heading-1);
-  font-weight: var(--amp-v2-font-weight-semibold);
-  color: var(--amp-colors-text-standout);
+  font-size: var(--amp-font-size-xl);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
   text-align: left;
-  margin-bottom: var(--amp-v2-spacing-xs);
+  margin-bottom: var(--amp-space-1);
 }
 
 .objectDescription {
-  font-size: var(--amp-v2-body);
-  color: var(--amp-colors-text-muted);
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
   text-align: left;
-  margin-bottom: var(--amp-v2-spacing-lg);
+  margin-bottom: var(--amp-space-5);
 }
 
 /* ============================================ */
@@ -35,71 +35,71 @@
 /* ============================================ */
 
 .fieldSection {
-  margin-bottom: var(--amp-v2-spacing-xl);
+  margin-bottom: var(--amp-space-6);
 }
 
 .sectionTitle {
-  font-size: var(--amp-v2-small);
-  font-weight: var(--amp-v2-font-weight-semibold);
-  color: var(--amp-colors-text-standout);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin-bottom: var(--amp-v2-spacing-xs);
+  margin-bottom: var(--amp-space-1);
 }
 
 .helperText {
-  font-size: var(--amp-v2-small);
-  color: var(--amp-colors-text-muted);
+  font-size: var(--amp-font-size-sm);
+  color: var(--amp-text-muted);
   font-style: italic;
-  margin-bottom: var(--amp-v2-spacing-md);
+  margin-bottom: var(--amp-space-4);
 }
 
 /* Card grid */
 .fieldCardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--amp-v2-spacing-sm);
+  gap: var(--amp-space-2);
 }
 
 .fieldCard {
   display: flex;
   align-items: center;
-  gap: var(--amp-v2-spacing-sm);
-  padding: var(--amp-v2-spacing-sm) var(--amp-v2-spacing-md);
-  border: 1px solid var(--amp-v2-card-border);
-  border-radius: var(--amp-v2-card-border-radius);
-  background: var(--amp-v2-card-bg);
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-2) var(--amp-space-4);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
+  background: var(--amp-surface-primary);
   cursor: pointer;
-  transition: all var(--amp-v2-transition-fast);
+  transition: all var(--amp-duration-fast) ease;
 }
 
 .fieldCard:hover {
-  background: var(--amp-v2-card-hover-bg);
-  border-color: var(--amp-v2-card-border-hover);
+  background: var(--amp-surface-hover);
+  border-color: var(--amp-border-emphasis);
 }
 
 .fieldCardDisabled {
-  background: var(--amp-colors-bg-secondary, #f5f5f5);
-  border-color: var(--amp-colors-border);
+  background: var(--amp-surface-secondary);
+  border-color: var(--amp-border-default);
   cursor: default;
   opacity: 0.7;
 }
 
 .fieldCardDisabled:hover {
-  background: var(--amp-colors-bg-secondary, #f5f5f5);
-  border-color: var(--amp-colors-border);
+  background: var(--amp-surface-secondary);
+  border-color: var(--amp-border-default);
 }
 
 .fieldCardName {
-  font-size: var(--amp-v2-body);
-  font-weight: var(--amp-v2-font-weight-medium);
-  color: var(--amp-colors-text-standout);
+  font-size: var(--amp-font-size-md);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-primary);
 }
 
 .noFields {
-  font-size: var(--amp-v2-body);
-  color: var(--amp-colors-text-muted);
-  padding: var(--amp-v2-spacing-lg);
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+  padding: var(--amp-space-5);
   text-align: center;
 }
 
@@ -107,9 +107,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--amp-v2-spacing-xl);
-  font-size: var(--amp-v2-body);
-  color: var(--amp-colors-text-muted);
+  padding: var(--amp-space-6);
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
 }
 
 /* ============================================ */
@@ -120,14 +120,14 @@
   display: grid;
   grid-template-columns: 1fr 24px 1fr;
   align-items: center;
-  gap: var(--amp-v2-spacing-sm);
+  gap: var(--amp-space-2);
 }
 
 .objectMappingArrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--amp-colors-text-muted);
+  color: var(--amp-text-muted);
 }
 
 /* ============================================ */
@@ -140,18 +140,18 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--amp-v2-spacing-sm) var(--amp-v2-spacing-md);
-  font-size: var(--amp-v2-body);
+  padding: var(--amp-space-2) var(--amp-space-4);
+  font-size: var(--amp-font-size-md);
   font-family: inherit;
-  color: var(--amp-colors-text-muted);
-  background: var(--amp-colors-bg-secondary, #f5f5f5);
-  border: 1px solid var(--amp-colors-border);
-  border-radius: var(--amp-default-border-radius);
+  color: var(--amp-text-muted);
+  background: var(--amp-surface-secondary);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-md);
   cursor: default;
 }
 
 .mappingDisabledInputText {
-  font-weight: var(--amp-v2-font-weight-medium);
+  font-weight: var(--amp-font-medium);
 }
 
 /* ============================================ */
@@ -165,15 +165,15 @@
 .mappingColumnHeaders {
   display: grid;
   grid-template-columns: 1fr 24px 1fr;
-  gap: var(--amp-v2-spacing-sm);
-  padding: var(--amp-v2-spacing-xs) 0;
-  margin-bottom: var(--amp-v2-spacing-sm);
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-1) 0;
+  margin-bottom: var(--amp-space-2);
 }
 
 .mappingColumnTitle {
-  font-size: var(--amp-v2-small);
-  font-weight: var(--amp-v2-font-weight-semibold);
-  color: var(--amp-colors-text-muted);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
