@@ -1,0 +1,81 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  padding: var(--amp-v2-spacing-md) 0;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:last-child {
+  flex: 0;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--amp-v2-wizard-step-pending);
+  color: var(--amp-v2-wizard-step-text);
+  font-size: var(--amp-v2-small);
+  font-weight: var(--amp-v2-font-weight-semibold);
+  flex-shrink: 0;
+  transition: all var(--amp-v2-transition-fast);
+}
+
+.active .stepIndicator {
+  background: var(--amp-v2-wizard-step-active);
+  color: var(--amp-colors-white);
+}
+
+.complete .stepIndicator {
+  background: var(--amp-v2-wizard-step-complete);
+  color: var(--amp-colors-white);
+}
+
+.stepNumber {
+  line-height: 1;
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.stepLabel {
+  margin-left: var(--amp-v2-spacing-sm);
+  font-size: var(--amp-v2-small);
+  font-weight: var(--amp-v2-font-weight-medium);
+  color: var(--amp-v2-wizard-step-text);
+  white-space: nowrap;
+  transition: color var(--amp-v2-transition-fast);
+}
+
+.active .stepLabel {
+  color: var(--amp-colors-text-standout);
+  font-weight: var(--amp-v2-font-weight-semibold);
+}
+
+.complete .stepLabel {
+  color: var(--amp-colors-text-regular);
+}
+
+.connector {
+  flex: 1;
+  height: 2px;
+  margin: 0 var(--amp-v2-spacing-md);
+  background: var(--amp-v2-wizard-step-pending);
+  transition: background var(--amp-v2-transition-fast);
+}
+
+.complete .connector {
+  background: var(--amp-v2-wizard-step-complete);
+}
