@@ -1,0 +1,1 @@
+export { ConfigureObjectsGate } from "./ConfigureObjectsStep";

@@ -1,0 +1,110 @@
+.reviewStep {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: var(--amp-space-5);
+}
+
+.title {
+  font-size: var(--amp-font-size-lg);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
+  margin-bottom: var(--amp-space-1);
+}
+
+.description {
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-space-2);
+  margin-bottom: var(--amp-space-5);
+}
+
+.summaryCard {
+  padding: var(--amp-space-4) 0;
+  border-bottom: 1px solid var(--amp-border-default);
+}
+
+.summaryCard:last-child {
+  border-bottom: none;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--amp-space-2);
+}
+
+.objectName {
+  font-size: var(--amp-font-size-md);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
+}
+
+.objectDescription {
+  font-size: var(--amp-font-size-sm);
+  color: var(--amp-text-muted);
+}
+
+.cardDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--amp-space-1);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--amp-space-1) 0.625rem;
+  background: var(--amp-surface-secondary);
+  color: var(--amp-text-muted);
+  border-radius: var(--amp-radius-sm);
+  font-size: var(--amp-font-size-sm);
+}
+
+.cardMappings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--amp-space-1);
+  margin-top: var(--amp-space-1);
+}
+
+.mappingPill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--amp-space-1) 0.625rem;
+  background: var(--amp-surface-secondary);
+  color: var(--amp-text-muted);
+  border-radius: var(--amp-radius-sm);
+  font-size: var(--amp-font-size-sm);
+}
+
+.error {
+  padding: var(--amp-space-4);
+  margin-bottom: var(--amp-space-4);
+  background: var(--amp-status-error-subtle);
+  color: var(--amp-status-error-text);
+  border-radius: var(--amp-radius-md);
+  font-size: var(--amp-font-size-sm);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: var(--amp-space-5);
+  border-top: 1px solid var(--amp-border-default);
+  margin-top: var(--amp-space-5);
+}
+
+.createButton {
+  font-size: var(--amp-font-size-md);
+}

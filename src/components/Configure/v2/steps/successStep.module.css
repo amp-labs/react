@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--amp-space-5);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: var(--amp-font-size-xl);
+  font-weight: var(--amp-font-semibold);
+  margin: 0;
+}
+
+.description {
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+  margin: 0;
+}
