@@ -9,6 +9,8 @@ import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
 
+import { InstallWizard } from "../InstallWizard/InstallWizard";
+
 import {
   ComponentContainerError,
   ComponentContainerLoading,
@@ -21,7 +23,6 @@ import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
 import { ConfigurationProvider } from "./state/ConfigurationStateProvider";
 import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
-import { InstallWizard } from "../InstallWizard/InstallWizard";
 
 import resetStyles from "src/styles/resetCss.module.css";
 

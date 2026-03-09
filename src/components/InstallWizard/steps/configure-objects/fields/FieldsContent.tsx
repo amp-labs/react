@@ -2,7 +2,6 @@ import type { HydratedIntegrationField } from "@generated/api/src";
 import { ArrowRightIcon, WidthIcon } from "@radix-ui/react-icons";
 
 import { SectionHeader } from "../../../components/SectionHeader";
-
 import { getFieldDisplayName, getFieldName } from "../subPageUtils";
 
 import sharedStyles from "../configureObjectsStep.module.css";
@@ -73,9 +72,7 @@ export function FieldsContent({
                   key={fieldName}
                   className={`${styles.fieldCard} ${styles.fieldCardDisabled}`}
                 >
-                  <span className={styles.fieldCardName}>
-                    {displayName}
-                  </span>
+                  <span className={styles.fieldCardName}>{displayName}</span>
                 </div>
               );
             })}

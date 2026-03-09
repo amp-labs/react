@@ -40,9 +40,7 @@ export function MappingsContent({
             {providerDisplayName} Field
           </span>
           <span className={styles.mappingColumnArrow} />
-          <span className={styles.mappingColumnTitle}>
-            {appName} Field
-          </span>
+          <span className={styles.mappingColumnTitle}>{appName} Field</span>
         </div>
 
         {requiredMapFields.map((mapping) => (
