@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ConnectionsProvider } from "context/ConnectionsContextProvider";
 import { ErrorBoundary, useErrorState } from "context/ErrorContextProvider";
 import { InstallIntegrationProvider } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
@@ -93,6 +93,14 @@ const InstallIntegrationContent = ({
   const [wizardDismissed, setWizardDismissed] = useState(false);
   const prevSeedRef = useRef(seed);
 
+  // Reset wizard state when component is reset (e.g., after uninstall)
+  useEffect(() => {
+    if (prevSeedRef.current !== seed) {
+      prevSeedRef.current = seed;
+      setWizardDismissed(false);
+    }
+  }, [seed]);
+
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
   }
@@ -117,12 +125,6 @@ const InstallIntegrationContent = ({
     return (
       <ComponentContainerError message="Something went wrong, couldn't find integration information" />
     );
-  }
-
-  // Reset wizard state when component is reset (e.g., after uninstall)
-  if (prevSeedRef.current !== seed) {
-    prevSeedRef.current = seed;
-    setWizardDismissed(false);
   }
 
   // Lock into wizard mode once we detect no installation
