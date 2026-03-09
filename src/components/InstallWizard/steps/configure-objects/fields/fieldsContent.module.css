@@ -1,0 +1,70 @@
+.fieldSection {
+  margin-bottom: var(--amp-space-6);
+}
+
+/* Card grid */
+.fieldCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--amp-space-2);
+}
+
+.fieldCard {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-2) var(--amp-space-4);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
+  background: var(--amp-surface-primary);
+  cursor: pointer;
+  transition: all var(--amp-duration-fast) ease;
+}
+
+.fieldCard:hover {
+  background: var(--amp-surface-hover);
+  border-color: var(--amp-border-emphasis);
+}
+
+.fieldCardDisabled {
+  background: var(--amp-surface-secondary);
+  border-color: var(--amp-border-default);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.fieldCardDisabled:hover {
+  background: var(--amp-surface-secondary);
+  border-color: var(--amp-border-default);
+}
+
+.fieldCardName {
+  font-size: var(--amp-font-size-md);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-primary);
+}
+
+.noFields {
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+  padding: var(--amp-space-5);
+  text-align: center;
+}
+
+/* ============================================ */
+/* Object Mapping (inline on fields sub-page)   */
+/* ============================================ */
+
+.objectMappingInline {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr;
+  align-items: center;
+  gap: var(--amp-space-2);
+}
+
+.objectMappingArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--amp-text-muted);
+}
