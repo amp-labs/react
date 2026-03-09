@@ -9,6 +9,7 @@ import {
   useManifest,
 } from "src/headless";
 
+import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
 import styles from "./ReviewStep.module.css";
@@ -120,12 +121,10 @@ export function ReviewStep() {
 
   return (
     <div className={styles.reviewStep}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Review & Create</h2>
-        <p className={styles.description}>
-          Review your configuration before creating the installation.
-        </p>
-      </div>
+      <StepHeader
+        title="Review & Create"
+        description="Review your configuration before creating the installation."
+      />
 
       <div className={styles.summaryList}>
         {objectSummaries.map((summary) => (

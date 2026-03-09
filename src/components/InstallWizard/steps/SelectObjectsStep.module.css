@@ -3,22 +3,6 @@
   flex-direction: column;
 }
 
-.header {
-  margin-bottom: var(--amp-space-5);
-}
-
-.title {
-  font-size: var(--amp-font-size-lg);
-  font-weight: var(--amp-font-semibold);
-  color: var(--amp-text-primary);
-  margin-bottom: var(--amp-space-1);
-}
-
-.description {
-  font-size: var(--amp-font-size-md);
-  color: var(--amp-text-muted);
-}
-
 .objectList {
   display: flex;
   flex-direction: column;
@@ -94,41 +78,6 @@
   font-size: var(--amp-font-size-sm);
   font-weight: var(--amp-font-medium);
   color: var(--amp-text-muted);
-}
-
-.writeInfoTrigger {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: var(--amp-text-muted);
-  cursor: help;
-  flex-shrink: 0;
-}
-
-.writeInfoTooltip {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  width: max-content;
-  max-width: 240px;
-  padding: var(--amp-space-1) var(--amp-space-2);
-  font-size: var(--amp-font-size-sm);
-  font-weight: normal;
-  color: var(--amp-text-secondary);
-  background: var(--amp-surface-primary);
-  border: 1px solid var(--amp-border-default);
-  border-radius: var(--amp-radius-md);
-  box-shadow: var(--amp-shadow-sm);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity var(--amp-duration-fast) ease, transform var(--amp-duration-fast) ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.writeInfoTrigger:hover .writeInfoTooltip {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .toggleSwitch {

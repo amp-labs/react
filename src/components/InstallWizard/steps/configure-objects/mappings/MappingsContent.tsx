@@ -1,9 +1,11 @@
 import type { IntegrationFieldMapping } from "@generated/api/src";
 import type { ReadObjectHandlers } from "src/headless/config/useConfigHelper";
 
+import { SectionHeader } from "../../../components/SectionHeader";
+
 import { MappingRow } from "./MappingRow";
 
-import sharedStyles from "./configureObjectsStep.module.css";
+import styles from "./mappingsContent.module.css";
 
 interface MappingsContentProps {
   objectName: string;
@@ -28,19 +30,17 @@ export function MappingsContent({
 }: MappingsContentProps) {
   return (
     <>
-      <h3 className={sharedStyles.sectionTitle}>Field Mappings</h3>
-      <p className={sharedStyles.helperText}>
-        Map {providerDisplayName} fields to the corresponding {appName} fields
-        for read
-        {isMappingBidirectional ? " and write" : ""}.
-      </p>
-      <div className={sharedStyles.mappingContent}>
-        <div className={sharedStyles.mappingColumnHeaders}>
-          <span className={sharedStyles.mappingColumnTitle}>
+      <SectionHeader
+        title="Field Mappings"
+        description={`Map ${providerDisplayName} fields to the corresponding ${appName} fields for read${isMappingBidirectional ? " and write" : ""}.`}
+      />
+      <div className={styles.mappingContent}>
+        <div className={styles.mappingColumnHeaders}>
+          <span className={styles.mappingColumnTitle}>
             {providerDisplayName} Field
           </span>
-          <span className={sharedStyles.mappingColumnArrow} />
-          <span className={sharedStyles.mappingColumnTitle}>
+          <span className={styles.mappingColumnArrow} />
+          <span className={styles.mappingColumnTitle}>
             {appName} Field
           </span>
         </div>

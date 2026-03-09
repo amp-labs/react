@@ -9,9 +9,9 @@ import type { CheckboxItem } from "components/ui-base/Checkbox/CheckboxPaginatio
 import { useWizard, WizardStep } from "../../wizard/WizardContext";
 import { WizardNavigation } from "../../wizard/WizardNavigation";
 
-import { AdditionalFieldsContent } from "./AdditionalFieldsContent";
-import { FieldsContent } from "./FieldsContent";
-import { MappingsContent } from "./MappingsContent";
+import { AdditionalFieldsContent } from "./additional/AdditionalFieldsContent";
+import { FieldsContent } from "./fields/FieldsContent";
+import { MappingsContent } from "./mappings/MappingsContent";
 import { ObjectTabs } from "./ObjectTabs";
 import { getFieldDisplayName, getFieldName } from "./subPageUtils";
 import { useSubPageNavigation } from "./useSubPageNavigation";

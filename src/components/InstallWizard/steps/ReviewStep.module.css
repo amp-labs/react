@@ -3,22 +3,6 @@
   flex-direction: column;
 }
 
-.header {
-  margin-bottom: var(--amp-space-5);
-}
-
-.title {
-  font-size: var(--amp-font-size-lg);
-  font-weight: var(--amp-font-semibold);
-  color: var(--amp-text-primary);
-  margin-bottom: var(--amp-space-1);
-}
-
-.description {
-  font-size: var(--amp-font-size-md);
-  color: var(--amp-text-muted);
-}
-
 .summaryList {
   display: flex;
   flex-direction: column;

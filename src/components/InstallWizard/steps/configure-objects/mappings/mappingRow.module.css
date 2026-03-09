@@ -20,41 +20,6 @@
   color: var(--amp-text-secondary);
 }
 
-.mappingInfoTrigger {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: var(--amp-text-muted);
-  cursor: help;
-  flex-shrink: 0;
-}
-
-.mappingInfoTooltip {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  width: max-content;
-  max-width: 240px;
-  padding: var(--amp-space-1) var(--amp-space-2);
-  font-size: var(--amp-font-size-sm);
-  font-weight: normal;
-  color: var(--amp-text-secondary);
-  background: var(--amp-surface-primary);
-  border: 1px solid var(--amp-border-default);
-  border-radius: var(--amp-radius-md);
-  box-shadow: var(--amp-shadow-sm);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity var(--amp-duration-fast) ease, transform var(--amp-duration-fast) ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.mappingInfoTrigger:hover .mappingInfoTooltip {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .mappingSelect {
   width: 100%;
   padding: var(--amp-space-2) var(--amp-space-4);

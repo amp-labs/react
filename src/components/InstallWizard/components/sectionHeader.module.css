@@ -1,0 +1,15 @@
+.sectionTitle {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--amp-space-1);
+}
+
+.helperText {
+  font-size: var(--amp-font-size-sm);
+  color: var(--amp-text-muted);
+  font-style: italic;
+  margin-bottom: var(--amp-space-4);
+}

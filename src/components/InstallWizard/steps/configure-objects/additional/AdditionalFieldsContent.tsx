@@ -1,7 +1,7 @@
 import type { CheckboxItem } from "components/ui-base/Checkbox/CheckboxPagination";
 import { CheckboxPagination } from "components/ui-base/Checkbox/CheckboxPagination";
 
-import sharedStyles from "./configureObjectsStep.module.css";
+import { SectionHeader } from "../../../components/SectionHeader";
 
 interface AdditionalFieldsContentProps {
   providerDisplayName: string;
@@ -18,11 +18,10 @@ export function AdditionalFieldsContent({
 }: AdditionalFieldsContentProps) {
   return (
     <>
-      <h3 className={sharedStyles.sectionTitle}>Additional Fields</h3>
-      <p className={sharedStyles.helperText}>
-        Would you like to share any optional {providerDisplayName} fields with{" "}
-        {appName}?
-      </p>
+      <SectionHeader
+        title="Additional Fields"
+        description={`Would you like to share any optional ${providerDisplayName} fields with ${appName}?`}
+      />
       <CheckboxPagination
         items={optionalFieldItems}
         onItemChange={onItemChange}

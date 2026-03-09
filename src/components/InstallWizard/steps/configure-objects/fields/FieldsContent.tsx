@@ -1,9 +1,12 @@
 import type { HydratedIntegrationField } from "@generated/api/src";
 import { ArrowRightIcon, WidthIcon } from "@radix-ui/react-icons";
 
-import { getFieldDisplayName, getFieldName } from "./subPageUtils";
+import { SectionHeader } from "../../../components/SectionHeader";
 
-import sharedStyles from "./configureObjectsStep.module.css";
+import { getFieldDisplayName, getFieldName } from "../subPageUtils";
+
+import sharedStyles from "../configureObjectsStep.module.css";
+import styles from "./fieldsContent.module.css";
 
 interface FieldsContentProps {
   objectDisplayName: string;
@@ -32,19 +35,18 @@ export function FieldsContent({
     <>
       {/* Object Mapping section */}
       {hasObjectMapping && (
-        <div className={sharedStyles.fieldSection}>
-          <h3 className={sharedStyles.sectionTitle}>Object Mapping</h3>
-          <p className={sharedStyles.helperText}>
-            This {providerDisplayName} object is mapped to the corresponding{" "}
-            {appName} object.
-          </p>
-          <div className={sharedStyles.objectMappingInline}>
+        <div className={styles.fieldSection}>
+          <SectionHeader
+            title="Object Mapping"
+            description={`This ${providerDisplayName} object is mapped to the corresponding ${appName} object.`}
+          />
+          <div className={styles.objectMappingInline}>
             <div className={sharedStyles.mappingDisabledInput}>
               <span className={sharedStyles.mappingDisabledInputText}>
                 {objectDisplayName}
               </span>
             </div>
-            <div className={sharedStyles.objectMappingArrow}>
+            <div className={styles.objectMappingArrow}>
               {isMappingBidirectional ? <WidthIcon /> : <ArrowRightIcon />}
             </div>
             <div className={sharedStyles.mappingDisabledInput}>
@@ -57,21 +59,21 @@ export function FieldsContent({
       )}
 
       {hasRequiredFields && (
-        <div className={sharedStyles.fieldSection}>
-          <h3 className={sharedStyles.sectionTitle}>Included Fields</h3>
-          <p className={sharedStyles.helperText}>
-            These fields are always read and require no configuration.
-          </p>
-          <div className={sharedStyles.fieldCardGrid}>
+        <div className={styles.fieldSection}>
+          <SectionHeader
+            title="Included Fields"
+            description="These fields are always read and require no configuration."
+          />
+          <div className={styles.fieldCardGrid}>
             {requiredFields.map((field) => {
               const fieldName = getFieldName(field);
               const displayName = getFieldDisplayName(field);
               return (
                 <div
                   key={fieldName}
-                  className={`${sharedStyles.fieldCard} ${sharedStyles.fieldCardDisabled}`}
+                  className={`${styles.fieldCard} ${styles.fieldCardDisabled}`}
                 >
-                  <span className={sharedStyles.fieldCardName}>
+                  <span className={styles.fieldCardName}>
                     {displayName}
                   </span>
                 </div>
@@ -82,7 +84,7 @@ export function FieldsContent({
       )}
 
       {!hasFieldsContent && (
-        <p className={sharedStyles.noFields}>
+        <p className={styles.noFields}>
           No configurable fields for {objectDisplayName}.
         </p>
       )}

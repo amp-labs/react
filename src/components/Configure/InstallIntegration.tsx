@@ -21,7 +21,7 @@ import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
 import { ObjectManagementNav } from "./nav/ObjectManagementNav";
 import { ConfigurationProvider } from "./state/ConfigurationStateProvider";
 import { HydratedRevisionProvider } from "./state/HydratedRevisionContext";
-import { InstallWizard } from "./v2/InstallWizard";
+import { InstallWizard } from "../InstallWizard/InstallWizard";
 
 import resetStyles from "src/styles/resetCss.module.css";
 

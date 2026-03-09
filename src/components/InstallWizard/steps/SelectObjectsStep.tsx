@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useProvider } from "src/hooks/useProvider";
 
+import { InfoTooltip } from "../components/InfoTooltip";
+import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
@@ -136,13 +137,10 @@ export function SelectObjectsStep() {
 
   return (
     <div className={styles.selectObjects}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Select Objects</h2>
-        <p className={styles.description}>
-          Choose which objects you want to read from {providerName}. You can
-          configure each object later.
-        </p>
-      </div>
+      <StepHeader
+        title="Select Objects"
+        description={`Choose which objects you want to read from ${providerName}. You can configure each object later.`}
+      />
 
       <div className={styles.objectList}>
         {readObjects.map((obj) => {
@@ -191,13 +189,9 @@ export function SelectObjectsStep() {
               {hasWrite && isSelected && (
                 <label className={styles.writeToggle}>
                   <span className={styles.writeToggleLabel}>Write Enabled</span>
-                  <span className={styles.writeInfoTrigger}>
-                    <InfoCircledIcon />
-                    <span className={styles.writeInfoTooltip}>
-                      Allow {appName} to write back to{" "}
-                      {obj.displayName || obj.objectName}
-                    </span>
-                  </span>
+                  <InfoTooltip
+                    text={`Allow ${appName} to write back to ${obj.displayName || obj.objectName}`}
+                  />
                   <span className={styles.toggleSwitch}>
                     <input
                       type="checkbox"

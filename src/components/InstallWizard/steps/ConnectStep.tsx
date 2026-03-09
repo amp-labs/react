@@ -3,7 +3,7 @@ import { useConnections } from "context/ConnectionsContextProvider";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { ConnectedSuccessBox } from "src/components/Connect/ConnectedSuccessBox";
 
-import { ProtectedConnectionLayout } from "../../layout/ProtectedConnectionLayout";
+import { ProtectedConnectionLayout } from "../../Configure/layout/ProtectedConnectionLayout";
 import { useWizard, WizardStep } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 

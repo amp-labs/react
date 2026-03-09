@@ -1,3 +1,3 @@
 export { InstallIntegration } from "./InstallIntegration";
-export { InstallWizard } from "./v2";
+export { InstallWizard } from "../InstallWizard";
 export { AmpersandErrorBoundary } from "./ErrorBoundary";

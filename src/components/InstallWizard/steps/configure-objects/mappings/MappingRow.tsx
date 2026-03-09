@@ -1,12 +1,10 @@
 import type { IntegrationFieldMapping } from "@generated/api/src";
-import {
-  ArrowRightIcon,
-  InfoCircledIcon,
-  WidthIcon,
-} from "@radix-ui/react-icons";
+import { ArrowRightIcon, WidthIcon } from "@radix-ui/react-icons";
 import type { ReadObjectHandlers } from "src/headless/config/useConfigHelper";
 
-import sharedStyles from "./configureObjectsStep.module.css";
+import { InfoTooltip } from "../../../components/InfoTooltip";
+
+import sharedStyles from "../configureObjectsStep.module.css";
 import styles from "./mappingRow.module.css";
 
 interface MappingRowProps {
@@ -64,14 +62,7 @@ export function MappingRow({
             {mapping.mapToDisplayName ?? mapping.mapToName}
             {required && <span className={styles.requiredAsterisk}>*</span>}
           </span>
-          {mapping.prompt && (
-            <span className={styles.mappingInfoTrigger}>
-              <InfoCircledIcon />
-              <span className={styles.mappingInfoTooltip}>
-                {mapping.prompt}
-              </span>
-            </span>
-          )}
+          {mapping.prompt && <InfoTooltip text={mapping.prompt} />}
         </div>
       </div>
     </div>

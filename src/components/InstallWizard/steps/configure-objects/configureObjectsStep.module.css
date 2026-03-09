@@ -1,0 +1,64 @@
+.configureObjects {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================ */
+/* Centered Card Panel                          */
+/* ============================================ */
+
+.objectConfigPanel {
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
+  padding: 2.5rem;
+  background: var(--amp-surface-primary);
+  margin-bottom: var(--amp-space-5);
+}
+
+.objectName {
+  font-size: var(--amp-font-size-xl);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
+  text-align: left;
+  margin-bottom: var(--amp-space-1);
+}
+
+.objectDescription {
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+  text-align: left;
+  margin-bottom: var(--amp-space-5);
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--amp-space-6);
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+}
+
+/* ============================================ */
+/* Shared disabled input (used by MappingRow    */
+/* and FieldsContent for object mapping)        */
+/* ============================================ */
+
+.mappingDisabledInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--amp-space-2) var(--amp-space-4);
+  font-size: var(--amp-font-size-md);
+  font-family: inherit;
+  color: var(--amp-text-muted);
+  background: var(--amp-surface-secondary);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-md);
+  cursor: default;
+}
+
+.mappingDisabledInputText {
+  font-weight: var(--amp-font-medium);
+}
