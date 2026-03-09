@@ -1,0 +1,139 @@
+.selectObjects {
+  display: flex;
+  flex-direction: column;
+}
+
+.objectList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-space-2);
+}
+
+.objectCard {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-4);
+  padding: var(--amp-space-4) var(--amp-space-5);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
+  background: var(--amp-surface-primary);
+  cursor: pointer;
+  transition: all var(--amp-duration-fast) ease;
+}
+
+.objectCard:hover {
+  background: var(--amp-surface-hover);
+  border-color: var(--amp-border-emphasis);
+}
+
+.objectCard.selected {
+  border-color: var(--amp-accent);
+  background: var(--amp-surface-selected);
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--amp-accent);
+  cursor: pointer;
+}
+
+.objectInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--amp-space-1);
+  flex: 1;
+}
+
+.objectName {
+  font-size: var(--amp-font-size-md);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-primary);
+}
+
+.badges {
+  display: flex;
+  gap: var(--amp-space-2);
+}
+
+.badge {
+  font-size: var(--amp-font-size-sm);
+  padding: var(--amp-space-1) 0.625rem;
+  background: var(--amp-surface-secondary);
+  color: var(--amp-text-muted);
+  border-radius: var(--amp-radius-sm);
+}
+
+/* Write Toggle */
+.writeToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-2);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.writeToggleLabel {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-muted);
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  inset: 0;
+  background: var(--amp-border-default);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background var(--amp-duration-normal) ease;
+}
+
+.toggleSlider::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--amp-duration-normal) ease;
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+  background: var(--amp-accent);
+}
+
+.toggleSwitch input:checked + .toggleSlider::before {
+  transform: translateX(16px);
+}
+
+.loading,
+.error,
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--amp-space-6);
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-muted);
+}
+
+.error {
+  color: var(--amp-status-error);
+}

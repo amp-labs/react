@@ -1,0 +1,17 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--amp-space-5);
+  border-top: 1px solid var(--amp-border-default);
+  margin-top: var(--amp-space-5);
+}
+
+.backButton {
+  font-size: var(--amp-font-size-md);
+}
+
+.nextButton {
+  font-size: var(--amp-font-size-md);
+  margin-left: auto;
+}
