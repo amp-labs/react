@@ -1,1 +1,1 @@
-export { ConfigureObjectsGate } from "./ConfigureObjectsPlaceholder";
+export { ConfigureObjectsGate } from "./ConfigureObjectsStep";

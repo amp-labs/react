@@ -1,0 +1,23 @@
+.mappingContent {
+  padding: 0;
+}
+
+.mappingColumnHeaders {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr;
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-1) 0;
+  margin-bottom: var(--amp-space-2);
+}
+
+.mappingColumnTitle {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mappingColumnArrow {
+  width: 24px;
+}
