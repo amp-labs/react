@@ -1,4 +1,5 @@
 import {
+  Connection,
   MetadataItemInput,
   ProviderInfo,
   ProviderMetadataInfo,
@@ -133,4 +134,66 @@ export function filterMetadataByModule(
       (key) => key.toLowerCase() === moduleLowerCase,
     );
   });
+}
+
+/**
+ * Checks if a connection is missing any metadata fields required by the module.
+ *
+ * @param connection - The existing connection to check
+ * @param requiredMetadataFields - The metadata fields required for this module
+ * @returns true if the connection is missing one or more required metadata fields
+ */
+export function isConnectionMissingModuleMetadata(
+  connection: Connection,
+  requiredMetadataFields: MetadataItemInput[],
+): boolean {
+  if (requiredMetadataFields.length === 0) {
+    return false;
+  }
+
+  const existingMetadata = connection.providerMetadata || {};
+
+  return requiredMetadataFields.some((field) => {
+    const existing = existingMetadata[field.name];
+    return !existing || !existing.value || existing.value.trim() === "";
+  });
+}
+
+/**
+ * Validates that a module prop is a valid module for the given provider.
+ *
+ * @param moduleProp - The module string to validate
+ * @param providerInfo - Provider information containing available modules
+ * @returns Error message if invalid, null if valid
+ */
+export function validateModuleProp(
+  moduleProp: string | undefined,
+  providerInfo: ProviderInfo | null | undefined,
+): string | null {
+  if (!moduleProp || !providerInfo) {
+    return null;
+  }
+
+  const providerModules = providerInfo.modules;
+  const hasModules = providerModules && Object.keys(providerModules).length > 0;
+
+  if (!hasModules) {
+    // Provider has no modules, module prop is ignored
+    return null;
+  }
+
+  // Case-insensitive lookup
+  const validModule = Object.keys(providerModules).some(
+    (key) => key.toLowerCase() === moduleProp.toLowerCase(),
+  );
+
+  if (!validModule) {
+    const validModules = Object.keys(providerModules).join(", ");
+    return (
+      `Invalid module "${moduleProp}" for provider ` +
+      `${providerInfo.name}. Valid modules: ${validModules}`
+    );
+  }
+
+  return null;
 }

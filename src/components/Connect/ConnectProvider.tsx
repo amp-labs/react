@@ -21,6 +21,12 @@ interface ConnectProviderProps {
   groupName?: string;
   redirectUrl?: string;
   /**
+   * The module to use for this connection. If the provider has modules defined,
+   * this determines which module-specific metadata to collect.
+   * Falls back to the provider's defaultModule if not specified.
+   */
+  module?: string;
+  /**
    * Use `onConnectSuccess` instead of `onSuccess`. `onSuccess` will soon be deprecated.
    * @deprecated
    */
@@ -44,6 +50,7 @@ export function ConnectProvider({
   groupRef,
   groupName,
   redirectUrl,
+  module,
   onSuccess,
   onDisconnectSuccess,
   onConnectSuccess,
@@ -85,6 +92,7 @@ export function ConnectProvider({
               consumerName={consumerName}
               groupRef={groupRef}
               groupName={groupName}
+              module={module}
               onSuccess={onSuccessFx}
               onDisconnectSuccess={onDisconnectSuccess}
             >

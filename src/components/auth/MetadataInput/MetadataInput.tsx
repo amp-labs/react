@@ -14,6 +14,7 @@ type MetadataInputProps = {
   ) => void;
   providerName?: string;
   variant?: "standard" | "header";
+  defaultValue?: string;
 };
 
 export function MetadataInput({
@@ -21,6 +22,7 @@ export function MetadataInput({
   onChange,
   providerName,
   variant = "standard",
+  defaultValue,
 }: MetadataInputProps) {
   return (
     <div className={styles.metadataInputWrapper}>
@@ -46,6 +48,7 @@ export function MetadataInput({
         name={metadata.name}
         type="text"
         placeholder={metadata.displayName || metadata.name}
+        defaultValue={defaultValue}
         onChange={onChange}
       />
     </div>
