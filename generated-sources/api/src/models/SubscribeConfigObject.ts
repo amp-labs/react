@@ -74,6 +74,12 @@ export interface SubscribeConfigObject {
      * @memberof SubscribeConfigObject
      */
     deleteEvent?: ConfigDeleteEvent;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SubscribeConfigObject
+     */
+    otherEvents?: Array<string>;
 }
 
 /**
@@ -104,6 +110,7 @@ export function SubscribeConfigObjectFromJSONTyped(json: any, ignoreDiscriminato
         'createEvent': !exists(json, 'createEvent') ? undefined : ConfigCreateEventFromJSON(json['createEvent']),
         'updateEvent': !exists(json, 'updateEvent') ? undefined : ConfigUpdateEventFromJSON(json['updateEvent']),
         'deleteEvent': !exists(json, 'deleteEvent') ? undefined : ConfigDeleteEventFromJSON(json['deleteEvent']),
+        'otherEvents': !exists(json, 'otherEvents') ? undefined : json['otherEvents'],
     };
 }
 
@@ -122,6 +129,7 @@ export function SubscribeConfigObjectToJSON(value?: SubscribeConfigObject | null
         'createEvent': ConfigCreateEventToJSON(value.createEvent),
         'updateEvent': ConfigUpdateEventToJSON(value.updateEvent),
         'deleteEvent': ConfigDeleteEventToJSON(value.deleteEvent),
+        'otherEvents': value.otherEvents,
     };
 }
 
