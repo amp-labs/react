@@ -15,7 +15,10 @@ import { OauthFlow } from "components/auth/Oauth/OauthFlow/OauthFlow";
 import {
   determineModule,
   filterMetadataByModule,
+  isConnectionMissingModuleMetadata,
+  validateModuleProp,
 } from "components/auth/providerMetadata";
+import { UpdateConnectionMetadata } from "components/Connect/UpdateConnectionMetadata";
 import { useConnectionHandler } from "components/Connect/useConnectionHandler";
 
 import { useProvider } from "../../../hooks/useProvider";
@@ -32,6 +35,7 @@ interface ProtectedConnectionLayoutProps {
   consumerName?: string;
   groupRef: string;
   groupName?: string;
+  module?: string; // passed in from ConnectProvider Component
   onSuccess?: (connection: Connection) => void;
   children: JSX.Element;
   onDisconnectSuccess?: (connection: Connection) => void;
@@ -44,6 +48,7 @@ export function ProtectedConnectionLayout({
   consumerName,
   groupRef,
   groupName,
+  module: moduleProp,
   children,
   onSuccess,
   onDisconnectSuccess,
@@ -72,10 +77,12 @@ export function ProtectedConnectionLayout({
     : providerInfoData;
 
   // Determine which module to use for filtering metadata:
+  // - moduleProp (from ConnectProvider) takes priority over integration's module
   // - If provider has no modules → returns { module: "", error: null }
-  // - If provider has modules → use integration's module or fall back to provider's defaultModule
+  // - If provider has modules → use the determined module or fall back to provider's defaultModule
   // - Returns error if provider has modules but no valid module can be determined
-  const integrationModule = integrationObj?.latestRevision?.content?.module;
+  const integrationModule =
+    moduleProp || integrationObj?.latestRevision?.content?.module;
   const { module, error: moduleError } = determineModule(
     integrationModule,
     providerInfo,
@@ -123,13 +130,49 @@ export function ProtectedConnectionLayout({
     );
   }
 
-  // a selected connection exists, render children
-  if (selectedConnection) return children;
+  // Validate module prop against provider's available modules
+  const moduleValidationError = validateModuleProp(moduleProp, providerInfo);
+
+  // A connection exists - check if it has all the metadata needed for the module
+  if (selectedConnection) {
+    if (moduleValidationError) {
+      return <ComponentContainerError message={moduleValidationError} />;
+    }
+
+    // Check if the connection is missing metadata required by the current module
+    if (
+      isConnectionMissingModuleMetadata(
+        selectedConnection,
+        filteredMetadataFields,
+      )
+    ) {
+      return (
+        <UpdateConnectionMetadata
+          connection={selectedConnection}
+          metadataInputs={filteredMetadataFields}
+          providerName={providerName}
+          onSuccess={() => {
+            // Invalidate connections query to refetch with updated metadata
+            queryClient.invalidateQueries({
+              queryKey: ["amp", "connections"],
+            });
+          }}
+        />
+      );
+    }
+
+    // Connection has all needed metadata, render children
+    return children;
+  }
 
   if (isProviderLoading) return <ComponentContainerLoading />;
 
   if (providerInfo == null)
     return <ComponentContainerError message="Provider info was not found." />;
+
+  if (moduleValidationError) {
+    return <ComponentContainerError message={moduleValidationError} />;
+  }
 
   const sharedProps = {
     provider: selectedProvider,
@@ -143,7 +186,7 @@ export function ProtectedConnectionLayout({
     providerInfo,
     onDisconnectSuccess,
     metadataInputs: filteredMetadataFields,
-    moduleError,
+    moduleError: moduleError || moduleValidationError,
   };
 
   if (providerInfo.authType === "none") {
