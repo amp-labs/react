@@ -135,30 +135,35 @@ export function ProtectedConnectionLayout({
 
   // A connection exists - check if it has all the metadata needed for the module
   if (selectedConnection) {
-    if (moduleValidationError) {
-      return <ComponentContainerError message={moduleValidationError} />;
-    }
+    // Only check for missing module metadata when a module is explicitly provided
+    // (via moduleProp from ConnectProvider or integrationModule from InstallIntegration).
+    // Without an explicit module, just render children.
+    if (integrationModule) {
+      if (moduleValidationError) {
+        return <ComponentContainerError message={moduleValidationError} />;
+      }
 
-    // Check if the connection is missing metadata required by the current module
-    if (
-      isConnectionMissingModuleMetadata(
-        selectedConnection,
-        filteredMetadataFields,
-      )
-    ) {
-      return (
-        <UpdateConnectionMetadata
-          connection={selectedConnection}
-          metadataInputs={filteredMetadataFields}
-          providerName={providerName}
-          onSuccess={() => {
-            // Invalidate connections query to refetch with updated metadata
-            queryClient.invalidateQueries({
-              queryKey: ["amp", "connections"],
-            });
-          }}
-        />
-      );
+      // Check if the connection is missing metadata required by the current module
+      if (
+        isConnectionMissingModuleMetadata(
+          selectedConnection,
+          filteredMetadataFields,
+        )
+      ) {
+        return (
+          <UpdateConnectionMetadata
+            connection={selectedConnection}
+            metadataInputs={filteredMetadataFields}
+            providerName={providerName}
+            onSuccess={() => {
+              // Invalidate connections query to refetch with updated metadata
+              queryClient.invalidateQueries({
+                queryKey: ["amp", "connections"],
+              });
+            }}
+          />
+        );
+      }
     }
 
     // Connection has all needed metadata, render children
