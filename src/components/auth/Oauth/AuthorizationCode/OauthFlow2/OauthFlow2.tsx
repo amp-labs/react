@@ -179,6 +179,7 @@ export function OauthFlow2({
             isConnectionsFetching ||
             !!error
           }
+          provider={provider}
           providerName={providerName}
           metadataInputs={metadataInputs}
         />
