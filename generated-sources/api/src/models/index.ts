@@ -168,6 +168,7 @@ export * from './ProviderMetadataInfo';
 export * from './ReadConfig';
 export * from './ReadConfigAllOf';
 export * from './ReadConfigObject';
+export * from './ReadFilter';
 export * from './Revision';
 export * from './SearchOperators';
 export * from './SearchSupport';

@@ -27,6 +27,7 @@ export const NotificationEventType = {
     ReadBackfillDone: 'read.backfill.done',
     ReadTriggeredDone: 'read.triggered.done',
     ReadTriggeredError: 'read.triggered.error',
+    WriteAsyncDone: 'write.async.done',
     DestinationWebhookDisabled: 'destination.webhook.disabled'
 } as const;
 export type NotificationEventType = typeof NotificationEventType[keyof typeof NotificationEventType];

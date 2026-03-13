@@ -25,6 +25,12 @@ import {
     DynamicMappingsInputEntryFromJSONTyped,
     DynamicMappingsInputEntryToJSON,
 } from './DynamicMappingsInputEntry';
+import type { ReadFilter } from './ReadFilter';
+import {
+    ReadFilterFromJSON,
+    ReadFilterFromJSONTyped,
+    ReadFilterToJSON,
+} from './ReadFilter';
 import type { SelectedFieldsAutoConfig } from './SelectedFieldsAutoConfig';
 import {
     SelectedFieldsAutoConfigFromJSON,
@@ -98,6 +104,12 @@ export interface ReadConfigObject {
      * @memberof ReadConfigObject
      */
     backfill?: BackfillConfig;
+    /**
+     * Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.
+     * @type {Array<ReadFilter>}
+     * @memberof ReadConfigObject
+     */
+    filter?: Array<ReadFilter>;
 }
 
 /**
@@ -132,6 +144,7 @@ export function ReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
         'selectedFieldMappings': json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
+        'filter': !exists(json, 'filter') ? undefined : ((json['filter'] as Array<any>).map(ReadFilterFromJSON)),
     };
 }
 
@@ -154,6 +167,7 @@ export function ReadConfigObjectToJSON(value?: ReadConfigObject | null): any {
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
+        'filter': value.filter === undefined ? undefined : ((value.filter as Array<any>).map(ReadFilterToJSON)),
     };
 }
 
