@@ -19,10 +19,14 @@ export function WorkspaceEntryContent({
   setFormData,
   error,
   isButtonDisabled,
+  provider,
   providerName,
   metadataInputs,
 }: WorkspaceEntryProps) {
-  const packageInstallUrl = getPackageInstallUrl(metadataInputs);
+  const isSalesforce = provider.startsWith("salesforce");
+  const packageInstallUrl = isSalesforce
+    ? getPackageInstallUrl(metadataInputs)
+    : null;
   const [step, setStep] = useState<"install" | "authorize">(
     packageInstallUrl ? "install" : "authorize",
   );
