@@ -45,6 +45,7 @@ export const CreateEventTopicRouteRequestEventTypeEnum = {
     InstallationUpdated: 'installation.updated',
     InstallationDeleted: 'installation.deleted',
     ReadSchedulePaused: 'read.schedule.paused',
+    WriteAsyncDone: 'write.async.done',
     DestinationWebhookDisabled: 'destination.webhook.disabled'
 } as const;
 export type CreateEventTopicRouteRequestEventTypeEnum = typeof CreateEventTopicRouteRequestEventTypeEnum[keyof typeof CreateEventTopicRouteRequestEventTypeEnum];
