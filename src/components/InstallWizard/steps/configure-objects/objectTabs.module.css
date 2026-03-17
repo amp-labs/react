@@ -1,0 +1,66 @@
+.objectTabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--amp-space-2);
+  margin-bottom: var(--amp-space-5);
+}
+
+.objectTab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: var(--amp-space-1) var(--amp-space-4);
+  border: none;
+  border-radius: var(--amp-radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--amp-duration-fast) ease;
+}
+
+.objectTab:hover {
+  background: var(--amp-surface-hover);
+}
+
+.objectTab:disabled {
+  cursor: default;
+  opacity: var(--amp-disabled-opacity);
+}
+
+.objectTab:disabled:hover {
+  background: transparent;
+}
+
+.objectTabActive {
+  background: var(--amp-surface-selected);
+}
+
+.objectTabLabel {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-primary);
+  white-space: nowrap;
+}
+
+.objectTabDots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dotComplete {
+  background: var(--amp-accent);
+}
+
+.dotActive {
+  background: var(--amp-accent);
+}
+
+.dotPending {
+  background: var(--amp-border-default);
+}
