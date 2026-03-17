@@ -74,8 +74,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   const [draft, setDraft] = useState<InstallationConfigContent>(initialConfig);
   const previousInstallationRef = useRef<Installation | undefined>(undefined);
 
-  const { getReadObject: getReadObjectFromManifest, data: manifest } =
-    useManifest();
+  const { data: manifest } = useManifest();
   const { installation } = useInstallation();
 
   const get = useCallback(() => draft, [draft]);
@@ -99,20 +98,8 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       const objects = read.objects || {};
       const obj = objects[objectName] || {};
 
-      // note: prefilling default values from manifest can be removed once taken care of in the backend
-      const selectedObject = getReadObjectFromManifest(objectName);
-
-      // Add required fields to defaultSelectedFields
-      const defaultSelectedFields: { [key: string]: boolean } = {};
-      selectedObject?.getRequiredFields()?.forEach((field) => {
-        if ("fieldName" in field) {
-          defaultSelectedFields[field.fieldName] = true;
-        }
-      });
-
-      // Initialize required fields for object from manifest if not set
+      // initialize object name if not set
       obj.objectName = obj.objectName || objectName;
-      obj.selectedFields = obj.selectedFields || defaultSelectedFields;
 
       objects[objectName] = obj;
       read.objects = objects;
@@ -120,7 +107,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
 
       return { read, objects, obj };
     },
-    [getReadObjectFromManifest, manifest?.content?.provider],
+    [manifest?.content?.provider],
   );
 
   /**
