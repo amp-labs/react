@@ -2,7 +2,7 @@
 
 :root {
     /* ============================================ */
-    /* TIER 1: PRIMITIVES (internal, do not override) */
+    /* TIER 1: PRIMITIVES (recommendation: override tier 2 or 3 instead of tier 1) */
     /* ============================================ */
 
     /* Font */
@@ -35,7 +35,7 @@
     --amp-colors-status-success-muted: #DCFFEC;
 
     /* ============================================ */
-    /* TIER 2: SEMANTIC TOKENS (public theming API) */
+    /* TIER 2: SEMANTIC TOKENS (can override these) */
     /* ============================================ */
 
     /* Surfaces */
@@ -77,7 +77,7 @@
     --amp-disabled-opacity: 0.5;
 
     /* ============================================ */
-    /* TIER 3: SCALE TOKENS (public API)            */
+    /* TIER 3: SCALE TOKENS (can override these)            */
     /* ============================================ */
 
     /* Spacing */
@@ -115,7 +115,7 @@
     --amp-duration-normal: 250ms;
 
     /* ============================================ */
-    /* V1 ALIASES (deprecated, remove in next major)*/
+    /* ALIASES used in v2.x.x (Recommendation: override base primitives instead) */
     /* ============================================ */
 
     /* Typography colors */
@@ -157,7 +157,6 @@
     --amp-colors-input-surface-focus: light-dark(var(--amp-colors-white), var(--amp-colors-black));
     --amp-colors-input-surface-hover: light-dark(var(--amp-colors-neutral-200), var(--amp-colors-neutral-800));
 
-    /* Previously undefined V1 tokens (fix broken references) */
     --amp-colors-tabs-background: transparent;
     --amp-colors-focus-border: var(--amp-accent);
     --amp-colors-background-muted: var(--amp-surface-secondary);
