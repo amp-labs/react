@@ -19,6 +19,8 @@ import type { InstallationConfigContent } from "./types";
 
 export type ReadObjectHandlers = {
   object: BaseReadConfigObject | undefined;
+  setEnableRead: () => void;
+  setDisableRead: () => void;
   getSelectedField: (fieldName: string) => boolean;
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;
   getFieldMapping: (fieldName: string) => string | undefined;
@@ -122,21 +124,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   );
 
   /**
-   * Ensures a read object is initialized in the draft with default values.
-   * Idempotent — safe to call multiple times for the same object.
-   */
-  const ensureObject = useCallback(
-    (objectName: string) => {
-      setDraft((prev) =>
-        produce(prev, (_draft) => {
-          initializeObjectWithDefaults(objectName, _draft);
-        }),
-      );
-    },
-    [initializeObjectWithDefaults],
-  );
-
-  /**
    * Removes an object from all actions (read, write) in the draft config.
    */
   const removeObject = useCallback((objectName: string) => {
@@ -155,6 +142,22 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   const readObject = useCallback(
     (objectName: string): ReadObjectHandlers => ({
       object: draft.read?.objects?.[objectName],
+      setEnableRead: () => {
+        setDraft((prev) =>
+          produce(prev, (_draft) => {
+            const { obj } = initializeObjectWithDefaults(objectName, _draft);
+            obj.disabled = false;
+          }),
+        );
+      },
+      setDisableRead: () => {
+        setDraft((prev) =>
+          produce(prev, (_draft) => {
+            const { obj } = initializeObjectWithDefaults(objectName, _draft);
+            obj.disabled = true;
+          }),
+        );
+      },
       getSelectedField: (fieldName: string) =>
         !!draft.read?.objects?.[objectName]?.selectedFields?.[fieldName],
 
@@ -392,7 +395,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     get,
     reset,
     setDraft,
-    ensureObject,
     removeObject,
     readObject,
     writeObject,

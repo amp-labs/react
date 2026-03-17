@@ -80,7 +80,7 @@ export function SelectObjectsStep() {
 
     // Initialize newly selected objects in the config draft
     selectedArray.forEach((objectName) => {
-      localConfig.ensureObject(objectName);
+      localConfig.readObject(objectName).setEnableRead();
     });
 
     // Remove deselected objects from the config draft
