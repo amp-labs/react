@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { useLocalConfig, useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
@@ -26,14 +26,15 @@ export function ConfigureObjectsStep() {
   const { appName: projectAppName } = useProjectQuery();
   const { currentObjectName } = useWizard();
 
-  const { subPage, currentPageIndex, handleNext, handleBack, handleTabClick } =
-    useSubPageNavigation();
-
-  // Get manifest data for the current object
-  const currentManifestObject = useMemo(() => {
-    if (!currentObjectName) return null;
-    return manifest.getReadObject(currentObjectName);
-  }, [manifest, currentObjectName]);
+  const {
+    subPage,
+    currentPageIndex,
+    currentManifestObject,
+    hasFieldsContent,
+    handleNext,
+    handleBack,
+    handleTabClick,
+  } = useSubPageNavigation();
 
   const requiredFields = useMemo(
     () => currentManifestObject?.getRequiredFields("no-mappings") ?? [],
@@ -62,7 +63,6 @@ export function ConfigureObjectsStep() {
     );
   }, [manifest, currentObjectName]);
 
-  // Derived booleans for current object
   const hasRequiredFields = requiredFields.length > 0;
 
   // Object mapping data
@@ -70,7 +70,6 @@ export function ConfigureObjectsStep() {
   const objectMapToDisplayName =
     currentManifestObject?.object?.mapToDisplayName || objectMapToName;
   const hasObjectMapping = !!objectMapToName;
-  const hasFieldsContent = hasRequiredFields || hasObjectMapping;
 
   const isMappingBidirectional =
     !!currentObjectName && !!localConfig.writeObject(currentObjectName).object;
@@ -193,8 +192,13 @@ export function ConfigureObjectsGate() {
   const { state, goToStep } = useWizard();
 
   // If no objects selected, redirect back to select step
+  useEffect(() => {
+    if (state.selectedObjects.length === 0) {
+      goToStep(WizardStep.SelectObjects);
+    }
+  }, [state.selectedObjects.length, goToStep]);
+
   if (state.selectedObjects.length === 0) {
-    goToStep(WizardStep.SelectObjects);
     return null;
   }
 

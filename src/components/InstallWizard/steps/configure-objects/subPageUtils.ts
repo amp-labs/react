@@ -26,22 +26,8 @@ export function getInitialSubPage(
   manifest: Manifest,
   objectName: string,
 ): SubPage {
-  const obj = manifest.getReadObject(objectName);
-  if (!obj) return "fields";
-
-  const hasRequiredFields =
-    (obj.getRequiredFields("no-mappings")?.length ?? 0) > 0;
-  const hasObjectMapping = !!obj.object?.mapToName;
-
-  if (hasRequiredFields || hasObjectMapping) return "fields";
-
-  const hasMappings =
-    (obj.getRequiredMapFields()?.length ?? 0) > 0 ||
-    (obj.getOptionalMapFields()?.length ?? 0) > 0;
-
-  if (hasMappings) return "mappings";
-
-  return "additional";
+  const pages = getSubPages(manifest, objectName);
+  return pages[0];
 }
 
 /**
@@ -51,19 +37,8 @@ export function getLastSubPage(
   manifest: Manifest,
   objectName: string,
 ): SubPage {
-  const obj = manifest.getReadObject(objectName);
-  if (!obj) return "fields";
-
-  const hasOptionalFields =
-    (obj.getOptionalFields("no-mappings")?.length ?? 0) > 0;
-  if (hasOptionalFields) return "additional";
-
-  const hasMappings =
-    (obj.getRequiredMapFields()?.length ?? 0) > 0 ||
-    (obj.getOptionalMapFields()?.length ?? 0) > 0;
-  if (hasMappings) return "mappings";
-
-  return "fields";
+  const pages = getSubPages(manifest, objectName);
+  return pages[pages.length - 1];
 }
 
 /**

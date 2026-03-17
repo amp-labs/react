@@ -162,6 +162,8 @@ export function useSubPageNavigation() {
   return {
     subPage,
     currentPageIndex,
+    currentManifestObject,
+    hasFieldsContent,
     handleNext,
     handleBack,
     handleTabClick,
