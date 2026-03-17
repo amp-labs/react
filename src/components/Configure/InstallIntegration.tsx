@@ -101,6 +101,13 @@ const InstallIntegrationContent = ({
     }
   }, [seed]);
 
+  // Lock into wizard mode once we detect no installation
+  useEffect(() => {
+    if (variant === "wizard" && !installation && !isInstallationPending) {
+      enteredWizardMode.current = true;
+    }
+  }, [variant, installation, isInstallationPending]);
+
   if (isProjectLoading || isIntegrationListLoading) {
     return <ComponentContainerLoading />;
   }
@@ -125,11 +132,6 @@ const InstallIntegrationContent = ({
     return (
       <ComponentContainerError message="Something went wrong, couldn't find integration information" />
     );
-  }
-
-  // Lock into wizard mode once we detect no installation
-  if (variant === "wizard" && !installation && !isInstallationPending) {
-    enteredWizardMode.current = true;
   }
 
   // Stay in wizard mode until user clicks "Edit Configuration"
