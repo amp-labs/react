@@ -1,0 +1,81 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  padding: var(--amp-space-4) 0;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:last-child {
+  flex: 0;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--amp-border-default);
+  color: var(--amp-text-muted);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  flex-shrink: 0;
+  transition: all var(--amp-duration-fast) ease;
+}
+
+.active .stepIndicator {
+  background: var(--amp-accent);
+  color: var(--amp-accent-text);
+}
+
+.complete .stepIndicator {
+  background: var(--amp-status-success);
+  color: var(--amp-text-on-emphasis);
+}
+
+.stepNumber {
+  line-height: 1;
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.stepLabel {
+  margin-left: var(--amp-space-2);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-muted);
+  white-space: nowrap;
+  transition: color var(--amp-duration-fast) ease;
+}
+
+.active .stepLabel {
+  color: var(--amp-text-primary);
+  font-weight: var(--amp-font-semibold);
+}
+
+.complete .stepLabel {
+  color: var(--amp-text-secondary);
+}
+
+.connector {
+  flex: 1;
+  height: 2px;
+  margin: 0 var(--amp-space-4);
+  background: var(--amp-border-default);
+  transition: background var(--amp-duration-fast) ease;
+}
+
+.complete .connector {
+  background: var(--amp-status-success);
+}
