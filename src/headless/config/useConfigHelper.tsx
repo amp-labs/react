@@ -122,14 +122,30 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   );
 
   /**
-   * Ensures a read object is initialized in the draft with default values.
+   * Initializes a read object in the draft with default values and enables it.
    * Idempotent — safe to call multiple times for the same object.
    */
-  const ensureObject = useCallback(
+  const setEnableRead = useCallback(
     (objectName: string) => {
       setDraft((prev) =>
         produce(prev, (_draft) => {
-          initializeObjectWithDefaults(objectName, _draft);
+          const { obj } = initializeObjectWithDefaults(objectName, _draft);
+          obj.disabled = false;
+        }),
+      );
+    },
+    [initializeObjectWithDefaults],
+  );
+
+  /**
+   * Disables reading for an object by setting its disabled flag to true.
+   */
+  const setDisableRead = useCallback(
+    (objectName: string) => {
+      setDraft((prev) =>
+        produce(prev, (_draft) => {
+          const { obj } = initializeObjectWithDefaults(objectName, _draft);
+          obj.disabled = true;
         }),
       );
     },
@@ -392,7 +408,8 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     get,
     reset,
     setDraft,
-    ensureObject,
+    setEnableRead,
+    setDisableRead,
     removeObject,
     readObject,
     writeObject,
