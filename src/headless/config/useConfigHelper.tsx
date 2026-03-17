@@ -121,37 +121,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     [getReadObjectFromManifest, manifest?.content?.provider],
   );
 
-  /**
-   * Ensures a read object is initialized in the draft with default values.
-   * Idempotent — safe to call multiple times for the same object.
-   */
-  const ensureObject = useCallback(
-    (objectName: string) => {
-      setDraft((prev) =>
-        produce(prev, (_draft) => {
-          initializeObjectWithDefaults(objectName, _draft);
-        }),
-      );
-    },
-    [initializeObjectWithDefaults],
-  );
-
-  /**
-   * Removes an object from all actions (read, write) in the draft config.
-   */
-  const removeObject = useCallback((objectName: string) => {
-    setDraft((prev) =>
-      produce(prev, (_draft) => {
-        if (_draft.read?.objects?.[objectName]) {
-          delete _draft.read.objects[objectName];
-        }
-        if (_draft.write?.objects?.[objectName]) {
-          delete _draft.write.objects[objectName];
-        }
-      }),
-    );
-  }, []);
-
   const readObject = useCallback(
     (objectName: string): ReadObjectHandlers => ({
       object: draft.read?.objects?.[objectName],
@@ -392,8 +361,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     get,
     reset,
     setDraft,
-    ensureObject,
-    removeObject,
     readObject,
     writeObject,
     proxy,

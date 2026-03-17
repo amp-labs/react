@@ -35,7 +35,6 @@ import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
 export type FieldInclude = "raw" | "no-mappings" | "mappings";
 
 export interface Manifest {
-  getReadObjects: () => HydratedIntegrationObject[];
   getReadObject: (objectName: string) => {
     object: HydratedIntegrationObject | null;
     /**
@@ -88,8 +87,6 @@ export function useManifest() {
 
   const manifest: Manifest = useMemo(
     () => ({
-      getReadObjects: (): HydratedIntegrationObject[] =>
-        content?.read?.objects ?? [],
       getReadObject: (objectName: string) => {
         const object = content?.read?.objects?.find(
           (obj) => obj.objectName === objectName,
