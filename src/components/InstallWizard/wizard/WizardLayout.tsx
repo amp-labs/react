@@ -1,7 +1,7 @@
 import { useWizard, WizardStep } from "./WizardContext";
 import { WizardStepper } from "./WizardStepper";
 
-import styles from "./WizardLayout.module.css";
+import styles from "./wizardLayout.module.css";
 
 interface WizardLayoutProps {
   children: React.ReactNode;

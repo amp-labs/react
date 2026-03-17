@@ -2,7 +2,7 @@ import { Button } from "src/components/ui-base/Button";
 
 import { useWizard, WizardStep } from "./WizardContext";
 
-import styles from "./WizardNavigation.module.css";
+import styles from "./wizardNavigation.module.css";
 
 interface WizardNavigationProps {
   onNext?: () => void;

@@ -12,11 +12,10 @@ import {
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
-import styles from "./ReviewStep.module.css";
+import styles from "./reviewStep.module.css";
 
 export function ReviewStep() {
-  const { state, prevStep, nextStep, setSubmitting, setSubmissionError } =
-    useWizard();
+  const { state, prevStep, nextStep, setSubmissionError } = useWizard();
   const { selectedObjects } = state;
   const manifest = useManifest();
   const localConfig = useLocalConfig();
@@ -93,26 +92,22 @@ export function ReviewStep() {
   }, [selectedObjects, manifest, localConfig]);
 
   const handleCreate = useCallback(() => {
-    setSubmitting(true);
     setSubmissionError(null);
 
     createInstallation({
       config: localConfig.draft,
       onSuccess: (installation) => {
-        setSubmitting(false);
         setInstallation(installation);
         onInstallSuccess?.(installation.id, installation.config as Config);
         nextStep();
       },
       onError: (error) => {
-        setSubmitting(false);
         setSubmissionError(error.message);
       },
     });
   }, [
     createInstallation,
     localConfig.draft,
-    setSubmitting,
     setSubmissionError,
     setInstallation,
     onInstallSuccess,

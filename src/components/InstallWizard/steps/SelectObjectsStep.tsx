@@ -9,7 +9,7 @@ import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
-import styles from "./SelectObjectsStep.module.css";
+import styles from "./selectObjectsStep.module.css";
 
 export function SelectObjectsStep() {
   const manifest = useManifest();

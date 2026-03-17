@@ -1,6 +1,6 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
-import styles from "./InfoTooltip.module.css";
+import styles from "./infoTooltip.module.css";
 
 interface InfoTooltipProps {
   text: string;

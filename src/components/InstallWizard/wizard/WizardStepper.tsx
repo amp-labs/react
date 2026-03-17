@@ -5,7 +5,7 @@ import {
   WizardStep,
 } from "./WizardContext";
 
-import styles from "./WizardStepper.module.css";
+import styles from "./wizardStepper.module.css";
 
 export function WizardStepper() {
   const { state } = useWizard();

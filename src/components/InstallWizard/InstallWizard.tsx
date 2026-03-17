@@ -21,7 +21,7 @@ import { WizardProvider } from "./wizard/WizardContext";
 import { WizardStep } from "./wizard/WizardContext";
 import { WizardLayout, WizardStepContainer } from "./wizard/WizardLayout";
 
-import styles from "./InstallWizard.module.css";
+import styles from "./installWizard.module.css";
 import resetStyles from "src/styles/resetCss.module.css";
 
 export type FieldMapping = {

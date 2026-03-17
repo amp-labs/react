@@ -7,7 +7,7 @@ import { ProtectedConnectionLayout } from "../../Configure/layout/ProtectedConne
 import { useWizard, WizardStep } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
-import styles from "./ConnectStep.module.css";
+import styles from "./connectStep.module.css";
 
 interface ConnectStepProps {
   consumerRef: string;
