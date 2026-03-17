@@ -98,6 +98,9 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       const objects = read.objects || {};
       const obj = objects[objectName] || {};
 
+      // initialize object name if not set
+      obj.objectName = obj.objectName || objectName;
+
       objects[objectName] = obj;
       read.objects = objects;
       _draft.read = read;
