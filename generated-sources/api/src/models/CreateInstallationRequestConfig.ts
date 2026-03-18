@@ -34,7 +34,7 @@ export interface CreateInstallationRequestConfig {
      */
     revisionId?: string;
     /**
-     * The person who created the config, in the format of "consumer:{consumer-id}" or "builder:{builder-id}".
+     * The person who created the config, in the format of "consumer:{consumer-id}", "builder:{builder-id}", or "api:{api-caller}".
      * @type {string}
      * @memberof CreateInstallationRequestConfig
      */
