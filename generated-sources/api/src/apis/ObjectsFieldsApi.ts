@@ -35,7 +35,7 @@ export interface GetObjectMetadataForConnectionRequest {
     projectIdOrName: string;
     provider: string;
     objectName: string;
-    groupRef?: string;
+    groupRef: string;
     excludeReadOnly?: boolean;
 }
 
@@ -43,7 +43,7 @@ export interface GetObjectMetadataForInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
     objectName: string;
-    groupRef?: string;
+    groupRef: string;
     excludeReadOnly?: boolean;
 }
 
@@ -67,12 +67,12 @@ export interface UpsertMetadataForInstallationRequest {
  */
 export interface ObjectsFieldsApiInterface {
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * @summary Get object metadata for connection
-     * @param {string} projectIdOrName The unique identifier or name of the project.
-     * @param {string} provider The API Provider
-     * @param {string} objectName Object name (mapped or unmapped)
-     * @param {string} [groupRef] The groupRef for the connection.
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. A connection must exist for the given `groupRef` and `provider`. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * @summary Get object metadata via connection
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} provider The provider name (e.g. &#x60;salesforce&#x60;, &#x60;hubspot&#x60;).
+     * @param {string} objectName The native provider object name to retrieve metadata for.
+     * @param {string} groupRef The ID of the user group whose connection should be used to fetch the metadata.
      * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -81,18 +81,18 @@ export interface ObjectsFieldsApiInterface {
     getObjectMetadataForConnectionRaw(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>>;
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for connection
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. A connection must exist for the given `groupRef` and `provider`. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via connection
      */
     getObjectMetadataForConnection(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * @summary Get object metadata for installation
-     * @param {string} projectIdOrName The unique identifier or name of the project.
-     * @param {string} integrationId The integration ID.
-     * @param {string} objectName Object name (mapped or unmapped)
-     * @param {string} [groupRef] The groupRef for the installation
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. An installation must exist for the given `groupRef` and `integrationId`. The `objectName` can be either the mapped name from your integration config or the native provider name. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * @summary Get object metadata via installation
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} integrationId The unique identifier of the integration.
+     * @param {string} objectName The name of the object to retrieve metadata for. You can use either the mapped name from your integration config (e.g. &#x60;people&#x60;) or the native provider object name (e.g. &#x60;contact&#x60;). 
+     * @param {string} groupRef The ID of the user group that has access to this installation.
      * @param {boolean} [excludeReadOnly] Excludes fields where &#x60;ReadOnly&#x60; is &#x60;true&#x60; from the response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -101,8 +101,8 @@ export interface ObjectsFieldsApiInterface {
     getObjectMetadataForInstallationRaw(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>>;
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for installation
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. An installation must exist for the given `groupRef` and `integrationId`. The `objectName` can be either the mapped name from your integration config or the native provider name. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via installation
      */
     getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata>;
 
@@ -150,8 +150,8 @@ export interface ObjectsFieldsApiInterface {
 export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsApiInterface {
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for connection
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. A connection must exist for the given `groupRef` and `provider`. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via connection
      */
     async getObjectMetadataForConnectionRaw(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -164,6 +164,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
 
         if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
             throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getObjectMetadataForConnection.');
+        }
+
+        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
+            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling getObjectMetadataForConnection.');
         }
 
         const queryParameters: any = {};
@@ -201,8 +205,8 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
     }
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint only requires that a Connection exists for the given groupRef. It does not apply any object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for connection
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. A connection must exist for the given `groupRef` and `provider`. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via connection
      */
     async getObjectMetadataForConnection(requestParameters: GetObjectMetadataForConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
         const response = await this.getObjectMetadataForConnectionRaw(requestParameters, initOverrides);
@@ -210,8 +214,8 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
     }
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for installation
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. An installation must exist for the given `groupRef` and `integrationId`. The `objectName` can be either the mapped name from your integration config or the native provider name. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via installation
      */
     async getObjectMetadataForInstallationRaw(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectMetadata>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -224,6 +228,10 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
 
         if (requestParameters.objectName === null || requestParameters.objectName === undefined) {
             throw new runtime.RequiredError('objectName','Required parameter requestParameters.objectName was null or undefined when calling getObjectMetadataForInstallation.');
+        }
+
+        if (requestParameters.groupRef === null || requestParameters.groupRef === undefined) {
+            throw new runtime.RequiredError('groupRef','Required parameter requestParameters.groupRef was null or undefined when calling getObjectMetadataForInstallation.');
         }
 
         const queryParameters: any = {};
@@ -261,8 +269,8 @@ export class ObjectsFieldsApi extends runtime.BaseAPI implements ObjectsFieldsAp
     }
 
     /**
-     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. This endpoint requires that an Installation exists for the given groupRef. It applies object mappings. This endpoint may return nested fields as a part of the response. Nested fields are returned in JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). Currently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future. 
-     * Get object metadata for installation
+     * Retrieves metadata about an object in a customer\'s SaaS instance, including its fields. An installation must exist for the given `groupRef` and `integrationId`. The `objectName` can be either the mapped name from your integration config or the native provider name. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$[\'billingaddress\'][\'city\']`). 
+     * Get object metadata via installation
      */
     async getObjectMetadataForInstallation(requestParameters: GetObjectMetadataForInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectMetadata> {
         const response = await this.getObjectMetadataForInstallationRaw(requestParameters, initOverrides);
