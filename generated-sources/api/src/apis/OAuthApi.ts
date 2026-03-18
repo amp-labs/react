@@ -46,7 +46,7 @@ export interface OauthUpdateRequest {
 export interface OAuthApiInterface {
     /**
      * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
-     * @summary Get URL for OAuth flow
+     * @summary Generate OAuth authorization URL
      * @param {OauthConnectRequest} connectOAuthParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -56,15 +56,15 @@ export interface OAuthApiInterface {
 
     /**
      * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
-     * Get URL for OAuth flow
+     * Generate OAuth authorization URL
      */
     oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection\'s credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead. 
      * @summary Get URL for updating OAuth connection
-     * @param {string} projectIdOrName Ampersand Project ID or name.
-     * @param {string} connectionId ID of connection to update.
+     * @param {string} projectIdOrName Ampersand project ID or name.
+     * @param {string} connectionId The ID of the connection to update.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OAuthApiInterface
@@ -72,7 +72,7 @@ export interface OAuthApiInterface {
     oauthUpdateRaw(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection\'s credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead. 
      * Get URL for updating OAuth connection
      */
     oauthUpdate(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
@@ -86,7 +86,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
 
     /**
      * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
-     * Get URL for OAuth flow
+     * Generate OAuth authorization URL
      */
     async oauthConnectRaw(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         if (requestParameters.connectOAuthParams === null || requestParameters.connectOAuthParams === undefined) {
@@ -128,7 +128,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
 
     /**
      * Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).
-     * Get URL for OAuth flow
+     * Generate OAuth authorization URL
      */
     async oauthConnect(requestParameters: OauthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.oauthConnectRaw(requestParameters, initOverrides);
@@ -136,7 +136,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection\'s credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead. 
      * Get URL for updating OAuth connection
      */
     async oauthUpdateRaw(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
@@ -179,7 +179,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.
+     * Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection\'s credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead. 
      * Get URL for updating OAuth connection
      */
     async oauthUpdate(requestParameters: OauthUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
