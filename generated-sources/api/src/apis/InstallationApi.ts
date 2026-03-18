@@ -88,7 +88,7 @@ export interface UpdateInstallationOperationRequest {
  */
 export interface InstallationApiInterface {
     /**
-     * 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * @summary Create a new installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -100,6 +100,7 @@ export interface InstallationApiInterface {
     createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -193,10 +194,10 @@ export interface InstallationApiInterface {
     patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} integrationId The integration ID.
+     * @param {string} integrationId The ID of the integration that this installation belongs to.
      * @param {string} installationId The Ampersand installation ID.
      * @param {UpdateInstallationRequest} installationUpdate 
      * @param {*} [options] Override http request option.
@@ -206,7 +207,7 @@ export interface InstallationApiInterface {
     updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -219,6 +220,7 @@ export interface InstallationApiInterface {
 export class InstallationApi extends runtime.BaseAPI implements InstallationApiInterface {
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -264,6 +266,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
@@ -530,7 +533,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -580,7 +583,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     async updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
