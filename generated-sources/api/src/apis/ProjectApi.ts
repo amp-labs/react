@@ -87,8 +87,8 @@ export interface ProjectApiInterface {
     getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
-     * 
-     * @summary List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * @summary List projects
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -96,7 +96,8 @@ export interface ProjectApiInterface {
     listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
 
@@ -215,7 +216,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     async listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
         const queryParameters: any = {};
@@ -245,7 +247,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     async listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
         const response = await this.listProjectsRaw(initOverrides);
