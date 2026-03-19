@@ -27,29 +27,29 @@ import {
  */
 export interface Project {
     /**
-     * The project ID.
+     * The unique identifier for the project.
      * @type {string}
      * @memberof Project
      */
     id: string;
     /**
-     * The project name.
+     * The unique name for the project.
      * @type {string}
      * @memberof Project
      */
     name: string;
     /**
-     * The name of the application, which is displayed to end users.
+     * The display name of the application, shown to end users during the connection flow.
      * @type {string}
      * @memberof Project
      */
     appName: string;
     /**
-     * The organization ID that this project belongs to.
+     * The ID of the organization that this project belongs to.
      * @type {string}
      * @memberof Project
      */
-    orgId?: string;
+    orgId: string;
     /**
      * The time the project was created.
      * @type {Date}
@@ -78,6 +78,7 @@ export function instanceOfProject(value: object): boolean {
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "appName" in value;
+    isInstance = isInstance && "orgId" in value;
     isInstance = isInstance && "createTime" in value;
 
     return isInstance;
@@ -96,7 +97,7 @@ export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'id': json['id'],
         'name': json['name'],
         'appName': json['appName'],
-        'orgId': !exists(json, 'orgId') ? undefined : json['orgId'],
+        'orgId': json['orgId'],
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
         'entitlements': !exists(json, 'entitlements') ? undefined : ProjectEntitlementsFromJSON(json['entitlements']),

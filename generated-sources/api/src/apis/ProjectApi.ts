@@ -56,7 +56,7 @@ export interface UpdateProjectOperationRequest {
  */
 export interface ProjectApiInterface {
     /**
-     * 
+     * Creates a new project within an organization. A project is a container for provider apps, integrations, and connections.
      * @summary Create a new project
      * @param {CreateProjectRequest} project 
      * @param {*} [options] Override http request option.
@@ -66,6 +66,7 @@ export interface ProjectApiInterface {
     createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
+     * Creates a new project within an organization. A project is a container for provider apps, integrations, and connections.
      * Create a new project
      */
     createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
@@ -87,8 +88,8 @@ export interface ProjectApiInterface {
     getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
-     * 
-     * @summary List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * @summary List projects
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApiInterface
@@ -96,7 +97,8 @@ export interface ProjectApiInterface {
     listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
 
@@ -124,6 +126,7 @@ export interface ProjectApiInterface {
 export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
 
     /**
+     * Creates a new project within an organization. A project is a container for provider apps, integrations, and connections.
      * Create a new project
      */
     async createProjectRaw(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
@@ -161,6 +164,7 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
+     * Creates a new project within an organization. A project is a container for provider apps, integrations, and connections.
      * Create a new project
      */
     async createProject(requestParameters: CreateProjectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
@@ -215,7 +219,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     async listProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
         const queryParameters: any = {};
@@ -245,7 +250,8 @@ export class ProjectApi extends runtime.BaseAPI implements ProjectApiInterface {
     }
 
     /**
-     * List all projects that the API key or user credential has access to.
+     * Lists projects your credentials can access.
+     * List projects
      */
     async listProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
         const response = await this.listProjectsRaw(initOverrides);
