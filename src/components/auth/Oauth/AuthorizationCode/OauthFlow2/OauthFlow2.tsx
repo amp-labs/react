@@ -148,11 +148,18 @@ export function OauthFlow2({
       });
 
       if (url) {
+        // DEBUG: log the OAuth URL and force fresh login for Salesforce
+        console.warn("[OAuth DEBUG] Original URL:", url);
+        const oauthUrl = new URL(url);
+        oauthUrl.searchParams.set("prompt", "consent");
+        const finalUrl = oauthUrl.toString();
+        console.warn("[OAuth DEBUG] Modified URL (prompt=consent):", finalUrl);
+
         const left = window.screenX + (window.outerWidth - DEFAULT_WIDTH) / 2;
         const top =
           window.screenY + (window.outerHeight - DEFAULT_HEIGHT) / 2.5;
         const windowDimensions = `width=${DEFAULT_WIDTH},height=${DEFAULT_HEIGHT},left=${left},top=${top}`;
-        popupRef.current = window.open(url, "OAuthPopup", windowDimensions);
+        popupRef.current = window.open(finalUrl, "OAuthPopup", windowDimensions);
       }
     } catch (error) {
       console.error(error);

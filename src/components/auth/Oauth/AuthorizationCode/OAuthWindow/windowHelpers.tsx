@@ -26,12 +26,20 @@ export function useOpenWindowHandler(
 ) {
   return useCallback(() => {
     if (!oauthUrl) return;
+
+    // DEBUG: log the OAuth URL and force consent prompt
+    console.warn("[OAuth DEBUG] Original URL:", oauthUrl);
+    const parsedUrl = new URL(oauthUrl);
+    parsedUrl.searchParams.set("prompt", "consent");
+    const finalUrl = parsedUrl.toString();
+    console.warn("[OAuth DEBUG] Modified URL (prompt=consent):", finalUrl);
+
     const left = window.screenX + (window.outerWidth - DEFAULT_WIDTH) / 2;
     const top = window.screenY + (window.outerHeight - DEFAULT_HEIGHT) / 2.5;
     const windowDimensions = `width=${DEFAULT_WIDTH},height=${DEFAULT_HEIGHT},left=${left},top=${top}`;
 
     // creates a new window
-    const newWindow = window.open(oauthUrl, windowTitle, windowDimensions);
+    const newWindow = window.open(finalUrl, windowTitle, windowDimensions);
     setOauthWindow(newWindow);
 
     window.addEventListener("message", receiveMessage, false);
