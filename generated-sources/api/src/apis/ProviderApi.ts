@@ -37,9 +37,9 @@ export interface GetProviderRequest {
  */
 export interface ProviderApiInterface {
     /**
-     * 
+     * Returns information about a single provider. No authentication is required. 
      * @summary Get provider
-     * @param {string} provider The API provider.
+     * @param {string} provider The provider name (e.g. &#x60;salesforce&#x60;, &#x60;hubspot&#x60;).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProviderApiInterface
@@ -47,12 +47,13 @@ export interface ProviderApiInterface {
     getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderInfo>>;
 
     /**
+     * Returns information about a single provider. No authentication is required. 
      * Get provider
      */
     getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderInfo>;
 
     /**
-     * 
+     * Returns all supported SaaS providers and their capabilities. The response is a JSON object keyed by provider name (e.g. `salesforce`, `hubspot`). Each value describes the provider\'s authentication type, supported operations, modules, and configuration options. No authentication is required. 
      * @summary List providers
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -61,6 +62,7 @@ export interface ProviderApiInterface {
     listProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: ProviderInfo; }>>;
 
     /**
+     * Returns all supported SaaS providers and their capabilities. The response is a JSON object keyed by provider name (e.g. `salesforce`, `hubspot`). Each value describes the provider\'s authentication type, supported operations, modules, and configuration options. No authentication is required. 
      * List providers
      */
     listProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: ProviderInfo; }>;
@@ -73,6 +75,7 @@ export interface ProviderApiInterface {
 export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface {
 
     /**
+     * Returns information about a single provider. No authentication is required. 
      * Get provider
      */
     async getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderInfo>> {
@@ -84,18 +87,6 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("Bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
         const response = await this.request({
             path: `/providers/{provider}`.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters.provider))),
             method: 'GET',
@@ -107,6 +98,7 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
     }
 
     /**
+     * Returns information about a single provider. No authentication is required. 
      * Get provider
      */
     async getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderInfo> {
@@ -115,6 +107,7 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
     }
 
     /**
+     * Returns all supported SaaS providers and their capabilities. The response is a JSON object keyed by provider name (e.g. `salesforce`, `hubspot`). Each value describes the provider\'s authentication type, supported operations, modules, and configuration options. No authentication is required. 
      * List providers
      */
     async listProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: ProviderInfo; }>> {
@@ -122,18 +115,6 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("Bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
         const response = await this.request({
             path: `/providers`,
             method: 'GET',
@@ -145,6 +126,7 @@ export class ProviderApi extends runtime.BaseAPI implements ProviderApiInterface
     }
 
     /**
+     * Returns all supported SaaS providers and their capabilities. The response is a JSON object keyed by provider name (e.g. `salesforce`, `hubspot`). Each value describes the provider\'s authentication type, supported operations, modules, and configuration options. No authentication is required. 
      * List providers
      */
     async listProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: ProviderInfo; }> {
