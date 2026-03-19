@@ -27,17 +27,17 @@ import {
  */
 export interface UpdateInstallationRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values include:
-     * - connectionId
-     * - config.createdBy
-     * - config.content.read.objects.OBJECT_NAME
-     * - config.content.write.objects.OBJECT_NAME
-     * - config.content.write.objects
-     * - config.content.subscribe.objects.OBJECT_NAME
-     * - config.content.subscribe.objects
-     * - config.content.proxy.enabled
+     * Array of field paths specifying which fields to update. Each path must have a corresponding value in the `installation` object. A field included in `installation` but not listed here will be ignored. Allowed values:
+     * - `connectionId` - switch the SaaS connection tied to this installation.
+     * - `config.createdBy` - change the attribution for who created this config.
+     * - `config.content.read.objects.<objectName>` - replace the read config for a single object (e.g. `config.content.read.objects.contacts`).
+     * - `config.content.write.objects.<objectName>` - replace the write config for a single object.
+     * - `config.content.write.objects` - replace the entire write objects map.
+     * - `config.content.subscribe.objects.<objectName>` - replace the subscribe config for a single object.
+     * - `config.content.subscribe.objects` - replace the entire subscribe objects map.
+     * - `config.content.proxy.enabled` - enable or disable the proxy.
      * 
-     * `OBJECT_NAME` means you can specify any object name.
+     * Replace `<objectName>` with the provider object name (e.g. `contacts`, `leads`, `accounts`).
      * @type {Array<string>}
      * @memberof UpdateInstallationRequest
      */
