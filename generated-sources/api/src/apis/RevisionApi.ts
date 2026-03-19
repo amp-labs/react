@@ -72,12 +72,12 @@ export interface RevisionApiInterface {
     createRevision(requestParameters: CreateRevisionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Hydrate a revision with information from the consumer\'s SaaS instance.
-     * @summary Hydrate a revision
+     * Returns the integration revision enriched with live field metadata from the consumer\'s connected SaaS instance, such as available fields, display names, and type for each object defined in the integration. 
+     * @summary Get a hydrated revision
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
-     * @param {string} revisionId The revision ID.
-     * @param {string} connectionId The connection ID.
+     * @param {string} revisionId The revision ID. You can find this on the integration object\&#39;s &#x60;latestRevision.id&#x60; field.
+     * @param {string} connectionId The ID of the consumer\&#39;s connection to the SaaS provider. This connection\&#39;s credentials are used to fetch field metadata from the provider\&#39;s API.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RevisionApiInterface
@@ -85,8 +85,8 @@ export interface RevisionApiInterface {
     getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>>;
 
     /**
-     * Hydrate a revision with information from the consumer\'s SaaS instance.
-     * Hydrate a revision
+     * Returns the integration revision enriched with live field metadata from the consumer\'s connected SaaS instance, such as available fields, display names, and type for each object defined in the integration. 
+     * Get a hydrated revision
      */
     getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision>;
 
@@ -156,8 +156,8 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     }
 
     /**
-     * Hydrate a revision with information from the consumer\'s SaaS instance.
-     * Hydrate a revision
+     * Returns the integration revision enriched with live field metadata from the consumer\'s connected SaaS instance, such as available fields, display names, and type for each object defined in the integration. 
+     * Get a hydrated revision
      */
     async getHydratedRevisionRaw(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HydratedRevision>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -207,8 +207,8 @@ export class RevisionApi extends runtime.BaseAPI implements RevisionApiInterface
     }
 
     /**
-     * Hydrate a revision with information from the consumer\'s SaaS instance.
-     * Hydrate a revision
+     * Returns the integration revision enriched with live field metadata from the consumer\'s connected SaaS instance, such as available fields, display names, and type for each object defined in the integration. 
+     * Get a hydrated revision
      */
     async getHydratedRevision(requestParameters: GetHydratedRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HydratedRevision> {
         const response = await this.getHydratedRevisionRaw(requestParameters, initOverrides);

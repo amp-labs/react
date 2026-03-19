@@ -20,19 +20,19 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateProjectRequest {
     /**
-     * The app name.
+     * The display name of your application, shown to end users during the connection flow.
      * @type {string}
      * @memberof CreateProjectRequest
      */
     appName: string;
     /**
-     * The project name. Must be alphanumerics and hyphens only. Project names will be save in lowercase.
+     * The unique name for the project. Must contain only letters, numbers, and hyphens. Values are normalized to lowercase on save.
      * @type {string}
      * @memberof CreateProjectRequest
      */
     name: string;
     /**
-     * The organization ID.
+     * The ID of the organization this project belongs to. Obtain this from the Ampersand Dashboard or by calling `GET /orgs`.
      * @type {string}
      * @memberof CreateProjectRequest
      */
