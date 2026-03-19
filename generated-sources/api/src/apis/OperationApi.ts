@@ -89,10 +89,10 @@ export interface OperationApiInterface {
     getBackfillProgress(requestParameters: GetBackfillProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillProgress>;
 
     /**
-     * 
+     * Retrieve a single operation by ID. An operation represents an async read, write, or subscribe action for an installation. Use this endpoint to poll for status, inspect the result summary, or fetch metadata such as backfill progress or write outcome details.  
      * @summary Get an operation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} operationId Operation ID.
+     * @param {string} operationId Unique identifier for the operation. Obtain from the list operations API endpoint, the Ampersand dashboard, or webhook payloads.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OperationApiInterface
@@ -100,6 +100,7 @@ export interface OperationApiInterface {
     getOperationRaw(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Operation>>;
 
     /**
+     * Retrieve a single operation by ID. An operation represents an async read, write, or subscribe action for an installation. Use this endpoint to poll for status, inspect the result summary, or fetch metadata such as backfill progress or write outcome details.  
      * Get an operation
      */
     getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation>;
@@ -203,6 +204,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
     }
 
     /**
+     * Retrieve a single operation by ID. An operation represents an async read, write, or subscribe action for an installation. Use this endpoint to poll for status, inspect the result summary, or fetch metadata such as backfill progress or write outcome details.  
      * Get an operation
      */
     async getOperationRaw(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Operation>> {
@@ -241,6 +243,7 @@ export class OperationApi extends runtime.BaseAPI implements OperationApiInterfa
     }
 
     /**
+     * Retrieve a single operation by ID. An operation represents an async read, write, or subscribe action for an installation. Use this endpoint to poll for status, inspect the result summary, or fetch metadata such as backfill progress or write outcome details.  
      * Get an operation
      */
     async getOperation(requestParameters: GetOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Operation> {
