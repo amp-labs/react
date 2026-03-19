@@ -25,6 +25,12 @@ import {
     BaseReadConfigFromJSONTyped,
     BaseReadConfigToJSON,
 } from './BaseReadConfig';
+import type { BaseSubscribeConfig } from './BaseSubscribeConfig';
+import {
+    BaseSubscribeConfigFromJSON,
+    BaseSubscribeConfigFromJSONTyped,
+    BaseSubscribeConfigToJSON,
+} from './BaseSubscribeConfig';
 import type { BaseWriteConfig } from './BaseWriteConfig';
 import {
     BaseWriteConfigFromJSON,
@@ -62,6 +68,12 @@ export interface UpdateInstallationConfigContent {
      * @memberof UpdateInstallationConfigContent
      */
     proxy?: BaseProxyConfig;
+    /**
+     * 
+     * @type {BaseSubscribeConfig}
+     * @memberof UpdateInstallationConfigContent
+     */
+    subscribe?: BaseSubscribeConfig;
 }
 
 /**
@@ -87,6 +99,7 @@ export function UpdateInstallationConfigContentFromJSONTyped(json: any, ignoreDi
         'read': !exists(json, 'read') ? undefined : BaseReadConfigFromJSON(json['read']),
         'write': !exists(json, 'write') ? undefined : BaseWriteConfigFromJSON(json['write']),
         'proxy': !exists(json, 'proxy') ? undefined : BaseProxyConfigFromJSON(json['proxy']),
+        'subscribe': !exists(json, 'subscribe') ? undefined : BaseSubscribeConfigFromJSON(json['subscribe']),
     };
 }
 
@@ -103,6 +116,7 @@ export function UpdateInstallationConfigContentToJSON(value?: UpdateInstallation
         'read': BaseReadConfigToJSON(value.read),
         'write': BaseWriteConfigToJSON(value.write),
         'proxy': BaseProxyConfigToJSON(value.proxy),
+        'subscribe': BaseSubscribeConfigToJSON(value.subscribe),
     };
 }
 

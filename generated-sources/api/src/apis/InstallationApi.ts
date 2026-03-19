@@ -88,7 +88,7 @@ export interface UpdateInstallationOperationRequest {
  */
 export interface InstallationApiInterface {
     /**
-     * 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * @summary Create a new installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -100,6 +100,7 @@ export interface InstallationApiInterface {
     createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -123,11 +124,11 @@ export interface InstallationApiInterface {
     deleteInstallation(requestParameters: DeleteInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * 
+     * Retrieves a single installation by ID, including its connection details, config, and health status. 
      * @summary Get an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} integrationId The integration ID.
-     * @param {string} installationId The installation ID.
+     * @param {string} integrationId The unique identifier (UUID) of the integration.
+     * @param {string} installationId The unique identifier (UUID) of the installation.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -135,16 +136,17 @@ export interface InstallationApiInterface {
     getInstallationRaw(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
+     * Retrieves a single installation by ID, including its connection details, config, and health status. 
      * Get an installation
      */
     getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * 
-     * @summary List installations
+     * Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead. 
+     * @summary List installations for an integration
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} integrationId 
-     * @param {string} [groupRef] The ID of the user group that has access to this installation.
+     * @param {string} integrationId The unique identifier (UUID) of the integration.
+     * @param {string} [groupRef] The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -152,15 +154,16 @@ export interface InstallationApiInterface {
     listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>>;
 
     /**
-     * List installations
+     * Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead. 
+     * List installations for an integration
      */
     listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
 
     /**
-     * Lists all installations for a given project and query parameters. 
+     * Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead. 
      * @summary List installations for a project
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} [groupRef] The group ref to filter by.
+     * @param {string} [groupRef] The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -168,7 +171,7 @@ export interface InstallationApiInterface {
     listInstallationsForProjectRaw(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>>;
 
     /**
-     * Lists all installations for a given project and query parameters. 
+     * Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead. 
      * List installations for a project
      */
     listInstallationsForProject(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>>;
@@ -193,10 +196,10 @@ export interface InstallationApiInterface {
     patchObjectConfigContent(requestParameters: PatchObjectConfigContentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * @summary Update an installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} integrationId The integration ID.
+     * @param {string} integrationId The ID of the integration that this installation belongs to.
      * @param {string} installationId The Ampersand installation ID.
      * @param {UpdateInstallationRequest} installationUpdate 
      * @param {*} [options] Override http request option.
@@ -206,7 +209,7 @@ export interface InstallationApiInterface {
     updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -219,6 +222,7 @@ export interface InstallationApiInterface {
 export class InstallationApi extends runtime.BaseAPI implements InstallationApiInterface {
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -264,6 +268,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
@@ -323,6 +328,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Retrieves a single installation by ID, including its connection details, config, and health status. 
      * Get an installation
      */
     async getInstallationRaw(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -365,6 +371,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
+     * Retrieves a single installation by ID, including its connection details, config, and health status. 
      * Get an installation
      */
     async getInstallation(requestParameters: GetInstallationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
@@ -373,7 +380,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * List installations
+     * Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead. 
+     * List installations for an integration
      */
     async listInstallationsRaw(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>> {
         if (requestParameters.projectIdOrName === null || requestParameters.projectIdOrName === undefined) {
@@ -415,7 +423,8 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * List installations
+     * Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead. 
+     * List installations for an integration
      */
     async listInstallations(requestParameters: ListInstallationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
         const response = await this.listInstallationsRaw(requestParameters, initOverrides);
@@ -423,7 +432,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Lists all installations for a given project and query parameters. 
+     * Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead. 
      * List installations for a project
      */
     async listInstallationsForProjectRaw(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Installation>>> {
@@ -462,7 +471,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Lists all installations for a given project and query parameters. 
+     * Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead. 
      * List installations for a project
      */
     async listInstallationsForProject(requestParameters: ListInstallationsForProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Installation>> {
@@ -530,7 +539,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     async updateInstallationRaw(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -580,7 +589,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system. 
+     * Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider\'s system, which typically takes 1-2 minutes but may take up to 10 minutes. 
      * Update an installation
      */
     async updateInstallation(requestParameters: UpdateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {
