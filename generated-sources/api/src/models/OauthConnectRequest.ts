@@ -39,7 +39,7 @@ export interface OauthConnectRequest {
      */
     provider: string;
     /**
-     * The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.
+     * Your application's identifier for the organization or workspace that this connection belongs to (e.g. an org ID or team ID).
      * @type {string}
      * @memberof OauthConnectRequest
      */
@@ -75,7 +75,7 @@ export interface OauthConnectRequest {
      */
     providerMetadata?: { [key: string]: ProviderMetadataInfo; };
     /**
-     * ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
+     * ID of the provider app, returned from the [Create Provider App endpoint](https://docs.withampersand.com/reference/provider-apps/create-provider-app). If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */
