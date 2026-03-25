@@ -63,11 +63,11 @@ export interface Installation {
      */
     group?: Group;
     /**
-     * The health status of the installation ("healthy", "unhealthy").
+     * The health status of the installation.
      * @type {string}
      * @memberof Installation
      */
-    healthStatus: string;
+    healthStatus: InstallationHealthStatusEnum;
     /**
      * The status of the latest operation for this installation.
      * @type {string}
@@ -81,7 +81,7 @@ export interface Installation {
      */
     connection: Connection;
     /**
-     * The time the integration was first installed.
+     * The time the installation was created.
      * @type {Date}
      * @memberof Installation
      */
@@ -106,6 +106,15 @@ export interface Installation {
     config: Config;
 }
 
+
+/**
+ * @export
+ */
+export const InstallationHealthStatusEnum = {
+    Healthy: 'healthy',
+    Unhealthy: 'unhealthy'
+} as const;
+export type InstallationHealthStatusEnum = typeof InstallationHealthStatusEnum[keyof typeof InstallationHealthStatusEnum];
 
 /**
  * @export
