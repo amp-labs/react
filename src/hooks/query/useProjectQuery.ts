@@ -40,7 +40,7 @@ const useProjectQuery = () => {
   return {
     ...query,
     projectIdOrName,
-    appName: query.data?.name,
+    appName: query.data?.appName,
     projectId: query.data?.id,
   };
 };
