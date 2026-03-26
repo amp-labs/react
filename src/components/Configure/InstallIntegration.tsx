@@ -33,7 +33,7 @@ export type FieldMapping = {
   [key: string]: Array<DynamicMappingsInputEntry>;
 };
 
-interface InstallIntegrationProps {
+export interface InstallIntegrationProps {
   /**
    * The name of the integration from amp.yaml
    */
@@ -62,8 +62,14 @@ interface InstallIntegrationProps {
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
+}
+
+/**
+ * Internal props that extend the public props with the variant option.
+ * This is not exported from the public API.
+ */
+interface InstallIntegrationInternalProps extends InstallIntegrationProps {
   /**
-   * @hidden
    * When "wizard", uses the new wizard-based install flow for new installations.
    * Existing installations still show the standard configuration view.
    */
@@ -81,7 +87,7 @@ const InstallIntegrationContent = ({
   onUninstallSuccess,
   fieldMapping,
   variant,
-}: InstallIntegrationProps) => {
+}: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
   const { projectIdOrName, isLoading: isProjectLoading } = useProjectQuery();
   const { isLoading: isIntegrationListLoading } = useListIntegrationsQuery();
@@ -211,7 +217,9 @@ export function InstallIntegration(props: InstallIntegrationProps) {
         groupRef={groupRef}
         groupName={groupName}
       >
-        <InstallIntegrationContent {...props} />
+        <InstallIntegrationContent
+          {...(props as InstallIntegrationInternalProps)}
+        />
       </InstallationProvider>
     </AmpersandErrorBoundary>
   );
