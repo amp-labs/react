@@ -27,9 +27,11 @@ import {
  */
 export interface UpdateProjectRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values include:
-     * - appName
-     * - name
+     * Array of field paths specifying which fields to update. Each path must have a
+     * corresponding value in the `project` object. A field included in `project` but
+     * not listed here will be ignored. Allowed values:
+     * - `appName` - the display name of the application, shown to end users during the connection flow.
+     * - `name` - the unique project identifier (must be unique within your organization).
      * @type {Array<string>}
      * @memberof UpdateProjectRequest
      */

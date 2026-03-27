@@ -21,23 +21,17 @@ import {
 } from './ConnectionRequest';
 
 /**
- * 
+ * Specify which fields to update in `updateMask` and provide corresponding values in `connection`. Fields in `connection` not listed in `updateMask` are ignored.
  * @export
  * @interface UpdateConnectionRequest
  */
 export interface UpdateConnectionRequest {
     /**
-     * Array of field paths specifying which fields to update. Allowed values include:
-     * - providerWorkspaceRef
-     * - providerMetadata
-     * - apiKey
-     * - basicAuth
-     * - oauth2ClientCredentials
-     * - oauth2PasswordCredentials
+     * Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.
      * @type {Array<string>}
      * @memberof UpdateConnectionRequest
      */
-    updateMask: Array<string>;
+    updateMask: Array<UpdateConnectionRequestUpdateMaskEnum>;
     /**
      * 
      * @type {ConnectionRequest}
@@ -45,6 +39,21 @@ export interface UpdateConnectionRequest {
      */
     connection: ConnectionRequest;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateConnectionRequestUpdateMaskEnum = {
+    ProviderWorkspaceRef: 'providerWorkspaceRef',
+    ProviderMetadata: 'providerMetadata',
+    ApiKey: 'apiKey',
+    BasicAuth: 'basicAuth',
+    Oauth2ClientCredentials: 'oauth2ClientCredentials',
+    Oauth2PasswordCredentials: 'oauth2PasswordCredentials'
+} as const;
+export type UpdateConnectionRequestUpdateMaskEnum = typeof UpdateConnectionRequestUpdateMaskEnum[keyof typeof UpdateConnectionRequestUpdateMaskEnum];
+
 
 /**
  * Check if a given object implements the UpdateConnectionRequest interface.
