@@ -89,6 +89,7 @@ export const FieldMetadataValueTypeEnum = {
     Datetime: 'datetime',
     Int: 'int',
     Float: 'float',
+    Reference: 'reference',
     Other: 'other'
 } as const;
 export type FieldMetadataValueTypeEnum = typeof FieldMetadataValueTypeEnum[keyof typeof FieldMetadataValueTypeEnum];
