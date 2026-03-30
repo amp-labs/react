@@ -169,6 +169,9 @@ src/models/Oauth2Opts.ts
 src/models/OauthConnectRequest.ts
 src/models/ObjectMetadata.ts
 src/models/Operation.ts
+src/models/OperationMetadata.ts
+src/models/OperationMetadataProgress.ts
+src/models/OperationMetadataRetry.ts
 src/models/OptionalFieldsAutoOption.ts
 src/models/Org.ts
 src/models/PaginationInfo.ts
@@ -215,6 +218,7 @@ src/models/UpdateDestinationRequestDestinationMetadata.ts
 src/models/UpdateDestinationRequestDestinationSecrets.ts
 src/models/UpdateEvent.ts
 src/models/UpdateInstallationConfigContent.ts
+src/models/UpdateInstallationConfigContentAllOf.ts
 src/models/UpdateInstallationRequest.ts
 src/models/UpdateInstallationRequestInstallation.ts
 src/models/UpdateInstallationRequestInstallationConfig.ts
