@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import { Installation } from "services/api";
 import { useUpdateInstallation } from "src/headless/installation/useUpdateInstallation";
+import { handleServerError } from "src/utils/handleServerError";
 import { ConfigContent } from "src/headless/types";
 
 import { generateUpdateReadConfigFromConfigureState } from "../actions/read/onSaveReadUpdateInstallation";
@@ -123,7 +124,10 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
           onNextIncompleteTab();
         },
         onError: (error) => {
-          setMutateInstallationError(selectedObjectName!)(error.message);
+          handleServerError(
+            error,
+            setMutateInstallationError(selectedObjectName!),
+          );
           setLoadingState(false);
         },
       });
@@ -155,7 +159,10 @@ export function UpdateInstallation({ installation }: UpdateInstallationProps) {
           onNextIncompleteTab();
         },
         onError: (error) => {
-          setMutateInstallationError(selectedObjectName!)(error.message);
+          handleServerError(
+            error,
+            setMutateInstallationError(selectedObjectName!),
+          );
           setLoadingState(false);
         },
       });
