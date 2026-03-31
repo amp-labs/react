@@ -2,8 +2,8 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import { Installation } from "services/api";
 import { useUpdateInstallation } from "src/headless/installation/useUpdateInstallation";
-import { handleServerError } from "src/utils/handleServerError";
 import { ConfigContent } from "src/headless/types";
+import { handleServerError } from "src/utils/handleServerError";
 
 import { generateUpdateReadConfigFromConfigureState } from "../actions/read/onSaveReadUpdateInstallation";
 import { generateUpdateWriteConfigFromConfigureState } from "../actions/write/onSaveWriteUpdateInstallation";
