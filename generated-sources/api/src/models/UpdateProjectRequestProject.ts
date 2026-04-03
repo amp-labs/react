@@ -14,19 +14,20 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * The project fields to update. (Only include the fields you'd like to update.)
+ * The project fields to update. Only fields whose paths are listed in `updateMask`
+ * will be applied; all other fields in this object are ignored.
  * @export
  * @interface UpdateProjectRequestProject
  */
 export interface UpdateProjectRequestProject {
     /**
-     * The app name.
+     * The display name of the application, shown to end users during the connection flow.
      * @type {string}
      * @memberof UpdateProjectRequestProject
      */
     appName?: string;
     /**
-     * The project name.
+     * The unique name for the project. Must be unique within the organization.
      * @type {string}
      * @memberof UpdateProjectRequestProject
      */

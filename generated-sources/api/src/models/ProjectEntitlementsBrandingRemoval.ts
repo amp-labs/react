@@ -14,13 +14,13 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * Whether branding can be removed from the UI library.
+ * Controls whether Ampersand branding is removed from the embeddable UI components.
  * @export
  * @interface ProjectEntitlementsBrandingRemoval
  */
 export interface ProjectEntitlementsBrandingRemoval {
     /**
-     * Whether branding has been removed from the project.
+     * True if Ampersand branding has been removed for this project.
      * @type {boolean}
      * @memberof ProjectEntitlementsBrandingRemoval
      */

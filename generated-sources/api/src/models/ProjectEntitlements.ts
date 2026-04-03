@@ -21,7 +21,7 @@ import {
 } from './ProjectEntitlementsBrandingRemoval';
 
 /**
- * The entitlements for the project.
+ * Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.
  * @export
  * @interface ProjectEntitlements
  */
