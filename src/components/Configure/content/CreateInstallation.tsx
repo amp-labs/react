@@ -4,6 +4,7 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ErrorBoundary } from "context/ErrorContextProvider";
 import { useCreateInstallation } from "src/headless/installation/useCreateInstallation";
+import { handleServerError } from "src/utils/handleServerError";
 
 import { generateCreateReadConfigFromConfigureState } from "../actions/read/onSaveReadCreateInstallation";
 import { generateCreateWriteConfigFromConfigureState } from "../actions/write/onSaveWriteCreateInstallation";
@@ -123,7 +124,10 @@ export function CreateInstallation() {
           onNextIncompleteTab();
         },
         onError: (error) => {
-          setMutateInstallationError(selectedObjectName)(error.message);
+          handleServerError(
+            error,
+            setMutateInstallationError(selectedObjectName),
+          );
           setLoadingState(false);
         },
       });
@@ -166,7 +170,10 @@ export function CreateInstallation() {
           onNextIncompleteTab();
         },
         onError: (error) => {
-          setMutateInstallationError(selectedObjectName)(error.message);
+          handleServerError(
+            error,
+            setMutateInstallationError(selectedObjectName),
+          );
           setLoadingState(false);
         },
       });

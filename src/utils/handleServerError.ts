@@ -44,5 +44,6 @@ export const handleServerError = async (
     }
   } else {
     console.error("Unexpected error:", error.message);
+    if (setError) setError(error.message);
   }
 };
