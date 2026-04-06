@@ -46,11 +46,13 @@ export function MappingRow({
           }}
         >
           <option value="">Select a field...</option>
-          {customerFieldOptions.map((field) => (
-            <option key={field.fieldName} value={field.fieldName}>
-              {field.displayName}
-            </option>
-          ))}
+          {[...customerFieldOptions]
+            .sort((a, b) => a.displayName.localeCompare(b.displayName))
+            .map((field) => (
+              <option key={field.fieldName} value={field.fieldName}>
+                {field.displayName}
+              </option>
+            ))}
         </select>
       </div>
       <div className={styles.mappingArrow}>
