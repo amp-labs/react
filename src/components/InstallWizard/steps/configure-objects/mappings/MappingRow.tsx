@@ -1,5 +1,7 @@
+import { useMemo } from "react";
 import type { IntegrationFieldMapping } from "@generated/api/src";
 import { ArrowRightIcon, WidthIcon } from "@radix-ui/react-icons";
+import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import type { ReadObjectHandlers } from "src/headless/config/useConfigHelper";
 
 import { InfoTooltip } from "../../../components/InfoTooltip";
@@ -17,7 +19,6 @@ interface MappingRowProps {
 }
 
 export function MappingRow({
-  objectName,
   mapping,
   required,
   bidirectional,
@@ -26,34 +27,36 @@ export function MappingRow({
 }: MappingRowProps) {
   const selectedValue = configHandlers.getFieldMapping(mapping.mapToName) ?? "";
 
+  const items = useMemo(
+    () =>
+      customerFieldOptions
+        .map((f) => ({
+          id: f.fieldName,
+          label: f.displayName,
+          value: f.fieldName,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [customerFieldOptions],
+  );
+
   return (
     <div className={styles.mappingRow}>
       <div className={styles.mappingField}>
-        <select
-          id={`mapping-${objectName}-${mapping.mapToName}`}
-          className={styles.mappingSelect}
-          value={selectedValue}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value) {
+        <ComboBox
+          items={items}
+          selectedValue={selectedValue || null}
+          onSelectedItemChange={(item) => {
+            if (item?.value) {
               configHandlers.setFieldMapping({
-                fieldName: value,
+                fieldName: item.value,
                 mapToName: mapping.mapToName,
               });
             } else {
               configHandlers.deleteFieldMapping(mapping.mapToName);
             }
           }}
-        >
-          <option value="">Select a field...</option>
-          {[...customerFieldOptions]
-            .sort((a, b) => a.displayName.localeCompare(b.displayName))
-            .map((field) => (
-              <option key={field.fieldName} value={field.fieldName}>
-                {field.displayName}
-              </option>
-            ))}
-        </select>
+          placeholder="Select a field..."
+        />
       </div>
       <div className={styles.mappingArrow}>
         {bidirectional ? <WidthIcon /> : <ArrowRightIcon />}
