@@ -38,11 +38,13 @@ export function NewDefaultValueUI({
 
   const items = useMemo(
     () =>
-      allFields.map((f) => ({
-        id: f.fieldName,
-        label: f.displayName,
-        value: f.fieldName,
-      })),
+      allFields
+        .map((f) => ({
+          id: f.fieldName,
+          label: f.displayName,
+          value: f.fieldName,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
     [allFields],
   );
 
