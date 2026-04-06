@@ -56,6 +56,7 @@ export function MappingRow({
             }
           }}
           placeholder="Select a field..."
+          clearable={!required}
         />
       </div>
       <div className={styles.mappingArrow}>
