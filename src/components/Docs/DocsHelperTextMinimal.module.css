@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  color: var(--amp-text-secondary);
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-medium);
+  line-height: 1.4;
+}
+
+.helpButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--amp-text-muted);
+  font-size: var(--amp-font-size-xs);
+  font-family: inherit;
+  padding: var(--amp-space-1) var(--amp-space-2);
+  border-radius: var(--amp-radius-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-1);
+  transition: color var(--amp-duration-fast) ease,
+    background-color var(--amp-duration-fast) ease;
+}
+
+.helpButton:hover {
+  color: var(--amp-text-primary);
+  background-color: var(--amp-surface-hover);
+}
+
+.chevron {
+  font-size: 1rem;
+  transition: transform var(--amp-duration-fast) ease;
+}
+
+.chevronExpanded {
+  transform: rotate(90deg);
+}
+
+.promptWrapper {
+  overflow: hidden;
+  transition: max-height var(--amp-duration-normal) ease,
+    opacity var(--amp-duration-normal) ease;
+  max-height: 0;
+  opacity: 0;
+}
+
+.promptWrapperExpanded {
+  max-height: 12rem;
+  opacity: 1;
+}
