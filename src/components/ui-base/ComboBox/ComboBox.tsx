@@ -73,6 +73,7 @@ export function ComboBox({
     highlightedIndex,
     getItemProps,
     setInputValue,
+    selectItem,
   } = useCombobox<Option>({
     items: filteredItems,
     selectedItem: selectedValue
@@ -137,7 +138,7 @@ export function ComboBox({
               aria-label="clear selection"
               className={styles.clearButton}
               onClick={() => {
-                _onSelectedItemChange(null);
+                selectItem(null as unknown as Option);
                 resetInput();
               }}
             >
