@@ -1,3 +1,5 @@
-.metadataInputWrapper:not(:last-child) {
-  margin-bottom: 1.5rem;
+.metadataInputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
