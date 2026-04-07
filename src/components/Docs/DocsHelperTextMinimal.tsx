@@ -1,7 +1,11 @@
-import { sanitizeHtmlId } from "src/utils";
+import { useState } from "react";
+import classNames from "classnames";
 
 import { AccessibleLink } from "../ui-base/AccessibleLink";
-import { LabelTooltip } from "../ui-base/Tooltip";
+
+import { MetadataPromptText } from "./MetadataPromptText";
+
+import styles from "./DocsHelperTextMinimal.module.css";
 
 type DocsHelperTextProps = {
   url?: string;
@@ -14,29 +18,44 @@ export function DocsHelperTextHeader({
   prompt,
   inputName,
 }: DocsHelperTextProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <p
-      style={{
-        color: "var(--amp-colors-text-muted)",
-        display: "flex",
-        justifyContent: "space-between",
-      }}
-    >
-      <span>
-        {url ? (
-          <AccessibleLink href={url} newTab>
-            <span style={{ textDecoration: "underline" }}>{inputName}</span>
-          </AccessibleLink>
-        ) : (
-          <span>{inputName}</span>
-        )}{" "}
+    <div>
+      <p className={styles.header}>
+        <span>
+          {url ? (
+            <AccessibleLink href={url} newTab>
+              <span style={{ textDecoration: "underline" }}>{inputName}</span>
+            </AccessibleLink>
+          ) : (
+            <span>{inputName}</span>
+          )}
+        </span>
         {prompt && (
-          <LabelTooltip
-            id={`docs-helper-text-${sanitizeHtmlId(inputName || prompt?.slice(0, 50))}`}
-            tooltipText={prompt}
-          />
+          <button
+            type="button"
+            onClick={() => setIsExpanded((prev) => !prev)}
+            className={styles.helpButton}
+          >
+            <span
+              className={classNames(styles.chevron, {
+                [styles.chevronExpanded]: isExpanded,
+              })}
+            >
+              ▸
+            </span>
+            Help
+          </button>
         )}
-      </span>
-    </p>
+      </p>
+      <div
+        className={classNames(styles.promptWrapper, {
+          [styles.promptWrapperExpanded]: isExpanded,
+        })}
+      >
+        {prompt && <MetadataPromptText prompt={prompt} />}
+      </div>
+    </div>
   );
 }
