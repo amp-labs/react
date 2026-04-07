@@ -24,7 +24,6 @@ type ClientCredentialsFormProps = {
   explicitScopesRequired?: boolean;
   buttonVariant?: "ghost";
   metadataInputs: MetadataItemInput[];
-  providerName?: string;
 };
 
 type ClientCredentialsFormData = {
@@ -40,7 +39,6 @@ export function ClientCredentialsForm({
   explicitScopesRequired,
   buttonVariant,
   metadataInputs,
-  providerName,
 }: ClientCredentialsFormProps) {
   const [formData, setFormData] = useState<ClientCredentialsFormData>({
     clientSecret: "",
@@ -118,7 +116,6 @@ export function ClientCredentialsForm({
             key={metadata.name}
             metadata={metadata}
             onChange={handleChange}
-            providerName={providerName}
           />
         ))}
       </div>
@@ -164,7 +161,6 @@ export function ClientCredentialsContent({
         isButtonDisabled={isButtonDisabled || !!error}
         explicitScopesRequired={explicitScopesRequired}
         metadataInputs={metadataInputs}
-        providerName={providerName}
       />
     </AuthCardLayout>
   );

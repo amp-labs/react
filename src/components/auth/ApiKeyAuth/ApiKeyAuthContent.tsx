@@ -98,7 +98,6 @@ export function ApiKeyAuthForm({
           key={metadata.name}
           metadata={metadata}
           onChange={handleChange}
-          providerName={providerName || capitalize(provider)}
         />
       ))}
       <Button
