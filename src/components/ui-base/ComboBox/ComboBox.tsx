@@ -17,6 +17,7 @@ interface ComboBoxProps {
   onSelectedItemChange: (item: Option | null) => void;
   placeholder: string;
   disabled?: boolean;
+  clearable?: boolean;
   style?: React.CSSProperties;
   menuPosition?: "top" | "bottom";
 }
@@ -40,6 +41,7 @@ export function ComboBox({
   // label,
   placeholder,
   disabled,
+  clearable,
   style,
   menuPosition = "bottom",
 }: ComboBoxProps) {
@@ -129,6 +131,19 @@ export function ComboBox({
               ref: inputRef,
             })}
           />
+          {clearable && selectedValue && (
+            <button
+              type="button"
+              aria-label="clear selection"
+              className={styles.clearButton}
+              onClick={() => {
+                _onSelectedItemChange(null);
+                resetInput();
+              }}
+            >
+              &#x2715;
+            </button>
+          )}
           <button
             style={{ border: "none" }}
             disabled={disabled}

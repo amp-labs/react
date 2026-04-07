@@ -30,6 +30,15 @@
   outline: 1px solid var(--amp-colors-input-border-focus);
 }
 
+.clearButton {
+  padding: 0.5rem;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: var(--amp-text-secondary);
+  font-size: 0.75rem;
+}
+
 .toggleButton {
   padding: 0.5rem;
   cursor: pointer;
