@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from "react";
-import { Button } from "src/components/ui-base/Button";
 import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 
 import { useSelectedConfigureState } from "../../useSelectedConfigureState";
@@ -54,17 +53,31 @@ export function ValueMappingItem({
 
   const onValueChange = useCallback(
     (item: { value: string } | null) => {
-      if (!item) return;
-
-      onSelectChange({
-        target: {
-          name: mappedValue.mappedValue,
-          value: item.value,
+      if (item) {
+        onSelectChange({
+          target: {
+            name: mappedValue.mappedValue,
+            value: item.value,
+            fieldName,
+          } as unknown as HTMLSelectElement,
+        } as unknown as React.ChangeEvent<HTMLSelectElement>);
+      } else if (selectedObjectName) {
+        setValueMapping(
+          selectedObjectName,
+          setConfigureState,
+          mappedValue.mappedValue,
+          "",
           fieldName,
-        } as unknown as HTMLSelectElement,
-      } as unknown as React.ChangeEvent<HTMLSelectElement>);
+        );
+      }
     },
-    [onSelectChange, fieldName, mappedValue.mappedValue],
+    [
+      onSelectChange,
+      fieldName,
+      mappedValue.mappedValue,
+      selectedObjectName,
+      setConfigureState,
+    ],
   );
 
   const SelectComponent = useMemo(
@@ -79,27 +92,12 @@ export function ValueMappingItem({
           borderRadius: "8px",
           width: "100%",
         }}
+        clearable
       />
     ),
     [fieldValue, items, onValueChange],
   );
 
-  const onClear = useCallback(() => {
-    if (selectedObjectName) {
-      setValueMapping(
-        selectedObjectName,
-        setConfigureState,
-        mappedValue.mappedValue,
-        "",
-        fieldName,
-      );
-    }
-  }, [
-    selectedObjectName,
-    setConfigureState,
-    mappedValue.mappedValue,
-    fieldName,
-  ]);
   return (
     <div
       key={mappedValue.mappedValue}
@@ -123,9 +121,6 @@ export function ValueMappingItem({
       </div>
       <div style={{ display: "flex", flexDirection: "row", gap: ".25rem" }}>
         {SelectComponent}
-        <Button type="button" variant="ghost" onClick={onClear}>
-          Clear
-        </Button>
       </div>
     </div>
   );
