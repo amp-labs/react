@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
 } from "services/api";
-import { Button } from "src/components/ui-base/Button";
 import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import { LabelTooltip } from "src/components/ui-base/Tooltip";
 import { ErrorBoundary, useErrorState } from "src/context/ErrorContextProvider";
@@ -76,38 +75,31 @@ export function FieldMappingRow({
       items={items}
       selectedValue={fieldValue || null}
       onSelectedItemChange={(item) => {
-        onSelectChange({
-          target: {
-            name: field.mapToName,
-            value: item?.value,
-          } as unknown as HTMLSelectElement,
-        } as unknown as React.ChangeEvent<HTMLSelectElement>);
+        if (item) {
+          onSelectChange({
+            target: {
+              name: field.mapToName,
+              value: item.value,
+            } as unknown as HTMLSelectElement,
+          } as unknown as React.ChangeEvent<HTMLSelectElement>);
+        } else if (selectedObjectName) {
+          setFieldMapping(selectedObjectName, setConfigureState, [
+            {
+              field: field.mapToName,
+              value: null,
+            },
+          ]);
+
+          if (isError(ErrorBoundary.MAPPING, selectedObjectName)) {
+            removeError(ErrorBoundary.MAPPING, selectedObjectName);
+          }
+        }
       }}
       placeholder="Please select one"
       style={{ width: "100%" }}
+      clearable
     />
   );
-
-  const onClear = useCallback(() => {
-    if (selectedObjectName) {
-      setFieldMapping(selectedObjectName, setConfigureState, [
-        {
-          field: field.mapToName,
-          value: null, // clear value; may reset to default
-        },
-      ]);
-
-      if (isError(ErrorBoundary.MAPPING, selectedObjectName)) {
-        removeError(ErrorBoundary.MAPPING, selectedObjectName);
-      }
-    }
-  }, [
-    field.mapToName,
-    selectedObjectName,
-    setConfigureState,
-    isError,
-    removeError,
-  ]);
 
   // Errors are tracked per field by storing an array of field names that have errors
   // under the selectedObjectName key in the error boundary. If a field name exists
@@ -150,9 +142,6 @@ export function FieldMappingRow({
         </div>
         <div style={{ display: "flex", flexDirection: "row", gap: ".25rem" }}>
           {SelectComponent}
-          <Button type="button" variant="ghost" onClick={onClear}>
-            Clear
-          </Button>
         </div>
       </div>
       {hasDuplicationError && (
