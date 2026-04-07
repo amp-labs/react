@@ -74,7 +74,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   const [draft, setDraft] = useState<InstallationConfigContent>(initialConfig);
   const previousInstallationRef = useRef<Installation | undefined>(undefined);
 
-  const { data: manifest } = useManifest();
+  const { data: manifest, getReadObject } = useManifest();
   const { installation } = useInstallation();
 
   const get = useCallback(() => draft, [draft]);
@@ -101,13 +101,37 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       // initialize object name if not set
       obj.objectName = obj.objectName || objectName;
 
+      // Apply field mapping defaults from amp.yaml manifest.
+      // IntegrationFieldMapping._default specifies which provider field
+      // should be pre-selected for a mapping. Only applied when no
+      // existing selection exists, preserving user overrides.
+      const readManifestObject = getReadObject(objectName);
+      if (readManifestObject) {
+        const allMapFields = [
+          ...(readManifestObject.getRequiredMapFields() ?? []),
+          ...(readManifestObject.getOptionalMapFields() ?? []),
+        ];
+
+        if (allMapFields.length > 0) {
+          obj.selectedFieldMappings = obj.selectedFieldMappings || {};
+          allMapFields.forEach((mapping) => {
+            if (
+              mapping._default &&
+              !obj.selectedFieldMappings![mapping.mapToName]
+            ) {
+              obj.selectedFieldMappings![mapping.mapToName] = mapping._default;
+            }
+          });
+        }
+      }
+
       objects[objectName] = obj;
       read.objects = objects;
       _draft.read = read;
 
       return { read, objects, obj };
     },
-    [manifest?.content?.provider],
+    [manifest?.content?.provider, getReadObject],
   );
 
   /**
