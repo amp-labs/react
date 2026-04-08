@@ -57,7 +57,7 @@ export interface FieldDefinition {
      */
     description?: string;
     /**
-     * The data type of the field. Valid values are string, boolean, date, datetime, singleSelect, multiSelect, int, float
+     * The data type of the field. Valid values are string, boolean, date, datetime, singleSelect, multiSelect, int, float, reference
      * @type {string}
      * @memberof FieldDefinition
      */
