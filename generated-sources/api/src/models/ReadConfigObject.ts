@@ -109,7 +109,7 @@ export interface ReadConfigObject {
      * @type {Array<ReadFilter>}
      * @memberof ReadConfigObject
      */
-    filter?: Array<ReadFilter>;
+    fieldFilters?: Array<ReadFilter>;
 }
 
 /**
@@ -144,7 +144,7 @@ export function ReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
         'selectedFieldMappings': json['selectedFieldMappings'],
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
-        'filter': !exists(json, 'filter') ? undefined : ((json['filter'] as Array<any>).map(ReadFilterFromJSON)),
+        'fieldFilters': !exists(json, 'fieldFilters') ? undefined : ((json['fieldFilters'] as Array<any>).map(ReadFilterFromJSON)),
     };
 }
 
@@ -167,7 +167,7 @@ export function ReadConfigObjectToJSON(value?: ReadConfigObject | null): any {
         'selectedFieldMappings': value.selectedFieldMappings,
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
-        'filter': value.filter === undefined ? undefined : ((value.filter as Array<any>).map(ReadFilterToJSON)),
+        'fieldFilters': value.fieldFilters === undefined ? undefined : ((value.fieldFilters as Array<any>).map(ReadFilterToJSON)),
     };
 }
 
