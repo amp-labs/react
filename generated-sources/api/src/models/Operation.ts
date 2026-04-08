@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { OperationMetadata } from './OperationMetadata';
+import {
+    OperationMetadataFromJSON,
+    OperationMetadataFromJSONTyped,
+    OperationMetadataToJSON,
+} from './OperationMetadata';
+
 /**
  * 
  * @export
@@ -71,11 +78,11 @@ export interface Operation {
      */
     result?: string;
     /**
-     * Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), and `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations.
-     * @type {object}
+     * 
+     * @type {OperationMetadata}
      * @memberof Operation
      */
-    metadata?: object;
+    metadata?: OperationMetadata;
     /**
      * The time the operation was created.
      * @type {Date}
@@ -118,7 +125,7 @@ export function OperationFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'installationId': json['installationId'],
         'status': json['status'],
         'result': !exists(json, 'result') ? undefined : json['result'],
-        'metadata': !exists(json, 'metadata') ? undefined : json['metadata'],
+        'metadata': !exists(json, 'metadata') ? undefined : OperationMetadataFromJSON(json['metadata']),
         'createTime': !exists(json, 'createTime') ? undefined : (new Date(json['createTime'])),
     };
 }
@@ -140,7 +147,7 @@ export function OperationToJSON(value?: Operation | null): any {
         'installationId': value.installationId,
         'status': value.status,
         'result': value.result,
-        'metadata': value.metadata,
+        'metadata': OperationMetadataToJSON(value.metadata),
         'createTime': value.createTime === undefined ? undefined : (value.createTime.toISOString()),
     };
 }

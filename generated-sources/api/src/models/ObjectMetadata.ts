@@ -39,7 +39,7 @@ export interface ObjectMetadata {
      */
     displayName?: string;
     /**
-     * 
+     * The mapped name of the object as defined in your integration config, if a mapping was applied. Only present when using the installation-scoped metadata endpoint.
      * @type {string}
      * @memberof ObjectMetadata
      */

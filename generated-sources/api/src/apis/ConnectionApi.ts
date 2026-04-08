@@ -110,8 +110,8 @@ export interface ConnectionApiInterface {
      * @summary Get a connection
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} connectionId 
-     * @param {boolean} [includeCreds] Whether to include the credentials in the response. Only access token will be included. Default is false.
-     * @param {boolean} [includeRefreshToken] Whether to include the refresh token in credentials in the response along with access token. If true, the &#x60;includeCreds&#x60; query parameter will be ignored. Default is false.
+     * @param {boolean} [includeCreds] Whether to include credentials for &#x60;oauth2AuthorizationCode&#x60; in the response. If true, &#x60;accessToken&#x60; and &#x60;scopes&#x60; are included. To include &#x60;refreshToken&#x60; as well, set &#x60;includeRefreshToken&#x60; to true. Default is false.
+     * @param {boolean} [includeRefreshToken] Whether to include &#x60;refreshToken&#x60; for &#x60;oauth2AuthorizationCode&#x60; credentials in the response (along with &#x60;accessToken&#x60; and &#x60;scopes&#x60;). If true, the &#x60;includeCreds&#x60; query parameter will be ignored. Default is false.
      * @param {'force' | 'ifExpired'} [refresh] Whether to refresh the access token. If value is &#x60;ifExpired&#x60;, the access token will be refreshed only if it has expired. If value is &#x60;force&#x60;, the access token will be refreshed regardless of its expiration.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -143,10 +143,10 @@ export interface ConnectionApiInterface {
     listConnections(requestParameters: ListConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Connection>>;
 
     /**
-     * Update an existing connection.
+     * Rotate credentials or update metadata (such as the provider workspace reference) for an existing connection.
      * @summary Update a connection.
-     * @param {string} projectIdOrName Project ID or Name.
-     * @param {string} connectionId Connection ID.
+     * @param {string} projectIdOrName The Ampersand project ID or project name.
+     * @param {string} connectionId The ID of the connection to update. You can find this via the [list connections endpoint](https://docs.withampersand.com/reference/connection/list-connections).
      * @param {UpdateConnectionRequest} updateConnectionRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -155,7 +155,7 @@ export interface ConnectionApiInterface {
     updateConnectionRaw(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * Update an existing connection.
+     * Rotate credentials or update metadata (such as the provider workspace reference) for an existing connection.
      * Update a connection.
      */
     updateConnection(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
@@ -372,7 +372,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * Update an existing connection.
+     * Rotate credentials or update metadata (such as the provider workspace reference) for an existing connection.
      * Update a connection.
      */
     async updateConnectionRaw(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
@@ -418,7 +418,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * Update an existing connection.
+     * Rotate credentials or update metadata (such as the provider workspace reference) for an existing connection.
      * Update a connection.
      */
     async updateConnection(requestParameters: UpdateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
