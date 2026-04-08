@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
@@ -27,35 +27,9 @@ export function FieldMappingRow({
 }: FieldMappingRowProps) {
   const { configureState, selectedObjectName, setConfigureState } =
     useSelectedConfigureState();
-  const [disabled, setDisabled] = useState(true);
   const { isError, removeError, getError } = useErrorState();
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const fieldValue = selectedFieldMappings?.[field.mapToName];
-
-  useEffect(() => {
-    /* eslint no-underscore-dangle: ["error", { "allow": ["_default"] }] */
-    if (
-      !!field._default &&
-      !fieldValue &&
-      selectedObjectName &&
-      !!configureState
-    ) {
-      // set field mapping default value if no value exists
-      setFieldMapping(selectedObjectName, setConfigureState, [
-        {
-          field: field.mapToName,
-          value: field._default,
-        },
-      ]);
-    }
-    setDisabled(false);
-  }, [
-    field,
-    setConfigureState,
-    selectedObjectName,
-    fieldValue,
-    configureState,
-  ]);
 
   const items = useMemo(
     () =>
@@ -71,7 +45,6 @@ export function FieldMappingRow({
 
   const SelectComponent = (
     <ComboBox
-      disabled={disabled}
       items={items}
       selectedValue={fieldValue || null}
       onSelectedItemChange={(item) => {

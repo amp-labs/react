@@ -79,6 +79,23 @@ const generateConfigurationStateRead = (
   const selectedFieldMappings =
     content?.read?.objects?.[objectName]?.selectedFieldMappings || {};
 
+  // Only apply defaults for objects that haven't been configured yet.
+  // If the object already exists in server config, the user may have
+  // intentionally left optional mappings blank.
+  const isObjectPreviouslyConfigured = !!content?.read?.objects?.[objectName];
+
+  if (!isObjectPreviouslyConfigured) {
+    const allMapFields = [
+      ...(requiredMapFields || []),
+      ...(optionalMapFields || []),
+    ];
+    allMapFields.forEach((mapping) => {
+      if (mapping._default && !selectedFieldMappings[mapping.mapToName]) {
+        selectedFieldMappings[mapping.mapToName] = mapping._default;
+      }
+    });
+  }
+
   // Get optional fields from saved config (server)
   const serverOptionalSelected = getServerOptionalSelectedFields(
     config,
