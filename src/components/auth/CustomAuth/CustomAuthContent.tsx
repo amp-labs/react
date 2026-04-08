@@ -68,7 +68,10 @@ export function CustomAuthForm({
       }}
     >
       {customInputs.map((input) => (
-        <div key={input.name}>
+        <div
+          key={input.name}
+          style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
+        >
           <DocsHelperTextHeader
             url={input.docsURL}
             prompt={input.prompt}
@@ -88,7 +91,6 @@ export function CustomAuthForm({
           key={metadata.name}
           metadata={metadata}
           onChange={handleChange}
-          variant="header"
         />
       ))}
       <Button
