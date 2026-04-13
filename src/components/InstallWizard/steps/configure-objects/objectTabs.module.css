@@ -40,6 +40,18 @@
   font-weight: var(--amp-font-semibold);
   color: var(--amp-text-primary);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--amp-space-2);
+}
+
+.needsSetupBadge {
+  font-size: var(--amp-font-size-xs);
+  font-weight: var(--amp-font-medium);
+  padding: 2px 6px;
+  background: var(--amp-surface-secondary);
+  color: var(--amp-text-muted);
+  border-radius: var(--amp-radius-sm);
 }
 
 .objectTabDots {
