@@ -43,7 +43,7 @@ export interface BackfillConfig {
      * @type {Array<ReadFilter>}
      * @memberof BackfillConfig
      */
-    filter?: Array<ReadFilter>;
+    fieldFilters?: Array<ReadFilter>;
 }
 
 /**
@@ -67,7 +67,7 @@ export function BackfillConfigFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'defaultPeriod': DefaultPeriodConfigFromJSON(json['defaultPeriod']),
-        'filter': !exists(json, 'filter') ? undefined : ((json['filter'] as Array<any>).map(ReadFilterFromJSON)),
+        'fieldFilters': !exists(json, 'fieldFilters') ? undefined : ((json['fieldFilters'] as Array<any>).map(ReadFilterFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function BackfillConfigToJSON(value?: BackfillConfig | null): any {
     return {
         
         'defaultPeriod': DefaultPeriodConfigToJSON(value.defaultPeriod),
-        'filter': value.filter === undefined ? undefined : ((value.filter as Array<any>).map(ReadFilterToJSON)),
+        'fieldFilters': value.fieldFilters === undefined ? undefined : ((value.fieldFilters as Array<any>).map(ReadFilterToJSON)),
     };
 }
 

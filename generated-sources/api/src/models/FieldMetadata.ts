@@ -69,6 +69,12 @@ export interface FieldMetadata {
      */
     isRequired?: boolean;
     /**
+     * The list of object types this field references. Only applicable if the providerType is a lookup/reference field.
+     * @type {Array<string>}
+     * @memberof FieldMetadata
+     */
+    referenceTo?: Array<string>;
+    /**
      * If the valueType is singleSelect or multiSelect, this is a list of possible values
      * @type {Array<FieldValue>}
      * @memberof FieldMetadata
@@ -89,6 +95,7 @@ export const FieldMetadataValueTypeEnum = {
     Datetime: 'datetime',
     Int: 'int',
     Float: 'float',
+    Reference: 'reference',
     Other: 'other'
 } as const;
 export type FieldMetadataValueTypeEnum = typeof FieldMetadataValueTypeEnum[keyof typeof FieldMetadataValueTypeEnum];
@@ -122,6 +129,7 @@ export function FieldMetadataFromJSONTyped(json: any, ignoreDiscriminator: boole
         'readOnly': !exists(json, 'readOnly') ? undefined : json['readOnly'],
         'isCustom': !exists(json, 'isCustom') ? undefined : json['isCustom'],
         'isRequired': !exists(json, 'isRequired') ? undefined : json['isRequired'],
+        'referenceTo': !exists(json, 'referenceTo') ? undefined : json['referenceTo'],
         'values': !exists(json, 'values') ? undefined : ((json['values'] as Array<any>).map(FieldValueFromJSON)),
     };
 }
@@ -142,6 +150,7 @@ export function FieldMetadataToJSON(value?: FieldMetadata | null): any {
         'readOnly': value.readOnly,
         'isCustom': value.isCustom,
         'isRequired': value.isRequired,
+        'referenceTo': value.referenceTo,
         'values': value.values === undefined ? undefined : ((value.values as Array<any>).map(FieldValueToJSON)),
     };
 }
