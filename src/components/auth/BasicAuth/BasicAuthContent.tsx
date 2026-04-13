@@ -138,7 +138,7 @@ function BasicAuthContentForm({
 
   return (
     <AuthCardLayout>
-      <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
+      <AuthTitle>{`Configure your ${providerName} connection`}</AuthTitle>
       <AuthErrorAlert error={error} />
       <BasicAuthForm
         provider={provider}

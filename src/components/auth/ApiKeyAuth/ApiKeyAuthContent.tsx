@@ -125,7 +125,7 @@ function ApiKeyAuthContentForm({
 
   return (
     <AuthCardLayout>
-      <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
+      <AuthTitle>{`Configure your ${providerName} connection`}</AuthTitle>
       <AuthErrorAlert error={error} />
       <ApiKeyAuthForm
         provider={provider}
