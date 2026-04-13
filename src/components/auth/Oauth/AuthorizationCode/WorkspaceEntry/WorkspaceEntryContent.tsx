@@ -46,7 +46,7 @@ export function WorkspaceEntryContent({
   return (
     <AuthCardLayout>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <AuthTitle>Enter your {providerName} workspace</AuthTitle>
+        <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
         {packageInstallUrl && (
           <Stepper currentStep={2} onStepClick={() => setStep("install")} />
         )}
