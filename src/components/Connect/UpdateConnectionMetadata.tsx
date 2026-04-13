@@ -109,7 +109,6 @@ export function UpdateConnectionMetadata({
           onChange={(event) =>
             handleFormDataChange(metadata.name, event.currentTarget.value)
           }
-          providerName={providerName}
           defaultValue={initialFormData[metadata.name]}
         />
       ))}

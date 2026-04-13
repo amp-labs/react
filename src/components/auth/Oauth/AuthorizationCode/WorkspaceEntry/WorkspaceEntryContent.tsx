@@ -48,10 +48,7 @@ export function WorkspaceEntryContent({
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <AuthTitle>Enter your {providerName} workspace</AuthTitle>
         {packageInstallUrl && (
-          <Stepper
-            currentStep={2}
-            onStepClick={() => setStep("install")}
-          />
+          <Stepper currentStep={2} onStepClick={() => setStep("install")} />
         )}
         <AuthErrorAlert error={error} />
         {metadataInputs.map((metadata: MetadataItemInput) => (
@@ -61,7 +58,6 @@ export function WorkspaceEntryContent({
             onChange={(event) =>
               setFormData(metadata.name, event.currentTarget.value)
             }
-            providerName={providerName}
           />
         ))}
         <Button
