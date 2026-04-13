@@ -41,6 +41,8 @@ export const CreateEventTopicRouteRequestEventTypeEnum = {
     ReadBackfillDone: 'read.backfill.done',
     ConnectionCreated: 'connection.created',
     ConnectionError: 'connection.error',
+    ConnectionRefreshed: 'connection.refreshed',
+    ConnectionDeleted: 'connection.deleted',
     InstallationCreated: 'installation.created',
     InstallationUpdated: 'installation.updated',
     InstallationDeleted: 'installation.deleted',
