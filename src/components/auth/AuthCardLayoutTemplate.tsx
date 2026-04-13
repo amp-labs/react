@@ -35,7 +35,7 @@ export function AuthCardLayoutTemplate({
 
   return (
     <AuthCardLayout>
-      <AuthTitle>{title || `Configure your ${providerName} connection`}</AuthTitle>
+      <AuthTitle>{title || `Set up ${providerName} integration`}</AuthTitle>
       <AuthErrorAlert error={error} />
       {children}
       <Button

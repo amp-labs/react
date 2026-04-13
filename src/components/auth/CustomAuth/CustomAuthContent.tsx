@@ -115,7 +115,7 @@ export function CustomAuthContent({
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
-      <AuthTitle>{`Configure your ${providerInfo.displayName} connection`}</AuthTitle>
+      <AuthTitle>{`Set up ${providerInfo.displayName} integration`}</AuthTitle>
       <AuthErrorAlert error={error} />
       <CustomAuthForm
         providerInfo={providerInfo}
