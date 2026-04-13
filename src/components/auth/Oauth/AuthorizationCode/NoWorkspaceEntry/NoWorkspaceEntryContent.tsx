@@ -17,7 +17,7 @@ export function NoWorkspaceEntryContent({
 }: LandingContentProps) {
   return (
     <AuthCardLayout>
-      <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
+      <AuthTitle>{`Configure your ${providerName} connection`}</AuthTitle>
       <AuthDescription>
         {`Click Next to sign into the ${providerName} account you'd like to sync.`}
       </AuthDescription>
