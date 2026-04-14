@@ -87,6 +87,11 @@
   font-weight: bold;
 }
 
+.sublabel {
+  color: var(--amp-text-secondary);
+  font-size: 0.75rem;
+}
+
 .hidden {
   display: none;
 }

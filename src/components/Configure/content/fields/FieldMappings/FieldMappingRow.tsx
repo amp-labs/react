@@ -38,6 +38,7 @@ export function FieldMappingRow({
           id: f.fieldName,
           label: f.displayName,
           value: f.fieldName,
+          sublabel: f.fieldName !== f.displayName ? f.fieldName : undefined,
         }))
         .sort((a, b) => a.label.localeCompare(b.label)),
     [allFields],
