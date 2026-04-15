@@ -31,17 +31,26 @@ export function FieldMappingRow({
   const selectedFieldMappings = configureState?.read?.selectedFieldMappings;
   const fieldValue = selectedFieldMappings?.[field.mapToName];
 
-  const items = useMemo(
-    () =>
-      allFields
-        .map((f) => ({
-          id: f.fieldName,
-          label: f.displayName,
-          value: f.fieldName,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [allFields],
-  );
+  const items = useMemo(() => {
+    const displayNameCounts = new Map<string, number>();
+    allFields.forEach((f) => {
+      displayNameCounts.set(
+        f.displayName,
+        (displayNameCounts.get(f.displayName) ?? 0) + 1,
+      );
+    });
+    return allFields
+      .map((f) => ({
+        id: f.fieldName,
+        label: f.displayName,
+        value: f.fieldName,
+        sublabel:
+          (displayNameCounts.get(f.displayName) ?? 0) > 1
+            ? f.fieldName
+            : undefined,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [allFields]);
 
   const SelectComponent = (
     <ComboBox

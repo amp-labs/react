@@ -8,6 +8,7 @@ interface Option {
   id: string;
   label: string;
   value: string;
+  sublabel?: string;
 }
 
 // Define the props for the ComboBox component
@@ -29,7 +30,8 @@ function getOptionsFilter(inputValue: string) {
     return (
       !inputValue ||
       option.label.toLowerCase().includes(lowerCasedInputValue) ||
-      option.value.toLowerCase().includes(lowerCasedInputValue)
+      option.value.toLowerCase().includes(lowerCasedInputValue) ||
+      !!option.sublabel?.toLowerCase().includes(lowerCasedInputValue)
     );
   };
 }
@@ -173,6 +175,9 @@ export function ComboBox({
               {...getItemProps({ item, index })}
             >
               <span>{item.label}</span>
+              {item.sublabel && (
+                <span className={styles.sublabel}>{item.sublabel}</span>
+              )}
             </li>
           ))}
       </ul>
