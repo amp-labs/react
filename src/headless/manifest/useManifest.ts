@@ -81,10 +81,10 @@ export function useManifest() {
     isError,
     isSuccess,
     error,
-    data: hydatedRevision,
+    data: hydratedRevision,
   } = hydratedRevisionQuery;
 
-  const content = hydatedRevision?.content;
+  const content = hydratedRevision?.content;
 
   const manifest: Manifest = useMemo(
     () => ({
@@ -169,7 +169,7 @@ export function useManifest() {
   );
 
   return {
-    data: hydatedRevision,
+    data: hydratedRevision,
     isLoading,
     isPending,
     isFetching,
