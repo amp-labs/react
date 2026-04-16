@@ -27,17 +27,26 @@ export function MappingRow({
 }: MappingRowProps) {
   const selectedValue = configHandlers.getFieldMapping(mapping.mapToName) ?? "";
 
-  const items = useMemo(
-    () =>
-      customerFieldOptions
-        .map((f) => ({
-          id: f.fieldName,
-          label: f.displayName,
-          value: f.fieldName,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [customerFieldOptions],
-  );
+  const items = useMemo(() => {
+    const displayNameCounts = new Map<string, number>();
+    customerFieldOptions.forEach((f) => {
+      displayNameCounts.set(
+        f.displayName,
+        (displayNameCounts.get(f.displayName) ?? 0) + 1,
+      );
+    });
+    return customerFieldOptions
+      .map((f) => ({
+        id: f.fieldName,
+        label: f.displayName,
+        value: f.fieldName,
+        sublabel:
+          (displayNameCounts.get(f.displayName) ?? 0) > 1
+            ? f.fieldName
+            : undefined,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [customerFieldOptions]);
 
   return (
     <div className={styles.mappingRow}>
