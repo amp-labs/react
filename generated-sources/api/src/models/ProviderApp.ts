@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProviderAppMetadata } from './ProviderAppMetadata';
+import {
+    ProviderAppMetadataFromJSON,
+    ProviderAppMetadataFromJSONTyped,
+    ProviderAppMetadataToJSON,
+} from './ProviderAppMetadata';
+
 /**
  * 
  * @export
@@ -55,6 +62,12 @@ export interface ProviderApp {
      * @memberof ProviderApp
      */
     scopes?: Array<string>;
+    /**
+     * 
+     * @type {ProviderAppMetadata}
+     * @memberof ProviderApp
+     */
+    metadata?: ProviderAppMetadata;
     /**
      * The time the provider app was created.
      * @type {Date}
@@ -99,6 +112,7 @@ export function ProviderAppFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'provider': json['provider'],
         'clientId': json['clientId'],
         'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
+        'metadata': !exists(json, 'metadata') ? undefined : ProviderAppMetadataFromJSON(json['metadata']),
         'createTime': (new Date(json['createTime'])),
         'updateTime': !exists(json, 'updateTime') ? undefined : (new Date(json['updateTime'])),
     };
@@ -119,6 +133,7 @@ export function ProviderAppToJSON(value?: ProviderApp | null): any {
         'provider': value.provider,
         'clientId': value.clientId,
         'scopes': value.scopes,
+        'metadata': ProviderAppMetadataToJSON(value.metadata),
         'createTime': (value.createTime.toISOString()),
         'updateTime': value.updateTime === undefined ? undefined : (value.updateTime.toISOString()),
     };
