@@ -6,7 +6,7 @@ import { useAPI } from "src/services/api";
 type UseObjectMetadataForConnectionQueryProps = {
   provider: string;
   providerObjectName: string;
-  groupRef?: string;
+  groupRef: string;
   excludeReadOnly?: boolean;
   enabled?: boolean;
 };
@@ -46,7 +46,8 @@ export const useObjectMetadataForConnectionQuery = ({
         excludeReadOnly,
       });
     },
-    enabled: enabled && !!projectIdOrName && !!provider && !!providerObjectName,
+    enabled:
+      enabled && !!projectIdOrName && !!provider && !!providerObjectName && !!groupRef,
     staleTime: Infinity,
     retry: false,
   });
