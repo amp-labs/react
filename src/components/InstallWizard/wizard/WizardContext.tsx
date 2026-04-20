@@ -38,6 +38,7 @@ type WizardAction =
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }
   | { type: "SET_SELECTED_OBJECTS"; objects: string[] }
+  | { type: "REPLACE_SELECTED_OBJECT"; from: string; to: string }
   | { type: "SET_CURRENT_OBJECT_INDEX"; index: number }
   | { type: "NEXT_OBJECT" }
   | { type: "PREV_OBJECT" }
@@ -64,6 +65,14 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
         selectedObjects: action.objects,
         currentObjectIndex: 0,
       };
+    case "REPLACE_SELECTED_OBJECT": {
+      const idx = state.selectedObjects.indexOf(action.from);
+      if (idx === -1) return state;
+      if (state.selectedObjects.includes(action.to)) return state;
+      const next = [...state.selectedObjects];
+      next[idx] = action.to;
+      return { ...state, selectedObjects: next };
+    }
     case "SET_CURRENT_OBJECT_INDEX":
       return { ...state, currentObjectIndex: action.index };
     case "NEXT_OBJECT":
@@ -102,6 +111,7 @@ interface WizardContextValue {
   nextStep: () => void;
   prevStep: () => void;
   setSelectedObjects: (objects: string[]) => void;
+  replaceSelectedObject: (from: string, to: string) => void;
   nextObject: () => void;
   prevObject: () => void;
   setCurrentObjectIndex: (index: number) => void;
@@ -125,6 +135,11 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
   const prevStep = useCallback(() => dispatch({ type: "PREV_STEP" }), []);
   const setSelectedObjects = useCallback(
     (objects: string[]) => dispatch({ type: "SET_SELECTED_OBJECTS", objects }),
+    [],
+  );
+  const replaceSelectedObject = useCallback(
+    (from: string, to: string) =>
+      dispatch({ type: "REPLACE_SELECTED_OBJECT", from, to }),
     [],
   );
   const nextObject = useCallback(() => dispatch({ type: "NEXT_OBJECT" }), []);
@@ -155,6 +170,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       nextStep,
       prevStep,
       setSelectedObjects,
+      replaceSelectedObject,
       nextObject,
       prevObject,
       setCurrentObjectIndex,
@@ -170,6 +186,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       nextStep,
       prevStep,
       setSelectedObjects,
+      replaceSelectedObject,
       nextObject,
       prevObject,
       setCurrentObjectIndex,

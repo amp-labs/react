@@ -12,6 +12,7 @@ import {
 } from "../Configure/ComponentContainer";
 import { AmpersandErrorBoundary } from "../Configure/ErrorBoundary";
 
+import { ResolvedMappedObjectsProvider } from "./state/ResolvedMappedObjectsProvider";
 import { ConfigureObjectsGate } from "./steps/configure-objects";
 import { ConnectStep } from "./steps/ConnectStep";
 import { ReviewStep } from "./steps/ReviewStep";
@@ -98,33 +99,35 @@ const InstallWizardContent = ({
         resetComponent={reset}
       >
         <ConnectionsProvider>
-          <WizardProvider>
-            <div className={styles.installWizard}>
-              <WizardLayout>
-                <WizardStepContainer step={WizardStep.Connect}>
-                  <ConnectStep
-                    consumerRef={consumerRef}
-                    consumerName={consumerName}
-                    groupRef={groupRef}
-                    groupName={groupName}
-                    resetComponent={reset}
-                  />
-                </WizardStepContainer>
-                <WizardStepContainer step={WizardStep.SelectObjects}>
-                  <SelectObjectsStep />
-                </WizardStepContainer>
-                <WizardStepContainer step={WizardStep.ConfigureObjects}>
-                  <ConfigureObjectsGate />
-                </WizardStepContainer>
-                <WizardStepContainer step={WizardStep.Review}>
-                  <ReviewStep />
-                </WizardStepContainer>
-                <WizardStepContainer step={WizardStep.Success}>
-                  <SuccessStep onEditConfiguration={onEditConfiguration} />
-                </WizardStepContainer>
-              </WizardLayout>
-            </div>
-          </WizardProvider>
+          <ResolvedMappedObjectsProvider>
+            <WizardProvider>
+              <div className={styles.installWizard}>
+                <WizardLayout>
+                  <WizardStepContainer step={WizardStep.Connect}>
+                    <ConnectStep
+                      consumerRef={consumerRef}
+                      consumerName={consumerName}
+                      groupRef={groupRef}
+                      groupName={groupName}
+                      resetComponent={reset}
+                    />
+                  </WizardStepContainer>
+                  <WizardStepContainer step={WizardStep.SelectObjects}>
+                    <SelectObjectsStep />
+                  </WizardStepContainer>
+                  <WizardStepContainer step={WizardStep.ConfigureObjects}>
+                    <ConfigureObjectsGate />
+                  </WizardStepContainer>
+                  <WizardStepContainer step={WizardStep.Review}>
+                    <ReviewStep />
+                  </WizardStepContainer>
+                  <WizardStepContainer step={WizardStep.Success}>
+                    <SuccessStep onEditConfiguration={onEditConfiguration} />
+                  </WizardStepContainer>
+                </WizardLayout>
+              </div>
+            </WizardProvider>
+          </ResolvedMappedObjectsProvider>
         </ConnectionsProvider>
       </InstallIntegrationProvider>
     </div>

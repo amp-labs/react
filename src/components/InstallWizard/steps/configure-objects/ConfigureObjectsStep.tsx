@@ -3,9 +3,11 @@ import { useInstallIntegrationProps } from "context/InstallIIntegrationContextPr
 import { useLocalConfig, useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useProvider } from "src/hooks/useProvider";
+import { isUnresolvedReadObject } from "src/utils/manifest";
 
 import type { CheckboxItem } from "components/ui-base/Checkbox/CheckboxPagination";
 
+import { useResolvedMappedObjects } from "../../state/ResolvedMappedObjectsProvider";
 import { useWizard, WizardStep } from "../../wizard/WizardContext";
 import { WizardNavigation } from "../../wizard/WizardNavigation";
 
@@ -13,6 +15,7 @@ import { AdditionalFieldsContent } from "./additional/AdditionalFieldsContent";
 import { FieldsContent } from "./fields/FieldsContent";
 import { MappingsContent } from "./mappings/MappingsContent";
 import { ObjectTabs } from "./ObjectTabs";
+import { ResolveMappedObjectSubPage } from "./resolve/ResolveMappedObjectSubPage";
 import { getFieldDisplayName, getFieldName } from "./subPageUtils";
 import { useSubPageNavigation } from "./useSubPageNavigation";
 
@@ -24,7 +27,9 @@ export function ConfigureObjectsStep() {
   const { provider } = useInstallIntegrationProps();
   const { providerName } = useProvider();
   const { appName: projectAppName } = useProjectQuery();
-  const { currentObjectName } = useWizard();
+  const { currentObjectName, replaceSelectedObject } = useWizard();
+  const { clearResolution, getResolution, resolutions } =
+    useResolvedMappedObjects();
 
   const {
     subPage,
@@ -120,10 +125,38 @@ export function ConfigureObjectsStep() {
     return <div className={styles.empty}>No objects to configure.</div>;
   }
 
+  const currentObject = currentManifestObject.object;
+  if (currentObject && isUnresolvedReadObject(currentObject)) {
+    return (
+      <ResolveMappedObjectSubPage
+        mapToName={currentObject.mapToName as string}
+        mapToDisplayName={
+          currentObject.mapToDisplayName ?? (currentObject.mapToName as string)
+        }
+      />
+    );
+  }
+
   const objectDisplayName =
     currentManifestObject.object?.displayName || currentObjectName;
   const appName = projectAppName || "Your App";
   const providerDisplayName = providerName || provider || "Provider";
+
+  // If this object was previously an unresolved mapped object, show an Edit
+  // affordance that lets the user change their selection.
+  const currentMapToName = currentObject?.mapToName;
+  const wasResolved =
+    !!currentMapToName &&
+    !!resolutions[currentMapToName] &&
+    getResolution(currentMapToName)?.resolvedObjectName === currentObjectName;
+
+  const handleEditResolution = () => {
+    if (!currentMapToName) return;
+    const resolvedName = currentObjectName;
+    replaceSelectedObject(resolvedName, currentMapToName);
+    localConfig.removeObject(resolvedName);
+    clearResolution(currentMapToName);
+  };
 
   return (
     <div className={styles.configureObjects}>
@@ -134,7 +167,18 @@ export function ConfigureObjectsStep() {
 
       {/* Centered Card */}
       <div className={styles.objectConfigPanel}>
-        <h2 className={styles.objectName}>{objectDisplayName}</h2>
+        <h2 className={styles.objectName}>
+          {objectDisplayName}
+          {wasResolved && (
+            <button
+              type="button"
+              className={styles.editResolution}
+              onClick={handleEditResolution}
+            >
+              Edit
+            </button>
+          )}
+        </h2>
         <p className={styles.objectDescription}>
           Confirm which {providerDisplayName} fields {appName} can read
           {isMappingBidirectional ? " and write" : ""}.
