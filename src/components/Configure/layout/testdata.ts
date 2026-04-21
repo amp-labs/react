@@ -28,9 +28,6 @@ export const testProviderInfo: ProviderInfo = {
       },
     },
   },
-  providerOpts: {
-    modules: "test-module",
-  },
   customOpts: {
     inputs: [
       {
