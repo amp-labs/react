@@ -206,7 +206,6 @@ src/models/StringFieldOptions.ts
 src/models/SubscribeConfig.ts
 src/models/SubscribeConfigAllOf.ts
 src/models/SubscribeConfigObject.ts
-src/models/SubscribeOpts.ts
 src/models/SubscribeSupport.ts
 src/models/Support.ts
 src/models/TokenMetadataFields.ts

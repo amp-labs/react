@@ -65,7 +65,7 @@ export interface Operation {
     /**
      * The status of the operation.
      * - `success`: The operation completed successfully
-     * - `failure`: The operation failed 
+     * - `failure`: The operation failed
      * - `in_progress`: The operation is currently running
      * @type {string}
      * @memberof Operation

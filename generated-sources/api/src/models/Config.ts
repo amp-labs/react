@@ -33,7 +33,7 @@ export interface Config {
      */
     id: string;
     /**
-     * The ID of the revision that was current when this config was created or last updated. 
+     * The ID of the revision that was current when this config was created or last updated.
      * @type {string}
      * @memberof Config
      */

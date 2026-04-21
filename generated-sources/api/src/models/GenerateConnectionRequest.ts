@@ -99,11 +99,11 @@ export interface GenerateConnectionRequest {
      */
     apiKey?: string;
     /**
-     * Values used for custom auth input variables.
-     * @type {{ [key: string]: string; }}
+     * Values used for custom auth input variables. Most values are strings (API keys, tokens, etc.), but structured values like arrays are also accepted — for example, googleWorkspaceDelegation sends a `scopes` array alongside the service account key.
+     * @type {{ [key: string]: any; }}
      * @memberof GenerateConnectionRequest
      */
-    customAuth?: { [key: string]: string; };
+    customAuth?: { [key: string]: any; };
     /**
      * 
      * @type {ConnectionRequestBasicAuth}
