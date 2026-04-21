@@ -33,6 +33,7 @@ export interface UpdateProviderAppRequest {
      * - clientSecret
      * - provider
      * - scopes
+     * - metadata
      * @type {Array<string>}
      * @memberof UpdateProviderAppRequest
      */

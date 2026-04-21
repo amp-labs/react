@@ -165,6 +165,8 @@ export * from './Project';
 export * from './ProjectEntitlements';
 export * from './ProjectEntitlementsBrandingRemoval';
 export * from './ProviderApp';
+export * from './ProviderAppMetadata';
+export * from './ProviderAppMetadata1';
 export * from './ProviderInfo';
 export * from './ProviderMetadata1';
 export * from './ProviderMetadataInfo';
