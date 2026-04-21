@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProviderAppMetadata } from './ProviderAppMetadata';
+import {
+    ProviderAppMetadataFromJSON,
+    ProviderAppMetadataFromJSONTyped,
+    ProviderAppMetadataToJSON,
+} from './ProviderAppMetadata';
+
 /**
  * The provider app fields to update. (Only include the fields you'd like to update.)
  * @export
@@ -49,6 +56,12 @@ export interface UpdateProviderAppRequestProviderApp {
      * @memberof UpdateProviderAppRequestProviderApp
      */
     scopes?: Array<string>;
+    /**
+     * 
+     * @type {ProviderAppMetadata}
+     * @memberof UpdateProviderAppRequestProviderApp
+     */
+    metadata?: ProviderAppMetadata;
 }
 
 /**
@@ -75,6 +88,7 @@ export function UpdateProviderAppRequestProviderAppFromJSONTyped(json: any, igno
         'clientId': !exists(json, 'clientId') ? undefined : json['clientId'],
         'clientSecret': !exists(json, 'clientSecret') ? undefined : json['clientSecret'],
         'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
+        'metadata': !exists(json, 'metadata') ? undefined : ProviderAppMetadataFromJSON(json['metadata']),
     };
 }
 
@@ -92,6 +106,7 @@ export function UpdateProviderAppRequestProviderAppToJSON(value?: UpdateProvider
         'clientId': value.clientId,
         'clientSecret': value.clientSecret,
         'scopes': value.scopes,
+        'metadata': ProviderAppMetadataToJSON(value.metadata),
     };
 }
 
