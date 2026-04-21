@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProviderAppMetadata } from './ProviderAppMetadata';
+import {
+    ProviderAppMetadataFromJSON,
+    ProviderAppMetadataFromJSONTyped,
+    ProviderAppMetadataToJSON,
+} from './ProviderAppMetadata';
+
 /**
  * 
  * @export
@@ -49,6 +56,12 @@ export interface CreateProviderAppRequest {
      * @memberof CreateProviderAppRequest
      */
     scopes?: Array<string>;
+    /**
+     * 
+     * @type {ProviderAppMetadata}
+     * @memberof CreateProviderAppRequest
+     */
+    metadata?: ProviderAppMetadata;
 }
 
 /**
@@ -78,6 +91,7 @@ export function CreateProviderAppRequestFromJSONTyped(json: any, ignoreDiscrimin
         'clientId': json['clientId'],
         'clientSecret': json['clientSecret'],
         'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
+        'metadata': !exists(json, 'metadata') ? undefined : ProviderAppMetadataFromJSON(json['metadata']),
     };
 }
 
@@ -95,6 +109,7 @@ export function CreateProviderAppRequestToJSON(value?: CreateProviderAppRequest 
         'clientId': value.clientId,
         'clientSecret': value.clientSecret,
         'scopes': value.scopes,
+        'metadata': ProviderAppMetadataToJSON(value.metadata),
     };
 }
 

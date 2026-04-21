@@ -61,18 +61,18 @@ import {
     Oauth2OptsFromJSONTyped,
     Oauth2OptsToJSON,
 } from './Oauth2Opts';
+import type { ProviderAppMetadata1 } from './ProviderAppMetadata1';
+import {
+    ProviderAppMetadata1FromJSON,
+    ProviderAppMetadata1FromJSONTyped,
+    ProviderAppMetadata1ToJSON,
+} from './ProviderAppMetadata1';
 import type { ProviderMetadata1 } from './ProviderMetadata1';
 import {
     ProviderMetadata1FromJSON,
     ProviderMetadata1FromJSONTyped,
     ProviderMetadata1ToJSON,
 } from './ProviderMetadata1';
-import type { SubscribeOpts } from './SubscribeOpts';
-import {
-    SubscribeOptsFromJSON,
-    SubscribeOptsFromJSONTyped,
-    SubscribeOptsToJSON,
-} from './SubscribeOpts';
 import type { Support } from './Support';
 import {
     SupportFromJSON,
@@ -141,12 +141,6 @@ export interface ProviderInfo {
      */
     support: Support;
     /**
-     * Additional provider-specific metadata.
-     * @type {{ [key: string]: string; }}
-     * @memberof ProviderInfo
-     */
-    providerOpts: { [key: string]: string; };
-    /**
      * 
      * @type {AuthHealthCheck}
      * @memberof ProviderInfo
@@ -177,12 +171,6 @@ export interface ProviderInfo {
      */
     labels?: { [key: string]: string; };
     /**
-     * 
-     * @type {SubscribeOpts}
-     * @memberof ProviderInfo
-     */
-    subscribeOpts?: SubscribeOpts;
-    /**
      * The registry of provider modules.
      * @type {{ [key: string]: ModuleInfo; }}
      * @memberof ProviderInfo
@@ -194,6 +182,12 @@ export interface ProviderInfo {
      * @memberof ProviderInfo
      */
     metadata?: ProviderMetadata1;
+    /**
+     * 
+     * @type {ProviderAppMetadata1}
+     * @memberof ProviderInfo
+     */
+    providerAppMetadata?: ProviderAppMetadata1;
 }
 
 /**
@@ -206,7 +200,6 @@ export function instanceOfProviderInfo(value: object): boolean {
     isInstance = isInstance && "baseURL" in value;
     isInstance = isInstance && "defaultModule" in value;
     isInstance = isInstance && "support" in value;
-    isInstance = isInstance && "providerOpts" in value;
 
     return isInstance;
 }
@@ -230,15 +223,14 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'basicOpts': !exists(json, 'basicOpts') ? undefined : BasicAuthOptsFromJSON(json['basicOpts']),
         'customOpts': !exists(json, 'customOpts') ? undefined : CustomAuthOptsFromJSON(json['customOpts']),
         'support': SupportFromJSON(json['support']),
-        'providerOpts': json['providerOpts'],
         'authHealthCheck': !exists(json, 'authHealthCheck') ? undefined : AuthHealthCheckFromJSON(json['authHealthCheck']),
         'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
         'labels': !exists(json, 'labels') ? undefined : json['labels'],
-        'subscribeOpts': !exists(json, 'subscribeOpts') ? undefined : SubscribeOptsFromJSON(json['subscribeOpts']),
         'modules': !exists(json, 'modules') ? undefined : (mapValues(json['modules'], ModuleInfoFromJSON)),
         'metadata': !exists(json, 'metadata') ? undefined : ProviderMetadata1FromJSON(json['metadata']),
+        'providerAppMetadata': !exists(json, 'providerAppMetadata') ? undefined : ProviderAppMetadata1FromJSON(json['providerAppMetadata']),
     };
 }
 
@@ -260,15 +252,14 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'basicOpts': BasicAuthOptsToJSON(value.basicOpts),
         'customOpts': CustomAuthOptsToJSON(value.customOpts),
         'support': SupportToJSON(value.support),
-        'providerOpts': value.providerOpts,
         'authHealthCheck': AuthHealthCheckToJSON(value.authHealthCheck),
         'displayName': value.displayName,
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
         'media': MediaToJSON(value.media),
         'labels': value.labels,
-        'subscribeOpts': SubscribeOptsToJSON(value.subscribeOpts),
         'modules': value.modules === undefined ? undefined : (mapValues(value.modules, ModuleInfoToJSON)),
         'metadata': ProviderMetadata1ToJSON(value.metadata),
+        'providerAppMetadata': ProviderAppMetadata1ToJSON(value.providerAppMetadata),
     };
 }
 
