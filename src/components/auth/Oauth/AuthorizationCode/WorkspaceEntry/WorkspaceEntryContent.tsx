@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MetadataItemInput } from "@generated/api/src";
+import { useProviderAppByProvider } from "src/hooks/query";
 import {
   AuthCardLayout,
   AuthTitle,
@@ -24,8 +25,11 @@ export function WorkspaceEntryContent({
   metadataInputs,
 }: WorkspaceEntryProps) {
   const isSalesforce = provider.startsWith("salesforce");
+  const { providerApp } = useProviderAppByProvider(
+    isSalesforce ? provider : undefined,
+  );
   const packageInstallUrl = isSalesforce
-    ? getPackageInstallUrl(metadataInputs)
+    ? getPackageInstallUrl(providerApp)
     : null;
   const [step, setStep] = useState<"install" | "authorize">(
     packageInstallUrl ? "install" : "authorize",
