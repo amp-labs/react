@@ -25,23 +25,27 @@ export function WorkspaceEntryContent({
   metadataInputs,
 }: WorkspaceEntryProps) {
   const isSalesforce = provider.startsWith("salesforce");
-  const { providerApp } = useProviderAppByProvider(
+  const { providerApp, isPending } = useProviderAppByProvider(
     isSalesforce ? provider : undefined,
   );
+  const [installDismissed, setInstallDismissed] = useState(false);
+
+  // Wait for the providerApp query before rendering — otherwise we'd flash the
+  // subdomain form then flip to the install banner once data arrives.
+  if (isSalesforce && isPending) return null;
+
   const packageInstallUrl = isSalesforce
     ? getPackageInstallUrl(providerApp)
     : null;
-  const [step, setStep] = useState<"install" | "authorize">(
-    packageInstallUrl ? "install" : "authorize",
-  );
+  const showInstallStep = !!packageInstallUrl && !installDismissed;
 
-  if (packageInstallUrl && step === "install") {
+  if (showInstallStep) {
     return (
       <AuthCardLayout>
         <PackageInstallStep
           packageInstallUrl={packageInstallUrl}
           providerName={providerName}
-          onSkip={() => setStep("authorize")}
+          onSkip={() => setInstallDismissed(true)}
         />
       </AuthCardLayout>
     );
@@ -52,7 +56,10 @@ export function WorkspaceEntryContent({
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <AuthTitle>{`Set up ${providerName} integration`}</AuthTitle>
         {packageInstallUrl && (
-          <Stepper currentStep={2} onStepClick={() => setStep("install")} />
+          <Stepper
+            currentStep={2}
+            onStepClick={() => setInstallDismissed(false)}
+          />
         )}
         <AuthErrorAlert error={error} />
         {metadataInputs.map((metadata: MetadataItemInput) => (
