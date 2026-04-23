@@ -20,19 +20,13 @@ export function DocsHelperTextHeader({
 }: DocsHelperTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const hasHelpContent = Boolean(prompt || url);
+
   return (
     <div>
       <p className={styles.header}>
-        <span>
-          {url ? (
-            <AccessibleLink href={url} newTab>
-              <span style={{ textDecoration: "underline" }}>{inputName}</span>
-            </AccessibleLink>
-          ) : (
-            <span>{inputName}</span>
-          )}
-        </span>
-        {prompt && (
+        <span>{inputName}</span>
+        {hasHelpContent && (
           <button
             type="button"
             onClick={() => setIsExpanded((prev) => !prev)}
@@ -49,13 +43,20 @@ export function DocsHelperTextHeader({
           </button>
         )}
       </p>
-      <div
-        className={classNames(styles.promptWrapper, {
-          [styles.promptWrapperExpanded]: isExpanded,
-        })}
-      >
-        {prompt && <MetadataPromptText prompt={prompt} />}
-      </div>
+      {hasHelpContent && (
+        <div
+          className={classNames(styles.promptWrapper, {
+            [styles.promptWrapperExpanded]: isExpanded,
+          })}
+        >
+          {prompt && <MetadataPromptText prompt={prompt} />}
+          {url && (
+            <AccessibleLink href={url} newTab className={styles.learnMoreLink}>
+              Learn more →
+            </AccessibleLink>
+          )}
+        </div>
+      )}
     </div>
   );
 }
