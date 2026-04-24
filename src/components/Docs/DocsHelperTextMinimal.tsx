@@ -49,11 +49,27 @@ export function DocsHelperTextHeader({
             [styles.promptWrapperExpanded]: isExpanded,
           })}
         >
-          {prompt && <MetadataPromptText prompt={prompt} />}
-          {url && (
-            <AccessibleLink href={url} newTab className={styles.learnMoreLink}>
-              Learn more →
-            </AccessibleLink>
+          {prompt ? (
+            <MetadataPromptText
+              prompt={prompt}
+              trailing={
+                url && (
+                  <AccessibleLink href={url} newTab>
+                    Learn more →
+                  </AccessibleLink>
+                )
+              }
+            />
+          ) : (
+            url && (
+              <AccessibleLink
+                href={url}
+                newTab
+                className={styles.learnMoreLink}
+              >
+                Learn more →
+              </AccessibleLink>
+            )
           )}
         </div>
       )}
