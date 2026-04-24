@@ -1,12 +1,17 @@
+import { ReactNode } from "react";
 import Markdown from "react-markdown";
 
 import styles from "./MetadataPromptText.module.css";
 
 type MetadataPromptTextProps = {
   prompt: string;
+  trailing?: ReactNode;
 };
 
-export function MetadataPromptText({ prompt }: MetadataPromptTextProps) {
+export function MetadataPromptText({
+  prompt,
+  trailing,
+}: MetadataPromptTextProps) {
   return (
     <div className={styles.container}>
       <Markdown
@@ -21,6 +26,7 @@ export function MetadataPromptText({ prompt }: MetadataPromptTextProps) {
       >
         {prompt}
       </Markdown>
+      {trailing ? <> {trailing}</> : null}
     </div>
   );
 }
