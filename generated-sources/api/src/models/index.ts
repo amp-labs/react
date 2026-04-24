@@ -183,6 +183,7 @@ export * from './StringFieldOptions';
 export * from './SubscribeConfig';
 export * from './SubscribeConfigAllOf';
 export * from './SubscribeConfigObject';
+export * from './SubscribeRequirements';
 export * from './SubscribeSupport';
 export * from './Support';
 export * from './TokenMetadataFields';

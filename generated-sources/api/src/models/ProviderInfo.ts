@@ -73,6 +73,12 @@ import {
     ProviderMetadata1FromJSONTyped,
     ProviderMetadata1ToJSON,
 } from './ProviderMetadata1';
+import type { SubscribeRequirements } from './SubscribeRequirements';
+import {
+    SubscribeRequirementsFromJSON,
+    SubscribeRequirementsFromJSONTyped,
+    SubscribeRequirementsToJSON,
+} from './SubscribeRequirements';
 import type { Support } from './Support';
 import {
     SupportFromJSON,
@@ -171,6 +177,12 @@ export interface ProviderInfo {
      */
     labels?: { [key: string]: string; };
     /**
+     * 
+     * @type {SubscribeRequirements}
+     * @memberof ProviderInfo
+     */
+    subscribeRequirements?: SubscribeRequirements;
+    /**
      * The registry of provider modules.
      * @type {{ [key: string]: ModuleInfo; }}
      * @memberof ProviderInfo
@@ -228,6 +240,7 @@ export function ProviderInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'postAuthInfoNeeded': !exists(json, 'postAuthInfoNeeded') ? undefined : json['postAuthInfoNeeded'],
         'media': !exists(json, 'media') ? undefined : MediaFromJSON(json['media']),
         'labels': !exists(json, 'labels') ? undefined : json['labels'],
+        'subscribeRequirements': !exists(json, 'subscribeRequirements') ? undefined : SubscribeRequirementsFromJSON(json['subscribeRequirements']),
         'modules': !exists(json, 'modules') ? undefined : (mapValues(json['modules'], ModuleInfoFromJSON)),
         'metadata': !exists(json, 'metadata') ? undefined : ProviderMetadata1FromJSON(json['metadata']),
         'providerAppMetadata': !exists(json, 'providerAppMetadata') ? undefined : ProviderAppMetadata1FromJSON(json['providerAppMetadata']),
@@ -257,6 +270,7 @@ export function ProviderInfoToJSON(value?: ProviderInfo | null): any {
         'postAuthInfoNeeded': value.postAuthInfoNeeded,
         'media': MediaToJSON(value.media),
         'labels': value.labels,
+        'subscribeRequirements': SubscribeRequirementsToJSON(value.subscribeRequirements),
         'modules': value.modules === undefined ? undefined : (mapValues(value.modules, ModuleInfoToJSON)),
         'metadata': ProviderMetadata1ToJSON(value.metadata),
         'providerAppMetadata': ProviderAppMetadata1ToJSON(value.providerAppMetadata),
