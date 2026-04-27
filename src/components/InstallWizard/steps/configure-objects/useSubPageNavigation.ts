@@ -22,8 +22,14 @@ export function useSubPageNavigation() {
 
   const { selectedObjects, currentObjectIndex } = state;
 
-  // Local sub-page state
-  const [subPage, setSubPage] = useState<SubPage>("fields");
+  // Local sub-page state — initialize from the manifest so we don't land on
+  // a sub-page the object doesn't have (e.g. "fields" when the object only
+  // has mappings).
+  const [subPage, setSubPage] = useState<SubPage>(() =>
+    currentObjectName
+      ? getInitialSubPage(manifest, currentObjectName)
+      : "fields",
+  );
   const pendingSubPageRef = useRef<SubPage | null>(null);
   const prevObjectNameRef = useRef(currentObjectName);
 
