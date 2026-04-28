@@ -82,7 +82,8 @@ export function FieldsContent({
 
       {!hasFieldsContent && (
         <p className={styles.noFields}>
-          No configurable fields for {objectDisplayName}.
+          No configuration needed for {objectDisplayName}. Click Next to
+          continue.
         </p>
       )}
     </>
