@@ -8,6 +8,7 @@ import {
   useLocalConfig,
   useManifest,
 } from "src/headless";
+import { handleServerError } from "src/utils/handleServerError";
 
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
@@ -102,7 +103,7 @@ export function ReviewStep() {
         nextStep();
       },
       onError: (error) => {
-        setSubmissionError(error.message);
+        handleServerError(error, setSubmissionError);
       },
     });
   }, [
