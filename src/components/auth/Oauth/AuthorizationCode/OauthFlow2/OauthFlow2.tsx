@@ -10,8 +10,8 @@ import {
   isProviderMetadataValid,
   ProviderMetadata,
 } from "src/components/auth/providerMetadata";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
-import { useProjectQuery } from "src/hooks/query";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
 import { AMP_SERVER } from "src/services/api";
 
@@ -59,7 +59,7 @@ export function OauthFlow2({
   metadataInputs,
   moduleError,
 }: OauthFlowProps) {
-  const { projectId } = useProjectQuery();
+  const { projectIdOrName } = useAmpersandProviderProps();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
 
@@ -138,7 +138,7 @@ export function OauthFlow2({
           provider,
           consumerRef,
           groupRef,
-          projectId: projectId || "", // todo - update to use projectIdOrName
+          projectIdOrName,
           consumerName,
           groupName,
           providerWorkspaceRef: metadata?.workspace?.value,

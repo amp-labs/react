@@ -27,11 +27,11 @@ import {
  */
 export interface OauthConnectRequest {
     /**
-     * The Ampersand project ID.
+     * The Ampersand project ID or project name.
      * @type {string}
      * @memberof OauthConnectRequest
      */
-    projectId: string;
+    projectIdOrName: string;
     /**
      * The provider that this app connects to.
      * @type {string}
@@ -93,7 +93,7 @@ export interface OauthConnectRequest {
  */
 export function instanceOfOauthConnectRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "projectId" in value;
+    isInstance = isInstance && "projectIdOrName" in value;
     isInstance = isInstance && "provider" in value;
     isInstance = isInstance && "groupRef" in value;
     isInstance = isInstance && "consumerRef" in value;
@@ -111,7 +111,7 @@ export function OauthConnectRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'projectId': json['projectId'],
+        'projectIdOrName': json['projectIdOrName'],
         'provider': json['provider'],
         'groupRef': json['groupRef'],
         'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
@@ -133,7 +133,7 @@ export function OauthConnectRequestToJSON(value?: OauthConnectRequest | null): a
     }
     return {
         
-        'projectId': value.projectId,
+        'projectIdOrName': value.projectIdOrName,
         'provider': value.provider,
         'groupRef': value.groupRef,
         'groupName': value.groupName,
