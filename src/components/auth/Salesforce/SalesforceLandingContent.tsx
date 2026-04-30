@@ -80,7 +80,7 @@ export function SalesforceLandingContent({
         {workspaceInput && (
           <details className={styles.disclosure}>
             <summary className={styles.summary}>
-              Sign in with a custom domain
+              Use My Domain (advanced)
             </summary>
             <div className={styles.body}>
               <MetadataInput
