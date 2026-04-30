@@ -5,7 +5,6 @@ export type WorkspaceEntryProps = {
   setFormData: (metadata: string, value: string) => void;
   error: string | null;
   isButtonDisabled?: boolean;
-  provider: string;
   providerName?: string;
   metadataInputs: MetadataItemInput[];
 };
