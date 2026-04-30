@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { MetadataItemInput } from "@generated/api/src";
-import { isSalesforceProvider } from "src/components/auth/Salesforce";
 import { useProviderAppByProvider } from "src/hooks/query";
 import {
   AuthCardLayout,
+  AuthDescription,
   AuthTitle,
 } from "src/layout/AuthCardLayout/AuthCardLayout";
 
@@ -14,9 +14,21 @@ import { PackageInstallStep } from "components/auth/PackageInstallBanner/Package
 import { Stepper } from "components/auth/PackageInstallBanner/Stepper";
 import { Button } from "components/ui-base/Button";
 
-import { WorkspaceEntryProps } from "./WorkspaceEntryProps";
+import { SALESFORCE_WORKSPACE_FIELD } from "./salesforce";
 
-export function WorkspaceEntryContent({
+import styles from "./SalesforceLanding.module.css";
+
+export type SalesforceLandingContentProps = {
+  handleSubmit: () => void;
+  setFormData: (key: string, value: string) => void;
+  error: string | null;
+  isButtonDisabled?: boolean;
+  provider: string;
+  providerName?: string;
+  metadataInputs: MetadataItemInput[];
+};
+
+export function SalesforceLandingContent({
   handleSubmit,
   setFormData,
   error,
@@ -24,20 +36,15 @@ export function WorkspaceEntryContent({
   provider,
   providerName,
   metadataInputs,
-}: WorkspaceEntryProps) {
-  const isSalesforce = isSalesforceProvider(provider);
-  const { providerApp, isPending } = useProviderAppByProvider(
-    isSalesforce ? provider : undefined,
-  );
+}: SalesforceLandingContentProps) {
+  const { providerApp, isPending } = useProviderAppByProvider(provider);
   const [installDismissed, setInstallDismissed] = useState(false);
 
   // Wait for the providerApp query before rendering — otherwise we'd flash the
-  // subdomain form then flip to the install banner once data arrives.
-  if (isSalesforce && isPending) return null;
+  // landing then flip to the install banner once data arrives.
+  if (isPending) return null;
 
-  const packageInstallUrl = isSalesforce
-    ? getPackageInstallUrl(providerApp)
-    : null;
+  const packageInstallUrl = getPackageInstallUrl(providerApp);
   const showInstallStep = !!packageInstallUrl && !installDismissed;
 
   if (showInstallStep) {
@@ -52,6 +59,10 @@ export function WorkspaceEntryContent({
     );
   }
 
+  const workspaceInput = metadataInputs.find(
+    (item) => item.name === SALESFORCE_WORKSPACE_FIELD,
+  );
+
   return (
     <AuthCardLayout>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -62,23 +73,35 @@ export function WorkspaceEntryContent({
             onStepClick={() => setInstallDismissed(false)}
           />
         )}
+        <AuthDescription>
+          {`Click Next to sign into the ${providerName} account you'd like to sync.`}
+        </AuthDescription>
         <AuthErrorAlert error={error} />
-        {metadataInputs.map((metadata: MetadataItemInput) => (
-          <MetadataInput
-            key={metadata.name}
-            metadata={metadata}
-            onChange={(event) =>
-              setFormData(metadata.name, event.currentTarget.value)
-            }
-          />
-        ))}
+        {workspaceInput && (
+          <details className={styles.disclosure}>
+            <summary className={styles.summary}>
+              Sign in with a custom domain
+            </summary>
+            <div className={styles.body}>
+              <MetadataInput
+                metadata={workspaceInput}
+                onChange={(event) =>
+                  setFormData(
+                    SALESFORCE_WORKSPACE_FIELD,
+                    event.currentTarget.value,
+                  )
+                }
+              />
+            </div>
+          </details>
+        )}
         <Button
           style={{ width: "100%" }}
           disabled={isButtonDisabled}
           type="submit"
           onClick={handleSubmit}
         >
-          Next
+          {isButtonDisabled && !error ? "Loading..." : "Next"}
         </Button>
       </div>
     </AuthCardLayout>

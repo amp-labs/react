@@ -10,6 +10,10 @@ import {
   isProviderMetadataValid,
   ProviderMetadata,
 } from "src/components/auth/providerMetadata";
+import {
+  isSalesforceProvider,
+  SalesforceLandingContent,
+} from "src/components/auth/Salesforce";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
@@ -62,6 +66,7 @@ export function OauthFlow2({
   const { projectIdOrName } = useAmpersandProviderProps();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
+  const isSalesforce = isSalesforceProvider(provider);
 
   // error state - initialize with moduleError if present
   const [error, setError] = useState<string | null>(moduleError || null);
@@ -123,8 +128,11 @@ export function OauthFlow2({
       console.debug("error with fetching connections");
     }
 
-    // Validate metadata fields if they exist
+    // Validate metadata fields if they exist.
+    // Salesforce treats workspace as optional (custom-domain disclosure), so
+    // skip the required-field check on the Salesforce path.
     if (
+      !isSalesforce &&
       metadataInputs.length > 0 &&
       !isProviderMetadataValid(metadataInputs, formData)
     ) {
@@ -166,6 +174,24 @@ export function OauthFlow2({
 
   // Determine which entry component to show based on provider and metadata
   const entryComponent = (() => {
+    // Salesforce: default to a no-workspace landing with an optional custom-domain
+    // disclosure. Workspace is optional — backend defaults to login.salesforce.com.
+    if (isSalesforce) {
+      return (
+        <SalesforceLandingContent
+          handleSubmit={handleSubmit}
+          setFormData={handleFormDataChange}
+          error={error}
+          isButtonDisabled={
+            isCreatingOauthConnection || isConnectionsFetching || !!error
+          }
+          provider={provider}
+          providerName={providerName}
+          metadataInputs={metadataInputs}
+        />
+      );
+    }
+
     // If there are metadata fields, show the workspace entry form
     if (metadataInputs.length > 0) {
       return (
