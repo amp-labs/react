@@ -13,13 +13,14 @@ export const useOauthConnectQuery = (request: OauthConnectRequest) => {
     queryKey: [
       "amp",
       "oauthConnect",
-      request.projectId,
+      request.projectIdOrName,
       request.groupRef,
       request.consumerRef,
       request.provider,
     ],
     queryFn: async () => {
-      if (!request.projectId) throw new Error("Project ID is required");
+      if (!request.projectIdOrName)
+        throw new Error("Project ID or Name is required");
       if (!request?.providerAppId)
         throw new Error("Provider App ID is required");
       if (!request?.provider) throw new Error("Provider is required");
