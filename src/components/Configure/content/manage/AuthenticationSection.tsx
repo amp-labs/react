@@ -1,3 +1,4 @@
+import { isSalesforceProvider } from "src/components/auth/Salesforce";
 import { useConnections } from "src/context/ConnectionsContextProvider";
 import { useProvider } from "src/hooks/useProvider";
 import { capitalize } from "src/utils";
@@ -23,7 +24,7 @@ function AuthenticationRow({
 export function AuthenticationSection() {
   const { selectedConnection } = useConnections();
   const { providerName } = useProvider();
-  const isSalesforce = selectedConnection?.provider === "salesforce";
+  const isSalesforce = isSalesforceProvider(selectedConnection?.provider);
   const workspaceString = isSalesforce ? "subdomain" : "workspace";
   const workspaceLabel = `${providerName} ${workspaceString}`;
 
