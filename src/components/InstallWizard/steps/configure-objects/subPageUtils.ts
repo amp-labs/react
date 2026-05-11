@@ -60,9 +60,18 @@ export function getSubPages(manifest: Manifest, objectName: string): SubPage[] {
     (obj.getOptionalMapFields()?.length ?? 0) > 0;
   if (hasMappings) pages.push("mappings");
 
-  const hasOptionalFields =
+  // An object has optional fields to show on the "additional" page if it has
+  // an explicit optionalFields list OR if it has auto-discovered customer
+  // fields (e.g. from `optionalFieldsAuto: all` in amp.yaml). The latter
+  // surface via manifest.getCustomerFieldsForObject(...).allFields.
+  const hasExplicitOptionalFields =
     (obj.getOptionalFields("no-mappings")?.length ?? 0) > 0;
-  if (hasOptionalFields) pages.push("additional");
+  const hasAutoOptionalFields =
+    Object.keys(manifest.getCustomerFieldsForObject(objectName).allFields ?? {})
+      .length > 0;
+  if (hasExplicitOptionalFields || hasAutoOptionalFields) {
+    pages.push("additional");
+  }
 
   return pages.length > 0 ? pages : ["fields"];
 }
