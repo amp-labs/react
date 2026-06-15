@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * Only present for backfill read operations.
+ * Read progress for the operation, reporting records processed and, where available, the estimated total. Present for all read operations.
  * @export
  * @interface OperationMetadataProgress
  */

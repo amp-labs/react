@@ -164,6 +164,7 @@ export * from './Problem';
 export * from './Project';
 export * from './ProjectEntitlements';
 export * from './ProjectEntitlementsBrandingRemoval';
+export * from './ProjectEntitlementsLogRetentionDays';
 export * from './ProviderApp';
 export * from './ProviderAppMetadata';
 export * from './ProviderAppMetadata1';
