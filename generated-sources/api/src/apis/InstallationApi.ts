@@ -41,6 +41,7 @@ export interface CreateInstallationOperationRequest {
     projectIdOrName: string;
     integrationId: string;
     installation: CreateInstallationRequest;
+    skipSampling?: boolean;
 }
 
 export interface DeleteInstallationRequest {
@@ -78,6 +79,7 @@ export interface UpdateInstallationOperationRequest {
     integrationId: string;
     installationId: string;
     installationUpdate: UpdateInstallationRequest;
+    skipSampling?: boolean;
 }
 
 /**
@@ -93,6 +95,7 @@ export interface InstallationApiInterface {
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
      * @param {CreateInstallationRequest} installation 
+     * @param {boolean} [skipSampling] When &#x60;true&#x60;, skips the sample read that validates the installation\&#39;s read configuration against the provider before saving. Defaults to &#x60;false&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -202,6 +205,7 @@ export interface InstallationApiInterface {
      * @param {string} integrationId The ID of the integration that this installation belongs to.
      * @param {string} installationId The Ampersand installation ID.
      * @param {UpdateInstallationRequest} installationUpdate 
+     * @param {boolean} [skipSampling] When &#x60;true&#x60;, skips the sample read that validates the installation\&#39;s read configuration against the provider before saving. Defaults to &#x60;false&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -239,6 +243,10 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.skipSampling !== undefined) {
+            queryParameters['skipSampling'] = requestParameters.skipSampling;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -560,6 +568,10 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.skipSampling !== undefined) {
+            queryParameters['skipSampling'] = requestParameters.skipSampling;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
