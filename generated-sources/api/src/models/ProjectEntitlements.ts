@@ -19,6 +19,12 @@ import {
     ProjectEntitlementsBrandingRemovalFromJSONTyped,
     ProjectEntitlementsBrandingRemovalToJSON,
 } from './ProjectEntitlementsBrandingRemoval';
+import type { ProjectEntitlementsLogRetentionDays } from './ProjectEntitlementsLogRetentionDays';
+import {
+    ProjectEntitlementsLogRetentionDaysFromJSON,
+    ProjectEntitlementsLogRetentionDaysFromJSONTyped,
+    ProjectEntitlementsLogRetentionDaysToJSON,
+} from './ProjectEntitlementsLogRetentionDays';
 
 /**
  * Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.
@@ -32,6 +38,12 @@ export interface ProjectEntitlements {
      * @memberof ProjectEntitlements
      */
     brandingRemoval?: ProjectEntitlementsBrandingRemoval;
+    /**
+     * 
+     * @type {ProjectEntitlementsLogRetentionDays}
+     * @memberof ProjectEntitlements
+     */
+    logRetentionDays?: ProjectEntitlementsLogRetentionDays;
 }
 
 /**
@@ -54,6 +66,7 @@ export function ProjectEntitlementsFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'brandingRemoval': !exists(json, 'brandingRemoval') ? undefined : ProjectEntitlementsBrandingRemovalFromJSON(json['brandingRemoval']),
+        'logRetentionDays': !exists(json, 'logRetentionDays') ? undefined : ProjectEntitlementsLogRetentionDaysFromJSON(json['logRetentionDays']),
     };
 }
 
@@ -67,6 +80,7 @@ export function ProjectEntitlementsToJSON(value?: ProjectEntitlements | null): a
     return {
         
         'brandingRemoval': ProjectEntitlementsBrandingRemovalToJSON(value.brandingRemoval),
+        'logRetentionDays': ProjectEntitlementsLogRetentionDaysToJSON(value.logRetentionDays),
     };
 }
 
