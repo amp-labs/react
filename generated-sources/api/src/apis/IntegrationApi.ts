@@ -47,7 +47,7 @@ export interface CreateIntegrationOperationRequest {
 
 export interface DeleteIntegrationRequest {
     projectIdOrName: string;
-    integrationId: string;
+    integrationIdOrName: string;
 }
 
 export interface GetIntegrationRequest {
@@ -104,7 +104,7 @@ export interface IntegrationApiInterface {
      * Delete an integration and all its installations.
      * @summary Delete an integration
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} integrationId The integration ID.
+     * @param {string} integrationIdOrName The integration ID or name.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationApiInterface
@@ -267,8 +267,8 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
             throw new runtime.RequiredError('projectIdOrName','Required parameter requestParameters.projectIdOrName was null or undefined when calling deleteIntegration.');
         }
 
-        if (requestParameters.integrationId === null || requestParameters.integrationId === undefined) {
-            throw new runtime.RequiredError('integrationId','Required parameter requestParameters.integrationId was null or undefined when calling deleteIntegration.');
+        if (requestParameters.integrationIdOrName === null || requestParameters.integrationIdOrName === undefined) {
+            throw new runtime.RequiredError('integrationIdOrName','Required parameter requestParameters.integrationIdOrName was null or undefined when calling deleteIntegration.');
         }
 
         const queryParameters: any = {};
@@ -288,7 +288,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
             }
         }
         const response = await this.request({
-            path: `/projects/{projectIdOrName}/integrations/{integrationId}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationId"}}`, encodeURIComponent(String(requestParameters.integrationId))),
+            path: `/projects/{projectIdOrName}/integrations/{integrationIdOrName}`.replace(`{${"projectIdOrName"}}`, encodeURIComponent(String(requestParameters.projectIdOrName))).replace(`{${"integrationIdOrName"}}`, encodeURIComponent(String(requestParameters.integrationIdOrName))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
