@@ -1,7 +1,5 @@
 import { ErrorIcon } from "assets/ErrorIcon";
 
-import { ProblemMessage } from "components/ProblemMessage/ProblemMessage";
-
 import { Box } from "../ui-base/Box/Box";
 import { Container } from "../ui-base/Container/Container";
 
@@ -18,7 +16,7 @@ export function InnerErrorTextBox({ message }: { message: string }) {
       <div className={classes.errorIconWrapper}>
         <ErrorIcon width="20" height="20" />
       </div>
-      <ProblemMessage message={message} />
+      <p className={classes.errorText}>{message}</p>
     </Box>
   );
 }
