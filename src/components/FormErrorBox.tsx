@@ -10,26 +10,16 @@ const defaultStyle = {
 /** Separates detail and remedy in serialized error strings from handleServerError. */
 const REMEDY_DELIMITER = "\x1e";
 
-const LEGACY_REMEDY_PATTERN = /\n\n\[Remedy\]\s*(.*)$/s;
-
 function parseErrorMessage(message: string): { detail: string; remedy?: string } {
   const delimiterIndex = message.indexOf(REMEDY_DELIMITER);
-  if (delimiterIndex !== -1) {
-    return {
-      detail: message.slice(0, delimiterIndex),
-      remedy: message.slice(delimiterIndex + REMEDY_DELIMITER.length),
-    };
+  if (delimiterIndex === -1) {
+    return { detail: message };
   }
 
-  const legacyMatch = message.match(LEGACY_REMEDY_PATTERN);
-  if (legacyMatch) {
-    return {
-      detail: message.slice(0, legacyMatch.index),
-      remedy: legacyMatch[1],
-    };
-  }
-
-  return { detail: message };
+  return {
+    detail: message.slice(0, delimiterIndex),
+    remedy: message.slice(delimiterIndex + REMEDY_DELIMITER.length),
+  };
 }
 
 function ErrorMessageContent({ message }: { message: string }) {
