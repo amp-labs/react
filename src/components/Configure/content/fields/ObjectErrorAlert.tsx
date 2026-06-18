@@ -1,4 +1,5 @@
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { ProblemMessage } from "src/components/ProblemMessage/ProblemMessage";
 
 import classes from "./objectErrorAlert.module.css";
 
@@ -13,7 +14,9 @@ export function ObjectErrorAlert({ error }: ObjectErrorAlertProps) {
         <ExclamationTriangleIcon className={classes.errorIcon} />
         <span className={classes.errorTitle}>Unable to load object</span>
       </div>
-      <div className={classes.errorMessage}>{error}</div>
+      <div className={classes.errorMessage}>
+        <ProblemMessage message={error} />
+      </div>
     </div>
   );
 }
