@@ -21,6 +21,24 @@
   color: var(--amp-text-primary);
   text-align: left;
   margin-bottom: var(--amp-space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-2);
+}
+
+.editResolution {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-medium);
+  color: var(--amp-text-muted);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.editResolution:hover {
+  color: var(--amp-text-primary);
 }
 
 .objectDescription {

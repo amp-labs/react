@@ -3,6 +3,7 @@ import {
   HydratedIntegrationFieldExistent,
   HydratedIntegrationObject,
   IntegrationFieldMapping,
+  ObjectMetadata,
 } from "@generated/api/src";
 
 /**
@@ -85,4 +86,74 @@ export function getOptionalMapFieldsFromObject(
         isIntegrationFieldMapping(rf) && !!rf.mapToName,
     ) || [];
   return optionalMapFields as IntegrationFieldMapping[];
+}
+
+/**
+ * True when a read object is an "unresolved mapped object": declared in amp.yaml
+ * with a mapToName but no concrete objectName. The integrating customer must
+ * choose which provider-side object fulfills the mapping.
+ */
+export function isUnresolvedReadObject(
+  object: HydratedIntegrationObject,
+): boolean {
+  return !object.objectName && !!object.mapToName;
+}
+
+/**
+ * Produce a fully-formed HydratedIntegrationObject by combining an unresolved
+ * manifest object with the user's chosen provider-side objectName and the
+ * ObjectMetadata returned by getObjectMetadataForConnection.
+ *
+ * The amp.yaml can't declare required/existent fields on an unresolved object
+ * (it doesn't know the provider-side fieldNames), so every field from the API
+ * is surfaced as optional. Any IntegrationFieldMapping entries declared on the
+ * original object are preserved.
+ */
+export function hydrateResolvedMappedObject(
+  object: HydratedIntegrationObject,
+  resolvedObjectName: string,
+  metadata: ObjectMetadata | undefined,
+): HydratedIntegrationObject {
+  const existingRequired = object.requiredFields ?? [];
+  const existingOptional = object.optionalFields ?? [];
+
+  if (!metadata) {
+    return { ...object, objectName: resolvedObjectName };
+  }
+
+  const existingOptionalFieldNames = new Set(
+    existingOptional
+      .filter((f) => !isIntegrationFieldMapping(f))
+      .map((f) => (f as HydratedIntegrationFieldExistent).fieldName),
+  );
+  const existingRequiredFieldNames = new Set(
+    existingRequired
+      .filter((f) => !isIntegrationFieldMapping(f))
+      .map((f) => (f as HydratedIntegrationFieldExistent).fieldName),
+  );
+
+  const extraOptional: HydratedIntegrationFieldExistent[] = Object.entries(
+    metadata.fields ?? {},
+  )
+    .filter(
+      ([fieldName]) =>
+        !existingOptionalFieldNames.has(fieldName) &&
+        !existingRequiredFieldNames.has(fieldName),
+    )
+    .map(([fieldName, meta]) => ({
+      fieldName,
+      displayName: meta.displayName || fieldName,
+    }));
+
+  return {
+    ...object,
+    objectName: resolvedObjectName,
+    displayName:
+      object.displayName || metadata.displayName || resolvedObjectName,
+    optionalFields: [...existingOptional, ...extraOptional],
+    allFieldsMetadata: {
+      ...(object.allFieldsMetadata ?? {}),
+      ...(metadata.fields ?? {}),
+    },
+  };
 }

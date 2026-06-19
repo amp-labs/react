@@ -5,6 +5,7 @@ import {
   InstallationApi,
   IntegrationApi,
   OAuthApi,
+  ObjectsFieldsApi,
   ProjectApi,
   ProviderApi,
   ProviderAppApi,
@@ -28,6 +29,8 @@ export class ApiService {
 
   public oAuthApi: OAuthApi;
 
+  public objectsFieldsApi: ObjectsFieldsApi;
+
   public projectApi: ProjectApi;
 
   public providerApi: ProviderApi;
@@ -41,6 +44,7 @@ export class ApiService {
     this.installationApi = new InstallationApi(config);
     this.integrationApi = new IntegrationApi(config);
     this.oAuthApi = new OAuthApi(config);
+    this.objectsFieldsApi = new ObjectsFieldsApi(config);
     this.projectApi = new ProjectApi(config);
     this.providerApi = new ProviderApi(config);
     this.providerAppApi = new ProviderAppApi(config);
