@@ -96,16 +96,37 @@ export function ConfigureObjectsStep() {
     [configHandlers],
   );
 
-  const optionalFieldItems: CheckboxItem[] = useMemo(
-    () =>
-      optionalFields.map((field) => ({
-        id: getFieldName(field),
+  // Build the list of optional-field checkboxes shown on the Additional page.
+  // Merge explicit optionalFields (from amp.yaml) with auto-discovered customer
+  // fields (e.g. when amp.yaml uses `optionalFieldsAuto: all`). Explicit
+  // entries win on conflicts so the configured display name is preserved.
+  const optionalFieldItems: CheckboxItem[] = useMemo(() => {
+    const items: CheckboxItem[] = [];
+    const seen = new Set<string>();
+
+    optionalFields.forEach((field) => {
+      const fieldName = getFieldName(field);
+      if (!fieldName || seen.has(fieldName)) return;
+      seen.add(fieldName);
+      items.push({
+        id: fieldName,
         label: getFieldDisplayName(field),
-        isChecked:
-          configHandlers?.getSelectedField(getFieldName(field)) ?? false,
-      })),
-    [optionalFields, configHandlers],
-  );
+        isChecked: configHandlers?.getSelectedField(fieldName) ?? false,
+      });
+    });
+
+    Object.entries(customerFields).forEach(([fieldName, meta]) => {
+      if (!fieldName || seen.has(fieldName)) return;
+      seen.add(fieldName);
+      items.push({
+        id: fieldName,
+        label: meta.displayName || fieldName,
+        isChecked: configHandlers?.getSelectedField(fieldName) ?? false,
+      });
+    });
+
+    return items;
+  }, [optionalFields, customerFields, configHandlers]);
 
   // Check if all required mappings have been filled
   const requiredMappingsComplete = useMemo(
