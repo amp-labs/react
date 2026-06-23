@@ -61,6 +61,7 @@ export function ApiKeyAuthForm({
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
+  const providerDisplayName = providerName || capitalize(provider);
 
   const onHandleSubmit = () => {
     const metadata = getProviderMetadata(metadataInputs, formData);
@@ -83,7 +84,12 @@ export function ApiKeyAuthForm({
       <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
         <DocsHelperTextHeader
           url={docsURL}
-          inputName={`${providerName || capitalize(provider)} API Key`}
+          inputName={`${providerDisplayName} API Key`}
+          prompt={
+            docsURL
+              ? `Where to find your ${providerDisplayName} API key:`
+              : undefined
+          }
         />
         <FormComponent.PasswordInput
           id="apiKey"
