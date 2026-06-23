@@ -11,7 +11,7 @@ import {
 import { capitalize } from "src/utils";
 
 import { MetadataInput } from "components/auth/MetadataInput";
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
   getProviderMetadata,
@@ -80,19 +80,18 @@ export function ApiKeyAuthForm({
         marginTop: "1rem",
       }}
     >
-      {docsURL && (
-        <DocsHelperText
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+        <DocsHelperTextHeader
           url={docsURL}
-          providerDisplayName={providerName || capitalize(provider)}
-          credentialName="API key"
+          inputName={`${providerName || capitalize(provider)} API Key`}
         />
-      )}
-      <FormComponent.PasswordInput
-        id="apiKey"
-        name="apiKey"
-        placeholder="API Key"
-        onChange={handleChange}
-      />
+        <FormComponent.PasswordInput
+          id="apiKey"
+          name="apiKey"
+          placeholder="API Key"
+          onChange={handleChange}
+        />
+      </div>
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <MetadataInput
           key={metadata.name}
