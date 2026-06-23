@@ -94,7 +94,7 @@ export function ApiKeyAuthForm({
         <FormComponent.PasswordInput
           id="apiKey"
           name="apiKey"
-          placeholder="API Key"
+          placeholder="Paste your API key here"
           onChange={handleChange}
         />
       </div>
