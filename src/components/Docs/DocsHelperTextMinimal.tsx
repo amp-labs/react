@@ -55,7 +55,7 @@ export function DocsHelperTextHeader({
               trailing={
                 url && (
                   <AccessibleLink href={url} newTab>
-                    Learn more →
+                    learn more →
                   </AccessibleLink>
                 )
               }
@@ -67,7 +67,7 @@ export function DocsHelperTextHeader({
                 newTab
                 className={styles.learnMoreLink}
               >
-                Learn more →
+                learn more →
               </AccessibleLink>
             )
           )}

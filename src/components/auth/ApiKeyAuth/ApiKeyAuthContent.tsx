@@ -11,7 +11,7 @@ import {
 import { capitalize } from "src/utils";
 
 import { MetadataInput } from "components/auth/MetadataInput";
-import { DocsHelperText } from "components/Docs/DocsHelperText";
+import { DocsHelperTextHeader } from "components/Docs/DocsHelperTextMinimal";
 
 import {
   getProviderMetadata,
@@ -61,6 +61,7 @@ export function ApiKeyAuthForm({
   const isSubmitDisabled =
     isButtonDisabled || !isApiKeyValid || !isMetadataValid;
   const docsURL = providerInfo.apiKeyOpts?.docsURL;
+  const providerDisplayName = providerName || capitalize(provider);
 
   const onHandleSubmit = () => {
     const metadata = getProviderMetadata(metadataInputs, formData);
@@ -80,19 +81,23 @@ export function ApiKeyAuthForm({
         marginTop: "1rem",
       }}
     >
-      {docsURL && (
-        <DocsHelperText
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+        <DocsHelperTextHeader
           url={docsURL}
-          providerDisplayName={providerName || capitalize(provider)}
-          credentialName="API key"
+          inputName={`${providerDisplayName} API Key`}
+          prompt={
+            docsURL
+              ? `Where to find your ${providerDisplayName} API key:`
+              : undefined
+          }
         />
-      )}
-      <FormComponent.PasswordInput
-        id="apiKey"
-        name="apiKey"
-        placeholder="API Key"
-        onChange={handleChange}
-      />
+        <FormComponent.PasswordInput
+          id="apiKey"
+          name="apiKey"
+          placeholder="Paste your API key here"
+          onChange={handleChange}
+        />
+      </div>
       {metadataInputs.map((metadata: MetadataItemInput) => (
         <MetadataInput
           key={metadata.name}
