@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { useManifest } from "src/headless";
 
 import { useWizard } from "../../wizard/WizardContext";
@@ -14,12 +15,13 @@ interface ObjectTabsProps {
 
 export function ObjectTabs({ currentPageIndex, onTabClick }: ObjectTabsProps) {
   const manifest = useManifest();
+  const { fieldMapping } = useInstallIntegrationProps();
   const { state } = useWizard();
   const { selectedObjects, currentObjectIndex } = state;
 
   const objectTabs = useMemo(() => {
     return selectedObjects.map((objName, objIndex) => {
-      const pages = getSubPages(manifest, objName);
+      const pages = getSubPages(manifest, objName, fieldMapping);
       const displayName =
         manifest.getReadObject(objName)?.object?.displayName || objName;
 
@@ -35,7 +37,13 @@ export function ObjectTabs({ currentPageIndex, onTabClick }: ObjectTabsProps) {
 
       return { objName, displayName, dots, objIndex };
     });
-  }, [selectedObjects, manifest, currentObjectIndex, currentPageIndex]);
+  }, [
+    selectedObjects,
+    manifest,
+    fieldMapping,
+    currentObjectIndex,
+    currentPageIndex,
+  ]);
 
   return (
     <div className={styles.objectTabs}>

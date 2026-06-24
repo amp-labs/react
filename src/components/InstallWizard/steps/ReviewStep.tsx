@@ -13,6 +13,8 @@ import { handleServerError } from "src/utils/handleServerError";
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
+import { buildSubmissionConfig } from "./configure-objects/buildSubmissionConfig";
+
 import styles from "./reviewStep.module.css";
 
 export function ReviewStep() {
@@ -21,7 +23,8 @@ export function ReviewStep() {
   const manifest = useManifest();
   const localConfig = useLocalConfig();
   const { createInstallation, isPending } = useCreateInstallation();
-  const { onInstallSuccess, setInstallation } = useInstallIntegrationProps();
+  const { onInstallSuccess, setInstallation, fieldMapping } =
+    useInstallIntegrationProps();
 
   // Build summary data for each selected object
   const objectSummaries = useMemo(() => {
@@ -46,10 +49,25 @@ export function ReviewStep() {
         })
         .map((f) => ("fieldName" in f ? f.displayName || f.fieldName : ""));
 
-      // Configured field mappings (source → destination)
-      const allMapFields = [
+      // Configured field mappings (source → destination). Includes prop dynamic
+      // field mappings (entries with a mapToName and no fixed fieldName), deduped
+      // so a mapToName isn't listed twice.
+      const propDynamicMapFields = (fieldMapping?.[objectName] ?? [])
+        .filter((entry) => entry.mapToName && !entry.fieldName)
+        .map((entry) => ({
+          mapToName: entry.mapToName as string,
+          mapToDisplayName: entry.mapToDisplayName,
+        }));
+      const manifestMapFields = [
         ...(manifestObj?.getRequiredMapFields() ?? []),
         ...(manifestObj?.getOptionalMapFields() ?? []),
+      ];
+      const propMapToNames = new Set(
+        propDynamicMapFields.map((f) => f.mapToName),
+      );
+      const allMapFields = [
+        ...manifestMapFields.filter((f) => !propMapToNames.has(f.mapToName)),
+        ...propDynamicMapFields,
       ];
       const customerFields =
         manifest.getCustomerFieldsForObject(objectName).allFields ?? {};
@@ -90,13 +108,13 @@ export function ReviewStep() {
         bidirectional,
       };
     });
-  }, [selectedObjects, manifest, localConfig]);
+  }, [selectedObjects, manifest, localConfig, fieldMapping]);
 
   const handleCreate = useCallback(() => {
     setSubmissionError(null);
 
     createInstallation({
-      config: localConfig.draft,
+      config: buildSubmissionConfig(localConfig.draft, fieldMapping),
       onSuccess: (installation) => {
         setInstallation(installation);
         onInstallSuccess?.(installation.id, installation.config as Config);
@@ -109,6 +127,7 @@ export function ReviewStep() {
   }, [
     createInstallation,
     localConfig.draft,
+    fieldMapping,
     setSubmissionError,
     setInstallation,
     onInstallSuccess,
