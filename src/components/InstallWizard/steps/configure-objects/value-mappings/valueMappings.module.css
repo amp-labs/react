@@ -34,3 +34,10 @@
   font-size: var(--amp-font-size-md);
   color: var(--amp-text-secondary);
 }
+
+.valueMappingHint {
+  font-size: var(--amp-font-size-sm);
+  color: var(--amp-text-muted);
+  font-style: italic;
+  padding: var(--amp-space-1) 0;
+}

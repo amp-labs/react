@@ -42,8 +42,21 @@ export function ValueMappingBlock({
     [manifest, objectName, resolvedField],
   );
 
-  // Field-mapped units have no field selected yet — nothing to map.
-  if (!resolvedField) return null;
+  const hintBlock = (message: string) => (
+    <div className={styles.valueMappingBlock}>
+      <div className={styles.valueMappingBlockTitle}>
+        Map the values for {unit.displayName}
+      </div>
+      <div className={styles.valueMappingHint}>{message}</div>
+    </div>
+  );
+
+  // Field-mapped units have no field selected yet — prompt the user instead of
+  // hiding the section, so it's clear values will need mapping once a field is
+  // chosen.
+  if (!resolvedField) {
+    return hintBlock("Select a field above to map its values.");
+  }
 
   const validation = validateValueMapping(
     resolvedField,
@@ -51,8 +64,14 @@ export function ValueMappingBlock({
     fieldMetadata ?? undefined,
   );
   if (!validation.isValid) {
-    console.error(validation.errorMessage, unit);
-    return null;
+    const isSelectType = ["singleSelect", "multiSelect"].includes(
+      fieldMetadata?.valueType ?? "",
+    );
+    return hintBlock(
+      isSelectType
+        ? "The selected field's values can't be mapped to these options."
+        : "Select a picklist (single/multi-select) field to map its values.",
+    );
   }
 
   const allOptions = fieldMetadata?.values ?? [];
