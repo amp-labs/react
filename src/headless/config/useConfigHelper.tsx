@@ -26,6 +26,15 @@ export type ReadObjectHandlers = {
   getFieldMapping: (fieldName: string) => string | undefined;
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
   deleteFieldMapping: (mapToName: string) => void;
+  getValueMapping: (
+    fieldName: string,
+    sourceValue: string,
+  ) => string | undefined;
+  setValueMapping: (params: {
+    fieldName: string;
+    sourceValue: string;
+    targetValue: string;
+  }) => void;
 };
 
 export type WriteObjectHandlers = {
@@ -212,6 +221,31 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
 
             if (selectedFieldMappings && mapToName in selectedFieldMappings) {
               delete selectedFieldMappings[mapToName];
+            }
+          }),
+        );
+      },
+
+      getValueMapping: (fieldName: string, sourceValue: string) =>
+        draft.read?.objects?.[objectName]?.selectedValueMappings?.[fieldName]?.[
+          sourceValue
+        ],
+
+      setValueMapping: ({ fieldName, sourceValue, targetValue }) => {
+        setDraft((prev) =>
+          produce(prev, (_draft) => {
+            const { obj } = initializeObjectWithDefaults(objectName, _draft);
+
+            // Initialize selectedValueMappings structure if it doesn't exist
+            obj.selectedValueMappings = obj.selectedValueMappings || {};
+            obj.selectedValueMappings[fieldName] =
+              obj.selectedValueMappings[fieldName] || {};
+
+            // An empty target clears the mapping for this source value
+            if (targetValue === "") {
+              delete obj.selectedValueMappings[fieldName][sourceValue];
+            } else {
+              obj.selectedValueMappings[fieldName][sourceValue] = targetValue;
             }
           }),
         );
