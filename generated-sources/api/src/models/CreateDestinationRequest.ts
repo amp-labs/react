@@ -64,7 +64,8 @@ export interface CreateDestinationRequest {
  */
 export const CreateDestinationRequestTypeEnum = {
     Webhook: 'webhook',
-    Kinesis: 'kinesis'
+    Kinesis: 'kinesis',
+    S3: 's3'
 } as const;
 export type CreateDestinationRequestTypeEnum = typeof CreateDestinationRequestTypeEnum[keyof typeof CreateDestinationRequestTypeEnum];
 

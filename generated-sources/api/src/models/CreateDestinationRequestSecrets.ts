@@ -20,19 +20,19 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateDestinationRequestSecrets {
     /**
-     * The AWS access key ID for the Kinesis destination.
+     * The AWS access key ID for the Kinesis or S3 destination.
      * @type {string}
      * @memberof CreateDestinationRequestSecrets
      */
     awsKeyId?: string;
     /**
-     * The AWS secret access key for the Kinesis destination.
+     * The AWS secret access key for the Kinesis or S3 destination.
      * @type {string}
      * @memberof CreateDestinationRequestSecrets
      */
     awsSecretKey?: string;
     /**
-     * The AWS session token for the Kinesis destination.
+     * The AWS session token for the Kinesis or S3 destination.
      * @type {string}
      * @memberof CreateDestinationRequestSecrets
      */
