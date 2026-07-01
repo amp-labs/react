@@ -32,7 +32,7 @@ export interface UpdateDestinationRequestDestinationMetadata {
      */
     headers?: { [key: string]: string; } | null;
     /**
-     * The AWS region where the kinesis destination is hosted.
+     * The AWS region where the Kinesis or S3 destination is hosted.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
@@ -55,6 +55,24 @@ export interface UpdateDestinationRequestDestinationMetadata {
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
     partitionKeyTemplate?: string;
+    /**
+     * The name of the S3 bucket to write objects to.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    bucket?: string;
+    /**
+     * The template for the S3 object key to use when writing objects (a JMESPath template). If omitted, the key defaults to the message timestamp followed by the message ID.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    keyTemplate?: string;
+    /**
+     * The S3 storage class for written objects. Defaults to STANDARD. Common values include STANDARD, STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, GLACIER_IR, and DEEP_ARCHIVE.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    storageClass?: string;
 }
 
 /**
@@ -82,6 +100,9 @@ export function UpdateDestinationRequestDestinationMetadataFromJSONTyped(json: a
         'streamName': !exists(json, 'streamName') ? undefined : json['streamName'],
         'endpointUrl': !exists(json, 'endpointUrl') ? undefined : json['endpointUrl'],
         'partitionKeyTemplate': !exists(json, 'partitionKeyTemplate') ? undefined : json['partitionKeyTemplate'],
+        'bucket': !exists(json, 'bucket') ? undefined : json['bucket'],
+        'keyTemplate': !exists(json, 'keyTemplate') ? undefined : json['keyTemplate'],
+        'storageClass': !exists(json, 'storageClass') ? undefined : json['storageClass'],
     };
 }
 
@@ -100,6 +121,9 @@ export function UpdateDestinationRequestDestinationMetadataToJSON(value?: Update
         'streamName': value.streamName,
         'endpointUrl': value.endpointUrl,
         'partitionKeyTemplate': value.partitionKeyTemplate,
+        'bucket': value.bucket,
+        'keyTemplate': value.keyTemplate,
+        'storageClass': value.storageClass,
     };
 }
 

@@ -27,7 +27,7 @@ import {
 } from './OperationMetadataRetry';
 
 /**
- * Additional operation details (e.g. objects, retry info, backfill progress, successfulRecordIds).
+ * Additional operation details (e.g. objects, retry info, read progress, successfulRecordIds).
  * @export
  * @interface OperationMetadata
  */

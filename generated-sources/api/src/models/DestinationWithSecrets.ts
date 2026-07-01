@@ -39,13 +39,13 @@ export interface DestinationWithSecrets {
      */
     id: string;
     /**
-     * User-defined name for the destination
+     * User-defined name for the destination.
      * @type {string}
      * @memberof DestinationWithSecrets
      */
     name: string;
     /**
-     * The type of the destination
+     * The type of the destination.
      * @type {string}
      * @memberof DestinationWithSecrets
      */
