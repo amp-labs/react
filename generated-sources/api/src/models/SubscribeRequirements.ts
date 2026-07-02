@@ -37,6 +37,12 @@ export interface SubscribeRequirements {
      * @memberof SubscribeRequirements
      */
     postProcess?: boolean;
+    /**
+     * Whether the provider supports programmatic subscription via API. If false, provider may still support webhooks via manual configuration in UI. 
+     * @type {boolean}
+     * @memberof SubscribeRequirements
+     */
+    subscribeByAPI?: boolean;
 }
 
 /**
@@ -61,6 +67,7 @@ export function SubscribeRequirementsFromJSONTyped(json: any, ignoreDiscriminato
         'registration': !exists(json, 'registration') ? undefined : json['registration'],
         'maintenance': !exists(json, 'maintenance') ? undefined : json['maintenance'],
         'postProcess': !exists(json, 'postProcess') ? undefined : json['postProcess'],
+        'subscribeByAPI': !exists(json, 'subscribeByAPI') ? undefined : json['subscribeByAPI'],
     };
 }
 
@@ -76,6 +83,7 @@ export function SubscribeRequirementsToJSON(value?: SubscribeRequirements | null
         'registration': value.registration,
         'maintenance': value.maintenance,
         'postProcess': value.postProcess,
+        'subscribeByAPI': value.subscribeByAPI,
     };
 }
 

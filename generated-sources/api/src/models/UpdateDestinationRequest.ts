@@ -35,6 +35,9 @@ export interface UpdateDestinationRequest {
      * - metadata.streamName
      * - metadata.endpointUrl
      * - metadata.partitionKeyTemplate
+     * - metadata.bucket
+     * - metadata.keyTemplate
+     * - metadata.storageClass
      * - secrets.awsKeyId
      * - secrets.awsSecretKey
      * - secrets.awsSessionToken
