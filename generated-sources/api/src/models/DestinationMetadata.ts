@@ -49,6 +49,24 @@ export interface DestinationMetadata {
      * @memberof DestinationMetadata
      */
     partitionKeyTemplate?: string;
+    /**
+     * The name of the S3 bucket
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    bucket?: string;
+    /**
+     * JMESPath template for generating S3 object keys
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    keyTemplate?: string;
+    /**
+     * The S3 storage class for written objects (defaults to STANDARD)
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    storageClass?: string;
 }
 
 /**
@@ -75,6 +93,9 @@ export function DestinationMetadataFromJSONTyped(json: any, ignoreDiscriminator:
         'streamName': !exists(json, 'streamName') ? undefined : json['streamName'],
         'region': !exists(json, 'region') ? undefined : json['region'],
         'partitionKeyTemplate': !exists(json, 'partitionKeyTemplate') ? undefined : json['partitionKeyTemplate'],
+        'bucket': !exists(json, 'bucket') ? undefined : json['bucket'],
+        'keyTemplate': !exists(json, 'keyTemplate') ? undefined : json['keyTemplate'],
+        'storageClass': !exists(json, 'storageClass') ? undefined : json['storageClass'],
     };
 }
 
@@ -92,6 +113,9 @@ export function DestinationMetadataToJSON(value?: DestinationMetadata | null): a
         'streamName': value.streamName,
         'region': value.region,
         'partitionKeyTemplate': value.partitionKeyTemplate,
+        'bucket': value.bucket,
+        'keyTemplate': value.keyTemplate,
+        'storageClass': value.storageClass,
     };
 }
 

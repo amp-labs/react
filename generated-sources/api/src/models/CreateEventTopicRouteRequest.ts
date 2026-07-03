@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { NotificationEventType } from './NotificationEventType';
+import {
+    NotificationEventTypeFromJSON,
+    NotificationEventTypeFromJSONTyped,
+    NotificationEventTypeToJSON,
+} from './NotificationEventType';
+
 /**
  * 
  * @export
@@ -20,11 +27,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateEventTopicRouteRequest {
     /**
-     * The type of notification event.
-     * @type {string}
+     * 
+     * @type {NotificationEventType}
      * @memberof CreateEventTopicRouteRequest
      */
-    eventType: CreateEventTopicRouteRequestEventTypeEnum;
+    eventType: NotificationEventType;
     /**
      * The ID of the topic to route events to.
      * @type {string}
@@ -32,26 +39,6 @@ export interface CreateEventTopicRouteRequest {
      */
     topicId: string;
 }
-
-
-/**
- * @export
- */
-export const CreateEventTopicRouteRequestEventTypeEnum = {
-    ReadBackfillDone: 'read.backfill.done',
-    ConnectionCreated: 'connection.created',
-    ConnectionError: 'connection.error',
-    ConnectionRefreshed: 'connection.refreshed',
-    ConnectionDeleted: 'connection.deleted',
-    InstallationCreated: 'installation.created',
-    InstallationUpdated: 'installation.updated',
-    InstallationDeleted: 'installation.deleted',
-    ReadSchedulePaused: 'read.schedule.paused',
-    WriteAsyncDone: 'write.async.done',
-    DestinationWebhookDisabled: 'destination.webhook.disabled'
-} as const;
-export type CreateEventTopicRouteRequestEventTypeEnum = typeof CreateEventTopicRouteRequestEventTypeEnum[keyof typeof CreateEventTopicRouteRequestEventTypeEnum];
-
 
 /**
  * Check if a given object implements the CreateEventTopicRouteRequest interface.
@@ -74,7 +61,7 @@ export function CreateEventTopicRouteRequestFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'eventType': json['eventType'],
+        'eventType': NotificationEventTypeFromJSON(json['eventType']),
         'topicId': json['topicId'],
     };
 }
@@ -88,7 +75,7 @@ export function CreateEventTopicRouteRequestToJSON(value?: CreateEventTopicRoute
     }
     return {
         
-        'eventType': value.eventType,
+        'eventType': NotificationEventTypeToJSON(value.eventType),
         'topicId': value.topicId,
     };
 }

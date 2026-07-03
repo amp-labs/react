@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { SubscribeRequirements } from './SubscribeRequirements';
+import {
+    SubscribeRequirementsFromJSON,
+    SubscribeRequirementsFromJSONTyped,
+    SubscribeRequirementsToJSON,
+} from './SubscribeRequirements';
 import type { Support } from './Support';
 import {
     SupportFromJSON,
@@ -44,6 +50,12 @@ export interface ModuleInfo {
      * @memberof ModuleInfo
      */
     support: Support;
+    /**
+     * 
+     * @type {SubscribeRequirements}
+     * @memberof ModuleInfo
+     */
+    subscribeRequirements?: SubscribeRequirements;
 }
 
 /**
@@ -71,6 +83,7 @@ export function ModuleInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'displayName': json['displayName'],
         'baseURL': json['baseURL'],
         'support': SupportFromJSON(json['support']),
+        'subscribeRequirements': !exists(json, 'subscribeRequirements') ? undefined : SubscribeRequirementsFromJSON(json['subscribeRequirements']),
     };
 }
 
@@ -86,6 +99,7 @@ export function ModuleInfoToJSON(value?: ModuleInfo | null): any {
         'displayName': value.displayName,
         'baseURL': value.baseURL,
         'support': SupportToJSON(value.support),
+        'subscribeRequirements': SubscribeRequirementsToJSON(value.subscribeRequirements),
     };
 }
 
