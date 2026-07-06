@@ -33,13 +33,13 @@ export interface Destination {
      */
     id: string;
     /**
-     * User-defined name for the destination
+     * User-defined name for the destination.
      * @type {string}
      * @memberof Destination
      */
     name: string;
     /**
-     * The type of the destination
+     * The type of the destination.
      * @type {string}
      * @memberof Destination
      */
