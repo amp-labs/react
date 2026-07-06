@@ -98,6 +98,13 @@ export interface Oauth2Opts {
      * @memberof Oauth2Opts
      */
     accessTokenOpts?: AccessTokenOpts;
+    /**
+     * How many hours between proactive token keep-alive refreshes for this provider.
+     * Token-manager adds a random stagger offset on top. If absent, defaults to 24.
+     * @type {number}
+     * @memberof Oauth2Opts
+     */
+    keepAliveIntervalHours?: number;
 }
 
 
@@ -148,6 +155,7 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
         'authURLParams': !exists(json, 'authURLParams') ? undefined : json['authURLParams'],
         'accessTokenOpts': !exists(json, 'accessTokenOpts') ? undefined : AccessTokenOptsFromJSON(json['accessTokenOpts']),
+        'keepAliveIntervalHours': !exists(json, 'keepAliveIntervalHours') ? undefined : json['keepAliveIntervalHours'],
     };
 }
 
@@ -171,6 +179,7 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'docsURL': value.docsURL,
         'authURLParams': value.authURLParams,
         'accessTokenOpts': AccessTokenOptsToJSON(value.accessTokenOpts),
+        'keepAliveIntervalHours': value.keepAliveIntervalHours,
     };
 }
 

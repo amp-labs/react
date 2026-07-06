@@ -38,7 +38,7 @@ export interface Org {
      */
     defaultTeamId: string;
     /**
-     * The time the organization was created.
+     * The time at which the organization was created.
      * @type {Date}
      * @memberof Org
      */
