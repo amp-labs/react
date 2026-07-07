@@ -21,6 +21,7 @@ export const NotificationEventType = {
     ConnectionCreated: 'connection.created',
     ConnectionError: 'connection.error',
     ConnectionRefreshed: 'connection.refreshed',
+    ConnectionUpdated: 'connection.updated',
     ConnectionDeleted: 'connection.deleted',
     InstallationCreated: 'installation.created',
     InstallationUpdated: 'installation.updated',
