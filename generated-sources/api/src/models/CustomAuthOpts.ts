@@ -56,6 +56,18 @@ export interface CustomAuthOpts {
      * @memberof CustomAuthOpts
      */
     inputs?: Array<CustomAuthInput>;
+    /**
+     * Input fields the builder configures on their provider app (e.g. client secrets, subscription keys) rather than the consumer. Routed to storage by fieldType. Optional.
+     * @type {Array<CustomAuthInput>}
+     * @memberof CustomAuthOpts
+     */
+    providerInputs?: Array<CustomAuthInput>;
+    /**
+     * Whether this provider uses a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls) driven by the /custom-auth/connect endpoint, rather than static header/query-param injection. The step definitions and handlers live in the connectors library, not the catalog; this flag is the signal that lets clients tell "multi-step custom" apart from plain "custom" at a glance.
+     * @type {boolean}
+     * @memberof CustomAuthOpts
+     */
+    multiStep?: boolean;
 }
 
 /**
@@ -80,6 +92,8 @@ export function CustomAuthOptsFromJSONTyped(json: any, ignoreDiscriminator: bool
         'headers': !exists(json, 'headers') ? undefined : ((json['headers'] as Array<any>).map(CustomAuthHeaderFromJSON)),
         'queryParams': !exists(json, 'queryParams') ? undefined : ((json['queryParams'] as Array<any>).map(CustomAuthQueryParamFromJSON)),
         'inputs': !exists(json, 'inputs') ? undefined : ((json['inputs'] as Array<any>).map(CustomAuthInputFromJSON)),
+        'providerInputs': !exists(json, 'providerInputs') ? undefined : ((json['providerInputs'] as Array<any>).map(CustomAuthInputFromJSON)),
+        'multiStep': !exists(json, 'multiStep') ? undefined : json['multiStep'],
     };
 }
 
@@ -95,6 +109,8 @@ export function CustomAuthOptsToJSON(value?: CustomAuthOpts | null): any {
         'headers': value.headers === undefined ? undefined : ((value.headers as Array<any>).map(CustomAuthHeaderToJSON)),
         'queryParams': value.queryParams === undefined ? undefined : ((value.queryParams as Array<any>).map(CustomAuthQueryParamToJSON)),
         'inputs': value.inputs === undefined ? undefined : ((value.inputs as Array<any>).map(CustomAuthInputToJSON)),
+        'providerInputs': value.providerInputs === undefined ? undefined : ((value.providerInputs as Array<any>).map(CustomAuthInputToJSON)),
+        'multiStep': value.multiStep,
     };
 }
 

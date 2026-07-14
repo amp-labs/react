@@ -93,8 +93,13 @@ src/models/CreateProviderAppRequest.ts
 src/models/CreateRevisionRequest.ts
 src/models/CreateTopicDestinationRouteRequest.ts
 src/models/CreateTopicRequest.ts
+src/models/CustomAuthConnectRequest.ts
+src/models/CustomAuthConnectResponse.ts
+src/models/CustomAuthConnectResponseOneOf.ts
+src/models/CustomAuthConnectResponseOneOf1.ts
 src/models/CustomAuthHeader.ts
 src/models/CustomAuthInput.ts
+src/models/CustomAuthInputOption.ts
 src/models/CustomAuthOpts.ts
 src/models/CustomAuthQueryParam.ts
 src/models/DefaultPeriod.ts
@@ -198,6 +203,7 @@ src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
 src/models/ReadFilter.ts
+src/models/RedirectResponse.ts
 src/models/Revision.ts
 src/models/SearchOperators.ts
 src/models/SearchSupport.ts
