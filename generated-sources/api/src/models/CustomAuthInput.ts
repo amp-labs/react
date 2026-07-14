@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { CustomAuthInputOption } from './CustomAuthInputOption';
+import {
+    CustomAuthInputOptionFromJSON,
+    CustomAuthInputOptionFromJSONTyped,
+    CustomAuthInputOptionToJSON,
+} from './CustomAuthInputOption';
+
 /**
  * A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).
  * @export
@@ -43,7 +50,31 @@ export interface CustomAuthInput {
      * @memberof CustomAuthInput
      */
     docsURL?: string;
+    /**
+     * How the frontend should render this input. "fieldTypeText" is an unmasked field (not sensitive), "fieldTypePassword" is a masked field (sensitive), and "fieldTypeSelect" is a dropdown populated from options. Defaults to "fieldTypePassword" when omitted.
+     * @type {string}
+     * @memberof CustomAuthInput
+     */
+    fieldType?: CustomAuthInputFieldTypeEnum;
+    /**
+     * The dropdown options, used only when fieldType is "select".
+     * @type {Array<CustomAuthInputOption>}
+     * @memberof CustomAuthInput
+     */
+    options?: Array<CustomAuthInputOption>;
 }
+
+
+/**
+ * @export
+ */
+export const CustomAuthInputFieldTypeEnum = {
+    FieldTypeText: 'fieldTypeText',
+    FieldTypePassword: 'fieldTypePassword',
+    FieldTypeSelect: 'fieldTypeSelect'
+} as const;
+export type CustomAuthInputFieldTypeEnum = typeof CustomAuthInputFieldTypeEnum[keyof typeof CustomAuthInputFieldTypeEnum];
+
 
 /**
  * Check if a given object implements the CustomAuthInput interface.
@@ -70,6 +101,8 @@ export function CustomAuthInputFromJSONTyped(json: any, ignoreDiscriminator: boo
         'displayName': json['displayName'],
         'prompt': !exists(json, 'prompt') ? undefined : json['prompt'],
         'docsURL': !exists(json, 'docsURL') ? undefined : json['docsURL'],
+        'fieldType': !exists(json, 'fieldType') ? undefined : json['fieldType'],
+        'options': !exists(json, 'options') ? undefined : ((json['options'] as Array<any>).map(CustomAuthInputOptionFromJSON)),
     };
 }
 
@@ -86,6 +119,8 @@ export function CustomAuthInputToJSON(value?: CustomAuthInput | null): any {
         'displayName': value.displayName,
         'prompt': value.prompt,
         'docsURL': value.docsURL,
+        'fieldType': value.fieldType,
+        'options': value.options === undefined ? undefined : ((value.options as Array<any>).map(CustomAuthInputOptionToJSON)),
     };
 }
 
