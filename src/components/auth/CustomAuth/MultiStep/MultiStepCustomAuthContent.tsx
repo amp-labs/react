@@ -7,7 +7,7 @@ import {
 } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
-import { Select } from "src/components/form/Select";
+import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import { Button } from "src/components/ui-base/Button";
 import {
   AuthCardLayout,
@@ -35,29 +35,28 @@ function CustomInputField({
   input,
   value,
   onChange,
+  onValueChange,
 }: {
   input: CustomAuthInput;
   value: string;
   onChange: CustomInputChangeHandler;
+  onValueChange: (name: string, value: string) => void;
 }) {
   switch (input.fieldType) {
     case CustomAuthInputFieldTypeEnum.FieldTypeSelect:
       return (
-        <Select
-          id={input.name}
-          name={input.name}
-          value={value}
-          onChange={onChange}
-        >
-          <option value="" disabled>
-            Select an option
-          </option>
-          {(input.options || []).map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+        <ComboBox
+          items={(input.options || []).map((option) => ({
+            id: option.value,
+            label: option.label,
+            value: option.value,
+          }))}
+          selectedValue={value || null}
+          onSelectedItemChange={(item) =>
+            onValueChange(input.name, item?.value ?? "")
+          }
+          placeholder="Select an option"
+        />
       );
     case CustomAuthInputFieldTypeEnum.FieldTypeText:
       return (
@@ -96,14 +95,32 @@ function MultiStepCustomAuthForm({
 }: MultiStepCustomAuthFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>({});
 
-  const handleChange: CustomInputChangeHandler = (event) => {
-    const { name, value } = event.currentTarget;
+  const setFieldValue = (name: string, value: string) => {
     setFormData((prevData) => ({ ...prevData, [name]: value.trim() }));
   };
 
-  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
-  const isSubmitDisabled = isButtonDisabled || !isMetadataValid;
+  const handleChange: CustomInputChangeHandler = (event) => {
+    const { name, value } = event.currentTarget;
+    setFieldValue(name, value);
+  };
+
   const customInputs = providerInfo.customOpts?.inputs || [];
+
+  // Every custom input must be filled before continuing; a select must resolve to
+  // one of its declared options, which also rejects the empty placeholder.
+  const areCustomInputsValid = customInputs.every((input) => {
+    const value = (formData[input.name] ?? "").trim();
+
+    if (input.fieldType === CustomAuthInputFieldTypeEnum.FieldTypeSelect) {
+      return (input.options ?? []).some((option) => option.value === value);
+    }
+
+    return value !== "";
+  });
+
+  const isMetadataValid = isProviderMetadataValid(metadataInputs, formData);
+  const isSubmitDisabled =
+    isButtonDisabled || !isMetadataValid || !areCustomInputsValid;
 
   const onHandleSubmit = () => {
     const metadata = getProviderMetadata(metadataInputs, formData);
@@ -140,6 +157,7 @@ function MultiStepCustomAuthForm({
             input={input}
             value={formData[input.name] || ""}
             onChange={handleChange}
+            onValueChange={setFieldValue}
           />
         </div>
       ))}
