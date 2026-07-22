@@ -18,18 +18,22 @@ import { MultiStepCustomAuthContent } from "./MultiStepCustomAuthContent";
 const POPUP_WIDTH = 600; // px
 const POPUP_HEIGHT = 600; // px
 
+// The message source the custom-auth callback (served by the API) posts to
+// window.opener; we ignore any message that doesn't carry it.
+const CALLBACK_MESSAGE_SOURCE = "ampersand-custom-auth";
+
 // The custom-auth callback (served by the API) posts this to window.opener. It
 // is intentionally dumb: params are the raw query/body params the provider sent,
 // which we forward to /custom-auth/connect to resume the flow.
 type CustomAuthCallbackMessage = {
-  source: "ampersand-custom-auth";
+  source: typeof CALLBACK_MESSAGE_SOURCE;
   params: Record<string, string>;
 };
 
 /**
  * Drives a multi-step custom auth flow: submit the form to /custom-auth/connect,
  * and while the server returns a redirect, open it in a popup and resume with the
- * params the callback forwards, until the server returns a connection.
+ * params the callback forwards, until the server returns a successfully created Connection.
  */
 export function MultiStepCustomAuthFlow({
   providerInfo,
@@ -82,7 +86,7 @@ export function MultiStepCustomAuthFlow({
     const onMessage = (ev: MessageEvent<CustomAuthCallbackMessage>) => {
       // Accept only messages from the API origin (where the callback is served).
       if (ev.origin !== AMP_SERVER) return;
-      if (ev.data?.source !== "ampersand-custom-auth") return;
+      if (ev.data?.source !== CALLBACK_MESSAGE_SOURCE) return;
 
       const sessionId = sessionIdRef.current;
       popupRef.current?.close();
