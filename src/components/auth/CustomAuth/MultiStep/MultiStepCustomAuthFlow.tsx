@@ -104,7 +104,14 @@ export function MultiStepCustomAuthFlow({
     };
 
     window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
+
+    // Deps are stable (context value, react-query's memoized mutateAsync, a
+    // useCallback), so this cleanup runs only on unmount — close any popup still
+    // open (e.g. the consumer navigated away mid-flow) so it isn't orphaned.
+    return () => {
+      window.removeEventListener("message", onMessage);
+      popupRef.current?.close();
+    };
   }, [projectIdOrName, customAuthConnectAsync, handleResult]);
 
   const onNext = useCallback(
