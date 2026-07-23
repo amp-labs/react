@@ -10,6 +10,7 @@ import { handleServerError } from "src/utils/handleServerError";
 import { ApiKeyAuthFlow } from "components/auth/ApiKeyAuth/ApiKeyAuthFlow";
 import { BasicAuthFlow } from "components/auth/BasicAuth/BasicAuthFlow";
 import { CustomAuthFlow } from "components/auth/CustomAuth/CustomAuthFlow";
+import { MultiStepCustomAuthFlow } from "components/auth/CustomAuth/MultiStep/MultiStepCustomAuthFlow";
 import { NoAuthFlow } from "components/auth/NoAuth/NoAuthFlow";
 import { OauthFlow } from "components/auth/Oauth/OauthFlow/OauthFlow";
 import {
@@ -202,6 +203,13 @@ export function ProtectedConnectionLayout({
   }
 
   if (providerInfo.authType === "custom") {
+    if (providerInfo.customOpts?.multiStep) {
+      return (
+        <MultiStepCustomAuthFlow {...sharedProps}>
+          {children}
+        </MultiStepCustomAuthFlow>
+      );
+    }
     return <CustomAuthFlow {...sharedProps}>{children}</CustomAuthFlow>;
   }
 

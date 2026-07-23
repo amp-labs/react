@@ -17,6 +17,8 @@ import * as runtime from '../runtime';
 import type {
   ApiProblem,
   Connection,
+  CustomAuthConnectRequest,
+  CustomAuthConnectResponse,
   GenerateConnectionRequest,
   InputValidationProblem,
   UpdateConnectionRequest,
@@ -26,6 +28,10 @@ import {
     ApiProblemToJSON,
     ConnectionFromJSON,
     ConnectionToJSON,
+    CustomAuthConnectRequestFromJSON,
+    CustomAuthConnectRequestToJSON,
+    CustomAuthConnectResponseFromJSON,
+    CustomAuthConnectResponseToJSON,
     GenerateConnectionRequestFromJSON,
     GenerateConnectionRequestToJSON,
     InputValidationProblemFromJSON,
@@ -33,6 +39,10 @@ import {
     UpdateConnectionRequestFromJSON,
     UpdateConnectionRequestToJSON,
 } from '../models';
+
+export interface CustomAuthConnectOperationRequest {
+    customAuthConnectParams: CustomAuthConnectRequest;
+}
 
 export interface DeleteConnectionRequest {
     projectIdOrName: string;
@@ -72,6 +82,22 @@ export interface UpdateConnectionOperationRequest {
  * @interface ConnectionApiInterface
  */
 export interface ConnectionApiInterface {
+    /**
+     * Drives a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls). Call it once with the flow inputs to start; if the response contains a redirect, open it, then call again with the returned sessionId and the provider\'s callback params to continue. Repeat until the response contains a connection. Used by the prebuilt UI components; only providers whose ProviderInfo has customOpts.multiStep present can use this endpoint. 
+     * @summary Start or continue a multi-step custom auth flow
+     * @param {CustomAuthConnectRequest} customAuthConnectParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ConnectionApiInterface
+     */
+    customAuthConnectRaw(requestParameters: CustomAuthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomAuthConnectResponse>>;
+
+    /**
+     * Drives a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls). Call it once with the flow inputs to start; if the response contains a redirect, open it, then call again with the returned sessionId and the provider\'s callback params to continue. Repeat until the response contains a connection. Used by the prebuilt UI components; only providers whose ProviderInfo has customOpts.multiStep present can use this endpoint. 
+     * Start or continue a multi-step custom auth flow
+     */
+    customAuthConnect(requestParameters: CustomAuthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomAuthConnectResponse>;
+
     /**
      * 
      * @summary Delete a connection
@@ -166,6 +192,53 @@ export interface ConnectionApiInterface {
  * 
  */
 export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInterface {
+
+    /**
+     * Drives a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls). Call it once with the flow inputs to start; if the response contains a redirect, open it, then call again with the returned sessionId and the provider\'s callback params to continue. Repeat until the response contains a connection. Used by the prebuilt UI components; only providers whose ProviderInfo has customOpts.multiStep present can use this endpoint. 
+     * Start or continue a multi-step custom auth flow
+     */
+    async customAuthConnectRaw(requestParameters: CustomAuthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomAuthConnectResponse>> {
+        if (requestParameters.customAuthConnectParams === null || requestParameters.customAuthConnectParams === undefined) {
+            throw new runtime.RequiredError('customAuthConnectParams','Required parameter requestParameters.customAuthConnectParams was null or undefined when calling customAuthConnect.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/custom-auth/connect`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CustomAuthConnectRequestToJSON(requestParameters.customAuthConnectParams),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CustomAuthConnectResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Drives a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls). Call it once with the flow inputs to start; if the response contains a redirect, open it, then call again with the returned sessionId and the provider\'s callback params to continue. Repeat until the response contains a connection. Used by the prebuilt UI components; only providers whose ProviderInfo has customOpts.multiStep present can use this endpoint. 
+     * Start or continue a multi-step custom auth flow
+     */
+    async customAuthConnect(requestParameters: CustomAuthConnectOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomAuthConnectResponse> {
+        const response = await this.customAuthConnectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Delete a connection
