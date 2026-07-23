@@ -7,8 +7,8 @@ import {
 } from "@generated/api/src";
 import { AuthErrorAlert } from "src/components/auth/AuthErrorAlert/AuthErrorAlert";
 import { FormComponent } from "src/components/form";
-import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import { Button } from "src/components/ui-base/Button";
+import { ComboBox } from "src/components/ui-base/ComboBox/ComboBox";
 import {
   AuthCardLayout,
   AuthTitle,
