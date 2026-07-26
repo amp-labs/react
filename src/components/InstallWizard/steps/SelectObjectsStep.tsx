@@ -3,6 +3,7 @@ import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useProvider } from "src/hooks/useProvider";
+import { isUnresolvedReadObject } from "src/utils/manifest";
 
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
@@ -38,15 +39,22 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
-  // Build a set of object names that have write support in the manifest
+  // Build a set of object names that have write support in the manifest.
+  // Unresolved mapped objects have no objectName yet, so skip write detection.
   const writeSupported = useMemo(() => {
     const set = new Set<string>();
     readObjects.forEach((obj) => {
+      if (!obj.objectName) return;
       const writeObj = manifest.getWriteObject(obj.objectName);
       if (writeObj?.object) set.add(obj.objectName);
     });
     return set;
   }, [readObjects, manifest]);
+
+  // Stable identifier: real objectName if present, else mapToName.
+  // Unresolved objects are keyed by mapToName until the user resolves them.
+  const getStableKey = (obj: { objectName?: string; mapToName?: string }) =>
+    obj.objectName || obj.mapToName || "";
 
   const toggleObject = useCallback((objectName: string) => {
     setSelected((prev) => {
@@ -78,8 +86,16 @@ export function SelectObjectsStep() {
 
     setSelectedObjects(selectedArray);
 
-    // Initialize newly selected objects in the config draft
+    const unresolvedKeys = new Set(
+      readObjects
+        .filter(isUnresolvedReadObject)
+        .map((obj) => obj.mapToName as string),
+    );
+
+    // Initialize newly selected objects in the config draft. Skip unresolved
+    // mapped objects — their draft entry is created once the user resolves them.
     selectedArray.forEach((objectName) => {
+      if (unresolvedKeys.has(objectName)) return;
       localConfig.readObject(objectName).setEnableRead();
     });
 
@@ -111,6 +127,7 @@ export function SelectObjectsStep() {
     writeSupported,
     writeEnabled,
     nextStep,
+    readObjects,
   ]);
 
   const isValid = selected.size > 0;
@@ -144,13 +161,21 @@ export function SelectObjectsStep() {
 
       <div className={styles.objectList}>
         {readObjects.map((obj) => {
-          const isSelected = selected.has(obj.objectName);
-          const hasWrite = writeSupported.has(obj.objectName);
-          const isWriteOn = writeEnabled.has(obj.objectName);
+          const key = getStableKey(obj);
+          const isUnresolved = isUnresolvedReadObject(obj);
+          const isSelected = selected.has(key);
+          const hasWrite = !isUnresolved && writeSupported.has(key);
+          const isWriteOn = writeEnabled.has(key);
+          const label =
+            obj.displayName ||
+            obj.mapToDisplayName ||
+            obj.objectName ||
+            obj.mapToName ||
+            "";
 
           return (
             <div
-              key={obj.objectName}
+              key={key}
               role="checkbox"
               aria-checked={isSelected}
               tabIndex={0}
@@ -160,7 +185,7 @@ export function SelectObjectsStep() {
                   `.${styles.writeToggle}`,
                 );
                 if (isWriteToggle) return;
-                toggleObject(obj.objectName);
+                toggleObject(key);
               }}
               onKeyDown={(e) => {
                 const isWriteToggle = (e.target as HTMLElement).closest(
@@ -169,7 +194,7 @@ export function SelectObjectsStep() {
                 if (isWriteToggle) return;
                 if (e.key === " " || e.key === "Enter") {
                   e.preventDefault();
-                  toggleObject(obj.objectName);
+                  toggleObject(key);
                 }
               }}
             >
@@ -178,26 +203,27 @@ export function SelectObjectsStep() {
                 className={styles.checkbox}
                 checked={isSelected}
                 tabIndex={-1}
-                onChange={() => toggleObject(obj.objectName)}
+                onChange={() => toggleObject(key)}
                 onClick={(e) => e.stopPropagation()}
               />
               <div className={styles.objectInfo}>
-                <span className={styles.objectName}>
-                  {obj.displayName || obj.objectName}
-                </span>
+                <span className={styles.objectName}>{label}</span>
+                {isUnresolved && (
+                  <span className={styles.needsSetupBadge}>Needs setup</span>
+                )}
               </div>
               {hasWrite && isSelected && (
                 <label className={styles.writeToggle}>
                   <span className={styles.writeToggleLabel}>Write Enabled</span>
                   <InfoTooltip
-                    text={`Allow ${appName} to write back to ${obj.displayName || obj.objectName}`}
+                    text={`Allow ${appName} to write back to ${label}`}
                   />
                   <span className={styles.toggleSwitch}>
                     <input
                       type="checkbox"
-                      aria-label={`Enable write for ${obj.displayName || obj.objectName}`}
+                      aria-label={`Enable write for ${label}`}
                       checked={isWriteOn}
-                      onChange={() => toggleWrite(obj.objectName)}
+                      onChange={() => toggleWrite(key)}
                     />
                     <span className={styles.toggleSlider} />
                   </span>

@@ -22,11 +22,14 @@ import {
   HydratedIntegrationWriteObject,
   IntegrationFieldMapping,
 } from "@generated/api/src";
+import { useOptionalResolvedMappedObjects } from "src/components/InstallWizard/state/ResolvedMappedObjectsProvider";
 import {
   getOptionalFieldsFromObject,
   getOptionalMapFieldsFromObject,
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
+  hydrateResolvedMappedObject,
+  isUnresolvedReadObject,
 } from "src/utils/manifest";
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
@@ -85,15 +88,30 @@ export function useManifest() {
   } = hydratedRevisionQuery;
 
   const content = hydratedRevision?.content;
+  const { resolutions } = useOptionalResolvedMappedObjects();
+
+  const mergedReadObjects = useMemo<HydratedIntegrationObject[]>(() => {
+    const readObjects = content?.read?.objects ?? [];
+    if (Object.keys(resolutions).length === 0) return readObjects;
+    return readObjects.map((obj) => {
+      if (!isUnresolvedReadObject(obj)) return obj;
+      const resolution = obj.mapToName ? resolutions[obj.mapToName] : undefined;
+      if (!resolution) return obj;
+      return hydrateResolvedMappedObject(
+        obj,
+        resolution.resolvedObjectName,
+        resolution.metadata,
+      );
+    });
+  }, [content?.read?.objects, resolutions]);
 
   const manifest: Manifest = useMemo(
     () => ({
-      getReadObjects: (): HydratedIntegrationObject[] =>
-        content?.read?.objects ?? [],
+      getReadObjects: (): HydratedIntegrationObject[] => mergedReadObjects,
       getReadObject: (objectName: string) => {
-        const object = content?.read?.objects?.find(
-          (obj) => obj.objectName === objectName,
-        );
+        const object =
+          mergedReadObjects.find((obj) => obj.objectName === objectName) ??
+          mergedReadObjects.find((obj) => obj.mapToName === objectName);
         if (!object) {
           console.error(`Object ${objectName} not found`);
           return {
@@ -145,9 +163,9 @@ export function useManifest() {
         return { object };
       },
       getCustomerFieldsForObject: (objectName: string) => {
-        const object = content?.read?.objects?.find(
-          (obj) => obj.objectName === objectName,
-        );
+        const object =
+          mergedReadObjects.find((obj) => obj.objectName === objectName) ??
+          mergedReadObjects.find((obj) => obj.mapToName === objectName);
         if (!object) {
           console.error(`Object ${objectName} not found`);
           return { allFields: null, getField: () => null };
@@ -165,7 +183,7 @@ export function useManifest() {
         };
       },
     }),
-    [content?.read?.objects, content?.write?.objects],
+    [mergedReadObjects, content?.write?.objects],
   );
 
   return {

@@ -65,6 +65,17 @@
   border-radius: var(--amp-radius-sm);
 }
 
+.needsSetupBadge {
+  display: inline-block;
+  width: fit-content;
+  font-size: var(--amp-font-size-sm);
+  padding: var(--amp-space-1) 0.625rem;
+  background: var(--amp-surface-secondary);
+  color: var(--amp-text-muted);
+  border-radius: var(--amp-radius-sm);
+  font-weight: var(--amp-font-medium);
+}
+
 /* Write Toggle */
 .writeToggle {
   display: flex;

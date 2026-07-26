@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useManifest } from "src/headless";
+import { isUnresolvedReadObject } from "src/utils/manifest";
 
 import { useWizard } from "../../wizard/WizardContext";
 
@@ -20,8 +21,11 @@ export function ObjectTabs({ currentPageIndex, onTabClick }: ObjectTabsProps) {
   const objectTabs = useMemo(() => {
     return selectedObjects.map((objName, objIndex) => {
       const pages = getSubPages(manifest, objName);
-      const displayName =
-        manifest.getReadObject(objName)?.object?.displayName || objName;
+      const object = manifest.getReadObject(objName)?.object ?? null;
+      const isUnresolved = !!object && isUnresolvedReadObject(object);
+      const displayName = isUnresolved
+        ? (object?.mapToDisplayName ?? object?.mapToName ?? objName)
+        : object?.displayName || objName;
 
       const dots = pages.map((_, pageIdx) => {
         if (objIndex < currentObjectIndex) return "complete" as const;
@@ -33,7 +37,7 @@ export function ObjectTabs({ currentPageIndex, onTabClick }: ObjectTabsProps) {
         return "pending" as const;
       });
 
-      return { objName, displayName, dots, objIndex };
+      return { objName, displayName, dots, objIndex, isUnresolved };
     });
   }, [selectedObjects, manifest, currentObjectIndex, currentPageIndex]);
 
@@ -47,7 +51,12 @@ export function ObjectTabs({ currentPageIndex, onTabClick }: ObjectTabsProps) {
           disabled={tab.objIndex > currentObjectIndex}
           onClick={() => onTabClick(tab.objIndex)}
         >
-          <span className={styles.objectTabLabel}>{tab.displayName}</span>
+          <span className={styles.objectTabLabel}>
+            {tab.displayName}
+            {tab.isUnresolved && (
+              <span className={styles.needsSetupBadge}>Needs setup</span>
+            )}
+          </span>
           <span className={styles.objectTabDots}>
             {tab.dots.map((status, dotIdx) => (
               <span
