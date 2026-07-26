@@ -1,0 +1,43 @@
+.valueMappingSection {
+  margin-top: var(--amp-space-4);
+}
+
+.valueMappingBlock {
+  margin-bottom: var(--amp-space-4);
+}
+
+.valueMappingBlock:last-of-type {
+  margin-bottom: 0;
+}
+
+.valueMappingBlockTitle {
+  font-size: var(--amp-font-size-sm);
+  font-weight: var(--amp-font-semibold);
+  color: var(--amp-text-secondary);
+  margin-bottom: var(--amp-space-2);
+}
+
+.valueMappingRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-2) 0;
+  border-bottom: 1px solid var(--amp-border-default);
+}
+
+.valueMappingRow:last-of-type {
+  border-bottom: none;
+}
+
+.valueMappingLabel {
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-secondary);
+}
+
+.valueMappingHint {
+  font-size: var(--amp-font-size-sm);
+  color: var(--amp-text-muted);
+  font-style: italic;
+  padding: var(--amp-space-1) 0;
+}

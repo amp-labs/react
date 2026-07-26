@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { useManifest } from "src/headless";
 
 import { useWizard } from "../../wizard/WizardContext";
 
 import type { SubPage } from "./subPageUtils";
-import { getInitialSubPage, getLastSubPage, getSubPages } from "./subPageUtils";
+import {
+  getInitialSubPage,
+  getLastSubPage,
+  getSubPages,
+  hasObjectMappings,
+} from "./subPageUtils";
 
 export function useSubPageNavigation() {
   const manifest = useManifest();
+  const { fieldMapping } = useInstallIntegrationProps();
   const {
     state,
     isFirstObject,
@@ -27,7 +34,7 @@ export function useSubPageNavigation() {
   // has mappings).
   const [subPage, setSubPage] = useState<SubPage>(() =>
     currentObjectName
-      ? getInitialSubPage(manifest, currentObjectName)
+      ? getInitialSubPage(manifest, currentObjectName, fieldMapping)
       : "fields",
   );
   const pendingSubPageRef = useRef<SubPage | null>(null);
@@ -43,9 +50,9 @@ export function useSubPageNavigation() {
       setSubPage(pendingSubPageRef.current);
       pendingSubPageRef.current = null;
     } else if (currentObjectName) {
-      setSubPage(getInitialSubPage(manifest, currentObjectName));
+      setSubPage(getInitialSubPage(manifest, currentObjectName, fieldMapping));
     }
-  }, [currentObjectName, manifest]);
+  }, [currentObjectName, manifest, fieldMapping]);
 
   // Derived booleans for current object
   const currentManifestObject = useMemo(() => {
@@ -53,11 +60,12 @@ export function useSubPageNavigation() {
     return manifest.getReadObject(currentObjectName);
   }, [manifest, currentObjectName]);
 
-  const hasMappings = useMemo(() => {
-    const required = currentManifestObject?.getRequiredMapFields()?.length ?? 0;
-    const optional = currentManifestObject?.getOptionalMapFields()?.length ?? 0;
-    return required > 0 || optional > 0;
-  }, [currentManifestObject]);
+  const hasMappings = useMemo(
+    () =>
+      !!currentObjectName &&
+      hasObjectMappings(manifest, currentObjectName, fieldMapping),
+    [manifest, currentObjectName, fieldMapping],
+  );
 
   const hasOptionalFields = useMemo(() => {
     return (
@@ -129,7 +137,11 @@ export function useSubPageNavigation() {
       const prevIndex = currentObjectIndex - 1;
       const prevObjName = selectedObjects[prevIndex];
       if (prevObjName) {
-        pendingSubPageRef.current = getLastSubPage(manifest, prevObjName);
+        pendingSubPageRef.current = getLastSubPage(
+          manifest,
+          prevObjName,
+          fieldMapping,
+        );
       }
       prevObject();
     }
@@ -142,13 +154,17 @@ export function useSubPageNavigation() {
     currentObjectIndex,
     selectedObjects,
     manifest,
+    fieldMapping,
     prevObject,
   ]);
 
   // Object tabs — page tracking
   const currentObjectPages = useMemo(
-    () => (currentObjectName ? getSubPages(manifest, currentObjectName) : []),
-    [manifest, currentObjectName],
+    () =>
+      currentObjectName
+        ? getSubPages(manifest, currentObjectName, fieldMapping)
+        : [],
+    [manifest, currentObjectName, fieldMapping],
   );
   const currentPageIndex = currentObjectPages.indexOf(subPage);
 
@@ -158,11 +174,21 @@ export function useSubPageNavigation() {
       // Navigate to a completed object — land on its last sub-page
       const objName = selectedObjects[objIndex];
       if (objName) {
-        pendingSubPageRef.current = getLastSubPage(manifest, objName);
+        pendingSubPageRef.current = getLastSubPage(
+          manifest,
+          objName,
+          fieldMapping,
+        );
       }
       setCurrentObjectIndex(objIndex);
     },
-    [currentObjectIndex, selectedObjects, manifest, setCurrentObjectIndex],
+    [
+      currentObjectIndex,
+      selectedObjects,
+      manifest,
+      fieldMapping,
+      setCurrentObjectIndex,
+    ],
   );
 
   return {

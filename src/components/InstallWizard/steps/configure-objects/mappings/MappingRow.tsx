@@ -27,15 +27,33 @@ export function MappingRow({
 }: MappingRowProps) {
   const selectedValue = configHandlers.getFieldMapping(mapping.mapToName) ?? "";
 
+  // Fields already mapped to a different destination — filtered out so the same
+  // provider field can't be mapped twice within an object (mirrors classic
+  // checkDuplicateFieldError, but prevents the duplicate rather than erroring).
+  const selectedFieldMappings = configHandlers.object?.selectedFieldMappings;
+  const usedByOtherMappings = useMemo(
+    () =>
+      new Set(
+        Object.entries(selectedFieldMappings ?? {})
+          .filter(([mapToName]) => mapToName !== mapping.mapToName)
+          .map(([, fieldName]) => fieldName),
+      ),
+    [selectedFieldMappings, mapping.mapToName],
+  );
+
   const items = useMemo(() => {
+    const availableOptions = customerFieldOptions.filter(
+      (f) =>
+        f.fieldName === selectedValue || !usedByOtherMappings.has(f.fieldName),
+    );
     const displayNameCounts = new Map<string, number>();
-    customerFieldOptions.forEach((f) => {
+    availableOptions.forEach((f) => {
       displayNameCounts.set(
         f.displayName,
         (displayNameCounts.get(f.displayName) ?? 0) + 1,
       );
     });
-    return customerFieldOptions
+    return availableOptions
       .map((f) => ({
         id: f.fieldName,
         label: f.displayName,
@@ -46,7 +64,7 @@ export function MappingRow({
             : undefined,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [customerFieldOptions]);
+  }, [customerFieldOptions, usedByOtherMappings, selectedValue]);
 
   return (
     <div className={styles.mappingRow}>

@@ -14,6 +14,7 @@ import { FieldsContent } from "./fields/FieldsContent";
 import { MappingsContent } from "./mappings/MappingsContent";
 import { ObjectTabs } from "./ObjectTabs";
 import { getFieldDisplayName, getFieldName } from "./subPageUtils";
+import { useObjectMappings } from "./useObjectMappings";
 import { useSubPageNavigation } from "./useSubPageNavigation";
 
 import styles from "./configureObjectsStep.module.css";
@@ -46,15 +47,10 @@ export function ConfigureObjectsStep() {
     [currentManifestObject],
   );
 
-  const requiredMapFields = useMemo(
-    () => currentManifestObject?.getRequiredMapFields() ?? [],
-    [currentManifestObject],
-  );
-
-  const optionalMapFields = useMemo(
-    () => currentManifestObject?.getOptionalMapFields() ?? [],
-    [currentManifestObject],
-  );
+  // Field mappings (manifest + fieldMapping prop dynamic mappings) and value
+  // mappings (fieldMapping prop entries with mappedValues) for this object.
+  const { requiredMapFields, optionalMapFields, valueMappingUnits } =
+    useObjectMappings(currentObjectName);
 
   const customerFields = useMemo(() => {
     if (!currentObjectName) return {};
@@ -162,6 +158,7 @@ export function ConfigureObjectsStep() {
             isMappingBidirectional={isMappingBidirectional}
             requiredMapFields={requiredMapFields}
             optionalMapFields={optionalMapFields}
+            valueMappingUnits={valueMappingUnits}
             customerFieldOptions={customerFieldOptions}
             configHandlers={configHandlers}
           />
