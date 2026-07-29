@@ -499,10 +499,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
             const tokenString = await token("Bearer", []);
@@ -546,10 +542,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
             const tokenString = await token("Bearer", []);
@@ -586,10 +578,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -633,10 +621,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
             const tokenString = await token("Bearer", []);
@@ -674,10 +658,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -718,10 +698,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
-
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
             const tokenString = await token("Bearer", []);
@@ -760,10 +736,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -808,10 +780,6 @@ export class OrgApi extends runtime.BaseAPI implements OrgApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-Api-Key"] = this.configuration.apiKey("X-Api-Key"); // APIKeyHeader authentication
-        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
