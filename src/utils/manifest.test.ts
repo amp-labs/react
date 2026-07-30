@@ -1,8 +1,8 @@
-import { describe, expect, it } from "@jest/globals";
 import type {
   HydratedIntegrationFieldExistent,
   IntegrationFieldMapping,
 } from "@generated/api/src";
+import { describe, expect, it } from "@jest/globals";
 
 import { getFieldDisplayName, isIntegrationFieldMapping } from "./manifest";
 
