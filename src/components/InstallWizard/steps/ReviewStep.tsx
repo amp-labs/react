@@ -9,6 +9,7 @@ import {
   useManifest,
 } from "src/headless";
 import { handleServerError } from "src/utils/handleServerError";
+import { getFieldDisplayName } from "src/utils/manifest";
 
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
@@ -34,7 +35,7 @@ export function ReviewStep() {
         manifestObj?.getRequiredFields("no-mappings") ?? []
       )
         .filter((f) => "fieldName" in f)
-        .map((f) => ("fieldName" in f ? f.displayName || f.fieldName : ""));
+        .map(getFieldDisplayName);
 
       // Selected optional fields
       const selectedOptionalFields = (
@@ -44,7 +45,7 @@ export function ReviewStep() {
           const fieldName = "fieldName" in f ? f.fieldName : "";
           return fieldName && configObj?.getSelectedField(fieldName);
         })
-        .map((f) => ("fieldName" in f ? f.displayName || f.fieldName : ""));
+        .map(getFieldDisplayName);
 
       // Configured field mappings (source → destination)
       const allMapFields = [

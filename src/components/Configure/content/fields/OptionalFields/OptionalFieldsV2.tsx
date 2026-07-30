@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { HydratedIntegrationFieldExistent } from "services/api";
-import { isIntegrationFieldMapping } from "src/utils/manifest";
+import {
+  getFieldDisplayName,
+  isIntegrationFieldMapping,
+} from "src/utils/manifest";
 
 import {
   CheckboxItem,
@@ -35,8 +38,9 @@ export function OptionalFieldsV2() {
             "displayName" in field,
         )
         .map((field) => ({
+          // id stays the provider field name: it is the key used in the config
           id: field.fieldName,
-          label: field.displayName,
+          label: getFieldDisplayName(field),
           isChecked: !!selectedOptionalFields?.[field.fieldName],
         }))
         .sort((a, b) => a.label.localeCompare(b.label)) || [],

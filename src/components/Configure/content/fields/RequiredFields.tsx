@@ -1,6 +1,10 @@
+import { HydratedIntegrationFieldExistent } from "services/api";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query";
-import { isIntegrationFieldMapping } from "src/utils/manifest";
+import {
+  getFieldDisplayName,
+  isIntegrationFieldMapping,
+} from "src/utils/manifest";
 
 import { Tag } from "components/ui-base/Tag";
 
@@ -37,10 +41,19 @@ export function RequiredFields() {
         }}
       >
         {requiredFields?.length
-          ? requiredFields.map((field) => {
-              if (isIntegrationFieldMapping(field)) return null;
-              return <Tag key={field.fieldName}>{field.displayName}</Tag>;
-            })
+          ? requiredFields
+              .filter(
+                (field): field is HydratedIntegrationFieldExistent =>
+                  !isIntegrationFieldMapping(field),
+              )
+              // the server sorts by its own displayName, which is not what we
+              // render, so re-sort by the label the user actually sees
+              .sort((a, b) =>
+                getFieldDisplayName(a).localeCompare(getFieldDisplayName(b)),
+              )
+              .map((field) => (
+                <Tag key={field.fieldName}>{getFieldDisplayName(field)}</Tag>
+              ))
           : "There are no required fields."}
       </div>
     </>
