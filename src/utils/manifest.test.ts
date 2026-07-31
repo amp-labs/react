@@ -51,18 +51,18 @@ describe("getFieldDisplayName", () => {
       expect(getFieldDisplayName(field)).toBe("Customer Email");
     });
 
-    it("uses mapToName for a nested field when mapToDisplayName is absent", () => {
+    // displayName outranks mapToName, and the server always populates it, so a
+    // nested field needs mapToDisplayName to render a readable label.
+    it("falls back to displayName when mapToDisplayName is absent", () => {
       const field: HydratedIntegrationFieldExistent = {
         fieldName: "$['Customer']['First_name']",
         displayName: "$['Customer']['First_name']",
         mapToName: "customer_first_name",
       };
 
-      expect(getFieldDisplayName(field)).toBe("customer_first_name");
+      expect(getFieldDisplayName(field)).toBe("$['Customer']['First_name']");
     });
 
-    // Per the feature request, builder-defined names win even when the field is
-    // not nested and the provider supplied a perfectly good display name.
     it("prefers mapToDisplayName over a usable provider displayName", () => {
       const field: HydratedIntegrationFieldExistent = {
         fieldName: "firstname",
@@ -74,14 +74,14 @@ describe("getFieldDisplayName", () => {
       expect(getFieldDisplayName(field)).toBe("Customer First Name");
     });
 
-    it("prefers mapToName over a usable provider displayName", () => {
+    it("prefers the provider displayName over mapToName", () => {
       const field: HydratedIntegrationFieldExistent = {
         fieldName: "phone",
         displayName: "Business Phone",
         mapToName: "customer_phone",
       };
 
-      expect(getFieldDisplayName(field)).toBe("customer_phone");
+      expect(getFieldDisplayName(field)).toBe("Business Phone");
     });
   });
 

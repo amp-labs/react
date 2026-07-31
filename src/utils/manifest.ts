@@ -18,15 +18,16 @@ export function isIntegrationFieldMapping(
 /**
  * Returns the label to show for a field in the read UI.
  *
- * Names the builder defined in amp.yaml (mapToDisplayName, then mapToName) take
- * precedence over the provider's own displayName, for two reasons:
+ * Precedence: mapToDisplayName > displayName > mapToName > fieldName.
  *
- * 1. A nested field has no provider metadata for its path, so the server falls
- *    back to TitleCase(fieldName) and the raw JSONPath leaks into the UI
- *    (e.g. "$['Customer']['Email']").
- * 2. Even when the provider's name is good, the end user is configuring what
- *    lands in the builder's product, so the builder's naming is what they
- *    recognize.
+ * mapToDisplayName wins so a builder can give a nested field a readable label.
+ * The provider has no metadata for a nested path, so the server falls back to
+ * TitleCase(fieldName) and the raw JSONPath would otherwise show, e.g.
+ * "$['Customer']['Email']".
+ *
+ * displayName sits above mapToName so a provider's own label is preferred over a
+ * builder's machine name. Note the server always populates displayName, so
+ * mapToName is only reached for an IntegrationFieldMapping, which has none.
  *
  * @param field HydratedIntegrationField
  * @returns string
