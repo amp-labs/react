@@ -182,6 +182,7 @@ export * from './ReadConfigObject';
 export * from './ReadFilter';
 export * from './RedirectResponse';
 export * from './Revision';
+export * from './SalesforceQuotaOptimizationConfig';
 export * from './SearchOperators';
 export * from './SearchSupport';
 export * from './SelectedFieldsAutoConfig';
