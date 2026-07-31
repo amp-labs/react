@@ -32,15 +32,15 @@ export function isIntegrationFieldMapping(
  * @returns string
  */
 export function getFieldDisplayName(field: HydratedIntegrationField): string {
-  if (isIntegrationFieldMapping(field)) {
-    return field.mapToDisplayName || field.mapToName;
-  }
+  // displayName and fieldName only exist on HydratedIntegrationFieldExistent.
+  // On an IntegrationFieldMapping they are undefined and get skipped.
+  const existent = field as HydratedIntegrationFieldExistent;
 
   return (
     field.mapToDisplayName ||
+    existent.displayName ||
     field.mapToName ||
-    field.displayName ||
-    field.fieldName
+    existent.fieldName
   );
 }
 

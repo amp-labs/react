@@ -1,4 +1,3 @@
-import { HydratedIntegrationFieldExistent } from "services/api";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query";
 import {
@@ -41,19 +40,12 @@ export function RequiredFields() {
         }}
       >
         {requiredFields?.length
-          ? requiredFields
-              .filter(
-                (field): field is HydratedIntegrationFieldExistent =>
-                  !isIntegrationFieldMapping(field),
-              )
-              // the server sorts by its own displayName, which is not what we
-              // render, so re-sort by the label the user actually sees
-              .sort((a, b) =>
-                getFieldDisplayName(a).localeCompare(getFieldDisplayName(b)),
-              )
-              .map((field) => (
+          ? requiredFields.map((field) => {
+              if (isIntegrationFieldMapping(field)) return null;
+              return (
                 <Tag key={field.fieldName}>{getFieldDisplayName(field)}</Tag>
-              ))
+              );
+            })
           : "There are no required fields."}
       </div>
     </>

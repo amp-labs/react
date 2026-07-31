@@ -3,6 +3,7 @@ import { useInstallIntegrationProps } from "context/InstallIIntegrationContextPr
 import { useLocalConfig, useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useProvider } from "src/hooks/useProvider";
+import { getFieldDisplayName } from "src/utils/manifest";
 
 import type { CheckboxItem } from "components/ui-base/Checkbox/CheckboxPagination";
 
@@ -13,7 +14,7 @@ import { AdditionalFieldsContent } from "./additional/AdditionalFieldsContent";
 import { FieldsContent } from "./fields/FieldsContent";
 import { MappingsContent } from "./mappings/MappingsContent";
 import { ObjectTabs } from "./ObjectTabs";
-import { getFieldDisplayName, getFieldName } from "./subPageUtils";
+import { getFieldName } from "./subPageUtils";
 import { useSubPageNavigation } from "./useSubPageNavigation";
 
 import styles from "./configureObjectsStep.module.css";

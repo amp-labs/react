@@ -14,10 +14,6 @@ export function getFieldName(field: HydratedIntegrationField): string {
   return isExistentField(field) ? field.fieldName : "";
 }
 
-// Label resolution is shared with the non-wizard Configure view, so that a
-// builder's mapToName/mapToDisplayName wins in both UIs.
-export { getFieldDisplayName } from "src/utils/manifest";
-
 /**
  * Determine the initial sub-page for an object based on what data it has.
  */

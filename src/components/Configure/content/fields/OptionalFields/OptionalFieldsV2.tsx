@@ -38,7 +38,6 @@ export function OptionalFieldsV2() {
             "displayName" in field,
         )
         .map((field) => ({
-          // id stays the provider field name: it is the key used in the config
           id: field.fieldName,
           label: getFieldDisplayName(field),
           isChecked: !!selectedOptionalFields?.[field.fieldName],
