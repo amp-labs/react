@@ -16,6 +16,36 @@ export function isIntegrationFieldMapping(
 }
 
 /**
+ * Returns the label to show for a field in the read UI.
+ *
+ * Precedence: mapToDisplayName > displayName > mapToName > fieldName.
+ *
+ * mapToDisplayName wins so a builder can give a nested field a readable label.
+ * The provider has no metadata for a nested path, so the server falls back to
+ * TitleCase(fieldName) and the raw JSONPath would otherwise show, e.g.
+ * "$['Customer']['Email']".
+ *
+ * displayName sits above mapToName so a provider's own label is preferred over a
+ * builder's machine name. Note the server always populates displayName, so
+ * mapToName is only reached for an IntegrationFieldMapping, which has none.
+ *
+ * @param field HydratedIntegrationField
+ * @returns string
+ */
+export function getFieldDisplayName(field: HydratedIntegrationField): string {
+  // displayName and fieldName only exist on HydratedIntegrationFieldExistent.
+  // On an IntegrationFieldMapping they are undefined and get skipped.
+  const existent = field as HydratedIntegrationFieldExistent;
+
+  return (
+    field.mapToDisplayName ||
+    existent.displayName ||
+    field.mapToName ||
+    existent.fieldName
+  );
+}
+
+/**
  * Returns the required existent fields from an object (mappings excluded).
  * For required mapping fields use getRequiredMapFieldsFromObject.
  *

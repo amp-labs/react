@@ -14,11 +14,6 @@ export function getFieldName(field: HydratedIntegrationField): string {
   return isExistentField(field) ? field.fieldName : "";
 }
 
-export function getFieldDisplayName(field: HydratedIntegrationField): string {
-  if (isExistentField(field)) return field.displayName || field.fieldName;
-  return "";
-}
-
 /**
  * Determine the initial sub-page for an object based on what data it has.
  */

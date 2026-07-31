@@ -1,8 +1,9 @@
 import type { HydratedIntegrationField } from "@generated/api/src";
 import { ArrowRightIcon, WidthIcon } from "@radix-ui/react-icons";
+import { getFieldDisplayName } from "src/utils/manifest";
 
 import { SectionHeader } from "../../../components/SectionHeader";
-import { getFieldDisplayName, getFieldName } from "../subPageUtils";
+import { getFieldName } from "../subPageUtils";
 
 import sharedStyles from "../configureObjectsStep.module.css";
 import styles from "./fieldsContent.module.css";
