@@ -205,6 +205,7 @@ src/models/ReadConfigObject.ts
 src/models/ReadFilter.ts
 src/models/RedirectResponse.ts
 src/models/Revision.ts
+src/models/SalesforceQuotaOptimizationConfig.ts
 src/models/SearchOperators.ts
 src/models/SearchSupport.ts
 src/models/SelectedFieldsAutoConfig.ts

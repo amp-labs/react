@@ -31,6 +31,12 @@ import {
     ConfigUpdateEventFromJSONTyped,
     ConfigUpdateEventToJSON,
 } from './ConfigUpdateEvent';
+import type { SalesforceQuotaOptimizationConfig } from './SalesforceQuotaOptimizationConfig';
+import {
+    SalesforceQuotaOptimizationConfigFromJSON,
+    SalesforceQuotaOptimizationConfigFromJSONTyped,
+    SalesforceQuotaOptimizationConfigToJSON,
+} from './SalesforceQuotaOptimizationConfig';
 
 /**
  * 
@@ -80,6 +86,12 @@ export interface SubscribeConfigObject {
      * @memberof SubscribeConfigObject
      */
     otherEvents?: Array<string>;
+    /**
+     * 
+     * @type {SalesforceQuotaOptimizationConfig}
+     * @memberof SubscribeConfigObject
+     */
+    salesforceQuotaOptimization?: SalesforceQuotaOptimizationConfig;
 }
 
 /**
@@ -111,6 +123,7 @@ export function SubscribeConfigObjectFromJSONTyped(json: any, ignoreDiscriminato
         'updateEvent': !exists(json, 'updateEvent') ? undefined : ConfigUpdateEventFromJSON(json['updateEvent']),
         'deleteEvent': !exists(json, 'deleteEvent') ? undefined : ConfigDeleteEventFromJSON(json['deleteEvent']),
         'otherEvents': !exists(json, 'otherEvents') ? undefined : json['otherEvents'],
+        'salesforceQuotaOptimization': !exists(json, 'salesforceQuotaOptimization') ? undefined : SalesforceQuotaOptimizationConfigFromJSON(json['salesforceQuotaOptimization']),
     };
 }
 
@@ -130,6 +143,7 @@ export function SubscribeConfigObjectToJSON(value?: SubscribeConfigObject | null
         'updateEvent': ConfigUpdateEventToJSON(value.updateEvent),
         'deleteEvent': ConfigDeleteEventToJSON(value.deleteEvent),
         'otherEvents': value.otherEvents,
+        'salesforceQuotaOptimization': SalesforceQuotaOptimizationConfigToJSON(value.salesforceQuotaOptimization),
     };
 }
 
