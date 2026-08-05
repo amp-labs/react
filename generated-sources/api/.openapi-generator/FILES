@@ -199,13 +199,13 @@ src/models/ProviderAppMetadata1.ts
 src/models/ProviderInfo.ts
 src/models/ProviderMetadata1.ts
 src/models/ProviderMetadataInfo.ts
+src/models/QuotaOptimizationConfig.ts
 src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
 src/models/ReadFilter.ts
 src/models/RedirectResponse.ts
 src/models/Revision.ts
-src/models/SalesforceQuotaOptimizationConfig.ts
 src/models/SearchOperators.ts
 src/models/SearchSupport.ts
 src/models/SelectedFieldsAutoConfig.ts
@@ -214,6 +214,7 @@ src/models/StringFieldOptions.ts
 src/models/SubscribeConfig.ts
 src/models/SubscribeConfigAllOf.ts
 src/models/SubscribeConfigObject.ts
+src/models/SubscribeProviderOptions.ts
 src/models/SubscribeRequirements.ts
 src/models/SubscribeSupport.ts
 src/models/Support.ts
