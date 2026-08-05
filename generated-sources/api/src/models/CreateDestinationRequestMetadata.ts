@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface CreateDestinationRequestMetadata {
     /**
-     * Webhook URL, must start with "https://".
+     * Webhook URL, must start with "https://". For `slack` destinations, this is the Slack incoming webhook URL.
      * @type {string}
      * @memberof CreateDestinationRequestMetadata
      */
