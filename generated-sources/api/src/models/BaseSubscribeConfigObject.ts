@@ -31,12 +31,12 @@ import {
     ConfigUpdateEventFromJSONTyped,
     ConfigUpdateEventToJSON,
 } from './ConfigUpdateEvent';
-import type { SalesforceQuotaOptimizationConfig } from './SalesforceQuotaOptimizationConfig';
+import type { SubscribeProviderOptions } from './SubscribeProviderOptions';
 import {
-    SalesforceQuotaOptimizationConfigFromJSON,
-    SalesforceQuotaOptimizationConfigFromJSONTyped,
-    SalesforceQuotaOptimizationConfigToJSON,
-} from './SalesforceQuotaOptimizationConfig';
+    SubscribeProviderOptionsFromJSON,
+    SubscribeProviderOptionsFromJSONTyped,
+    SubscribeProviderOptionsToJSON,
+} from './SubscribeProviderOptions';
 
 /**
  * 
@@ -88,10 +88,10 @@ export interface BaseSubscribeConfigObject {
     otherEvents?: Array<string>;
     /**
      * 
-     * @type {SalesforceQuotaOptimizationConfig}
+     * @type {SubscribeProviderOptions}
      * @memberof BaseSubscribeConfigObject
      */
-    salesforceQuotaOptimization?: SalesforceQuotaOptimizationConfig;
+    providerOptions?: SubscribeProviderOptions;
 }
 
 /**
@@ -123,7 +123,7 @@ export function BaseSubscribeConfigObjectFromJSONTyped(json: any, ignoreDiscrimi
         'updateEvent': !exists(json, 'updateEvent') ? undefined : ConfigUpdateEventFromJSON(json['updateEvent']),
         'deleteEvent': !exists(json, 'deleteEvent') ? undefined : ConfigDeleteEventFromJSON(json['deleteEvent']),
         'otherEvents': !exists(json, 'otherEvents') ? undefined : json['otherEvents'],
-        'salesforceQuotaOptimization': !exists(json, 'salesforceQuotaOptimization') ? undefined : SalesforceQuotaOptimizationConfigFromJSON(json['salesforceQuotaOptimization']),
+        'providerOptions': !exists(json, 'providerOptions') ? undefined : SubscribeProviderOptionsFromJSON(json['providerOptions']),
     };
 }
 
@@ -143,7 +143,7 @@ export function BaseSubscribeConfigObjectToJSON(value?: BaseSubscribeConfigObjec
         'updateEvent': ConfigUpdateEventToJSON(value.updateEvent),
         'deleteEvent': ConfigDeleteEventToJSON(value.deleteEvent),
         'otherEvents': value.otherEvents,
-        'salesforceQuotaOptimization': SalesforceQuotaOptimizationConfigToJSON(value.salesforceQuotaOptimization),
+        'providerOptions': SubscribeProviderOptionsToJSON(value.providerOptions),
     };
 }
 
