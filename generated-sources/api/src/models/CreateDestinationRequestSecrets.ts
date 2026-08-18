@@ -37,6 +37,48 @@ export interface CreateDestinationRequestSecrets {
      * @memberof CreateDestinationRequestSecrets
      */
     awsSessionToken?: string;
+    /**
+     * The password for the `clickhouse` destination.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    password?: string;
+    /**
+     * The PEM-encoded RSA private key for the `snowflake` destination.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    privateKey?: string;
+    /**
+     * The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    credentials?: string;
+    /**
+     * The AWS access key ID for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    accessKeyId?: string;
+    /**
+     * The AWS secret access key for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    secretAccessKey?: string;
+    /**
+     * The account access key for the `azureblob` destination.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    accessKey?: string;
+    /**
+     * The connection URI (embeds credentials) for the `rabbitmq` destination.
+     * @type {string}
+     * @memberof CreateDestinationRequestSecrets
+     */
+    uri?: string;
 }
 
 /**
@@ -61,6 +103,13 @@ export function CreateDestinationRequestSecretsFromJSONTyped(json: any, ignoreDi
         'awsKeyId': !exists(json, 'awsKeyId') ? undefined : json['awsKeyId'],
         'awsSecretKey': !exists(json, 'awsSecretKey') ? undefined : json['awsSecretKey'],
         'awsSessionToken': !exists(json, 'awsSessionToken') ? undefined : json['awsSessionToken'],
+        'password': !exists(json, 'password') ? undefined : json['password'],
+        'privateKey': !exists(json, 'privateKey') ? undefined : json['privateKey'],
+        'credentials': !exists(json, 'credentials') ? undefined : json['credentials'],
+        'accessKeyId': !exists(json, 'accessKeyId') ? undefined : json['accessKeyId'],
+        'secretAccessKey': !exists(json, 'secretAccessKey') ? undefined : json['secretAccessKey'],
+        'accessKey': !exists(json, 'accessKey') ? undefined : json['accessKey'],
+        'uri': !exists(json, 'uri') ? undefined : json['uri'],
     };
 }
 
@@ -76,6 +125,13 @@ export function CreateDestinationRequestSecretsToJSON(value?: CreateDestinationR
         'awsKeyId': value.awsKeyId,
         'awsSecretKey': value.awsSecretKey,
         'awsSessionToken': value.awsSessionToken,
+        'password': value.password,
+        'privateKey': value.privateKey,
+        'credentials': value.credentials,
+        'accessKeyId': value.accessKeyId,
+        'secretAccessKey': value.secretAccessKey,
+        'accessKey': value.accessKey,
+        'uri': value.uri,
     };
 }
 

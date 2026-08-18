@@ -73,6 +73,132 @@ export interface UpdateDestinationRequestDestinationMetadata {
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
     storageClass?: string;
+    /**
+     * The username for the `clickhouse` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    username?: string;
+    /**
+     * The destination table name (`clickhouse`, `snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    tableName?: string;
+    /**
+     * The database name for the `clickhouse` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    database?: string;
+    /**
+     * The Snowflake account identifier for the `snowflake` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    accountIdentifier?: string;
+    /**
+     * The user ID for the `snowflake` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    userId?: string;
+    /**
+     * The database name (`snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    dbName?: string;
+    /**
+     * The schema name (`snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    schemaName?: string;
+    /**
+     * The Google Cloud project ID (`bigquery`, `pubsub`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    projectId?: string;
+    /**
+     * The BigQuery dataset ID for the `bigquery` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    datasetId?: string;
+    /**
+     * The BigQuery table ID for the `bigquery` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    tableId?: string;
+    /**
+     * The Redshift Serverless workgroup name for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    workgroupName?: string;
+    /**
+     * The Redshift provisioned cluster identifier for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    clusterIdentifier?: string;
+    /**
+     * The database user for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    dbUser?: string;
+    /**
+     * The storage account name for the `azureblob` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    account?: string;
+    /**
+     * The blob container name for the `azureblob` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    container?: string;
+    /**
+     * The SQS queue URL for the `sqs` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    queueUrl?: string;
+    /**
+     * The SNS topic ARN for the `sns` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    topicArn?: string;
+    /**
+     * The EventBridge event bus name for the `eventbridge` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    eventBusName?: string;
+    /**
+     * The EventBridge detail-type for published events (`eventbridge`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    detailType?: string;
+    /**
+     * The Pub/Sub topic ID for the `pubsub` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    topicId?: string;
+    /**
+     * The routing key for the `rabbitmq` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    routingKey?: string;
 }
 
 /**
@@ -103,6 +229,27 @@ export function UpdateDestinationRequestDestinationMetadataFromJSONTyped(json: a
         'bucket': !exists(json, 'bucket') ? undefined : json['bucket'],
         'keyTemplate': !exists(json, 'keyTemplate') ? undefined : json['keyTemplate'],
         'storageClass': !exists(json, 'storageClass') ? undefined : json['storageClass'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
+        'tableName': !exists(json, 'tableName') ? undefined : json['tableName'],
+        'database': !exists(json, 'database') ? undefined : json['database'],
+        'accountIdentifier': !exists(json, 'accountIdentifier') ? undefined : json['accountIdentifier'],
+        'userId': !exists(json, 'userId') ? undefined : json['userId'],
+        'dbName': !exists(json, 'dbName') ? undefined : json['dbName'],
+        'schemaName': !exists(json, 'schemaName') ? undefined : json['schemaName'],
+        'projectId': !exists(json, 'projectId') ? undefined : json['projectId'],
+        'datasetId': !exists(json, 'datasetId') ? undefined : json['datasetId'],
+        'tableId': !exists(json, 'tableId') ? undefined : json['tableId'],
+        'workgroupName': !exists(json, 'workgroupName') ? undefined : json['workgroupName'],
+        'clusterIdentifier': !exists(json, 'clusterIdentifier') ? undefined : json['clusterIdentifier'],
+        'dbUser': !exists(json, 'dbUser') ? undefined : json['dbUser'],
+        'account': !exists(json, 'account') ? undefined : json['account'],
+        'container': !exists(json, 'container') ? undefined : json['container'],
+        'queueUrl': !exists(json, 'queueUrl') ? undefined : json['queueUrl'],
+        'topicArn': !exists(json, 'topicArn') ? undefined : json['topicArn'],
+        'eventBusName': !exists(json, 'eventBusName') ? undefined : json['eventBusName'],
+        'detailType': !exists(json, 'detailType') ? undefined : json['detailType'],
+        'topicId': !exists(json, 'topicId') ? undefined : json['topicId'],
+        'routingKey': !exists(json, 'routingKey') ? undefined : json['routingKey'],
     };
 }
 
@@ -124,6 +271,27 @@ export function UpdateDestinationRequestDestinationMetadataToJSON(value?: Update
         'bucket': value.bucket,
         'keyTemplate': value.keyTemplate,
         'storageClass': value.storageClass,
+        'username': value.username,
+        'tableName': value.tableName,
+        'database': value.database,
+        'accountIdentifier': value.accountIdentifier,
+        'userId': value.userId,
+        'dbName': value.dbName,
+        'schemaName': value.schemaName,
+        'projectId': value.projectId,
+        'datasetId': value.datasetId,
+        'tableId': value.tableId,
+        'workgroupName': value.workgroupName,
+        'clusterIdentifier': value.clusterIdentifier,
+        'dbUser': value.dbUser,
+        'account': value.account,
+        'container': value.container,
+        'queueUrl': value.queueUrl,
+        'topicArn': value.topicArn,
+        'eventBusName': value.eventBusName,
+        'detailType': value.detailType,
+        'topicId': value.topicId,
+        'routingKey': value.routingKey,
     };
 }
 
