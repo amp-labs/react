@@ -44,13 +44,13 @@ export interface UpdateDestinationRequestDestinationMetadata {
      */
     streamName?: string;
     /**
-     * The endpoint URL for the Kinesis stream.
+     * The endpoint URL for the `kinesis` stream, or the optional custom endpoint URL for the `sqs` destination.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
     endpointUrl?: string;
     /**
-     * The template for the partition key to use when sending events to Kinesis (a JMESPath template)
+     * The template for the partition key (a JMESPath template). Used by `kinesis`, and optionally by `kafka`.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
@@ -73,7 +73,175 @@ export interface UpdateDestinationRequestDestinationMetadata {
      * @memberof UpdateDestinationRequestDestinationMetadata
      */
     storageClass?: string;
+    /**
+     * The username for the `clickhouse` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    username?: string;
+    /**
+     * The destination table name (`clickhouse`, `snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    tableName?: string;
+    /**
+     * The database name for the `clickhouse` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    database?: string;
+    /**
+     * The Snowflake account identifier for the `snowflake` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    accountIdentifier?: string;
+    /**
+     * The user ID for the `snowflake` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    userId?: string;
+    /**
+     * The database name (`snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    dbName?: string;
+    /**
+     * The schema name (`snowflake`, `redshift`).
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    schemaName?: string;
+    /**
+     * The Google Cloud project ID (`bigquery`, `pubsub`). Required for `pubsub`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    projectId?: string;
+    /**
+     * The BigQuery dataset ID for the `bigquery` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    datasetId?: string;
+    /**
+     * The BigQuery table ID for the `bigquery` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    tableId?: string;
+    /**
+     * The Redshift Serverless workgroup name for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    workgroupName?: string;
+    /**
+     * The Redshift provisioned cluster identifier for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    clusterIdentifier?: string;
+    /**
+     * The database user for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    dbUser?: string;
+    /**
+     * The storage account name for the `azureblob` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    account?: string;
+    /**
+     * The blob container name for the `azureblob` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    container?: string;
+    /**
+     * The SQS queue URL for the `sqs` destination. Required for `sqs`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    queueUrl?: string;
+    /**
+     * The Pub/Sub topic ID for the `pubsub` destination. Required for `pubsub`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    topicId?: string;
+    /**
+     * The AMQP server URL for the `rabbitmq` destination. Required for `rabbitmq`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    serverUrl?: string;
+    /**
+     * The exchange to publish to for the `rabbitmq` destination. Required for `rabbitmq`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    exchange?: string;
+    /**
+     * Whether to connect over TLS. Optional for the `rabbitmq` and `kafka` destinations.
+     * @type {boolean}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    tls?: boolean;
+    /**
+     * The queue or topic name for the `azureservicebus` destination. Required for `azureservicebus`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    name?: string;
+    /**
+     * The comma-separated list of Kafka broker addresses for the `kafka` destination. Required for `kafka`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    brokers?: string;
+    /**
+     * The Kafka topic to publish to for the `kafka` destination. Required for `kafka`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    topic?: string;
+    /**
+     * The SASL mechanism used to authenticate to Kafka for the `kafka` destination. Required for `kafka`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    saslMechanism?: UpdateDestinationRequestDestinationMetadataSaslMechanismEnum;
+    /**
+     * For warehouse destinations, rows to buffer before flushing a batch (default 1000).
+     * @type {number}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    batchSize?: number;
+    /**
+     * For warehouse destinations, max seconds before flushing a batch (default 30).
+     * @type {number}
+     * @memberof UpdateDestinationRequestDestinationMetadata
+     */
+    maxWaitSecs?: number;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateDestinationRequestDestinationMetadataSaslMechanismEnum = {
+    Plain: 'plain',
+    ScramSha256: 'scram-sha-256',
+    ScramSha512: 'scram-sha-512'
+} as const;
+export type UpdateDestinationRequestDestinationMetadataSaslMechanismEnum = typeof UpdateDestinationRequestDestinationMetadataSaslMechanismEnum[keyof typeof UpdateDestinationRequestDestinationMetadataSaslMechanismEnum];
+
 
 /**
  * Check if a given object implements the UpdateDestinationRequestDestinationMetadata interface.
@@ -103,6 +271,32 @@ export function UpdateDestinationRequestDestinationMetadataFromJSONTyped(json: a
         'bucket': !exists(json, 'bucket') ? undefined : json['bucket'],
         'keyTemplate': !exists(json, 'keyTemplate') ? undefined : json['keyTemplate'],
         'storageClass': !exists(json, 'storageClass') ? undefined : json['storageClass'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
+        'tableName': !exists(json, 'tableName') ? undefined : json['tableName'],
+        'database': !exists(json, 'database') ? undefined : json['database'],
+        'accountIdentifier': !exists(json, 'accountIdentifier') ? undefined : json['accountIdentifier'],
+        'userId': !exists(json, 'userId') ? undefined : json['userId'],
+        'dbName': !exists(json, 'dbName') ? undefined : json['dbName'],
+        'schemaName': !exists(json, 'schemaName') ? undefined : json['schemaName'],
+        'projectId': !exists(json, 'projectId') ? undefined : json['projectId'],
+        'datasetId': !exists(json, 'datasetId') ? undefined : json['datasetId'],
+        'tableId': !exists(json, 'tableId') ? undefined : json['tableId'],
+        'workgroupName': !exists(json, 'workgroupName') ? undefined : json['workgroupName'],
+        'clusterIdentifier': !exists(json, 'clusterIdentifier') ? undefined : json['clusterIdentifier'],
+        'dbUser': !exists(json, 'dbUser') ? undefined : json['dbUser'],
+        'account': !exists(json, 'account') ? undefined : json['account'],
+        'container': !exists(json, 'container') ? undefined : json['container'],
+        'queueUrl': !exists(json, 'queueUrl') ? undefined : json['queueUrl'],
+        'topicId': !exists(json, 'topicId') ? undefined : json['topicId'],
+        'serverUrl': !exists(json, 'serverUrl') ? undefined : json['serverUrl'],
+        'exchange': !exists(json, 'exchange') ? undefined : json['exchange'],
+        'tls': !exists(json, 'tls') ? undefined : json['tls'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'brokers': !exists(json, 'brokers') ? undefined : json['brokers'],
+        'topic': !exists(json, 'topic') ? undefined : json['topic'],
+        'saslMechanism': !exists(json, 'saslMechanism') ? undefined : json['saslMechanism'],
+        'batchSize': !exists(json, 'batchSize') ? undefined : json['batchSize'],
+        'maxWaitSecs': !exists(json, 'maxWaitSecs') ? undefined : json['maxWaitSecs'],
     };
 }
 
@@ -124,6 +318,32 @@ export function UpdateDestinationRequestDestinationMetadataToJSON(value?: Update
         'bucket': value.bucket,
         'keyTemplate': value.keyTemplate,
         'storageClass': value.storageClass,
+        'username': value.username,
+        'tableName': value.tableName,
+        'database': value.database,
+        'accountIdentifier': value.accountIdentifier,
+        'userId': value.userId,
+        'dbName': value.dbName,
+        'schemaName': value.schemaName,
+        'projectId': value.projectId,
+        'datasetId': value.datasetId,
+        'tableId': value.tableId,
+        'workgroupName': value.workgroupName,
+        'clusterIdentifier': value.clusterIdentifier,
+        'dbUser': value.dbUser,
+        'account': value.account,
+        'container': value.container,
+        'queueUrl': value.queueUrl,
+        'topicId': value.topicId,
+        'serverUrl': value.serverUrl,
+        'exchange': value.exchange,
+        'tls': value.tls,
+        'name': value.name,
+        'brokers': value.brokers,
+        'topic': value.topic,
+        'saslMechanism': value.saslMechanism,
+        'batchSize': value.batchSize,
+        'maxWaitSecs': value.maxWaitSecs,
     };
 }
 

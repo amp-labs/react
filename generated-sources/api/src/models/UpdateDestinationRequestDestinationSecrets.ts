@@ -20,23 +20,71 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UpdateDestinationRequestDestinationSecrets {
     /**
-     * The AWS access key ID for the Kinesis or S3 destination.
+     * The AWS access key ID for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationSecrets
      */
     awsKeyId?: string;
     /**
-     * The AWS secret access key for the Kinesis or S3 destination.
+     * The AWS secret access key for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationSecrets
      */
     awsSecretKey?: string;
     /**
-     * The AWS session token for the Kinesis or S3 destination.
+     * The optional AWS session token for the `kinesis`, `s3`, and `sqs` destinations.
      * @type {string}
      * @memberof UpdateDestinationRequestDestinationSecrets
      */
     awsSessionToken?: string;
+    /**
+     * The password for the `clickhouse`, `rabbitmq`, and `kafka` destinations. Required for `rabbitmq` and `kafka`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    password?: string;
+    /**
+     * The PEM-encoded RSA private key for the `snowflake` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    privateKey?: string;
+    /**
+     * The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations. Required for `pubsub`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    credentials?: string;
+    /**
+     * The AWS access key ID for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    accessKeyId?: string;
+    /**
+     * The AWS secret access key for the `redshift` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    secretAccessKey?: string;
+    /**
+     * The account access key for the `azureblob` destination.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    accessKey?: string;
+    /**
+     * The username for the `rabbitmq` and `kafka` destinations. Required for both.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    username?: string;
+    /**
+     * The connection string for the `azureservicebus` destination. Required for `azureservicebus`.
+     * @type {string}
+     * @memberof UpdateDestinationRequestDestinationSecrets
+     */
+    connectionString?: string;
 }
 
 /**
@@ -61,6 +109,14 @@ export function UpdateDestinationRequestDestinationSecretsFromJSONTyped(json: an
         'awsKeyId': !exists(json, 'awsKeyId') ? undefined : json['awsKeyId'],
         'awsSecretKey': !exists(json, 'awsSecretKey') ? undefined : json['awsSecretKey'],
         'awsSessionToken': !exists(json, 'awsSessionToken') ? undefined : json['awsSessionToken'],
+        'password': !exists(json, 'password') ? undefined : json['password'],
+        'privateKey': !exists(json, 'privateKey') ? undefined : json['privateKey'],
+        'credentials': !exists(json, 'credentials') ? undefined : json['credentials'],
+        'accessKeyId': !exists(json, 'accessKeyId') ? undefined : json['accessKeyId'],
+        'secretAccessKey': !exists(json, 'secretAccessKey') ? undefined : json['secretAccessKey'],
+        'accessKey': !exists(json, 'accessKey') ? undefined : json['accessKey'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
+        'connectionString': !exists(json, 'connectionString') ? undefined : json['connectionString'],
     };
 }
 
@@ -76,6 +132,14 @@ export function UpdateDestinationRequestDestinationSecretsToJSON(value?: UpdateD
         'awsKeyId': value.awsKeyId,
         'awsSecretKey': value.awsSecretKey,
         'awsSessionToken': value.awsSessionToken,
+        'password': value.password,
+        'privateKey': value.privateKey,
+        'credentials': value.credentials,
+        'accessKeyId': value.accessKeyId,
+        'secretAccessKey': value.secretAccessKey,
+        'accessKey': value.accessKey,
+        'username': value.username,
+        'connectionString': value.connectionString,
     };
 }
 
