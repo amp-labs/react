@@ -38,9 +38,40 @@ export interface UpdateDestinationRequest {
      * - metadata.bucket
      * - metadata.keyTemplate
      * - metadata.storageClass
+     * - metadata.username
+     * - metadata.tableName
+     * - metadata.database
+     * - metadata.accountIdentifier
+     * - metadata.userId
+     * - metadata.dbName
+     * - metadata.schemaName
+     * - metadata.projectId
+     * - metadata.datasetId
+     * - metadata.tableId
+     * - metadata.workgroupName
+     * - metadata.clusterIdentifier
+     * - metadata.dbUser
+     * - metadata.account
+     * - metadata.container
+     * - metadata.queueUrl
+     * - metadata.topicId
+     * - metadata.serverUrl
+     * - metadata.exchange
+     * - metadata.tls
+     * - metadata.name
+     * - metadata.batchSize
+     * - metadata.maxWaitSecs
      * - secrets.awsKeyId
      * - secrets.awsSecretKey
      * - secrets.awsSessionToken
+     * - secrets.password
+     * - secrets.privateKey
+     * - secrets.credentials
+     * - secrets.accessKeyId
+     * - secrets.secretAccessKey
+     * - secrets.accessKey
+     * - secrets.username
+     * - secrets.connectionString
      * @type {Array<string>}
      * @memberof UpdateDestinationRequest
      */
