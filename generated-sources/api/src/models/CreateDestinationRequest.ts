@@ -39,7 +39,7 @@ export interface CreateDestinationRequest {
      */
     name: string;
     /**
-     * The type of the destination.
+     * The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL. The warehouse and message-queue types (`clickhouse`, `snowflake`, `bigquery`, `redshift`, `sqs`, `pubsub`, `rabbitmq`, `azureservicebus`) are configured via the `metadata` and `secrets` fields documented below.
      * @type {string}
      * @memberof CreateDestinationRequest
      */
@@ -65,7 +65,16 @@ export interface CreateDestinationRequest {
 export const CreateDestinationRequestTypeEnum = {
     Webhook: 'webhook',
     Kinesis: 'kinesis',
-    S3: 's3'
+    S3: 's3',
+    Slack: 'slack',
+    Clickhouse: 'clickhouse',
+    Snowflake: 'snowflake',
+    Bigquery: 'bigquery',
+    Redshift: 'redshift',
+    Sqs: 'sqs',
+    Pubsub: 'pubsub',
+    Rabbitmq: 'rabbitmq',
+    Azureservicebus: 'azureservicebus'
 } as const;
 export type CreateDestinationRequestTypeEnum = typeof CreateDestinationRequestTypeEnum[keyof typeof CreateDestinationRequestTypeEnum];
 
