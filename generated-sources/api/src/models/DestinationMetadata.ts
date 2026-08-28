@@ -67,6 +67,144 @@ export interface DestinationMetadata {
      * @memberof DestinationMetadata
      */
     storageClass?: string;
+    /**
+     * The username for the clickhouse destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    username?: string;
+    /**
+     * The destination table name (clickhouse, snowflake, redshift)
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    tableName?: string;
+    /**
+     * The database name for the clickhouse destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    database?: string;
+    /**
+     * The Snowflake account identifier for the snowflake destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    accountIdentifier?: string;
+    /**
+     * The user ID for the snowflake destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    userId?: string;
+    /**
+     * The database name (snowflake, redshift)
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    dbName?: string;
+    /**
+     * The schema name (snowflake, redshift)
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    schemaName?: string;
+    /**
+     * The Google Cloud project ID (bigquery, pubsub)
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    projectId?: string;
+    /**
+     * The BigQuery dataset ID for the bigquery destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    datasetId?: string;
+    /**
+     * The BigQuery table ID for the bigquery destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    tableId?: string;
+    /**
+     * The Redshift Serverless workgroup name for the redshift destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    workgroupName?: string;
+    /**
+     * The Redshift provisioned cluster identifier for the redshift destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    clusterIdentifier?: string;
+    /**
+     * The database user for the redshift destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    dbUser?: string;
+    /**
+     * The storage account name for the azureblob destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    account?: string;
+    /**
+     * The blob container name for the azureblob destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    container?: string;
+    /**
+     * The SQS queue URL for the sqs destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    queueUrl?: string;
+    /**
+     * The Pub/Sub topic ID for the pubsub destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    topicId?: string;
+    /**
+     * The AMQP server URL for the rabbitmq destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    serverUrl?: string;
+    /**
+     * The exchange to publish to for the rabbitmq destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    exchange?: string;
+    /**
+     * Whether to connect over TLS (rabbitmq)
+     * @type {boolean}
+     * @memberof DestinationMetadata
+     */
+    tls?: boolean;
+    /**
+     * The queue or topic name for the azureservicebus destination
+     * @type {string}
+     * @memberof DestinationMetadata
+     */
+    name?: string;
+    /**
+     * For warehouse destinations, rows to buffer before flushing a batch (default 1000)
+     * @type {number}
+     * @memberof DestinationMetadata
+     */
+    batchSize?: number;
+    /**
+     * For warehouse destinations, max seconds before flushing a batch (default 30)
+     * @type {number}
+     * @memberof DestinationMetadata
+     */
+    maxWaitSecs?: number;
 }
 
 /**
@@ -96,6 +234,29 @@ export function DestinationMetadataFromJSONTyped(json: any, ignoreDiscriminator:
         'bucket': !exists(json, 'bucket') ? undefined : json['bucket'],
         'keyTemplate': !exists(json, 'keyTemplate') ? undefined : json['keyTemplate'],
         'storageClass': !exists(json, 'storageClass') ? undefined : json['storageClass'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
+        'tableName': !exists(json, 'tableName') ? undefined : json['tableName'],
+        'database': !exists(json, 'database') ? undefined : json['database'],
+        'accountIdentifier': !exists(json, 'accountIdentifier') ? undefined : json['accountIdentifier'],
+        'userId': !exists(json, 'userId') ? undefined : json['userId'],
+        'dbName': !exists(json, 'dbName') ? undefined : json['dbName'],
+        'schemaName': !exists(json, 'schemaName') ? undefined : json['schemaName'],
+        'projectId': !exists(json, 'projectId') ? undefined : json['projectId'],
+        'datasetId': !exists(json, 'datasetId') ? undefined : json['datasetId'],
+        'tableId': !exists(json, 'tableId') ? undefined : json['tableId'],
+        'workgroupName': !exists(json, 'workgroupName') ? undefined : json['workgroupName'],
+        'clusterIdentifier': !exists(json, 'clusterIdentifier') ? undefined : json['clusterIdentifier'],
+        'dbUser': !exists(json, 'dbUser') ? undefined : json['dbUser'],
+        'account': !exists(json, 'account') ? undefined : json['account'],
+        'container': !exists(json, 'container') ? undefined : json['container'],
+        'queueUrl': !exists(json, 'queueUrl') ? undefined : json['queueUrl'],
+        'topicId': !exists(json, 'topicId') ? undefined : json['topicId'],
+        'serverUrl': !exists(json, 'serverUrl') ? undefined : json['serverUrl'],
+        'exchange': !exists(json, 'exchange') ? undefined : json['exchange'],
+        'tls': !exists(json, 'tls') ? undefined : json['tls'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'batchSize': !exists(json, 'batchSize') ? undefined : json['batchSize'],
+        'maxWaitSecs': !exists(json, 'maxWaitSecs') ? undefined : json['maxWaitSecs'],
     };
 }
 
@@ -116,6 +277,29 @@ export function DestinationMetadataToJSON(value?: DestinationMetadata | null): a
         'bucket': value.bucket,
         'keyTemplate': value.keyTemplate,
         'storageClass': value.storageClass,
+        'username': value.username,
+        'tableName': value.tableName,
+        'database': value.database,
+        'accountIdentifier': value.accountIdentifier,
+        'userId': value.userId,
+        'dbName': value.dbName,
+        'schemaName': value.schemaName,
+        'projectId': value.projectId,
+        'datasetId': value.datasetId,
+        'tableId': value.tableId,
+        'workgroupName': value.workgroupName,
+        'clusterIdentifier': value.clusterIdentifier,
+        'dbUser': value.dbUser,
+        'account': value.account,
+        'container': value.container,
+        'queueUrl': value.queueUrl,
+        'topicId': value.topicId,
+        'serverUrl': value.serverUrl,
+        'exchange': value.exchange,
+        'tls': value.tls,
+        'name': value.name,
+        'batchSize': value.batchSize,
+        'maxWaitSecs': value.maxWaitSecs,
     };
 }
 

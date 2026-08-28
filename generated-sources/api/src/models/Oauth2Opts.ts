@@ -105,6 +105,14 @@ export interface Oauth2Opts {
      * @memberof Oauth2Opts
      */
     keepAliveIntervalHours?: number;
+    /**
+     * The query parameter name used to pass OAuth scopes in the authorization URL.
+     * Defaults to "scope" when not specified. Some providers use a different
+     * parameter name, such as "user_scope" for Slack user scopes.
+     * @type {string}
+     * @memberof Oauth2Opts
+     */
+    scopeQueryParam?: string;
 }
 
 
@@ -156,6 +164,7 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'authURLParams': !exists(json, 'authURLParams') ? undefined : json['authURLParams'],
         'accessTokenOpts': !exists(json, 'accessTokenOpts') ? undefined : AccessTokenOptsFromJSON(json['accessTokenOpts']),
         'keepAliveIntervalHours': !exists(json, 'keepAliveIntervalHours') ? undefined : json['keepAliveIntervalHours'],
+        'scopeQueryParam': !exists(json, 'scopeQueryParam') ? undefined : json['scopeQueryParam'],
     };
 }
 
@@ -180,6 +189,7 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'authURLParams': value.authURLParams,
         'accessTokenOpts': AccessTokenOptsToJSON(value.accessTokenOpts),
         'keepAliveIntervalHours': value.keepAliveIntervalHours,
+        'scopeQueryParam': value.scopeQueryParam,
     };
 }
 
