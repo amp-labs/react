@@ -77,7 +77,7 @@ yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-
 
 ## Usage
 
-Please visit [our documentation](https://docs.withampersand.com/v1.0/docs/embeddable-ui-components) to learn more about how to use this library.
+Please visit [our documentation](https://docs.withampersand.com/embeddable-ui-components) to learn more about how to use this library.
 
 ### Changes with 2.0
 In addition to importing components, the default stylesheet must also be imported. You may also override 
