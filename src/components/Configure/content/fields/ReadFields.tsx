@@ -11,7 +11,13 @@ export function ReadFields() {
   useClearOldFieldMappings();
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
       <ReEnableReadObject />
       <ReadObjectMapping />
       <RequiredFields />
@@ -20,6 +26,6 @@ export function ReadFields() {
       <ValueMappings />
       <OptionalFields />
       <DisableReadObject />
-    </>
+    </div>
   );
 }
