@@ -11,7 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
-import { JwtTokenProvider } from "../JwtTokenContextProvider";
+import { JwtTokenProvider } from "../JwtTokenContextProvider.reactquery";
 
 interface AmpersandProviderProps {
   options: {

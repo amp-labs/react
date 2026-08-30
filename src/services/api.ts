@@ -27,7 +27,7 @@ import {
   UpdateInstallationRequestInstallationConfig,
 } from "@generated/api/src";
 import { useApiKey } from "src/context/ApiKeyContextProvider";
-import { useJwtToken } from "src/context/JwtTokenContextProvider";
+import { useJwtToken } from "src/context/JwtTokenContextProvider.reactquery";
 import { useInstallationProps } from "src/headless/InstallationProvider";
 
 import { ApiService } from "./ApiService";
