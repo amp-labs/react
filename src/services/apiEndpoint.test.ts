@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 
 import {
   getAmpersandRegion,
-  PROD_ENDPOINT,
+  PROD_EU_ENDPOINT,
+  PROD_US_ENDPOINT,
   resolveApiEndpoint,
   setAmpersandRegion,
 } from "./apiEndpoint";
@@ -17,20 +18,24 @@ afterEach(() => {
 
 describe("resolveApiEndpoint", () => {
   it("defaults to the global prod endpoint", () => {
-    expect(resolveApiEndpoint()).toBe(PROD_ENDPOINT);
+    expect(resolveApiEndpoint()).toBe(PROD_US_ENDPOINT);
   });
 
   it("maps the eu region to the eu endpoint", () => {
-    expect(resolveApiEndpoint("eu")).toBe("https://api.eu.withampersand.com");
+    expect(resolveApiEndpoint("eu")).toBe(PROD_EU_ENDPOINT);
+  });
+
+  it("maps the us region to the default endpoint", () => {
+    expect(resolveApiEndpoint("us")).toBe(PROD_US_ENDPOINT);
   });
 
   it("ignores casing and surrounding whitespace in the region", () => {
-    expect(resolveApiEndpoint(" EU ")).toBe("https://api.eu.withampersand.com");
+    expect(resolveApiEndpoint(" EU ")).toBe(PROD_EU_ENDPOINT);
   });
 
   it("falls back to the prod endpoint for an unknown region", () => {
     const error = jest.spyOn(console, "error").mockImplementation(() => {});
-    expect(resolveApiEndpoint("mars")).toBe(PROD_ENDPOINT);
+    expect(resolveApiEndpoint("mars")).toBe(PROD_US_ENDPOINT);
     expect(error).toHaveBeenCalled();
   });
 
@@ -48,7 +53,7 @@ describe("resolveApiEndpoint", () => {
 
   it("applies the region when REACT_APP_AMP_SERVER is empty", () => {
     process.env[ENV_KEY] = "";
-    expect(resolveApiEndpoint("eu")).toBe("https://api.eu.withampersand.com");
+    expect(resolveApiEndpoint("eu")).toBe(PROD_EU_ENDPOINT);
   });
 
   it("resolves the documented env values", () => {
@@ -56,7 +61,7 @@ describe("resolveApiEndpoint", () => {
       ["local", "http://localhost:8080"],
       ["dev", "https://dev-api.withampersand.com"],
       ["staging", "https://staging-api.withampersand.com"],
-      ["prod", PROD_ENDPOINT],
+      ["prod", PROD_US_ENDPOINT],
       ["mock", "http://127.0.0.1:4010"],
     ];
 
@@ -72,8 +77,6 @@ describe("region store", () => {
     expect(getAmpersandRegion()).toBeUndefined();
     setAmpersandRegion("eu");
     expect(getAmpersandRegion()).toBe("eu");
-    expect(resolveApiEndpoint(getAmpersandRegion())).toBe(
-      "https://api.eu.withampersand.com",
-    );
+    expect(resolveApiEndpoint(getAmpersandRegion())).toBe(PROD_EU_ENDPOINT);
   });
 });

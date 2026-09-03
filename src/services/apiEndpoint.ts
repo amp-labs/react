@@ -8,17 +8,22 @@
  * 2. `region` — an internal, undocumented option on `AmpersandProvider` that is not part of
  *    the public TypeScript types. Ignored whenever `REACT_APP_AMP_SERVER` is set.
  *
- * With neither set, the default (global) production endpoint is used.
+ * With neither set, the US production endpoint is used.
  */
 
-export const PROD_ENDPOINT = "https://api.withampersand.com";
+/** US production endpoint. Used when no region is given. */
+export const PROD_US_ENDPOINT = "https://api.withampersand.com";
+
+/** EU production endpoint. */
+export const PROD_EU_ENDPOINT = "https://api.eu.withampersand.com";
 
 /**
- * Known regional endpoints, keyed by the `region` option. The default (no region) is the
- * global production endpoint above; add a new entry here to support another region.
+ * Production endpoints keyed by the `region` option. No region means US.
+ * Add an entry here to support another region.
  */
 const REGIONAL_ENDPOINTS: Record<string, string> = {
-  eu: "https://api.eu.withampersand.com",
+  us: PROD_US_ENDPOINT,
+  eu: PROD_EU_ENDPOINT,
 };
 
 /**
@@ -36,7 +41,7 @@ function getEnvEndpoint(): string | null {
       case "staging":
         return "https://staging-api.withampersand.com";
       case "prod":
-        return PROD_ENDPOINT;
+        return PROD_US_ENDPOINT;
       case "mock":
         return "http://127.0.0.1:4010";
       case undefined:
@@ -56,14 +61,14 @@ function getEnvEndpoint(): string | null {
  * Resolves a region to its endpoint, falling back to the default endpoint for an unknown region.
  */
 function getRegionalEndpoint(region?: string): string {
-  if (!region) return PROD_ENDPOINT;
+  if (!region) return PROD_US_ENDPOINT;
 
   const endpoint = REGIONAL_ENDPOINTS[region.trim().toLowerCase()];
   if (!endpoint) {
     console.error(
-      `Unknown Ampersand region "${region}". Falling back to ${PROD_ENDPOINT}.`,
+      `Unknown Ampersand region "${region}". Falling back to ${PROD_US_ENDPOINT}.`,
     );
-    return PROD_ENDPOINT;
+    return PROD_US_ENDPOINT;
   }
 
   return endpoint;
