@@ -33,10 +33,33 @@ describe("resolveApiEndpoint", () => {
     expect(resolveApiEndpoint(" EU ")).toBe(PROD_EU_ENDPOINT);
   });
 
-  it("falls back to the prod endpoint for an unknown region", () => {
+  it("falls back to the us endpoint for an unknown region", () => {
     const error = jest.spyOn(console, "error").mockImplementation(() => {});
     expect(resolveApiEndpoint("mars")).toBe(PROD_US_ENDPOINT);
     expect(error).toHaveBeenCalled();
+  });
+
+  it("does not resolve inherited object keys to an endpoint", () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    ["constructor", "__proto__", "toString", "valueOf", "hasOwnProperty"].forEach(
+      (key) => {
+        expect(resolveApiEndpoint(key)).toBe(PROD_US_ENDPOINT);
+      },
+    );
+  });
+
+  it("falls back instead of throwing for a non-string region", () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    [123, true, {}, [], () => {}, Symbol("eu")].forEach((value) => {
+      expect(resolveApiEndpoint(value)).toBe(PROD_US_ENDPOINT);
+    });
+  });
+
+  it("treats null and whitespace-only as unset, without logging", () => {
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    expect(resolveApiEndpoint(null)).toBe(PROD_US_ENDPOINT);
+    expect(resolveApiEndpoint("   ")).toBe(PROD_US_ENDPOINT);
+    expect(error).not.toHaveBeenCalled();
   });
 
   it("lets REACT_APP_AMP_SERVER take priority over the region", () => {
@@ -73,6 +96,14 @@ describe("resolveApiEndpoint", () => {
 });
 
 describe("region store", () => {
+  it("stores only a known region, and drops an invalid one", () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    setAmpersandRegion("mars");
+    expect(getAmpersandRegion()).toBeUndefined();
+    setAmpersandRegion(" EU ");
+    expect(getAmpersandRegion()).toBe("eu");
+  });
+
   it("round-trips the region set by AmpersandProvider", () => {
     expect(getAmpersandRegion()).toBeUndefined();
     setAmpersandRegion("eu");

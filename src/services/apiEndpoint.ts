@@ -57,28 +57,61 @@ function getEnvEndpoint(): string | null {
   }
 }
 
-/**
- * Resolves a region to its endpoint, falling back to the default endpoint for an unknown region.
- */
-function getRegionalEndpoint(region?: string): string {
-  if (!region) return PROD_US_ENDPOINT;
+/** Values already reported, so a bad region logs once instead of on every render. */
+const warnedRegions = new Set<string>();
 
-  const endpoint = REGIONAL_ENDPOINTS[region.trim().toLowerCase()];
-  if (!endpoint) {
-    console.error(
-      `Unknown Ampersand region "${region}". Falling back to ${PROD_US_ENDPOINT}.`,
+function warnOnce(key: string, message: string): void {
+  if (warnedRegions.has(key)) return;
+  warnedRegions.add(key);
+  console.error(message);
+}
+
+/**
+ * Validates and canonicalises a region, returning undefined (meaning "use the US endpoint")
+ * for anything unrecognised. Builders reach this through a cast, so the value is untyped at
+ * runtime and may be any shape.
+ */
+function normalizeRegion(region?: unknown): string | undefined {
+  if (region === undefined || region === null) return undefined;
+
+  if (typeof region !== "string") {
+    warnOnce(
+      `type:${typeof region}`,
+      `Ampersand region must be a string, received ${typeof region}. Using ${PROD_US_ENDPOINT}.`,
     );
-    return PROD_US_ENDPOINT;
+    return undefined;
   }
 
-  return endpoint;
+  const normalized = region.trim().toLowerCase();
+  if (!normalized) return undefined;
+
+  // Own-property check only: a plain object inherits keys such as "constructor" and
+  // "__proto__", which would otherwise resolve to a function or prototype object.
+  if (!Object.prototype.hasOwnProperty.call(REGIONAL_ENDPOINTS, normalized)) {
+    warnOnce(
+      `region:${normalized}`,
+      `Unknown Ampersand region "${region}". Expected one of: ` +
+        `${Object.keys(REGIONAL_ENDPOINTS).join(", ")}. Using ${PROD_US_ENDPOINT}.`,
+    );
+    return undefined;
+  }
+
+  return normalized;
+}
+
+/**
+ * Resolves a region to its endpoint, falling back to the US endpoint for an unknown region.
+ */
+function getRegionalEndpoint(region?: unknown): string {
+  const normalized = normalizeRegion(region);
+  return normalized ? REGIONAL_ENDPOINTS[normalized] : PROD_US_ENDPOINT;
 }
 
 /**
  * The API server origin (no version path), e.g. "https://api.eu.withampersand.com".
  * `REACT_APP_AMP_SERVER` takes priority over `region`.
  */
-export function resolveApiEndpoint(region?: string): string {
+export function resolveApiEndpoint(region?: unknown): string {
   return getEnvEndpoint() ?? getRegionalEndpoint(region);
 }
 
@@ -89,8 +122,10 @@ export function resolveApiEndpoint(region?: string): string {
  */
 let ampersandRegion: string | undefined;
 
-export function setAmpersandRegion(region?: string): void {
-  ampersandRegion = region;
+export function setAmpersandRegion(region?: unknown): void {
+  // Validated here, at the provider, so an invalid value is reported once rather than on
+  // every request, and only a known region is ever stored.
+  ampersandRegion = normalizeRegion(region);
 }
 
 export function getAmpersandRegion(): string | undefined {
