@@ -7,7 +7,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCustomAuthConnectMutation } from "src/hooks/mutation/useCustomAuthConnectMutation";
-import { AMP_SERVER } from "src/services/api";
+import { getAmpServer } from "src/services/api";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { CustomAuthFlowProps } from "../CustomAuthFlowProps";
@@ -85,7 +85,7 @@ export function MultiStepCustomAuthFlow({
   useEffect(() => {
     const onMessage = (ev: MessageEvent<CustomAuthCallbackMessage>) => {
       // Accept only messages from the API origin (where the callback is served).
-      if (ev.origin !== AMP_SERVER) return;
+      if (ev.origin !== getAmpServer()) return;
       if (ev.data?.source !== CALLBACK_MESSAGE_SOURCE) return;
 
       const sessionId = sessionIdRef.current;

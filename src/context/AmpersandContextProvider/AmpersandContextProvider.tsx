@@ -8,6 +8,7 @@
 import React, { createContext, useContext } from "react";
 import { ResponseError } from "@generated/api/src";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setAmpersandRegion } from "src/services/apiEndpoint";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
@@ -37,6 +38,22 @@ interface AmpersandProviderProps {
       consumerRef: string;
       groupRef: string;
     }) => Promise<string>;
+  };
+  children: React.ReactNode;
+}
+
+/**
+ * Internal props that extend the public options with the region option.
+ * This is not exported from the public API.
+ */
+interface AmpersandProviderInternalProps {
+  options: AmpersandProviderProps["options"] & {
+    /**
+     * Routes every API request to a regional endpoint, e.g. "eu" for
+     * https://api.eu.withampersand.com. Defaults to the global endpoint.
+     * Ignored when REACT_APP_AMP_SERVER is set.
+     */
+    region?: string;
   };
   children: React.ReactNode;
 }
@@ -83,9 +100,14 @@ const queryClient = new QueryClient({
 
 export function AmpersandProvider(props: AmpersandProviderProps) {
   const {
-    options: { apiKey, projectId, project, getToken },
+    options: { apiKey, projectId, project, getToken, region },
     children,
-  } = props;
+  } = props as AmpersandProviderInternalProps;
+
+  // Set during render, not in an effect: children fire API requests from their own effects,
+  // which run before the parent's, so an effect here would land after the first request.
+  setAmpersandRegion(region);
+
   const projectIdOrName = project || projectId;
   if (projectId && project) {
     throw new Error(

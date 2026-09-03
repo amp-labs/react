@@ -17,7 +17,7 @@ import {
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
-import { AMP_SERVER } from "src/services/api";
+import { getAmpServer } from "src/services/api";
 
 import { enableCSRFProtection } from "../enableCSRFprotection";
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
@@ -90,7 +90,7 @@ export function OauthFlow2({
   useEffect(() => {
     const onMessage = (ev: MessageEvent<AuthEvent>) => {
       // Accept only events from *your* popup origin
-      if (ev.origin !== AMP_SERVER) return;
+      if (ev.origin !== getAmpServer()) return;
 
       if (ev.data?.eventType === "AUTHORIZATION_SUCCEEDED") {
         setError(null);
