@@ -30,6 +30,7 @@ import { useApiKey } from "src/context/ApiKeyContextProvider";
 import { useJwtToken } from "src/context/JwtTokenContextProvider";
 import { useInstallationProps } from "src/headless/InstallationProvider";
 
+import { getAmpersandRegion, resolveApiEndpoint } from "./apiEndpoint";
 import { ApiService } from "./ApiService";
 import { LIB_VERSION } from "./version";
 
@@ -46,44 +47,23 @@ import { LIB_VERSION } from "./version";
  *
  * */
 const VERSION = "v1";
-const prodEndpoint = "https://api.withampersand.com";
-
-function getApiEndpoint(): string {
-  try {
-    const ENV_SERVER = process.env.REACT_APP_AMP_SERVER;
-    switch (ENV_SERVER) {
-      case "local":
-        return "http://localhost:8080";
-      case "dev":
-        return "https://dev-api.withampersand.com";
-      case "staging":
-        return "https://staging-api.withampersand.com";
-      case "prod":
-        return prodEndpoint;
-      case "mock":
-        return "http://127.0.0.1:4010";
-      case "":
-        return prodEndpoint;
-      default:
-        // The user may provide an arbitrary URL here if they want to, or else the
-        // default prod url will be used.
-        return ENV_SERVER ?? prodEndpoint;
-    }
-  } catch {
-    return prodEndpoint;
-  }
-}
 
 const getApiRoot = (server: string, version: string): string =>
   `${server}/${version}`;
 
-// REACT_APP_AMP_SERVER=local npm start will use the local server
-function assignRoot(): string {
-  return getApiRoot(getApiEndpoint(), VERSION);
-}
+/**
+ * The API server origin, e.g. "https://api.withampersand.com". Resolved on every call because
+ * the region (set by AmpersandProvider) is not known at module load time.
+ *
+ * REACT_APP_AMP_SERVER=local npm start will use the local server.
+ */
+export const getAmpServer = (): string =>
+  resolveApiEndpoint(getAmpersandRegion());
 
-export const AMP_SERVER = getApiEndpoint();
-export const AMP_API_ROOT = assignRoot();
+/**
+ * The versioned API root used as the SDK basePath, e.g. "https://api.withampersand.com/v1".
+ */
+export const getAmpApiRoot = (): string => getApiRoot(getAmpServer(), VERSION);
 
 /**
  * we can modify the authentication, baseURL and other configurations to access
@@ -94,7 +74,7 @@ export const AMP_API_ROOT = assignRoot();
  * */
 
 const config = new Configuration({
-  basePath: AMP_API_ROOT,
+  basePath: getAmpApiRoot(),
   headers: {
     "X-Amp-Client": "react",
     "X-Amp-Client-Version": LIB_VERSION,
@@ -133,7 +113,7 @@ const createJwtAuth = (token: string) => {
 
 const createAuthConfig = (authHeader: string, authValue: string) =>
   new Configuration({
-    basePath: AMP_API_ROOT,
+    basePath: getAmpApiRoot(),
     headers: {
       "X-Amp-Client": "react",
       "X-Amp-Client-Version": LIB_VERSION,

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { AMP_SERVER } from "services/api";
+import { getAmpServer } from "services/api";
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -53,7 +53,7 @@ export function useReceiveMessageEventHandler(
   return useCallback(
     (event: MessageEvent) => {
       // Ignore messages from unexpected origins
-      if (event.origin !== AMP_SERVER) {
+      if (event.origin !== getAmpServer()) {
         return;
       }
 
