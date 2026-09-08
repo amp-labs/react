@@ -39,18 +39,10 @@ interface AmpersandProviderProps {
       groupRef: string;
     }) => Promise<string>;
     /**
-     * Internal, unsupported. Routes every API request to a regional endpoint
+     * Preview feature: region-specific API endpoints.
      * ("eu" -> https://api.eu.withampersand.com). Ignored when REACT_APP_AMP_SERVER is set.
      *
-     * Typed `never` on purpose: setting it requires an explicit `@ts-expect-error`, which is
-     * the acknowledgement that this is not part of the supported API. `never` (rather than
-     * simply omitting the key) makes that gate hold for both an inline `options={{ ... }}`
-     * literal and a pre-built `const options = { ... }` object — excess-property checking
-     * alone only catches the former.
-     *
-     * Deliberately NOT tagged `@internal`: API Extractor strips `@internal` members from the
-     * published .d.ts, and a stripped member is only caught by excess-property checking, which
-     * would silently un-gate the pre-built-object form for every consumer of the package.
+     * Typed `never` on purpose: setting it requires an explicit `@ts-expect-error`
      */
     region?: never;
   };
@@ -58,7 +50,7 @@ interface AmpersandProviderProps {
 }
 
 /**
- * Internal props that widen `region` back to the values the library actually accepts.
+ * Internal props.
  * This is not exported from the public API.
  */
 interface AmpersandProviderInternalProps {
@@ -72,7 +64,7 @@ interface AmpersandContextValue {
   options: AmpersandProviderProps["options"];
   projectIdOrName: string;
   /**
-   * Validated region for this provider, or undefined for the default (US) endpoint.
+   * Region for API calls, if it's undefined, defaults to US
    * Read it through `useAmpServer()` / `useAmpApiRoot()` rather than directly.
    *
    * @internal

@@ -10,10 +10,6 @@
  *    `REACT_APP_AMP_SERVER` is set.
  *
  * With neither set, the US production endpoint is used.
- *
- * This module is intentionally free of mutable state: the region travels through React
- * context (see `AmpersandProvider`), so two providers, or two concurrent SSR requests,
- * cannot overwrite each other's endpoint.
  */
 
 /** US production endpoint. Used when no region is given. */
