@@ -7,7 +7,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCustomAuthConnectMutation } from "src/hooks/mutation/useCustomAuthConnectMutation";
-import { getAmpServer } from "src/services/api";
+import { useAmpServer } from "src/services/api";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { CustomAuthFlowProps } from "../CustomAuthFlowProps";
@@ -47,6 +47,7 @@ export function MultiStepCustomAuthFlow({
   moduleError,
 }: CustomAuthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
+  const ampServer = useAmpServer();
   const queryClient = useQueryClient();
   const { mutateAsync: customAuthConnectAsync, isPending } =
     useCustomAuthConnectMutation();
@@ -85,7 +86,7 @@ export function MultiStepCustomAuthFlow({
   useEffect(() => {
     const onMessage = (ev: MessageEvent<CustomAuthCallbackMessage>) => {
       // Accept only messages from the API origin (where the callback is served).
-      if (ev.origin !== getAmpServer()) return;
+      if (ev.origin !== ampServer) return;
       if (ev.data?.source !== CALLBACK_MESSAGE_SOURCE) return;
 
       const sessionId = sessionIdRef.current;
@@ -112,7 +113,7 @@ export function MultiStepCustomAuthFlow({
       window.removeEventListener("message", onMessage);
       popupRef.current?.close();
     };
-  }, [projectIdOrName, customAuthConnectAsync, handleResult]);
+  }, [projectIdOrName, customAuthConnectAsync, handleResult, ampServer]);
 
   const onNext = useCallback(
     (form: CustomAuthFormData) => {

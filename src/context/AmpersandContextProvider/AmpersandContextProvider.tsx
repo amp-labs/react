@@ -5,10 +5,10 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { ResponseError } from "@generated/api/src";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { setAmpersandRegion } from "src/services/apiEndpoint";
+import { AmpersandRegion, normalizeRegion } from "src/services/apiEndpoint";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
@@ -38,22 +38,32 @@ interface AmpersandProviderProps {
       consumerRef: string;
       groupRef: string;
     }) => Promise<string>;
+    /**
+     * Internal, unsupported. Routes every API request to a regional endpoint
+     * ("eu" -> https://api.eu.withampersand.com). Ignored when REACT_APP_AMP_SERVER is set.
+     *
+     * Typed `never` on purpose: setting it requires an explicit `@ts-expect-error`, which is
+     * the acknowledgement that this is not part of the supported API. `never` (rather than
+     * simply omitting the key) makes that gate hold for both an inline `options={{ ... }}`
+     * literal and a pre-built `const options = { ... }` object — excess-property checking
+     * alone only catches the former.
+     *
+     * Deliberately NOT tagged `@internal`: API Extractor strips `@internal` members from the
+     * published .d.ts, and a stripped member is only caught by excess-property checking, which
+     * would silently un-gate the pre-built-object form for every consumer of the package.
+     */
+    region?: never;
   };
   children: React.ReactNode;
 }
 
 /**
- * Internal props that extend the public options with the region option.
+ * Internal props that widen `region` back to the values the library actually accepts.
  * This is not exported from the public API.
  */
 interface AmpersandProviderInternalProps {
-  options: AmpersandProviderProps["options"] & {
-    /**
-     * Routes every API request to a regional endpoint, e.g. "eu" for
-     * https://api.eu.withampersand.com. Defaults to the global endpoint.
-     * Ignored when REACT_APP_AMP_SERVER is set.
-     */
-    region?: string;
+  options: Omit<AmpersandProviderProps["options"], "region"> & {
+    region?: AmpersandRegion;
   };
   children: React.ReactNode;
 }
@@ -61,6 +71,13 @@ interface AmpersandProviderInternalProps {
 interface AmpersandContextValue {
   options: AmpersandProviderProps["options"];
   projectIdOrName: string;
+  /**
+   * Validated region for this provider, or undefined for the default (US) endpoint.
+   * Read it through `useAmpServer()` / `useAmpApiRoot()` rather than directly.
+   *
+   * @internal
+   */
+  region?: AmpersandRegion;
 }
 
 export const AmpersandContext = createContext<AmpersandContextValue | null>(
@@ -104,11 +121,20 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     children,
   } = props as AmpersandProviderInternalProps;
 
-  // Set during render, not in an effect: children fire API requests from their own effects,
-  // which run before the parent's, so an effect here would land after the first request.
-  setAmpersandRegion(region);
-
   const projectIdOrName = project || projectId;
+
+  // Validated here rather than at each request, so an invalid value is reported once.
+  const normalizedRegion = useMemo(() => normalizeRegion(region), [region]);
+
+  const contextValue = useMemo<AmpersandContextValue>(
+    () => ({
+      options: props.options,
+      projectIdOrName: projectIdOrName as string,
+      region: normalizedRegion,
+    }),
+    [props.options, projectIdOrName, normalizedRegion],
+  );
+
   if (projectId && project) {
     throw new Error(
       "Use AmpersandProvider either with projectId or project but not both.",
@@ -131,11 +157,6 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       "Cannot use AmpersandProvider with both apiKey and getToken.",
     );
   }
-
-  const contextValue: AmpersandContextValue = {
-    options: props.options,
-    projectIdOrName,
-  };
 
   return (
     <QueryClientProvider client={queryClient}>

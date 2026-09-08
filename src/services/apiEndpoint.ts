@@ -5,10 +5,15 @@
  *
  * 1. `REACT_APP_AMP_SERVER` — always wins, so the Ampersand team can point a build at
  *    local / dev / staging (or an arbitrary URL).
- * 2. `region` — an internal, undocumented option on `AmpersandProvider` that is not part of
- *    the public TypeScript types. Ignored whenever `REACT_APP_AMP_SERVER` is set.
+ * 2. `region` — an internal option on `AmpersandProvider`, typed `never` on the public
+ *    props so that setting it requires an explicit `@ts-expect-error`. Ignored whenever
+ *    `REACT_APP_AMP_SERVER` is set.
  *
  * With neither set, the US production endpoint is used.
+ *
+ * This module is intentionally free of mutable state: the region travels through React
+ * context (see `AmpersandProvider`), so two providers, or two concurrent SSR requests,
+ * cannot overwrite each other's endpoint.
  */
 
 /** US production endpoint. Used when no region is given. */
@@ -21,10 +26,13 @@ export const PROD_EU_ENDPOINT = "https://api.eu.withampersand.com";
  * Production endpoints keyed by the `region` option. No region means US.
  * Add an entry here to support another region.
  */
-const REGIONAL_ENDPOINTS: Record<string, string> = {
+const REGIONAL_ENDPOINTS = {
   us: PROD_US_ENDPOINT,
   eu: PROD_EU_ENDPOINT,
-};
+} as const;
+
+/** A region the library knows how to route to. */
+export type AmpersandRegion = keyof typeof REGIONAL_ENDPOINTS;
 
 /**
  * Resolves `REACT_APP_AMP_SERVER`, or null when it is unset/empty (in which case the region
@@ -68,10 +76,10 @@ function warnOnce(key: string, message: string): void {
 
 /**
  * Validates and canonicalises a region, returning undefined (meaning "use the US endpoint")
- * for anything unrecognised. Builders reach this through a cast, so the value is untyped at
- * runtime and may be any shape.
+ * for anything unrecognised. Builders reach this through a `@ts-expect-error`, so the value is
+ * untyped at runtime and may be any shape.
  */
-function normalizeRegion(region?: unknown): string | undefined {
+export function normalizeRegion(region?: unknown): AmpersandRegion | undefined {
   if (region === undefined || region === null) return undefined;
 
   if (typeof region !== "string") {
@@ -96,7 +104,7 @@ function normalizeRegion(region?: unknown): string | undefined {
     return undefined;
   }
 
-  return normalized;
+  return normalized as AmpersandRegion;
 }
 
 /**
@@ -113,21 +121,4 @@ function getRegionalEndpoint(region?: unknown): string {
  */
 export function resolveApiEndpoint(region?: unknown): string {
   return getEnvEndpoint() ?? getRegionalEndpoint(region);
-}
-
-/**
- * The region is module state rather than context so that it stays out of the library's public
- * types (like the `variant` prop on InstallIntegration). `AmpersandProvider` sets it during
- * render — before any child effect or query runs — and readers resolve the endpoint lazily.
- */
-let ampersandRegion: string | undefined;
-
-export function setAmpersandRegion(region?: unknown): void {
-  // Validated here, at the provider, so an invalid value is reported once rather than on
-  // every request, and only a known region is ever stored.
-  ampersandRegion = normalizeRegion(region);
-}
-
-export function getAmpersandRegion(): string | undefined {
-  return ampersandRegion;
 }

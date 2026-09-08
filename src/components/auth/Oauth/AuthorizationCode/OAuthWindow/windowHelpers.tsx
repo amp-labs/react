@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { getAmpServer } from "services/api";
+import { useAmpServer } from "services/api";
 
 const DEFAULT_WIDTH = 600; // px
 const DEFAULT_HEIGHT = 600; // px
@@ -49,11 +49,12 @@ export function useReceiveMessageEventHandler(
   onSuccessConnect?: () => void,
 ) {
   const queryClient = useQueryClient();
+  const ampServer = useAmpServer();
 
   return useCallback(
     (event: MessageEvent) => {
       // Ignore messages from unexpected origins
-      if (event.origin !== getAmpServer()) {
+      if (event.origin !== ampServer) {
         return;
       }
 
@@ -91,6 +92,13 @@ export function useReceiveMessageEventHandler(
         // do not close the window if error occurs
       }
     },
-    [oauthWindow, onError, queryClient, setConnectionId, onSuccessConnect],
+    [
+      oauthWindow,
+      onError,
+      queryClient,
+      setConnectionId,
+      onSuccessConnect,
+      ampServer,
+    ],
   );
 }

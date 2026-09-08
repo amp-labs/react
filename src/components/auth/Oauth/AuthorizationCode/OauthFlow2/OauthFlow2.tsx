@@ -17,7 +17,7 @@ import {
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useCreateOauthConnectionMutation } from "src/hooks/mutation/useCreateOauthConnectionMutation";
 import { useConnectionsListQuery } from "src/hooks/query/useConnectionsListQuery";
-import { getAmpServer } from "src/services/api";
+import { useAmpServer } from "src/services/api";
 
 import { enableCSRFProtection } from "../enableCSRFprotection";
 import { NoWorkspaceEntryContent } from "../NoWorkspaceEntry/NoWorkspaceEntryContent";
@@ -64,6 +64,7 @@ export function OauthFlow2({
   moduleError,
 }: OauthFlowProps) {
   const { projectIdOrName } = useAmpersandProviderProps();
+  const ampServer = useAmpServer();
   const queryClient = useQueryClient();
   const popupRef = useRef<Window | null>(null);
   const isSalesforce = isSalesforceProvider(provider);
@@ -90,7 +91,7 @@ export function OauthFlow2({
   useEffect(() => {
     const onMessage = (ev: MessageEvent<AuthEvent>) => {
       // Accept only events from *your* popup origin
-      if (ev.origin !== getAmpServer()) return;
+      if (ev.origin !== ampServer) return;
 
       if (ev.data?.eventType === "AUTHORIZATION_SUCCEEDED") {
         setError(null);
@@ -107,7 +108,7 @@ export function OauthFlow2({
 
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [queryClient]);
+  }, [queryClient, ampServer]);
 
   const handleFormDataChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
