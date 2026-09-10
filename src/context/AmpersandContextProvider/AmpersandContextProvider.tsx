@@ -5,10 +5,10 @@
  * Also optionally accepts theme styles object with CSS values.
  */
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { ResponseError } from "@generated/api/src";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { setAmpersandRegion } from "src/services/apiEndpoint";
+import { AmpersandRegion, normalizeRegion } from "src/services/apiEndpoint";
 
 import { ApiKeyProvider } from "../ApiKeyContextProvider";
 import { ErrorStateProvider } from "../ErrorContextProvider";
@@ -38,22 +38,24 @@ interface AmpersandProviderProps {
       consumerRef: string;
       groupRef: string;
     }) => Promise<string>;
+    /**
+     * Preview feature: region-specific API endpoints.
+     * ("eu" -> https://api.eu.withampersand.com). Ignored when REACT_APP_AMP_SERVER is set.
+     *
+     * Typed `never` on purpose: setting it requires an explicit `@ts-expect-error`
+     */
+    region?: never;
   };
   children: React.ReactNode;
 }
 
 /**
- * Internal props that extend the public options with the region option.
+ * Internal props.
  * This is not exported from the public API.
  */
 interface AmpersandProviderInternalProps {
-  options: AmpersandProviderProps["options"] & {
-    /**
-     * Routes every API request to a regional endpoint, e.g. "eu" for
-     * https://api.eu.withampersand.com. Defaults to the global endpoint.
-     * Ignored when REACT_APP_AMP_SERVER is set.
-     */
-    region?: string;
+  options: Omit<AmpersandProviderProps["options"], "region"> & {
+    region?: AmpersandRegion;
   };
   children: React.ReactNode;
 }
@@ -61,6 +63,13 @@ interface AmpersandProviderInternalProps {
 interface AmpersandContextValue {
   options: AmpersandProviderProps["options"];
   projectIdOrName: string;
+  /**
+   * Region for API calls, if it's undefined, defaults to US
+   * Read it through `useAmpServer()` / `useAmpApiRoot()` rather than directly.
+   *
+   * @internal
+   */
+  region?: AmpersandRegion;
 }
 
 export const AmpersandContext = createContext<AmpersandContextValue | null>(
@@ -104,11 +113,20 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
     children,
   } = props as AmpersandProviderInternalProps;
 
-  // Set during render, not in an effect: children fire API requests from their own effects,
-  // which run before the parent's, so an effect here would land after the first request.
-  setAmpersandRegion(region);
-
   const projectIdOrName = project || projectId;
+
+  // Validated here rather than at each request, so an invalid value is reported once.
+  const normalizedRegion = useMemo(() => normalizeRegion(region), [region]);
+
+  const contextValue = useMemo<AmpersandContextValue>(
+    () => ({
+      options: props.options,
+      projectIdOrName: projectIdOrName as string,
+      region: normalizedRegion,
+    }),
+    [props.options, projectIdOrName, normalizedRegion],
+  );
+
   if (projectId && project) {
     throw new Error(
       "Use AmpersandProvider either with projectId or project but not both.",
@@ -131,11 +149,6 @@ export function AmpersandProvider(props: AmpersandProviderProps) {
       "Cannot use AmpersandProvider with both apiKey and getToken.",
     );
   }
-
-  const contextValue: AmpersandContextValue = {
-    options: props.options,
-    projectIdOrName,
-  };
 
   return (
     <QueryClientProvider client={queryClient}>

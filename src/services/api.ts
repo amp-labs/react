@@ -1,5 +1,5 @@
 // currently not using a bundler to support alias imports
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import {
   BackfillConfig,
   BaseWriteConfigObject,
@@ -26,11 +26,12 @@ import {
   UpdateInstallationOperationRequest,
   UpdateInstallationRequestInstallationConfig,
 } from "@generated/api/src";
+import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useApiKey } from "src/context/ApiKeyContextProvider";
 import { useJwtToken } from "src/context/JwtTokenContextProvider";
 import { useInstallationProps } from "src/headless/InstallationProvider";
 
-import { getAmpersandRegion, resolveApiEndpoint } from "./apiEndpoint";
+import { resolveApiEndpoint } from "./apiEndpoint";
 import { ApiService } from "./ApiService";
 import { LIB_VERSION } from "./version";
 
@@ -52,46 +53,26 @@ const getApiRoot = (server: string, version: string): string =>
   `${server}/${version}`;
 
 /**
- * The API server origin, e.g. "https://api.withampersand.com". Resolved on every call because
- * the region (set by AmpersandProvider) is not known at module load time.
+ * The API server origin for the surrounding `AmpersandProvider`,
+ * e.g. "https://api.withampersand.com".
+ *
+ * A hook rather than a module function: the region lives in provider context, so there is no
+ * correct value to compute at module-load time.
  *
  * REACT_APP_AMP_SERVER=local npm start will use the local server.
  */
-export const getAmpServer = (): string =>
-  resolveApiEndpoint(getAmpersandRegion());
+export function useAmpServer(): string {
+  const { region } = useAmpersandProviderProps();
+  return useMemo(() => resolveApiEndpoint(region), [region]);
+}
 
 /**
  * The versioned API root used as the SDK basePath, e.g. "https://api.withampersand.com/v1".
  */
-export const getAmpApiRoot = (): string => getApiRoot(getAmpServer(), VERSION);
-
-/**
- * we can modify the authentication, baseURL and other configurations to access
- * our API in the future
- *
- * When in dev mode we want to mock the PRISM_MOCK_URL
- *
- * */
-
-const config = new Configuration({
-  basePath: getAmpApiRoot(),
-  headers: {
-    "X-Amp-Client": "react",
-    "X-Amp-Client-Version": LIB_VERSION,
-  },
-});
-
-let apiValue = new ApiService(config);
-
-// For testing, etc. we may want to use a different API configuration than the default
-export const setApi = (api: ApiService) => {
-  apiValue = api;
-};
-
-/**
- * @deprecated
- */
-export const api = () => apiValue;
+export function useAmpApiRoot(): string {
+  const ampServer = useAmpServer();
+  return useMemo(() => getApiRoot(ampServer, VERSION), [ampServer]);
+}
 
 // Authentication helper functions
 const createApiKeyAuth = (apiKey: string) => ({
@@ -111,9 +92,13 @@ const createJwtAuth = (token: string) => {
   }
 };
 
-const createAuthConfig = (authHeader: string, authValue: string) =>
+const createAuthConfig = (
+  authHeader: string,
+  authValue: string,
+  basePath: string,
+) =>
   new Configuration({
-    basePath: getAmpApiRoot(),
+    basePath,
     headers: {
       "X-Amp-Client": "react",
       "X-Amp-Client-Version": LIB_VERSION,
@@ -147,6 +132,7 @@ export function useAPI(
   const apiKey = useApiKey();
   const { getToken } = useJwtToken();
   const contextProps = useInstallationProps(); // in InstallationProvider
+  const ampApiRoot = useAmpApiRoot();
 
   // Use provided overrides, fall back to context values
   const consumerRef = consumerRefOverride || contextProps.consumerRef;
@@ -157,7 +143,11 @@ export function useAPI(
   const getAPI = useCallback(async () => {
     if (apiKey) {
       const auth = createApiKeyAuth(apiKey);
-      const configWithAuth = createAuthConfig(auth.header, auth.value);
+      const configWithAuth = createAuthConfig(
+        auth.header,
+        auth.value,
+        ampApiRoot,
+      );
       return new ApiService(configWithAuth);
     }
 
@@ -183,7 +173,11 @@ export function useAPI(
       }
       const token = await getToken({ consumerRef, groupRef });
       const auth = createJwtAuth(token);
-      const configWithAuth = createAuthConfig(auth.header, auth.value);
+      const configWithAuth = createAuthConfig(
+        auth.header,
+        auth.value,
+        ampApiRoot,
+      );
       return new ApiService(configWithAuth);
     }
 
@@ -191,7 +185,7 @@ export function useAPI(
     throw new Error(
       "Unable to create API service without API key or JWT token.",
     );
-  }, [apiKey, getToken, consumerRef, groupRef]);
+  }, [apiKey, getToken, consumerRef, groupRef, ampApiRoot]);
 
   return getAPI;
 }

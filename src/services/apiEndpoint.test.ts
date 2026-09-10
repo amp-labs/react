@@ -1,18 +1,24 @@
 import { afterEach, describe, expect, it, jest } from "@jest/globals";
 
 import {
-  getAmpersandRegion,
+  normalizeRegion,
   PROD_EU_ENDPOINT,
   PROD_US_ENDPOINT,
   resolveApiEndpoint,
-  setAmpersandRegion,
 } from "./apiEndpoint";
 
 const ENV_KEY = "REACT_APP_AMP_SERVER";
 
+function setEnv(value?: string) {
+  if (value === undefined) {
+    delete process.env[ENV_KEY];
+  } else {
+    process.env[ENV_KEY] = value;
+  }
+}
+
 afterEach(() => {
-  delete process.env[ENV_KEY];
-  setAmpersandRegion(undefined);
+  setEnv(undefined);
   jest.restoreAllMocks();
 });
 
@@ -41,11 +47,15 @@ describe("resolveApiEndpoint", () => {
 
   it("does not resolve inherited object keys to an endpoint", () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
-    ["constructor", "__proto__", "toString", "valueOf", "hasOwnProperty"].forEach(
-      (key) => {
-        expect(resolveApiEndpoint(key)).toBe(PROD_US_ENDPOINT);
-      },
-    );
+    [
+      "constructor",
+      "__proto__",
+      "toString",
+      "valueOf",
+      "hasOwnProperty",
+    ].forEach((key) => {
+      expect(resolveApiEndpoint(key)).toBe(PROD_US_ENDPOINT);
+    });
   });
 
   it("falls back instead of throwing for a non-string region", () => {
@@ -63,19 +73,19 @@ describe("resolveApiEndpoint", () => {
   });
 
   it("lets REACT_APP_AMP_SERVER take priority over the region", () => {
-    process.env[ENV_KEY] = "staging";
+    setEnv("staging");
     expect(resolveApiEndpoint("eu")).toBe(
       "https://staging-api.withampersand.com",
     );
   });
 
   it("lets an arbitrary REACT_APP_AMP_SERVER url take priority over the region", () => {
-    process.env[ENV_KEY] = "https://my-tunnel.example.com";
+    setEnv("https://my-tunnel.example.com");
     expect(resolveApiEndpoint("eu")).toBe("https://my-tunnel.example.com");
   });
 
   it("applies the region when REACT_APP_AMP_SERVER is empty", () => {
-    process.env[ENV_KEY] = "";
+    setEnv("");
     expect(resolveApiEndpoint("eu")).toBe(PROD_EU_ENDPOINT);
   });
 
@@ -89,25 +99,40 @@ describe("resolveApiEndpoint", () => {
     ];
 
     cases.forEach(([env, expected]) => {
-      process.env[ENV_KEY] = env;
+      setEnv(env);
       expect(resolveApiEndpoint()).toBe(expected);
     });
   });
+
+  it("does not throw when process is unavailable", () => {
+    const savedProcess = globalThis.process;
+    // Simulate a browser bundle with no process shim (e.g. plain Vite).
+    // @ts-expect-error deliberately removing the global for this test
+    delete globalThis.process;
+    try {
+      expect(resolveApiEndpoint()).toBe(PROD_US_ENDPOINT);
+      expect(resolveApiEndpoint("eu")).toBe(PROD_EU_ENDPOINT);
+    } finally {
+      globalThis.process = savedProcess;
+    }
+  });
 });
 
-describe("region store", () => {
-  it("stores only a known region, and drops an invalid one", () => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
-    setAmpersandRegion("mars");
-    expect(getAmpersandRegion()).toBeUndefined();
-    setAmpersandRegion(" EU ");
-    expect(getAmpersandRegion()).toBe("eu");
+describe("normalizeRegion", () => {
+  it("returns undefined for an unset region", () => {
+    expect(normalizeRegion(undefined)).toBeUndefined();
+    expect(normalizeRegion(null)).toBeUndefined();
+    expect(normalizeRegion("  ")).toBeUndefined();
   });
 
-  it("round-trips the region set by AmpersandProvider", () => {
-    expect(getAmpersandRegion()).toBeUndefined();
-    setAmpersandRegion("eu");
-    expect(getAmpersandRegion()).toBe("eu");
-    expect(resolveApiEndpoint(getAmpersandRegion())).toBe(PROD_EU_ENDPOINT);
+  it("canonicalises a known region", () => {
+    expect(normalizeRegion(" EU ")).toBe("eu");
+    expect(normalizeRegion("us")).toBe("us");
+  });
+
+  it("drops an unknown region so the provider stores only valid values", () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    expect(normalizeRegion("mars")).toBeUndefined();
+    expect(resolveApiEndpoint(normalizeRegion("mars"))).toBe(PROD_US_ENDPOINT);
   });
 });
