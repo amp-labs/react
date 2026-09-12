@@ -7,6 +7,7 @@ import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider"
 import { useConnections } from "src/context/ConnectionsContextProvider";
 import { useUpdateConnectionMutation } from "src/hooks/mutation/useUpdateConnectionMutation";
 import { useProvider } from "src/hooks/useProvider";
+import { useResubscribeOnReauth } from "src/hooks/useResubscribeOnReauth";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { FieldHeader } from "../../fields/FieldHeader";
@@ -32,9 +33,13 @@ export function UpdateApiKeyConnect({ provider }: { provider?: string }) {
 
   const resetSuccessConnect = () => setSuccessConnect(false);
 
+  const startResubscribe = useResubscribeOnReauth();
+
   const handleSuccessConnect = () => {
     setSuccessConnect(true);
     setError(null);
+    // Opt-in only; no-ops unless the builder set resubscribeOnReAuth.
+    startResubscribe();
   };
 
   const error = updateError?.message || localError || null;

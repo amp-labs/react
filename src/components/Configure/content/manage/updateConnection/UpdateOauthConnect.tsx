@@ -6,6 +6,7 @@ import { Button } from "src/components/ui-base/Button";
 import { useConnections } from "src/context/ConnectionsContextProvider";
 import { useUpdateOauthConnectMutation } from "src/hooks/mutation/useUpdateOauthConnectMutation";
 import { useProvider } from "src/hooks/useProvider";
+import { useResubscribeOnReauth } from "src/hooks/useResubscribeOnReauth";
 import { handleServerError } from "src/utils/handleServerError";
 
 import { FieldHeader } from "../../fields/FieldHeader";
@@ -63,10 +64,14 @@ export function UpdateOauthConnect({ provider }: { provider?: string }) {
     setSuccessConnect(false);
   };
 
+  const startResubscribe = useResubscribeOnReauth();
+
   const handleSuccessConnect = () => {
     setSuccessConnect(true);
     setError(null);
     setUrl(null);
+    // Opt-in only; no-ops unless the builder set resubscribeOnReAuth.
+    startResubscribe();
   };
 
   const error = updateOauthConnectError?.message || localError || null;

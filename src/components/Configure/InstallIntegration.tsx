@@ -59,6 +59,12 @@ export interface InstallIntegrationProps {
    * @experimental
    */
   fieldMapping?: FieldMapping;
+  /**
+   * When true, reauthenticating an existing connection also restarts subscribe setup for the
+   * installation if it never finished. Off by default. The consumer sees no difference; the
+   * reconnect happens behind the reauthentication flow.
+   */
+  resubscribeOnReAuth?: boolean;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -86,6 +92,7 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  resubscribeOnReAuth,
   variant,
 }: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
@@ -173,6 +180,7 @@ const InstallIntegrationContent = ({
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
+        resubscribeOnReAuth={resubscribeOnReAuth}
         resetComponent={reset}
       >
         <ConnectionsProvider>
