@@ -242,6 +242,7 @@ src/models/UpdateProviderAppRequestProviderApp.ts
 src/models/UpdateTopicRequest.ts
 src/models/UpsertMetadataRequest.ts
 src/models/UpsertMetadataResponse.ts
+src/models/UseSalesforceFlowsConfig.ts
 src/models/ValueDefault.ts
 src/models/ValueDefaultBoolean.ts
 src/models/ValueDefaultInteger.ts
