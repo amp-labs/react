@@ -37,7 +37,8 @@ export const NotificationEventType = {
     SubscribeCreateSuccess: 'subscribe.create.success',
     SubscribeUpdateSuccess: 'subscribe.update.success',
     SubscribeDeleteSuccess: 'subscribe.delete.success',
-    DestinationWebhookDisabled: 'destination.webhook.disabled'
+    DestinationWebhookDisabled: 'destination.webhook.disabled',
+    DestinationDeliveryError: 'destination.delivery.error'
 } as const;
 export type NotificationEventType = typeof NotificationEventType[keyof typeof NotificationEventType];
 
