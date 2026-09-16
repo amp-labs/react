@@ -219,6 +219,7 @@ export * from './UpdateProviderAppRequestProviderApp';
 export * from './UpdateTopicRequest';
 export * from './UpsertMetadataRequest';
 export * from './UpsertMetadataResponse';
+export * from './UseSalesforceFlowsConfig';
 export * from './ValueDefault';
 export * from './ValueDefaultBoolean';
 export * from './ValueDefaultInteger';
