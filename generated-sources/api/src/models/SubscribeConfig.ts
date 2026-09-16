@@ -19,6 +19,12 @@ import {
     SubscribeConfigObjectFromJSONTyped,
     SubscribeConfigObjectToJSON,
 } from './SubscribeConfigObject';
+import type { SubscribeInstallationProviderOptions } from './SubscribeInstallationProviderOptions';
+import {
+    SubscribeInstallationProviderOptionsFromJSON,
+    SubscribeInstallationProviderOptionsFromJSONTyped,
+    SubscribeInstallationProviderOptionsToJSON,
+} from './SubscribeInstallationProviderOptions';
 
 /**
  * 
@@ -32,6 +38,12 @@ export interface SubscribeConfig {
      * @memberof SubscribeConfig
      */
     objects: { [key: string]: SubscribeConfigObject; };
+    /**
+     * 
+     * @type {SubscribeInstallationProviderOptions}
+     * @memberof SubscribeConfig
+     */
+    providerOptions?: SubscribeInstallationProviderOptions;
 }
 
 /**
@@ -55,6 +67,7 @@ export function SubscribeConfigFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'objects': (mapValues(json['objects'], SubscribeConfigObjectFromJSON)),
+        'providerOptions': !exists(json, 'providerOptions') ? undefined : SubscribeInstallationProviderOptionsFromJSON(json['providerOptions']),
     };
 }
 
@@ -68,6 +81,7 @@ export function SubscribeConfigToJSON(value?: SubscribeConfig | null): any {
     return {
         
         'objects': (mapValues(value.objects, SubscribeConfigObjectToJSON)),
+        'providerOptions': SubscribeInstallationProviderOptionsToJSON(value.providerOptions),
     };
 }
 
