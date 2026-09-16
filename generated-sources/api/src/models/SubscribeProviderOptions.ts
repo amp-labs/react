@@ -19,15 +19,9 @@ import {
     QuotaOptimizationConfigFromJSONTyped,
     QuotaOptimizationConfigToJSON,
 } from './QuotaOptimizationConfig';
-import type { UseSalesforceFlowsConfig } from './UseSalesforceFlowsConfig';
-import {
-    UseSalesforceFlowsConfigFromJSON,
-    UseSalesforceFlowsConfigFromJSONTyped,
-    UseSalesforceFlowsConfigToJSON,
-} from './UseSalesforceFlowsConfig';
 
 /**
- * Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.
+ * Per-object subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected. Options that apply to the whole subscription live on `subscribe.providerOptions` instead.
  * @export
  * @interface SubscribeProviderOptions
  */
@@ -38,12 +32,6 @@ export interface SubscribeProviderOptions {
      * @memberof SubscribeProviderOptions
      */
     quotaOptimization?: QuotaOptimizationConfig;
-    /**
-     * 
-     * @type {UseSalesforceFlowsConfig}
-     * @memberof SubscribeProviderOptions
-     */
-    useSalesforceFlows?: UseSalesforceFlowsConfig;
 }
 
 /**
@@ -66,7 +54,6 @@ export function SubscribeProviderOptionsFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'quotaOptimization': !exists(json, 'quotaOptimization') ? undefined : QuotaOptimizationConfigFromJSON(json['quotaOptimization']),
-        'useSalesforceFlows': !exists(json, 'useSalesforceFlows') ? undefined : UseSalesforceFlowsConfigFromJSON(json['useSalesforceFlows']),
     };
 }
 
@@ -80,7 +67,6 @@ export function SubscribeProviderOptionsToJSON(value?: SubscribeProviderOptions 
     return {
         
         'quotaOptimization': QuotaOptimizationConfigToJSON(value.quotaOptimization),
-        'useSalesforceFlows': UseSalesforceFlowsConfigToJSON(value.useSalesforceFlows),
     };
 }
 

@@ -191,6 +191,7 @@ export * from './StringFieldOptions';
 export * from './SubscribeConfig';
 export * from './SubscribeConfigAllOf';
 export * from './SubscribeConfigObject';
+export * from './SubscribeInstallationProviderOptions';
 export * from './SubscribeProviderOptions';
 export * from './SubscribeRequirements';
 export * from './SubscribeSupport';

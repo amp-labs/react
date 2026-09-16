@@ -214,6 +214,7 @@ src/models/StringFieldOptions.ts
 src/models/SubscribeConfig.ts
 src/models/SubscribeConfigAllOf.ts
 src/models/SubscribeConfigObject.ts
+src/models/SubscribeInstallationProviderOptions.ts
 src/models/SubscribeProviderOptions.ts
 src/models/SubscribeRequirements.ts
 src/models/SubscribeSupport.ts

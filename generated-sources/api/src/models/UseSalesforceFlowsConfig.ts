@@ -14,13 +14,13 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * Opt a Salesforce subscribe installation into record-triggered flows and outbound messages instead of Change Data Capture. An installation uses only one subscribe method: if any object sets this to enabled, every object with a subscribe event in that installation must set it too. Delete events are not supported on this path. Defaults to false (CDC). 
+ * Opt this installation's Salesforce subscription into record-triggered flows and outbound messages instead of Change Data Capture. Delete events are not supported on this path. Defaults to false (CDC).
  * @export
  * @interface UseSalesforceFlowsConfig
  */
 export interface UseSalesforceFlowsConfig {
     /**
-     * Whether this object uses Salesforce record-triggered flows for subscribe.
+     * Whether this installation uses Salesforce record-triggered flows for subscribe.
      * @type {boolean}
      * @memberof UseSalesforceFlowsConfig
      */
