@@ -21,5 +21,9 @@ export { useConfig, useLocalConfig } from "./config/ConfigContext";
 // Config Bridge Types
 export type { InstallationConfigContent } from "./config/types";
 
+// OAuth Hooks
+export { useOAuthPrimitives } from "./oauth/useOAuthPrimitives";
+export { useOAuthConnect } from "./oauth/useOAuthConnect";
+
 // Export all necessary types
 export * from "./types";
