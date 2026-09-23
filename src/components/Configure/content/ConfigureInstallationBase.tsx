@@ -192,7 +192,7 @@ export function ConfigureInstallationBase({
         }}
       >
         {errorMsg && (
-          <FormErrorBox>
+          <FormErrorBox style={{ marginBottom: "1rem" }}>
             {typeof errorMsg === "string" ? errorMsg : "Installation Failed."}
           </FormErrorBox>
         )}
