@@ -11,7 +11,10 @@ import {
   useUpdateInstallation,
 } from "src/headless";
 import { handleServerError } from "src/utils/handleServerError";
-import { getFieldDisplayName } from "src/utils/manifest";
+import {
+  getFieldDisplayName,
+  isReadObjectAlwaysEnabled,
+} from "src/utils/manifest";
 
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
@@ -31,6 +34,17 @@ export function ReviewStep() {
   const isPending = isCreatePending || isUpdatePending;
   const { onInstallSuccess, onUpdateSuccess, setInstallation } =
     useInstallIntegrationProps();
+
+  // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
+  // only objects selected, this step saves that installation rather than setting up new objects.
+  const isOnlyAlwaysEnabled = useMemo(
+    () =>
+      selectedObjects.length > 0 &&
+      selectedObjects.every((objectName) =>
+        isReadObjectAlwaysEnabled(manifest.getReadObject(objectName).object),
+      ),
+    [selectedObjects, manifest],
+  );
 
   // Build summary data for each selected object
   const objectSummaries = useMemo(() => {
@@ -103,7 +117,7 @@ export function ReviewStep() {
 
   // An installation already exists when the integration has `enabled: always` objects: they're
   // installed as soon as the consumer connects, so this step updates it.
-  const handleCreate = useCallback(() => {
+  const handleSubmit = useCallback(() => {
     setSubmissionError(null);
 
     const onError = (error: Error) => {
@@ -148,8 +162,12 @@ export function ReviewStep() {
   return (
     <div className={styles.reviewStep}>
       <StepHeader
-        title="Review & Create"
-        description="Review your configuration before creating the installation."
+        title={isOnlyAlwaysEnabled ? "Review & Save" : "Review & Create"}
+        description={
+          isOnlyAlwaysEnabled
+            ? "Review your configuration before saving the installation."
+            : "Review your configuration before creating the installation."
+        }
       />
 
       <div className={styles.summaryList}>
@@ -198,10 +216,16 @@ export function ReviewStep() {
         <Button
           type="button"
           className={styles.createButton}
-          onClick={handleCreate}
+          onClick={handleSubmit}
           disabled={isPending}
         >
-          {isPending ? "Creating..." : "Create Installation"}
+          {isOnlyAlwaysEnabled
+            ? isPending
+              ? "Saving..."
+              : "Save Installation"
+            : isPending
+              ? "Creating..."
+              : "Create Installation"}
         </Button>
       </div>
     </div>
