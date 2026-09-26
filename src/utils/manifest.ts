@@ -6,6 +6,16 @@ import {
 } from "@generated/api/src";
 
 /**
+ * Returns whether the integration reads the object for every installation (`enabled: always`),
+ * so the customer can't turn it off.
+ */
+export function isReadObjectAlwaysEnabled(
+  object: HydratedIntegrationObject | null | undefined,
+): boolean {
+  return object?.enabled === "always";
+}
+
+/**
  * Type guard for IntegrationFieldMapping.
  * A field is a mapping if it does not have a fieldName property.
  */

@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
+import classNames from "classnames";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useProvider } from "src/hooks/useProvider";
+import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
@@ -38,6 +40,23 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
+  // Objects marked `enabled: always` are read for every installation, so they are always
+  // selected and can't be deselected. They still go through configuration like any other.
+  const alwaysEnabledObjects = useMemo(
+    () =>
+      new Set(
+        readObjects
+          .filter(isReadObjectAlwaysEnabled)
+          .map((obj) => obj.objectName),
+      ),
+    [readObjects],
+  );
+
+  const selectedOrAlwaysEnabled = useMemo(
+    () => new Set([...selected, ...alwaysEnabledObjects]),
+    [selected, alwaysEnabledObjects],
+  );
+
   // Build a set of object names that have write support in the manifest
   const writeSupported = useMemo(() => {
     const set = new Set<string>();
@@ -48,17 +67,22 @@ export function SelectObjectsStep() {
     return set;
   }, [readObjects, manifest]);
 
-  const toggleObject = useCallback((objectName: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(objectName)) {
-        next.delete(objectName);
-      } else {
-        next.add(objectName);
-      }
-      return next;
-    });
-  }, []);
+  const toggleObject = useCallback(
+    (objectName: string) => {
+      if (alwaysEnabledObjects.has(objectName)) return;
+
+      setSelected((prev) => {
+        const next = new Set(prev);
+        if (next.has(objectName)) {
+          next.delete(objectName);
+        } else {
+          next.add(objectName);
+        }
+        return next;
+      });
+    },
+    [alwaysEnabledObjects],
+  );
 
   const toggleWrite = useCallback((objectName: string) => {
     setWriteEnabled((prev) => {
@@ -73,7 +97,7 @@ export function SelectObjectsStep() {
   }, []);
 
   const handleNext = useCallback(() => {
-    const selectedArray = Array.from(selected);
+    const selectedArray = Array.from(selectedOrAlwaysEnabled);
     const previouslySelected = new Set(state.selectedObjects);
 
     setSelectedObjects(selectedArray);
@@ -85,7 +109,7 @@ export function SelectObjectsStep() {
 
     // Remove deselected objects from the config draft
     previouslySelected.forEach((objectName) => {
-      if (!selected.has(objectName)) {
+      if (!selectedOrAlwaysEnabled.has(objectName)) {
         localConfig.removeObject(objectName);
       }
     });
@@ -104,7 +128,7 @@ export function SelectObjectsStep() {
 
     nextStep();
   }, [
-    selected,
+    selectedOrAlwaysEnabled,
     state.selectedObjects,
     setSelectedObjects,
     localConfig,
@@ -113,7 +137,7 @@ export function SelectObjectsStep() {
     nextStep,
   ]);
 
-  const isValid = selected.size > 0;
+  const isValid = selectedOrAlwaysEnabled.size > 0;
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
@@ -144,7 +168,8 @@ export function SelectObjectsStep() {
 
       <div className={styles.objectList}>
         {readObjects.map((obj) => {
-          const isSelected = selected.has(obj.objectName);
+          const isSelected = selectedOrAlwaysEnabled.has(obj.objectName);
+          const isAlwaysEnabled = alwaysEnabledObjects.has(obj.objectName);
           const hasWrite = writeSupported.has(obj.objectName);
           const isWriteOn = writeEnabled.has(obj.objectName);
 
@@ -153,8 +178,12 @@ export function SelectObjectsStep() {
               key={obj.objectName}
               role="checkbox"
               aria-checked={isSelected}
+              aria-disabled={isAlwaysEnabled}
               tabIndex={0}
-              className={`${styles.objectCard} ${isSelected ? styles.selected : ""}`}
+              className={classNames(styles.objectCard, {
+                [styles.selected]: isSelected,
+                [styles.alwaysEnabled]: isAlwaysEnabled,
+              })}
               onClick={(e) => {
                 const isWriteToggle = (e.target as HTMLElement).closest(
                   `.${styles.writeToggle}`,
@@ -177,6 +206,7 @@ export function SelectObjectsStep() {
                 type="checkbox"
                 className={styles.checkbox}
                 checked={isSelected}
+                disabled={isAlwaysEnabled}
                 tabIndex={-1}
                 onChange={() => toggleObject(obj.objectName)}
                 onClick={(e) => e.stopPropagation()}

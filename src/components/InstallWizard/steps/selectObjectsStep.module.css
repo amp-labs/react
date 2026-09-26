@@ -39,6 +39,11 @@
   cursor: pointer;
 }
 
+.objectCard.alwaysEnabled,
+.objectCard.alwaysEnabled .checkbox {
+  cursor: default;
+}
+
 .objectInfo {
   display: flex;
   flex-direction: column;
