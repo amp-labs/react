@@ -39,9 +39,18 @@
   cursor: pointer;
 }
 
-.objectCard.alwaysEnabled,
-.objectCard.alwaysEnabled .checkbox {
+.checkboxWrapper {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.objectCard.alwaysEnabled {
   cursor: default;
+}
+
+/* Let hover reach the wrapper, which shows the tooltip. */
+.objectCard.alwaysEnabled .checkbox {
+  pointer-events: none;
 }
 
 .objectInfo {

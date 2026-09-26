@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { Tooltip } from "react-tooltip";
 import classNames from "classnames";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
@@ -12,6 +13,8 @@ import { useWizard } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
 import styles from "./selectObjectsStep.module.css";
+
+const ALWAYS_ENABLED_TOOLTIP_ID = "always-enabled-object";
 
 export function SelectObjectsStep() {
   const manifest = useManifest();
@@ -202,15 +205,26 @@ export function SelectObjectsStep() {
                 }
               }}
             >
-              <input
-                type="checkbox"
-                className={styles.checkbox}
-                checked={isSelected}
-                disabled={isAlwaysEnabled}
-                tabIndex={-1}
-                onChange={() => toggleObject(obj.objectName)}
-                onClick={(e) => e.stopPropagation()}
-              />
+              {/* The wrapper carries the tooltip: a disabled checkbox doesn't get hover events. */}
+              <span
+                className={styles.checkboxWrapper}
+                data-tooltip-id={
+                  isAlwaysEnabled ? ALWAYS_ENABLED_TOOLTIP_ID : undefined
+                }
+                data-tooltip-content={
+                  isAlwaysEnabled ? "Always enabled" : undefined
+                }
+              >
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={isSelected}
+                  disabled={isAlwaysEnabled}
+                  tabIndex={-1}
+                  onChange={() => toggleObject(obj.objectName)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </span>
               <div className={styles.objectInfo}>
                 <span className={styles.objectName}>
                   {obj.displayName || obj.objectName}
@@ -237,6 +251,9 @@ export function SelectObjectsStep() {
           );
         })}
       </div>
+      {alwaysEnabledObjects.size > 0 && (
+        <Tooltip id={ALWAYS_ENABLED_TOOLTIP_ID} place="top" />
+      )}
 
       <WizardNavigation
         onNext={handleNext}
