@@ -27,6 +27,7 @@ import {
   getOptionalMapFieldsFromObject,
   getRequiredFieldsFromObject,
   getRequiredMapFieldsFromObject,
+  isReadObjectAlwaysEnabled,
 } from "src/utils/manifest";
 
 import { useHydratedRevisionQuery } from "./useHydratedRevisionQuery";
@@ -54,6 +55,11 @@ export interface Manifest {
     getRequiredMapFields: () => IntegrationFieldMapping[] | null;
     /** Optional mapping fields. Same as getOptionalFields('mappings'). */
     getOptionalMapFields: () => IntegrationFieldMapping[] | null;
+    /**
+     * Whether the integration reads the object for every installation (`enabled: always` in
+     * amp.yaml). Such objects can't be disabled or removed from the config.
+     */
+    isAlwaysEnabled: () => boolean;
   };
   getWriteObject: (objectName: string) => {
     object: HydratedIntegrationWriteObject | null;
@@ -102,6 +108,7 @@ export function useManifest() {
             getOptionalFields: () => null,
             getRequiredMapFields: () => null,
             getOptionalMapFields: () => null,
+            isAlwaysEnabled: () => false,
           };
         }
 
@@ -132,6 +139,7 @@ export function useManifest() {
             getRequiredFields("mappings") as IntegrationFieldMapping[],
           getOptionalMapFields: (): IntegrationFieldMapping[] =>
             getOptionalFields("mappings") as IntegrationFieldMapping[],
+          isAlwaysEnabled: () => isReadObjectAlwaysEnabled(object),
         };
       },
       getWriteObject: (objectName: string) => {

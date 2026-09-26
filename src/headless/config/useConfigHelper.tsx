@@ -11,6 +11,7 @@ import type {
 import type { Installation } from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
+import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { useInstallation } from "../installation/useInstallation";
 import { useManifest } from "../manifest/useManifest";
@@ -74,8 +75,18 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   const [draft, setDraft] = useState<InstallationConfigContent>(initialConfig);
   const previousInstallationRef = useRef<Installation | undefined>(undefined);
 
-  const { data: manifest, getReadObject } = useManifest();
+  const { data: manifest, getReadObject, getReadObjects } = useManifest();
   const { installation } = useInstallation();
+
+  // Objects marked `enabled: always` are read for every installation, and the server rejects a
+  // config that disables or drops them, so the helpers below leave them in place.
+  const isAlwaysEnabled = useCallback(
+    (objectName: string) =>
+      isReadObjectAlwaysEnabled(
+        getReadObjects().find((obj) => obj.objectName === objectName),
+      ),
+    [getReadObjects],
+  );
 
   const get = useCallback(() => draft, [draft]);
 
@@ -135,20 +146,25 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
   );
 
   /**
-   * Removes an object from all actions (read, write) in the draft config.
+   * Removes an object from all actions (read, write) in the draft config. An `enabled: always`
+   * read object keeps its read entry.
    */
-  const removeObject = useCallback((objectName: string) => {
-    setDraft((prev) =>
-      produce(prev, (_draft) => {
-        if (_draft.read?.objects?.[objectName]) {
-          delete _draft.read.objects[objectName];
-        }
-        if (_draft.write?.objects?.[objectName]) {
-          delete _draft.write.objects[objectName];
-        }
-      }),
-    );
-  }, []);
+  const removeObject = useCallback(
+    (objectName: string) => {
+      const keepRead = isAlwaysEnabled(objectName);
+      setDraft((prev) =>
+        produce(prev, (_draft) => {
+          if (!keepRead && _draft.read?.objects?.[objectName]) {
+            delete _draft.read.objects[objectName];
+          }
+          if (_draft.write?.objects?.[objectName]) {
+            delete _draft.write.objects[objectName];
+          }
+        }),
+      );
+    },
+    [isAlwaysEnabled],
+  );
 
   const readObject = useCallback(
     (objectName: string): ReadObjectHandlers => ({
@@ -162,6 +178,12 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
         );
       },
       setDisableRead: () => {
+        if (isAlwaysEnabled(objectName)) {
+          console.warn(
+            `${objectName} is marked enabled: always and can't be disabled`,
+          );
+          return;
+        }
         setDraft((prev) =>
           produce(prev, (_draft) => {
             const { obj } = initializeObjectWithDefaults(objectName, _draft);
@@ -217,7 +239,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
         );
       },
     }),
-    [draft.read?.objects, initializeObjectWithDefaults],
+    [draft.read?.objects, initializeObjectWithDefaults, isAlwaysEnabled],
   );
 
   const writeObject = useCallback(
