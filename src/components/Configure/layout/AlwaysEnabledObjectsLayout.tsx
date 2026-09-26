@@ -9,12 +9,12 @@ import {
   useManifest,
   useUpdateInstallation,
 } from "src/headless";
-import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
+import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
 
 import {
   ComponentContainerError,
   ComponentContainerLoading,
-} from "./ComponentContainer";
+} from "../ComponentContainer";
 
 /**
  * Installs the read objects marked `enabled: always` as soon as one is missing: it creates the
@@ -22,14 +22,15 @@ import {
  * Consumers can't opt out of these objects, so they're saved before any screen that lets the
  * consumer configure the installation, and those screens only ever update it.
  */
-export function AlwaysEnabledObjectsGate({
+export function AlwaysEnabledObjectsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { connection } = useConnection();
   const { installation, isPending: isInstallationPending } = useInstallation();
-  const { data: hydratedRevision, getReadObjects } = useManifest();
+  const { data: hydratedRevision } = useManifest();
+  const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
   const { createInstallation } = useCreateInstallation();
   const { updateInstallation } = useUpdateInstallation();
   const { setInstallation, onInstallSuccess, onUpdateSuccess } =
@@ -38,15 +39,12 @@ export function AlwaysEnabledObjectsGate({
   const attempted = useRef<string | null>(null);
 
   const missingObjects = useMemo(() => {
-    if (!hydratedRevision) return [];
-
     const configured = installation?.config?.content?.read?.objects ?? {};
 
-    return getReadObjects()
-      .filter(isReadObjectAlwaysEnabled)
-      .map((obj) => obj.objectName)
-      .filter((objectName) => !configured[objectName]);
-  }, [hydratedRevision, getReadObjects, installation]);
+    return [...alwaysEnabledObjects].filter(
+      (objectName) => !configured[objectName],
+    );
+  }, [alwaysEnabledObjects, installation]);
 
   const save = useCallback(() => {
     // The same entry the server writes for these objects: no fields chosen, so only the fields

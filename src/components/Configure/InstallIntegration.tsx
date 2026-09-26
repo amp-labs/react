@@ -11,13 +11,13 @@ import { useForceUpdate } from "src/hooks/useForceUpdate";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
-import { AlwaysEnabledObjectsGate } from "./AlwaysEnabledObjectsGate";
 import {
   ComponentContainerError,
   ComponentContainerLoading,
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
 import { AmpersandErrorBoundary } from "./ErrorBoundary";
+import { AlwaysEnabledObjectsLayout } from "./layout/AlwaysEnabledObjectsLayout";
 // eslint-disable-next-line max-len
 import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
@@ -184,7 +184,7 @@ const InstallIntegrationContent = ({
             groupName={groupName}
             resetComponent={reset}
           >
-            <AlwaysEnabledObjectsGate>
+            <AlwaysEnabledObjectsLayout>
               <HydratedRevisionProvider resetComponent={reset}>
                 <ConditionalHasConfigurationLayout>
                   <ConfigurationProvider>
@@ -194,7 +194,7 @@ const InstallIntegrationContent = ({
                   </ConfigurationProvider>
                 </ConditionalHasConfigurationLayout>
               </HydratedRevisionProvider>
-            </AlwaysEnabledObjectsGate>
+            </AlwaysEnabledObjectsLayout>
           </ProtectedConnectionLayout>
         </ConnectionsProvider>
       </InstallIntegrationProvider>

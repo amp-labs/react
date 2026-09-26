@@ -4,8 +4,8 @@ import classNames from "classnames";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
+import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
 import { useProvider } from "src/hooks/useProvider";
-import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
@@ -45,15 +45,7 @@ export function SelectObjectsStep() {
 
   // Objects marked `enabled: always` are read for every installation, so they are always
   // selected and can't be deselected. They still go through configuration like any other.
-  const alwaysEnabledObjects = useMemo(
-    () =>
-      new Set(
-        readObjects
-          .filter(isReadObjectAlwaysEnabled)
-          .map((obj) => obj.objectName),
-      ),
-    [readObjects],
-  );
+  const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
 
   const selectedOrAlwaysEnabled = useMemo(
     () => new Set([...selected, ...alwaysEnabledObjects]),

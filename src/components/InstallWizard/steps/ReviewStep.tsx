@@ -10,16 +10,28 @@ import {
   useManifest,
   useUpdateInstallation,
 } from "src/headless";
+import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
 import { handleServerError } from "src/utils/handleServerError";
-import {
-  getFieldDisplayName,
-  isReadObjectAlwaysEnabled,
-} from "src/utils/manifest";
+import { getFieldDisplayName } from "src/utils/manifest";
 
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
 import styles from "./reviewStep.module.css";
+
+const CREATE_COPY = {
+  title: "Review & Create",
+  description: "Review your configuration before creating the installation.",
+  submit: "Create Installation",
+  pending: "Creating...",
+};
+
+const SAVE_COPY = {
+  title: "Review & Save",
+  description: "Review your configuration before saving the installation.",
+  submit: "Save Installation",
+  pending: "Saving...",
+};
 
 export function ReviewStep() {
   const { state, prevStep, nextStep, setSubmissionError } = useWizard();
@@ -37,14 +49,11 @@ export function ReviewStep() {
 
   // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
   // only objects selected, this step saves that installation rather than setting up new objects.
-  const isOnlyAlwaysEnabled = useMemo(
-    () =>
-      selectedObjects.length > 0 &&
-      selectedObjects.every((objectName) =>
-        isReadObjectAlwaysEnabled(manifest.getReadObject(objectName).object),
-      ),
-    [selectedObjects, manifest],
-  );
+  const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
+  const isOnlyAlwaysEnabled =
+    selectedObjects.length > 0 &&
+    selectedObjects.every((objectName) => alwaysEnabledObjects.has(objectName));
+  const copy = isOnlyAlwaysEnabled ? SAVE_COPY : CREATE_COPY;
 
   // Build summary data for each selected object
   const objectSummaries = useMemo(() => {
@@ -161,14 +170,7 @@ export function ReviewStep() {
 
   return (
     <div className={styles.reviewStep}>
-      <StepHeader
-        title={isOnlyAlwaysEnabled ? "Review & Save" : "Review & Create"}
-        description={
-          isOnlyAlwaysEnabled
-            ? "Review your configuration before saving the installation."
-            : "Review your configuration before creating the installation."
-        }
-      />
+      <StepHeader title={copy.title} description={copy.description} />
 
       <div className={styles.summaryList}>
         {objectSummaries.map((summary) => (
@@ -219,13 +221,7 @@ export function ReviewStep() {
           onClick={handleSubmit}
           disabled={isPending}
         >
-          {isOnlyAlwaysEnabled
-            ? isPending
-              ? "Saving..."
-              : "Save Installation"
-            : isPending
-              ? "Creating..."
-              : "Create Installation"}
+          {isPending ? copy.pending : copy.submit}
         </Button>
       </div>
     </div>

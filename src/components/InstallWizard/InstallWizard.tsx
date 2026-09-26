@@ -6,12 +6,12 @@ import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
 
-import { AlwaysEnabledObjectsGate } from "../Configure/AlwaysEnabledObjectsGate";
 import {
   ComponentContainerError,
   ComponentContainerLoading,
 } from "../Configure/ComponentContainer";
 import { AmpersandErrorBoundary } from "../Configure/ErrorBoundary";
+import { AlwaysEnabledObjectsLayout } from "../Configure/layout/AlwaysEnabledObjectsLayout";
 
 import { ConfigureObjectsGate } from "./steps/configure-objects";
 import { ConnectStep } from "./steps/ConnectStep";
@@ -112,9 +112,9 @@ const InstallWizardContent = ({
                   />
                 </WizardStepContainer>
                 <WizardStepContainer step={WizardStep.SelectObjects}>
-                  <AlwaysEnabledObjectsGate>
+                  <AlwaysEnabledObjectsLayout>
                     <SelectObjectsStep />
-                  </AlwaysEnabledObjectsGate>
+                  </AlwaysEnabledObjectsLayout>
                 </WizardStepContainer>
                 <WizardStepContainer step={WizardStep.ConfigureObjects}>
                   <ConfigureObjectsGate />
