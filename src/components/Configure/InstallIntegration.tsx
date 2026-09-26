@@ -17,7 +17,6 @@ import {
 } from "./ComponentContainer";
 import { InstallationContent } from "./content/InstallationContent";
 import { AmpersandErrorBoundary } from "./ErrorBoundary";
-import { AlwaysEnabledObjectsLayout } from "./layout/AlwaysEnabledObjectsLayout";
 // eslint-disable-next-line max-len
 import { ConditionalHasConfigurationLayout } from "./layout/ConditionalHasConfigurationLayout/ConditionalHasConfigurationLayout";
 import { ProtectedConnectionLayout } from "./layout/ProtectedConnectionLayout";
@@ -184,17 +183,15 @@ const InstallIntegrationContent = ({
             groupName={groupName}
             resetComponent={reset}
           >
-            <AlwaysEnabledObjectsLayout>
-              <HydratedRevisionProvider resetComponent={reset}>
-                <ConditionalHasConfigurationLayout>
-                  <ConfigurationProvider>
-                    <ObjectManagementNav>
-                      <InstallationContent />
-                    </ObjectManagementNav>
-                  </ConfigurationProvider>
-                </ConditionalHasConfigurationLayout>
-              </HydratedRevisionProvider>
-            </AlwaysEnabledObjectsLayout>
+            <HydratedRevisionProvider resetComponent={reset}>
+              <ConditionalHasConfigurationLayout>
+                <ConfigurationProvider>
+                  <ObjectManagementNav>
+                    <InstallationContent />
+                  </ObjectManagementNav>
+                </ConfigurationProvider>
+              </ConditionalHasConfigurationLayout>
+            </HydratedRevisionProvider>
           </ProtectedConnectionLayout>
         </ConnectionsProvider>
       </InstallIntegrationProvider>

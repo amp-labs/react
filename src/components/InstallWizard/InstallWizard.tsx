@@ -11,7 +11,6 @@ import {
   ComponentContainerLoading,
 } from "../Configure/ComponentContainer";
 import { AmpersandErrorBoundary } from "../Configure/ErrorBoundary";
-import { AlwaysEnabledObjectsLayout } from "../Configure/layout/AlwaysEnabledObjectsLayout";
 
 import { ConfigureObjectsGate } from "./steps/configure-objects";
 import { ConnectStep } from "./steps/ConnectStep";
@@ -112,9 +111,7 @@ const InstallWizardContent = ({
                   />
                 </WizardStepContainer>
                 <WizardStepContainer step={WizardStep.SelectObjects}>
-                  <AlwaysEnabledObjectsLayout>
-                    <SelectObjectsStep />
-                  </AlwaysEnabledObjectsLayout>
+                  <SelectObjectsStep />
                 </WizardStepContainer>
                 <WizardStepContainer step={WizardStep.ConfigureObjects}>
                   <ConfigureObjectsGate />

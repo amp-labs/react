@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config, Installation } from "services/api";
-import { Button } from "src/components/ui-base/Button";
 import {
   useConnection,
   useCreateInstallation,
@@ -9,24 +8,18 @@ import {
   useManifest,
   useUpdateInstallation,
 } from "src/headless";
-import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
 
-import {
-  ComponentContainerError,
-  ComponentContainerLoading,
-} from "../ComponentContainer";
+import { useAlwaysEnabledReadObjects } from "./useAlwaysEnabledReadObjects";
 
 /**
  * Installs the read objects marked `enabled: always` as soon as one is missing: it creates the
  * installation once a connection exists, or updates an existing installation that lacks one.
- * Consumers can't opt out of these objects, so they're saved before any screen that lets the
- * consumer configure the installation, and those screens only ever update it.
+ * Consumers can't opt out of these objects, so screens that let the consumer configure the
+ * installation wait for this and then only ever update it.
+ *
+ * @returns `isInstalling` while objects are being saved, and `error` with `retry` if saving failed.
  */
-export function AlwaysEnabledObjectsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function useInstallAlwaysEnabledObjects() {
   const { connection } = useConnection();
   const { installation, isPending: isInstallationPending } = useInstallation();
   const { data: hydratedRevision } = useManifest();
@@ -97,7 +90,7 @@ export function AlwaysEnabledObjectsLayout({
     onUpdateSuccess,
   ]);
 
-  // One attempt per installation and set of missing objects. A failure waits for Retry.
+  // One attempt per installation and set of missing objects. A failure waits for retry.
   const isReady = !!connection && !isInstallationPending && !!hydratedRevision;
   const attemptKey =
     isReady && missingObjects.length > 0
@@ -110,19 +103,13 @@ export function AlwaysEnabledObjectsLayout({
     save();
   }, [attemptKey, save]);
 
-  if (error) {
-    return (
-      <ComponentContainerError
-        message={`We couldn't set up the objects this integration always reads: ${error}`}
-      >
-        <Button type="button" onClick={save}>
-          Retry
-        </Button>
-      </ComponentContainerError>
-    );
-  }
+  // A failure only matters while objects are still missing: if another tab or request installed
+  // them in the meantime, there's nothing left to retry.
+  const currentError = attemptKey ? error : null;
 
-  if (attemptKey) return <ComponentContainerLoading />;
-
-  return <>{children}</>;
+  return {
+    isInstalling: !!attemptKey && !currentError,
+    error: currentError,
+    retry: save,
+  };
 }

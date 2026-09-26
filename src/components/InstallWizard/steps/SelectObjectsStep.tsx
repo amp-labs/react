@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import classNames from "classnames";
+import { Button } from "src/components/ui-base/Button";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
 import { InfoTooltip } from "../components/InfoTooltip";
@@ -46,6 +48,12 @@ export function SelectObjectsStep() {
   // Objects marked `enabled: always` are read for every installation, so they are always
   // selected and can't be deselected. They still go through configuration like any other.
   const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
+  // They're installed as soon as the consumer connects, before this step can be used.
+  const {
+    isInstalling,
+    error: installError,
+    retry,
+  } = useInstallAlwaysEnabledObjects();
 
   const selectedOrAlwaysEnabled = useMemo(
     () => new Set([...selected, ...alwaysEnabledObjects]),
@@ -136,6 +144,22 @@ export function SelectObjectsStep() {
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
+  }
+
+  if (isInstalling) {
+    return <div className={styles.loading}>Setting up your integration...</div>;
+  }
+
+  if (installError) {
+    return (
+      <div className={styles.error}>
+        We couldn&apos;t set up the objects this integration always reads:{" "}
+        {installError}
+        <Button type="button" onClick={retry}>
+          Retry
+        </Button>
+      </div>
+    );
   }
 
   if (manifest.isError) {
