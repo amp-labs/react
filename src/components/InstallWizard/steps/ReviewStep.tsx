@@ -5,8 +5,10 @@ import { Config } from "services/api";
 import { Button } from "src/components/ui-base/Button";
 import {
   useCreateInstallation,
+  useInstallation,
   useLocalConfig,
   useManifest,
+  useUpdateInstallation,
 } from "src/headless";
 import { handleServerError } from "src/utils/handleServerError";
 import { getFieldDisplayName } from "src/utils/manifest";
@@ -21,8 +23,14 @@ export function ReviewStep() {
   const { selectedObjects } = state;
   const manifest = useManifest();
   const localConfig = useLocalConfig();
-  const { createInstallation, isPending } = useCreateInstallation();
-  const { onInstallSuccess, setInstallation } = useInstallIntegrationProps();
+  const { installation } = useInstallation();
+  const { createInstallation, isPending: isCreatePending } =
+    useCreateInstallation();
+  const { updateInstallation, isPending: isUpdatePending } =
+    useUpdateInstallation();
+  const isPending = isCreatePending || isUpdatePending;
+  const { onInstallSuccess, onUpdateSuccess, setInstallation } =
+    useInstallIntegrationProps();
 
   // Build summary data for each selected object
   const objectSummaries = useMemo(() => {
@@ -93,26 +101,47 @@ export function ReviewStep() {
     });
   }, [selectedObjects, manifest, localConfig]);
 
+  // An installation already exists when the integration has `enabled: always` objects: they're
+  // installed as soon as the consumer connects, so this step updates it.
   const handleCreate = useCallback(() => {
     setSubmissionError(null);
 
+    const onError = (error: Error) => {
+      handleServerError(error, setSubmissionError);
+    };
+
+    if (installation) {
+      updateInstallation({
+        config: localConfig.draft,
+        onSuccess: (updated) => {
+          setInstallation(updated);
+          onUpdateSuccess?.(updated.id, updated.config as Config);
+          nextStep();
+        },
+        onError,
+      });
+
+      return;
+    }
+
     createInstallation({
       config: localConfig.draft,
-      onSuccess: (installation) => {
-        setInstallation(installation);
-        onInstallSuccess?.(installation.id, installation.config as Config);
+      onSuccess: (created) => {
+        setInstallation(created);
+        onInstallSuccess?.(created.id, created.config as Config);
         nextStep();
       },
-      onError: (error) => {
-        handleServerError(error, setSubmissionError);
-      },
+      onError,
     });
   }, [
+    installation,
+    updateInstallation,
     createInstallation,
     localConfig.draft,
     setSubmissionError,
     setInstallation,
     onInstallSuccess,
+    onUpdateSuccess,
     nextStep,
   ]);
 

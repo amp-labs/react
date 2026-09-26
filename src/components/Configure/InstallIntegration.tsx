@@ -11,6 +11,7 @@ import { useForceUpdate } from "src/hooks/useForceUpdate";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
+import { AlwaysEnabledObjectsGate } from "./AlwaysEnabledObjectsGate";
 import {
   ComponentContainerError,
   ComponentContainerLoading,
@@ -183,15 +184,17 @@ const InstallIntegrationContent = ({
             groupName={groupName}
             resetComponent={reset}
           >
-            <HydratedRevisionProvider resetComponent={reset}>
-              <ConditionalHasConfigurationLayout>
-                <ConfigurationProvider>
-                  <ObjectManagementNav>
-                    <InstallationContent />
-                  </ObjectManagementNav>
-                </ConfigurationProvider>
-              </ConditionalHasConfigurationLayout>
-            </HydratedRevisionProvider>
+            <AlwaysEnabledObjectsGate>
+              <HydratedRevisionProvider resetComponent={reset}>
+                <ConditionalHasConfigurationLayout>
+                  <ConfigurationProvider>
+                    <ObjectManagementNav>
+                      <InstallationContent />
+                    </ObjectManagementNav>
+                  </ConfigurationProvider>
+                </ConditionalHasConfigurationLayout>
+              </HydratedRevisionProvider>
+            </AlwaysEnabledObjectsGate>
           </ProtectedConnectionLayout>
         </ConnectionsProvider>
       </InstallIntegrationProvider>
