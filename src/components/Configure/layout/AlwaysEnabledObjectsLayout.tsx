@@ -39,10 +39,19 @@ export function AlwaysEnabledObjectsLayout({
   const attempted = useRef<string | null>(null);
 
   const missingObjects = useMemo(() => {
-    const configured = installation?.config?.content?.read?.objects ?? {};
+    // Compare names case-insensitively, as the server does, so an installation created through
+    // the API with `Account` isn't given a second `account` entry.
+    const configured = new Set(
+      Object.entries(
+        installation?.config?.content?.read?.objects ?? {},
+      ).flatMap(([key, obj]) => [
+        key.toLowerCase(),
+        obj.objectName?.toLowerCase(),
+      ]),
+    );
 
     return [...alwaysEnabledObjects].filter(
-      (objectName) => !configured[objectName],
+      (objectName) => !configured.has(objectName.toLowerCase()),
     );
   }, [alwaysEnabledObjects, installation]);
 

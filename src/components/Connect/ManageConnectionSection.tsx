@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { UninstallSection } from "src/components/Configure/content/manage/UninstallSection";
 import { UpdateConnectionSection } from "src/components/Configure/content/manage/updateConnection/UpdateConnectionSection";
 import { Connection } from "src/services/api";
 
@@ -11,10 +12,16 @@ export function ManageConnectionSection({
   resetComponent,
   onDisconnectSuccess,
   provider,
+  hasInstallation = false,
 }: {
   resetComponent: () => void;
   onDisconnectSuccess?: (connection: Connection) => void;
   provider?: string;
+  /**
+   * An installation uses the connection. The server won't delete a connection an installation
+   * uses, so uninstalling (which deletes both) is offered instead.
+   */
+  hasInstallation?: boolean;
 }) {
   const [showUpdateConnection, setShowUpdateConnection] = useState(false);
 
@@ -49,10 +56,14 @@ export function ManageConnectionSection({
       {showUpdateConnection === true && (
         <>
           <UpdateConnectionSection provider={provider} />
-          <RemoveConnectionSection
-            resetComponent={resetComponent}
-            onDisconnectSuccess={onDisconnectSuccess}
-          />
+          {hasInstallation ? (
+            <UninstallSection />
+          ) : (
+            <RemoveConnectionSection
+              resetComponent={resetComponent}
+              onDisconnectSuccess={onDisconnectSuccess}
+            />
+          )}
         </>
       )}
     </>
