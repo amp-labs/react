@@ -28,6 +28,7 @@ export const NotificationEventType = {
     InstallationDeleted: 'installation.deleted',
     ReadSchedulePaused: 'read.schedule.paused',
     ReadBackfillDone: 'read.backfill.done',
+    ReadBackfillError: 'read.backfill.error',
     ReadTriggeredDone: 'read.triggered.done',
     ReadTriggeredError: 'read.triggered.error',
     WriteAsyncDone: 'write.async.done',

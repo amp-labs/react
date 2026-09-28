@@ -123,7 +123,23 @@ export interface HydratedIntegrationObject {
      * @memberof HydratedIntegrationObject
      */
     backfill?: Backfill;
+    /**
+     * If set to `always`, Ampersand reads this object for every installation even if the customer never selects it (or it isn't present) in the installation config.
+     * @type {string}
+     * @memberof HydratedIntegrationObject
+     */
+    enabled?: HydratedIntegrationObjectEnabledEnum;
 }
+
+
+/**
+ * @export
+ */
+export const HydratedIntegrationObjectEnabledEnum = {
+    Always: 'always'
+} as const;
+export type HydratedIntegrationObjectEnabledEnum = typeof HydratedIntegrationObjectEnabledEnum[keyof typeof HydratedIntegrationObjectEnabledEnum];
+
 
 /**
  * Check if a given object implements the HydratedIntegrationObject interface.
@@ -161,6 +177,7 @@ export function HydratedIntegrationObjectFromJSONTyped(json: any, ignoreDiscrimi
         'allFieldsMetadata': !exists(json, 'allFieldsMetadata') ? undefined : (mapValues(json['allFieldsMetadata'], FieldMetadataFromJSON)),
         'allFields': !exists(json, 'allFields') ? undefined : ((json['allFields'] as Array<any>).map(HydratedIntegrationFieldFromJSON)),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillFromJSON(json['backfill']),
+        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
     };
 }
 
@@ -186,6 +203,7 @@ export function HydratedIntegrationObjectToJSON(value?: HydratedIntegrationObjec
         'allFieldsMetadata': value.allFieldsMetadata === undefined ? undefined : (mapValues(value.allFieldsMetadata, FieldMetadataToJSON)),
         'allFields': value.allFields === undefined ? undefined : ((value.allFields as Array<any>).map(HydratedIntegrationFieldToJSON)),
         'backfill': BackfillToJSON(value.backfill),
+        'enabled': value.enabled,
     };
 }
 
