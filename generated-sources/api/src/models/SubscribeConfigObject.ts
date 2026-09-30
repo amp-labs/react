@@ -49,7 +49,7 @@ export interface SubscribeConfigObject {
      * @type {boolean}
      * @memberof SubscribeConfigObject
      */
-    inheritFieldsAndMappings: boolean;
+    inheritFieldsAndMappings: boolean | null;
     /**
      * The name of the object to subscribe to.
      * @type {string}
