@@ -200,6 +200,7 @@ src/models/ProviderInfo.ts
 src/models/ProviderMetadata1.ts
 src/models/ProviderMetadataInfo.ts
 src/models/QuotaOptimizationConfig.ts
+src/models/RawFilter.ts
 src/models/ReadConfig.ts
 src/models/ReadConfigAllOf.ts
 src/models/ReadConfigObject.ts
