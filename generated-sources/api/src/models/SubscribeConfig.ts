@@ -33,11 +33,11 @@ import {
  */
 export interface SubscribeConfig {
     /**
-     * 
+     * Per-object subscribe configuration. Optional: when omitted, the subscribe objects come from the integration revision, and the config may carry only `providerOptions`.
      * @type {{ [key: string]: SubscribeConfigObject; }}
      * @memberof SubscribeConfig
      */
-    objects: { [key: string]: SubscribeConfigObject; };
+    objects?: { [key: string]: SubscribeConfigObject; };
     /**
      * 
      * @type {SubscribeInstallationProviderOptions}
@@ -51,7 +51,6 @@ export interface SubscribeConfig {
  */
 export function instanceOfSubscribeConfig(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "objects" in value;
 
     return isInstance;
 }
@@ -66,7 +65,7 @@ export function SubscribeConfigFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'objects': (mapValues(json['objects'], SubscribeConfigObjectFromJSON)),
+        'objects': !exists(json, 'objects') ? undefined : (mapValues(json['objects'], SubscribeConfigObjectFromJSON)),
         'providerOptions': !exists(json, 'providerOptions') ? undefined : SubscribeInstallationProviderOptionsFromJSON(json['providerOptions']),
     };
 }
@@ -80,7 +79,7 @@ export function SubscribeConfigToJSON(value?: SubscribeConfig | null): any {
     }
     return {
         
-        'objects': (mapValues(value.objects, SubscribeConfigObjectToJSON)),
+        'objects': value.objects === undefined ? undefined : (mapValues(value.objects, SubscribeConfigObjectToJSON)),
         'providerOptions': SubscribeInstallationProviderOptionsToJSON(value.providerOptions),
     };
 }
