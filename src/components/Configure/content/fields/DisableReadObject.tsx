@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "src/components/ui-base/Button";
 import { useInstallation } from "src/headless/installation/useInstallation";
+import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 import { useSelectedObject } from "../useSelectedObject";
@@ -11,7 +12,8 @@ export function DisableReadObject() {
   const { installation } = useInstallation();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { selectedObjectName } = useSelectedConfigureState();
-  const { displayName: selectedObjectDisplayName } = useSelectedObject();
+  const { displayName: selectedObjectDisplayName, selectedObject } =
+    useSelectedObject();
   const { toggleReadingObject, isPending } = useToggleReadingObject();
 
   // Only show if read object is present and not disabled
@@ -25,6 +27,11 @@ export function DisableReadObject() {
 
   const isDisabled = readObject.disabled;
   if (isDisabled) {
+    return null;
+  }
+
+  // Objects marked `enabled: always` are read for every installation and can't be turned off.
+  if (isReadObjectAlwaysEnabled(selectedObject)) {
     return null;
   }
 

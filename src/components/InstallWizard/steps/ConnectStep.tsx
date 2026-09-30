@@ -25,7 +25,8 @@ export function ConnectStep({
   resetComponent,
 }: ConnectStepProps) {
   const { goToStep } = useWizard();
-  const { provider } = useInstallIntegrationProps();
+  const { provider, installation, isIntegrationDeleted } =
+    useInstallIntegrationProps();
   const { selectedConnection } = useConnections();
 
   // Track whether a connection existed on mount.
@@ -38,14 +39,20 @@ export function ConnectStep({
     }
   }, [selectedConnection, goToStep]);
 
-  // If already connected (e.g. navigated back), show manage connection UI.
-  if (hadConnectionOnMount.current && selectedConnection) {
+  // If already connected (e.g. navigated back), show manage connection UI. After an uninstall,
+  // fall through to ProtectedConnectionLayout, which shows the uninstalled state with Reinstall.
+  if (
+    hadConnectionOnMount.current &&
+    selectedConnection &&
+    !isIntegrationDeleted
+  ) {
     return (
       <div className={styles.connectStep}>
         <div className={styles.connected}>
           <ConnectedSuccessBox
             provider={provider}
             resetComponent={resetComponent}
+            hasInstallation={!!installation}
           />
           <WizardNavigation
             showBack={false}
@@ -69,6 +76,7 @@ export function ConnectStep({
           <ConnectedSuccessBox
             provider={provider}
             resetComponent={resetComponent}
+            hasInstallation={!!installation}
           />
           <WizardNavigation
             showBack={false}

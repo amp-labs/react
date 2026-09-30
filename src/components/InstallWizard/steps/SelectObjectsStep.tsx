@@ -1,7 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
+import { Tooltip } from "react-tooltip";
+import classNames from "classnames";
+import { Button } from "src/components/ui-base/Button";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
+import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
 import { InfoTooltip } from "../components/InfoTooltip";
@@ -10,6 +15,8 @@ import { useWizard } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
 import styles from "./selectObjectsStep.module.css";
+
+const ALWAYS_ENABLED_TOOLTIP_ID = "always-enabled-object";
 
 export function SelectObjectsStep() {
   const manifest = useManifest();
@@ -38,6 +45,21 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
+  // Objects marked `enabled: always` are read for every installation, so they are always
+  // selected and can't be deselected. They still go through configuration like any other.
+  const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
+  // They're installed as soon as the consumer connects, before this step can be used.
+  const {
+    isInstalling,
+    error: installError,
+    retry,
+  } = useInstallAlwaysEnabledObjects();
+
+  const selectedOrAlwaysEnabled = useMemo(
+    () => new Set([...selected, ...alwaysEnabledObjects]),
+    [selected, alwaysEnabledObjects],
+  );
+
   // Build a set of object names that have write support in the manifest
   const writeSupported = useMemo(() => {
     const set = new Set<string>();
@@ -48,17 +70,22 @@ export function SelectObjectsStep() {
     return set;
   }, [readObjects, manifest]);
 
-  const toggleObject = useCallback((objectName: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(objectName)) {
-        next.delete(objectName);
-      } else {
-        next.add(objectName);
-      }
-      return next;
-    });
-  }, []);
+  const toggleObject = useCallback(
+    (objectName: string) => {
+      if (alwaysEnabledObjects.has(objectName)) return;
+
+      setSelected((prev) => {
+        const next = new Set(prev);
+        if (next.has(objectName)) {
+          next.delete(objectName);
+        } else {
+          next.add(objectName);
+        }
+        return next;
+      });
+    },
+    [alwaysEnabledObjects],
+  );
 
   const toggleWrite = useCallback((objectName: string) => {
     setWriteEnabled((prev) => {
@@ -73,7 +100,7 @@ export function SelectObjectsStep() {
   }, []);
 
   const handleNext = useCallback(() => {
-    const selectedArray = Array.from(selected);
+    const selectedArray = Array.from(selectedOrAlwaysEnabled);
     const previouslySelected = new Set(state.selectedObjects);
 
     setSelectedObjects(selectedArray);
@@ -85,7 +112,7 @@ export function SelectObjectsStep() {
 
     // Remove deselected objects from the config draft
     previouslySelected.forEach((objectName) => {
-      if (!selected.has(objectName)) {
+      if (!selectedOrAlwaysEnabled.has(objectName)) {
         localConfig.removeObject(objectName);
       }
     });
@@ -104,7 +131,7 @@ export function SelectObjectsStep() {
 
     nextStep();
   }, [
-    selected,
+    selectedOrAlwaysEnabled,
     state.selectedObjects,
     setSelectedObjects,
     localConfig,
@@ -113,10 +140,26 @@ export function SelectObjectsStep() {
     nextStep,
   ]);
 
-  const isValid = selected.size > 0;
+  const isValid = selectedOrAlwaysEnabled.size > 0;
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
+  }
+
+  if (isInstalling) {
+    return <div className={styles.loading}>Setting up your integration...</div>;
+  }
+
+  if (installError) {
+    return (
+      <div className={styles.error}>
+        We couldn&apos;t set up the objects this integration always reads:{" "}
+        {installError}
+        <Button type="button" onClick={retry}>
+          Retry
+        </Button>
+      </div>
+    );
   }
 
   if (manifest.isError) {
@@ -144,7 +187,8 @@ export function SelectObjectsStep() {
 
       <div className={styles.objectList}>
         {readObjects.map((obj) => {
-          const isSelected = selected.has(obj.objectName);
+          const isSelected = selectedOrAlwaysEnabled.has(obj.objectName);
+          const isAlwaysEnabled = alwaysEnabledObjects.has(obj.objectName);
           const hasWrite = writeSupported.has(obj.objectName);
           const isWriteOn = writeEnabled.has(obj.objectName);
 
@@ -153,8 +197,12 @@ export function SelectObjectsStep() {
               key={obj.objectName}
               role="checkbox"
               aria-checked={isSelected}
+              aria-disabled={isAlwaysEnabled}
               tabIndex={0}
-              className={`${styles.objectCard} ${isSelected ? styles.selected : ""}`}
+              className={classNames(styles.objectCard, {
+                [styles.selected]: isSelected,
+                [styles.alwaysEnabled]: isAlwaysEnabled,
+              })}
               onClick={(e) => {
                 const isWriteToggle = (e.target as HTMLElement).closest(
                   `.${styles.writeToggle}`,
@@ -173,14 +221,26 @@ export function SelectObjectsStep() {
                 }
               }}
             >
-              <input
-                type="checkbox"
-                className={styles.checkbox}
-                checked={isSelected}
-                tabIndex={-1}
-                onChange={() => toggleObject(obj.objectName)}
-                onClick={(e) => e.stopPropagation()}
-              />
+              {/* The wrapper carries the tooltip: a disabled checkbox doesn't get hover events. */}
+              <span
+                className={styles.checkboxWrapper}
+                data-tooltip-id={
+                  isAlwaysEnabled ? ALWAYS_ENABLED_TOOLTIP_ID : undefined
+                }
+                data-tooltip-content={
+                  isAlwaysEnabled ? "Always enabled" : undefined
+                }
+              >
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={isSelected}
+                  disabled={isAlwaysEnabled}
+                  tabIndex={-1}
+                  onChange={() => toggleObject(obj.objectName)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </span>
               <div className={styles.objectInfo}>
                 <span className={styles.objectName}>
                   {obj.displayName || obj.objectName}
@@ -207,6 +267,9 @@ export function SelectObjectsStep() {
           );
         })}
       </div>
+      {alwaysEnabledObjects.size > 0 && (
+        <Tooltip id={ALWAYS_ENABLED_TOOLTIP_ID} place="top" />
+      )}
 
       <WizardNavigation
         onNext={handleNext}

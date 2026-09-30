@@ -5,9 +5,12 @@ import { Config } from "services/api";
 import { Button } from "src/components/ui-base/Button";
 import {
   useCreateInstallation,
+  useInstallation,
   useLocalConfig,
   useManifest,
+  useUpdateInstallation,
 } from "src/headless";
+import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
 import { handleServerError } from "src/utils/handleServerError";
 import { getFieldDisplayName } from "src/utils/manifest";
 
@@ -16,13 +19,41 @@ import { useWizard } from "../wizard/WizardContext";
 
 import styles from "./reviewStep.module.css";
 
+const CREATE_COPY = {
+  title: "Review & Create",
+  description: "Review your configuration before creating the installation.",
+  submit: "Create Installation",
+  pending: "Creating...",
+};
+
+const SAVE_COPY = {
+  title: "Review & Save",
+  description: "Review your configuration before saving the installation.",
+  submit: "Save Installation",
+  pending: "Saving...",
+};
+
 export function ReviewStep() {
   const { state, prevStep, nextStep, setSubmissionError } = useWizard();
   const { selectedObjects } = state;
   const manifest = useManifest();
   const localConfig = useLocalConfig();
-  const { createInstallation, isPending } = useCreateInstallation();
-  const { onInstallSuccess, setInstallation } = useInstallIntegrationProps();
+  const { installation } = useInstallation();
+  const { createInstallation, isPending: isCreatePending } =
+    useCreateInstallation();
+  const { updateInstallation, isPending: isUpdatePending } =
+    useUpdateInstallation();
+  const isPending = isCreatePending || isUpdatePending;
+  const { onInstallSuccess, onUpdateSuccess, setInstallation } =
+    useInstallIntegrationProps();
+
+  // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
+  // only objects selected, this step saves that installation rather than setting up new objects.
+  const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
+  const isOnlyAlwaysEnabled =
+    selectedObjects.length > 0 &&
+    selectedObjects.every((objectName) => alwaysEnabledObjects.has(objectName));
+  const copy = isOnlyAlwaysEnabled ? SAVE_COPY : CREATE_COPY;
 
   // Build summary data for each selected object
   const objectSummaries = useMemo(() => {
@@ -93,35 +124,53 @@ export function ReviewStep() {
     });
   }, [selectedObjects, manifest, localConfig]);
 
-  const handleCreate = useCallback(() => {
+  // An installation already exists when the integration has `enabled: always` objects: they're
+  // installed as soon as the consumer connects, so this step updates it.
+  const handleSubmit = useCallback(() => {
     setSubmissionError(null);
+
+    const onError = (error: Error) => {
+      handleServerError(error, setSubmissionError);
+    };
+
+    if (installation) {
+      updateInstallation({
+        config: localConfig.draft,
+        onSuccess: (updated) => {
+          setInstallation(updated);
+          onUpdateSuccess?.(updated.id, updated.config as Config);
+          nextStep();
+        },
+        onError,
+      });
+
+      return;
+    }
 
     createInstallation({
       config: localConfig.draft,
-      onSuccess: (installation) => {
-        setInstallation(installation);
-        onInstallSuccess?.(installation.id, installation.config as Config);
+      onSuccess: (created) => {
+        setInstallation(created);
+        onInstallSuccess?.(created.id, created.config as Config);
         nextStep();
       },
-      onError: (error) => {
-        handleServerError(error, setSubmissionError);
-      },
+      onError,
     });
   }, [
+    installation,
+    updateInstallation,
     createInstallation,
     localConfig.draft,
     setSubmissionError,
     setInstallation,
     onInstallSuccess,
+    onUpdateSuccess,
     nextStep,
   ]);
 
   return (
     <div className={styles.reviewStep}>
-      <StepHeader
-        title="Review & Create"
-        description="Review your configuration before creating the installation."
-      />
+      <StepHeader title={copy.title} description={copy.description} />
 
       <div className={styles.summaryList}>
         {objectSummaries.map((summary) => (
@@ -169,10 +218,10 @@ export function ReviewStep() {
         <Button
           type="button"
           className={styles.createButton}
-          onClick={handleCreate}
+          onClick={handleSubmit}
           disabled={isPending}
         >
-          {isPending ? "Creating..." : "Create Installation"}
+          {isPending ? copy.pending : copy.submit}
         </Button>
       </div>
     </div>

@@ -10,11 +10,13 @@ interface ConnectedSuccessBoxProps {
   resetComponent: () => void; // reset the ConnectProvider component
   provider: string;
   onDisconnectSuccess?: (connection: Connection) => void;
+  hasInstallation?: boolean; // see ManageConnectionSection
 }
 export function ConnectedSuccessBox({
   provider,
   onDisconnectSuccess,
   resetComponent,
+  hasInstallation,
 }: ConnectedSuccessBoxProps) {
   const { appName } = useProjectQuery();
   const { providerName } = useProvider(provider);
@@ -34,6 +36,7 @@ export function ConnectedSuccessBox({
           resetComponent={resetComponent}
           onDisconnectSuccess={onDisconnectSuccess}
           provider={provider}
+          hasInstallation={hasInstallation}
         />
       </div>
     </SuccessTextBox>
