@@ -35,6 +35,7 @@ export interface UpdateInstallationRequest {
      * - `config.content.write.objects` - replace the entire write objects map.
      * - `config.content.subscribe.objects.<objectName>` - replace the subscribe config for a single object.
      * - `config.content.subscribe.objects` - replace the entire subscribe objects map.
+     * - `config.content.subscribe.providerOptions` - replace subscribe-level provider options, including `useSalesforceFlows`.
      * - `config.content.proxy.enabled` - enable or disable the proxy.
      * 
      * Replace `<objectName>` with the provider object name (e.g. `contacts`, `leads`, `accounts`).

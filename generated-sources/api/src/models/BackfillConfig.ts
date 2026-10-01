@@ -19,6 +19,12 @@ import {
     DefaultPeriodConfigFromJSONTyped,
     DefaultPeriodConfigToJSON,
 } from './DefaultPeriodConfig';
+import type { RawFilter } from './RawFilter';
+import {
+    RawFilterFromJSON,
+    RawFilterFromJSONTyped,
+    RawFilterToJSON,
+} from './RawFilter';
 import type { ReadFilter } from './ReadFilter';
 import {
     ReadFilterFromJSON,
@@ -44,6 +50,12 @@ export interface BackfillConfig {
      * @memberof BackfillConfig
      */
     fieldFilters?: Array<ReadFilter>;
+    /**
+     * 
+     * @type {RawFilter}
+     * @memberof BackfillConfig
+     */
+    rawFilter?: RawFilter;
 }
 
 /**
@@ -68,6 +80,7 @@ export function BackfillConfigFromJSONTyped(json: any, ignoreDiscriminator: bool
         
         'defaultPeriod': DefaultPeriodConfigFromJSON(json['defaultPeriod']),
         'fieldFilters': !exists(json, 'fieldFilters') ? undefined : ((json['fieldFilters'] as Array<any>).map(ReadFilterFromJSON)),
+        'rawFilter': !exists(json, 'rawFilter') ? undefined : RawFilterFromJSON(json['rawFilter']),
     };
 }
 
@@ -82,6 +95,7 @@ export function BackfillConfigToJSON(value?: BackfillConfig | null): any {
         
         'defaultPeriod': DefaultPeriodConfigToJSON(value.defaultPeriod),
         'fieldFilters': value.fieldFilters === undefined ? undefined : ((value.fieldFilters as Array<any>).map(ReadFilterToJSON)),
+        'rawFilter': RawFilterToJSON(value.rawFilter),
     };
 }
 

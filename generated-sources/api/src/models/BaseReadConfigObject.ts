@@ -25,6 +25,12 @@ import {
     DynamicMappingsInputEntryFromJSONTyped,
     DynamicMappingsInputEntryToJSON,
 } from './DynamicMappingsInputEntry';
+import type { RawFilter } from './RawFilter';
+import {
+    RawFilterFromJSON,
+    RawFilterFromJSONTyped,
+    RawFilterToJSON,
+} from './RawFilter';
 import type { ReadFilter } from './ReadFilter';
 import {
     ReadFilterFromJSON,
@@ -110,6 +116,12 @@ export interface BaseReadConfigObject {
      * @memberof BaseReadConfigObject
      */
     fieldFilters?: Array<ReadFilter>;
+    /**
+     * 
+     * @type {RawFilter}
+     * @memberof BaseReadConfigObject
+     */
+    rawFilter?: RawFilter;
 }
 
 /**
@@ -142,6 +154,7 @@ export function BaseReadConfigObjectFromJSONTyped(json: any, ignoreDiscriminator
         'selectedFieldsAuto': !exists(json, 'selectedFieldsAuto') ? undefined : SelectedFieldsAutoConfigFromJSON(json['selectedFieldsAuto']),
         'backfill': !exists(json, 'backfill') ? undefined : BackfillConfigFromJSON(json['backfill']),
         'fieldFilters': !exists(json, 'fieldFilters') ? undefined : ((json['fieldFilters'] as Array<any>).map(ReadFilterFromJSON)),
+        'rawFilter': !exists(json, 'rawFilter') ? undefined : RawFilterFromJSON(json['rawFilter']),
     };
 }
 
@@ -165,6 +178,7 @@ export function BaseReadConfigObjectToJSON(value?: BaseReadConfigObject | null):
         'selectedFieldsAuto': SelectedFieldsAutoConfigToJSON(value.selectedFieldsAuto),
         'backfill': BackfillConfigToJSON(value.backfill),
         'fieldFilters': value.fieldFilters === undefined ? undefined : ((value.fieldFilters as Array<any>).map(ReadFilterToJSON)),
+        'rawFilter': RawFilterToJSON(value.rawFilter),
     };
 }
 

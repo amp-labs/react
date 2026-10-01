@@ -177,6 +177,7 @@ export * from './ProviderInfo';
 export * from './ProviderMetadata1';
 export * from './ProviderMetadataInfo';
 export * from './QuotaOptimizationConfig';
+export * from './RawFilter';
 export * from './ReadConfig';
 export * from './ReadConfigAllOf';
 export * from './ReadConfigObject';

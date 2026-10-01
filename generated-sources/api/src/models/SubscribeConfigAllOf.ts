@@ -27,11 +27,11 @@ import {
  */
 export interface SubscribeConfigAllOf {
     /**
-     * 
+     * Per-object subscribe configuration. Optional: when omitted, the subscribe objects come from the integration revision, and the config may carry only `providerOptions`.
      * @type {{ [key: string]: SubscribeConfigObject; }}
      * @memberof SubscribeConfigAllOf
      */
-    objects: { [key: string]: SubscribeConfigObject; };
+    objects?: { [key: string]: SubscribeConfigObject; };
 }
 
 /**
@@ -39,7 +39,6 @@ export interface SubscribeConfigAllOf {
  */
 export function instanceOfSubscribeConfigAllOf(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "objects" in value;
 
     return isInstance;
 }
@@ -54,7 +53,7 @@ export function SubscribeConfigAllOfFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'objects': (mapValues(json['objects'], SubscribeConfigObjectFromJSON)),
+        'objects': !exists(json, 'objects') ? undefined : (mapValues(json['objects'], SubscribeConfigObjectFromJSON)),
     };
 }
 
@@ -67,7 +66,7 @@ export function SubscribeConfigAllOfToJSON(value?: SubscribeConfigAllOf | null):
     }
     return {
         
-        'objects': (mapValues(value.objects, SubscribeConfigObjectToJSON)),
+        'objects': value.objects === undefined ? undefined : (mapValues(value.objects, SubscribeConfigObjectToJSON)),
     };
 }
 
