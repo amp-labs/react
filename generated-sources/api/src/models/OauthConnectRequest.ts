@@ -75,7 +75,7 @@ export interface OauthConnectRequest {
      */
     providerMetadata?: { [key: string]: ProviderMetadataInfo; };
     /**
-     * ID of the provider app, returned from the [Create Provider App endpoint](https://docs.withampersand.com/reference/provider-apps/create-provider-app). If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
+     * ID of the provider app, returned from the [Create Provider App endpoint](https://docs.ampersand.ai/reference/provider-app/create-a-new-provider-app). If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.
      * @type {string}
      * @memberof OauthConnectRequest
      */
