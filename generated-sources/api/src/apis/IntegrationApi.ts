@@ -67,7 +67,7 @@ export interface ListIntegrationsRequest {
  */
 export interface IntegrationApiInterface {
     /**
-     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.ampersand.ai/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * @summary Batch upsert a group of integrations
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {BatchUpsertIntegrationsRequest} batchUpsertIntegrationsRequest 
@@ -79,7 +79,7 @@ export interface IntegrationApiInterface {
     batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
 
     /**
-     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.ampersand.ai/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
@@ -156,7 +156,7 @@ export interface IntegrationApiInterface {
 export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInterface {
 
     /**
-     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.ampersand.ai/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     async batchUpsertIntegrationsRaw(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
@@ -202,7 +202,7 @@ export class IntegrationApi extends runtime.BaseAPI implements IntegrationApiInt
     }
 
     /**
-     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.withampersand.com/cli/overview#deploy-integrations) rather than this API endpoint directly.
+     * This endpoint is used by the Ampersand CLI to batch upsert integrations. We recommend using the [CLI\'s deploy command](https://docs.ampersand.ai/cli/overview#deploy-integrations) rather than this API endpoint directly.
      * Batch upsert a group of integrations
      */
     async batchUpsertIntegrations(requestParameters: BatchUpsertIntegrationsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
