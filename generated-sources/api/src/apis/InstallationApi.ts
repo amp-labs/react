@@ -90,7 +90,7 @@ export interface UpdateInstallationOperationRequest {
  */
 export interface InstallationApiInterface {
     /**
-     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.ampersand.ai/embeddable-ui-components). 
      * @summary Create a new installation
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
@@ -103,7 +103,7 @@ export interface InstallationApiInterface {
     createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>>;
 
     /**
-     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.ampersand.ai/embeddable-ui-components). 
      * Create a new installation
      */
     createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation>;
@@ -226,7 +226,7 @@ export interface InstallationApiInterface {
 export class InstallationApi extends runtime.BaseAPI implements InstallationApiInterface {
 
     /**
-     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.ampersand.ai/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallationRaw(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Installation>> {
@@ -276,7 +276,7 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
     }
 
     /**
-     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components). 
+     * Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group\'s default. To create a connection, use the [OAuth Connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) or the [prebuilt UI components](https://docs.ampersand.ai/embeddable-ui-components). 
      * Create a new installation
      */
     async createInstallation(requestParameters: CreateInstallationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Installation> {

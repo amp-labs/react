@@ -75,6 +75,12 @@ export interface FieldDefinition {
      */
     unique?: boolean;
     /**
+     * Marks the field as an ID from an external system, which can be used as an upsert or relationship key. Salesforce only; supported on Text and Number fields. Ignored by other providers.
+     * @type {boolean}
+     * @memberof FieldDefinition
+     */
+    externalId?: boolean;
+    /**
      * Indicates if the field should be indexed for faster search
      * @type {boolean}
      * @memberof FieldDefinition
@@ -128,6 +134,7 @@ export function FieldDefinitionFromJSONTyped(json: any, ignoreDiscriminator: boo
         'valueType': json['valueType'],
         'required': !exists(json, 'required') ? undefined : json['required'],
         'unique': !exists(json, 'unique') ? undefined : json['unique'],
+        'externalId': !exists(json, 'externalId') ? undefined : json['externalId'],
         'indexed': !exists(json, 'indexed') ? undefined : json['indexed'],
         'stringOptions': !exists(json, 'stringOptions') ? undefined : StringFieldOptionsFromJSON(json['stringOptions']),
         'numericOptions': !exists(json, 'numericOptions') ? undefined : NumericFieldOptionsFromJSON(json['numericOptions']),
@@ -150,6 +157,7 @@ export function FieldDefinitionToJSON(value?: FieldDefinition | null): any {
         'valueType': value.valueType,
         'required': value.required,
         'unique': value.unique,
+        'externalId': value.externalId,
         'indexed': value.indexed,
         'stringOptions': StringFieldOptionsToJSON(value.stringOptions),
         'numericOptions': NumericFieldOptionsToJSON(value.numericOptions),
