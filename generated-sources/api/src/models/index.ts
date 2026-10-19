@@ -168,6 +168,7 @@ export * from './PatchObjectConfigContentRequestAllOfOneOf1';
 export * from './Problem';
 export * from './Project';
 export * from './ProjectEntitlements';
+export * from './ProjectEntitlementsAndiChat';
 export * from './ProjectEntitlementsBrandingRemoval';
 export * from './ProjectEntitlementsLogRetentionDays';
 export * from './ProviderApp';

@@ -191,6 +191,7 @@ src/models/PatchObjectConfigContentRequestAllOfOneOf1.ts
 src/models/Problem.ts
 src/models/Project.ts
 src/models/ProjectEntitlements.ts
+src/models/ProjectEntitlementsAndiChat.ts
 src/models/ProjectEntitlementsBrandingRemoval.ts
 src/models/ProjectEntitlementsLogRetentionDays.ts
 src/models/ProviderApp.ts
