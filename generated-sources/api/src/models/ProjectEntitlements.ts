@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProjectEntitlementsAndiChat } from './ProjectEntitlementsAndiChat';
+import {
+    ProjectEntitlementsAndiChatFromJSON,
+    ProjectEntitlementsAndiChatFromJSONTyped,
+    ProjectEntitlementsAndiChatToJSON,
+} from './ProjectEntitlementsAndiChat';
 import type { ProjectEntitlementsBrandingRemoval } from './ProjectEntitlementsBrandingRemoval';
 import {
     ProjectEntitlementsBrandingRemovalFromJSON,
@@ -44,6 +50,12 @@ export interface ProjectEntitlements {
      * @memberof ProjectEntitlements
      */
     logRetentionDays?: ProjectEntitlementsLogRetentionDays;
+    /**
+     * 
+     * @type {ProjectEntitlementsAndiChat}
+     * @memberof ProjectEntitlements
+     */
+    andiChat?: ProjectEntitlementsAndiChat;
 }
 
 /**
@@ -67,6 +79,7 @@ export function ProjectEntitlementsFromJSONTyped(json: any, ignoreDiscriminator:
         
         'brandingRemoval': !exists(json, 'brandingRemoval') ? undefined : ProjectEntitlementsBrandingRemovalFromJSON(json['brandingRemoval']),
         'logRetentionDays': !exists(json, 'logRetentionDays') ? undefined : ProjectEntitlementsLogRetentionDaysFromJSON(json['logRetentionDays']),
+        'andiChat': !exists(json, 'andiChat') ? undefined : ProjectEntitlementsAndiChatFromJSON(json['andiChat']),
     };
 }
 
@@ -81,6 +94,7 @@ export function ProjectEntitlementsToJSON(value?: ProjectEntitlements | null): a
         
         'brandingRemoval': ProjectEntitlementsBrandingRemovalToJSON(value.brandingRemoval),
         'logRetentionDays': ProjectEntitlementsLogRetentionDaysToJSON(value.logRetentionDays),
+        'andiChat': ProjectEntitlementsAndiChatToJSON(value.andiChat),
     };
 }
 

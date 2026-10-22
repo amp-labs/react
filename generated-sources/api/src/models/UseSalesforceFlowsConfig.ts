@@ -25,6 +25,12 @@ export interface UseSalesforceFlowsConfig {
      * @memberof UseSalesforceFlowsConfig
      */
     enabled: boolean;
+    /**
+     * Whether the customer creates and maintains the flows and outbound messages in their Salesforce org themselves. When true, Ampersand never creates, updates or deletes them; the customer's outbound messages post to the installation's subscribe webhook URL. Requires `enabled` to be true. Defaults to false.
+     * @type {boolean}
+     * @memberof UseSalesforceFlowsConfig
+     */
+    manualManagement?: boolean;
 }
 
 /**
@@ -48,6 +54,7 @@ export function UseSalesforceFlowsConfigFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'enabled': json['enabled'],
+        'manualManagement': !exists(json, 'manualManagement') ? undefined : json['manualManagement'],
     };
 }
 
@@ -61,6 +68,7 @@ export function UseSalesforceFlowsConfigToJSON(value?: UseSalesforceFlowsConfig 
     return {
         
         'enabled': value.enabled,
+        'manualManagement': value.manualManagement,
     };
 }
 
