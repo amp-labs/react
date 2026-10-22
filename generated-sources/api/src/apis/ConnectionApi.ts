@@ -115,7 +115,7 @@ export interface ConnectionApiInterface {
     deleteConnection(requestParameters: DeleteConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
+     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) instead, unless you already have the refresh token and are importing it into Ampersand.
      * @summary Generate a new connection
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {GenerateConnectionRequest} [generateConnectionParams] 
@@ -126,7 +126,7 @@ export interface ConnectionApiInterface {
     generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>>;
 
     /**
-     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
+     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection>;
@@ -172,7 +172,7 @@ export interface ConnectionApiInterface {
      * Rotate credentials or update metadata (such as the provider workspace reference) for an existing connection.
      * @summary Update a connection.
      * @param {string} projectIdOrName The Ampersand project ID or project name.
-     * @param {string} connectionId The ID of the connection to update. You can find this via the [list connections endpoint](https://docs.withampersand.com/reference/connection/list-connections).
+     * @param {string} connectionId The ID of the connection to update. You can find this via the [list connections endpoint](https://docs.ampersand.ai/reference/connection/list-connections).
      * @param {UpdateConnectionRequest} updateConnectionRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -286,7 +286,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
+     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     async generateConnectionRaw(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Connection>> {
@@ -324,7 +324,7 @@ export class ConnectionApi extends runtime.BaseAPI implements ConnectionApiInter
     }
 
     /**
-     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/get-url-for-oauth-flow) instead, unless you already have the refresh token and are importing it into Ampersand.
+     * All auth schemes are supported, but for OAuth2 Authorization Code, it is recommended that you use the [/oauth-connect endpoint](https://docs.ampersand.ai/reference/oauth/generate-oauth-authorization-url) instead, unless you already have the refresh token and are importing it into Ampersand.
      * Generate a new connection
      */
     async generateConnection(requestParameters: GenerateConnectionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Connection> {
