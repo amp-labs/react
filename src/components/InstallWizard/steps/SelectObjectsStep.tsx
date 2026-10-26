@@ -11,7 +11,7 @@ import { useProvider } from "src/hooks/useProvider";
 
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
-import { useWizard } from "../wizard/WizardContext";
+import { useWizard, WizardStep } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
 import styles from "./selectObjectsStep.module.css";
@@ -21,7 +21,8 @@ const ALWAYS_ENABLED_TOOLTIP_ID = "always-enabled-object";
 export function SelectObjectsStep() {
   const manifest = useManifest();
   const localConfig = useLocalConfig();
-  const { state, setSelectedObjects, nextStep, prevStep } = useWizard();
+  const { state, setSelectedObjects, nextStep, prevStep, goToStep } =
+    useWizard();
   const { providerName } = useProvider();
   const { appName: projectAppName } = useProjectQuery();
   const appName = projectAppName || "Your App";
@@ -129,6 +130,14 @@ export function SelectObjectsStep() {
       }
     });
 
+    // With no read objects there is nothing to configure, and ConfigureObjectsGate sends an
+    // empty selection straight back here. Skip to review so the step is not a dead end.
+    if (readObjects.length === 0) {
+      goToStep(WizardStep.Review);
+
+      return;
+    }
+
     nextStep();
   }, [
     selectedOrAlwaysEnabled,
@@ -138,9 +147,15 @@ export function SelectObjectsStep() {
     writeSupported,
     writeEnabled,
     nextStep,
+    readObjects.length,
+    goToStep,
   ]);
 
-  const isValid = selectedOrAlwaysEnabled.size > 0;
+  // An integration can have no read objects at all — a subscribe-only integration carries
+  // `read: objects: []` because the manifest requires a read block. There is then nothing to
+  // select, which is not a reason to block the install.
+  const hasNoReadObjects = readObjects.length === 0;
+  const isValid = selectedOrAlwaysEnabled.size > 0 || hasNoReadObjects;
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
@@ -170,10 +185,24 @@ export function SelectObjectsStep() {
     );
   }
 
-  if (readObjects.length === 0) {
+  if (hasNoReadObjects) {
     return (
-      <div className={styles.empty}>
-        No objects available for this integration.
+      <div className={styles.selectObjects}>
+        <StepHeader
+          title="Select Objects"
+          description={`This integration does not read any objects from ${providerName}.`}
+        />
+
+        <div className={styles.empty}>
+          There is nothing to select. Continue to review and create the
+          installation.
+        </div>
+
+        <WizardNavigation
+          onNext={handleNext}
+          onBack={prevStep}
+          nextLabel="Next"
+        />
       </div>
     );
   }
