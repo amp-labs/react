@@ -38,15 +38,18 @@ export interface SubscribeEvents {
   /**
    * Whether this object takes its fields and mappings from the matching read object.
    *
-   * Defaults to `false`, which is what a subscribe-only object needs: it has no read
-   * object behind it, and the server rejects an inheriting object that names one it
-   * cannot find. Set it to `true` for an object that does have a read action, and leave
-   * `selectedFields` and `selectedFieldMappings` unset — the server rejects an inheriting
-   * object that also carries its own.
+   * Required, with no default: the server reads an absent value as `true`, so a value
+   * this library guessed would decide the object's shape silently. Say which it is.
    *
-   * Written out either way. An omitted value is read as `true` by the server.
+   * `false` for a subscribe-only object, which is the only value that works: it has no
+   * read object behind it, and an inheriting object with none is rejected with "read
+   * object config is required to subscribe object".
+   *
+   * `true` for an object that does have a read action. Leave `selectedFields` and
+   * `selectedFieldMappings` unset in that case — the server rejects an inheriting object
+   * that also carries its own.
    */
-  inheritFieldsAndMappings?: boolean;
+  inheritFieldsAndMappings: boolean;
   /**
    * Fields to deliver with each event, by provider field name.
    *
@@ -121,7 +124,7 @@ export type UpdateEventWatchSpec =
  * own, and `watchFieldsAuto` has exactly one value in a config, `"all"`.
  */
 export function updateEventWatchSpec(
-  events: SubscribeEvents,
+  events: Pick<SubscribeEvents, "selectedFields" | "selectedFieldMappings">,
 ): UpdateEventWatchSpec {
   const namesFields =
     Boolean(events.selectedFields?.length) ||
@@ -155,9 +158,9 @@ export function buildSubscribeConfigObjects(
       // The revision supplies the real destination; the hydrated revision carries no
       // subscribe block, so there is nothing here to name it with.
       destination: "",
-      // Written out either way: an omitted value is read as `true` by the server, which
-      // then demands a read object a subscribe-only object does not have.
-      inheritFieldsAndMappings: events.inheritFieldsAndMappings ?? false,
+      // Always written out: an omitted value is read as `true` by the server, which then
+      // demands a read object a subscribe-only object does not have.
+      inheritFieldsAndMappings: events.inheritFieldsAndMappings,
     };
 
     if (events.selectedFields?.length) {
