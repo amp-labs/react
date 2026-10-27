@@ -14,10 +14,10 @@ import {
   ConfigCreateEventEnabledEnum,
   ConfigDeleteEventEnabledEnum,
   ConfigUpdateEventEnabledEnum,
-  ConfigUpdateEventWatchFieldsAutoEnum,
 } from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
+import type { UpdateEventWatchSpec } from "src/types/subscribeEvents";
 import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { useInstallation } from "../installation/useInstallation";
@@ -49,12 +49,11 @@ export type SubscribeObjectHandlers = {
   /** Subscribe to delete events for this object. */
   setEnableDelete: () => void;
   /**
-   * Subscribe to update events. `watchAllFields` writes `watchFieldsAuto: "all"`, which
-   * is what the wizard sends when the consumer was not asked to pick fields and no fields
-   * were named for the object. Omit it whenever the object selects fields or mappings:
-   * those are the watch set, and "all" would contradict them.
+   * Subscribe to update events. `watch` says which field changes deliver an event, as
+   * either `requiredWatchFields` or `watchFieldsAuto: "all"`; the server requires one of
+   * the two, so omitting it writes an update event the server will reject.
    */
-  setEnableUpdate: (opts?: { watchAllFields?: boolean }) => void;
+  setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
    * Fields delivered with each event, by provider field name. A subscribe-only object
    * must select something: the server rejects a non-inheriting object that selects
@@ -505,17 +504,13 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
             }),
           );
         },
-        setEnableUpdate: (opts) => {
+        setEnableUpdate: (watch) => {
           setDraft((prev) =>
             produce(prev, (_draft) => {
               const { obj } = initializeSubscribeObject(_draft);
               obj.updateEvent = {
                 enabled: ConfigUpdateEventEnabledEnum.Always,
-                ...(opts?.watchAllFields
-                  ? {
-                      watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All,
-                    }
-                  : {}),
+                ...(watch ?? {}),
               };
             }),
           );

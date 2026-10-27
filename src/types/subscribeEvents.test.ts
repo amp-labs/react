@@ -3,7 +3,7 @@ import { describe, expect, it } from "@jest/globals";
 import {
   autoAppliedSubscribeEvents,
   buildSubscribeConfigObjects,
-  shouldWatchAllFields,
+  updateEventWatchSpec,
 } from "./subscribeEvents";
 
 // The prop's contract: an event key present means subscribe to it; absent means do not.
@@ -71,27 +71,39 @@ describe("autoAppliedSubscribeEvents", () => {
   });
 });
 
-// watchFieldsAuto: "all" and a named field set are two ways of saying which fields to
-// watch, so only one of them is ever written.
-describe("shouldWatchAllFields", () => {
+// A config update event must carry one of requiredWatchFields or watchFieldsAuto, and
+// watchFieldsAuto has only the one value, so naming fields and watching all of them are
+// the two available answers.
+describe("updateEventWatchSpec", () => {
   it("watches all when the caller named nothing", () => {
-    expect(shouldWatchAllFields({})).toBe(true);
-  });
-
-  it("does not watch all when fields are named", () => {
-    expect(shouldWatchAllFields({ selectedFields: ["text"] })).toBe(false);
-  });
-
-  it("does not watch all when only mappings are named", () => {
-    expect(
-      shouldWatchAllFields({ selectedFieldMappings: { timeStamp: "ts" } }),
-    ).toBe(false);
+    expect(updateEventWatchSpec({})).toEqual({ watchFieldsAuto: "all" });
   });
 
   it("watches all when the field set is present but empty", () => {
     expect(
-      shouldWatchAllFields({ selectedFields: [], selectedFieldMappings: {} }),
-    ).toBe(true);
+      updateEventWatchSpec({ selectedFields: [], selectedFieldMappings: {} }),
+    ).toEqual({ watchFieldsAuto: "all" });
+  });
+
+  it("watches the named fields", () => {
+    expect(updateEventWatchSpec({ selectedFields: ["text", "user"] })).toEqual({
+      requiredWatchFields: ["text", "user"],
+    });
+  });
+
+  it("watches a mapped field under its mapTo name", () => {
+    expect(
+      updateEventWatchSpec({ selectedFieldMappings: { timeStamp: "ts" } }),
+    ).toEqual({ requiredWatchFields: ["timeStamp"] });
+  });
+
+  it("combines selected fields and mappings without repeating one", () => {
+    expect(
+      updateEventWatchSpec({
+        selectedFields: ["text", "timeStamp"],
+        selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
+      }),
+    ).toEqual({ requiredWatchFields: ["text", "timeStamp", "channelName"] });
   });
 });
 
@@ -125,7 +137,7 @@ describe("buildSubscribeConfigObjects", () => {
     });
   });
 
-  it("leaves watchFieldsAuto unset when fields are named", () => {
+  it("watches the named fields rather than all of them", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         selectedFields: ["text"],
@@ -133,7 +145,10 @@ describe("buildSubscribeConfigObjects", () => {
       },
     });
 
-    expect(objects?.messages.updateEvent).toEqual({ enabled: "always" });
+    expect(objects?.messages.updateEvent).toEqual({
+      enabled: "always",
+      requiredWatchFields: ["text"],
+    });
   });
 
   it("watches all fields when the caller named none", () => {
