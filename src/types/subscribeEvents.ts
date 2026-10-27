@@ -36,6 +36,18 @@ export interface SubscribeEventOption {
  */
 export interface SubscribeEvents {
   /**
+   * Whether this object takes its fields and mappings from the matching read object.
+   *
+   * Defaults to `false`, which is what a subscribe-only object needs: it has no read
+   * object behind it, and the server rejects an inheriting object that names one it
+   * cannot find. Set it to `true` for an object that does have a read action, and leave
+   * `selectedFields` and `selectedFieldMappings` unset — the server rejects an inheriting
+   * object that also carries its own.
+   *
+   * Written out either way. An omitted value is read as `true` by the server.
+   */
+  inheritFieldsAndMappings?: boolean;
+  /**
    * Fields to deliver with each event, by provider field name.
    *
    * Required for a subscribe-only object: it has no read config to inherit a field set
@@ -143,9 +155,9 @@ export function buildSubscribeConfigObjects(
       // The revision supplies the real destination; the hydrated revision carries no
       // subscribe block, so there is nothing here to name it with.
       destination: "",
-      // Written explicitly: an omitted value is read as `true` by the server, which then
-      // demands a read object a subscribe-only object does not have.
-      inheritFieldsAndMappings: false,
+      // Written out either way: an omitted value is read as `true` by the server, which
+      // then demands a read object a subscribe-only object does not have.
+      inheritFieldsAndMappings: events.inheritFieldsAndMappings ?? false,
     };
 
     if (events.selectedFields?.length) {

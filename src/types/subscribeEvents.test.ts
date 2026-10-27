@@ -174,6 +174,25 @@ describe("buildSubscribeConfigObjects", () => {
     expect(objects?.messages.selectedFieldMappings).toBeUndefined();
   });
 
+  it("defaults to not inheriting, for a subscribe-only object", () => {
+    const objects = buildSubscribeConfigObjects({
+      messages: { createEvent: { userSelect: false } },
+    });
+
+    expect(objects?.messages.inheritFieldsAndMappings).toBe(false);
+  });
+
+  it("passes the caller's inheritFieldsAndMappings through", () => {
+    const objects = buildSubscribeConfigObjects({
+      contacts: {
+        inheritFieldsAndMappings: true,
+        createEvent: { userSelect: false },
+      },
+    });
+
+    expect(objects?.contacts.inheritFieldsAndMappings).toBe(true);
+  });
+
   it("builds every object the prop names", () => {
     const objects = buildSubscribeConfigObjects({
       messages: { createEvent: { userSelect: false } },
