@@ -55,6 +55,11 @@ export type SubscribeObjectHandlers = {
    */
   setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
+   * Whether this object takes its fields and mappings from the matching read object.
+   * Written out either way, since an omitted value is read as `true` by the server.
+   */
+  setInheritFieldsAndMappings: (inherit: boolean) => void;
+  /**
    * Fields delivered with each event, by provider field name. A subscribe-only object
    * must select something: the server rejects a non-inheriting object that selects
    * nothing, because there is no read config behind it to inherit from.
@@ -467,9 +472,9 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       const initializeSubscribeObject = (_draft: InstallationConfigContent) => {
         const subscribe = _draft.subscribe || {};
         const objects = subscribe.objects || {};
-        // A subscribe-only object carries its own fields, so inheritFieldsAndMappings
-        // is written explicitly: an omitted value is read as `true` by the server,
-        // which then demands a read object this object does not have.
+        // Written out rather than left unset, since the server reads an omitted value as
+        // `true` and then demands a read object a subscribe-only object does not have.
+        // setInheritFieldsAndMappings overrides it for an object that does inherit.
         const obj = objects[objectName] || {
           objectName,
           inheritFieldsAndMappings: false,
@@ -512,6 +517,14 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
                 enabled: ConfigUpdateEventEnabledEnum.Always,
                 ...(watch ?? {}),
               };
+            }),
+          );
+        },
+        setInheritFieldsAndMappings: (inherit: boolean) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.inheritFieldsAndMappings = inherit;
             }),
           );
         },
