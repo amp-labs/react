@@ -7,6 +7,7 @@ import {
 } from "services/api";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
+import { buildSubscribeConfigObjects } from "src/types/subscribeEvents";
 
 import { getIsProxyEnabled } from "../../actions/proxy/isProxyEnabled";
 import {
@@ -23,7 +24,10 @@ const getNoConfigurationRequired = (
   hydratedRevision: HydratedRevision | null,
 ) => {
   const { read, write } = hydratedRevision?.content ?? {};
-  return !read && !write;
+  // Count objects rather than nil-check the blocks: a subscribe-only integration still
+  // carries a read block, because the manifest rejects `subscribe` without one, and an
+  // empty object list leaves the consumer with nothing to configure all the same.
+  return !read?.objects?.length && !write?.objects?.length;
 };
 
 interface ConditionalHasConfigurationLayoutProps {
@@ -49,6 +53,7 @@ export function ConditionalHasConfigurationLayout({
     consumerRef,
     onInstallSuccess,
     isIntegrationDeleted,
+    subscribeEvents,
   } = useInstallIntegrationProps();
 
   const {
@@ -96,6 +101,17 @@ export function ConditionalHasConfigurationLayout({
           hydratedRevision?.content?.proxy;
       }
 
+      // A subscribe-only integration is installed here, with no step for the consumer, so
+      // the caller's subscribeEvents props are the whole subscribe config. Without them the
+      // installation is created with none, and the server has no fields to deliver.
+      const subscribeObjects = buildSubscribeConfigObjects(subscribeEvents);
+
+      if (subscribeObjects) {
+        createInstallationRequest.installation.config.content.subscribe = {
+          objects: subscribeObjects,
+        };
+      }
+
       if (isCreateInstallationIdle && !hasFiredMutationRef.current) {
         createInstallation(createInstallationRequest, {
           onSuccess: (_installation) => {
@@ -123,6 +139,7 @@ export function ConditionalHasConfigurationLayout({
     provider,
     createInstallation,
     isCreateInstallationIdle,
+    subscribeEvents,
   ]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
