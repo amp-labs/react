@@ -8,7 +8,9 @@
  * `userSelect` only decides whether the consumer is asked about it:
  *
  * - `userSelect: false` — subscribed, no question asked. For `updateEvent` this writes
- *   `watchFieldsAuto: "all"`, so every field change delivers.
+ *   `watchFieldsAuto: "all"` only when no fields are named; `selectedFields` and
+ *   `selectedFieldMappings` are themselves the watch set, so naming any field leaves
+ *   `watchFieldsAuto` unset rather than contradicting that set.
  * - `userSelect: true` — the wizard asks. For `createEvent` and `deleteEvent` that is
  *   whether to subscribe; for `updateEvent` it is also which fields to watch.
  *
@@ -26,6 +28,18 @@ export interface SubscribeEventOption {
  * @experimental
  */
 export interface SubscribeEvents {
+  /**
+   * Fields to deliver with each event, by provider field name.
+   *
+   * Required for a subscribe-only object: it has no read config to inherit a field set
+   * from, and the server rejects a non-inheriting subscribe object that selects nothing
+   * (`selectedFields or selectedFieldMappings is required when inheritFieldsAndMappings
+   * is false`). There is no field metadata for subscribe objects, so these are taken as
+   * written and not validated against the provider.
+   */
+  selectedFields?: string[];
+  /** Mapped field name to provider field name, for events that need a mapping. */
+  selectedFieldMappings?: Record<string, string>;
   createEvent?: SubscribeEventOption;
   updateEvent?: SubscribeEventOption;
   deleteEvent?: SubscribeEventOption;
