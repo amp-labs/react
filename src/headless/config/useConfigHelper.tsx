@@ -50,9 +50,19 @@ export type SubscribeObjectHandlers = {
   setEnableDelete: () => void;
   /**
    * Subscribe to update events. `watchAllFields` writes `watchFieldsAuto: "all"`, which
-   * is what the wizard sends when the consumer was not asked to pick fields.
+   * is what the wizard sends when the consumer was not asked to pick fields and no fields
+   * were named for the object. Omit it whenever the object selects fields or mappings:
+   * those are the watch set, and "all" would contradict them.
    */
   setEnableUpdate: (opts?: { watchAllFields?: boolean }) => void;
+  /**
+   * Fields delivered with each event, by provider field name. A subscribe-only object
+   * must select something: the server rejects a non-inheriting object that selects
+   * nothing, because there is no read config behind it to inherit from.
+   */
+  setSelectedFields: (fields: string[]) => void;
+  /** Mapped field name to provider field name. */
+  setSelectedFieldMappings: (mappings: Record<string, string>) => void;
   /** Stop subscribing to this object entirely. */
   removeSubscribeObject: () => void;
 };
@@ -507,6 +517,29 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
                     }
                   : {}),
               };
+            }),
+          );
+        },
+        setSelectedFields: (fields: string[]) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.selectedFields = fields.reduce<Record<string, boolean>>(
+                (acc, field) => {
+                  acc[field] = true;
+
+                  return acc;
+                },
+                {},
+              );
+            }),
+          );
+        },
+        setSelectedFieldMappings: (mappings: Record<string, string>) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.selectedFieldMappings = { ...mappings };
             }),
           );
         },
