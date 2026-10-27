@@ -36,9 +36,7 @@ export function useApplySubscribeEvents() {
 
       const handlers = subscribeObject(objectName);
 
-      handlers.setInheritFieldsAndMappings(
-        events.inheritFieldsAndMappings ?? false,
-      );
+      handlers.setInheritFieldsAndMappings(events.inheritFieldsAndMappings);
 
       // Fields first: the events below are only valid on an object that selects something.
       if (events.selectedFields?.length) {
