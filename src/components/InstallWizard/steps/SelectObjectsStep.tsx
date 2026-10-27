@@ -6,6 +6,7 @@ import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { useApplySubscribeEvents } from "src/hooks/useApplySubscribeEvents";
 import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
@@ -55,6 +56,10 @@ export function SelectObjectsStep() {
     error: installError,
     retry,
   } = useInstallAlwaysEnabledObjects();
+
+  // Subscribe events the consumer is not asked about are settled here, before any of the
+  // branches below return. Events with userSelect: true are left for the wizard to ask.
+  useApplySubscribeEvents();
 
   const selectedOrAlwaysEnabled = useMemo(
     () => new Set([...selected, ...alwaysEnabledObjects]),

@@ -7,8 +7,15 @@ import type {
   FieldSettingDefault,
   FieldSettingWriteOnCreateEnum,
   FieldSettingWriteOnUpdateEnum,
+  SubscribeConfigObject,
 } from "@generated/api/src";
 import type { Installation } from "@generated/api/src";
+import {
+  ConfigCreateEventEnabledEnum,
+  ConfigDeleteEventEnabledEnum,
+  ConfigUpdateEventEnabledEnum,
+  ConfigUpdateEventWatchFieldsAutoEnum,
+} from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
 import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
@@ -27,6 +34,27 @@ export type ReadObjectHandlers = {
   getFieldMapping: (fieldName: string) => string | undefined;
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
   deleteFieldMapping: (mapToName: string) => void;
+};
+
+/**
+ * Handlers for one object's subscribe config. A subscribe-only object carries its own
+ * events: nothing is inherited from a read object, because there is no read object.
+ *
+ * @experimental
+ */
+export type SubscribeObjectHandlers = {
+  object: SubscribeConfigObject | undefined;
+  /** Subscribe to create events for this object. */
+  setEnableCreate: () => void;
+  /** Subscribe to delete events for this object. */
+  setEnableDelete: () => void;
+  /**
+   * Subscribe to update events. `watchAllFields` writes `watchFieldsAuto: "all"`, which
+   * is what the wizard sends when the consumer was not asked to pick fields.
+   */
+  setEnableUpdate: (opts?: { watchAllFields?: boolean }) => void;
+  /** Stop subscribing to this object entirely. */
+  removeSubscribeObject: () => void;
 };
 
 export type WriteObjectHandlers = {
@@ -423,6 +451,78 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     }
   }, [installation, reset]);
 
+  const subscribeObject = useCallback(
+    (objectName: string): SubscribeObjectHandlers => {
+      const object = draft.subscribe?.objects?.[objectName];
+
+      const initializeSubscribeObject = (_draft: InstallationConfigContent) => {
+        const subscribe = _draft.subscribe || {};
+        const objects = subscribe.objects || {};
+        // A subscribe-only object carries its own fields, so inheritFieldsAndMappings
+        // is written explicitly: an omitted value is read as `true` by the server,
+        // which then demands a read object this object does not have.
+        const obj = objects[objectName] || {
+          objectName,
+          inheritFieldsAndMappings: false,
+        };
+
+        objects[objectName] = obj;
+        subscribe.objects = objects;
+        _draft.subscribe = subscribe;
+
+        return { subscribe, objects, obj };
+      };
+
+      return {
+        object,
+        setEnableCreate: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.createEvent = {
+                enabled: ConfigCreateEventEnabledEnum.Always,
+              };
+            }),
+          );
+        },
+        setEnableDelete: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.deleteEvent = {
+                enabled: ConfigDeleteEventEnabledEnum.Always,
+              };
+            }),
+          );
+        },
+        setEnableUpdate: (opts) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.updateEvent = {
+                enabled: ConfigUpdateEventEnabledEnum.Always,
+                ...(opts?.watchAllFields
+                  ? {
+                      watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All,
+                    }
+                  : {}),
+              };
+            }),
+          );
+        },
+        removeSubscribeObject: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const objects = _draft.subscribe?.objects;
+              if (objects) delete objects[objectName];
+            }),
+          );
+        },
+      };
+    },
+    [draft, setDraft],
+  );
+
   return {
     draft,
     get,
@@ -432,5 +532,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     readObject,
     writeObject,
     proxy,
+    subscribeObject,
   };
 }
