@@ -15,10 +15,10 @@ import {
  * An omitted event is not subscribed to at all. A present event is subscribed to, and
  * `userSelect` only decides whether the consumer is asked about it:
  *
- * - `userSelect: false` — subscribed, no question asked. For `updateEvent` this writes
- *   `watchFieldsAuto: "all"` only when no fields are named; `selectedFields` and
- *   `selectedFieldMappings` are themselves the watch set, so naming any field leaves
- *   `watchFieldsAuto` unset rather than contradicting that set.
+ * - `userSelect: false` — subscribed, no question asked. For `updateEvent`, an object that
+ *   names fields watches exactly those (`requiredWatchFields`), and one that names none
+ *   watches everything (`watchFieldsAuto: "all"`); a config update event must carry one or
+ *   the other.
  * - `userSelect: true` — the wizard asks. For `createEvent` and `deleteEvent` that is
  *   whether to subscribe; for `updateEvent` it is also which fields to watch.
  *
@@ -92,18 +92,46 @@ export function autoAppliedSubscribeEvents(
   return events;
 }
 
+/** How an update event says which field changes it wants to be told about. */
+export type UpdateEventWatchSpec =
+  | { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum }
+  | { requiredWatchFields: string[] };
+
 /**
- * Whether an update event the consumer was not asked about should watch every field.
+ * Which fields the caller named for an object, in the name space `selectedFields` uses.
  *
- * `selectedFields` and `selectedFieldMappings` are themselves the set of fields to watch,
- * so `watchFieldsAuto: "all"` is written only when the caller named nothing - the case the
- * flag was for, a subscribe-only object with no read config to inherit a field set from.
+ * Mapping keys are mapTo names, which the server resolves through `selectedFieldMappings`
+ * the same way it resolves selected fields, so the two belong in one list.
  */
-export function shouldWatchAllFields(events: SubscribeEvents): boolean {
-  return (
-    !events.selectedFields?.length &&
-    Object.keys(events.selectedFieldMappings ?? {}).length === 0
-  );
+function namedFields(events: SubscribeEvents): string[] {
+  return [
+    ...(events.selectedFields ?? []),
+    ...Object.keys(events.selectedFieldMappings ?? {}),
+  ].filter((field, index, fields) => fields.indexOf(field) === index);
+}
+
+/**
+ * How an update event the consumer was not asked about decides what to watch.
+ *
+ * A config update event must carry one of `requiredWatchFields` or `watchFieldsAuto`, and
+ * `watchFieldsAuto` has exactly one value in a config, `"all"`. Naming fields and watching
+ * all of them are therefore the only two answers, not a default plus an override: an
+ * object that names fields watches those, and only an object that names none watches
+ * everything.
+ *
+ * `selectedFields` is what an event delivers and `requiredWatchFields` is what triggers
+ * one, which are different axes. Treating the named fields as both is the reading that
+ * fits a subscribe-only object, where the caller named the fields it cares about and has
+ * no read config to say anything more.
+ */
+export function updateEventWatchSpec(
+  events: SubscribeEvents,
+): UpdateEventWatchSpec {
+  const fields = namedFields(events);
+
+  return fields.length > 0
+    ? { requiredWatchFields: fields }
+    : { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All };
 }
 
 /**
@@ -157,9 +185,7 @@ export function buildSubscribeConfigObjects(
         if (event === "updateEvent") {
           object.updateEvent = {
             enabled: ConfigUpdateEventEnabledEnum.Always,
-            ...(shouldWatchAllFields(events)
-              ? { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All }
-              : {}),
+            ...updateEventWatchSpec(events),
           };
         }
       },
