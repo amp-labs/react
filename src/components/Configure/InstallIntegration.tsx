@@ -8,6 +8,7 @@ import { InstallationProvider, useInstallation } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
+import type { SubscribeEventsByObject } from "src/types/subscribeEvents";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
@@ -59,6 +60,16 @@ export interface InstallIntegrationProps {
    * @experimental
    */
   fieldMapping?: FieldMapping;
+  /**
+   * Subscribe behaviour per object, for integrations that subscribe to provider events.
+   *
+   * An event listed here is subscribed to; an omitted event is not. `userSelect` decides
+   * only whether the consumer is asked: `false` configures the event without a question
+   * (for `updateEvent`, as `watchFieldsAuto: "all"`), `true` lets them choose in the wizard.
+   *
+   * @experimental
+   */
+  subscribeEvents?: SubscribeEventsByObject;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -86,6 +97,7 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  subscribeEvents,
   variant,
 }: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
@@ -151,6 +163,7 @@ const InstallIntegrationContent = ({
         groupRef={groupRef}
         groupName={groupName}
         fieldMapping={fieldMapping}
+        subscribeEvents={subscribeEvents}
         onInstallSuccess={onInstallSuccess}
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
@@ -173,6 +186,7 @@ const InstallIntegrationContent = ({
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
+        subscribeEvents={subscribeEvents}
         resetComponent={reset}
       >
         <ConnectionsProvider>

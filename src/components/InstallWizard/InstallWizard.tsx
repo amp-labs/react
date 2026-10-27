@@ -5,6 +5,7 @@ import { InstallationProvider } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
+import type { SubscribeEventsByObject } from "src/types/subscribeEvents";
 
 import {
   ComponentContainerError,
@@ -35,6 +36,7 @@ interface InstallWizardProps {
   groupRef: string;
   groupName?: string;
   fieldMapping?: FieldMapping;
+  subscribeEvents?: SubscribeEventsByObject;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -51,6 +53,7 @@ const InstallWizardContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  subscribeEvents,
   onEditConfiguration,
 }: InstallWizardProps) => {
   const {
@@ -95,6 +98,7 @@ const InstallWizardContent = ({
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
+        subscribeEvents={subscribeEvents}
         resetComponent={reset}
       >
         <ConnectionsProvider>
