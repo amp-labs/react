@@ -71,9 +71,8 @@ describe("autoAppliedSubscribeEvents", () => {
   });
 });
 
-// A config update event must carry one of requiredWatchFields or watchFieldsAuto, and
-// watchFieldsAuto has only the one value, so naming fields and watching all of them are
-// the two available answers.
+// An object that names fields is already telling the server what to watch, so the watch
+// spec only has something to add when it names none.
 describe("updateEventWatchSpec", () => {
   it("watches all when the caller named nothing", () => {
     expect(updateEventWatchSpec({})).toEqual({ watchFieldsAuto: "all" });
@@ -85,25 +84,14 @@ describe("updateEventWatchSpec", () => {
     ).toEqual({ watchFieldsAuto: "all" });
   });
 
-  it("watches the named fields", () => {
-    expect(updateEventWatchSpec({ selectedFields: ["text", "user"] })).toEqual({
-      requiredWatchFields: ["text", "user"],
-    });
+  it("adds nothing when fields are named", () => {
+    expect(updateEventWatchSpec({ selectedFields: ["text"] })).toEqual({});
   });
 
-  it("watches a mapped field under its mapTo name", () => {
+  it("adds nothing when only mappings are named", () => {
     expect(
       updateEventWatchSpec({ selectedFieldMappings: { timeStamp: "ts" } }),
-    ).toEqual({ requiredWatchFields: ["timeStamp"] });
-  });
-
-  it("combines selected fields and mappings without repeating one", () => {
-    expect(
-      updateEventWatchSpec({
-        selectedFields: ["text", "timeStamp"],
-        selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
-      }),
-    ).toEqual({ requiredWatchFields: ["text", "timeStamp", "channelName"] });
+    ).toEqual({});
   });
 });
 
@@ -137,7 +125,7 @@ describe("buildSubscribeConfigObjects", () => {
     });
   });
 
-  it("watches the named fields rather than all of them", () => {
+  it("leaves the watch fields to the server when fields are named", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         selectedFields: ["text"],
@@ -145,10 +133,7 @@ describe("buildSubscribeConfigObjects", () => {
       },
     });
 
-    expect(objects?.messages.updateEvent).toEqual({
-      enabled: "always",
-      requiredWatchFields: ["text"],
-    });
+    expect(objects?.messages.updateEvent).toEqual({ enabled: "always" });
   });
 
   it("watches all fields when the caller named none", () => {
