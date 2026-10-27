@@ -1,3 +1,11 @@
+import type { SubscribeConfigObject } from "@generated/api/src";
+import {
+  ConfigCreateEventEnabledEnum,
+  ConfigDeleteEventEnabledEnum,
+  ConfigUpdateEventEnabledEnum,
+  ConfigUpdateEventWatchFieldsAutoEnum,
+} from "@generated/api/src";
+
 /**
  * Per-event subscribe behaviour for the install wizard.
  *
@@ -82,4 +90,83 @@ export function autoAppliedSubscribeEvents(
   });
 
   return events;
+}
+
+/**
+ * Whether an update event the consumer was not asked about should watch every field.
+ *
+ * `selectedFields` and `selectedFieldMappings` are themselves the set of fields to watch,
+ * so `watchFieldsAuto: "all"` is written only when the caller named nothing - the case the
+ * flag was for, a subscribe-only object with no read config to inherit a field set from.
+ */
+export function shouldWatchAllFields(events: SubscribeEvents): boolean {
+  return (
+    !events.selectedFields?.length &&
+    Object.keys(events.selectedFieldMappings ?? {}).length === 0
+  );
+}
+
+/**
+ * Builds the subscribe config these props describe, for a flow that writes the installation
+ * config directly rather than through the wizard's draft.
+ *
+ * Same decisions as `useApplySubscribeEvents` makes against the draft: only the events the
+ * consumer is not asked about, fields as the caller wrote them, and `watchFieldsAuto` left
+ * unset whenever fields were named.
+ *
+ * Returns undefined when there is nothing to configure, so a caller can omit the block.
+ */
+export function buildSubscribeConfigObjects(
+  subscribeEvents: SubscribeEventsByObject | undefined,
+): { [key: string]: SubscribeConfigObject } | undefined {
+  if (!subscribeEvents) return undefined;
+
+  const objects: { [key: string]: SubscribeConfigObject } = {};
+
+  Object.entries(subscribeEvents).forEach(([objectName, events]) => {
+    const object: SubscribeConfigObject = {
+      objectName,
+      // The revision supplies the real destination; the hydrated revision carries no
+      // subscribe block, so there is nothing here to name it with.
+      destination: "",
+      // Written explicitly: an omitted value is read as `true` by the server, which then
+      // demands a read object a subscribe-only object does not have.
+      inheritFieldsAndMappings: false,
+    };
+
+    if (events.selectedFields?.length) {
+      object.selectedFields = Object.fromEntries(
+        events.selectedFields.map((field) => [field, true]),
+      );
+    }
+
+    if (Object.keys(events.selectedFieldMappings ?? {}).length > 0) {
+      object.selectedFieldMappings = events.selectedFieldMappings;
+    }
+
+    autoAppliedSubscribeEvents({ [objectName]: events }).forEach(
+      ({ event }) => {
+        if (event === "createEvent") {
+          object.createEvent = { enabled: ConfigCreateEventEnabledEnum.Always };
+        }
+
+        if (event === "deleteEvent") {
+          object.deleteEvent = { enabled: ConfigDeleteEventEnabledEnum.Always };
+        }
+
+        if (event === "updateEvent") {
+          object.updateEvent = {
+            enabled: ConfigUpdateEventEnabledEnum.Always,
+            ...(shouldWatchAllFields(events)
+              ? { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All }
+              : {}),
+          };
+        }
+      },
+    );
+
+    objects[objectName] = object;
+  });
+
+  return Object.keys(objects).length > 0 ? objects : undefined;
 }

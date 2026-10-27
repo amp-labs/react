@@ -1,7 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { useLocalConfig } from "src/headless";
-import { autoAppliedSubscribeEvents } from "src/types/subscribeEvents";
+import {
+  autoAppliedSubscribeEvents,
+  shouldWatchAllFields,
+} from "src/types/subscribeEvents";
 
 /**
  * Writes the subscribe events the consumer is not asked about into the config draft.
@@ -42,17 +45,15 @@ export function useApplySubscribeEvents() {
         handlers.setSelectedFieldMappings(events.selectedFieldMappings);
       }
 
-      const hasSelectedFields =
-        Boolean(events.selectedFields?.length) ||
-        Object.keys(events.selectedFieldMappings ?? {}).length > 0;
-
       autoAppliedSubscribeEvents({ [objectName]: events }).forEach(
         ({ event }) => {
           if (event === "createEvent") handlers.setEnableCreate();
           if (event === "deleteEvent") handlers.setEnableDelete();
           // Watch everything only when nothing was named; see above.
           if (event === "updateEvent") {
-            handlers.setEnableUpdate({ watchAllFields: !hasSelectedFields });
+            handlers.setEnableUpdate({
+              watchAllFields: shouldWatchAllFields(events),
+            });
           }
         },
       );
