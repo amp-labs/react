@@ -1,17 +1,20 @@
 import { useCallback, useMemo, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import classNames from "classnames";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Button } from "src/components/ui-base/Button";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { useApplySubscribeEvents } from "src/hooks/useApplySubscribeEvents";
 import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
+import { formatObjectList } from "../components/formatObjectList";
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
-import { useWizard } from "../wizard/WizardContext";
+import { useWizard, WizardStep } from "../wizard/WizardContext";
 import { WizardNavigation } from "../wizard/WizardNavigation";
 
 import styles from "./selectObjectsStep.module.css";
@@ -21,8 +24,10 @@ const ALWAYS_ENABLED_TOOLTIP_ID = "always-enabled-object";
 export function SelectObjectsStep() {
   const manifest = useManifest();
   const localConfig = useLocalConfig();
-  const { state, setSelectedObjects, nextStep, prevStep } = useWizard();
+  const { state, setSelectedObjects, nextStep, prevStep, goToStep } =
+    useWizard();
   const { providerName } = useProvider();
+  const { subscribeEvents } = useInstallIntegrationProps();
   const { appName: projectAppName } = useProjectQuery();
   const appName = projectAppName || "Your App";
 
@@ -45,6 +50,14 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
+  // The objects this installation subscribes to. The hydrated manifest carries no subscribe
+  // block — `HydrateRevision` copies read, write and proxy only — so the caller's prop is the
+  // only source for them, and it is also what decides the subscribe config that gets created.
+  const subscribeObjectNames = useMemo(
+    () => Object.keys(subscribeEvents ?? {}),
+    [subscribeEvents],
+  );
+
   // Objects marked `enabled: always` are read for every installation, so they are always
   // selected and can't be deselected. They still go through configuration like any other.
   const alwaysEnabledObjects = useAlwaysEnabledReadObjects();
@@ -54,6 +67,10 @@ export function SelectObjectsStep() {
     error: installError,
     retry,
   } = useInstallAlwaysEnabledObjects();
+
+  // Subscribe events the consumer is not asked about are settled here, before any of the
+  // branches below return. Events with userSelect: true are left for the wizard to ask.
+  useApplySubscribeEvents();
 
   const selectedOrAlwaysEnabled = useMemo(
     () => new Set([...selected, ...alwaysEnabledObjects]),
@@ -129,6 +146,14 @@ export function SelectObjectsStep() {
       }
     });
 
+    // With no read objects there is nothing to configure, and ConfigureObjectsGate sends an
+    // empty selection straight back here. Skip to review so the step is not a dead end.
+    if (readObjects.length === 0) {
+      goToStep(WizardStep.Review);
+
+      return;
+    }
+
     nextStep();
   }, [
     selectedOrAlwaysEnabled,
@@ -138,9 +163,15 @@ export function SelectObjectsStep() {
     writeSupported,
     writeEnabled,
     nextStep,
+    readObjects.length,
+    goToStep,
   ]);
 
-  const isValid = selectedOrAlwaysEnabled.size > 0;
+  // An integration can have no read objects at all — a subscribe-only integration carries
+  // `read: objects: []` because the manifest requires a read block. There is then nothing to
+  // select, which is not a reason to block the install.
+  const hasNoReadObjects = readObjects.length === 0;
+  const isValid = selectedOrAlwaysEnabled.size > 0 || hasNoReadObjects;
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
@@ -170,10 +201,48 @@ export function SelectObjectsStep() {
     );
   }
 
-  if (readObjects.length === 0) {
+  if (hasNoReadObjects) {
+    // Nothing is selectable, but the consumer should still see what they are installing.
+    const isSyncing = subscribeObjectNames.length > 0;
+
     return (
-      <div className={styles.empty}>
-        No objects available for this integration.
+      <div className={styles.selectObjects}>
+        <StepHeader
+          title="Select Objects"
+          description={
+            isSyncing
+              ? `This integration will sync ${formatObjectList(subscribeObjectNames)} ${
+                  subscribeObjectNames.length === 1 ? "object" : "objects"
+                } from ${providerName}.`
+              : `This integration does not read any objects from ${providerName}.`
+          }
+        />
+
+        {isSyncing ? (
+          <div className={styles.objectList}>
+            {subscribeObjectNames.map((objectName) => (
+              <div key={objectName} className={styles.syncedObjectCard}>
+                <div className={styles.objectInfo}>
+                  <span className={styles.objectName}>{objectName}</span>
+                </div>
+                <div className={styles.badges}>
+                  <span className={styles.badge}>Subscribe</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.empty}>
+            There is nothing to select. Continue to review and create the
+            installation.
+          </div>
+        )}
+
+        <WizardNavigation
+          onNext={handleNext}
+          onBack={prevStep}
+          nextLabel="Next"
+        />
       </div>
     );
   }

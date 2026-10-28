@@ -14,6 +14,7 @@ import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjec
 import { handleServerError } from "src/utils/handleServerError";
 import { getFieldDisplayName } from "src/utils/manifest";
 
+import { formatObjectList } from "../components/formatObjectList";
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
@@ -46,6 +47,26 @@ export function ReviewStep() {
   const isPending = isCreatePending || isUpdatePending;
   const { onInstallSuccess, onUpdateSuccess, setInstallation } =
     useInstallIntegrationProps();
+  const { subscribeEvents } = useInstallIntegrationProps();
+
+  // Subscribe objects are not part of `selectedObjects` — they are never selected, and the
+  // hydrated manifest has no subscribe block to list them from. The caller's prop is both
+  // the source of the field set and what becomes the subscribe config, so it is what the
+  // consumer is shown.
+  const subscribeSummaries = useMemo(
+    () =>
+      Object.entries(subscribeEvents ?? {}).map(([objectName, events]) => ({
+        objectName,
+        // The update event's watch fields are also the fields it delivers, and the only
+        // field list these props carry. Provider names, taken as written.
+        fields: events.updateEvent?.requiredWatchFields ?? [],
+        // An event key is present only when it is subscribed to.
+        events: (["createEvent", "updateEvent", "deleteEvent"] as const)
+          .filter((key) => events[key])
+          .map((key) => key.replace("Event", "")),
+      })),
+    [subscribeEvents],
+  );
 
   // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
   // only objects selected, this step saves that installation rather than setting up new objects.
@@ -172,6 +193,12 @@ export function ReviewStep() {
     <div className={styles.reviewStep}>
       <StepHeader title={copy.title} description={copy.description} />
 
+      {objectSummaries.length === 0 && (
+        <div className={styles.empty}>
+          <p className={styles.emptyTitle}>There is nothing to configure.</p>
+        </div>
+      )}
+
       <div className={styles.summaryList}>
         {objectSummaries.map((summary) => (
           <div key={summary.objectName} className={styles.summaryCard}>
@@ -199,6 +226,31 @@ export function ReviewStep() {
                 {summary.configuredMappings.map((m) => (
                   <span key={m.key} className={styles.mappingPill}>
                     {m.sourceLabel} <WidthIcon /> {m.destLabel}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {subscribeSummaries.map((summary) => (
+          <div
+            key={`subscribe-${summary.objectName}`}
+            className={styles.summaryCard}
+          >
+            <div className={styles.cardHeader}>
+              <span className={styles.objectName}>{summary.objectName}</span>
+              <span className={styles.objectDescription}>
+                {summary.events.length > 0
+                  ? `Subscribes to ${formatObjectList(summary.events)} events`
+                  : "Subscribes to events"}
+              </span>
+            </div>
+            {summary.fields.length > 0 && (
+              <div className={styles.cardDetails}>
+                {summary.fields.map((name: string) => (
+                  <span key={name} className={styles.pill}>
+                    {name}
                   </span>
                 ))}
               </div>
