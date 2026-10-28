@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import classNames from "classnames";
+import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Button } from "src/components/ui-base/Button";
 import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
@@ -10,6 +11,7 @@ import { useApplySubscribeEvents } from "src/hooks/useApplySubscribeEvents";
 import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
+import { formatObjectList } from "../components/formatObjectList";
 import { InfoTooltip } from "../components/InfoTooltip";
 import { StepHeader } from "../components/StepHeader";
 import { useWizard, WizardStep } from "../wizard/WizardContext";
@@ -25,6 +27,7 @@ export function SelectObjectsStep() {
   const { state, setSelectedObjects, nextStep, prevStep, goToStep } =
     useWizard();
   const { providerName } = useProvider();
+  const { subscribeEvents } = useInstallIntegrationProps();
   const { appName: projectAppName } = useProjectQuery();
   const appName = projectAppName || "Your App";
 
@@ -46,6 +49,14 @@ export function SelectObjectsStep() {
 
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
+
+  // The objects this installation subscribes to. The hydrated manifest carries no subscribe
+  // block — `HydrateRevision` copies read, write and proxy only — so the caller's prop is the
+  // only source for them, and it is also what decides the subscribe config that gets created.
+  const subscribeObjectNames = useMemo(
+    () => Object.keys(subscribeEvents ?? {}),
+    [subscribeEvents],
+  );
 
   // Objects marked `enabled: always` are read for every installation, so they are always
   // selected and can't be deselected. They still go through configuration like any other.
@@ -191,17 +202,41 @@ export function SelectObjectsStep() {
   }
 
   if (hasNoReadObjects) {
+    // Nothing is selectable, but the consumer should still see what they are installing.
+    const isSyncing = subscribeObjectNames.length > 0;
+
     return (
       <div className={styles.selectObjects}>
         <StepHeader
           title="Select Objects"
-          description={`This integration does not read any objects from ${providerName}.`}
+          description={
+            isSyncing
+              ? `This integration will sync ${formatObjectList(subscribeObjectNames)} ${
+                  subscribeObjectNames.length === 1 ? "object" : "objects"
+                } from ${providerName}.`
+              : `This integration does not read any objects from ${providerName}.`
+          }
         />
 
-        <div className={styles.empty}>
-          There is nothing to select. Continue to review and create the
-          installation.
-        </div>
+        {isSyncing ? (
+          <div className={styles.objectList}>
+            {subscribeObjectNames.map((objectName) => (
+              <div key={objectName} className={styles.syncedObjectCard}>
+                <div className={styles.objectInfo}>
+                  <span className={styles.objectName}>{objectName}</span>
+                </div>
+                <div className={styles.badges}>
+                  <span className={styles.badge}>Subscribe</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.empty}>
+            There is nothing to select. Continue to review and create the
+            installation.
+          </div>
+        )}
 
         <WizardNavigation
           onNext={handleNext}
