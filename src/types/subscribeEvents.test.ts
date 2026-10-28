@@ -80,27 +80,31 @@ describe("autoAppliedSubscribeEvents", () => {
   });
 });
 
-// An object that names fields is already telling the server what to watch, so the watch
-// spec only has something to add when it names none.
+// The update event names the fields it wants; naming none means every field.
 describe("updateEventWatchSpec", () => {
-  it("watches all when the caller named nothing", () => {
-    expect(updateEventWatchSpec({})).toEqual({ watchFieldsAuto: "all" });
+  it("watches all when there is no update event", () => {
+    expect(updateEventWatchSpec(undefined)).toEqual({ watchFieldsAuto: "all" });
   });
 
-  it("watches all when the field set is present but empty", () => {
+  it("watches all when the caller named no fields", () => {
+    expect(updateEventWatchSpec({ userSelect: false })).toEqual({
+      watchFieldsAuto: "all",
+    });
+  });
+
+  it("watches all when the field list is present but empty", () => {
     expect(
-      updateEventWatchSpec({ selectedFields: [], selectedFieldMappings: {} }),
+      updateEventWatchSpec({ userSelect: false, requiredWatchFields: [] }),
     ).toEqual({ watchFieldsAuto: "all" });
   });
 
-  it("adds nothing when fields are named", () => {
-    expect(updateEventWatchSpec({ selectedFields: ["text"] })).toEqual({});
-  });
-
-  it("adds nothing when only mappings are named", () => {
+  it("watches the named fields", () => {
     expect(
-      updateEventWatchSpec({ selectedFieldMappings: { timeStamp: "ts" } }),
-    ).toEqual({});
+      updateEventWatchSpec({
+        userSelect: false,
+        requiredWatchFields: ["text", "user"],
+      }),
+    ).toEqual({ requiredWatchFields: ["text", "user"] });
   });
 });
 
@@ -115,13 +119,14 @@ describe("buildSubscribeConfigObjects", () => {
     expect(buildSubscribeConfigObjects({})).toBeUndefined();
   });
 
-  it("builds an object that carries its own fields and mappings", () => {
+  it("builds an object whose update event names its fields", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        selectedFields: ["text", "user"],
-        selectedFieldMappings: { timeStamp: "ts" },
-        createEvent: { userSelect: false },
+        updateEvent: {
+          userSelect: false,
+          requiredWatchFields: ["text", "user"],
+        },
       },
     });
 
@@ -129,22 +134,11 @@ describe("buildSubscribeConfigObjects", () => {
       objectName: "messages",
       destination: "",
       inheritFieldsAndMappings: false,
-      selectedFields: { text: true, user: true },
-      selectedFieldMappings: { timeStamp: "ts" },
-      createEvent: { enabled: "always" },
-    });
-  });
-
-  it("leaves the watch fields to the server when fields are named", () => {
-    const objects = buildSubscribeConfigObjects({
-      messages: {
-        inheritFieldsAndMappings: false,
-        selectedFields: ["text"],
-        updateEvent: { userSelect: false },
+      updateEvent: {
+        enabled: "always",
+        requiredWatchFields: ["text", "user"],
       },
     });
-
-    expect(objects?.messages.updateEvent).toEqual({ enabled: "always" });
   });
 
   it("watches all fields when the caller named none", () => {
@@ -165,7 +159,6 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        selectedFields: ["text"],
         createEvent: { userSelect: false },
         deleteEvent: { userSelect: true },
       },
@@ -176,13 +169,11 @@ describe("buildSubscribeConfigObjects", () => {
     expect(objects?.messages.updateEvent).toBeUndefined();
   });
 
-  it("omits empty field sets rather than sending them", () => {
+  it("never sends selectedFields or selectedFieldMappings: the prop cannot set them", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        selectedFields: [],
-        selectedFieldMappings: {},
-        createEvent: { userSelect: false },
+        updateEvent: { userSelect: false, requiredWatchFields: ["text"] },
       },
     });
 

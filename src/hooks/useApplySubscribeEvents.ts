@@ -14,8 +14,8 @@ import {
  * question to put to the consumer. Events with `userSelect: true` are left for the wizard
  * to ask about and are deliberately untouched.
  *
- * For an update event, "not asked" means watching the fields the caller named, or every
- * field when it named none. The server requires one of `requiredWatchFields` or
+ * For an update event, "not asked" means watching the fields the caller named on it, or
+ * every field when it named none. The server requires one of `requiredWatchFields` or
  * `watchFieldsAuto` on a config update event, so there is no third option that stays
  * quiet; see `updateEventWatchSpec`.
  *
@@ -38,22 +38,13 @@ export function useApplySubscribeEvents() {
 
       handlers.setInheritFieldsAndMappings(events.inheritFieldsAndMappings);
 
-      // Fields first: the events below are only valid on an object that selects something.
-      if (events.selectedFields?.length) {
-        handlers.setSelectedFields(events.selectedFields);
-      }
-
-      if (events.selectedFieldMappings) {
-        handlers.setSelectedFieldMappings(events.selectedFieldMappings);
-      }
-
       autoAppliedSubscribeEvents({ [objectName]: events }).forEach(
         ({ event }) => {
           if (event === "createEvent") handlers.setEnableCreate();
           if (event === "deleteEvent") handlers.setEnableDelete();
           // Watch the named fields, or everything when none were named; see above.
           if (event === "updateEvent") {
-            handlers.setEnableUpdate(updateEventWatchSpec(events));
+            handlers.setEnableUpdate(updateEventWatchSpec(events.updateEvent));
           }
         },
       );
