@@ -15,8 +15,8 @@ import {
  * An omitted event is not subscribed to at all. A present event is subscribed to, and
  * `userSelect` only decides whether the consumer is asked about it:
  *
- * - `userSelect: false` — subscribed, no question asked. For `updateEvent`, an object that
- *   names fields watches exactly those, and one that names none watches everything
+ * - `userSelect: false` — subscribed, no question asked. For `updateEvent`, the event
+ *   watches the fields in `requiredWatchFields`, or everything when none are named
  *   (`watchFieldsAuto: "all"`).
  * - `userSelect: true` — the wizard asks. For `createEvent` and `deleteEvent` that is
  *   whether to subscribe; for `updateEvent` it is also which fields to watch.
@@ -26,6 +26,24 @@ import {
 export interface SubscribeEventOption {
   /** Whether the consumer chooses this event's behaviour in the wizard. */
   userSelect: boolean;
+}
+
+/**
+ * An update event, which additionally says which field changes it wants to hear about.
+ *
+ * @experimental
+ */
+export interface SubscribeUpdateEventOption extends SubscribeEventOption {
+  /**
+   * Provider field names whose changes trigger an update event, and the fields the event
+   * delivers — the two are the same set.
+   *
+   * Name them for a subscribe-only object: it has no read config to take a field set from,
+   * and an object that names nothing watches and delivers every field. There is no field
+   * metadata for subscribe objects, so these are taken as written and not validated
+   * against the provider.
+   */
+  requiredWatchFields?: string[];
 }
 
 /**
@@ -45,25 +63,21 @@ export interface SubscribeEvents {
    * read object behind it, and an inheriting object with none is rejected with "read
    * object config is required to subscribe object".
    *
-   * `true` for an object that does have a read action. Leave `selectedFields` and
-   * `selectedFieldMappings` unset in that case — the server rejects an inheriting object
-   * that also carries its own.
+   * `true` for an object that does have a read action, whose fields it then takes.
    */
   inheritFieldsAndMappings: boolean;
   /**
-   * Fields to deliver with each event, by provider field name.
+   * Which fields an object cares about is said once, as `requiredWatchFields` on the
+   * update event.
    *
-   * Required for a subscribe-only object: it has no read config to inherit a field set
-   * from, and the server rejects a non-inheriting subscribe object that selects nothing
-   * (`selectedFields or selectedFieldMappings is required when inheritFieldsAndMappings
-   * is false`). There is no field metadata for subscribe objects, so these are taken as
-   * written and not validated against the provider.
+   * The config schema also has `selectedFields` and `selectedFieldMappings`, and neither is
+   * accepted here **yet**: a field-selection step is coming, and these props are for what a
+   * caller settles without asking the consumer. The server accepts all three, so nothing
+   * here is a limit on the config itself — `useConfigHelper`'s `subscribeObject()` already
+   * has `setSelectedFields` and `setSelectedFieldMappings` for that step to write through.
    */
-  selectedFields?: string[];
-  /** Mapped field name to provider field name, for events that need a mapping. */
-  selectedFieldMappings?: Record<string, string>;
   createEvent?: SubscribeEventOption;
-  updateEvent?: SubscribeEventOption;
+  updateEvent?: SubscribeUpdateEventOption;
   deleteEvent?: SubscribeEventOption;
 }
 
@@ -108,30 +122,22 @@ export function autoAppliedSubscribeEvents(
 
 /** How an update event says which field changes it wants to be told about. */
 export type UpdateEventWatchSpec =
-  | { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum }
-  | Record<string, never>;
+  | { requiredWatchFields: string[] }
+  | { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum };
 
 /**
  * How an update event the consumer was not asked about decides what to watch.
  *
- * An object that names fields watches exactly those: the server reads its `selectedFields`
- * and `selectedFieldMappings` as the watch set, so repeating them as `requiredWatchFields`
- * would be the same list written twice. An object that names none has nothing to watch by,
- * and watches everything.
- *
- * Both halves of that are the server's rules, not a choice made here. A config update event
- * is rejected unless it carries `requiredWatchFields`, `watchFieldsAuto`, or fields of its
- * own, and `watchFieldsAuto` has exactly one value in a config, `"all"`.
+ * The named fields if there are any, and everything otherwise: an event that names nothing
+ * has no field set to watch by. Both are the server's rules rather than a choice made here
+ * — a config update event is rejected unless it carries `requiredWatchFields` or
+ * `watchFieldsAuto`, and `watchFieldsAuto` has exactly one value in a config, `"all"`.
  */
 export function updateEventWatchSpec(
-  events: Pick<SubscribeEvents, "selectedFields" | "selectedFieldMappings">,
+  updateEvent: SubscribeUpdateEventOption | undefined,
 ): UpdateEventWatchSpec {
-  const namesFields =
-    Boolean(events.selectedFields?.length) ||
-    Object.keys(events.selectedFieldMappings ?? {}).length > 0;
-
-  return namesFields
-    ? {}
+  return updateEvent?.requiredWatchFields?.length
+    ? { requiredWatchFields: updateEvent.requiredWatchFields }
     : { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All };
 }
 
@@ -140,8 +146,7 @@ export function updateEventWatchSpec(
  * config directly rather than through the wizard's draft.
  *
  * Same decisions as `useApplySubscribeEvents` makes against the draft: only the events the
- * consumer is not asked about, fields as the caller wrote them, and `watchFieldsAuto` left
- * unset whenever fields were named.
+ * consumer is not asked about, and the update event's fields as the caller wrote them.
  *
  * Returns undefined when there is nothing to configure, so a caller can omit the block.
  */
@@ -163,16 +168,6 @@ export function buildSubscribeConfigObjects(
       inheritFieldsAndMappings: events.inheritFieldsAndMappings,
     };
 
-    if (events.selectedFields?.length) {
-      object.selectedFields = Object.fromEntries(
-        events.selectedFields.map((field) => [field, true]),
-      );
-    }
-
-    if (Object.keys(events.selectedFieldMappings ?? {}).length > 0) {
-      object.selectedFieldMappings = events.selectedFieldMappings;
-    }
-
     autoAppliedSubscribeEvents({ [objectName]: events }).forEach(
       ({ event }) => {
         if (event === "createEvent") {
@@ -186,7 +181,7 @@ export function buildSubscribeConfigObjects(
         if (event === "updateEvent") {
           object.updateEvent = {
             enabled: ConfigUpdateEventEnabledEnum.Always,
-            ...updateEventWatchSpec(events),
+            ...updateEventWatchSpec(events.updateEvent),
           };
         }
       },
