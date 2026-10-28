@@ -70,6 +70,21 @@
   font-size: var(--amp-font-size-sm);
 }
 
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--amp-space-2);
+  padding: var(--amp-space-6);
+  text-align: center;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: var(--amp-font-size-md);
+  color: var(--amp-text-primary);
+}
+
 .error {
   padding: var(--amp-space-4);
   margin-bottom: var(--amp-space-4);
