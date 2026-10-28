@@ -31,6 +31,17 @@
   background: var(--amp-surface-selected);
 }
 
+/* Same shape as .objectCard, but nothing here is selectable. */
+.syncedObjectCard {
+  display: flex;
+  align-items: center;
+  gap: var(--amp-space-4);
+  padding: var(--amp-space-4) var(--amp-space-5);
+  border: 1px solid var(--amp-border-default);
+  border-radius: var(--amp-radius-lg);
+  background: var(--amp-surface-primary);
+}
+
 .checkbox {
   width: 20px;
   height: 20px;
