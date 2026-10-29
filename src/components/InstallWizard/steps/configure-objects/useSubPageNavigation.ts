@@ -59,11 +59,20 @@ export function useSubPageNavigation() {
     return required > 0 || optional > 0;
   }, [currentManifestObject]);
 
+  // Mirrors the check in getSubPages(): an object has an "additional" page if
+  // it has explicit optionalFields OR auto-discovered customer fields (e.g.
+  // from `optionalFieldsAuto: all`).
   const hasOptionalFields = useMemo(() => {
-    return (
-      (currentManifestObject?.getOptionalFields("no-mappings")?.length ?? 0) > 0
-    );
-  }, [currentManifestObject]);
+    const hasExplicit =
+      (currentManifestObject?.getOptionalFields("no-mappings")?.length ?? 0) >
+      0;
+    const hasAuto =
+      !!currentObjectName &&
+      Object.keys(
+        manifest.getCustomerFieldsForObject(currentObjectName).allFields ?? {},
+      ).length > 0;
+    return hasExplicit || hasAuto;
+  }, [currentManifestObject, manifest, currentObjectName]);
 
   const hasFieldsContent = useMemo(() => {
     const hasRequiredFields =
