@@ -13,7 +13,10 @@ import {
  * validates. These props say, for each event, whether the consumer gets a choice.
  *
  * An omitted event is not subscribed to at all. A present event is subscribed to, and
- * `userSelect` only decides whether the consumer is asked about it:
+ * `userSelect` only decides whether the consumer is asked about it. The one exception is an
+ * update event with `enabled: false`, which is written as `never` so that its
+ * `requiredWatchFields` can name the fields the other events deliver.
+ *
  *
  * - `userSelect: false` — subscribed, no question asked. For `updateEvent`, the event
  *   watches the fields in `requiredWatchFields`, or everything when none are named
@@ -44,6 +47,16 @@ export interface SubscribeUpdateEventOption extends SubscribeEventOption {
    * against the provider.
    */
   requiredWatchFields?: string[];
+  /**
+   * Whether update events are delivered. Defaults to `true`.
+   *
+   * `false` installs the object without update events: the update event is written as
+   * `never`, and `requiredWatchFields` remains the list of fields the create and delete
+   * events deliver. It is how a subscribe-only object that wants no updates names its fields,
+   * since `requiredWatchFields` is the only field list these props take. Applies to an event
+   * the consumer is not asked about (`userSelect: false`).
+   */
+  enabled?: boolean;
 }
 
 /**
@@ -56,8 +69,10 @@ export interface SubscribeEvents {
   /**
    * Whether this object takes its fields and mappings from the matching read object.
    *
-   * Required, with no default: the server reads an absent value as `true`, so a value
-   * this library guessed would decide the object's shape silently. Say which it is.
+   * Required, with no default: when the config leaves it out, the server takes the
+   * manifest's `inheritFieldsAndMapping` for the object, and rejects the config if the
+   * manifest has no matching subscribe object. Say which it is rather than leave the
+   * object's shape to the manifest.
    *
    * `false` for a subscribe-only object, which is the only value that works: it has no
    * read object behind it, and an inheriting object with none is rejected with "read
@@ -142,6 +157,18 @@ export function updateEventWatchSpec(
 }
 
 /**
+ * The config `enabled` value for an update event the consumer was not asked about: `never`
+ * when the caller set `enabled: false`, `always` otherwise.
+ */
+export function updateEventEnabled(
+  updateEvent: SubscribeUpdateEventOption | undefined,
+): ConfigUpdateEventEnabledEnum {
+  return updateEvent?.enabled === false
+    ? ConfigUpdateEventEnabledEnum.Never
+    : ConfigUpdateEventEnabledEnum.Always;
+}
+
+/**
  * Builds the subscribe config these props describe, for a flow that writes the installation
  * config directly rather than through the wizard's draft.
  *
@@ -163,8 +190,8 @@ export function buildSubscribeConfigObjects(
       // The revision supplies the real destination; the hydrated revision carries no
       // subscribe block, so there is nothing here to name it with.
       destination: "",
-      // Always written out: an omitted value is read as `true` by the server, which then
-      // demands a read object a subscribe-only object does not have.
+      // Always written out: an omitted value falls back to the manifest's
+      // inheritFieldsAndMapping, which these props do not see.
       inheritFieldsAndMappings: events.inheritFieldsAndMappings,
     };
 
@@ -180,7 +207,7 @@ export function buildSubscribeConfigObjects(
 
         if (event === "updateEvent") {
           object.updateEvent = {
-            enabled: ConfigUpdateEventEnabledEnum.Always,
+            enabled: updateEventEnabled(events.updateEvent),
             ...updateEventWatchSpec(events.updateEvent),
           };
         }

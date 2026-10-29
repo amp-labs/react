@@ -55,8 +55,15 @@ export type SubscribeObjectHandlers = {
    */
   setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
+   * Write the update event as `never`: no update events are delivered. `watch` still names
+   * the fields the object's other events deliver, and the server requires `requiredWatchFields`
+   * or `watchFieldsAuto` on a disabled config update event too.
+   */
+  setDisableUpdate: (watch?: UpdateEventWatchSpec) => void;
+  /**
    * Whether this object takes its fields and mappings from the matching read object.
-   * Written out either way, since an omitted value is read as `true` by the server.
+   * Written out either way, since an omitted value falls back to the manifest's
+   * `inheritFieldsAndMapping`.
    */
   setInheritFieldsAndMappings: (inherit: boolean) => void;
   /**
@@ -472,9 +479,9 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       const initializeSubscribeObject = (_draft: InstallationConfigContent) => {
         const subscribe = _draft.subscribe || {};
         const objects = subscribe.objects || {};
-        // Written out rather than left unset, since the server reads an omitted value as
-        // `true` and then demands a read object a subscribe-only object does not have.
-        // setInheritFieldsAndMappings overrides it for an object that does inherit.
+        // Written out rather than left unset, since the server then falls back to the
+        // manifest's inheritFieldsAndMapping. setInheritFieldsAndMappings overrides it for an
+        // object that does inherit.
         const obj = objects[objectName] || {
           objectName,
           inheritFieldsAndMappings: false,
@@ -515,6 +522,17 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
               const { obj } = initializeSubscribeObject(_draft);
               obj.updateEvent = {
                 enabled: ConfigUpdateEventEnabledEnum.Always,
+                ...(watch ?? {}),
+              };
+            }),
+          );
+        },
+        setDisableUpdate: (watch) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.updateEvent = {
+                enabled: ConfigUpdateEventEnabledEnum.Never,
                 ...(watch ?? {}),
               };
             }),

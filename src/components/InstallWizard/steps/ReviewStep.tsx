@@ -60,9 +60,14 @@ export function ReviewStep() {
         // The update event's watch fields are also the fields it delivers, and the only
         // field list these props carry. Provider names, taken as written.
         fields: events.updateEvent?.requiredWatchFields ?? [],
-        // An event key is present only when it is subscribed to.
+        // An event key is present only when it is subscribed to, except an update event
+        // with enabled: false, which is there only to name the fields.
         events: (["createEvent", "updateEvent", "deleteEvent"] as const)
-          .filter((key) => events[key])
+          .filter(
+            (key) =>
+              events[key] &&
+              !(key === "updateEvent" && events.updateEvent?.enabled === false),
+          )
           .map((key) => key.replace("Event", "")),
       })),
     [subscribeEvents],
