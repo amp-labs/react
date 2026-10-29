@@ -7,6 +7,7 @@ import { useInstallation } from "src/headless/installation/useInstallation";
 import { useSelectedConfigureState } from "../useSelectedConfigureState";
 import { useSelectedObject } from "../useSelectedObject";
 
+import { SubscribeStillActiveBox } from "./SubscribeStillActiveBox";
 import { useToggleReadingObject } from "./useToggleReadingObject";
 
 export function ReEnableReadObject() {
@@ -18,6 +19,9 @@ export function ReEnableReadObject() {
   // Only show if read object is present and disabled
   const readObject = selectedObjectName
     ? installation?.config?.content?.read?.objects?.[selectedObjectName]
+    : undefined;
+  const subscribeObject = selectedObjectName
+    ? installation?.config?.content?.subscribe?.objects?.[selectedObjectName]
     : undefined;
   if (!readObject) return null;
 
@@ -86,6 +90,14 @@ export function ReEnableReadObject() {
             : `Re-enable reading from ${selectedObjectDisplayName}`}
         </Button>
       </FormCalloutBox>
+      {subscribeObject && (
+        <SubscribeStillActiveBox
+          subscribeObject={subscribeObject}
+          objectDisplayName={
+            selectedObjectDisplayName ?? selectedObjectName ?? ""
+          }
+        />
+      )}
     </>
   );
 }
