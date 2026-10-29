@@ -28,7 +28,7 @@ import {
 } from "@generated/api/src";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider/AmpersandContextProvider";
 import { useApiKey } from "src/context/ApiKeyContextProvider";
-import { useJwtToken } from "src/context/JwtTokenContextProvider";
+import { useJwtToken } from "src/context/JwtTokenContextProvider.reactquery";
 import { useInstallationProps } from "src/headless/InstallationProvider";
 
 import { resolveApiEndpoint } from "./apiEndpoint";
