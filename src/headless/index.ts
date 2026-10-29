@@ -8,6 +8,7 @@ export { useConnection } from "./useConnection";
 
 // Installation Hooks
 export { useInstallation } from "./installation/useInstallation";
+export { useInstallationValidation } from "./installation/useInstallationValidation";
 export { useCreateInstallation } from "./installation/useCreateInstallation";
 export { useUpdateInstallation } from "./installation/useUpdateInstallation";
 export { useDeleteInstallation } from "./installation/useDeleteInstallation";
