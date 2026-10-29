@@ -17,7 +17,8 @@ import {
  * For an update event, "not asked" means watching the fields the caller named on it, or
  * every field when it named none. The server requires one of `requiredWatchFields` or
  * `watchFieldsAuto` on a config update event, so there is no third option that stays
- * quiet; see `updateEventWatchSpec`.
+ * quiet; see `updateEventWatchSpec`. With `enabled: false` the event is written as `never`
+ * and its watch fields only name what the other events deliver.
  *
  * Runs once per object. The draft is the user's from then on, so re-applying would undo
  * their edits.
@@ -44,7 +45,13 @@ export function useApplySubscribeEvents() {
           if (event === "deleteEvent") handlers.setEnableDelete();
           // Watch the named fields, or everything when none were named; see above.
           if (event === "updateEvent") {
-            handlers.setEnableUpdate(updateEventWatchSpec(events.updateEvent));
+            const watch = updateEventWatchSpec(events.updateEvent);
+
+            if (events.updateEvent?.enabled === false) {
+              handlers.setDisableUpdate(watch);
+            } else {
+              handlers.setEnableUpdate(watch);
+            }
           }
         },
       );

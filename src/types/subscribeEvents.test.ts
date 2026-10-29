@@ -4,6 +4,7 @@ import type { SubscribeEvents } from "./subscribeEvents";
 import {
   autoAppliedSubscribeEvents,
   buildSubscribeConfigObjects,
+  updateEventEnabled,
   updateEventWatchSpec,
 } from "./subscribeEvents";
 
@@ -108,6 +109,24 @@ describe("updateEventWatchSpec", () => {
   });
 });
 
+// enabled: false keeps the update event in the config, as never, so its watch fields can
+// still name what the other events deliver.
+describe("updateEventEnabled", () => {
+  it("is always when there is no update event", () => {
+    expect(updateEventEnabled(undefined)).toBe("always");
+  });
+
+  it("is always when the caller left enabled out", () => {
+    expect(updateEventEnabled({ userSelect: false })).toBe("always");
+  });
+
+  it("is never when the caller set enabled to false", () => {
+    expect(updateEventEnabled({ userSelect: false, enabled: false })).toBe(
+      "never",
+    );
+  });
+});
+
 // The non-wizard flow writes the installation config directly, so the props have to
 // produce the same config the wizard's draft would have held.
 describe("buildSubscribeConfigObjects", () => {
@@ -138,6 +157,26 @@ describe("buildSubscribeConfigObjects", () => {
         enabled: "always",
         requiredWatchFields: ["text", "user"],
       },
+    });
+  });
+
+  it("installs without update events, keeping the update event's fields", () => {
+    const objects = buildSubscribeConfigObjects({
+      messages: {
+        inheritFieldsAndMappings: false,
+        createEvent: { userSelect: false },
+        updateEvent: {
+          userSelect: false,
+          enabled: false,
+          requiredWatchFields: ["text", "user"],
+        },
+      },
+    });
+
+    expect(objects?.messages.createEvent).toEqual({ enabled: "always" });
+    expect(objects?.messages.updateEvent).toEqual({
+      enabled: "never",
+      requiredWatchFields: ["text", "user"],
     });
   });
 
