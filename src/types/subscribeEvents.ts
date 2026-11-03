@@ -70,9 +70,9 @@ export interface SubscribeEvents {
    * Whether this object takes its fields and mappings from the matching read object.
    *
    * Required, with no default: when the config leaves it out, the server takes the
-   * manifest's `inheritFieldsAndMapping` for the object, and rejects the config if the
-   * manifest has no matching subscribe object. Say which it is rather than leave the
-   * object's shape to the manifest.
+   * manifest's `inheritFieldsAndMapping` for the object, or inherits when the manifest has
+   * no matching subscribe object. Say which it is rather than leave the object's shape to
+   * the manifest.
    *
    * `false` for a subscribe-only object, which is the only value that works: it has no
    * read object behind it, and an inheriting object with none is rejected with "read
