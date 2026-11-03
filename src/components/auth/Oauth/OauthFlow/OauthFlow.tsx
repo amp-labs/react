@@ -4,10 +4,12 @@ import { useProvider } from "src/hooks/useProvider";
 
 import { OauthFlow2 } from "../AuthorizationCode/OauthFlow2/OauthFlow2";
 import { ClientCredentials } from "../ClientCredentials/ClientCredentials";
+import { PasswordGrant } from "../PasswordGrant/PasswordGrant";
 
 const AUTHORIZATION_CODE = "authorizationCode";
 const AUTHORIZATION_CODE_PKCE = "authorizationCodePKCE";
 const CLIENT_CREDENTIALS = "clientCredentials";
+const PASSWORD = "password";
 
 type OauthFlowProps = {
   provider: string;
@@ -72,8 +74,14 @@ export function OauthFlow({
     );
   }
 
-  if (grantType === "password") {
-    return <em>Password flow not supported yet</em>;
+  if (grantType === PASSWORD) {
+    return (
+      <PasswordGrant
+        {...sharedProps}
+        explicitScopesRequired={explicitScopesRequired}
+        selectedConnection={selectedConnection}
+      />
+    );
   }
 
   return <em>Unsupported grant type: {grantType}</em>;
