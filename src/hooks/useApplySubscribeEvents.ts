@@ -7,15 +7,13 @@ import {
 } from "src/types/subscribeEvents";
 
 /**
- * Writes the subscribe events the consumer is not asked about into the config draft.
+ * Writes the caller's `subscribeEvents` into the wizard's config draft, from Select Objects.
  *
- * An event present in `subscribeEvents` is subscribed to; an omitted event is not. Events
- * with `userSelect: false` are settled here, before any step renders, because there is no
- * question to put to the consumer. Events with `userSelect: true` are left for the wizard
- * to ask about and are deliberately untouched.
+ * An event present in `subscribeEvents` is subscribed to; an omitted event is not. The
+ * consumer is not asked about either.
  *
- * For an update event, "not asked" means watching the fields the caller named on it, or
- * every field when it named none, which only an inheriting object may do. The server requires one of `requiredWatchFields` or
+ * An update event watches the fields the caller named on it, or every field when it named
+ * none, which only an inheriting object may do. The server requires one of `requiredWatchFields` or
  * `watchFieldsAuto` on a config update event, so there is no third option that stays
  * quiet; see `updateEventWatchSpec`. With `enabled: false` the event is written as `never`
  * and its watch fields only name what the other events deliver.

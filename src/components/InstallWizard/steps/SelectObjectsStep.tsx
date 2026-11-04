@@ -68,8 +68,8 @@ export function SelectObjectsStep() {
     retry,
   } = useInstallAlwaysEnabledObjects();
 
-  // Subscribe events the consumer is not asked about are settled here, before any of the
-  // branches below return. Events with userSelect: true are left for the wizard to ask.
+  // The caller's subscribe events are written to the draft here, before any of the branches
+  // below return.
   useApplySubscribeEvents();
 
   const selectedOrAlwaysEnabled = useMemo(

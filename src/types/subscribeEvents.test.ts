@@ -19,8 +19,6 @@ const inheriting = (
 ): SubscribeEvents => ({ inheritFieldsAndMappings: true, ...events });
 
 // The prop's contract: an event key present means subscribe to it; absent means do not.
-// Of the present ones, userSelect: false is settled by the wizard without asking, and
-// userSelect: true is left for the consumer to answer.
 describe("autoAppliedSubscribeEvents", () => {
   it("returns nothing when the prop is absent", () => {
     expect(autoAppliedSubscribeEvents(undefined)).toEqual([]);
@@ -32,42 +30,35 @@ describe("autoAppliedSubscribeEvents", () => {
     );
   });
 
-  it("applies an event whose key is present with userSelect false", () => {
+  it("applies an event whose key is present", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: inheriting({ updateEvent: { userSelect: false } }),
+        messages: inheriting({ updateEvent: {} }),
       }),
     ).toEqual([{ objectName: "messages", event: "updateEvent" }]);
-  });
-
-  it("leaves an event with userSelect true for the consumer", () => {
-    expect(
-      autoAppliedSubscribeEvents({
-        messages: inheriting({ deleteEvent: { userSelect: true } }),
-      }),
-    ).toEqual([]);
   });
 
   it("ignores an omitted event rather than disabling it explicitly", () => {
     // createEvent is absent: not subscribed, and nothing to write.
     expect(
       autoAppliedSubscribeEvents({
-        messages: inheriting({ deleteEvent: { userSelect: false } }),
+        messages: inheriting({ deleteEvent: {} }),
       }),
     ).toEqual([{ objectName: "messages", event: "deleteEvent" }]);
   });
 
-  it("splits a mixed object into applied and asked", () => {
+  it("applies every event an object lists", () => {
     expect(
       autoAppliedSubscribeEvents({
         messages: inheriting({
-          createEvent: { userSelect: false },
-          updateEvent: { userSelect: true },
-          deleteEvent: { userSelect: false },
+          createEvent: {},
+          updateEvent: {},
+          deleteEvent: {},
         }),
       }),
     ).toEqual([
       { objectName: "messages", event: "createEvent" },
+      { objectName: "messages", event: "updateEvent" },
       { objectName: "messages", event: "deleteEvent" },
     ]);
   });
@@ -75,8 +66,8 @@ describe("autoAppliedSubscribeEvents", () => {
   it("handles several objects", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: inheriting({ createEvent: { userSelect: false } }),
-        reactions: inheriting({ deleteEvent: { userSelect: false } }),
+        messages: inheriting({ createEvent: {} }),
+        reactions: inheriting({ deleteEvent: {} }),
       }),
     ).toEqual([
       { objectName: "messages", event: "createEvent" },
@@ -92,21 +83,20 @@ describe("updateEventWatchSpec", () => {
   });
 
   it("watches all when the caller named no fields", () => {
-    expect(updateEventWatchSpec({ userSelect: false })).toEqual({
+    expect(updateEventWatchSpec({})).toEqual({
       watchFieldsAuto: "all",
     });
   });
 
   it("watches all when the field list is present but empty", () => {
-    expect(
-      updateEventWatchSpec({ userSelect: false, requiredWatchFields: [] }),
-    ).toEqual({ watchFieldsAuto: "all" });
+    expect(updateEventWatchSpec({ requiredWatchFields: [] })).toEqual({
+      watchFieldsAuto: "all",
+    });
   });
 
   it("watches the named fields", () => {
     expect(
       updateEventWatchSpec({
-        userSelect: false,
         requiredWatchFields: ["text", "user"],
       }),
     ).toEqual({ requiredWatchFields: ["text", "user"] });
@@ -121,13 +111,11 @@ describe("updateEventEnabled", () => {
   });
 
   it("is always when the caller left enabled out", () => {
-    expect(updateEventEnabled({ userSelect: false })).toBe("always");
+    expect(updateEventEnabled({})).toBe("always");
   });
 
   it("is never when the caller set enabled to false", () => {
-    expect(updateEventEnabled({ userSelect: false, enabled: false })).toBe(
-      "never",
-    );
+    expect(updateEventEnabled({ enabled: false })).toBe("never");
   });
 });
 
@@ -147,7 +135,6 @@ describe("buildSubscribeConfigObjects", () => {
       messages: {
         inheritFieldsAndMappings: false,
         updateEvent: {
-          userSelect: false,
           requiredWatchFields: ["text", "user"],
         },
       },
@@ -168,9 +155,8 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        createEvent: { userSelect: false },
+        createEvent: {},
         updateEvent: {
-          userSelect: false,
           enabled: false,
           requiredWatchFields: ["text", "user"],
         },
@@ -188,7 +174,7 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       contacts: {
         inheritFieldsAndMappings: true,
-        updateEvent: { userSelect: false },
+        updateEvent: {},
       },
     });
 
@@ -198,12 +184,11 @@ describe("buildSubscribeConfigObjects", () => {
     });
   });
 
-  it("omits an event the consumer is asked about, and one left out entirely", () => {
+  it("omits an event left out entirely", () => {
     const objects = buildSubscribeConfigObjects({
       contacts: {
         inheritFieldsAndMappings: true,
-        createEvent: { userSelect: false },
-        deleteEvent: { userSelect: true },
+        createEvent: {},
       },
     });
 
@@ -216,7 +201,7 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        updateEvent: { userSelect: false, requiredWatchFields: ["text"] },
+        updateEvent: { requiredWatchFields: ["text"] },
       },
     });
 
@@ -228,9 +213,8 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        createEvent: { userSelect: false },
+        createEvent: {},
         updateEvent: {
-          userSelect: false,
           enabled: false,
           requiredWatchFields: ["text"],
         },
@@ -244,7 +228,7 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       contacts: {
         inheritFieldsAndMappings: true,
-        createEvent: { userSelect: false },
+        createEvent: {},
       },
     });
 
@@ -255,12 +239,12 @@ describe("buildSubscribeConfigObjects", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
-        createEvent: { userSelect: false },
-        updateEvent: { userSelect: false, requiredWatchFields: ["text"] },
+        createEvent: {},
+        updateEvent: { requiredWatchFields: ["text"] },
       },
       contacts: {
         inheritFieldsAndMappings: true,
-        deleteEvent: { userSelect: false },
+        deleteEvent: {},
       },
     });
 
@@ -276,14 +260,14 @@ describe("SubscribeEvents type", () => {
       // @ts-expect-error updateEvent is required when inheritFieldsAndMappings is false
       messages: {
         inheritFieldsAndMappings: false,
-        createEvent: { userSelect: false },
+        createEvent: {},
       },
     };
     const withoutFields: SubscribeEventsByObject = {
       // @ts-expect-error requiredWatchFields is required when inheritFieldsAndMappings is false
       messages: {
         inheritFieldsAndMappings: false,
-        updateEvent: { userSelect: false },
+        updateEvent: {},
       },
     };
 
@@ -291,11 +275,23 @@ describe("SubscribeEvents type", () => {
     expect(withoutFields).toBeDefined();
   });
 
+  it("rejects userSelect, which no install flow reads yet", () => {
+    const events: SubscribeEventsByObject = {
+      contacts: {
+        inheritFieldsAndMappings: true,
+        // @ts-expect-error userSelect is not part of the prop until a selection step exists
+        createEvent: { userSelect: false },
+      },
+    };
+
+    expect(events.contacts.inheritFieldsAndMappings).toBe(true);
+  });
+
   it("lets an inheriting object leave the update event out", () => {
     const events: SubscribeEventsByObject = {
       contacts: {
         inheritFieldsAndMappings: true,
-        createEvent: { userSelect: false },
+        createEvent: {},
       },
     };
 

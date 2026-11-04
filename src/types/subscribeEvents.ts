@@ -7,36 +7,24 @@ import {
 } from "@generated/api/src";
 
 /**
- * Per-event subscribe behaviour for the install wizard.
- *
- * The caller decides the shape of the subscribe config; the server stores whatever
- * validates. These props say, for each event, whether the consumer gets a choice.
- *
- * An omitted event is not subscribed to at all. A present event is subscribed to, and
- * `userSelect` only decides whether the consumer is asked about it. The one exception is an
- * update event with `enabled: false`, which is written as `never` so that its
- * `requiredWatchFields` can name the fields the other events deliver.
- *
- *
- * - `userSelect: false` — subscribed, no question asked. For `updateEvent`, the event
- *   watches the fields in `requiredWatchFields`; an inheriting object that names none watches
- *   every field (`watchFieldsAuto: "all"`).
- * - `userSelect: true` — the wizard asks. For `createEvent` and `deleteEvent` that is
- *   whether to subscribe; for `updateEvent` it is also which fields to watch.
+ * A create or delete event. Its presence subscribes the object to that event; it takes no
+ * options yet. The consumer is not asked about it: there is no wizard step for choosing
+ * subscribe events.
  *
  * @experimental
  */
-export interface SubscribeEventOption {
-  /** Whether the consumer chooses this event's behaviour in the wizard. */
-  userSelect: boolean;
-}
+export type SubscribeEventOption = Record<string, never>;
 
 /**
- * An update event, which additionally says which field changes it wants to hear about.
+ * An update event. Its presence subscribes the object to updates, watching the fields in
+ * `requiredWatchFields`; an inheriting object that names none watches every field
+ * (`watchFieldsAuto: "all"`). With `enabled: false` it is written as `never`, so its
+ * `requiredWatchFields` name the fields the other events deliver without subscribing to
+ * updates.
  *
  * @experimental
  */
-export interface SubscribeUpdateEventOption extends SubscribeEventOption {
+export interface SubscribeUpdateEventOption {
   /**
    * Provider field names whose changes trigger an update event.
    *
@@ -55,8 +43,7 @@ export interface SubscribeUpdateEventOption extends SubscribeEventOption {
    * `false` installs the object without update events: the update event is written as
    * `never`, and `requiredWatchFields` remains the list of fields the create and delete
    * events deliver. It is how a subscribe-only object that wants no updates names its fields,
-   * since `requiredWatchFields` is the only field list these props take. Applies to an event
-   * the consumer is not asked about (`userSelect: false`).
+   * since `requiredWatchFields` is the only field list these props take.
    */
   enabled?: boolean;
 }
@@ -130,7 +117,7 @@ export type SubscribeEvents =
 
 /**
  * Subscribe props per object name, e.g.
- * `{ messages: { inheritFieldsAndMappings: false, updateEvent: { userSelect: false, requiredWatchFields: ["text"] } } }`.
+ * `{ messages: { inheritFieldsAndMappings: false, updateEvent: { requiredWatchFields: ["text"] } } }`.
  *
  * @experimental
  */
@@ -143,11 +130,8 @@ export interface AutoAppliedSubscribeEvent {
 }
 
 /**
- * Picks the events the wizard configures on the consumer's behalf.
- *
- * An event is subscribed to only if its key is present. Of those, the ones with
- * `userSelect: false` are settled without a question; `userSelect: true` is left for the
- * wizard to ask about and is not returned here.
+ * Lists the events the install flows write for each object: every event whose key is
+ * present. An absent key leaves that event out of the config.
  */
 export function autoAppliedSubscribeEvents(
   subscribeEvents: SubscribeEventsByObject | undefined,
@@ -159,9 +143,7 @@ export function autoAppliedSubscribeEvents(
 
   Object.entries(subscribeEvents).forEach(([objectName, perObject]) => {
     eventKeys.forEach((event) => {
-      const option = perObject[event];
-      // Absent key: not subscribed at all. Present with userSelect: the wizard asks.
-      if (option && !option.userSelect) events.push({ objectName, event });
+      if (perObject[event]) events.push({ objectName, event });
     });
   });
 
@@ -174,7 +156,7 @@ export type UpdateEventWatchSpec =
   | { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum };
 
 /**
- * How an update event the consumer was not asked about decides what to watch.
+ * How an update event decides what to watch.
  *
  * The named fields if there are any, and every field otherwise. A config update event is
  * rejected unless it carries `requiredWatchFields` or `watchFieldsAuto`, and `watchFieldsAuto`
@@ -191,8 +173,8 @@ export function updateEventWatchSpec(
 }
 
 /**
- * The config `enabled` value for an update event the consumer was not asked about: `never`
- * when the caller set `enabled: false`, `always` otherwise.
+ * The config `enabled` value for an update event: `never` when the caller set
+ * `enabled: false`, `always` otherwise.
  */
 export function updateEventEnabled(
   updateEvent: SubscribeUpdateEventOption | undefined,
@@ -206,8 +188,8 @@ export function updateEventEnabled(
  * Builds the subscribe config these props describe, for a flow that writes the installation
  * config directly rather than through the wizard's draft.
  *
- * Same decisions as `useApplySubscribeEvents` makes against the draft: only the events the
- * consumer is not asked about, and the update event's fields as the caller wrote them.
+ * Same decisions as `useApplySubscribeEvents` makes against the draft: every event the caller
+ * listed, and the update event's fields as the caller wrote them.
  *
  * Returns undefined when there is nothing to configure, so a caller can omit the block.
  */
