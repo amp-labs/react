@@ -15,7 +15,7 @@ import {
  * to ask about and are deliberately untouched.
  *
  * For an update event, "not asked" means watching the fields the caller named on it, or
- * every field when it named none. The server requires one of `requiredWatchFields` or
+ * every field when it named none, which only an inheriting object may do. The server requires one of `requiredWatchFields` or
  * `watchFieldsAuto` on a config update event, so there is no third option that stays
  * quiet; see `updateEventWatchSpec`. With `enabled: false` the event is written as `never`
  * and its watch fields only name what the other events deliver.

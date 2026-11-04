@@ -22,7 +22,11 @@ export type {
   Config, // For InstallIntegration callbacks
 };
 export type {
+  InheritingSubscribeEvents,
+  NonInheritingSubscribeEvents,
   SubscribeEventOption,
   SubscribeEvents,
   SubscribeEventsByObject,
+  SubscribeUpdateEventOption,
+  SubscribeUpdateEventWithFields,
 } from "src/types/subscribeEvents";

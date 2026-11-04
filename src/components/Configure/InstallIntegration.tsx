@@ -65,8 +65,9 @@ export interface InstallIntegrationProps {
    *
    * An event listed here is subscribed to; an omitted event is not. `userSelect` decides
    * only whether the consumer is asked: `false` configures the event without a question
-   * (for `updateEvent`, watching its `requiredWatchFields`, or every field when it names
-   * none), `true` lets them choose in the wizard. An `updateEvent` with `enabled: false` is
+   * (for `updateEvent`, watching its `requiredWatchFields`, which a non-inheriting object
+   * must name; an inheriting object that names none watches every field), `true` lets them
+   * choose in the wizard. An `updateEvent` with `enabled: false` is
    * written as `never`, so its `requiredWatchFields` name the fields without subscribing to
    * updates.
    *

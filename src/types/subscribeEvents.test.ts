@@ -1,6 +1,10 @@
 import { describe, expect, it } from "@jest/globals";
 
-import type { SubscribeEvents } from "./subscribeEvents";
+import type {
+  InheritingSubscribeEvents,
+  SubscribeEvents,
+  SubscribeEventsByObject,
+} from "./subscribeEvents";
 import {
   autoAppliedSubscribeEvents,
   buildSubscribeConfigObjects,
@@ -9,10 +13,10 @@ import {
 } from "./subscribeEvents";
 
 // Every object has to say whether it inherits. These cases are about the event keys, so
-// they all take the subscribe-only answer.
-const subscribeOnly = (
-  events: Omit<SubscribeEvents, "inheritFieldsAndMappings">,
-): SubscribeEvents => ({ inheritFieldsAndMappings: false, ...events });
+// they all take the inheriting answer, which leaves every event optional.
+const inheriting = (
+  events: Omit<InheritingSubscribeEvents, "inheritFieldsAndMappings">,
+): SubscribeEvents => ({ inheritFieldsAndMappings: true, ...events });
 
 // The prop's contract: an event key present means subscribe to it; absent means do not.
 // Of the present ones, userSelect: false is settled by the wizard without asking, and
@@ -23,7 +27,7 @@ describe("autoAppliedSubscribeEvents", () => {
   });
 
   it("returns nothing for an object with no events", () => {
-    expect(autoAppliedSubscribeEvents({ messages: subscribeOnly({}) })).toEqual(
+    expect(autoAppliedSubscribeEvents({ messages: inheriting({}) })).toEqual(
       [],
     );
   });
@@ -31,7 +35,7 @@ describe("autoAppliedSubscribeEvents", () => {
   it("applies an event whose key is present with userSelect false", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: subscribeOnly({ updateEvent: { userSelect: false } }),
+        messages: inheriting({ updateEvent: { userSelect: false } }),
       }),
     ).toEqual([{ objectName: "messages", event: "updateEvent" }]);
   });
@@ -39,7 +43,7 @@ describe("autoAppliedSubscribeEvents", () => {
   it("leaves an event with userSelect true for the consumer", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: subscribeOnly({ deleteEvent: { userSelect: true } }),
+        messages: inheriting({ deleteEvent: { userSelect: true } }),
       }),
     ).toEqual([]);
   });
@@ -48,7 +52,7 @@ describe("autoAppliedSubscribeEvents", () => {
     // createEvent is absent: not subscribed, and nothing to write.
     expect(
       autoAppliedSubscribeEvents({
-        messages: subscribeOnly({ deleteEvent: { userSelect: false } }),
+        messages: inheriting({ deleteEvent: { userSelect: false } }),
       }),
     ).toEqual([{ objectName: "messages", event: "deleteEvent" }]);
   });
@@ -56,7 +60,7 @@ describe("autoAppliedSubscribeEvents", () => {
   it("splits a mixed object into applied and asked", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: subscribeOnly({
+        messages: inheriting({
           createEvent: { userSelect: false },
           updateEvent: { userSelect: true },
           deleteEvent: { userSelect: false },
@@ -71,8 +75,8 @@ describe("autoAppliedSubscribeEvents", () => {
   it("handles several objects", () => {
     expect(
       autoAppliedSubscribeEvents({
-        messages: subscribeOnly({ createEvent: { userSelect: false } }),
-        reactions: subscribeOnly({ deleteEvent: { userSelect: false } }),
+        messages: inheriting({ createEvent: { userSelect: false } }),
+        reactions: inheriting({ deleteEvent: { userSelect: false } }),
       }),
     ).toEqual([
       { objectName: "messages", event: "createEvent" },
@@ -180,15 +184,15 @@ describe("buildSubscribeConfigObjects", () => {
     });
   });
 
-  it("watches all fields when the caller named none", () => {
+  it("watches all fields when an inheriting object named none", () => {
     const objects = buildSubscribeConfigObjects({
-      messages: {
-        inheritFieldsAndMappings: false,
+      contacts: {
+        inheritFieldsAndMappings: true,
         updateEvent: { userSelect: false },
       },
     });
 
-    expect(objects?.messages.updateEvent).toEqual({
+    expect(objects?.contacts.updateEvent).toEqual({
       enabled: "always",
       watchFieldsAuto: "all",
     });
@@ -196,16 +200,16 @@ describe("buildSubscribeConfigObjects", () => {
 
   it("omits an event the consumer is asked about, and one left out entirely", () => {
     const objects = buildSubscribeConfigObjects({
-      messages: {
-        inheritFieldsAndMappings: false,
+      contacts: {
+        inheritFieldsAndMappings: true,
         createEvent: { userSelect: false },
         deleteEvent: { userSelect: true },
       },
     });
 
-    expect(objects?.messages.createEvent).toEqual({ enabled: "always" });
-    expect(objects?.messages.deleteEvent).toBeUndefined();
-    expect(objects?.messages.updateEvent).toBeUndefined();
+    expect(objects?.contacts.createEvent).toEqual({ enabled: "always" });
+    expect(objects?.contacts.deleteEvent).toBeUndefined();
+    expect(objects?.contacts.updateEvent).toBeUndefined();
   });
 
   it("never sends selectedFields or selectedFieldMappings: the prop cannot set them", () => {
@@ -220,11 +224,16 @@ describe("buildSubscribeConfigObjects", () => {
     expect(objects?.messages.selectedFieldMappings).toBeUndefined();
   });
 
-  it("defaults to not inheriting, for a subscribe-only object", () => {
+  it("passes inheritFieldsAndMappings: false through for a subscribe-only object", () => {
     const objects = buildSubscribeConfigObjects({
       messages: {
         inheritFieldsAndMappings: false,
         createEvent: { userSelect: false },
+        updateEvent: {
+          userSelect: false,
+          enabled: false,
+          requiredWatchFields: ["text"],
+        },
       },
     });
 
@@ -247,13 +256,49 @@ describe("buildSubscribeConfigObjects", () => {
       messages: {
         inheritFieldsAndMappings: false,
         createEvent: { userSelect: false },
+        updateEvent: { userSelect: false, requiredWatchFields: ["text"] },
       },
-      reactions: {
-        inheritFieldsAndMappings: false,
+      contacts: {
+        inheritFieldsAndMappings: true,
         deleteEvent: { userSelect: false },
       },
     });
 
-    expect(Object.keys(objects ?? {})).toEqual(["messages", "reactions"]);
+    expect(Object.keys(objects ?? {})).toEqual(["messages", "contacts"]);
+  });
+});
+
+// A non-inheriting object has no read config to take fields from, and the server rejects one
+// that names none, so the prop's type requires the update event's field list.
+describe("SubscribeEvents type", () => {
+  it("rejects a non-inheriting object without updateEvent.requiredWatchFields", () => {
+    const withoutUpdateEvent: SubscribeEventsByObject = {
+      // @ts-expect-error updateEvent is required when inheritFieldsAndMappings is false
+      messages: {
+        inheritFieldsAndMappings: false,
+        createEvent: { userSelect: false },
+      },
+    };
+    const withoutFields: SubscribeEventsByObject = {
+      // @ts-expect-error requiredWatchFields is required when inheritFieldsAndMappings is false
+      messages: {
+        inheritFieldsAndMappings: false,
+        updateEvent: { userSelect: false },
+      },
+    };
+
+    expect(withoutUpdateEvent).toBeDefined();
+    expect(withoutFields).toBeDefined();
+  });
+
+  it("lets an inheriting object leave the update event out", () => {
+    const events: SubscribeEventsByObject = {
+      contacts: {
+        inheritFieldsAndMappings: true,
+        createEvent: { userSelect: false },
+      },
+    };
+
+    expect(events.contacts.inheritFieldsAndMappings).toBe(true);
   });
 });
