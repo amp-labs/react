@@ -7,7 +7,6 @@ import {
 } from "services/api";
 import { useAmpersandProviderProps } from "src/context/AmpersandContextProvider";
 import { useCreateInstallationMutation } from "src/hooks/mutation/useCreateInstallationMutation";
-import { buildSubscribeConfigObjects } from "src/types/subscribeEvents";
 
 import { getIsProxyEnabled } from "../../actions/proxy/isProxyEnabled";
 import {
@@ -53,7 +52,6 @@ export function ConditionalHasConfigurationLayout({
     consumerRef,
     onInstallSuccess,
     isIntegrationDeleted,
-    subscribeEvents,
   } = useInstallIntegrationProps();
 
   const {
@@ -72,6 +70,11 @@ export function ConditionalHasConfigurationLayout({
   const provider = hydratedRevision?.content?.provider;
   const isConfigurationNotRequired: boolean =
     getNoConfigurationRequired(hydratedRevision);
+  // Subscribe objects with nothing to configure get their fields from the subscribeEvents
+  // props, which only wizard mode applies, so this flow doesn't install them.
+  const isSubscribeOnly =
+    isConfigurationNotRequired &&
+    !!integrationObj?.latestRevision?.content?.subscribe?.objects?.length;
 
   useEffect(() => {
     if (
@@ -79,6 +82,7 @@ export function ConditionalHasConfigurationLayout({
       !isConnectionsLoading &&
       hydratedRevision &&
       isConfigurationNotRequired &&
+      !isSubscribeOnly &&
       !installation &&
       selectedConnection &&
       integrationObj?.id &&
@@ -99,17 +103,6 @@ export function ConditionalHasConfigurationLayout({
       if (getIsProxyEnabled(hydratedRevision) === true) {
         createInstallationRequest.installation.config.content.proxy =
           hydratedRevision?.content?.proxy;
-      }
-
-      // A subscribe-only integration is installed here, with no step for the consumer, so
-      // the caller's subscribeEvents props are the whole subscribe config. Without them the
-      // installation is created with none, and the server has no fields to deliver.
-      const subscribeObjects = buildSubscribeConfigObjects(subscribeEvents);
-
-      if (subscribeObjects) {
-        createInstallationRequest.installation.config.content.subscribe = {
-          objects: subscribeObjects,
-        };
       }
 
       if (isCreateInstallationIdle && !hasFiredMutationRef.current) {
@@ -139,7 +132,7 @@ export function ConditionalHasConfigurationLayout({
     provider,
     createInstallation,
     isCreateInstallationIdle,
-    subscribeEvents,
+    isSubscribeOnly,
   ]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
@@ -156,6 +149,10 @@ export function ConditionalHasConfigurationLayout({
       <ComponentContainerError message={"We can't load the integration"} />
     );
   if (isLoading) return <ComponentContainerLoading />;
+  if (isSubscribeOnly && !installation)
+    return (
+      <ComponentContainerError message="This integration can't be set up here. Please contact your administrator." />
+    );
 
   return <div>{children}</div>;
 }

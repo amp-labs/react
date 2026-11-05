@@ -1,10 +1,4 @@
-import type { SubscribeConfigObject } from "@generated/api/src";
-import {
-  ConfigCreateEventEnabledEnum,
-  ConfigDeleteEventEnabledEnum,
-  ConfigUpdateEventEnabledEnum,
-  ConfigUpdateEventWatchFieldsAutoEnum,
-} from "@generated/api/src";
+import { ConfigUpdateEventWatchFieldsAutoEnum } from "@generated/api/src";
 
 /**
  * A create or delete event. Its presence subscribes the object to that event; it takes no
@@ -170,68 +164,4 @@ export function updateEventWatchSpec(
   return updateEvent?.requiredWatchFields?.length
     ? { requiredWatchFields: updateEvent.requiredWatchFields }
     : { watchFieldsAuto: ConfigUpdateEventWatchFieldsAutoEnum.All };
-}
-
-/**
- * The config `enabled` value for an update event: `never` when the caller set
- * `enabled: false`, `always` otherwise.
- */
-export function updateEventEnabled(
-  updateEvent: SubscribeUpdateEventOption | undefined,
-): ConfigUpdateEventEnabledEnum {
-  return updateEvent?.enabled === false
-    ? ConfigUpdateEventEnabledEnum.Never
-    : ConfigUpdateEventEnabledEnum.Always;
-}
-
-/**
- * Builds the subscribe config these props describe, for a flow that writes the installation
- * config directly rather than through the wizard's draft.
- *
- * Same decisions as `useApplySubscribeEvents` makes against the draft: every event the caller
- * listed, and the update event's fields as the caller wrote them.
- *
- * Returns undefined when there is nothing to configure, so a caller can omit the block.
- */
-export function buildSubscribeConfigObjects(
-  subscribeEvents: SubscribeEventsByObject | undefined,
-): { [key: string]: SubscribeConfigObject } | undefined {
-  if (!subscribeEvents) return undefined;
-
-  const objects: { [key: string]: SubscribeConfigObject } = {};
-
-  Object.entries(subscribeEvents).forEach(([objectName, events]) => {
-    const object: SubscribeConfigObject = {
-      objectName,
-      // The revision supplies the real destination; the hydrated revision carries no
-      // subscribe block, so there is nothing here to name it with.
-      destination: "",
-      // Always written out: an omitted value falls back to the manifest's
-      // inheritFieldsAndMapping, which these props do not see.
-      inheritFieldsAndMappings: events.inheritFieldsAndMappings,
-    };
-
-    autoAppliedSubscribeEvents({ [objectName]: events }).forEach(
-      ({ event }) => {
-        if (event === "createEvent") {
-          object.createEvent = { enabled: ConfigCreateEventEnabledEnum.Always };
-        }
-
-        if (event === "deleteEvent") {
-          object.deleteEvent = { enabled: ConfigDeleteEventEnabledEnum.Always };
-        }
-
-        if (event === "updateEvent") {
-          object.updateEvent = {
-            enabled: updateEventEnabled(events.updateEvent),
-            ...updateEventWatchSpec(events.updateEvent),
-          };
-        }
-      },
-    );
-
-    objects[objectName] = object;
-  });
-
-  return Object.keys(objects).length > 0 ? objects : undefined;
 }

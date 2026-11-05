@@ -69,6 +69,9 @@ export interface InstallIntegrationProps {
    * `enabled: false` is written as `never`, so its `requiredWatchFields` name the fields
    * without subscribing to updates.
    *
+   * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
+   * and no read or write objects shows an error instead of installing.
+   *
    * @experimental
    */
   subscribeEvents?: SubscribeEventsByObject;
@@ -188,7 +191,6 @@ const InstallIntegrationContent = ({
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
         fieldMapping={fieldMapping}
-        subscribeEvents={subscribeEvents}
         resetComponent={reset}
       >
         <ConnectionsProvider>
