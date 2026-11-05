@@ -7,10 +7,17 @@ import type {
   FieldSettingDefault,
   FieldSettingWriteOnCreateEnum,
   FieldSettingWriteOnUpdateEnum,
+  SubscribeConfigObject,
 } from "@generated/api/src";
 import type { Installation } from "@generated/api/src";
+import {
+  ConfigCreateEventEnabledEnum,
+  ConfigDeleteEventEnabledEnum,
+  ConfigUpdateEventEnabledEnum,
+} from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
+import type { UpdateEventWatchSpec } from "src/types/subscribeEvents";
 import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { useInstallation } from "../installation/useInstallation";
@@ -27,6 +34,48 @@ export type ReadObjectHandlers = {
   getFieldMapping: (fieldName: string) => string | undefined;
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;
   deleteFieldMapping: (mapToName: string) => void;
+};
+
+/**
+ * Handlers for one object's subscribe config. A subscribe-only object carries its own
+ * events: nothing is inherited from a read object, because there is no read object.
+ *
+ * @experimental
+ */
+export type SubscribeObjectHandlers = {
+  object: SubscribeConfigObject | undefined;
+  /** Subscribe to create events for this object. */
+  setEnableCreate: () => void;
+  /** Subscribe to delete events for this object. */
+  setEnableDelete: () => void;
+  /**
+   * Subscribe to update events. `watch` says which field changes deliver an event, as
+   * either `requiredWatchFields` or `watchFieldsAuto: "all"`; the server requires one of
+   * the two, so omitting it writes an update event the server will reject.
+   */
+  setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
+  /**
+   * Write the update event as `never`: no update events are delivered. `watch` still names
+   * the fields the object's other events deliver, and the server requires `requiredWatchFields`
+   * or `watchFieldsAuto` on a disabled config update event too.
+   */
+  setDisableUpdate: (watch?: UpdateEventWatchSpec) => void;
+  /**
+   * Whether this object takes its fields and mappings from the matching read object.
+   * Written out either way, since an omitted value falls back to the manifest's
+   * `inheritFieldsAndMapping`.
+   */
+  setInheritFieldsAndMappings: (inherit: boolean) => void;
+  /**
+   * Fields delivered with each event, by provider field name. A subscribe-only object
+   * must select something: the server rejects a non-inheriting object that selects
+   * nothing, because there is no read config behind it to inherit from.
+   */
+  setSelectedFields: (fields: string[]) => void;
+  /** Mapped field name to provider field name. */
+  setSelectedFieldMappings: (mappings: Record<string, string>) => void;
+  /** Stop subscribing to this object entirely. */
+  removeSubscribeObject: () => void;
 };
 
 export type WriteObjectHandlers = {
@@ -423,6 +472,116 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     }
   }, [installation, reset]);
 
+  const subscribeObject = useCallback(
+    (objectName: string): SubscribeObjectHandlers => {
+      const object = draft.subscribe?.objects?.[objectName];
+
+      const initializeSubscribeObject = (_draft: InstallationConfigContent) => {
+        const subscribe = _draft.subscribe || {};
+        const objects = subscribe.objects || {};
+        // Written out rather than left unset, since the server then falls back to the
+        // manifest's inheritFieldsAndMapping. setInheritFieldsAndMappings overrides it for an
+        // object that does inherit.
+        const obj = objects[objectName] || {
+          objectName,
+          inheritFieldsAndMappings: false,
+        };
+
+        objects[objectName] = obj;
+        subscribe.objects = objects;
+        _draft.subscribe = subscribe;
+
+        return { subscribe, objects, obj };
+      };
+
+      return {
+        object,
+        setEnableCreate: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.createEvent = {
+                enabled: ConfigCreateEventEnabledEnum.Always,
+              };
+            }),
+          );
+        },
+        setEnableDelete: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.deleteEvent = {
+                enabled: ConfigDeleteEventEnabledEnum.Always,
+              };
+            }),
+          );
+        },
+        setEnableUpdate: (watch) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.updateEvent = {
+                enabled: ConfigUpdateEventEnabledEnum.Always,
+                ...(watch ?? {}),
+              };
+            }),
+          );
+        },
+        setDisableUpdate: (watch) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.updateEvent = {
+                enabled: ConfigUpdateEventEnabledEnum.Never,
+                ...(watch ?? {}),
+              };
+            }),
+          );
+        },
+        setInheritFieldsAndMappings: (inherit: boolean) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.inheritFieldsAndMappings = inherit;
+            }),
+          );
+        },
+        setSelectedFields: (fields: string[]) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.selectedFields = fields.reduce<Record<string, boolean>>(
+                (acc, field) => {
+                  acc[field] = true;
+
+                  return acc;
+                },
+                {},
+              );
+            }),
+          );
+        },
+        setSelectedFieldMappings: (mappings: Record<string, string>) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { obj } = initializeSubscribeObject(_draft);
+              obj.selectedFieldMappings = { ...mappings };
+            }),
+          );
+        },
+        removeSubscribeObject: () => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const objects = _draft.subscribe?.objects;
+              if (objects) delete objects[objectName];
+            }),
+          );
+        },
+      };
+    },
+    [draft, setDraft],
+  );
+
   return {
     draft,
     get,
@@ -432,5 +591,6 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
     readObject,
     writeObject,
     proxy,
+    subscribeObject,
   };
 }

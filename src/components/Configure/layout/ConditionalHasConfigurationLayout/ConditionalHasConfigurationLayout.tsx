@@ -23,7 +23,10 @@ const getNoConfigurationRequired = (
   hydratedRevision: HydratedRevision | null,
 ) => {
   const { read, write } = hydratedRevision?.content ?? {};
-  return !read && !write;
+  // Count objects rather than nil-check the blocks: a subscribe-only integration still
+  // carries a read block, because the manifest rejects `subscribe` without one, and an
+  // empty object list leaves the consumer with nothing to configure all the same.
+  return !read?.objects?.length && !write?.objects?.length;
 };
 
 interface ConditionalHasConfigurationLayoutProps {
@@ -67,6 +70,11 @@ export function ConditionalHasConfigurationLayout({
   const provider = hydratedRevision?.content?.provider;
   const isConfigurationNotRequired: boolean =
     getNoConfigurationRequired(hydratedRevision);
+  // Subscribe objects with nothing to configure get their fields from the subscribeEvents
+  // props, which only wizard mode applies, so this flow doesn't install them.
+  const isSubscribeOnly =
+    isConfigurationNotRequired &&
+    !!integrationObj?.latestRevision?.content?.subscribe?.objects?.length;
 
   useEffect(() => {
     if (
@@ -74,6 +82,7 @@ export function ConditionalHasConfigurationLayout({
       !isConnectionsLoading &&
       hydratedRevision &&
       isConfigurationNotRequired &&
+      !isSubscribeOnly &&
       !installation &&
       selectedConnection &&
       integrationObj?.id &&
@@ -123,6 +132,7 @@ export function ConditionalHasConfigurationLayout({
     provider,
     createInstallation,
     isCreateInstallationIdle,
+    isSubscribeOnly,
   ]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
@@ -139,6 +149,10 @@ export function ConditionalHasConfigurationLayout({
       <ComponentContainerError message={"We can't load the integration"} />
     );
   if (isLoading) return <ComponentContainerLoading />;
+  if (isSubscribeOnly && !installation)
+    return (
+      <ComponentContainerError message="This integration can't be set up here. Please contact your administrator." />
+    );
 
   return <div>{children}</div>;
 }

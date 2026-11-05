@@ -11,6 +11,7 @@ import type { InstallationConfigContent } from "../config/types";
 import { toUpdateConfigContent } from "../config/types";
 import { useInstallationProps } from "../InstallationProvider";
 
+import { subscribeObjectUpdateMasks } from "./subscribeUpdateMask";
 import { useInstallation } from "./useInstallation";
 
 /**
@@ -90,6 +91,14 @@ export function useUpdateInstallation() {
         ...objectNames.map((name) => `config.content.read.objects.${name}`),
       );
     }
+
+    // add subscribe objects that are new or changed to update mask
+    updateMask.push(
+      ...subscribeObjectUpdateMasks(
+        config?.subscribe?.objects,
+        installation.config?.content?.subscribe?.objects,
+      ),
+    );
 
     // assemble update installation requests from providers
     const updateInstallationRequest: UpdateInstallationOperationRequest = {

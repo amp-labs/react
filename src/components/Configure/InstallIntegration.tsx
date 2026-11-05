@@ -8,6 +8,7 @@ import { InstallationProvider, useInstallation } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
+import type { SubscribeEventsByObject } from "src/types/subscribeEvents";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
@@ -59,6 +60,21 @@ export interface InstallIntegrationProps {
    * @experimental
    */
   fieldMapping?: FieldMapping;
+  /**
+   * Subscribe behaviour per object, for integrations that subscribe to provider events.
+   *
+   * An event listed here is subscribed to; an omitted event is not. The consumer is not asked
+   * about them. `updateEvent` watches its `requiredWatchFields`, which a non-inheriting object
+   * must name; an inheriting object that names none watches every field. An `updateEvent` with
+   * `enabled: false` is written as `never`, so its `requiredWatchFields` name the fields
+   * without subscribing to updates.
+   *
+   * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
+   * and no read or write objects shows an error instead of installing.
+   *
+   * @experimental
+   */
+  subscribeEvents?: SubscribeEventsByObject;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -86,6 +102,7 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  subscribeEvents,
   variant,
 }: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
@@ -151,6 +168,7 @@ const InstallIntegrationContent = ({
         groupRef={groupRef}
         groupName={groupName}
         fieldMapping={fieldMapping}
+        subscribeEvents={subscribeEvents}
         onInstallSuccess={onInstallSuccess}
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}

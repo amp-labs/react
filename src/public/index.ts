@@ -21,3 +21,12 @@ export type {
   Connection, // For ConnectProvider callbacks
   Config, // For InstallIntegration callbacks
 };
+export type {
+  InheritingSubscribeEvents,
+  NonInheritingSubscribeEvents,
+  SubscribeEventOption,
+  SubscribeEvents,
+  SubscribeEventsByObject,
+  SubscribeUpdateEventOption,
+  SubscribeUpdateEventWithFields,
+} from "src/types/subscribeEvents";
