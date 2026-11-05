@@ -167,11 +167,8 @@ export function SelectObjectsStep() {
     goToStep,
   ]);
 
-  // An integration can have no read objects at all — a subscribe-only integration carries
-  // `read: objects: []` because the manifest requires a read block. There is then nothing to
-  // select, which is not a reason to block the install.
   const hasNoReadObjects = readObjects.length === 0;
-  const isValid = selectedOrAlwaysEnabled.size > 0 || hasNoReadObjects;
+  const isValid = selectedOrAlwaysEnabled.size > 0;
 
   if (manifest.isLoading || manifest.isPending) {
     return <div className={styles.loading}>Loading available objects...</div>;
@@ -201,6 +198,9 @@ export function SelectObjectsStep() {
     );
   }
 
+  // An integration can have no read objects at all — a subscribe-only integration carries
+  // `read: objects: []` because the manifest requires a read block. There is then nothing to
+  // select, which is not a reason to block the install, so Next stays enabled here.
   if (hasNoReadObjects) {
     // Nothing is selectable, but the consumer should still see what they are installing.
     const isSyncing = subscribeObjectNames.length > 0;
