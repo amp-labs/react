@@ -12,9 +12,8 @@ export type SubscribeEventOption = Record<string, never>;
 /**
  * An update event. Its presence subscribes the object to updates, watching the fields in
  * `requiredWatchFields`; an inheriting object that names none watches every field
- * (`watchFieldsAuto: "all"`). With `enabled: false` it is written as `never`, so its
- * `requiredWatchFields` name the fields the other events deliver without subscribing to
- * updates.
+ * (`watchFieldsAuto: "all"`). With `enabled: false` it is written as `never`, so no update
+ * events are delivered.
  *
  * @experimental
  */
@@ -23,7 +22,7 @@ export interface SubscribeUpdateEventOption {
    * Provider field names whose changes trigger an update event.
    *
    * For an object with `inheritFieldsAndMappings: false` they are also the fields every event
-   * delivers, and they are required: the object has no read config to take fields from, and
+   * delivers, and they are required: the object does not take fields from a read config, and
    * the server rejects it when it names none. For an inheriting object they are optional;
    * naming none watches every field, and events deliver the read config's fields.
    *
@@ -35,9 +34,9 @@ export interface SubscribeUpdateEventOption {
    * Whether update events are delivered. Defaults to `true`.
    *
    * `false` installs the object without update events: the update event is written as
-   * `never`, and `requiredWatchFields` remains the list of fields the create and delete
-   * events deliver. It is how a subscribe-only object that wants no updates names its fields,
-   * since `requiredWatchFields` is the only field list these props take.
+   * `never`. On a non-inheriting object, `requiredWatchFields` is still the list of fields the
+   * create and delete events deliver. It is how a subscribe-only object that wants no updates
+   * names its fields, since `requiredWatchFields` is the only field list these props take.
    */
   enabled?: boolean;
 }
@@ -56,11 +55,10 @@ export interface SubscribeUpdateEventWithFields
  * The events common to both kinds of object.
  *
  * Which fields an object cares about is said once, as `requiredWatchFields` on the update
- * event. The config schema also has `selectedFields` and `selectedFieldMappings`, and neither
- * is accepted here **yet**: a field-selection step is coming, and these props are for what a
- * caller settles without asking the consumer. The server accepts all three, so nothing here
- * is a limit on the config itself — `useConfigHelper`'s `subscribeObject()` already has
- * `setSelectedFields` and `setSelectedFieldMappings` for that step to write through.
+ * event. The config schema also has `selectedFields` and `selectedFieldMappings`; these props
+ * don't take them, because they cover only what the caller decides without asking the
+ * consumer. The server accepts all three, and `useConfigHelper`'s `subscribeObject()` has
+ * `setSelectedFields` and `setSelectedFieldMappings` for a step that asks the consumer.
  */
 interface SubscribeEventsBase {
   createEvent?: SubscribeEventOption;
@@ -91,7 +89,7 @@ export interface NonInheritingSubscribeEvents extends SubscribeEventsBase {
 
 /**
  * Subscribe behaviour per event type, keyed the same way the installation config is.
- * Omit an event to leave it unsubscribed.
+ * An omitted event is left out of the config, so the manifest decides whether it is subscribed.
  *
  * `inheritFieldsAndMappings` is required, with no default: when the config leaves it out, the
  * server takes the manifest's `inheritFieldsAndMapping` for the object, or inherits when the
@@ -124,8 +122,8 @@ export interface AutoAppliedSubscribeEvent {
 }
 
 /**
- * Lists the events the install flows write for each object: every event whose key is
- * present. An absent key leaves that event out of the config.
+ * Lists the events the wizard writes for each object: every event whose key is present. An
+ * absent key leaves that event out of the config.
  */
 export function autoAppliedSubscribeEvents(
   subscribeEvents: SubscribeEventsByObject | undefined,

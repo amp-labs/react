@@ -7,16 +7,17 @@ import {
 } from "src/types/subscribeEvents";
 
 /**
- * Writes the caller's `subscribeEvents` into the wizard's config draft, from Select Objects.
+ * Writes the caller's `subscribeEvents` into the wizard's config draft. Select Objects calls it.
  *
- * An event present in `subscribeEvents` is subscribed to; an omitted event is not. The
- * consumer is not asked about either.
+ * An event present in `subscribeEvents` is written to the config. An omitted event is left out,
+ * so the manifest decides whether the object is subscribed to it. The consumer is not asked
+ * about either.
  *
  * An update event watches the fields the caller named on it, or every field when it named
- * none, which only an inheriting object may do. The server requires one of `requiredWatchFields` or
- * `watchFieldsAuto` on a config update event, so there is no third option that stays
- * quiet; see `updateEventWatchSpec`. With `enabled: false` the event is written as `never`
- * and its watch fields only name what the other events deliver.
+ * none, which only an inheriting object may do. The server rejects a config update event that
+ * has neither `requiredWatchFields` nor `watchFieldsAuto`, so it cannot watch no fields; see
+ * `updateEventWatchSpec`. With `enabled: false` the event is written as `never`; on a
+ * non-inheriting object its watch fields still name the fields the other events deliver.
  *
  * Runs once per object. The draft is the user's from then on, so re-applying would undo
  * their edits.

@@ -37,8 +37,7 @@ export type ReadObjectHandlers = {
 };
 
 /**
- * Handlers for one object's subscribe config. A subscribe-only object carries its own
- * events: nothing is inherited from a read object, because there is no read object.
+ * Handlers that edit one object's subscribe config in the draft.
  *
  * @experimental
  */
@@ -55,9 +54,9 @@ export type SubscribeObjectHandlers = {
    */
   setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
-   * Write the update event as `never`: no update events are delivered. `watch` still names
-   * the fields the object's other events deliver, and the server requires `requiredWatchFields`
-   * or `watchFieldsAuto` on a disabled config update event too.
+   * Write the update event as `never`: no update events are delivered. The server requires
+   * `requiredWatchFields` or `watchFieldsAuto` on a `never` update event too, so pass `watch`;
+   * on a non-inheriting object it also names the fields the other events deliver.
    */
   setDisableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
@@ -67,9 +66,9 @@ export type SubscribeObjectHandlers = {
    */
   setInheritFieldsAndMappings: (inherit: boolean) => void;
   /**
-   * Fields delivered with each event, by provider field name. A subscribe-only object
-   * must select something: the server rejects a non-inheriting object that selects
-   * nothing, because there is no read config behind it to inherit from.
+   * Fields delivered with each event, by provider field name. A non-inheriting object must
+   * name its fields here, in `setSelectedFieldMappings`, or in the update event's
+   * `requiredWatchFields`; the server rejects one that names none.
    */
   setSelectedFields: (fields: string[]) => void;
   /** Mapped field name to provider field name. */

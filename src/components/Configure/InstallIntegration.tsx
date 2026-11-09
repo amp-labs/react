@@ -63,11 +63,13 @@ export interface InstallIntegrationProps {
   /**
    * Subscribe behaviour per object, for integrations that subscribe to provider events.
    *
-   * An event listed here is subscribed to; an omitted event is not. The consumer is not asked
-   * about them. `updateEvent` watches its `requiredWatchFields`, which a non-inheriting object
-   * must name; an inheriting object that names none watches every field. An `updateEvent` with
-   * `enabled: false` is written as `never`, so its `requiredWatchFields` name the fields
-   * without subscribing to updates.
+   * An event listed here is subscribed to. An omitted event is left out of the config, so the
+   * manifest decides it: subscribed if the manifest enables it, otherwise not. The consumer is
+   * not asked about either. `updateEvent` watches its `requiredWatchFields`, which a
+   * non-inheriting object must name; an inheriting object that names none watches every field.
+   * An `updateEvent` with `enabled: false` is written as `never`, so no update events are
+   * delivered; on a non-inheriting object its `requiredWatchFields` still name the fields the
+   * other events deliver.
    *
    * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
    * and no read or write objects shows an error instead of installing.

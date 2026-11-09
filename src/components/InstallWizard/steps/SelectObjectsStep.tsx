@@ -50,9 +50,9 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
-  // The objects this installation subscribes to. The hydrated manifest carries no subscribe
-  // block — `HydrateRevision` copies read, write and proxy only — so the caller's prop is the
-  // only source for them, and it is also what decides the subscribe config that gets created.
+  // The objects the caller's subscribeEvents prop configures. The hydrated manifest carries no
+  // subscribe block (the server's `HydrateRevision` copies read, write and proxy only), so the
+  // prop is the only list of subscribe objects the wizard has.
   const subscribeObjectNames = useMemo(
     () => Object.keys(subscribeEvents ?? {}),
     [subscribeEvents],

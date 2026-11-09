@@ -50,18 +50,18 @@ export function ReviewStep() {
   const { subscribeEvents } = useInstallIntegrationProps();
 
   // Subscribe objects are not part of `selectedObjects` — they are never selected, and the
-  // hydrated manifest has no subscribe block to list them from. The caller's prop is both
-  // the source of the field set and what becomes the subscribe config, so it is what the
-  // consumer is shown.
+  // hydrated manifest has no subscribe block to list them from. The caller's prop is what the
+  // wizard writes to the subscribe config, so it is what the consumer is shown.
   const subscribeSummaries = useMemo(
     () =>
       Object.entries(subscribeEvents ?? {}).map(([objectName, events]) => ({
         objectName,
-        // The update event's watch fields are also the fields it delivers, and the only
-        // field list these props carry. Provider names, taken as written.
+        // The update event's watch fields, the only field list these props carry. On a
+        // non-inheriting object they are also the fields its events deliver; an inheriting
+        // object delivers its read config's fields. Provider names, taken as written.
         fields: events.updateEvent?.requiredWatchFields ?? [],
-        // An event key is present only when it is subscribed to, except an update event
-        // with enabled: false, which is there only to name the fields.
+        // Every event key the prop sets, except an update event with enabled: false. An
+        // event the prop omits but the manifest enables is not listed.
         events: (["createEvent", "updateEvent", "deleteEvent"] as const)
           .filter(
             (key) =>

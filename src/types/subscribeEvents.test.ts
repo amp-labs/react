@@ -16,7 +16,7 @@ const inheriting = (
   events: Omit<InheritingSubscribeEvents, "inheritFieldsAndMappings">,
 ): SubscribeEvents => ({ inheritFieldsAndMappings: true, ...events });
 
-// The prop's contract: an event key present means subscribe to it; absent means do not.
+// An event key that is present is written to the config; an absent one is left out.
 describe("autoAppliedSubscribeEvents", () => {
   it("returns nothing when the prop is absent", () => {
     expect(autoAppliedSubscribeEvents(undefined)).toEqual([]);
@@ -37,7 +37,7 @@ describe("autoAppliedSubscribeEvents", () => {
   });
 
   it("ignores an omitted event rather than disabling it explicitly", () => {
-    // createEvent is absent: not subscribed, and nothing to write.
+    // createEvent is absent, so nothing is written for it.
     expect(
       autoAppliedSubscribeEvents({
         messages: inheriting({ deleteEvent: {} }),
@@ -61,7 +61,7 @@ describe("autoAppliedSubscribeEvents", () => {
     ]);
   });
 
-  it("handles several objects", () => {
+  it("lists the events of each object", () => {
     expect(
       autoAppliedSubscribeEvents({
         messages: inheriting({ createEvent: {} }),
@@ -101,7 +101,7 @@ describe("updateEventWatchSpec", () => {
   });
 });
 
-// A non-inheriting object has no read config to take fields from, and the server rejects one
+// A non-inheriting object does not take fields from a read config, and the server rejects one
 // that names none, so the prop's type requires the update event's field list.
 describe("SubscribeEvents type", () => {
   it("rejects a non-inheriting object without updateEvent.requiredWatchFields", () => {
