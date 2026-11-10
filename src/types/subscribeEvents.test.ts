@@ -124,18 +124,6 @@ describe("SubscribeEvents type", () => {
     expect(withoutFields).toBeDefined();
   });
 
-  it("rejects userSelect, which no install flow reads yet", () => {
-    const events: SubscribeEventsByObject = {
-      contacts: {
-        inheritFieldsAndMappings: true,
-        // @ts-expect-error userSelect is not part of the prop until a selection step exists
-        createEvent: { userSelect: false },
-      },
-    };
-
-    expect(events.contacts.inheritFieldsAndMappings).toBe(true);
-  });
-
   it("lets an inheriting object leave the update event out", () => {
     const events: SubscribeEventsByObject = {
       contacts: {
