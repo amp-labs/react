@@ -60,9 +60,8 @@ export type SubscribeObjectHandlers = {
    */
   setDisableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
-   * Whether this object takes its fields and mappings from the matching read object.
-   * Written out either way, since an omitted value falls back to the manifest's
-   * `inheritFieldsAndMapping`.
+   * Whether this object takes its fields and mappings from the matching read object. When never
+   * set, the server uses amp.yaml's `inheritFieldsAndMapping`.
    */
   setInheritFieldsAndMappings: (inherit: boolean) => void;
   /**
@@ -478,13 +477,7 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
       const initializeSubscribeObject = (_draft: InstallationConfigContent) => {
         const subscribe = _draft.subscribe || {};
         const objects = subscribe.objects || {};
-        // Written out rather than left unset, since the server then falls back to the
-        // manifest's inheritFieldsAndMapping. setInheritFieldsAndMappings overrides it for an
-        // object that does inherit.
-        const obj = objects[objectName] || {
-          objectName,
-          inheritFieldsAndMappings: false,
-        };
+        const obj = objects[objectName] || { objectName };
 
         objects[objectName] = obj;
         subscribe.objects = objects;
