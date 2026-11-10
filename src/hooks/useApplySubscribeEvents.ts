@@ -7,20 +7,11 @@ import {
 } from "src/types/subscribeEvents";
 
 /**
- * Writes the caller's `subscribeEvents` into the wizard's config draft. Select Objects calls it.
+ * Writes the caller's `subscribeEvents` into the wizard's config draft.
  *
  * An event present in `subscribeEvents` is written to the config. An omitted event is left out,
  * so the manifest decides whether the object is subscribed to it. The consumer is not asked
  * about either.
- *
- * An update event watches the fields the caller named on it, or every field when it named
- * none, which only an inheriting object may do. The server rejects a config update event that
- * has neither `requiredWatchFields` nor `watchFieldsAuto`, so it cannot watch no fields; see
- * `updateEventWatchSpec`. With `enabled: false` the event is written as `never`; on a
- * non-inheriting object its watch fields still name the fields the other events deliver.
- *
- * Runs once per object. The draft is the user's from then on, so re-applying would undo
- * their edits.
  */
 export function useApplySubscribeEvents() {
   const { subscribeEvents } = useInstallIntegrationProps();
@@ -42,7 +33,7 @@ export function useApplySubscribeEvents() {
         ({ event }) => {
           if (event === "createEvent") handlers.setEnableCreate();
           if (event === "deleteEvent") handlers.setEnableDelete();
-          // Watch the named fields, or everything when none were named; see above.
+          // Watch the named fields, or everything when none were named; see updateEventWatchSpec.
           if (event === "updateEvent") {
             const watch = updateEventWatchSpec(events.updateEvent);
 
