@@ -66,9 +66,8 @@ export function ConditionalHasConfigurationLayout({
   const provider = hydratedRevision?.content?.provider;
   const isConfigurationNotRequired: boolean =
     getNoConfigurationRequired(hydratedRevision);
-  // An integration with subscribe objects and no read or write objects gets its subscribe
-  // config only from the subscribeEvents props, which only wizard mode applies, so this flow
-  // does not create its installation.
+  // This flow is not passed the subscribeEvents prop, so it has no subscribe config to install
+  // a subscribe-only integration with.
   const isSubscribeOnly =
     isConfigurationNotRequired &&
     !!integrationObj?.latestRevision?.content?.subscribe?.objects?.length;
