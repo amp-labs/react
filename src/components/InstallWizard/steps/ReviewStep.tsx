@@ -61,8 +61,6 @@ export function ReviewStep() {
     return Object.entries(subscribeEvents ?? {}).map(
       ([objectName, events]) => ({
         objectName,
-        // The update event's watch fields, the only field list these props carry. Provider
-        // names, taken as written.
         watchFields: events.updateEvent?.requiredWatchFields ?? [],
         // Every event key the prop sets, except an update event with enabled: false. An
         // event the prop omits but the manifest enables is not listed.
