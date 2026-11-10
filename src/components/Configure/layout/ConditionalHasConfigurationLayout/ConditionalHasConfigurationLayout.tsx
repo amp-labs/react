@@ -17,15 +17,11 @@ import { useHydratedRevision } from "../../state/HydratedRevisionContext";
 
 import { InstalledSuccessBox } from "./InstalledSuccessBox";
 
-// explicity check actions (i.e. read, write) to determine if configuration is required
-// returns false if configuration is not required
+// Reports whether the integration has no read or write objects for the consumer to configure.
 const getNoConfigurationRequired = (
   hydratedRevision: HydratedRevision | null,
 ) => {
   const { read, write } = hydratedRevision?.content ?? {};
-  // Count objects rather than nil-check the blocks: a subscribe-only integration still
-  // carries a read block, because the manifest rejects `subscribe` without one, and an
-  // empty object list leaves the consumer with nothing to configure all the same.
   return !read?.objects?.length && !write?.objects?.length;
 };
 
