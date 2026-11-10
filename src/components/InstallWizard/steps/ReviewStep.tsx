@@ -63,7 +63,7 @@ export function ReviewStep() {
         objectName,
         // The update event's watch fields, the only field list these props carry. Provider
         // names, taken as written.
-        fields: events.updateEvent?.requiredWatchFields ?? [],
+        watchFields: events.updateEvent?.requiredWatchFields ?? [],
         // Every event key the prop sets, except an update event with enabled: false. An
         // event the prop omits but the manifest enables is not listed.
         events: (["createEvent", "updateEvent", "deleteEvent"] as const)
@@ -255,9 +255,9 @@ export function ReviewStep() {
                   : "Subscribes to events"}
               </span>
             </div>
-            {summary.fields.length > 0 && (
+            {summary.watchFields.length > 0 && (
               <div className={styles.cardDetails}>
-                {summary.fields.map((name: string) => (
+                {summary.watchFields.map((name: string) => (
                   <span key={name} className={styles.pill}>
                     {name}
                   </span>
