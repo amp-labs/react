@@ -202,7 +202,7 @@ export function ReviewStep() {
     <div className={styles.reviewStep}>
       <StepHeader title={copy.title} description={copy.description} />
 
-      {objectSummaries.length === 0 && (
+      {objectSummaries.length === 0 && subscribeSummaries.length === 0 && (
         <div className={styles.empty}>
           <p className={styles.emptyTitle}>There is nothing to configure.</p>
         </div>
