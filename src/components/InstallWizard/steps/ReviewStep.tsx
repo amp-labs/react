@@ -49,16 +49,20 @@ export function ReviewStep() {
     useInstallIntegrationProps();
   const { subscribeEvents } = useInstallIntegrationProps();
 
-  // Subscribe objects are not part of `selectedObjects` — they are never selected, and the
-  // hydrated manifest has no subscribe block to list them from. The caller's prop is what the
-  // wizard writes to the subscribe config, so it is what the consumer is shown.
-  const subscribeSummaries = useMemo(
-    () =>
-      Object.entries(subscribeEvents ?? {}).map(([objectName, events]) => ({
+  // Lists the subscribe objects when the install has no read objects, so Review is not empty.
+  // They come from the caller's prop: subscribe objects are never selected, and the hydrated
+  // manifest has no subscribe block. Hidden next to read objects because an inheriting object
+  // delivers its read config's fields, not the watch fields shown here. With no read objects
+  // every object is non-inheriting, since the server rejects an inheriting subscribe object
+  // without a matching read object.
+  const subscribeSummaries = useMemo(() => {
+    if (selectedObjects.length > 0) return [];
+
+    return Object.entries(subscribeEvents ?? {}).map(
+      ([objectName, events]) => ({
         objectName,
-        // The update event's watch fields, the only field list these props carry. On a
-        // non-inheriting object they are also the fields its events deliver; an inheriting
-        // object delivers its read config's fields. Provider names, taken as written.
+        // The update event's watch fields, the only field list these props carry. Provider
+        // names, taken as written.
         fields: events.updateEvent?.requiredWatchFields ?? [],
         // Every event key the prop sets, except an update event with enabled: false. An
         // event the prop omits but the manifest enables is not listed.
@@ -69,9 +73,9 @@ export function ReviewStep() {
               !(key === "updateEvent" && events.updateEvent?.enabled === false),
           )
           .map((key) => key.replace("Event", "")),
-      })),
-    [subscribeEvents],
-  );
+      }),
+    );
+  }, [selectedObjects.length, subscribeEvents]);
 
   // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
   // only objects selected, this step saves that installation rather than setting up new objects.
