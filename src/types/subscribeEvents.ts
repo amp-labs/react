@@ -21,22 +21,15 @@ export interface SubscribeUpdateEventOption {
   /**
    * Provider field names whose changes trigger an update event.
    *
-   * For an object with `inheritFieldsAndMappings: false` they are also the fields every event
-   * delivers, and they are required: the object does not take fields from a read config, and
-   * the server rejects it when it names none. For an inheriting object they are optional;
-   * naming none watches every field, and events deliver the read config's fields.
-   *
-   * There is no field metadata for subscribe objects, so these are taken as written and not
-   * validated against the provider.
+   * For a subscribe object with no matching read object (`inheritFieldsAndMappings: false`),
+   * these are also the fields delivered with every event, create and delete included, as if
+   * they were `selectedFields`.
    */
   requiredWatchFields?: string[];
   /**
-   * Whether update events are delivered. Defaults to `true`.
-   *
-   * `false` installs the object without update events: the update event is written as
-   * `never`. On a non-inheriting object, `requiredWatchFields` is still the list of fields the
-   * create and delete events deliver. It is how a subscribe-only object that wants no updates
-   * names its fields, since `requiredWatchFields` is the only field list these props take.
+   * Whether update events are delivered. Defaults to `true`. `false` writes the update event
+   * as `never`; on a non-inheriting object, `requiredWatchFields` still names the fields that
+   * create and delete events deliver.
    */
   enabled?: boolean;
 }
