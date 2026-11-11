@@ -7,7 +7,7 @@ import { useLocalConfig } from "src/headless";
 import { useManifest } from "src/headless";
 import { useProjectQuery } from "src/hooks/query/useProjectQuery";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
-import { useApplySubscribeEvents } from "src/hooks/useApplySubscribeEvents";
+import { useApplySubscribeConfig } from "src/hooks/useApplySubscribeConfig";
 import { useInstallAlwaysEnabledObjects } from "src/hooks/useInstallAlwaysEnabledObjects";
 import { useProvider } from "src/hooks/useProvider";
 
@@ -27,7 +27,7 @@ export function SelectObjectsStep() {
   const { state, setSelectedObjects, nextStep, prevStep, goToStep } =
     useWizard();
   const { providerName } = useProvider();
-  const { subscribeEvents } = useInstallIntegrationProps();
+  const { subscribeConfig } = useInstallIntegrationProps();
   const { appName: projectAppName } = useProjectQuery();
   const appName = projectAppName || "Your App";
 
@@ -50,12 +50,12 @@ export function SelectObjectsStep() {
   // Get all available read objects from manifest
   const readObjects = manifest.getReadObjects();
 
-  // The objects the caller's subscribeEvents prop configures. The hydrated manifest carries no
+  // The objects the caller's subscribeConfig prop configures. The hydrated manifest carries no
   // subscribe block (the server's `HydrateRevision` copies read, write and proxy only), so the
   // prop is the only list of subscribe objects the wizard has.
   const subscribeObjectNames = useMemo(
-    () => Object.keys(subscribeEvents ?? {}),
-    [subscribeEvents],
+    () => Object.keys(subscribeConfig ?? {}),
+    [subscribeConfig],
   );
 
   // Objects marked `enabled: always` are read for every installation, so they are always
@@ -68,9 +68,9 @@ export function SelectObjectsStep() {
     retry,
   } = useInstallAlwaysEnabledObjects();
 
-  // The caller's subscribe events are written to the draft here, before any of the branches
+  // The caller's subscribe config is written to the draft here, before any of the branches
   // below return.
-  useApplySubscribeEvents();
+  useApplySubscribeConfig();
 
   const selectedOrAlwaysEnabled = useMemo(
     () => new Set([...selected, ...alwaysEnabledObjects]),

@@ -8,7 +8,7 @@ import { InstallationProvider, useInstallation } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
-import type { SubscribeEventsByObject } from "src/types/subscribeEvents";
+import type { SubscribeConfigByObject } from "src/types/subscribeConfig";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
@@ -61,22 +61,22 @@ export interface InstallIntegrationProps {
    */
   fieldMapping?: FieldMapping;
   /**
-   * Subscribe behaviour per object, for integrations that subscribe to provider events.
+   * Subscribe config per object name, in the installation API's shape, written to the
+   * installation's `subscribe.objects` without asking the consumer. The key supplies
+   * `objectName`; `destination` may be omitted, and the server then takes the object's
+   * `amp.yaml` destination.
    *
-   * An event listed here is subscribed to. An omitted event is left out of the config, so the
-   * manifest decides it: subscribed if the manifest enables it, otherwise not. The consumer is
-   * not asked about either. `updateEvent` watches its `requiredWatchFields`, which a
-   * non-inheriting object must name; an inheriting object that names none watches every field.
-   * An `updateEvent` with `enabled: false` is written as `never`, so no update events are
-   * delivered; on a non-inheriting object its `requiredWatchFields` still name the fields the
-   * other events deliver.
+   * An event left out is left out of the installation, so the manifest decides it. An omitted
+   * `inheritFieldsAndMappings` takes the manifest's `inheritFieldsAndMapping`. A non-inheriting
+   * object must name its fields in `selectedFields`, `selectedFieldMappings` or
+   * `updateEvent.requiredWatchFields`; the server rejects one that names none.
    *
    * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
    * and no read or write objects shows an error instead of installing.
    *
    * @experimental
    */
-  subscribeEvents?: SubscribeEventsByObject;
+  subscribeConfig?: SubscribeConfigByObject;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -104,7 +104,7 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
-  subscribeEvents,
+  subscribeConfig,
   variant,
 }: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
@@ -170,7 +170,7 @@ const InstallIntegrationContent = ({
         groupRef={groupRef}
         groupName={groupName}
         fieldMapping={fieldMapping}
-        subscribeEvents={subscribeEvents}
+        subscribeConfig={subscribeConfig}
         onInstallSuccess={onInstallSuccess}
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}

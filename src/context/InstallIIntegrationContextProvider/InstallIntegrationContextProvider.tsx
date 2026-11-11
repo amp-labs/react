@@ -14,7 +14,7 @@ import {
 } from "src/components/Configure/ComponentContainer";
 import { FieldMapping } from "src/components/Configure/InstallIntegration";
 import { useListIntegrationsQuery } from "src/hooks/query";
-import type { SubscribeEventsByObject } from "src/types/subscribeEvents";
+import type { SubscribeConfigByObject } from "src/types/subscribeConfig";
 import { findIntegrationFromList } from "src/utils";
 import { handleServerError } from "src/utils/handleServerError";
 
@@ -40,7 +40,7 @@ interface InstallIntegrationContextValue {
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
   fieldMapping?: FieldMapping;
-  subscribeEvents?: SubscribeEventsByObject;
+  subscribeConfig?: SubscribeConfigByObject;
   resetComponent: () => void;
 }
 // Create a context to pass down the props
@@ -86,7 +86,7 @@ interface InstallIntegrationProviderProps {
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
   fieldMapping?: FieldMapping;
-  subscribeEvents?: SubscribeEventsByObject;
+  subscribeConfig?: SubscribeConfigByObject;
   resetComponent: () => void;
 }
 
@@ -102,7 +102,7 @@ export function InstallIntegrationProvider({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
-  subscribeEvents,
+  subscribeConfig,
   resetComponent,
 }: InstallIntegrationProviderProps) {
   const { data: integrations } = useListIntegrationsQuery();
@@ -198,7 +198,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
-      subscribeEvents,
+      subscribeConfig,
       resetComponent,
     }),
     [
@@ -216,7 +216,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
-      subscribeEvents,
+      subscribeConfig,
       resetComponent,
     ],
   );

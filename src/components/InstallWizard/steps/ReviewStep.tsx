@@ -17,6 +17,7 @@ import {
   useUpdateInstallation,
 } from "src/headless";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { namedFields } from "src/types/subscribeConfig";
 import { handleServerError } from "src/utils/handleServerError";
 import { getFieldDisplayName } from "src/utils/manifest";
 
@@ -68,9 +69,9 @@ export function ReviewStep() {
     useInstallIntegrationProps();
 
   // The subscribe objects Review submits, listed when the install has no read objects so
-  // Review is not empty. Select Objects writes them to the draft from the subscribeEvents
+  // Review is not empty. Select Objects writes them to the draft from the subscribeConfig
   // prop. Hidden next to read objects because an inheriting object delivers its read config's
-  // fields, not the watch fields shown here; with no read objects every object is
+  // fields, not the fields its config names; with no read objects every object is
   // non-inheriting, since the server rejects an inheriting one without a matching read object.
   const subscribeObjects = useMemo(
     () =>
@@ -247,7 +248,7 @@ export function ReviewStep() {
 
         {subscribeObjects.map((object) => {
           const events = subscribedEvents(object);
-          const watchFields = object.updateEvent?.requiredWatchFields ?? [];
+          const fields = namedFields(object);
 
           return (
             <div
@@ -262,9 +263,9 @@ export function ReviewStep() {
                     : "Subscribes to events"}
                 </span>
               </div>
-              {watchFields.length > 0 && (
+              {fields.length > 0 && (
                 <div className={styles.cardDetails}>
-                  {watchFields.map((name) => (
+                  {fields.map((name) => (
                     <span key={name} className={styles.pill}>
                       {name}
                     </span>

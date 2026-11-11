@@ -17,7 +17,10 @@ import {
 } from "@generated/api/src";
 import { produce } from "immer";
 import isEqual from "lodash.isequal";
-import type { UpdateEventWatchSpec } from "src/types/subscribeEvents";
+import type {
+  SubscribeObjectConfig,
+  UpdateEventWatchSpec,
+} from "src/types/subscribeConfig";
 import { isReadObjectAlwaysEnabled } from "src/utils/manifest";
 
 import { useInstallation } from "../installation/useInstallation";
@@ -43,6 +46,8 @@ export type ReadObjectHandlers = {
  */
 export type SubscribeObjectHandlers = {
   object: SubscribeConfigObject | undefined;
+  /** Replace this object's subscribe config with `config`. */
+  setConfig: (config: SubscribeObjectConfig) => void;
   /** Subscribe to create events for this object. */
   setEnableCreate: () => void;
   /** Subscribe to delete events for this object. */
@@ -488,6 +493,19 @@ export function useConfigHelper(initialConfig: InstallationConfigContent) {
 
       return {
         object,
+        setConfig: (config) => {
+          setDraft((prev) =>
+            produce(prev, (_draft) => {
+              const { objects } = initializeSubscribeObject(_draft);
+              // The generated type requires destination, but the server accepts an object
+              // without one and takes the amp.yaml subscribe object's.
+              objects[objectName] = {
+                ...config,
+                objectName,
+              } as SubscribeConfigObject;
+            }),
+          );
+        },
         setEnableCreate: () => {
           setDraft((prev) =>
             produce(prev, (_draft) => {
