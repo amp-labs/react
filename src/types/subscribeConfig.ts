@@ -29,8 +29,9 @@ export type UpdateEventWatchSpec =
 
 /**
  * Lists the field names a non-inheriting subscribe object's config names: `selectedFields`
- * set to true, `updateEvent.requiredWatchFields`, and the mapped names in
- * `selectedFieldMappings`, each once.
+ * set to true and the mapped names in `selectedFieldMappings`, each once. Leaves out
+ * `updateEvent.requiredWatchFields`: they decide which changes fire an update event and are
+ * not delivered unless `selectedFields` or `selectedFieldMappings` also lists them.
  */
 export function namedFields(object: SubscribeObjectConfig): string[] {
   return [
@@ -38,7 +39,6 @@ export function namedFields(object: SubscribeObjectConfig): string[] {
       ...Object.entries(object.selectedFields ?? {})
         .filter(([, selected]) => selected)
         .map(([name]) => name),
-      ...(object.updateEvent?.requiredWatchFields ?? []),
       ...Object.keys(object.selectedFieldMappings ?? {}),
     ]),
   ];

@@ -36,14 +36,14 @@ describe("SubscribeConfigByObject", () => {
 });
 
 describe("namedFields", () => {
-  it("lists selected fields, watch fields and mapped names once each", () => {
+  it("lists selected fields and mapped names once each, leaving out watch fields", () => {
     expect(
       namedFields({
         selectedFields: { text: true, user: true, channel: false },
         updateEvent: { enabled: "always", requiredWatchFields: ["text", "ts"] },
         selectedFieldMappings: { timeStamp: "ts" },
       }),
-    ).toEqual(["text", "user", "ts", "timeStamp"]);
+    ).toEqual(["text", "user", "timeStamp"]);
   });
 
   it("is empty for an object that names no fields", () => {

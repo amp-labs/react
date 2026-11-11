@@ -68,8 +68,10 @@ export interface InstallIntegrationProps {
    *
    * An event left out is left out of the installation, so the manifest decides it. An omitted
    * `inheritFieldsAndMappings` takes the manifest's `inheritFieldsAndMapping`. A non-inheriting
-   * object must name its fields in `selectedFields`, `selectedFieldMappings` or
-   * `updateEvent.requiredWatchFields`; the server rejects one that names none.
+   * object must name the fields its events deliver in `selectedFields` or
+   * `selectedFieldMappings`, and an update event set to `always` must list
+   * `requiredWatchFields`; the server rejects an object that does not. `requiredWatchFields`
+   * decide which changes fire an update event and are not delivered unless also selected.
    *
    * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
    * and no read or write objects shows an error instead of installing.

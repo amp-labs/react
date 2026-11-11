@@ -53,15 +53,16 @@ export type SubscribeObjectHandlers = {
   /** Subscribe to delete events for this object. */
   setEnableDelete: () => void;
   /**
-   * Subscribe to update events. `watch` says which field changes deliver an event, as
+   * Subscribe to update events. `watch` says which field changes fire an update event, as
    * either `requiredWatchFields` or `watchFieldsAuto: "all"`; the server requires one of
-   * the two, so omitting it writes an update event the server will reject.
+   * the two, so omitting it writes an update event the server will reject. A non-inheriting
+   * object must use `requiredWatchFields`. Watch fields are not delivered unless
+   * `setSelectedFields` or `setSelectedFieldMappings` also lists them.
    */
   setEnableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
    * Write the update event as `never`: no update events are delivered. The server requires
-   * `requiredWatchFields` or `watchFieldsAuto` on a `never` update event too, so pass `watch`;
-   * on a non-inheriting object it also names the fields the other events deliver.
+   * `requiredWatchFields` or `watchFieldsAuto` on a `never` update event too, so pass `watch`.
    */
   setDisableUpdate: (watch?: UpdateEventWatchSpec) => void;
   /**
@@ -71,8 +72,8 @@ export type SubscribeObjectHandlers = {
   setInheritFieldsAndMappings: (inherit: boolean) => void;
   /**
    * Fields delivered with each event, by provider field name. A non-inheriting object must
-   * name its fields here, in `setSelectedFieldMappings`, or in the update event's
-   * `requiredWatchFields`; the server rejects one that names none.
+   * name its fields here or in `setSelectedFieldMappings`; the server rejects one that names
+   * none.
    */
   setSelectedFields: (fields: string[]) => void;
   /** Mapped field name to provider field name. */
