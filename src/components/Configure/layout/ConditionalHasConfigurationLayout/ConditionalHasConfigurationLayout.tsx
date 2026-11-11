@@ -17,13 +17,12 @@ import { useHydratedRevision } from "../../state/HydratedRevisionContext";
 
 import { InstalledSuccessBox } from "./InstalledSuccessBox";
 
-// explicity check actions (i.e. read, write) to determine if configuration is required
-// returns false if configuration is not required
+// Reports whether the integration has no read or write objects for the consumer to configure.
 const getNoConfigurationRequired = (
   hydratedRevision: HydratedRevision | null,
 ) => {
   const { read, write } = hydratedRevision?.content ?? {};
-  return !read && !write;
+  return !read?.objects?.length && !write?.objects?.length;
 };
 
 interface ConditionalHasConfigurationLayoutProps {
@@ -67,6 +66,11 @@ export function ConditionalHasConfigurationLayout({
   const provider = hydratedRevision?.content?.provider;
   const isConfigurationNotRequired: boolean =
     getNoConfigurationRequired(hydratedRevision);
+  // This flow is not passed the subscribeConfig prop, so it has no subscribe config to install
+  // a subscribe-only integration with.
+  const isSubscribeOnly =
+    isConfigurationNotRequired &&
+    !!integrationObj?.latestRevision?.content?.subscribe?.objects?.length;
 
   useEffect(() => {
     if (
@@ -74,6 +78,7 @@ export function ConditionalHasConfigurationLayout({
       !isConnectionsLoading &&
       hydratedRevision &&
       isConfigurationNotRequired &&
+      !isSubscribeOnly &&
       !installation &&
       selectedConnection &&
       integrationObj?.id &&
@@ -123,6 +128,7 @@ export function ConditionalHasConfigurationLayout({
     provider,
     createInstallation,
     isCreateInstallationIdle,
+    isSubscribeOnly,
   ]);
 
   // if the integration has no configuration required, show the installed success box (proxy, subscribe-only)
@@ -139,6 +145,10 @@ export function ConditionalHasConfigurationLayout({
       <ComponentContainerError message={"We can't load the integration"} />
     );
   if (isLoading) return <ComponentContainerLoading />;
+  if (isSubscribeOnly && !installation)
+    return (
+      <ComponentContainerError message="This integration can't be set up here. Please contact your administrator." />
+    );
 
   return <div>{children}</div>;
 }

@@ -1,4 +1,10 @@
 import { useCallback, useMemo } from "react";
+import type { SubscribeConfigObject } from "@generated/api/src";
+import {
+  ConfigCreateEventEnabledEnum,
+  ConfigDeleteEventEnabledEnum,
+  ConfigUpdateEventEnabledEnum,
+} from "@generated/api/src";
 import { WidthIcon } from "@radix-ui/react-icons";
 import { useInstallIntegrationProps } from "context/InstallIIntegrationContextProvider/InstallIntegrationContextProvider";
 import { Config } from "services/api";
@@ -11,9 +17,11 @@ import {
   useUpdateInstallation,
 } from "src/headless";
 import { useAlwaysEnabledReadObjects } from "src/hooks/useAlwaysEnabledReadObjects";
+import { namedFields } from "src/types/subscribeConfig";
 import { handleServerError } from "src/utils/handleServerError";
 import { getFieldDisplayName } from "src/utils/manifest";
 
+import { formatObjectList } from "../components/formatObjectList";
 import { StepHeader } from "../components/StepHeader";
 import { useWizard } from "../wizard/WizardContext";
 
@@ -33,6 +41,19 @@ const SAVE_COPY = {
   pending: "Saving...",
 };
 
+// The create, update and delete events the object is subscribed to, as "create", "update"
+// and "delete".
+function subscribedEvents(object: SubscribeConfigObject): string[] {
+  return [
+    object.createEvent?.enabled === ConfigCreateEventEnabledEnum.Always &&
+      "create",
+    object.updateEvent?.enabled === ConfigUpdateEventEnabledEnum.Always &&
+      "update",
+    object.deleteEvent?.enabled === ConfigDeleteEventEnabledEnum.Always &&
+      "delete",
+  ].filter((event): event is string => !!event);
+}
+
 export function ReviewStep() {
   const { state, prevStep, nextStep, setSubmissionError } = useWizard();
   const { selectedObjects } = state;
@@ -46,6 +67,19 @@ export function ReviewStep() {
   const isPending = isCreatePending || isUpdatePending;
   const { onInstallSuccess, onUpdateSuccess, setInstallation } =
     useInstallIntegrationProps();
+
+  // The subscribe objects Review submits, listed when the install has no read objects so
+  // Review is not empty. Select Objects writes them to the draft from the subscribeConfig
+  // prop. Hidden next to read objects because an inheriting object delivers its read config's
+  // fields, not the fields its config names; with no read objects every object is
+  // non-inheriting, since the server rejects an inheriting one without a matching read object.
+  const subscribeObjects = useMemo(
+    () =>
+      selectedObjects.length > 0
+        ? []
+        : Object.values(localConfig.draft.subscribe?.objects ?? {}),
+    [selectedObjects.length, localConfig.draft.subscribe?.objects],
+  );
 
   // `enabled: always` objects are installed as soon as the consumer connects, so when they're the
   // only objects selected, this step saves that installation rather than setting up new objects.
@@ -172,6 +206,12 @@ export function ReviewStep() {
     <div className={styles.reviewStep}>
       <StepHeader title={copy.title} description={copy.description} />
 
+      {objectSummaries.length === 0 && subscribeObjects.length === 0 && (
+        <div className={styles.empty}>
+          <p className={styles.emptyTitle}>There is nothing to configure.</p>
+        </div>
+      )}
+
       <div className={styles.summaryList}>
         {objectSummaries.map((summary) => (
           <div key={summary.objectName} className={styles.summaryCard}>
@@ -205,6 +245,36 @@ export function ReviewStep() {
             )}
           </div>
         ))}
+
+        {subscribeObjects.map((object) => {
+          const events = subscribedEvents(object);
+          const fields = namedFields(object);
+
+          return (
+            <div
+              key={`subscribe-${object.objectName}`}
+              className={styles.summaryCard}
+            >
+              <div className={styles.cardHeader}>
+                <span className={styles.objectName}>{object.objectName}</span>
+                <span className={styles.objectDescription}>
+                  {events.length > 0
+                    ? `Subscribes to ${formatObjectList(events)} events`
+                    : "Subscribes to events"}
+                </span>
+              </div>
+              {fields.length > 0 && (
+                <div className={styles.cardDetails}>
+                  {fields.map((name) => (
+                    <span key={name} className={styles.pill}>
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {state.submissionError && (

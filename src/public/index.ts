@@ -21,3 +21,7 @@ export type {
   Connection, // For ConnectProvider callbacks
   Config, // For InstallIntegration callbacks
 };
+export type {
+  SubscribeConfigByObject,
+  SubscribeObjectConfig,
+} from "src/types/subscribeConfig";

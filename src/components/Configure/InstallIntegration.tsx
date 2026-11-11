@@ -8,6 +8,7 @@ import { InstallationProvider, useInstallation } from "src/headless";
 import { useListIntegrationsQuery } from "src/hooks/query";
 import { useProjectQuery } from "src/hooks/query";
 import { useForceUpdate } from "src/hooks/useForceUpdate";
+import type { SubscribeConfigByObject } from "src/types/subscribeConfig";
 
 import { InstallWizard } from "../InstallWizard/InstallWizard";
 
@@ -59,6 +60,25 @@ export interface InstallIntegrationProps {
    * @experimental
    */
   fieldMapping?: FieldMapping;
+  /**
+   * Subscribe config per object name, in the installation API's shape, written to the
+   * installation's `subscribe.objects` without asking the consumer. The key supplies
+   * `objectName`; `destination` may be omitted, and the server then takes the object's
+   * `amp.yaml` destination.
+   *
+   * An event left out is left out of the installation, so the manifest decides it. An omitted
+   * `inheritFieldsAndMappings` takes the manifest's `inheritFieldsAndMapping`. A non-inheriting
+   * object must name the fields its events deliver in `selectedFields` or
+   * `selectedFieldMappings`, and an update event set to `always` must list
+   * `requiredWatchFields`; the server rejects an object that does not. `requiredWatchFields`
+   * decide which changes fire an update event and are not delivered unless also selected.
+   *
+   * Applied only in wizard mode. In the standard flow, an integration with subscribe objects
+   * and no read or write objects shows an error instead of installing.
+   *
+   * @experimental
+   */
+  subscribeConfig?: SubscribeConfigByObject;
   onInstallSuccess?: (installationId: string, config: Config) => void;
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
@@ -86,6 +106,7 @@ const InstallIntegrationContent = ({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  subscribeConfig,
   variant,
 }: InstallIntegrationInternalProps) => {
   const { installation, isPending: isInstallationPending } = useInstallation();
@@ -151,6 +172,7 @@ const InstallIntegrationContent = ({
         groupRef={groupRef}
         groupName={groupName}
         fieldMapping={fieldMapping}
+        subscribeConfig={subscribeConfig}
         onInstallSuccess={onInstallSuccess}
         onUpdateSuccess={onUpdateSuccess}
         onUninstallSuccess={onUninstallSuccess}
