@@ -13,7 +13,7 @@
  */
 
 
-export const BASE_PATH = "https://api.withampersand.com/v1".replace(/\/+$/, "");
+export const BASE_PATH = "https://api.ampersand.ai/v1".replace(/\/+$/, "");
 
 export interface ConfigurationParameters {
     basePath?: string; // override base path
