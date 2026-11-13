@@ -45,7 +45,7 @@ import {
  */
 export interface BaseSubscribeConfigObject {
     /**
-     * Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.
+     * Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.
      * @type {boolean}
      * @memberof BaseSubscribeConfigObject
      */
@@ -62,18 +62,6 @@ export interface BaseSubscribeConfigObject {
      * @memberof BaseSubscribeConfigObject
      */
     destination: string;
-    /**
-     * This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.
-     * @type {{ [key: string]: boolean; }}
-     * @memberof BaseSubscribeConfigObject
-     */
-    selectedFields?: { [key: string]: boolean; };
-    /**
-     * This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.
-     * @type {{ [key: string]: string; }}
-     * @memberof BaseSubscribeConfigObject
-     */
-    selectedFieldMappings?: { [key: string]: string; };
     /**
      * 
      * @type {ConfigCreateEvent}
@@ -130,8 +118,6 @@ export function BaseSubscribeConfigObjectFromJSONTyped(json: any, ignoreDiscrimi
         'inheritFieldsAndMappings': !exists(json, 'inheritFieldsAndMappings') ? undefined : json['inheritFieldsAndMappings'],
         'objectName': json['objectName'],
         'destination': json['destination'],
-        'selectedFields': !exists(json, 'selectedFields') ? undefined : json['selectedFields'],
-        'selectedFieldMappings': !exists(json, 'selectedFieldMappings') ? undefined : json['selectedFieldMappings'],
         'createEvent': !exists(json, 'createEvent') ? undefined : ConfigCreateEventFromJSON(json['createEvent']),
         'updateEvent': !exists(json, 'updateEvent') ? undefined : ConfigUpdateEventFromJSON(json['updateEvent']),
         'deleteEvent': !exists(json, 'deleteEvent') ? undefined : ConfigDeleteEventFromJSON(json['deleteEvent']),
@@ -152,8 +138,6 @@ export function BaseSubscribeConfigObjectToJSON(value?: BaseSubscribeConfigObjec
         'inheritFieldsAndMappings': value.inheritFieldsAndMappings,
         'objectName': value.objectName,
         'destination': value.destination,
-        'selectedFields': value.selectedFields,
-        'selectedFieldMappings': value.selectedFieldMappings,
         'createEvent': ConfigCreateEventToJSON(value.createEvent),
         'updateEvent': ConfigUpdateEventToJSON(value.updateEvent),
         'deleteEvent': ConfigDeleteEventToJSON(value.deleteEvent),
