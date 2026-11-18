@@ -11,11 +11,13 @@ import { handleServerError } from "src/utils/handleServerError";
 
 import { FieldHeader } from "../../fields/FieldHeader";
 
+import { passwordUpdateMask } from "./passwordUpdateMask";
+
 /**
  * Re-enters the username and password of a password grant connection, for example
  * after the user changed their password. The server signs in with the new
- * credentials before saving them. Client credentials are never returned, so this
- * form cannot show them; left blank, the server keeps the ones the connection has.
+ * credentials before saving them. Client fields left blank keep the connection's
+ * client (see passwordUpdateMask), and an update keeps the connection's scopes.
  *
  * @param provider is provided directly for ConnectProvider component
  */
@@ -26,7 +28,7 @@ export function UpdatePasswordGrantConnect({
 }) {
   const { projectIdOrName } = useAmpersandProviderProps();
   const { selectedConnection, isConnectionsLoading } = useConnections();
-  const { providerName, data: providerInfo } = useProvider(provider);
+  const { providerName } = useProvider(provider);
   const { mutateAsync: updateConnection, isPending: isConnectionUpdating } =
     useUpdateConnectionMutation();
 
@@ -42,14 +44,13 @@ export function UpdatePasswordGrantConnect({
         projectIdOrName: projectIdOrName || "",
         connectionId: selectedConnection?.id || "",
         updateConnectionRequest: {
-          updateMask: ["oauth2PasswordCredentials"],
+          updateMask: passwordUpdateMask(formData),
           connection: {
             oauth2PasswordCredentials: {
               username: formData.username,
               password: formData.password,
               clientId: formData.clientId,
               clientSecret: formData.clientSecret,
-              scopes: formData.scopes,
             },
           },
         },
@@ -82,14 +83,12 @@ export function UpdatePasswordGrantConnect({
         <PasswordGrantForm
           handleSubmit={handleSubmit}
           isButtonDisabled={isConnectionUpdating || isConnectionsLoading}
-          explicitScopesRequired={
-            providerInfo?.oauth2Opts?.explicitScopesRequired
-          }
+          // An update keeps the connection's scopes, so the form does not ask for them.
           buttonVariant="ghost"
           buttonText="Update"
           // We currently do not support updating metadata inputs for connections.
           metadataInputs={[]}
-          // The server keeps the connection's client ID and secret when both are left blank.
+          // Blank client fields are left out of the update mask, so the server keeps them.
           clientIdPlaceholder="Client ID (leave blank to keep the current one)"
           clientSecretPlaceholder="Client Secret (leave blank to keep the current one)"
         />
