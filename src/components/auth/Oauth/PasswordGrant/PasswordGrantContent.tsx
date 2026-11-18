@@ -25,6 +25,8 @@ type PasswordGrantFormProps = {
   buttonVariant?: "ghost";
   buttonText?: string;
   metadataInputs: MetadataItemInput[];
+  clientIdPlaceholder?: string;
+  clientSecretPlaceholder?: string;
 };
 
 type PasswordGrantFormData = {
@@ -48,6 +50,8 @@ export function PasswordGrantForm({
   buttonVariant,
   buttonText = "Next",
   metadataInputs,
+  clientIdPlaceholder = "Client ID (optional)",
+  clientSecretPlaceholder = "Client Secret (optional)",
 }: PasswordGrantFormProps) {
   const [formData, setFormData] = useState<PasswordGrantFormData>({
     username: "",
@@ -124,13 +128,13 @@ export function PasswordGrantForm({
           id="clientId"
           name="clientId"
           type="text"
-          placeholder="Client ID (optional)"
+          placeholder={clientIdPlaceholder}
           onChange={handleChange}
         />
         <FormComponent.PasswordInput
           id="clientSecret"
           name="clientSecret"
-          placeholder="Client Secret (optional)"
+          placeholder={clientSecretPlaceholder}
           onChange={handleChange}
         />
       </div>

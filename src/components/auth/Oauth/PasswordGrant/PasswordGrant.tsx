@@ -96,7 +96,7 @@ export function PasswordGrant({
         providerName={providerName}
         handleSubmit={handleSubmit}
         error={error}
-        isButtonDisabled={createConnectionMutation.isPending}
+        isButtonDisabled={createConnectionMutation.isPending || !!moduleError}
         explicitScopesRequired={explicitScopesRequired}
         metadataInputs={metadataInputs}
       />

@@ -14,7 +14,8 @@ import { FieldHeader } from "../../fields/FieldHeader";
 /**
  * Re-enters the username and password of a password grant connection, for example
  * after the user changed their password. The server signs in with the new
- * credentials before saving them.
+ * credentials before saving them. Client credentials are never returned, so this
+ * form cannot show them; left blank, the server keeps the ones the connection has.
  *
  * @param provider is provided directly for ConnectProvider component
  */
@@ -88,6 +89,9 @@ export function UpdatePasswordGrantConnect({
           buttonText="Update"
           // We currently do not support updating metadata inputs for connections.
           metadataInputs={[]}
+          // The server keeps the connection's client ID and secret when both are left blank.
+          clientIdPlaceholder="Client ID (leave blank to keep the current one)"
+          clientSecretPlaceholder="Client Secret (leave blank to keep the current one)"
         />
       </div>
     </>
