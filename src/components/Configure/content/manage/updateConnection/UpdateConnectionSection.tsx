@@ -5,6 +5,7 @@ import { UpdateApiKeyConnect } from "./UpdateApiKeyConnect";
 import { UpdateBasicAuthConnect } from "./UpdateBasicAuthConnect";
 import { UpdateClientCredentialsConnect } from "./UpdateClientCredentialsConnect";
 import { UpdateOauthConnect } from "./UpdateOauthConnect";
+import { UpdatePasswordGrantConnect } from "./UpdatePasswordGrantConnect";
 
 /**
  *
@@ -34,6 +35,10 @@ export function UpdateConnectionSection({ provider }: { provider?: string }) {
 
     if (oAuthGrantType === Oauth2OptsGrantTypeEnum.ClientCredentials) {
       return <UpdateClientCredentialsConnect provider={provider} />;
+    }
+
+    if (oAuthGrantType === Oauth2OptsGrantTypeEnum.Password) {
+      return <UpdatePasswordGrantConnect provider={provider} />;
     }
   }
 
