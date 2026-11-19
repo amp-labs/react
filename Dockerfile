@@ -5,7 +5,9 @@ FROM node:24-alpine3.24
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 WORKDIR /app
 # Install dependencies
-RUN apk update && apk add --no-cache ca-certificates git bash openjdk21-jre jq openssh python3 && rm -rf /var/cache/apk/*
+# openjdk21-jre is pinned to >=21.0.13.1, the fix for CVE-2026-114938 (a HotSpot
+# AVX-512 Base64 heap overflow). `yarn generate-api` runs openapi-generator on this JRE.
+RUN apk update && apk add --no-cache ca-certificates git bash 'openjdk21-jre>=21.0.13.1' jq openssh python3 && rm -rf /var/cache/apk/*
 COPY . .
 # Pre-cache node modules, set up ssh, install gh, and install gcloud
 RUN yarn install && \
