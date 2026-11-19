@@ -34,6 +34,14 @@ export type {
   WriteObjectHandlers,
 } from "./config/useConfigHelper";
 export type { Manifest } from "./manifest/useManifest";
+export type {
+  OAuthAuthorizationEvent,
+  OAuthConnectionMode,
+  CreateOAuthConnectionParams,
+  UpdateOAuthConnectionParams,
+  OAuthPopupOptions,
+  OAuthCallbacks,
+} from "./oauth/types";
 
 // Re-export generated types that are commonly used
 export type {
