@@ -39,6 +39,8 @@ interface InstallIntegrationContextValue {
   isIntegrationDeleted: boolean;
   setIntegrationDeleted: () => void;
   fieldMapping?: FieldMapping;
+  /** Builder opt-in: restart subscribe setup after a successful reauthentication. */
+  resubscribeOnReAuth: boolean;
   resetComponent: () => void;
 }
 // Create a context to pass down the props
@@ -59,6 +61,7 @@ export const InstallIntegrationContext =
     onUninstallSuccess: undefined,
     isIntegrationDeleted: false,
     setIntegrationDeleted: () => {},
+    resubscribeOnReAuth: false,
     resetComponent: () => {},
   });
 
@@ -84,6 +87,7 @@ interface InstallIntegrationProviderProps {
   onUpdateSuccess?: (installationId: string, config: Config) => void;
   onUninstallSuccess?: (installationId: string) => void;
   fieldMapping?: FieldMapping;
+  resubscribeOnReAuth?: boolean;
   resetComponent: () => void;
 }
 
@@ -99,6 +103,7 @@ export function InstallIntegrationProvider({
   onUpdateSuccess,
   onUninstallSuccess,
   fieldMapping,
+  resubscribeOnReAuth = false,
   resetComponent,
 }: InstallIntegrationProviderProps) {
   const { data: integrations } = useListIntegrationsQuery();
@@ -194,6 +199,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
+      resubscribeOnReAuth,
       resetComponent,
     }),
     [
@@ -211,6 +217,7 @@ export function InstallIntegrationProvider({
       isIntegrationDeleted,
       setIntegrationDeleted,
       fieldMapping,
+      resubscribeOnReAuth,
       resetComponent,
     ],
   );
