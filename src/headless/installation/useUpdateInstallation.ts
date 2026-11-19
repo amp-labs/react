@@ -12,11 +12,14 @@ import { toUpdateConfigContent } from "../config/types";
 import { useInstallationProps } from "../InstallationProvider";
 
 import { useInstallation } from "./useInstallation";
+import { useInstallationValidation } from "./useInstallationValidation";
 
 /**
  * update installation hook
  * @returns {Object} An object containing:
  *   - `updateInstallation` (function): A function to update the installation.
+ *   - `canUpdate` (boolean): Whether the installation can be updated.
+ *   - `validationErrors` (Object): Detailed validation error information.
  *   - `isIdle` (boolean): Whether the mutation is idle.
  *   - `isPending` (boolean): Whether the mutation is pending.
  *   - `error` (Error | null): The error object, if any.
@@ -27,6 +30,7 @@ export function useUpdateInstallation() {
   const { integrationNameOrId } = useInstallationProps();
   const { data: integrationObj } = useIntegrationQuery(integrationNameOrId);
   const { installation } = useInstallation();
+  const { canUpdate, validationErrors } = useInstallationValidation();
   const queryClient = useQueryClient();
   const {
     mutate: updateInstallationMutation,
@@ -124,6 +128,8 @@ export function useUpdateInstallation() {
 
   return {
     updateInstallation,
+    canUpdate,
+    validationErrors,
     isIdle,
     isPending,
     error,
