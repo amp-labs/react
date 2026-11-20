@@ -31,6 +31,12 @@ import {
     DeleteEventFromJSONTyped,
     DeleteEventToJSON,
 } from './DeleteEvent';
+import type { IntegrationFieldExistent } from './IntegrationFieldExistent';
+import {
+    IntegrationFieldExistentFromJSON,
+    IntegrationFieldExistentFromJSONTyped,
+    IntegrationFieldExistentToJSON,
+} from './IntegrationFieldExistent';
 import type { UpdateEvent } from './UpdateEvent';
 import {
     UpdateEventFromJSON,
@@ -62,6 +68,12 @@ export interface IntegrationSubscribeObject {
      * @memberof IntegrationSubscribeObject
      */
     inheritFieldsAndMapping?: boolean;
+    /**
+     * Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.
+     * @type {Array<IntegrationFieldExistent>}
+     * @memberof IntegrationSubscribeObject
+     */
+    requiredFields?: Array<IntegrationFieldExistent>;
     /**
      * 
      * @type {CreateEvent}
@@ -118,6 +130,7 @@ export function IntegrationSubscribeObjectFromJSONTyped(json: any, ignoreDiscrim
         'objectName': json['objectName'],
         'destination': json['destination'],
         'inheritFieldsAndMapping': !exists(json, 'inheritFieldsAndMapping') ? undefined : json['inheritFieldsAndMapping'],
+        'requiredFields': !exists(json, 'requiredFields') ? undefined : ((json['requiredFields'] as Array<any>).map(IntegrationFieldExistentFromJSON)),
         'createEvent': !exists(json, 'createEvent') ? undefined : CreateEventFromJSON(json['createEvent']),
         'updateEvent': !exists(json, 'updateEvent') ? undefined : UpdateEventFromJSON(json['updateEvent']),
         'deleteEvent': !exists(json, 'deleteEvent') ? undefined : DeleteEventFromJSON(json['deleteEvent']),
@@ -138,6 +151,7 @@ export function IntegrationSubscribeObjectToJSON(value?: IntegrationSubscribeObj
         'objectName': value.objectName,
         'destination': value.destination,
         'inheritFieldsAndMapping': value.inheritFieldsAndMapping,
+        'requiredFields': value.requiredFields === undefined ? undefined : ((value.requiredFields as Array<any>).map(IntegrationFieldExistentToJSON)),
         'createEvent': CreateEventToJSON(value.createEvent),
         'updateEvent': UpdateEventToJSON(value.updateEvent),
         'deleteEvent': DeleteEventToJSON(value.deleteEvent),

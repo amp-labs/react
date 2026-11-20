@@ -48,6 +48,7 @@ export interface DeleteInstallationRequest {
     projectIdOrName: string;
     integrationId: string;
     installationId: string;
+    force?: boolean;
 }
 
 export interface GetInstallationRequest {
@@ -114,6 +115,7 @@ export interface InstallationApiInterface {
      * @param {string} projectIdOrName The Ampersand project ID or project name.
      * @param {string} integrationId The integration ID.
      * @param {string} installationId The Ampersand installation ID.
+     * @param {boolean} [force] When &#x60;true&#x60;, deletes the installation even if cleanup in the provider fails (for example, because the connection\&#39;s credentials are no longer valid) or a subscription change is still pending. A forced delete might not clean up the artifacts Ampersand created in the provider. Defaults to &#x60;false&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstallationApiInterface
@@ -302,6 +304,10 @@ export class InstallationApi extends runtime.BaseAPI implements InstallationApiI
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.force !== undefined) {
+            queryParameters['force'] = requestParameters.force;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
