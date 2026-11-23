@@ -27,7 +27,9 @@ import {
  */
 export interface UpdateConnectionRequest {
     /**
-     * Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.
+     * Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme, and replace all of its credentials.
+     * 
+     * A password grant connection can also update single credential fields: `oauth2PasswordCredentials.username`, `oauth2PasswordCredentials.password`, `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret`. The fields not named keep their current values, and a named field with no value in `connection` is cleared. For example, naming `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret` with no values switches the connection to the provider's default client.
      * @type {Array<string>}
      * @memberof UpdateConnectionRequest
      */
@@ -50,7 +52,11 @@ export const UpdateConnectionRequestUpdateMaskEnum = {
     ApiKey: 'apiKey',
     BasicAuth: 'basicAuth',
     Oauth2ClientCredentials: 'oauth2ClientCredentials',
-    Oauth2PasswordCredentials: 'oauth2PasswordCredentials'
+    Oauth2PasswordCredentials: 'oauth2PasswordCredentials',
+    Oauth2PasswordCredentialsUsername: 'oauth2PasswordCredentials.username',
+    Oauth2PasswordCredentialsPassword: 'oauth2PasswordCredentials.password',
+    Oauth2PasswordCredentialsClientId: 'oauth2PasswordCredentials.clientId',
+    Oauth2PasswordCredentialsClientSecret: 'oauth2PasswordCredentials.clientSecret'
 } as const;
 export type UpdateConnectionRequestUpdateMaskEnum = typeof UpdateConnectionRequestUpdateMaskEnum[keyof typeof UpdateConnectionRequestUpdateMaskEnum];
 
