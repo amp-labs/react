@@ -113,6 +113,17 @@ export interface Oauth2Opts {
      * @memberof Oauth2Opts
      */
     scopeQueryParam?: string;
+    /**
+     * Extra parameters to send in the body of every request to the token URL
+     * (authorization code exchange, refresh, client credentials and password grants),
+     * for providers whose token endpoint needs fields beyond the OAuth 2.0 ones.
+     * Values may use catalog variables such as {{.workspace}}. A parameter here never
+     * replaces one that the grant itself sets. A client_id or client_secret here is a
+     * default that is used only when the connection has no client credentials of its own.
+     * @type {{ [key: string]: string; }}
+     * @memberof Oauth2Opts
+     */
+    tokenReqBodyParams?: { [key: string]: string; };
 }
 
 
@@ -165,6 +176,7 @@ export function Oauth2OptsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'accessTokenOpts': !exists(json, 'accessTokenOpts') ? undefined : AccessTokenOptsFromJSON(json['accessTokenOpts']),
         'keepAliveIntervalHours': !exists(json, 'keepAliveIntervalHours') ? undefined : json['keepAliveIntervalHours'],
         'scopeQueryParam': !exists(json, 'scopeQueryParam') ? undefined : json['scopeQueryParam'],
+        'tokenReqBodyParams': !exists(json, 'tokenReqBodyParams') ? undefined : json['tokenReqBodyParams'],
     };
 }
 
@@ -190,6 +202,7 @@ export function Oauth2OptsToJSON(value?: Oauth2Opts | null): any {
         'accessTokenOpts': AccessTokenOptsToJSON(value.accessTokenOpts),
         'keepAliveIntervalHours': value.keepAliveIntervalHours,
         'scopeQueryParam': value.scopeQueryParam,
+        'tokenReqBodyParams': value.tokenReqBodyParams,
     };
 }
 

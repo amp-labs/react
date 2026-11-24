@@ -14,7 +14,16 @@
 
 import { exists, mapValues } from '../runtime';
 /**
+ * Credentials for a provider that uses the OAuth 2.0 password grant (called the resource
+ * owner password credentials grant in RFC 6749). Ampersand signs in to the provider with
+ * them before it creates the connection or saves updated credentials, so credentials that
+ * the provider rejects return a 422 response and are not saved. The username and password
+ * are kept (encrypted) so that Ampersand can sign in again when the provider's refresh
+ * token expires.
  * 
+ * To update some of a connection's credentials and keep the others (for example, a new
+ * password with the connection's current client), name only those fields in `updateMask`,
+ * such as `oauth2PasswordCredentials.password`.
  * @export
  * @interface ConnectionRequestOauth2PasswordCredentials
  */
@@ -32,17 +41,17 @@ export interface ConnectionRequestOauth2PasswordCredentials {
      */
     password: string;
     /**
-     * The client ID to use for the connection.
+     * The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client.
      * @type {string}
      * @memberof ConnectionRequestOauth2PasswordCredentials
      */
-    clientId: string;
+    clientId?: string;
     /**
-     * The client secret to use for the connection.
+     * The client secret to use for the connection. Omit it when the client has no secret.
      * @type {string}
      * @memberof ConnectionRequestOauth2PasswordCredentials
      */
-    clientSecret: string;
+    clientSecret?: string;
     /**
      * The scopes for the tokens.
      * @type {Array<string>}
@@ -58,8 +67,6 @@ export function instanceOfConnectionRequestOauth2PasswordCredentials(value: obje
     let isInstance = true;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "password" in value;
-    isInstance = isInstance && "clientId" in value;
-    isInstance = isInstance && "clientSecret" in value;
 
     return isInstance;
 }
@@ -76,8 +83,8 @@ export function ConnectionRequestOauth2PasswordCredentialsFromJSONTyped(json: an
         
         'username': json['username'],
         'password': json['password'],
-        'clientId': json['clientId'],
-        'clientSecret': json['clientSecret'],
+        'clientId': !exists(json, 'clientId') ? undefined : json['clientId'],
+        'clientSecret': !exists(json, 'clientSecret') ? undefined : json['clientSecret'],
         'scopes': !exists(json, 'scopes') ? undefined : json['scopes'],
     };
 }
